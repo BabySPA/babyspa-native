@@ -1,8 +1,9 @@
 import { Dimensions, PixelRatio, StyleSheet } from "react-native";
 
+const uiWidth = 1194;
+const uiHeight = 835;
+
 const StyleUtils = {
-  uiWidth: 1194,
-  uiHeight: 835,
   hairline: StyleSheet.hairlineWidth,
   pixel: 1 / PixelRatio.get(),
   screenWidth: Dimensions.get("window").width,
@@ -10,14 +11,14 @@ const StyleUtils = {
   pixelRatio: PixelRatio.get(),
   fontScale: PixelRatio.getFontScale(),
   scale: Math.min(
-    Dimensions.get("window").height / 835,
-    Dimensions.get("window").width / 1194
+    Dimensions.get("window").height / uiHeight,
+    Dimensions.get("window").width / uiWidth
   ),
   autoWidth(value: number) {
-    return (Dimensions.get("window").width * value) / this.uiWidth;
+    return (Dimensions.get("window").width * value) / uiWidth;
   },
   autoHeight(value: number) {
-    return (Dimensions.get("window").height * value) / this.uiHeight;
+    return (Dimensions.get("window").height * value) / uiHeight;
   },
   setSpText(number: number) {
     const num = Math.round(
