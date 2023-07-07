@@ -12,7 +12,7 @@ interface AuthState {
 }
 
 const useAuthStore = create<AuthState>((set) => ({
-  token: null,
+  token: '123',
   // setAuthority: (token) => set({ token }),
   login: async (email, password) => {
     // if (!email) return Promise.reject('Email is required');

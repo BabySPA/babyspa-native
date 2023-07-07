@@ -16,7 +16,7 @@ export default function useCachedResources() {
         await Font.loadAsync({
           ...FontAwesome.font,
           // NOTE：这里加载字体文件
-          // 'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
+          'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

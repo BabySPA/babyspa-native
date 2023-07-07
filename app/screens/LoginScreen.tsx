@@ -48,7 +48,7 @@ export default function LoginScreen({
   };
 
   return (
-    <Flex safeArea>
+    <Flex safeArea flex={1}>
       <Center h={'full'}>
         <Box safeArea p="2" py="8" w="90%" maxW="290">
           <Heading
