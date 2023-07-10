@@ -1,14 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { NativeBaseProvider } from 'native-base';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import useCachedResources from './app/hooks/useCachedResources';
-import useColorScheme from './app/hooks/useColorScheme';
-import Navigation from './app/navigation/RootNavigator';
+import { StatusBar } from "expo-status-bar";
+import { NativeBaseProvider } from "native-base";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import useCachedResources from "./app/hooks/use-cached-resources";
+import useColorScheme from "./app/hooks/use-color-scheme";
+import Navigation from "./app/navigation/root-navigator";
 
 const config = {
   dependencies: {
-    'linear-gradient': LinearGradient,
+    "linear-gradient": LinearGradient,
   },
 };
 

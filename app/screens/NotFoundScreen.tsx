@@ -1,7 +1,7 @@
 import { Center, Flex, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
 
-import { RootStackScreenProps } from "../../types";
+import { RootStackScreenProps } from "../types";
 
 export default function NotFoundScreen({
   navigation,

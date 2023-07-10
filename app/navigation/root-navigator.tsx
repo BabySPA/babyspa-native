@@ -2,16 +2,16 @@ import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ColorSchemeName } from 'react-native';
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ColorSchemeName } from "react-native";
 
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import { RootStackParamList } from '../../types';
-import AuthNavigator from './AuthNavigator';
-import AppNavigator from './AppNavigator';
-import useAuthStore from '../stores/AuthStore';
+import ModalScreen from "../screens/ModalScreen";
+import NotFoundScreen from "../screens/NotFoundScreen";
+import { RootStackParamList } from "../types";
+import AuthNavigator from "./auth-navigator";
+import AppNavigator from "./app-navigator";
+import useAuthStore from "../stores/auth";
 
 export default function Navigation({
   colorScheme,
@@ -20,7 +20,7 @@ export default function Navigation({
 }) {
   return (
     <NavigationContainer
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <RootNavigator />
     </NavigationContainer>
@@ -30,10 +30,10 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const { token } = useAuthStore();
+  const { accessToken } = useAuthStore();
   return (
     <Stack.Navigator>
-      {!token ? (
+      {!accessToken ? (
         <Stack.Screen
           name="Auth"
           component={AuthNavigator}
@@ -49,9 +49,9 @@ function RootNavigator() {
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: 'Oops!' }}
+        options={{ title: "Oops!" }}
       />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
     </Stack.Navigator>

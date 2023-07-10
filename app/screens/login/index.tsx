@@ -13,18 +13,18 @@ import {
   useTheme,
   useToast,
   VStack,
-} from 'native-base';
-import { AuthStackScreenProps } from '../../types';
-import { useState } from 'react';
-import useAuthStore from '../stores/AuthStore';
-import { MaterialIcons } from '@expo/vector-icons';
+} from "native-base";
+import { AuthStackScreenProps } from "../../types";
+import { useState } from "react";
+import useAuthStore from "../../stores/auth";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function LoginScreen({
   navigation,
-}: AuthStackScreenProps<'Login'>) {
+}: AuthStackScreenProps<"Login">) {
   const { login } = useAuthStore();
-  const [username, setUsername] = useState('17666117715');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState("17666117715");
+  const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -32,31 +32,31 @@ export default function LoginScreen({
     setLoading(true);
     login(username, password)
       .then((user) => {
-        console.log('Login successful', user);
+        console.log("Login successful", user);
       })
       .catch((error) => {
-        console.log('Login failed', error);
+        console.log("Login failed", error);
         toast.show({
-          variant: 'left-accent',
-          placement: 'top',
-          title: 'Login failed',
+          variant: "left-accent",
+          placement: "top",
+          title: "Login failed",
           description: error.message,
-          bg: 'danger.500',
+          bg: "danger.500",
         });
       })
       .finally(() => setLoading(false));
   };
 
   return (
-    <Flex safeArea flex={1}>
-      <Center h={'full'}>
+    <Flex safeArea flex={1} bgColor={"white"}>
+      <Center h={"full"}>
         <Box safeArea p="2" py="8" w="90%" maxW="290">
           <Heading
             size="lg"
             fontWeight="600"
             color="coolGray.800"
             _dark={{
-              color: 'warmGray.50',
+              color: "warmGray.50",
             }}
           >
             Welcome
@@ -64,7 +64,7 @@ export default function LoginScreen({
           <Heading
             mt="1"
             _dark={{
-              color: 'warmGray.200',
+              color: "warmGray.200",
             }}
             color="coolGray.600"
             fontWeight="medium"
