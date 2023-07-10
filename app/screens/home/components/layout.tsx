@@ -1,17 +1,8 @@
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Center,
-  Flex,
-  Text,
-  Pressable,
-} from "native-base";
-import { ls, sp, ss } from "~/app/utils/style";
-import { useState } from "react";
-import { Image } from "react-native";
-import useLayoutConfigWithRole from "~/app/stores/layout";
-import useAuthStore from "~/app/stores/auth";
+import { Box, Center, Flex, Text, Pressable } from 'native-base';
+import { ls, ss } from '~/app/utils/style';
+import { Image } from 'react-native';
+import useLayoutConfigWithRole from '~/app/stores/layout';
+import useAuthStore from '~/app/stores/auth';
 
 export default function Layout() {
   const {
@@ -22,12 +13,17 @@ export default function Layout() {
   } = useLayoutConfigWithRole();
 
   const { logout } = useAuthStore();
+  const Fragment = () => {
+    return layoutConfig[currentSelected].features[
+      layoutConfig[currentSelected].featureSelected
+    ].fragment();
+  };
   return (
     <Flex
       safeAreaTop
       bg={{
         linearGradient: {
-          colors: ["#22D59C", "#1AB7BE"],
+          colors: ['#22D59C', '#1AB7BE'],
           start: [0, 0],
           end: [1, 1],
         },
@@ -49,7 +45,7 @@ export default function Layout() {
             }}
           >
             <Image
-              source={require("~/assets/images/logo.png")}
+              source={require('~/assets/images/logo.png')}
               style={{
                 width: ss(60, { min: 45 }),
                 height: ss(60, { min: 45 }),
@@ -58,10 +54,10 @@ export default function Layout() {
           </Pressable>
           <Text
             fontSize={ls(20)}
-            color={"white"}
+            color={'white'}
             mt={ss(5)}
             fontWeight={600}
-            textAlign={"center"}
+            textAlign={'center'}
           >
             茗淳儿推
           </Text>
@@ -78,7 +74,7 @@ export default function Layout() {
                 <Center
                   safeAreaLeft
                   background={
-                    idx == currentSelected ? "warmGray.50" : "transparent"
+                    idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
                   px={ls(10)}
                   py={ss(16)}
@@ -93,7 +89,7 @@ export default function Layout() {
                   />
                   <Text
                     fontSize={ls(18)}
-                    color={idx == currentSelected ? "#64CF97" : "warmGray.50"}
+                    color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}
                   >
                     {item.text}
                   </Text>
@@ -104,33 +100,31 @@ export default function Layout() {
         </Box>
       </Box>
       <Flex direction="column" flex={1}>
-        <Flex direction="row" justifyContent={"center"}>
+        <Flex direction="row" justifyContent={'center'}>
           {layoutConfig[currentSelected].features.map((item, idx) => {
             return (
               <Pressable
                 key={idx}
                 p={ss(16)}
-                paddingRight={"8%"}
+                paddingRight={'8%'}
                 onPress={() => {
                   changeFeatureSelected(idx);
                 }}
               >
                 <Center>
-                  <Text color={"white"} fontSize={ls(20)} fontWeight={600}>
+                  <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
                     {item.text}
                   </Text>
                   {layoutConfig[currentSelected].featureSelected == idx && (
-                    <Box w={ss(40)} h={ss(4)} bgColor={"white"} mt={ss(5)} />
+                    <Box w={ss(40)} h={ss(4)} bgColor={'white'} mt={ss(5)} />
                   )}
                 </Center>
               </Pressable>
             );
           })}
         </Flex>
-        <Flex bgColor={"#E6EEF1"} flex={1} borderTopLeftRadius={ss(10)}>
-          {layoutConfig[currentSelected].features[
-            layoutConfig[currentSelected].featureSelected
-          ].fragment()}
+        <Flex bgColor={'#E6EEF1'} flex={1} borderTopLeftRadius={ss(10)}>
+          <Fragment />
         </Flex>
       </Flex>
     </Flex>

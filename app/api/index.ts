@@ -1,11 +1,8 @@
 // index.ts
-import axios from "axios";
-import type {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from "axios";
+import axios from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Environment from '../config/environment';
+import useAuthStore from '../stores/auth';
 
 type Result<T> = {
   code: number;
@@ -27,30 +24,30 @@ class Request {
   // axios 实例
   instance: AxiosInstance;
   // 基础配置，url和超时时间
+
   baseConfig: AxiosRequestConfig = {
-    baseURL: "http://121.36.108.137:4000/manager",
+    baseURL: Environment.api.manager,
     timeout: 60000,
   };
 
   constructor(config: AxiosRequestConfig) {
+    console.log(Environment);
+
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
 
     this.instance.interceptors.request.use(
       (config) => {
-        // 一般会请求拦截里面加token，用于后端的验证
-        // const token = localStorage.getItem("token") as string;
-        // const { accessToken } = useAuthStore();
-        // if (accessToken) {
-        //   config.headers!.Authorization = `Bearer ${accessToken}`;
-        // }
-
+        const { accessToken } = useAuthStore.getState();
+        if (accessToken) {
+          config.headers!.Authorization = `Bearer ${accessToken}`;
+        }
         return config;
       },
       (err: any) => {
         // 请求错误，这里可以用全局提示框进行提示
         return Promise.reject(err);
-      }
+      },
     );
 
     this.instance.interceptors.response.use(
@@ -70,7 +67,7 @@ class Request {
           //
         }
         return Promise.reject(response.data);
-      }
+      },
     );
   }
 
@@ -81,30 +78,29 @@ class Request {
 
   public get<T = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.get(url, config);
   }
 
   public post<T = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
-    return this.instance.post(url, data, config);
+    return this.instance.post(url, config);
   }
 
   public put<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.put(url, data, config);
   }
 
   public delete<T = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.delete(url, config);
   }
