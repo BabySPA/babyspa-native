@@ -23,6 +23,7 @@ export interface Customer {
   phoneNumber: string;
   status: CustomerStatus;
   updatedAt: string;
+  tag: string;
 }
 
 interface FlowState {
