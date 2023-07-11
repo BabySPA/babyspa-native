@@ -8,10 +8,10 @@ import { ColorSchemeName } from "react-native";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import { RootStackParamList } from "../types";
 import AuthNavigator from "./auth-navigator";
 import AppNavigator from "./app-navigator";
 import useAuthStore from "../stores/auth";
+import { RootStackParamList } from "../types";
 
 export default function Navigation({
   colorScheme,

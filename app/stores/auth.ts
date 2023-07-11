@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import request from '~/app/api';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import request from "~/app/api";
 
 interface AuthState {
   accessToken: string | null;
@@ -33,9 +33,7 @@ const useAuthStore = create(
       login: async (username: string, password: string) => {
         return new Promise((resolve, reject) => {
           request
-            .post('/auth/login', {
-              data: { username, password },
-            })
+            .post("/auth/login", { username, password })
             .then((res) => {
               const { accessToken, ...rest } = res.data;
               set({ accessToken: accessToken, user: { ...rest } });
@@ -52,10 +50,10 @@ const useAuthStore = create(
       },
     }),
     {
-      name: 'local-storage',
+      name: "local-storage",
       storage: createJSONStorage(() => AsyncStorage),
-    },
-  ),
+    }
+  )
 );
 
 export default useAuthStore;

@@ -1,8 +1,8 @@
 // index.ts
-import axios from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import Environment from '../config/environment';
-import useAuthStore from '../stores/auth';
+import axios from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import Environment from "../config/environment";
+import useAuthStore from "../stores/auth";
 
 type Result<T> = {
   code: number;
@@ -31,8 +31,6 @@ class Request {
   };
 
   constructor(config: AxiosRequestConfig) {
-    console.log(Environment);
-
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
 
@@ -47,7 +45,7 @@ class Request {
       (err: any) => {
         // 请求错误，这里可以用全局提示框进行提示
         return Promise.reject(err);
-      },
+      }
     );
 
     this.instance.interceptors.response.use(
@@ -65,9 +63,11 @@ class Request {
         const { code } = response.data;
         if (code === 401) {
           //
+          const { logout } = useAuthStore.getState();
+          logout();
         }
         return Promise.reject(response.data);
-      },
+      }
     );
   }
 
@@ -78,29 +78,30 @@ class Request {
 
   public get<T = any>(
     url: string,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<Result<T>> {
     return this.instance.get(url, config);
   }
 
   public post<T = any>(
     url: string,
-    config?: AxiosRequestConfig,
+    data?: any,
+    config?: AxiosRequestConfig
   ): Promise<Result<T>> {
-    return this.instance.post(url, config);
+    return this.instance.post(url, data, config);
   }
 
   public put<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<Result<T>> {
     return this.instance.put(url, data, config);
   }
 
   public delete<T = any>(
     url: string,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<Result<T>> {
     return this.instance.delete(url, config);
   }

@@ -1,8 +1,7 @@
-import { create } from 'zustand';
-import request from '~/app/api';
+import { create } from "zustand";
+import request from "~/app/api";
 
 export enum CustomerStatus {
-  All = -1, // 全部
   Completed = 0, // 已完成
   Canceled, // 已取消
   ToBeCollected, // 待收集
@@ -10,7 +9,7 @@ export enum CustomerStatus {
   ToBeConfirmed, // 待确认
 }
 
-interface Register {
+export interface Customer {
   operator: {
     id: string;
     name: string;
@@ -18,17 +17,20 @@ interface Register {
   };
   id: string;
   name: string;
+  gender: number;
+  birthday: string;
+  nickname: string;
   phoneNumber: string;
   status: CustomerStatus;
   updatedAt: string;
 }
 
 interface FlowState {
-  registers: Register[];
+  registers: Customer[];
   searchKeywords: string;
   startDate: string;
   endDate: string;
-  status: CustomerStatus;
+  status: CustomerStatus | -1;
   page: number;
   hasNextPage: boolean;
   getRegisterCustomers: () => Promise<void>;
@@ -36,10 +38,10 @@ interface FlowState {
 
 const useFlowStore = create<FlowState>((set, get) => ({
   registers: [],
-  searchKeywords: '',
-  status: CustomerStatus.All,
-  startDate: '',
-  endDate: '',
+  searchKeywords: "",
+  status: -1,
+  startDate: "",
+  endDate: "",
   page: 1,
   hasNextPage: false, // hasNextPage:false
 
@@ -52,7 +54,7 @@ const useFlowStore = create<FlowState>((set, get) => ({
     if (searchKeywords) {
       params.search = searchKeywords;
     }
-    if (status !== CustomerStatus.All) {
+    if (status !== -1) {
       params.status = status;
     }
     if (startDate) {
@@ -62,7 +64,7 @@ const useFlowStore = create<FlowState>((set, get) => ({
       params.endDate = startDate;
     }
 
-    request.get('/customers', { params }).then(({ data }) => {
+    request.get("/customers", { params }).then(({ data }) => {
       const { docs, hasNextPage } = data;
       set({ registers: docs, hasNextPage: hasNextPage });
     });
