@@ -2,8 +2,8 @@
  * Learn more about using TypeScript with React Navigation:
  * https://reactnavigation.org/docs/typescript/
  */
-import { NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NavigatorScreenParams } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 declare global {
   namespace ReactNavigation {
@@ -14,6 +14,7 @@ declare global {
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackList> | undefined;
   App: NavigatorScreenParams<AppStackList> | undefined;
+  Register: undefined;
   Modal: undefined;
   NotFound: undefined;
 };
@@ -23,7 +24,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type AppStackList = {
   Home: undefined;
-  Test: undefined;
+  Register: undefined;
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =
