@@ -38,7 +38,7 @@ export default function Register() {
           borderRadius={ss(10)}
           justifyContent={"space-between"}
           flexWrap={"wrap"}
-          padding={ss(40)}
+          p={ss(40)}
         >
           {registers.map((register) => (
             <CustomerItem customer={register} key={register.id} />
@@ -206,7 +206,7 @@ function Filter() {
           ml={ls(30)}
           w={ls(240)}
           h={ss(40)}
-          padding={ss(10)}
+          p={ss(10)}
           placeholderTextColor={"#6E6F73"}
           color={"#333333"}
           fontSize={ss(16)}
@@ -224,7 +224,7 @@ function Filter() {
           ml={ls(20)}
           w={ls(160)}
           h={ss(40)}
-          padding={ss(10)}
+          p={ss(10)}
           placeholderTextColor={"#AFB0B4"}
           color={"#333333"}
           fontSize={ss(18)}
@@ -246,7 +246,7 @@ function Filter() {
           ml={ls(20)}
           w={ls(160)}
           h={ss(40)}
-          padding={ss(10)}
+          p={ss(10)}
           placeholderTextColor={"#AFB0B4"}
           color={"#333333"}
           fontSize={ss(18)}

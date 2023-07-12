@@ -39,7 +39,7 @@ export default function NavigationBar(props: NavigationBarParams) {
           _icon={{
             as: SimpleLineIcons,
             name: "arrow-left",
-            size: ss(20),
+            size: ss(20, { min: 14 }),
             color: "white",
           }}
         />

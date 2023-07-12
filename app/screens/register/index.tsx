@@ -24,7 +24,7 @@ export default function RegisterScreen({
       <NavigationBar
         onBackIntercept={() => true}
         leftElement={
-          <Text color="white" fontWeight={600} fontSize={sp(20)}>
+          <Text color="white" fontWeight={600} fontSize={sp(20, { min: 14 })}>
             登记
           </Text>
         }
@@ -37,7 +37,7 @@ export default function RegisterScreen({
             <Box
               bgColor={"white"}
               borderRadius={ss(4)}
-              _text={{ color: "#03CBB2", fontSize: sp(14) }}
+              _text={{ color: "#03CBB2", fontSize: sp(14, { min: 12 }) }}
               px={ls(26)}
               py={ss(10)}
             >
@@ -46,7 +46,7 @@ export default function RegisterScreen({
           </Pressable>
         }
       />
-      <Row safeAreaLeft bgColor={"#F6F6FA"} flex={1} padding={ss(10)}>
+      <Row safeAreaLeft bgColor={"#F6F6FA"} flex={1} p={ss(20)}>
         <EditCustomer style={{ marginRight: ss(10) }} />
         <SelectCustomer style={{ marginLeft: ss(10) }} />
       </Row>
