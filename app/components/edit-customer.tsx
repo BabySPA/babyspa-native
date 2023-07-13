@@ -12,20 +12,20 @@ import {
   ScrollView,
   Select,
   Text,
-} from "native-base";
-import { Pressable, StyleProp, View, ViewStyle } from "react-native";
-import BoxTitle from "./box-title";
-import { ss, ls, sp } from "../utils/style";
-import { useCallback, useState } from "react";
-import Dot from "./dot";
-import { CustomProps } from "native-base/lib/typescript/components/types";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Button } from "react-native-paper";
-import { DatePickerModal } from "react-native-paper-dates";
-import { CalendarDate } from "react-native-paper-dates/lib/typescript/Date/Calendar";
-import dayjs from "dayjs";
-import { Picker } from "@react-native-picker/picker";
-import SelectDropdown from "react-native-select-dropdown";
+} from 'native-base';
+import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
+import BoxTitle from './box-title';
+import { ss, ls, sp } from '../utils/style';
+import { useCallback, useState } from 'react';
+import Dot from './dot';
+import { CustomProps } from 'native-base/lib/typescript/components/types';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Button } from 'react-native-paper';
+import { DatePickerModal } from 'react-native-paper-dates';
+import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
+import dayjs from 'dayjs';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import SelectDropdown from 'react-native-select-dropdown';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -41,8 +41,8 @@ interface FormBoxParams {
 function FormBox(props: FormBoxParams) {
   const { required, form, title, style } = props;
   return (
-    <Row style={style} h={ls(48)} alignItems={"center"}>
-      <Row alignItems={"center"} mr={ls(30)}>
+    <Row style={style} h={ls(48)} alignItems={'center'}>
+      <Row alignItems={'center'} mr={ls(30)}>
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>
@@ -54,22 +54,18 @@ function FormBox(props: FormBoxParams) {
 }
 
 export default function EditCustomer(params: EditCustomerParams) {
-  const [birthday, setBirthday] = useState<CalendarDate>(new Date());
+  const [birthday, setBirthday] = useState<Date>(new Date());
   const [openBirthdayPicker, setOpenBirthdayPicker] = useState(false);
 
-  const onDismissBirthdayPicker = useCallback(() => {
+  const onConfirmBirthdayPicker = (event: any, selectedDate: Date) => {
     setOpenBirthdayPicker(false);
-  }, [setOpenBirthdayPicker]);
-
-  const onConfirmBirthdayPicker = (params: { date: CalendarDate }) => {
-    setOpenBirthdayPicker(false);
-    setBirthday(params.date);
+    setBirthday(selectedDate);
   };
 
   const { style = {} } = params;
-  const [selectedLanguage, setSelectedLanguage] = useState();
+
   return (
-    <ScrollView flex={1} bgColor={"#fff"} style={style} p={ss(20)}>
+    <ScrollView flex={1} bgColor={'#fff'} style={style} p={ss(20)}>
       <Flex>
         <BoxTitle title="客户信息" />
         <Column mt={ss(30)}>
@@ -78,12 +74,12 @@ export default function EditCustomer(params: EditCustomerParams) {
             required
             form={
               <Input
-                w={"70%"}
+                w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                placeholderTextColor={"#CCC"}
-                color={"#333333"}
+                placeholderTextColor={'#CCC'}
+                color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder="请输入"
               />
@@ -94,12 +90,12 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
-                w={"70%"}
+                w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                placeholderTextColor={"#CCC"}
-                color={"#333333"}
+                placeholderTextColor={'#CCC'}
+                color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder="请输入"
               />
@@ -112,7 +108,7 @@ export default function EditCustomer(params: EditCustomerParams) {
               <Radio.Group
                 defaultValue="1"
                 name="gender"
-                flexDirection={"row"}
+                flexDirection={'row'}
                 onChange={(event) => {
                   console.log(event);
                 }}
@@ -131,7 +127,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             required
             style={{ marginTop: ss(20) }}
             form={
-              <Box w={"70%"}>
+              <Box w={'70%'}>
                 <Pressable
                   onPress={() => {
                     setOpenBirthdayPicker(true);
@@ -143,10 +139,10 @@ export default function EditCustomer(params: EditCustomerParams) {
                     h={ss(48, { min: 26 })}
                     py={ss(10)}
                     px={ls(20)}
-                    placeholderTextColor={"#CCC"}
-                    color={"#333333"}
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
                     fontSize={sp(16, { min: 12 })}
-                    value={dayjs(birthday).format("YYYY-MM-DD")}
+                    value={dayjs(birthday).format('YYYY-MM-DD')}
                     rightElement={
                       <Icon
                         as={<FontAwesome name="angle-down" />}
@@ -155,14 +151,13 @@ export default function EditCustomer(params: EditCustomerParams) {
                       />
                     }
                   />
-                  <DatePickerModal
-                    locale="zh"
-                    mode="single"
-                    visible={openBirthdayPicker}
-                    onDismiss={onDismissBirthdayPicker}
-                    date={birthday}
-                    onConfirm={onConfirmBirthdayPicker}
-                  />
+                  {openBirthdayPicker && (
+                    <DateTimePicker
+                      value={birthday}
+                      mode={'date'}
+                      onChange={onConfirmBirthdayPicker}
+                    />
+                  )}
                 </Pressable>
               </Box>
             }
@@ -173,12 +168,12 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
-                w={"70%"}
+                w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                placeholderTextColor={"#CCC"}
-                color={"#333333"}
+                placeholderTextColor={'#CCC'}
+                color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder="请输入"
               />
@@ -189,12 +184,12 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
-                w={"70%"}
+                w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                placeholderTextColor={"#CCC"}
-                color={"#333333"}
+                placeholderTextColor={'#CCC'}
+                color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder="请输入"
               />
@@ -204,26 +199,26 @@ export default function EditCustomer(params: EditCustomerParams) {
             title="理疗师"
             style={{ marginTop: ss(20) }}
             form={
-              <Box w={"70%"}>
+              <Box w={'70%'}>
                 <SelectDropdown
                   data={[
-                    "Egypt",
-                    "Canada",
-                    "Australia",
-                    "Ireland",
-                    "Brazil",
-                    "England",
-                    "Dubai",
-                    "France",
-                    "Germany",
-                    "Saudi Arabia",
-                    "Argentina",
-                    "India",
+                    'Egypt',
+                    'Canada',
+                    'Australia',
+                    'Ireland',
+                    'Brazil',
+                    'England',
+                    'Dubai',
+                    'France',
+                    'Germany',
+                    'Saudi Arabia',
+                    'Argentina',
+                    'India',
                   ]}
                   onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index);
                   }}
-                  defaultButtonText={"Select country"}
+                  defaultButtonText={'Select country'}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                   }}
@@ -231,16 +226,16 @@ export default function EditCustomer(params: EditCustomerParams) {
                     return item;
                   }}
                   buttonStyle={{
-                    width: "100%",
+                    width: '100%',
                     height: ss(48, { min: 26 }),
-                    backgroundColor: "#fff",
+                    backgroundColor: '#fff',
                     borderRadius: ss(4),
                     borderWidth: 1,
-                    borderColor: "#D8D8D8",
+                    borderColor: '#D8D8D8',
                   }}
                   buttonTextStyle={{
-                    color: "#333333",
-                    textAlign: "left",
+                    color: '#333333',
+                    textAlign: 'left',
                     fontSize: sp(16, { min: 12 }),
                   }}
                   renderDropdownIcon={(isOpened) => {
@@ -248,7 +243,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                       <Icon
                         as={
                           <FontAwesome
-                            name={isOpened ? "angle-up" : "angle-down"}
+                            name={isOpened ? 'angle-up' : 'angle-down'}
                           />
                         }
                         size={ss(18, { min: 15 })}
@@ -256,40 +251,40 @@ export default function EditCustomer(params: EditCustomerParams) {
                       />
                     );
                   }}
-                  dropdownIconPosition={"right"}
+                  dropdownIconPosition={'right'}
                   dropdownStyle={{
-                    backgroundColor: "#fff",
+                    backgroundColor: '#fff',
                     borderRadius: ss(8),
                   }}
                   rowStyle={{
                     height: ss(50, { min: 30 }),
-                    backgroundColor: "#fff",
-                    borderBottomColor: "#D8D8D8",
+                    backgroundColor: '#fff',
+                    borderBottomColor: '#D8D8D8',
                   }}
                   rowTextStyle={{
-                    color: "#333",
-                    textAlign: "center",
+                    color: '#333',
+                    textAlign: 'center',
                   }}
                   selectedRowStyle={{
-                    backgroundColor: "#f8f8f8",
+                    backgroundColor: '#f8f8f8',
                   }}
                   search
                   searchInputStyle={{
                     height: ss(50, { min: 30 }),
-                    backgroundColor: "#00B49E",
+                    backgroundColor: '#00B49E',
                     borderBottomWidth: 1,
-                    borderBottomColor: "#FFF",
+                    borderBottomColor: '#FFF',
                   }}
-                  searchPlaceHolder={"Search here"}
-                  searchPlaceHolderColor={"#F8F8F8"}
+                  searchPlaceHolder={'Search here'}
+                  searchPlaceHolderColor={'#F8F8F8'}
                   searchInputTxtStyle={{
                     fontSize: sp(20, { min: 12 }),
                   }}
                   renderSearchInputLeftIcon={() => {
                     return (
                       <FontAwesome
-                        name={"search"}
-                        color={"#FFF"}
+                        name={'search'}
+                        color={'#FFF'}
                         size={ss(18, { min: 15 })}
                       />
                     );

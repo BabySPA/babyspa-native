@@ -34,6 +34,8 @@ class Request {
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
 
+    console.log(Object.assign(this.baseConfig, config))
+    
     this.instance.interceptors.request.use(
       (config) => {
         const { accessToken } = useAuthStore.getState();

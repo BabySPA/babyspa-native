@@ -33,7 +33,7 @@ function RootNavigator() {
   const { accessToken } = useAuthStore();
   return (
     <Stack.Navigator>
-      {accessToken ? (
+      {!accessToken ? (
         <Stack.Screen
           name="Auth"
           component={AuthNavigator}

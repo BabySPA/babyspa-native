@@ -2497,6 +2497,13 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
+"@react-native-community/datetimepicker@6.7.3":
+  version "6.7.3"
+  resolved "https://registry.npmmirror.com/@react-native-community/datetimepicker/-/datetimepicker-6.7.3.tgz#e6d75a42729265d8404d1d668c86926564abca2f"
+  integrity sha512-fXWbEdHMLW/e8cts3snEsbOTbnFXfUHeO2pkiDFX3fWpFoDtUrRWvn50xbY13IJUUKHDhoJ+mj24nMRVIXfX1A==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -4763,6 +4770,11 @@ expo-constants@~14.2.0, expo-constants@~14.2.1:
   dependencies:
     "@expo/config" "~8.0.0"
     uuid "^3.3.2"
+
+expo-datepicker@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.npmmirror.com/expo-datepicker/-/expo-datepicker-1.0.23.tgz#892a2c8d7629d3f6a9581031e0502cb3262af448"
+  integrity sha512-LoOgrbd/SvU/gJN886LOxLy0FctyykyZ+hqpORyM6DqLw+c9v4HwgRragIjUdN+Qzf/HYlbr9S9gEnJNHPX79w==
 
 expo-file-system@~15.2.0, expo-file-system@~15.2.2:
   version "15.2.2"
