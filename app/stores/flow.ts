@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import request from "~/app/api";
+import { create } from 'zustand';
+import request from '~/app/api';
 
 export enum CustomerStatus {
   Completed = 0, // 已完成
@@ -39,10 +39,10 @@ interface FlowState {
 
 const useFlowStore = create<FlowState>((set, get) => ({
   registers: [],
-  searchKeywords: "",
+  searchKeywords: '',
   status: -1,
-  startDate: "",
-  endDate: "",
+  startDate: '',
+  endDate: '',
   page: 1,
   hasNextPage: false, // hasNextPage:false
 
@@ -65,7 +65,7 @@ const useFlowStore = create<FlowState>((set, get) => ({
       params.endDate = startDate;
     }
 
-    request.get("/customers", { params }).then(({ data }) => {
+    request.get('/customers', { params }).then(({ data }) => {
       const { docs, hasNextPage } = data;
       set({ registers: docs, hasNextPage: hasNextPage });
     });

@@ -1,6 +1,6 @@
-import { Box, Icon, IconButton, Row } from "native-base";
-import { ls, ss, sp } from "../utils/style";
-import { MaterialIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { Box, Icon, IconButton, Row } from 'native-base';
+import { ls, ss, sp } from '../utils/style';
+import { MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
 
 interface NavigationBarParams {
   hasLeftIcon?: boolean;
@@ -23,24 +23,24 @@ export default function NavigationBar(props: NavigationBarParams) {
       safeAreaRight
       bg={{
         linearGradient: {
-          colors: ["#22D59C", "#1AB7BE"],
+          colors: ['#22D59C', '#1AB7BE'],
           start: [0, 0],
           end: [1, 1],
         },
       }}
-      alignItems={"center"}
-      justifyContent={"space-between"}
+      alignItems={'center'}
+      justifyContent={'space-between'}
       px={ss(20)}
       py={ss(20)}
     >
-      <Row alignItems={"center"}>
+      <Row alignItems={'center'}>
         <IconButton
-          variant="ghost"
+          variant='ghost'
           _icon={{
             as: SimpleLineIcons,
-            name: "arrow-left",
+            name: 'arrow-left',
             size: ss(20, { min: 14 }),
-            color: "white",
+            color: 'white',
           }}
         />
         {leftElement}

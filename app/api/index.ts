@@ -1,8 +1,8 @@
 // index.ts
-import axios from "axios";
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import Environment from "../config/environment";
-import useAuthStore from "../stores/auth";
+import axios from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Environment from '../config/environment';
+import useAuthStore from '../stores/auth';
 
 type Result<T> = {
   code: number;
@@ -34,8 +34,8 @@ class Request {
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
 
-    console.log(Object.assign(this.baseConfig, config))
-    
+    console.log(Object.assign(this.baseConfig, config));
+
     this.instance.interceptors.request.use(
       (config) => {
         const { accessToken } = useAuthStore.getState();
@@ -47,7 +47,7 @@ class Request {
       (err: any) => {
         // 请求错误，这里可以用全局提示框进行提示
         return Promise.reject(err);
-      }
+      },
     );
 
     this.instance.interceptors.response.use(
@@ -69,7 +69,7 @@ class Request {
           logout();
         }
         return Promise.reject(response.data);
-      }
+      },
     );
   }
 
@@ -80,7 +80,7 @@ class Request {
 
   public get<T = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.get(url, config);
   }
@@ -88,7 +88,7 @@ class Request {
   public post<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.post(url, data, config);
   }
@@ -96,14 +96,14 @@ class Request {
   public put<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.put(url, data, config);
   }
 
   public delete<T = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Result<T>> {
     return this.instance.delete(url, config);
   }

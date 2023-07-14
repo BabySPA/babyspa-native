@@ -1,14 +1,14 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { AuthStackList } from "../types";
-import LoginScreen from "../screens/login";
+import { AuthStackList } from '../types';
+import LoginScreen from '../screens/login';
 
 const Stack = createNativeStackNavigator<AuthStackList>();
 
 export default function AuthNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name='Login' component={LoginScreen} />
     </Stack.Navigator>
   );
 }

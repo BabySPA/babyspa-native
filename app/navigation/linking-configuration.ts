@@ -1,27 +1,27 @@
-import { LinkingOptions } from "@react-navigation/native";
-import * as Linking from "expo-linking";
-import { RootStackParamList } from "../types";
+import { LinkingOptions } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
+import { RootStackParamList } from '../types';
 
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.createURL("/")],
+  prefixes: [Linking.createURL('/')],
   config: {
     screens: {
       Auth: {
         screens: {
-          Login: "login",
+          Login: 'login',
         },
       },
       App: {
         screens: {
           Home: {
             screens: {
-              HomeScreen: "home",
+              HomeScreen: 'home',
             },
           },
         },
       },
-      Modal: "modal",
-      NotFound: "*",
+      Modal: 'modal',
+      NotFound: '*',
     },
   },
 };

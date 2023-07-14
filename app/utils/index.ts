@@ -1,6 +1,6 @@
 export function getAge(birthday: string) {
   if (birthday) {
-    const birthdays = birthday.split("-");
+    const birthdays = birthday.split('-');
     // 新建日期对象
     let date = new Date();
     // 今天日期，数组，同 birthday

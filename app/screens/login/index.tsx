@@ -13,18 +13,18 @@ import {
   useTheme,
   useToast,
   VStack,
-} from "native-base";
-import { AuthStackScreenProps } from "../../types";
-import { useState } from "react";
-import useAuthStore from "../../stores/auth";
-import { MaterialIcons } from "@expo/vector-icons";
+} from 'native-base';
+import { AuthStackScreenProps } from '../../types';
+import { useState } from 'react';
+import useAuthStore from '../../stores/auth';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function LoginScreen({
   navigation,
-}: AuthStackScreenProps<"Login">) {
+}: AuthStackScreenProps<'Login'>) {
   const { login } = useAuthStore();
-  const [username, setUsername] = useState("17666117715");
-  const [password, setPassword] = useState("123456");
+  const [username, setUsername] = useState('17666117715');
+  const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -33,51 +33,51 @@ export default function LoginScreen({
     login(username, password)
       .then(() => {
         toast.show({
-          variant: "left-accent",
-          placement: "top",
-          title: "登录成功",
-          bg: "success.500",
+          variant: 'left-accent',
+          placement: 'top',
+          title: '登录成功',
+          bg: 'success.500',
         });
       })
       .catch((error) => {
         toast.show({
-          variant: "left-accent",
-          placement: "top",
-          title: "登录失败",
-          description: "请查看用户名/密码是否正确",
-          bg: "danger.500",
+          variant: 'left-accent',
+          placement: 'top',
+          title: '登录失败',
+          description: '请查看用户名/密码是否正确',
+          bg: 'danger.500',
         });
       })
       .finally(() => setLoading(false));
   };
 
   return (
-    <Flex safeArea flex={1} bgColor={"white"}>
-      <Center h={"full"}>
-        <Box safeArea p="2" py="8" w="90%" maxW="290">
+    <Flex safeArea flex={1} bgColor={'white'}>
+      <Center h={'full'}>
+        <Box safeArea p='2' py='8' w='90%' maxW='290'>
           <Heading
-            size="lg"
-            fontWeight="600"
-            color="coolGray.800"
+            size='lg'
+            fontWeight='600'
+            color='coolGray.800'
             _dark={{
-              color: "warmGray.50",
+              color: 'warmGray.50',
             }}
           >
             Welcome
           </Heading>
           <Heading
-            mt="1"
+            mt='1'
             _dark={{
-              color: "warmGray.200",
+              color: 'warmGray.200',
             }}
-            color="coolGray.600"
-            fontWeight="medium"
-            size="xs"
+            color='coolGray.600'
+            fontWeight='medium'
+            size='xs'
           >
             登录以继续
           </Heading>
 
-          <VStack space={3} mt="5">
+          <VStack space={3} mt='5'>
             <FormControl>
               <FormControl.Label>用户名</FormControl.Label>
               <Input
@@ -85,10 +85,10 @@ export default function LoginScreen({
                 onChangeText={setUsername}
                 InputLeftElement={
                   <Icon
-                    as={<MaterialIcons name="person" />}
+                    as={<MaterialIcons name='person' />}
                     size={5}
-                    ml="2"
-                    color="muted.400"
+                    ml='2'
+                    color='muted.400'
                   />
                 }
               />
@@ -96,25 +96,25 @@ export default function LoginScreen({
             <FormControl>
               <FormControl.Label>Password</FormControl.Label>
               <Input
-                type="password"
+                type='password'
                 value={password}
                 onChangeText={setPassword}
                 InputLeftElement={
                   <Icon
-                    as={<MaterialIcons name="lock" />}
+                    as={<MaterialIcons name='lock' />}
                     size={5}
-                    ml="2"
-                    color="muted.400"
+                    ml='2'
+                    color='muted.400'
                   />
                 }
               />
             </FormControl>
             <Button
-              mt="2"
-              colorScheme="indigo"
+              mt='2'
+              colorScheme='indigo'
               onPress={() => onClickLogin()}
               leftIcon={
-                <Icon as={<MaterialIcons name="login" />} size={5} ml="2" />
+                <Icon as={<MaterialIcons name='login' />} size={5} ml='2' />
               }
               isLoading={loading}
             >

@@ -1,11 +1,11 @@
-import { Dimensions, PixelRatio } from "react-native";
+import { Dimensions, PixelRatio } from 'react-native';
 
 interface M {
   min?: number;
   max?: number;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
@@ -19,7 +19,7 @@ const FS = PixelRatio.getFontScale();
 
 const S = Math.min(
   longDimension / guidelineLong,
-  shortDimension / guidelineShort
+  shortDimension / guidelineShort,
 );
 
 const setSpText = (number: number, minAndMax?: M) => {

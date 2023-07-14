@@ -6,12 +6,12 @@ import {
   Flex,
   Text,
   Pressable,
-} from "native-base";
-import { AppStackScreenProps } from "../../types";
-import Layout from "./components/layout";
+} from 'native-base';
+import { AppStackScreenProps } from '../../types';
+import Layout from './components/layout';
 
 export default function HomeScreen({
   navigation,
-}: AppStackScreenProps<"Home">) {
+}: AppStackScreenProps<'Home'>) {
   return <Layout />;
 }

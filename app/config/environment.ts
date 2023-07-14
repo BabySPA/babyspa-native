@@ -1,5 +1,5 @@
 // @ts-ignore
-import { MANAGER_API_URL } from "@env";
+import { MANAGER_API_URL } from '@env';
 
 const Environment = {
   api: {

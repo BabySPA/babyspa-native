@@ -1,31 +1,27 @@
 import {
+  Actionsheet,
   Box,
-  CheckIcon,
+  Button,
   Column,
   Flex,
-  FormControl,
-  IFlexProps,
   Icon,
   Input,
+  Modal,
   Radio,
   Row,
   ScrollView,
   Select,
   Text,
 } from 'native-base';
-import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import BoxTitle from './box-title';
 import { ss, ls, sp } from '../utils/style';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import Dot from './dot';
-import { CustomProps } from 'native-base/lib/typescript/components/types';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Button } from 'react-native-paper';
-import { DatePickerModal } from 'react-native-paper-dates';
-import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
+import { FontAwesome } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
+import DatePicker from './date-picker';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -42,7 +38,7 @@ function FormBox(props: FormBoxParams) {
   const { required, form, title, style } = props;
   return (
     <Row style={style} h={ls(48)} alignItems={'center'}>
-      <Row alignItems={'center'} mr={ls(30)}>
+      <Row alignItems={'center'} mr={ls(30)} w={ls(70)}>
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>
@@ -54,12 +50,12 @@ function FormBox(props: FormBoxParams) {
 }
 
 export default function EditCustomer(params: EditCustomerParams) {
-  const [birthday, setBirthday] = useState<Date>(new Date());
-  const [openBirthdayPicker, setOpenBirthdayPicker] = useState(false);
+  let currentSelectBirthday = dayjs().format('YYYY-MM-DD');
+  const [birthday, setBirthday] = useState<string>(currentSelectBirthday);
+  const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
 
-  const onConfirmBirthdayPicker = (event: any, selectedDate: Date) => {
-    setOpenBirthdayPicker(false);
-    setBirthday(selectedDate);
+  const showDatePicker = () => {
+    setIsOpenBirthdayPicker(true);
   };
 
   const { style = {} } = params;
@@ -67,10 +63,10 @@ export default function EditCustomer(params: EditCustomerParams) {
   return (
     <ScrollView flex={1} bgColor={'#fff'} style={style} p={ss(20)}>
       <Flex>
-        <BoxTitle title="客户信息" />
-        <Column mt={ss(30)}>
+        <BoxTitle title='客户信息' />
+        <Column m={ss(30)}>
           <FormBox
-            title="姓名"
+            title='姓名'
             required
             form={
               <Input
@@ -81,12 +77,12 @@ export default function EditCustomer(params: EditCustomerParams) {
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
-                placeholder="请输入"
+                placeholder='请输入'
               />
             }
           />
           <FormBox
-            title="乳名"
+            title='乳名'
             style={{ marginTop: ss(20) }}
             form={
               <Input
@@ -97,74 +93,64 @@ export default function EditCustomer(params: EditCustomerParams) {
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
-                placeholder="请输入"
+                placeholder='请输入'
               />
             }
           />
           <FormBox
-            title="性别"
+            title='性别'
             style={{ marginTop: ss(20) }}
             form={
               <Radio.Group
-                defaultValue="1"
-                name="gender"
+                defaultValue='1'
+                name='gender'
                 flexDirection={'row'}
                 onChange={(event) => {
                   console.log(event);
-                }}
-              >
-                <Radio colorScheme="green" value="1">
+                }}>
+                <Radio colorScheme='green' value='1' size={'sm'}>
                   男
                 </Radio>
-                <Radio colorScheme="green" value="2" ml={ls(40)}>
+                <Radio colorScheme='green' value='2' ml={ls(40)} size={'sm'}>
                   女
                 </Radio>
               </Radio.Group>
             }
           />
           <FormBox
-            title="生日"
+            title='生日'
             required
             style={{ marginTop: ss(20) }}
             form={
               <Box w={'70%'}>
                 <Pressable
                   onPress={() => {
-                    setOpenBirthdayPicker(true);
-                  }}
-                >
-                  <Input
-                    placeholder="请输入"
-                    isReadOnly={true}
-                    h={ss(48, { min: 26 })}
+                    showDatePicker();
+                  }}>
+                  <Row
+                    borderRadius={ss(10)}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    borderWidth={1}
+                    borderColor={'#D8D8D8'}
                     py={ss(10)}
-                    px={ls(20)}
-                    placeholderTextColor={'#CCC'}
-                    color={'#333333'}
-                    fontSize={sp(16, { min: 12 })}
-                    value={dayjs(birthday).format('YYYY-MM-DD')}
-                    rightElement={
-                      <Icon
-                        as={<FontAwesome name="angle-down" />}
-                        size={ss(18, { min: 15 })}
-                        color="#999"
-                      />
-                    }
-                  />
-                  {openBirthdayPicker && (
-                    <DateTimePicker
-                      value={birthday}
-                      mode={'date'}
-                      onChange={onConfirmBirthdayPicker}
+                    px={ss(20)}>
+                    <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      {birthday}
+                    </Text>
+                    <Icon
+                      as={<FontAwesome name='angle-down' />}
+                      size={ss(18, { min: 15 })}
+                      color='#999'
                     />
-                  )}
+                  </Row>
                 </Pressable>
               </Box>
             }
           />
           <FormBox
             required
-            title="电话"
+            title='电话'
             style={{ marginTop: ss(20) }}
             form={
               <Input
@@ -175,12 +161,12 @@ export default function EditCustomer(params: EditCustomerParams) {
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
-                placeholder="请输入"
+                placeholder='请输入'
               />
             }
           />
           <FormBox
-            title="过敏史"
+            title='过敏史'
             style={{ marginTop: ss(20) }}
             form={
               <Input
@@ -191,12 +177,12 @@ export default function EditCustomer(params: EditCustomerParams) {
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
-                placeholder="请输入"
+                placeholder='请输入'
               />
             }
           />
           <FormBox
-            title="理疗师"
+            title='理疗师'
             style={{ marginTop: ss(20) }}
             form={
               <Box w={'70%'}>
@@ -218,7 +204,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                   onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index);
                   }}
-                  defaultButtonText={'Select country'}
+                  defaultButtonText={'请选择理疗师'}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                   }}
@@ -247,7 +233,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                           />
                         }
                         size={ss(18, { min: 15 })}
-                        color="#999"
+                        color='#999'
                       />
                     );
                   }}
@@ -257,20 +243,19 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderRadius: ss(8),
                   }}
                   rowStyle={{
-                    height: ss(50, { min: 30 }),
                     backgroundColor: '#fff',
                     borderBottomColor: '#D8D8D8',
                   }}
                   rowTextStyle={{
                     color: '#333',
                     textAlign: 'center',
+                    fontSize: sp(16, { min: 12 }),
                   }}
                   selectedRowStyle={{
                     backgroundColor: '#f8f8f8',
                   }}
                   search
                   searchInputStyle={{
-                    height: ss(50, { min: 30 }),
                     backgroundColor: '#00B49E',
                     borderBottomWidth: 1,
                     borderBottomColor: '#FFF',
@@ -295,6 +280,56 @@ export default function EditCustomer(params: EditCustomerParams) {
           />
         </Column>
       </Flex>
+      <Modal
+        isOpen={isOpenBirthdayPicker}
+        onClose={() => {
+          setIsOpenBirthdayPicker(false);
+        }}>
+        <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
+          <DatePicker
+            options={{
+              textHeaderFontSize: sp(16, { min: 12 }),
+              mainColor: '#00B49E',
+            }}
+            onSelectedChange={(date) => {
+              currentSelectBirthday = date;
+            }}
+            current={birthday}
+            selected={birthday}
+            mode='calendar'
+          />
+          <Row justifyContent={'flex-end'} mt={ss(12)}>
+            <Pressable
+              onPress={() => {
+                setBirthday(currentSelectBirthday);
+                setIsOpenBirthdayPicker(false);
+              }}>
+              <Box
+                bgColor={'#00B49E'}
+                px={ls(26)}
+                py={ss(12)}
+                borderRadius={ss(8)}
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+                确定
+              </Box>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setIsOpenBirthdayPicker(false);
+              }}>
+              <Box
+                bgColor={'#D8D8D8'}
+                px={ls(26)}
+                py={ss(12)}
+                ml={ls(10)}
+                borderRadius={ss(8)}
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+                取消
+              </Box>
+            </Pressable>
+          </Row>
+        </Flex>
+      </Modal>
     </ScrollView>
   );
 }
