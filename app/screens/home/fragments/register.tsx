@@ -23,7 +23,10 @@ import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Register() {
-  const { getRegisterCustomers, registers } = useFlowStore();
+  const {
+    getRegisterCustomers,
+    register: { customers },
+  } = useFlowStore();
   useEffect(() => {
     getRegisterCustomers();
   }, []);
@@ -37,10 +40,9 @@ export default function Register() {
           borderRadius={ss(10)}
           justifyContent={'space-between'}
           flexWrap={'wrap'}
-          p={ss(40)}
-        >
-          {registers.map((register) => (
-            <CustomerItem customer={register} key={register.id} />
+          p={ss(40)}>
+          {customers.map((customer) => (
+            <CustomerItem customer={customer} key={customer.id} />
           ))}
         </Row>
       </ScrollView>
@@ -88,8 +90,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
       w={ls(467)}
       h={ss(148)}
       mb={ss(40)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Row pt={ss(20)} pl={ls(30)}>
         <Column justifyContent={'center'}>
           <Image
@@ -123,8 +124,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(3)}
-            >
+              ml={ls(3)}>
               {ageText}
             </Text>
           </Row>
@@ -141,8 +141,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(10)}
-            >
+              ml={ls(10)}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
@@ -158,8 +157,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
             color: StatusTextConfig[customer.status].textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}
-        >
+          borderTopRightRadius={ss(8)}>
           {StatusTextConfig[customer.status].text}
         </Box>
         {customer.status == CustomerStatus.ToBeAnalyzed && (
@@ -174,8 +172,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
                   start: [0, 0],
                   end: [1, 1],
                 },
-              }}
-            >
+              }}>
               <Text color='white' fontSize={sp(16)}>
                 分析
               </Text>
@@ -263,8 +260,7 @@ function Filter() {
         <Pressable
           onPress={() => {
             setShowFilter(!showFilter);
-          }}
-        >
+          }}>
           <Row alignItems={'center'}>
             <Icon
               as={<FontAwesome name='filter' />}
@@ -280,8 +276,7 @@ function Filter() {
         <Pressable
           onPress={() => {
             navigation.navigate('Register');
-          }}
-        >
+          }}>
           <Box
             ml={ls(20)}
             bg={{
@@ -293,8 +288,7 @@ function Filter() {
             }}
             px={ls(26)}
             py={ss(10)}
-            _text={{ fontSize: ss(14), color: 'white' }}
-          >
+            _text={{ fontSize: ss(14), color: 'white' }}>
             登记
           </Box>
         </Pressable>

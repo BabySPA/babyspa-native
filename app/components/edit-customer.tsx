@@ -1,7 +1,5 @@
 import {
-  Actionsheet,
   Box,
-  Button,
   Column,
   Flex,
   Icon,
@@ -10,7 +8,6 @@ import {
   Radio,
   Row,
   ScrollView,
-  Select,
   Text,
 } from 'native-base';
 import { Pressable, StyleProp, ViewStyle } from 'react-native';
@@ -22,6 +19,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import SelectDropdown from 'react-native-select-dropdown';
 import DatePicker from './date-picker';
+import useFlowStore from '../stores/flow';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -38,7 +36,7 @@ function FormBox(props: FormBoxParams) {
   const { required, form, title, style } = props;
   return (
     <Row style={style} h={ls(48)} alignItems={'center'}>
-      <Row alignItems={'center'} mr={ls(30)} w={ls(70)}>
+      <Row alignItems={'center'} mr={ls(30)} w={ls(75)}>
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>
@@ -54,8 +52,20 @@ export default function EditCustomer(params: EditCustomerParams) {
   const [birthday, setBirthday] = useState<string>(currentSelectBirthday);
   const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
 
+  const { operators } = useFlowStore();
+
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
+  };
+
+  const currentForm = {
+    name: '',
+    nickname: '',
+    gender: 1,
+    birthday: currentSelectBirthday,
+    phoneNumber: '',
+    allergy: '',
+    operatorId: '',
   };
 
   const { style = {} } = params;
@@ -182,34 +192,22 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            required
             title='理疗师'
             style={{ marginTop: ss(20) }}
             form={
               <Box w={'70%'}>
                 <SelectDropdown
-                  data={[
-                    'Egypt',
-                    'Canada',
-                    'Australia',
-                    'Ireland',
-                    'Brazil',
-                    'England',
-                    'Dubai',
-                    'France',
-                    'Germany',
-                    'Saudi Arabia',
-                    'Argentina',
-                    'India',
-                  ]}
+                  data={operators}
                   onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index);
                   }}
                   defaultButtonText={'请选择理疗师'}
                   buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem;
+                    return selectedItem.name;
                   }}
                   rowTextForSelection={(item, index) => {
-                    return item;
+                    return item.name;
                   }}
                   buttonStyle={{
                     width: '100%',
@@ -253,26 +251,6 @@ export default function EditCustomer(params: EditCustomerParams) {
                   }}
                   selectedRowStyle={{
                     backgroundColor: '#f8f8f8',
-                  }}
-                  search
-                  searchInputStyle={{
-                    backgroundColor: '#00B49E',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#FFF',
-                  }}
-                  searchPlaceHolder={'Search here'}
-                  searchPlaceHolderColor={'#F8F8F8'}
-                  searchInputTxtStyle={{
-                    fontSize: sp(20, { min: 12 }),
-                  }}
-                  renderSearchInputLeftIcon={() => {
-                    return (
-                      <FontAwesome
-                        name={'search'}
-                        color={'#FFF'}
-                        size={ss(18, { min: 15 })}
-                      />
-                    );
                   }}
                 />
               </Box>

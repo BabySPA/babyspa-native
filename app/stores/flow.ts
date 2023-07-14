@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import request from '~/app/api';
+import { DOCTOR_ROLE_ID } from '../constants';
 
 export enum CustomerStatus {
   Completed = 0, // 已完成
@@ -26,28 +27,45 @@ export interface Customer {
   tag: string;
 }
 
+interface Operator {
+  gender: number;
+  name: string;
+  phoneNumber: string;
+  roleKey: string;
+  username: string;
+}
 interface FlowState {
-  registers: Customer[];
-  searchKeywords: string;
-  startDate: string;
-  endDate: string;
-  status: CustomerStatus | -1;
-  page: number;
-  hasNextPage: boolean;
+  operators: Operator[];
+  register: {
+    customers: Customer[];
+    page: number;
+    hasNextPage: boolean;
+    searchKeywords: string;
+    startDate: string;
+    endDate: string;
+    status: CustomerStatus | -1;
+  };
+
   getRegisterCustomers: () => Promise<void>;
+  getOperators: () => Promise<void>;
 }
 
 const useFlowStore = create<FlowState>((set, get) => ({
-  registers: [],
-  searchKeywords: '',
-  status: -1,
-  startDate: '',
-  endDate: '',
-  page: 1,
-  hasNextPage: false, // hasNextPage:false
+  register: {
+    customers: [],
+    page: 1,
+    hasNextPage: false, // hasNextPage:false
+    searchKeywords: '',
+    status: -1,
+    startDate: '',
+    endDate: '',
+  },
+  operators: [],
 
   getRegisterCustomers: async () => {
-    const { searchKeywords, status, startDate, endDate, page } = get();
+    const {
+      register: { searchKeywords, status, startDate, endDate, page },
+    } = get();
     const params: any = {
       page: page,
       pageSize: 20,
@@ -67,8 +85,26 @@ const useFlowStore = create<FlowState>((set, get) => ({
 
     request.get('/customers', { params }).then(({ data }) => {
       const { docs, hasNextPage } = data;
-      set({ registers: docs, hasNextPage: hasNextPage });
+      set({
+        register: {
+          ...get().register,
+          customers: docs,
+          hasNextPage: hasNextPage,
+        },
+      });
     });
+  },
+
+  getOperators: async () => {
+    request
+      .get('/users', {
+        params: {
+          roleKey: DOCTOR_ROLE_ID,
+        },
+      })
+      .then(({ data }) => {
+        set({ operators: data });
+      });
   },
 }));
 

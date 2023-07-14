@@ -1,24 +1,21 @@
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Center,
-  Flex,
-  Text,
-  Pressable,
-  StatusBar,
-  Icon,
-  Row,
-} from 'native-base';
+import { Box, Text, Pressable, Row } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import EditCustomer from '~/app/components/edit-customer';
 import SelectCustomer from '~/app/components/select-customer';
+import { useEffect } from 'react';
+import useFlowStore from '~/app/stores/flow';
 
 export default function RegisterScreen({
   navigation,
 }: AppStackScreenProps<'Register'>) {
+  const { getOperators } = useFlowStore();
+
+  useEffect(() => {
+    getOperators();
+  }, [getOperators]);
+  
   return (
     <Box flex={1}>
       <NavigationBar
