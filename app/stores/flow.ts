@@ -1,24 +1,15 @@
 import { create } from 'zustand';
 import request from '~/app/api';
-import { DOCTOR_ROLE_ID } from '../constants';
-
-export enum CustomerStatus {
-  Completed = 0, // 已完成
-  Canceled, // 已取消
-  ToBeCollected, // 待收集
-  ToBeAnalyzed, // 待分析
-  ToBeConfirmed, // 待确认
-}
+import { CustomerStatus, DOCTOR_ROLE_ID, Gender } from '../constants';
+import dayjs from 'dayjs';
+import { immer } from 'zustand/middleware/immer';
+import { produce } from 'immer';
 
 export interface Customer {
-  operator: {
-    id: string;
-    name: string;
-    phoneNumber: string;
-  };
+  operator: OperatorInfo;
   id: string;
   name: string;
-  gender: number;
+  gender: Gender;
   birthday: string;
   nickname: string;
   phoneNumber: string;
@@ -28,12 +19,29 @@ export interface Customer {
 }
 
 interface Operator {
-  gender: number;
+  gender: Gender;
   name: string;
   phoneNumber: string;
   roleKey: string;
   username: string;
 }
+
+interface OperatorInfo {
+  id: string;
+  name: string;
+  phoneNumber: string;
+}
+
+interface RegisterCustomerInfo {
+  name: string;
+  nickname: string;
+  gender: number;
+  birthday: string;
+  phoneNumber: string;
+  allergy: string;
+  operator: OperatorInfo | null;
+}
+
 interface FlowState {
   operators: Operator[];
   register: {
@@ -44,68 +52,108 @@ interface FlowState {
     startDate: string;
     endDate: string;
     status: CustomerStatus | -1;
+    currentCustomer: Partial<RegisterCustomerInfo>;
   };
 
   getRegisterCustomers: () => Promise<void>;
   getOperators: () => Promise<void>;
+  regist: () => Promise<any>;
+  setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
 }
 
-const useFlowStore = create<FlowState>((set, get) => ({
-  register: {
-    customers: [],
-    page: 1,
-    hasNextPage: false, // hasNextPage:false
-    searchKeywords: '',
-    status: -1,
-    startDate: '',
-    endDate: '',
-  },
-  operators: [],
+const useFlowStore = create(
+  immer<FlowState>((set, get) => ({
+    register: {
+      customers: [],
+      page: 1,
+      hasNextPage: false, // hasNextPage:false
+      searchKeywords: '',
+      status: -1,
+      startDate: '',
+      endDate: '',
+      currentCustomer: {
+        name: '',
+        nickname: '',
+        gender: 1,
+        birthday: dayjs().format('YYYY-MM-DD'),
+        phoneNumber: '',
+        allergy: '',
+        operator: null,
+      },
+    },
+    operators: [],
 
-  getRegisterCustomers: async () => {
-    const {
-      register: { searchKeywords, status, startDate, endDate, page },
-    } = get();
-    const params: any = {
-      page: page,
-      pageSize: 20,
-    };
-    if (searchKeywords) {
-      params.search = searchKeywords;
-    }
-    if (status !== -1) {
-      params.status = status;
-    }
-    if (startDate) {
-      params.startDate = startDate;
-    }
-    if (endDate) {
-      params.endDate = startDate;
-    }
+    getRegisterCustomers: async () => {
+      const {
+        register: { searchKeywords, status, startDate, endDate, page },
+      } = get();
+      const params: any = {
+        page: page,
+        pageSize: 20,
+      };
+      if (searchKeywords) {
+        params.search = searchKeywords;
+      }
+      if (status !== -1) {
+        params.status = status;
+      }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = startDate;
+      }
 
-    request.get('/customers', { params }).then(({ data }) => {
-      const { docs, hasNextPage } = data;
-      set({
-        register: {
-          ...get().register,
-          customers: docs,
-          hasNextPage: hasNextPage,
-        },
+      request.get('/customers', { params }).then(({ data }) => {
+        const { docs, hasNextPage } = data;
+        set({
+          register: {
+            ...get().register,
+            customers: docs,
+            hasNextPage: hasNextPage,
+          },
+        });
       });
-    });
-  },
+    },
 
-  getOperators: async () => {
-    request
-      .get('/users', {
-        params: {
-          roleKey: DOCTOR_ROLE_ID,
-        },
-      })
-      .then(({ data }) => {
-        set({ operators: data });
+    getOperators: async () => {
+      request
+        .get('/users', {
+          params: {
+            roleKey: DOCTOR_ROLE_ID,
+          },
+        })
+        .then(({ data }) => {
+          set({ operators: data });
+        });
+    },
+
+    setCurrentRegisterCustomer: (data) => {
+      return set((state) => {
+        state.register.currentCustomer = produce(
+          state.register.currentCustomer,
+          (draft) => {
+            Object.assign(draft, data);
+          },
+        );
       });
-  },
-}));
+    },
+
+    regist: async () => {
+      // 发起登记
+      const customer = get().register.currentCustomer;
+
+      return request.post('/customers', {
+        phoneNumber: customer.phoneNumber,
+        name: customer.name,
+        gender: customer.gender,
+        birthday: customer.birthday,
+        allergy: customer.allergy,
+        nickname: customer.nickname,
+        operatorId: customer.operator?.id,
+      });
+    },
+  })),
+);
 
 export default useFlowStore;

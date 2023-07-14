@@ -5,6 +5,7 @@
     "strict": true,
     "baseUrl": ".",
     "resolveJsonModule": true,
+    "noImplicitAny": true,
     "paths": {
       "~/assets": ["./assets/*"],
       "~/app/*": ["./app/*"]

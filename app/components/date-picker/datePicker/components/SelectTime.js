@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,12 +10,12 @@ import {
   I18nManager,
 } from 'react-native';
 
-import {useCalendar} from '../DatePicker';
+import { useCalendar } from '../DatePicker';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-const TimeScroller = ({title, data, onChange}) => {
-  const {options, utils} = useCalendar();
+const TimeScroller = ({ title, data, onChange }) => {
+  const { options, utils } = useCalendar();
   const [itemSize, setItemSize] = useState(0);
   const style = styles(options);
   const scrollAnimatedValue = useRef(new Animated.Value(0)).current;
@@ -25,19 +25,21 @@ const TimeScroller = ({title, data, onChange}) => {
 
   useEffect(() => {
     scrollListener.current && clearInterval(scrollListener.current);
-    scrollListener.current = scrollAnimatedValue.addListener(({value}) => (active.current = value));
+    scrollListener.current = scrollAnimatedValue.addListener(
+      ({ value }) => (active.current = value),
+    );
 
     return () => {
       clearInterval(scrollListener.current);
     };
   }, [scrollAnimatedValue]);
 
-  const changeItemWidth = ({nativeEvent}) => {
-    const {width} = nativeEvent.layout;
+  const changeItemWidth = ({ nativeEvent }) => {
+    const { width } = nativeEvent.layout;
     !itemSize && setItemSize(width / 5);
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     const makeAnimated = (a, b, c) => {
       return {
         inputRange: [...data.map((_, i) => i * itemSize)],
@@ -64,7 +66,9 @@ const TimeScroller = ({title, data, onChange}) => {
             opacity: scrollAnimatedValue.interpolate(makeAnimated(1, 0.6, 0.3)),
             transform: [
               {
-                scale: scrollAnimatedValue.interpolate(makeAnimated(1.2, 0.9, 0.8)),
+                scale: scrollAnimatedValue.interpolate(
+                  makeAnimated(1.2, 0.9, 0.8),
+                ),
               },
               {
                 scaleX: I18nManager.isRTL ? -1 : 1,
@@ -89,9 +93,12 @@ const TimeScroller = ({title, data, onChange}) => {
         horizontal
         snapToInterval={itemSize}
         decelerationRate={'fast'}
-        onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollAnimatedValue}}}], {
-          useNativeDriver: true,
-        })}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollAnimatedValue } } }],
+          {
+            useNativeDriver: true,
+          },
+        )}
         data={I18nManager.isRTL ? data.reverse() : data}
         onMomentumScrollEnd={() => {
           const index = Math.round(active.current / itemSize);
@@ -115,7 +122,8 @@ const TimeScroller = ({title, data, onChange}) => {
 };
 
 const SelectTime = () => {
-  const {options, state, utils, minuteInterval, mode, onTimeChange} = useCalendar();
+  const { options, state, utils, minuteInterval, mode, onTimeChange } =
+    useCalendar();
   const [mainState, setMainState] = state;
   const [show, setShow] = useState(false);
   const [time, setTime] = useState({
@@ -186,16 +194,22 @@ const SelectTime = () => {
     <Animated.View style={containerStyle}>
       <TimeScroller
         title={utils.config.hour}
-        data={Array.from({length: 24}, (x, i) => i)}
-        onChange={hour => setTime({...time, hour})}
+        data={Array.from({ length: 24 }, (x, i) => i)}
+        onChange={(hour) => setTime({ ...time, hour })}
       />
       <TimeScroller
         title={utils.config.minute}
-        data={Array.from({length: 60 / minuteInterval}, (x, i) => i * minuteInterval)}
-        onChange={minute => setTime({...time, minute})}
+        data={Array.from(
+          { length: 60 / minuteInterval },
+          (x, i) => i * minuteInterval,
+        )}
+        onChange={(minute) => setTime({ ...time, minute })}
       />
       <View style={style.footer}>
-        <TouchableOpacity style={style.button} activeOpacity={0.8} onPress={selectTime}>
+        <TouchableOpacity
+          style={style.button}
+          activeOpacity={0.8}
+          onPress={selectTime}>
           <Text style={style.btnText}>{utils.config.timeSelect}</Text>
         </TouchableOpacity>
         {mode !== 'time' && (
@@ -215,7 +229,7 @@ const SelectTime = () => {
   ) : null;
 };
 
-const styles = theme =>
+const styles = (theme) =>
   StyleSheet.create({
     container: {
       position: 'absolute',
@@ -271,4 +285,4 @@ const styles = theme =>
     },
   });
 
-export {SelectTime};
+export { SelectTime };

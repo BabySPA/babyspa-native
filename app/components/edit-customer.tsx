@@ -48,8 +48,6 @@ function FormBox(props: FormBoxParams) {
 }
 
 export default function EditCustomer(params: EditCustomerParams) {
-  let currentSelectBirthday = dayjs().format('YYYY-MM-DD');
-  const [birthday, setBirthday] = useState<string>(currentSelectBirthday);
   const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
 
   const { operators } = useFlowStore();
@@ -58,15 +56,12 @@ export default function EditCustomer(params: EditCustomerParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const currentForm = {
-    name: '',
-    nickname: '',
-    gender: 1,
-    birthday: currentSelectBirthday,
-    phoneNumber: '',
-    allergy: '',
-    operatorId: '',
-  };
+  const {
+    register: { currentCustomer },
+    setCurrentRegisterCustomer,
+  } = useFlowStore();
+
+  let currentSelectBirthday = currentCustomer.birthday;
 
   const { style = {} } = params;
 
@@ -84,10 +79,14 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
+                defaultValue={currentCustomer.name}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder='请输入'
+                onChangeText={(text) => {
+                  setCurrentRegisterCustomer({ name: text });
+                }}
               />
             }
           />
@@ -100,7 +99,11 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
+                defaultValue={currentCustomer.nickname}
                 placeholderTextColor={'#CCC'}
+                onChangeText={(text) => {
+                  setCurrentRegisterCustomer({ nickname: text });
+                }}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder='请输入'
@@ -112,11 +115,11 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Radio.Group
-                defaultValue='1'
+                defaultValue={`${currentCustomer.gender}`}
                 name='gender'
                 flexDirection={'row'}
                 onChange={(event) => {
-                  console.log(event);
+                  setCurrentRegisterCustomer({ gender: +event });
                 }}>
                 <Radio colorScheme='green' value='1' size={'sm'}>
                   男
@@ -146,7 +149,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     py={ss(10)}
                     px={ss(20)}>
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                      {birthday}
+                      {currentCustomer.birthday}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -165,9 +168,13 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Input
                 w={'70%'}
+                defaultValue={currentCustomer.phoneNumber}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
+                onChangeText={(text) => {
+                  setCurrentRegisterCustomer({ phoneNumber: text });
+                }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
@@ -180,10 +187,14 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
+                defaultValue={currentCustomer.allergy}
                 w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
+                onChangeText={(text) => {
+                  setCurrentRegisterCustomer({ allergy: text });
+                }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
@@ -201,8 +212,18 @@ export default function EditCustomer(params: EditCustomerParams) {
                   data={operators}
                   onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index);
+
+                    setCurrentRegisterCustomer({
+                      operator: {
+                        id: selectedItem._id,
+                        name: selectedItem.name,
+                        phoneNumber: selectedItem.phoneNumber,
+                      },
+                    });
                   }}
-                  defaultButtonText={'请选择理疗师'}
+                  defaultButtonText={
+                    currentCustomer?.operator?.name ?? '请选择理疗师'
+                  }
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name;
                   }}
@@ -272,14 +293,14 @@ export default function EditCustomer(params: EditCustomerParams) {
             onSelectedChange={(date) => {
               currentSelectBirthday = date;
             }}
-            current={birthday}
-            selected={birthday}
+            current={currentCustomer.birthday}
+            selected={currentCustomer.birthday}
             mode='calendar'
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
               onPress={() => {
-                setBirthday(currentSelectBirthday);
+                setCurrentRegisterCustomer({ birthday: currentSelectBirthday });
                 setIsOpenBirthdayPicker(false);
               }}>
               <Box

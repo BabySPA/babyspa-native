@@ -10,16 +10,16 @@ import useFlowStore from '~/app/stores/flow';
 export default function RegisterScreen({
   navigation,
 }: AppStackScreenProps<'Register'>) {
-  const { getOperators } = useFlowStore();
+  const { getOperators, regist, getRegisterCustomers } = useFlowStore();
 
   useEffect(() => {
     getOperators();
   }, [getOperators]);
-  
+
   return (
     <Box flex={1}>
       <NavigationBar
-        onBackIntercept={() => true}
+        onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
             登记
@@ -28,7 +28,10 @@ export default function RegisterScreen({
         rightElement={
           <Pressable
             onPress={() => {
-              console.log('登记');
+              regist().then((res) => {
+                getRegisterCustomers();
+                // TODO
+              });
             }}>
             <Box
               bgColor={'white'}

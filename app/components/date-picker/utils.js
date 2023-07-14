@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { Animated, Easing, I18nManager } from 'react-native';
-import moment from 'moment-jalaali';
+import dayjs from 'dayjs';
 
-const m = moment();
+const m = dayjs();
 
 const gregorianConfigs = {
   dayNames: [
@@ -76,7 +76,7 @@ class utils {
     date.format(this.config[formatName]);
 
   getFormatedDate = (date = new Date(), format = 'YYYY/MM/DD') =>
-    moment(date).format(format);
+    dayjs(date).format(format);
 
   getTime = (time) => this.getDate(time).format(this.config.timeFormat);
 
@@ -98,7 +98,7 @@ class utils {
     return value.replace(/[۰-۹]/g, (w) => w.charCodeAt(0) - charCodeZero);
   };
 
-  getDate = (time) => moment(time, this.config.selectedFormat);
+  getDate = (time) => dayjs(time, this.config.selectedFormat);
 
   getMonthYearText = (time) => {
     const { isGregorian } = this.data;
@@ -170,7 +170,7 @@ class utils {
     let date = this.getDate(time);
     const currentMonthDays = isGregorian
       ? date.daysInMonth()
-      : moment.jDaysInMonth(date.jYear(), date.jMonth());
+      : dayjs.jDaysInMonth(date.jYear(), date.jMonth());
     const firstDay = isGregorian ? date.date(1) : date.jDate(1);
     const dayOfMonth = (firstDay.day() + Number(!isGregorian)) % 7;
     return [
