@@ -1,5 +1,5 @@
 import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
-import { AppStackScreenProps } from '../../types';
+import { AppStackScreenProps, CustomerScreenType } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import EditCustomer from '~/app/components/edit-customer';
@@ -8,14 +8,17 @@ import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { toastAlert } from '~/app/utils/toast';
 
-export default function RegisterScreen({
+export default function CustomerInfoScreen({
   navigation,
-}: AppStackScreenProps<'Register'>) {
-  const { getOperators, requestRegist, requestRegisterCustomers } =
+  route: { params },
+}: AppStackScreenProps<'CustomerInfo'>) {
+  const { type } = params;
+  const isRegister = type == CustomerScreenType.register;
+
+  const { getOperators, requestPostCustomerInfo, requestRegisterCustomers } =
     useFlowStore();
 
   const toast = useToast();
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -28,7 +31,7 @@ export default function RegisterScreen({
         onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
-            登记
+            {isRegister ? '登记' : '快速采集'}
           </Text>
         }
         rightElement={
@@ -38,9 +41,13 @@ export default function RegisterScreen({
 
               setLoading(true);
 
-              requestRegist()
-                .then((res) => {
-                  toastAlert(toast, 'success', '登记成功！');
+              requestPostCustomerInfo()
+                .then(() => {
+                  toastAlert(
+                    toast,
+                    'success',
+                    isRegister ? '登记成功！' : '快速采集客户信息成功！',
+                  );
                   requestRegisterCustomers();
                   navigation.goBack();
                 })
@@ -48,7 +55,9 @@ export default function RegisterScreen({
                   toastAlert(
                     toast,
                     'error',
-                    '登记失败，请检查客户信息是否正确！',
+                    isRegister
+                      ? '登记失败，请检查客户信息是否正确！'
+                      : '快速采集客户信息失败！',
                   );
                 })
                 .finally(() => {

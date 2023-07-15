@@ -15,8 +15,8 @@ export const DOCTOR_ROLE_ID = '6Zeo5bqX6LCD55CG5biI';
 export const StatusTextConfig = {
   [CustomerStatus.ToBeConfirmed]: {
     text: '待确认',
-    textColor: '#FFC700',
-    bgColor: 'rgba(255, 199, 0, 0.2)',
+    textColor: '#FB6459',
+    bgColor: 'rgba(251, 100, 89, 0.2)',
   },
   [CustomerStatus.ToBeCollected]: {
     text: '待采集',
@@ -35,7 +35,7 @@ export const StatusTextConfig = {
   },
   [CustomerStatus.Canceled]: {
     text: '已取消',
-    textColor: '#FB6459',
-    bgColor: 'rgba(251, 100, 89, 0.2)',
+    textColor: '#777',
+    bgColor: 'rgba(119, 119, 119, 0.2)',
   },
 };

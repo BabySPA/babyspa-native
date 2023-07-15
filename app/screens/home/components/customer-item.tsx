@@ -20,8 +20,8 @@ export default function CustomerItem({ customer }: { customer: Customer }) {
       h={ss(148)}
       mb={ss(40)}
       justifyContent={'space-between'}>
-      <Row pt={ss(20)} pl={ls(30)}>
-        <Column justifyContent={'center'}>
+      <Row p={ss(20)}>
+        <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
             style={{ width: ss(60), height: ss(60) }}
             source={

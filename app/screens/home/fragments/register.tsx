@@ -12,14 +12,10 @@ import {
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
+import { CustomerScreenType } from '~/app/types';
 
 export default function Register() {
   const {
@@ -37,11 +33,12 @@ export default function Register() {
           flex={1}
           bgColor='white'
           borderRadius={ss(10)}
-          justifyContent={'space-between'}
           flexWrap={'wrap'}
           p={ss(40)}>
-          {customers.map((customer) => (
-            <CustomerItem customer={customer} key={customer.id} />
+          {customers.map((customer, idx) => (
+            <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
+              <CustomerItem customer={customer} />
+            </Box>
           ))}
         </Row>
       </ScrollView>
@@ -140,7 +137,9 @@ function Filter() {
         </Pressable>
         <Pressable
           onPress={() => {
-            navigation.navigate('Register');
+            navigation.navigate('CustomerInfo', {
+              type: CustomerScreenType.register,
+            });
           }}>
           <Box
             ml={ls(20)}

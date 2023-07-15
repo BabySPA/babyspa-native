@@ -33,10 +33,7 @@ export default function EditCustomer(params: EditCustomerParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const {
-    register: { currentCustomer },
-    setCurrentRegisterCustomer,
-  } = useFlowStore();
+  const { currentCustomer, setCurrentRegisterCustomer } = useFlowStore();
 
   let currentSelectBirthday = currentCustomer.birthday;
 
@@ -97,7 +94,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Radio.Group
-                defaultValue={`${currentCustomer.gender}`}
+                value={`${currentCustomer.gender}`}
                 name='gender'
                 flexDirection={'row'}
                 onChange={(event) => {
@@ -106,7 +103,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Radio colorScheme='green' value='1' size={'sm'}>
                   男
                 </Radio>
-                <Radio colorScheme='green' value='2' ml={ls(40)} size={'sm'}>
+                <Radio colorScheme='green' value='0' ml={ls(40)} size={'sm'}>
                   女
                 </Radio>
               </Radio.Group>

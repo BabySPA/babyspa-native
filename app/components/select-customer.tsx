@@ -4,7 +4,6 @@ import {
   Icon,
   Input,
   Row,
-  ScrollView,
   Pressable,
   Text,
   FlatList,
@@ -103,6 +102,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
   const {
     register: { customers },
     requestRegisterCustomers,
+    setCurrentRegisterCustomer,
   } = useFlowStore();
 
   useEffect(() => {
@@ -143,11 +143,20 @@ export default function SelectCustomer(params: SelectCustomerParams) {
         <Box mt={ss(30)}>
           <FlatList
             data={customers}
+            maxH={ss(520)}
             renderItem={({ item }) => {
               return (
                 <Pressable
                   onPress={() => {
-                    console.log(item);
+                    setCurrentRegisterCustomer({
+                      name: item.name,
+                      nickname: item.birthday,
+                      gender: item.gender,
+                      birthday: item.birthday,
+                      phoneNumber: item.phoneNumber,
+                      allergy: item.allergy,
+                      operator: item.operator,
+                    });
                   }}>
                   <CustomerItem customer={item} />
                 </Pressable>
