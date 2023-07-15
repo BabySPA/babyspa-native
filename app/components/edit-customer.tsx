@@ -14,37 +14,14 @@ import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import BoxTitle from './box-title';
 import { ss, ls, sp } from '../utils/style';
 import { useState } from 'react';
-import Dot from './dot';
 import { FontAwesome } from '@expo/vector-icons';
-import dayjs from 'dayjs';
 import SelectDropdown from 'react-native-select-dropdown';
 import DatePicker from './date-picker';
 import useFlowStore from '../stores/flow';
+import { FormBox } from './form-box';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
-}
-
-interface FormBoxParams {
-  title: string;
-  form: JSX.Element;
-  required?: boolean;
-  style?: StyleProp<ViewStyle>;
-}
-
-function FormBox(props: FormBoxParams) {
-  const { required, form, title, style } = props;
-  return (
-    <Row style={style} h={ls(48)} alignItems={'center'}>
-      <Row alignItems={'center'} mr={ls(30)} w={ls(75)}>
-        <Box opacity={required ? 1 : 0}>
-          <Dot />
-        </Box>
-        <Text fontSize={sp(20, { min: 12 })}>{title}</Text>
-      </Row>
-      {form}
-    </Row>
-  );
 }
 
 export default function EditCustomer(params: EditCustomerParams) {
@@ -66,7 +43,12 @@ export default function EditCustomer(params: EditCustomerParams) {
   const { style = {} } = params;
 
   return (
-    <ScrollView flex={1} bgColor={'#fff'} style={style} p={ss(20)}>
+    <ScrollView
+      flex={1}
+      bgColor={'#fff'}
+      style={style}
+      p={ss(20)}
+      borderRadius={ss(10)}>
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>

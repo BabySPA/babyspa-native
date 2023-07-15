@@ -55,9 +55,9 @@ interface FlowState {
     currentCustomer: Partial<RegisterCustomerInfo>;
   };
 
-  getRegisterCustomers: () => Promise<void>;
+  requestRegisterCustomers: () => Promise<void>;
   getOperators: () => Promise<void>;
-  regist: () => Promise<any>;
+  requestRegist: () => Promise<any>;
   setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
 }
 
@@ -83,13 +83,13 @@ const useFlowStore = create(
     },
     operators: [],
 
-    getRegisterCustomers: async () => {
+    requestRegisterCustomers: async () => {
       const {
         register: { searchKeywords, status, startDate, endDate, page },
       } = get();
       const params: any = {
         page: page,
-        pageSize: 20,
+        pageSize: 100,
       };
       if (searchKeywords) {
         params.search = searchKeywords;
@@ -139,7 +139,7 @@ const useFlowStore = create(
       });
     },
 
-    regist: async () => {
+    requestRegist: async () => {
       // 发起登记
       const customer = get().register.currentCustomer;
 

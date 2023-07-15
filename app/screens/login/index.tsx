@@ -12,7 +12,7 @@ import {
   Text,
   useTheme,
   useToast,
-  VStack,
+  Column,
 } from 'native-base';
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
@@ -61,8 +61,7 @@ export default function LoginScreen({
             color='coolGray.800'
             _dark={{
               color: 'warmGray.50',
-            }}
-          >
+            }}>
             Welcome
           </Heading>
           <Heading
@@ -72,12 +71,11 @@ export default function LoginScreen({
             }}
             color='coolGray.600'
             fontWeight='medium'
-            size='xs'
-          >
+            size='xs'>
             登录以继续
           </Heading>
 
-          <VStack space={3} mt='5'>
+          <Column space={3} mt='5'>
             <FormControl>
               <FormControl.Label>用户名</FormControl.Label>
               <Input
@@ -116,11 +114,10 @@ export default function LoginScreen({
               leftIcon={
                 <Icon as={<MaterialIcons name='login' />} size={5} ml='2' />
               }
-              isLoading={loading}
-            >
+              isLoading={loading}>
               登录
             </Button>
-          </VStack>
+          </Column>
         </Box>
       </Center>
     </Flex>

@@ -1,16 +1,22 @@
-import { Box, Text, Pressable, Row } from 'native-base';
+import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import EditCustomer from '~/app/components/edit-customer';
 import SelectCustomer from '~/app/components/select-customer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
+import { toastAlert } from '~/app/utils/toast';
 
 export default function RegisterScreen({
   navigation,
 }: AppStackScreenProps<'Register'>) {
-  const { getOperators, regist, getRegisterCustomers } = useFlowStore();
+  const { getOperators, requestRegist, requestRegisterCustomers } =
+    useFlowStore();
+
+  const toast = useToast();
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getOperators();
@@ -28,19 +34,36 @@ export default function RegisterScreen({
         rightElement={
           <Pressable
             onPress={() => {
-              regist().then((res) => {
-                getRegisterCustomers();
-                // TODO
-              });
+              if (loading) return;
+
+              setLoading(true);
+
+              requestRegist()
+                .then((res) => {
+                  toastAlert(toast, 'success', '登记成功！');
+                  requestRegisterCustomers();
+                  navigation.goBack();
+                })
+                .catch(() => {
+                  toastAlert(
+                    toast,
+                    'error',
+                    '登记失败，请检查客户信息是否正确！',
+                  );
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
             }}>
-            <Box
-              bgColor={'white'}
-              borderRadius={ss(4)}
-              _text={{ color: '#03CBB2', fontSize: sp(14, { min: 12 }) }}
-              px={ls(26)}
-              py={ss(10)}>
-              确定
-            </Box>
+            <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
+              {loading && <Spinner mr={ls(5)} />}
+              <Text
+                color={'#03CBB2'}
+                opacity={loading ? 0.2 : 1}
+                fontSize={sp(14, { min: 12 })}>
+                确定
+              </Text>
+            </Row>
           </Pressable>
         }
       />

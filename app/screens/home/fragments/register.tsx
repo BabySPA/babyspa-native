@@ -23,11 +23,11 @@ import CustomerItem from '../components/customer-item';
 
 export default function Register() {
   const {
-    getRegisterCustomers,
+    requestRegisterCustomers,
     register: { customers },
   } = useFlowStore();
   useEffect(() => {
-    getRegisterCustomers();
+    requestRegisterCustomers();
   }, []);
   return (
     <Flex flex={1}>
