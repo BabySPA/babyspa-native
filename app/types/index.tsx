@@ -4,6 +4,7 @@
  */
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CustomerStatus } from '../constants';
 
 declare global {
   namespace ReactNavigation {
@@ -21,7 +22,9 @@ export type RootStackParamList = {
   CustomerInfo: {
     type: CustomerScreenType;
   };
-  Flow: undefined;
+  Flow: {
+    status: CustomerStatus;
+  };
   Modal: undefined;
   NotFound: undefined;
 };
@@ -34,7 +37,9 @@ export type AppStackList = {
   CustomerInfo: {
     type: CustomerScreenType;
   };
-  Flow: undefined;
+  Flow: {
+    status: CustomerStatus;
+  };
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =

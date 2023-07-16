@@ -16,6 +16,7 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
 import { CustomerScreenType } from '~/app/types';
+import { OperateType } from '~/app/constants';
 
 export default function Register() {
   const {
@@ -37,7 +38,7 @@ export default function Register() {
           p={ss(40)}>
           {customers.map((customer, idx) => (
             <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
-              <CustomerItem customer={customer} />
+              <CustomerItem customer={customer} type={OperateType.Register} />
             </Box>
           ))}
         </Row>

@@ -1,15 +1,29 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { Pressable, Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
-import { CustomerStatus, StatusTextConfig } from '~/app/constants';
+import OperateButton from '~/app/components/operate-button';
+import {
+  CustomerStatus,
+  OperateType,
+  StatusOperateConfig,
+  StatusTextConfig,
+} from '~/app/constants';
 import { Customer } from '~/app/stores/flow';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-export default function CustomerItem({ customer }: { customer: Customer }) {
+export default function CustomerItem({
+  customer,
+  type,
+}: {
+  customer: Customer;
+  type: OperateType;
+}) {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
+  const navigation = useNavigation();
   return (
     <Row
       borderRadius={ss(8)}
@@ -89,25 +103,22 @@ export default function CustomerItem({ customer }: { customer: Customer }) {
           borderTopRightRadius={ss(8)}>
           {StatusTextConfig[customer.status].text}
         </Box>
-        {customer.status == CustomerStatus.ToBeAnalyzed && (
-          <Pressable>
-            <Box
-              m={ss(10)}
-              borderRadius={ss(6)}
-              px={ls(20)}
-              bg={{
-                linearGradient: {
-                  colors: ['#22D59C', '#1AB7BE'],
-                  start: [0, 0],
-                  end: [1, 1],
-                },
-              }}>
-              <Text color='white' fontSize={sp(16)}>
-                分析
-              </Text>
-            </Box>
-          </Pressable>
-        )}
+
+        <OperateButton
+          text={StatusOperateConfig[customer.status].operate}
+          onPress={() => {
+            console.log('operate', customer.status);
+            if (customer.status === CustomerStatus.ToBeAnalyzed) {
+              navigation.navigate('Flow', {
+                status: CustomerStatus.ToBeAnalyzed,
+              });
+            } else if (customer.status === CustomerStatus.ToBeCollected) {
+              navigation.navigate('Flow', {
+                status: CustomerStatus.ToBeCollected,
+              });
+            }
+          }}
+        />
       </Flex>
     </Row>
   );

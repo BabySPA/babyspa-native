@@ -4,7 +4,7 @@ import { CustomerStatus, DOCTOR_ROLE_ID, Gender } from '../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
-
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 export interface Customer {
   operator: OperatorInfo;
   id: string;
@@ -229,5 +229,9 @@ const useFlowStore = create(
     },
   })),
 );
+
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('FlowStore', useFlowStore);
+}
 
 export default useFlowStore;

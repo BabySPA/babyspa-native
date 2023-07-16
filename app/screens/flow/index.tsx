@@ -12,11 +12,12 @@ import {
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function FlowScreen({
   navigation,
+  route,
 }: AppStackScreenProps<'Flow'>) {
+  const { status } = route.params;
   return (
     <Box flex={1}>
       <NavigationBar
