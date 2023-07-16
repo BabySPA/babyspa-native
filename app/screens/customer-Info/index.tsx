@@ -49,7 +49,12 @@ export default function CustomerInfoScreen({
                     isRegister ? '登记成功！' : '快速采集客户信息成功！',
                   );
                   requestRegisterCustomers();
-                  navigation.goBack();
+                  if (isRegister) {
+                    navigation.goBack();
+                  } else {
+                    // 进入流程页面
+                    navigation.navigate('Flow');
+                  }
                 })
                 .catch(() => {
                   toastAlert(

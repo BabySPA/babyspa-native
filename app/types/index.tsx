@@ -13,7 +13,7 @@ declare global {
 
 export enum CustomerScreenType {
   collection = 'collection',
-  register = 'register'
+  register = 'register',
 }
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackList> | undefined;
@@ -21,6 +21,7 @@ export type RootStackParamList = {
   CustomerInfo: {
     type: CustomerScreenType;
   };
+  Flow: undefined;
   Modal: undefined;
   NotFound: undefined;
 };
@@ -33,6 +34,7 @@ export type AppStackList = {
   CustomerInfo: {
     type: CustomerScreenType;
   };
+  Flow: undefined;
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =
