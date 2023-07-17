@@ -8,8 +8,9 @@ export default function OperateButton({
   text: string | undefined;
   onPress: () => void;
 }) {
+  if (!text) return null;
   return (
-    <Pressable onPress={onPress} display={text}>
+    <Pressable onPress={onPress}>
       <Box
         m={ss(10)}
         borderRadius={ss(6)}

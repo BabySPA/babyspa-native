@@ -15,15 +15,18 @@ export default function CustomerInfoScreen({
   const { type } = params;
   const isRegister = type == CustomerScreenType.register;
 
-  const { getOperators, requestPostCustomerInfo, requestRegisterCustomers } =
-    useFlowStore();
+  const {
+    requestGetOperators,
+    requestPostCustomerInfo,
+    requestRegisterCustomers,
+  } = useFlowStore();
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getOperators();
-  }, [getOperators]);
+    requestGetOperators();
+  }, [requestGetOperators]);
 
   return (
     <Box flex={1}>

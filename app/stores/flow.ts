@@ -4,7 +4,7 @@ import { CustomerStatus, DOCTOR_ROLE_ID, Gender } from '../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
+
 export interface Customer {
   operator: OperatorInfo;
   id: string;
@@ -17,6 +17,7 @@ export interface Customer {
   allergy: string;
   updatedAt: string;
   tag: string;
+  flowId: string;
 }
 
 interface Operator {
@@ -63,8 +64,9 @@ interface FlowState {
   requestRegisterCustomers: () => Promise<void>;
   requestCollectionCustomers: () => Promise<void>;
   requestAnalyzeCustomers: () => Promise<void>;
-  getOperators: () => Promise<void>;
+  requestGetOperators: () => Promise<void>;
   requestPostCustomerInfo: () => Promise<any>;
+  requestGetFlow: (flowId: string) => Promise<any>;
   setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
 }
 
@@ -193,7 +195,7 @@ const useFlowStore = create(
       });
     },
 
-    getOperators: async () => {
+    requestGetOperators: async () => {
       request
         .get('/users', {
           params: {
@@ -227,11 +229,11 @@ const useFlowStore = create(
         operatorId: customer.operator?.id,
       });
     },
+
+    requestGetFlow: async (flowId: string) => {
+      return request.get(`/flows/${flowId}`);
+    },
   })),
 );
-
-if (process.env.NODE_ENV === 'development') {
-  mountStoreDevtool('FlowStore', useFlowStore);
-}
 
 export default useFlowStore;

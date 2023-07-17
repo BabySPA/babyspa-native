@@ -107,14 +107,15 @@ export default function CustomerItem({
         <OperateButton
           text={StatusOperateConfig[customer.status].operate}
           onPress={() => {
-            console.log('operate', customer.status);
             if (customer.status === CustomerStatus.ToBeAnalyzed) {
               navigation.navigate('Flow', {
                 status: CustomerStatus.ToBeAnalyzed,
+                customer: customer,
               });
             } else if (customer.status === CustomerStatus.ToBeCollected) {
               navigation.navigate('Flow', {
                 status: CustomerStatus.ToBeCollected,
+                customer: customer,
               });
             }
           }}

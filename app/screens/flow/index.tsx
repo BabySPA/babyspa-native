@@ -1,30 +1,28 @@
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Center,
-  Flex,
-  Text,
-  Pressable,
-  StatusBar,
-  Icon,
-} from 'native-base';
+import { Box, Text, Pressable } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
+import { useEffect } from 'react';
+import useFlowStore from '~/app/stores/flow';
 
 export default function FlowScreen({
   navigation,
   route,
 }: AppStackScreenProps<'Flow'>) {
-  const { status } = route.params;
+  const { status, customer } = route.params;
+  const { requestGetFlow } = useFlowStore();
+  useEffect(() => {
+    requestGetFlow(customer.flowId).then((res) => {
+      console.log(res);
+    });
+  }, [requestGetFlow]);
   return (
     <Box flex={1}>
       <NavigationBar
-        onBackIntercept={() => true}
+        onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20)}>
-            张子萱
+            {customer.name}
           </Text>
         }
         rightElement={
