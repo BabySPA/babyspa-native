@@ -71,3 +71,26 @@ export const StatusTextConfig = {
     bgColor: 'rgba(119, 119, 119, 0.2)',
   },
 };
+
+export const FlowOperatorConfig = [
+  {
+    text: '健康资料',
+    key: 'healthInfo',
+  },
+  {
+    text: '调理导向',
+    key: 'guidance',
+  },
+  {
+    text: '分析结论',
+    key: 'conclusions',
+  },
+  {
+    text: '调理方案',
+    key: 'solution',
+  },
+  {
+    text: '反馈',
+    key: 'evaluation',
+  },
+];

@@ -1,3 +1,5 @@
+import { FlowOperatorConfig } from '../constants';
+
 export function getAge(birthday: string) {
   if (birthday) {
     const birthdays = birthday.split('-');
@@ -27,4 +29,8 @@ export function getAge(birthday: string) {
       day: age[2],
     };
   }
+}
+
+export function getFlowOperatorConfigByUser() {
+  return FlowOperatorConfig;
 }
