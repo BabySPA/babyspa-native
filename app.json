@@ -25,6 +25,15 @@
     "web": {
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "允许 $(PRODUCT_NAME) 访问您的照片",
+          "cameraPermission": "允许 $(PRODUCT_NAME) 使用您的相机"
+        }
+      ]
+    ]
   }
 }
