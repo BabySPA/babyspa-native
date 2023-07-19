@@ -92,12 +92,12 @@ export default function FlowScreen({
               {FlowOperators.map((item, idx) => {
                 return (
                   <Pressable
+                    key={item.key}
                     onPress={() => {
                       setOperatorIdx(idx);
                     }}>
                     <Box
                       minW={ss(120)}
-                      key={item.key}
                       px={ss(20)}
                       py={ss(10)}
                       bgColor={operatorIdx == idx ? '#03CBB2' : '#F1F1F1'}

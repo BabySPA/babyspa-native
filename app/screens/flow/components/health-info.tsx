@@ -14,6 +14,15 @@ import {
 } from 'native-base';
 import { ImageSourcePropType, TextInput } from 'react-native';
 import { ss, sp } from '~/app/utils/style';
+import ImagePicker, {
+  MediaTypeOptions,
+  launchCameraAsync,
+  launchImageLibraryAsync,
+  requestCameraPermissionsAsync,
+  requestMediaLibraryPermissionsAsync,
+  useCameraPermissions,
+  useMediaLibraryPermissions,
+} from 'expo-image-picker';
 
 function TitleBar({
   title,
@@ -61,6 +70,9 @@ function BoxItem({
 }
 
 export default function HealthInfo() {
+  const [mediaPermission] = useMediaLibraryPermissions();
+  const [cameraPermission] = useCameraPermissions();
+
   return (
     <Row flex={1}>
       <Column flex={1}>
@@ -124,6 +136,28 @@ export default function HealthInfo() {
               borderTopWidth={1}
               justifyContent={'center'}
               alignItems={'center'}
+              onPress={() => {
+                if (cameraPermission?.status === 'undetermined') {
+                  requestCameraPermissionsAsync().then((res) => {
+                    console.log('立即拍摄', res.status === 'undetermined');
+                    launchCameraAsync({
+                      mediaTypes: MediaTypeOptions.Images,
+                      allowsEditing: false,
+                      quality: 1,
+                    }).then((res) => {
+                      console.log(res);
+                    });
+                  });
+                } else {
+                  launchCameraAsync({
+                    mediaTypes: MediaTypeOptions.Images,
+                    allowsEditing: false,
+                    quality: 1,
+                  }).then((res) => {
+                    console.log(res);
+                  });
+                }
+              }}
               py={ss(16)}>
               <Text textAlign={'center'}>立即拍摄</Text>
             </Menu.Item>
@@ -132,6 +166,23 @@ export default function HealthInfo() {
               borderTopWidth={1}
               justifyContent={'center'}
               alignItems={'center'}
+              onPress={() => {
+                console.log('从相册选择', cameraPermission);
+                if (mediaPermission?.status !== 'granted') {
+                  requestMediaLibraryPermissionsAsync().then((res) => {
+                    console.log(res);
+                  });
+                } else {
+                  launchImageLibraryAsync({
+                    mediaTypes: MediaTypeOptions.Images,
+                    allowsMultipleSelection: true,
+                    allowsEditing: false,
+                    quality: 1,
+                  }).then((res) => {
+                    console.log(res);
+                  });
+                }
+              }}
               py={ss(16)}>
               <Text textAlign={'center'}>从相册选择</Text>
             </Menu.Item>
