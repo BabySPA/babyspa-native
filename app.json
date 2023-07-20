@@ -3,8 +3,8 @@
     "name": "babyspa",
     "slug": "babyspa",
     "version": "1.0.0",
-    "orientation": "landscape",
     "icon": "./assets/images/icon.png",
+    "orientation": "landscape",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -14,13 +14,15 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["CAMERA", "RECORD_AUDIO"]
     },
     "web": {
       "bundler": "metro",
@@ -28,10 +30,28 @@
     },
     "plugins": [
       [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "LANDSCAPE_RIGHT"
+        }
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "允许 $(PRODUCT_NAME) 访问您的照片",
           "cameraPermission": "允许 $(PRODUCT_NAME) 使用您的相机"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "允许 $(PRODUCT_NAME) 使用您的相机"
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "允许 $(PRODUCT_NAME) 使用您的麦克风"
         }
       ]
     ]

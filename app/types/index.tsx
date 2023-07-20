@@ -29,6 +29,7 @@ export type RootStackParamList = {
   };
   Modal: undefined;
   NotFound: undefined;
+  Camera: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -43,6 +44,7 @@ export type AppStackList = {
     status: CustomerStatus;
     customer: Customer;
   };
+  Camera: undefined;
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =

@@ -3,6 +3,7 @@ import { AppStackList } from '../types';
 import HomeScreen from '../screens/home';
 import RegisterScreen from '../screens/customer-Info';
 import FlowScreen from '../screens/flow';
+import CameraScreen from '../screens/camera';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
@@ -12,6 +13,7 @@ export default function AppNavigator() {
       <Stack.Screen name='Home' component={HomeScreen} />
       <Stack.Screen name='CustomerInfo' component={RegisterScreen} />
       <Stack.Screen name='Flow' component={FlowScreen} />
+      <Stack.Screen name='Camera' component={CameraScreen} />
     </Stack.Navigator>
   );
 }
