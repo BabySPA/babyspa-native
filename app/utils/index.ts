@@ -34,3 +34,28 @@ export function getAge(birthday: string) {
 export function getFlowOperatorConfigByUser() {
   return FlowOperatorConfig;
 }
+
+export function getBase64ImageFormat(base64String: string): string | null {
+  const formats: { [key: string]: string } = {
+    jpeg: 'data:image/jpeg;base64,',
+    png: 'data:image/png;base64,',
+    gif: 'data:image/gif;base64,',
+    webp: 'data:image/webp;base64,',
+    bmp: 'data:image/bmp;base64,',
+    svg: 'data:image/svg+xml;base64,',
+    tiff: 'data:image/tiff;base64,',
+    ico: 'data:image/x-icon;base64,',
+    jp2: 'data:image/jp2;base64,',
+    jxr: 'data:image/jxr;base64,',
+    heic: 'data:image/heic;base64,',
+    heif: 'data:image/heif;base64,',
+  };
+
+  for (const format in formats) {
+    if (base64String.startsWith(formats[format])) {
+      return format;
+    }
+  }
+
+  return 'png';
+}

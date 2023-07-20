@@ -15,6 +15,7 @@ import {
 } from 'native-base';
 import { ImageSourcePropType, TextInput, View } from 'react-native';
 import { ss, sp, ls } from '~/app/utils/style';
+import { uploadFile } from '~/app/api/upload';
 import ImagePicker, {
   MediaTypeOptions,
   launchCameraAsync,
@@ -29,6 +30,7 @@ import { useNavigation } from '@react-navigation/native';
 import DashedLine from 'react-native-dashed-line';
 import { useState } from 'react';
 import { AVPlaybackStatus, Audio } from 'expo-av';
+import { getBase64ImageFormat } from '~/app/utils';
 
 function TitleBar({
   title,
@@ -156,11 +158,19 @@ export default function HealthInfo() {
         } else {
           launchImageLibraryAsync({
             mediaTypes: MediaTypeOptions.Images,
-            allowsMultipleSelection: true,
+            allowsMultipleSelection: false,
             allowsEditing: false,
-            quality: 1,
+            quality: 0.1,
           }).then((res) => {
-            console.log(res);
+            if (res.assets && res.assets.length > 0) {
+              const selectImageFile = res.assets[0];
+
+              const fileUrl = uploadFile(
+                selectImageFile.uri,
+                selectImageFile.fileName ??
+                  `${Date.now()}.${getBase64ImageFormat(selectImageFile.uri)}`,
+              );
+            }
           });
         }
       })
