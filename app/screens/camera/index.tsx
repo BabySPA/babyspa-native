@@ -45,7 +45,8 @@ export default function CameraScreen() {
       <Camera
         style={styles.camera}
         type={CameraType.back}
-        ref={(ref) => (cameraRef = ref)}>
+        ref={(ref) => (cameraRef = ref)}
+      >
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={takePhoto}>
             <Text style={styles.text}>take photo</Text>

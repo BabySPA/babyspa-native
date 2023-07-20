@@ -1,12 +1,15 @@
 import { create } from 'zustand';
 import request from '~/app/api';
-import { CustomerStatus, DOCTOR_ROLE_ID, Gender } from '../constants';
+import { DOCTOR_ROLE_ID } from '../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
+import { upload } from '../api/upload';
+import { CustomerStatus, Gender } from '../types';
+import useOssStore from './oss';
 
 export interface Customer {
-  operator: OperatorInfo;
+  operator: OperatorInfo | null;
   id: string;
   name: string;
   gender: Gender;
@@ -34,15 +37,7 @@ interface OperatorInfo {
   phoneNumber: string;
 }
 
-interface RegisterCustomerInfo {
-  name: string;
-  nickname: string;
-  gender: number;
-  birthday: string;
-  phoneNumber: string;
-  allergy: string;
-  operator: OperatorInfo | null;
-}
+type RegisterCustomerInfo = Partial<Customer>;
 
 interface RegisterAndCollection {
   customers: Customer[];
@@ -59,7 +54,8 @@ interface FlowState {
   collection: RegisterAndCollection;
   analyze: RegisterAndCollection;
 
-  currentCustomer: Partial<RegisterCustomerInfo>;
+  currentRegisterCustomer: RegisterCustomerInfo;
+  currentFlowCustomer: Customer;
 
   requestRegisterCustomers: () => Promise<void>;
   requestCollectionCustomers: () => Promise<void>;
@@ -68,6 +64,8 @@ interface FlowState {
   requestPostCustomerInfo: () => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<any>;
   setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
+  setCurrentFlowCustomer: (data: Customer) => void;
+  uploadFile: (uri: string, fileName: string) => Promise<any>;
 }
 
 const defaultRegisterAndCollection = {
@@ -86,7 +84,7 @@ const useFlowStore = create(
     analyze: defaultRegisterAndCollection,
     operators: [],
 
-    currentCustomer: {
+    currentRegisterCustomer: {
       name: '',
       nickname: '',
       gender: 1,
@@ -94,6 +92,21 @@ const useFlowStore = create(
       phoneNumber: '',
       allergy: '',
       operator: null,
+    },
+
+    currentFlowCustomer: {
+      operator: null,
+      id: '',
+      name: '',
+      gender: 1,
+      birthday: '',
+      nickname: '',
+      phoneNumber: '',
+      status: CustomerStatus.Completed,
+      allergy: '',
+      updatedAt: '',
+      tag: '',
+      flowId: '',
     },
 
     requestRegisterCustomers: async () => {
@@ -209,15 +222,29 @@ const useFlowStore = create(
 
     setCurrentRegisterCustomer: (data) => {
       return set((state) => {
-        state.currentCustomer = produce(state.currentCustomer, (draft) => {
-          Object.assign(draft, data);
-        });
+        state.currentRegisterCustomer = produce(
+          state.currentRegisterCustomer,
+          (draft) => {
+            Object.assign(draft, data);
+          },
+        );
+      });
+    },
+
+    setCurrentFlowCustomer: (data) => {
+      return set((state) => {
+        state.currentFlowCustomer = produce(
+          state.currentFlowCustomer,
+          (draft) => {
+            Object.assign(draft, data);
+          },
+        );
       });
     },
 
     requestPostCustomerInfo: async () => {
       // 发起登记
-      const customer = get().currentCustomer;
+      const customer = get().currentRegisterCustomer;
 
       return request.post('/customers', {
         phoneNumber: customer.phoneNumber,
@@ -232,6 +259,14 @@ const useFlowStore = create(
 
     requestGetFlow: async (flowId: string) => {
       return request.get(`/flows/${flowId}`);
+    },
+
+    uploadFile: async (uri: string, fileName: string) => {
+      const name = `${get().currentFlowCustomer.tag}-${
+        get().currentFlowCustomer.flowId
+      }-${dayjs().format('YYYYMMDDHHmmss')}-${fileName}`;
+
+      return upload(uri, name, useOssStore.getState().oss);
     },
   })),
 );

@@ -12,6 +12,8 @@ import AuthNavigator from './auth-navigator';
 import AppNavigator from './app-navigator';
 import useAuthStore from '../stores/auth';
 import { RootStackParamList } from '../types';
+import { useEffect } from 'react';
+import useOssStore from '../stores/oss';
 
 export default function Navigation({
   colorScheme,
@@ -31,6 +33,16 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const { accessToken } = useAuthStore();
+  const { requestGetOssConfig } = useOssStore();
+
+  useEffect(() => {
+    // 在应用程序启动时执行某些操作
+    console.log('App launched');
+    if (accessToken) {
+      requestGetOssConfig();
+    }
+  }, []);
+
   return (
     <Stack.Navigator>
       {!accessToken ? (

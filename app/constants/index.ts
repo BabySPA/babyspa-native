@@ -1,16 +1,4 @@
-export enum CustomerStatus {
-  Completed = 0, // 已完成
-  Canceled, // 已取消
-  ToBeCollected, // 待收集
-  ToBeAnalyzed, // 待分析
-  ToBeConfirmed, // 待确认
-}
-
-const excludedStatus: CustomerStatus[] = [
-  CustomerStatus.Completed,
-  CustomerStatus.Canceled,
-  CustomerStatus.ToBeConfirmed,
-];
+import { CustomerStatus } from '../types';
 
 type StatusOperateConfig = {
   [key in CustomerStatus]: {
@@ -29,18 +17,6 @@ export const StatusOperateConfig: StatusOperateConfig = {
   [CustomerStatus.Canceled]: {},
   [CustomerStatus.ToBeConfirmed]: {},
 };
-
-export enum Gender {
-  WOMAN = 0,
-  MAN = 1,
-}
-
-// 操作类型仅用于首页公共组件区分类型
-export enum OperateType {
-  Register = 0,
-  Collection,
-  Analyze,
-}
 
 export const DOCTOR_ROLE_ID = '6Zeo5bqX6LCD55CG5biI';
 

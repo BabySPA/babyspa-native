@@ -7,7 +7,6 @@ import SelectCustomer from '~/app/components/select-customer';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { toastAlert } from '~/app/utils/toast';
-import { CustomerStatus } from '~/app/constants';
 
 export default function CustomerInfoScreen({
   navigation,
@@ -20,6 +19,7 @@ export default function CustomerInfoScreen({
     requestGetOperators,
     requestPostCustomerInfo,
     requestRegisterCustomers,
+    setCurrentFlowCustomer,
   } = useFlowStore();
 
   const toast = useToast();
@@ -57,10 +57,8 @@ export default function CustomerInfoScreen({
                     navigation.goBack();
                   } else {
                     // 进入流程页面
-                    navigation.navigate('Flow', {
-                      customer: res,
-                      status: CustomerStatus.ToBeAnalyzed,
-                    });
+                    setCurrentFlowCustomer(res);
+                    navigation.navigate('Flow');
                   }
                 })
                 .catch(() => {

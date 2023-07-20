@@ -22,17 +22,16 @@ import HealthInfo from './components/health-info';
 
 export default function FlowScreen({
   navigation,
-  route,
 }: AppStackScreenProps<'Flow'>) {
-  const { status, customer } = route.params;
-  const age = getAge(customer.birthday);
+  const { requestGetFlow, currentFlowCustomer } = useFlowStore();
+
+  const age = getAge(currentFlowCustomer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
-  const { requestGetFlow } = useFlowStore();
 
   const FlowOperators = getFlowOperatorConfigByUser();
 
   useEffect(() => {
-    requestGetFlow(customer.flowId).then((res) => {
+    requestGetFlow(currentFlowCustomer.flowId).then((res) => {
       console.log(res);
     });
   }, [requestGetFlow]);
@@ -46,12 +45,16 @@ export default function FlowScreen({
         leftElement={
           <Row alignItems={'center'}>
             <Text color='white' fontWeight={600} fontSize={sp(20)}>
-              {customer.name}
+              {currentFlowCustomer.name}
             </Text>
             <Icon
               as={
                 <MaterialCommunityIcons
-                  name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
+                  name={
+                    currentFlowCustomer.gender == 1
+                      ? 'gender-male'
+                      : 'gender-female'
+                  }
                 />
               }
               size={ss(26)}
@@ -62,7 +65,7 @@ export default function FlowScreen({
               {ageText}
             </Text>
             <Text color={'#FFF'} fontWeight={400} fontSize={sp(20)} ml={ls(12)}>
-              {customer.phoneNumber}
+              {currentFlowCustomer.phoneNumber}
             </Text>
             <Pressable>
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
@@ -88,25 +91,29 @@ export default function FlowScreen({
               borderRadius={ss(4)}
               borderColor={'#99A9BF'}
               borderWidth={1}
-              borderStyle={'solid'}>
+              borderStyle={'solid'}
+            >
               {FlowOperators.map((item, idx) => {
                 return (
                   <Pressable
                     key={item.key}
                     onPress={() => {
                       setOperatorIdx(idx);
-                    }}>
+                    }}
+                  >
                     <Box
                       minW={ss(120)}
                       px={ss(20)}
                       py={ss(10)}
                       bgColor={operatorIdx == idx ? '#03CBB2' : '#F1F1F1'}
                       borderRightWidth={idx == FlowOperators.length - 1 ? 0 : 1}
-                      borderRightColor={'#99A9BF'}>
+                      borderRightColor={'#99A9BF'}
+                    >
                       <Text
                         fontSize={sp(20)}
                         fontWeight={600}
-                        color={operatorIdx == idx ? '#fff' : '#333'}>
+                        color={operatorIdx == idx ? '#fff' : '#333'}
+                      >
                         {item.text}
                       </Text>
                     </Box>

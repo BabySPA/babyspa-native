@@ -61,7 +61,8 @@ export default function LoginScreen({
             color='coolGray.800'
             _dark={{
               color: 'warmGray.50',
-            }}>
+            }}
+          >
             Welcome
           </Heading>
           <Heading
@@ -71,7 +72,8 @@ export default function LoginScreen({
             }}
             color='coolGray.600'
             fontWeight='medium'
-            size='xs'>
+            size='xs'
+          >
             登录以继续
           </Heading>
 
@@ -114,7 +116,8 @@ export default function LoginScreen({
               leftIcon={
                 <Icon as={<MaterialIcons name='login' />} size={5} ml='2' />
               }
-              isLoading={loading}>
+              isLoading={loading}
+            >
               登录
             </Button>
           </Column>

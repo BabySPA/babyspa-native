@@ -4,13 +4,9 @@ import dayjs from 'dayjs';
 import { Pressable, Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
-import {
-  CustomerStatus,
-  OperateType,
-  StatusOperateConfig,
-  StatusTextConfig,
-} from '~/app/constants';
-import { Customer } from '~/app/stores/flow';
+import { StatusOperateConfig, StatusTextConfig } from '~/app/constants';
+import useFlowStore, { Customer } from '~/app/stores/flow';
+import { CustomerStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
@@ -24,6 +20,7 @@ export default function CustomerItem({
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
+  const { setCurrentFlowCustomer } = useFlowStore();
   return (
     <Row
       borderRadius={ss(8)}
@@ -72,7 +69,7 @@ export default function CustomerItem({
             </Text>
           </Row>
           <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
-            理疗师：{customer.operator.name}
+            理疗师：{customer.operator?.name}
           </Text>
           <Row alignItems={'center'} mt={ss(10)}>
             <Icon
@@ -107,16 +104,11 @@ export default function CustomerItem({
         <OperateButton
           text={StatusOperateConfig[customer.status].operate}
           onPress={() => {
+            setCurrentFlowCustomer(customer);
             if (customer.status === CustomerStatus.ToBeAnalyzed) {
-              navigation.navigate('Flow', {
-                status: CustomerStatus.ToBeAnalyzed,
-                customer: customer,
-              });
+              navigation.navigate('Flow');
             } else if (customer.status === CustomerStatus.ToBeCollected) {
-              navigation.navigate('Flow', {
-                status: CustomerStatus.ToBeCollected,
-                customer: customer,
-              });
+              navigation.navigate('Flow');
             }
           }}
         />
@@ -124,5 +116,3 @@ export default function CustomerItem({
     </Row>
   );
 }
-
-

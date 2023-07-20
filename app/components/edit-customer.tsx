@@ -33,9 +33,10 @@ export default function EditCustomer(params: EditCustomerParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const { currentCustomer, setCurrentRegisterCustomer } = useFlowStore();
+  const { currentRegisterCustomer, setCurrentRegisterCustomer } =
+    useFlowStore();
 
-  let currentSelectBirthday = currentCustomer.birthday;
+  let currentSelectBirthday = currentRegisterCustomer.birthday;
 
   const { style = {} } = params;
 
@@ -45,7 +46,8 @@ export default function EditCustomer(params: EditCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(10)}>
+      borderRadius={ss(10)}
+    >
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -58,7 +60,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                defaultValue={currentCustomer.name}
+                defaultValue={currentRegisterCustomer.name}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
@@ -78,7 +80,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                defaultValue={currentCustomer.nickname}
+                defaultValue={currentRegisterCustomer.nickname}
                 placeholderTextColor={'#CCC'}
                 onChangeText={(text) => {
                   setCurrentRegisterCustomer({ nickname: text });
@@ -94,12 +96,13 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Radio.Group
-                value={`${currentCustomer.gender}`}
+                value={`${currentRegisterCustomer.gender}`}
                 name='gender'
                 flexDirection={'row'}
                 onChange={(event) => {
                   setCurrentRegisterCustomer({ gender: +event });
-                }}>
+                }}
+              >
                 <Radio colorScheme='green' value='1' size={'sm'}>
                   男
                 </Radio>
@@ -118,7 +121,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Pressable
                   onPress={() => {
                     showDatePicker();
-                  }}>
+                  }}
+                >
                   <Row
                     borderRadius={ss(10)}
                     justifyContent={'space-between'}
@@ -126,9 +130,10 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
-                    px={ss(20)}>
+                    px={ss(20)}
+                  >
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                      {currentCustomer.birthday}
+                      {currentRegisterCustomer.birthday}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -147,7 +152,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Input
                 w={'70%'}
-                defaultValue={currentCustomer.phoneNumber}
+                defaultValue={currentRegisterCustomer.phoneNumber}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
@@ -166,7 +171,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
-                defaultValue={currentCustomer.allergy}
+                defaultValue={currentRegisterCustomer.allergy}
                 w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
@@ -201,7 +206,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     });
                   }}
                   defaultButtonText={
-                    currentCustomer?.operator?.name ?? '请选择理疗师'
+                    currentRegisterCustomer?.operator?.name ?? '请选择理疗师'
                   }
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name;
@@ -262,7 +267,8 @@ export default function EditCustomer(params: EditCustomerParams) {
         isOpen={isOpenBirthdayPicker}
         onClose={() => {
           setIsOpenBirthdayPicker(false);
-        }}>
+        }}
+      >
         <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
           <DatePicker
             options={{
@@ -272,8 +278,8 @@ export default function EditCustomer(params: EditCustomerParams) {
             onSelectedChange={(date) => {
               currentSelectBirthday = date;
             }}
-            current={currentCustomer.birthday}
-            selected={currentCustomer.birthday}
+            current={currentRegisterCustomer.birthday}
+            selected={currentRegisterCustomer.birthday}
             mode='calendar'
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
@@ -281,27 +287,31 @@ export default function EditCustomer(params: EditCustomerParams) {
               onPress={() => {
                 setCurrentRegisterCustomer({ birthday: currentSelectBirthday });
                 setIsOpenBirthdayPicker(false);
-              }}>
+              }}
+            >
               <Box
                 bgColor={'#00B49E'}
                 px={ls(26)}
                 py={ss(12)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
+              >
                 确定
               </Box>
             </Pressable>
             <Pressable
               onPress={() => {
                 setIsOpenBirthdayPicker(false);
-              }}>
+              }}
+            >
               <Box
                 bgColor={'#D8D8D8'}
                 px={ls(26)}
                 py={ss(12)}
                 ml={ls(10)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
+              >
                 取消
               </Box>
             </Pressable>

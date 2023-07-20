@@ -15,7 +15,6 @@ import {
 } from 'native-base';
 import { ImageSourcePropType, TextInput, View } from 'react-native';
 import { ss, sp, ls } from '~/app/utils/style';
-import { uploadFile } from '~/app/api/upload';
 import ImagePicker, {
   MediaTypeOptions,
   launchCameraAsync,
@@ -31,6 +30,7 @@ import DashedLine from 'react-native-dashed-line';
 import { useState } from 'react';
 import { AVPlaybackStatus, Audio } from 'expo-av';
 import { getBase64ImageFormat } from '~/app/utils';
+import useFlowStore from '~/app/stores/flow';
 
 function TitleBar({
   title,
@@ -70,7 +70,8 @@ function BoxItem({
       borderRadius={ss(10)}
       mt={mt ?? 0}
       px={ss(20)}
-      py={ss(18)}>
+      py={ss(18)}
+    >
       <TitleBar title={title} icon={icon} />
       {children}
     </Box>
@@ -81,6 +82,8 @@ export default function HealthInfo() {
   const toast = useToast();
   const navigation = useNavigation();
   const [recording, setRecording] = useState<Audio.Recording>();
+
+  const { uploadFile } = useFlowStore();
 
   async function startRecording() {
     try {
@@ -203,14 +206,16 @@ export default function HealthInfo() {
         <BoxItem
           title={'备注'}
           icon={require('~/assets/images/notice.png')}
-          mt={ss(10)}>
+          mt={ss(10)}
+        >
           <Row>
             <Box flex={1}>
               <Text>录音</Text>
               <Pressable
                 onPress={() => {
                   startRecording();
-                }}>
+                }}
+              >
                 <Image
                   source={require('~/assets/images/record_start.png')}
                   size={ss(50)}
@@ -220,7 +225,8 @@ export default function HealthInfo() {
               <Pressable
                 onPress={() => {
                   stopRecording();
-                }}>
+                }}
+              >
                 <Image
                   source={require('~/assets/images/record_ok.png')}
                   size={ss(50)}
@@ -243,7 +249,8 @@ export default function HealthInfo() {
                   borderStyle={'dashed'}
                   bgColor={'#FFF'}
                   w={ss(100)}
-                  h={ss(100)}>
+                  h={ss(100)}
+                >
                   <Icon
                     as={<AntDesign name='plus' size={ss(40)} />}
                     color={'#ACACAC'}
@@ -257,7 +264,8 @@ export default function HealthInfo() {
       <Column flex={1} ml={ss(10)}>
         <BoxItem
           title={'舌部图片'}
-          icon={require('~/assets/images/tongue.png')}>
+          icon={require('~/assets/images/tongue.png')}
+        >
           <Menu
             w={ls(280)}
             _text={{ fontSize: sp(18), color: '#000' }}
@@ -270,7 +278,8 @@ export default function HealthInfo() {
                     borderStyle={'dashed'}
                     bgColor={'#FFF'}
                     w={ss(100)}
-                    h={ss(100)}>
+                    h={ss(100)}
+                  >
                     <Icon
                       as={<AntDesign name='plus' size={ss(40)} />}
                       color={'#ACACAC'}
@@ -278,7 +287,8 @@ export default function HealthInfo() {
                   </Center>
                 </Pressable>
               );
-            }}>
+            }}
+          >
             <Box alignItems={'center'} py={ss(16)}>
               <Text fontWeight={600} justifyContent={'center'}>
                 请选择上传方式
@@ -292,7 +302,8 @@ export default function HealthInfo() {
               onPress={() => {
                 openCamera();
               }}
-              py={ss(16)}>
+              py={ss(16)}
+            >
               <Text textAlign={'center'}>立即拍摄</Text>
             </Menu.Item>
             <Menu.Item
@@ -303,7 +314,8 @@ export default function HealthInfo() {
               onPress={() => {
                 openMediaLibrary();
               }}
-              py={ss(16)}>
+              py={ss(16)}
+            >
               <Text textAlign={'center'}>从相册选择</Text>
             </Menu.Item>
           </Menu>
@@ -311,7 +323,8 @@ export default function HealthInfo() {
         <BoxItem
           title={'手部图片'}
           icon={require('~/assets/images/hand.png')}
-          mt={ss(10)}>
+          mt={ss(10)}
+        >
           <Menu
             w={ls(280)}
             _text={{ fontSize: sp(18), color: '#000' }}
@@ -324,7 +337,8 @@ export default function HealthInfo() {
                     borderStyle={'dashed'}
                     bgColor={'#FFF'}
                     w={ss(100)}
-                    h={ss(100)}>
+                    h={ss(100)}
+                  >
                     <Icon
                       as={<AntDesign name='plus' size={ss(40)} />}
                       color={'#ACACAC'}
@@ -332,7 +346,8 @@ export default function HealthInfo() {
                   </Center>
                 </Pressable>
               );
-            }}>
+            }}
+          >
             <Menu.Item alignItems={'center'} py={ss(16)}>
               <Text fontWeight={600} justifyContent={'center'}>
                 请选择上传方式
@@ -346,7 +361,8 @@ export default function HealthInfo() {
               onPress={() => {
                 openCamera();
               }}
-              py={ss(16)}>
+              py={ss(16)}
+            >
               <Text textAlign={'center'}>立即拍摄</Text>
             </Menu.Item>
             <Menu.Item
@@ -357,7 +373,8 @@ export default function HealthInfo() {
               onPress={() => {
                 openMediaLibrary();
               }}
-              py={ss(16)}>
+              py={ss(16)}
+            >
               <Text textAlign={'center'}>从相册选择</Text>
             </Menu.Item>
           </Menu>

@@ -4,8 +4,6 @@
  */
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { CustomerStatus } from '../constants';
-import { Customer } from '../stores/flow';
 
 declare global {
   namespace ReactNavigation {
@@ -17,16 +15,41 @@ export enum CustomerScreenType {
   collection = 'collection',
   register = 'register',
 }
+
+export interface OssConfig {
+  accessId: string;
+  host: string;
+  policy: string;
+  signature: string;
+}
+
+export enum CustomerStatus {
+  Completed = 0, // 已完成
+  Canceled, // 已取消
+  ToBeCollected, // 待收集
+  ToBeAnalyzed, // 待分析
+  ToBeConfirmed, // 待确认
+}
+
+export enum Gender {
+  WOMAN = 0,
+  MAN = 1,
+}
+
+// 操作类型仅用于首页公共组件区分类型
+export enum OperateType {
+  Register = 0,
+  Collection,
+  Analyze,
+}
+
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackList> | undefined;
   App: NavigatorScreenParams<AppStackList> | undefined;
   CustomerInfo: {
     type: CustomerScreenType;
   };
-  Flow: {
-    status: CustomerStatus;
-    customer: Customer;
-  };
+  Flow: undefined;
   Modal: undefined;
   NotFound: undefined;
   Camera: undefined;
@@ -40,10 +63,7 @@ export type AppStackList = {
   CustomerInfo: {
     type: CustomerScreenType;
   };
-  Flow: {
-    status: CustomerStatus;
-    customer: Customer;
-  };
+  Flow: undefined;
   Camera: undefined;
 };
 

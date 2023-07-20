@@ -15,8 +15,7 @@ import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
-import { CustomerScreenType } from '~/app/types';
-import { OperateType } from '~/app/constants';
+import { CustomerScreenType, OperateType } from '~/app/types';
 
 export default function Register() {
   const {

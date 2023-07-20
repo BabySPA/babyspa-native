@@ -15,7 +15,8 @@ export function toastAlert(
               flexShrink={1}
               space={2}
               alignItems='center'
-              justifyContent='space-between'>
+              justifyContent='space-between'
+            >
               <Row space={2} flexShrink={1} alignItems='center'>
                 <Alert.Icon />
                 <Text>{errorText}</Text>
