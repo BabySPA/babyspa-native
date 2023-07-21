@@ -35,7 +35,6 @@ export default function CameraScreen() {
   const takePhoto = async () => {
     if (cameraRef) {
       const photo = await cameraRef.takePictureAsync();
-      console.log(photo);
     }
     navigation.goBack();
   };

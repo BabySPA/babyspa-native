@@ -1,72 +1,20 @@
 import { create } from 'zustand';
 import request from '~/app/api';
-import { DOCTOR_ROLE_ID } from '../constants';
+import { DOCTOR_ROLE_ID } from '../../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
-import { upload } from '../api/upload';
-import { CustomerStatus, Gender } from '../types';
-import useOssStore from './oss';
-
-export interface Customer {
-  operator: OperatorInfo | null;
-  id: string;
-  name: string;
-  gender: Gender;
-  birthday: string;
-  nickname: string;
-  phoneNumber: string;
-  status: CustomerStatus;
-  allergy: string;
-  updatedAt: string;
-  tag: string;
-  flowId: string;
-}
-
-interface Operator {
-  gender: Gender;
-  name: string;
-  phoneNumber: string;
-  roleKey: string;
-  username: string;
-}
-
-interface OperatorInfo {
-  id: string;
-  name: string;
-  phoneNumber: string;
-}
-
-type RegisterCustomerInfo = Partial<Customer>;
-
-interface RegisterAndCollection {
-  customers: Customer[];
-  page: number;
-  hasNextPage: boolean;
-  searchKeywords: string;
-  startDate: string;
-  endDate: string;
-  status: CustomerStatus | -1;
-}
-interface FlowState {
-  operators: Operator[];
-  register: RegisterAndCollection;
-  collection: RegisterAndCollection;
-  analyze: RegisterAndCollection;
-
-  currentRegisterCustomer: RegisterCustomerInfo;
-  currentFlowCustomer: Customer;
-
-  requestRegisterCustomers: () => Promise<void>;
-  requestCollectionCustomers: () => Promise<void>;
-  requestAnalyzeCustomers: () => Promise<void>;
-  requestGetOperators: () => Promise<void>;
-  requestPostCustomerInfo: () => Promise<any>;
-  requestGetFlow: (flowId: string) => Promise<any>;
-  setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
-  setCurrentFlowCustomer: (data: Customer) => void;
-  uploadFile: (uri: string, fileName: string) => Promise<any>;
-}
+import { upload } from '../../api/upload';
+import { CustomerStatus } from '../../types';
+import useOssStore from '../oss';
+import {
+  MediaTypeOptions,
+  launchImageLibraryAsync,
+  requestMediaLibraryPermissionsAsync,
+} from 'expo-image-picker';
+import { toastAlert } from '../../utils/toast';
+import { getBase64ImageFormat } from '../../utils';
+import { FlowState } from './type';
 
 const defaultRegisterAndCollection = {
   customers: [],
@@ -77,11 +25,46 @@ const defaultRegisterAndCollection = {
   startDate: '',
   endDate: '',
 };
+
+const defaultFlow = {
+  _id: '',
+  customerId: '',
+  healthInfo: {
+    allergy: '',
+    audioFiles: [],
+    leftHandImages: [],
+    rightHandImages: [],
+    lingualImage: [],
+    otherImages: [],
+  },
+  guidance: '',
+  conclusions: [],
+  solution: {
+    applications: [],
+    massages: [],
+    operatorId: '',
+    remark: '',
+  },
+  followUp: {
+    isFollowed: false,
+    followUpTime: '',
+  },
+  evaluation: {
+    rating: 5,
+    content: '',
+    updatedAt: '',
+    operatorId: '',
+  },
+  createdAt: '',
+  updatedAt: '',
+};
+
 const useFlowStore = create(
   immer<FlowState>((set, get) => ({
     register: defaultRegisterAndCollection,
     collection: defaultRegisterAndCollection,
     analyze: defaultRegisterAndCollection,
+    currentFlow: defaultFlow,
     operators: [],
 
     currentRegisterCustomer: {
@@ -242,6 +225,17 @@ const useFlowStore = create(
       });
     },
 
+    updateHealthInfo: (data) => {
+      return set((state) => {
+        state.currentFlow.healthInfo = produce(
+          state.currentFlow.healthInfo,
+          (draft) => {
+            Object.assign(draft, data);
+          },
+        );
+      });
+    },
+
     requestPostCustomerInfo: async () => {
       // 发起登记
       const customer = get().currentRegisterCustomer;
@@ -258,7 +252,9 @@ const useFlowStore = create(
     },
 
     requestGetFlow: async (flowId: string) => {
-      return request.get(`/flows/${flowId}`);
+      request.get(`/flows/${flowId}`).then(({ data }) => {
+        set({ currentFlow: data });
+      });
     },
 
     uploadFile: async (uri: string, fileName: string) => {
@@ -268,6 +264,45 @@ const useFlowStore = create(
 
       const oss = await useOssStore.getState().getOssConfig();
       return upload(uri, name, oss);
+    },
+
+    openMediaLibrary: (toast) => {
+      return new Promise((resolve, reject) => {
+        requestMediaLibraryPermissionsAsync()
+          .then((res) => {
+            if (res.status !== 'granted') {
+              toastAlert(toast, 'error', '请授予相册权限');
+            } else {
+              launchImageLibraryAsync({
+                mediaTypes: MediaTypeOptions.Images,
+                allowsMultipleSelection: false,
+                allowsEditing: false,
+                quality: 0.1,
+              })
+                .then(async (res) => {
+                  if (res.assets && res.assets.length > 0) {
+                    const selectImageFile = res.assets[0];
+
+                    const fileUrl = await get().uploadFile(
+                      selectImageFile.uri,
+                      selectImageFile.fileName ??
+                        `${Date.now()}.${getBase64ImageFormat(
+                          selectImageFile.uri,
+                        )}`,
+                    );
+
+                    resolve(fileUrl);
+                  }
+                })
+                .catch((err) => {
+                  reject(err);
+                });
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     },
   })),
 );

@@ -195,7 +195,6 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <SelectDropdown
                   data={operators}
                   onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index);
 
                     setCurrentRegisterCustomer({
                       operator: {

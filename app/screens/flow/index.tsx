@@ -4,10 +4,6 @@ import {
   Pressable,
   Row,
   Icon,
-  Button,
-  Center,
-  Flex,
-  View,
   Container,
 } from 'native-base';
 import { AppStackScreenProps } from '../../types';
