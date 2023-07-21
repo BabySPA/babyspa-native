@@ -21,6 +21,7 @@ export interface OssConfig {
   host: string;
   policy: string;
   signature: string;
+  expire: number;
 }
 
 export enum CustomerStatus {

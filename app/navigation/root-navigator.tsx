@@ -22,8 +22,7 @@ export default function Navigation({
 }) {
   return (
     <NavigationContainer
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-    >
+      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -33,15 +32,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const { accessToken } = useAuthStore();
-  const { requestGetOssConfig } = useOssStore();
-
-  useEffect(() => {
-    // 在应用程序启动时执行某些操作
-    console.log('App launched');
-    if (accessToken) {
-      requestGetOssConfig();
-    }
-  }, []);
 
   return (
     <Stack.Navigator>

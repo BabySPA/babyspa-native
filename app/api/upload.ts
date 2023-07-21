@@ -19,19 +19,23 @@ export async function upload(uri: string, fileName: string, oss: OssConfig) {
     name: key,
   });
 
-  const res = await axios
+  axios
     .post(oss.host, formdata, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
+    .then((res) => {
+      console.log('upload success', res);
+      if (res?.status === 200) {
+        return Promise.resolve(oss.host + '/' + key);
+      } else {
+        return Promise.reject(res);
+      }
+    })
     .catch((err) => {
-      console.log(err);
+      console.log('upload fail', err);
+
+      return Promise.reject(err);
     });
-
-  if (res?.status === 200) {
-    alert('文件上传成功');
-  }
-
-  return '';
 }

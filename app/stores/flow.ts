@@ -266,7 +266,8 @@ const useFlowStore = create(
         get().currentFlowCustomer.flowId
       }-${dayjs().format('YYYYMMDDHHmmss')}-${fileName}`;
 
-      return upload(uri, name, useOssStore.getState().oss);
+      const oss = await useOssStore.getState().getOssConfig();
+      return upload(uri, name, oss);
     },
   })),
 );
