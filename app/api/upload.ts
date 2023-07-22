@@ -2,9 +2,13 @@ import axios from 'axios';
 import * as mime from 'react-native-mime-types';
 import { OssConfig } from '../types';
 
-export async function upload(uri: string, fileName: string, oss: OssConfig) {
+export async function upload(
+  uri: string,
+  filename: string,
+  oss: OssConfig,
+): Promise<string> {
   return new Promise((resolve, reject) => {
-    const key = fileName;
+    const key = filename;
     const formdata = new FormData(); // 注意参数的顺序，key 必须是第一位，表示OSS存储文件的路径
 
     formdata.append('key', key);

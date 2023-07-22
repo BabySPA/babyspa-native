@@ -4,16 +4,7 @@ import { DOCTOR_ROLE_ID } from '../../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
-import { upload } from '../../api/upload';
 import { CustomerStatus } from '../../types';
-import useOssStore from '../oss';
-import {
-  MediaTypeOptions,
-  launchImageLibraryAsync,
-  requestMediaLibraryPermissionsAsync,
-} from 'expo-image-picker';
-import { toastAlert } from '../../utils/toast';
-import { getBase64ImageFormat } from '../../utils';
 import { FlowState } from './type';
 
 const defaultRegisterAndCollection = {
@@ -236,6 +227,72 @@ const useFlowStore = create(
       });
     },
 
+    addlingualImage: (data) => {
+      return set((state) => {
+        state.currentFlow.healthInfo.lingualImage = [
+          ...state.currentFlow.healthInfo.lingualImage,
+          data,
+        ];
+      });
+    },
+
+    updatelingualImage: (name: string, url: string) => {
+      return set((state) => {
+        const idx = state.currentFlow.healthInfo.lingualImage.findIndex(
+          (item) => {
+            if (typeof item === 'object') {
+              return item.name === name;
+            }
+          },
+        );
+        state.currentFlow.healthInfo.lingualImage[idx] = url;
+      });
+    },
+
+    addLeftHandImage: (data) => {
+      return set((state) => {
+        state.currentFlow.healthInfo.leftHandImages = [
+          ...state.currentFlow.healthInfo.leftHandImages,
+          data,
+        ];
+      });
+    },
+
+    updateLeftHandImage: (name: string, url: string) => {
+      return set((state) => {
+        const idx = state.currentFlow.healthInfo.leftHandImages.findIndex(
+          (item) => {
+            if (typeof item === 'object') {
+              return item.name === name;
+            }
+          },
+        );
+        state.currentFlow.healthInfo.leftHandImages[idx] = url;
+      });
+    },
+
+    addRightHandImage: (data) => {
+      return set((state) => {
+        state.currentFlow.healthInfo.rightHandImages = [
+          ...state.currentFlow.healthInfo.rightHandImages,
+          data,
+        ];
+      });
+    },
+
+    updateRightHandImage: (name: string, url: string) => {
+      return set((state) => {
+        const idx = state.currentFlow.healthInfo.rightHandImages.findIndex(
+          (item) => {
+            if (typeof item === 'object') {
+              return item.name === name;
+            }
+          },
+        );
+        state.currentFlow.healthInfo.rightHandImages[idx] = url;
+      });
+    },
+
     requestPostCustomerInfo: async () => {
       // 发起登记
       const customer = get().currentRegisterCustomer;
@@ -254,54 +311,6 @@ const useFlowStore = create(
     requestGetFlow: async (flowId: string) => {
       request.get(`/flows/${flowId}`).then(({ data }) => {
         set({ currentFlow: data });
-      });
-    },
-
-    uploadFile: async (uri: string, fileName: string) => {
-      const name = `${get().currentFlowCustomer.tag}-${
-        get().currentFlowCustomer.flowId
-      }-${dayjs().format('YYYYMMDDHHmmss')}-${fileName}`;
-
-      const oss = await useOssStore.getState().getOssConfig();
-      return upload(uri, name, oss);
-    },
-
-    openMediaLibrary: (toast) => {
-      return new Promise((resolve, reject) => {
-        requestMediaLibraryPermissionsAsync()
-          .then((res) => {
-            if (res.status !== 'granted') {
-              toastAlert(toast, 'error', '请授予相册权限');
-            } else {
-              launchImageLibraryAsync({
-                mediaTypes: MediaTypeOptions.Images,
-                allowsMultipleSelection: false,
-                allowsEditing: false,
-                quality: 0.1,
-              })
-                .then(async (res) => {
-                  if (res.assets && res.assets.length > 0) {
-                    const selectImageFile = res.assets[0];
-
-                    const fileUrl = await get().uploadFile(
-                      selectImageFile.uri,
-                      selectImageFile.fileName ??
-                        `${Date.now()}.${getBase64ImageFormat(
-                          selectImageFile.uri,
-                        )}`,
-                    );
-
-                    resolve(fileUrl);
-                  }
-                })
-                .catch((err) => {
-                  reject(err);
-                });
-            }
-          })
-          .catch((err) => {
-            reject(err);
-          });
       });
     },
   })),

@@ -11,6 +11,8 @@ import {
   Menu,
   useToast,
   ScrollView,
+  Spinner,
+  Modal,
 } from 'native-base';
 import { Image } from 'expo-image';
 import { ImageSourcePropType, TextInput } from 'react-native';
@@ -23,6 +25,7 @@ import { useState } from 'react';
 import { Audio } from 'expo-av';
 import { getBase64ImageFormat } from '~/app/utils';
 import useFlowStore from '~/app/stores/flow';
+import ImageBox from './image-box';
 
 function TitleBar({
   title,
@@ -44,16 +47,62 @@ function TitleBar({
   );
 }
 
+const ArrowBox = () => {
+  return (
+    <Box flex={1} justifyContent='center' alignItems='center'>
+      {/* 画框框 */}
+      <Box position='relative'>
+        <Box
+          bg={{
+            linearGradient: {
+              colors: ['#22D59C', '#1AB7BE'],
+              start: [0, 0],
+              end: [1, 1],
+            },
+          }}
+          borderRadius={8}
+          py={ss(27)}
+          px={ls(38)}>
+          <Image
+            source={require('~/assets/images/record-loading.png')}
+            style={{ height: ss(18), width: ls(72) }}
+          />
+        </Box>
+        {/* 画箭头 */}
+        <Box
+          position='absolute'
+          top='100%' // 位于底部
+          left='50%'
+          ml={-ls(10)} // 居中箭头
+          width={0}
+          height={0}
+          borderTopWidth={ss(15)} // 使用 borderTopWidth 改变箭头方向
+          borderLeftWidth={ls(10)}
+          borderRightWidth={ls(10)}
+          borderStyle='solid'
+          backgroundColor='transparent'
+          borderTopColor='#22D59C' // 箭头颜色为渐变色的起始色
+          borderBottomColor='transparent'
+          borderLeftColor='transparent'
+          borderRightColor='transparent'
+        />
+      </Box>
+    </Box>
+  );
+};
+
 function BoxItem({
   mt,
   title,
   icon,
   children,
+  autoScroll = true,
 }: {
   mt?: number;
   title: string;
   icon: ImageSourcePropType;
   children: React.ReactNode;
+  autoScroll?: boolean;
 }) {
   return (
     <Box
@@ -64,17 +113,25 @@ function BoxItem({
       px={ss(20)}
       py={ss(18)}>
       <TitleBar title={title} icon={icon} />
-      <ScrollView>{children}</ScrollView>
+      {autoScroll ? <ScrollView>{children}</ScrollView> : children}
     </Box>
   );
 }
 
 export default function HealthInfo() {
-  const toast = useToast();
   const navigation = useNavigation();
   const [recording, setRecording] = useState<Audio.Recording>();
 
-  const { openMediaLibrary, updateHealthInfo, currentFlow } = useFlowStore();
+  const {
+    addlingualImage,
+    updatelingualImage,
+    addLeftHandImage,
+    updateLeftHandImage,
+    addRightHandImage,
+    updateRightHandImage,
+    updateHealthInfo,
+    currentFlow,
+  } = useFlowStore();
 
   const { healthInfo } = currentFlow;
   async function startRecording() {
@@ -127,22 +184,7 @@ export default function HealthInfo() {
     }
   }
 
-  const openCamera = () => {
-    // 如果用户授予权限，则打开相机
-    // 否则请求权限
-    requestCameraPermissionsAsync()
-      .then((res) => {
-        if (res.status !== 'granted') {
-          toastAlert(toast, 'error', '请授予相机权限');
-        } else {
-          console.log('准备打开相机');
-          navigation.navigate('Camera');
-        }
-      })
-      .catch((err) => {
-        console.log('requestCameraPermissionsAsync err ==>', err);
-      });
-  };
+  const [record, setRecord] = useState(false);
 
   return (
     <Row flex={1}>
@@ -156,7 +198,7 @@ export default function HealthInfo() {
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
                 borderWidth: 1,
-                height: '100%',
+                height: ss(221),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
                 fontSize: sp(14),
@@ -168,28 +210,54 @@ export default function HealthInfo() {
         <BoxItem
           title={'备注'}
           icon={require('~/assets/images/notice.png')}
-          mt={ss(10)}>
+          mt={ss(10)}
+          autoScroll={false}>
           <Row>
             <Box flex={1}>
-              <Text>录音</Text>
+              <Text fontSize={sp(12)} fontWeight={600} color='#333'>
+                录音
+              </Text>
+              <ScrollView></ScrollView>
               <Pressable
-                onPress={() => {
-                  startRecording();
+                onLongPress={() => {
+                  console.log('正在长按');
+                  setRecord(true);
+                }}
+                onBlur={() => {
+                  console.log('onBlur');
+                }}
+                onTouchEnd={() => {
+                  console.log('onTouchEnd');
                 }}>
-                <Image
-                  source={require('~/assets/images/record_start.png')}
-                  style={{ width: ss(50), height: ss(50) }}
-                />
+                <Center
+                  m={ss(10)}
+                  borderRadius={ss(6)}
+                  px={ls(20)}
+                  py={ss(13)}
+                  bg={{
+                    linearGradient: {
+                      colors: ['#22D59C', '#1AB7BE'],
+                      start: [0, 0],
+                      end: [1, 1],
+                    },
+                  }}>
+                  <Text color='white' fontSize={sp(16)}>
+                    按住录音
+                  </Text>
+                </Center>
               </Pressable>
-              <Pressable
-                onPress={() => {
-                  stopRecording();
+              <Modal
+                isOpen={record}
+                onClose={() => {
+                  setRecord(false);
                 }}>
-                <Image
-                  source={require('~/assets/images/record_ok.png')}
-                  style={{ width: ss(50), height: ss(50) }}
-                />
-              </Pressable>
+                <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
+                  <ArrowBox />
+                  <Text color={'white'} mt={ss(30)}>
+                    松开保存，上划取消
+                  </Text>
+                </Box>
+              </Modal>
             </Box>
             <DashedLine
               axis='vertical'
@@ -199,12 +267,17 @@ export default function HealthInfo() {
               style={{ marginHorizontal: ls(15) }}
             />
             <Box flex={1}>
+              <Text fontSize={sp(12)} fontWeight={600} color='#333'>
+                其他
+              </Text>
+
               <Pressable>
                 <Center
                   borderColor={'#ACACAC'}
                   borderWidth={1}
                   borderStyle={'dashed'}
                   bgColor={'#FFF'}
+                  mt={ss(10)}
                   w={ss(100)}
                   h={ss(100)}>
                   <Icon
@@ -221,132 +294,114 @@ export default function HealthInfo() {
         <BoxItem
           title={'舌部图片'}
           icon={require('~/assets/images/tongue.png')}>
-          <Row flexWrap={'wrap'}>
-            {healthInfo.lingualImage.map((item, index) => {
-              return (
-                <Image
-                  key={index}
-                  style={{
-                    width: ss(100),
-                    height: ss(100),
-                    marginRight: ss(10),
-                    marginBottom: ss(10),
-                  }}
-                  blurRadius={12}
-                  source={item}
-                  contentFit='cover'
-                  transition={1000}
-                />
-              );
-            })}
-            <Menu
-              w={ls(280)}
-              _text={{ fontSize: sp(18), color: '#000' }}
-              trigger={(triggerProps) => {
-                return (
-                  <Pressable {...triggerProps}>
-                    <Center
-                      borderColor={'#ACACAC'}
-                      borderWidth={1}
-                      borderStyle={'dashed'}
-                      bgColor={'#FFF'}
-                      w={ss(100)}
-                      h={ss(100)}>
-                      <Icon
-                        as={<AntDesign name='plus' size={ss(40)} />}
-                        color={'#ACACAC'}
-                      />
-                    </Center>
-                  </Pressable>
-                );
-              }}>
-              <Box alignItems={'center'} py={ss(16)}>
-                <Text fontWeight={600} justifyContent={'center'}>
-                  请选择上传方式
-                </Text>
-              </Box>
-              <Menu.Item
-                borderTopColor={'#DFE1DE'}
-                borderTopWidth={1}
-                justifyContent={'center'}
-                alignItems={'center'}
-                onPress={() => {
-                  openCamera();
-                }}
-                py={ss(16)}>
-                <Text textAlign={'center'}>立即拍摄</Text>
-              </Menu.Item>
-              <Menu.Item
-                borderTopColor={'#DFE1DE'}
-                borderTopWidth={1}
-                justifyContent={'center'}
-                alignItems={'center'}
-                onPress={() => {
-                  openMediaLibrary(toast).then((res) => {
-                    updateHealthInfo({
-                      lingualImage: [...healthInfo.lingualImage, res],
-                    });
-                  });
-                }}
-                py={ss(16)}>
-                <Text textAlign={'center'}>从相册选择</Text>
-              </Menu.Item>
-            </Menu>
-          </Row>
+          <ImageBox
+            images={healthInfo.lingualImage}
+            selectedCallback={function (filename: string, uri: string): void {
+              addlingualImage({
+                name: filename,
+                uri: uri,
+              });
+            }}
+            takePhotoCallback={function (filename: string, uri: string): void {
+              throw new Error('Function not implemented.');
+            }}
+            uploadCallback={function (filename: string, url: string): void {
+              updatelingualImage(filename, url);
+            }}
+            errorCallback={function (err: any): void {
+              throw new Error('Function not implemented.');
+            }}
+          />
         </BoxItem>
         <BoxItem
           title={'手部图片'}
           icon={require('~/assets/images/hand.png')}
           mt={ss(10)}>
-          <Menu
-            w={ls(280)}
-            _text={{ fontSize: sp(18), color: '#000' }}
-            trigger={(triggerProps) => {
-              return (
-                <Pressable {...triggerProps}>
-                  <Center
-                    borderColor={'#ACACAC'}
-                    borderWidth={1}
-                    borderStyle={'dashed'}
-                    bgColor={'#FFF'}
-                    w={ss(100)}
-                    h={ss(100)}>
-                    <Icon
-                      as={<AntDesign name='plus' size={ss(40)} />}
-                      color={'#ACACAC'}
-                    />
-                  </Center>
-                </Pressable>
-              );
-            }}>
-            <Menu.Item alignItems={'center'} py={ss(16)}>
-              <Text fontWeight={600} justifyContent={'center'}>
-                请选择上传方式
-              </Text>
-            </Menu.Item>
-            <Menu.Item
-              borderTopColor={'#DFE1DE'}
-              borderTopWidth={1}
-              justifyContent={'center'}
-              alignItems={'center'}
-              onPress={() => {
-                openCamera();
-              }}
-              py={ss(16)}>
-              <Text textAlign={'center'}>立即拍摄</Text>
-            </Menu.Item>
-            <Menu.Item
-              borderTopColor={'#DFE1DE'}
-              borderTopWidth={1}
-              justifyContent={'center'}
-              alignItems={'center'}
-              onPress={() => {
-                // openMediaLibrary();
-              }}
-              py={ss(16)}>
-              <Text textAlign={'center'}>从相册选择</Text>
-            </Menu.Item>
-          </Menu>
+          <Row>
+            <Box flex={1}>
+              <Row>
+                <Text
+                  mr={ls(10)}
+                  fontSize={sp(12)}
+                  fontWeight={600}
+                  color='#333'>
+                  左手
+                </Text>
+                <ImageBox
+                  images={healthInfo.leftHandImages}
+                  selectedCallback={function (
+                    filename: string,
+                    uri: string,
+                  ): void {
+                    addLeftHandImage({
+                      name: filename,
+                      uri: uri,
+                    });
+                  }}
+                  takePhotoCallback={function (
+                    filename: string,
+                    uri: string,
+                  ): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                  uploadCallback={function (
+                    filename: string,
+                    url: string,
+                  ): void {
+                    updateLeftHandImage(filename, url);
+                  }}
+                  errorCallback={function (err: any): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                />
+              </Row>
+            </Box>
+            <DashedLine
+              axis='vertical'
+              dashLength={ss(12)}
+              dashGap={ss(12)}
+              dashColor='#DFE1DE'
+              style={{ marginHorizontal: ls(15) }}
+            />
+            <Box flex={1}>
+              <Row>
+                <Text
+                  mr={ls(10)}
+                  fontSize={sp(12)}
+                  fontWeight={600}
+                  color='#333'>
+                  右手
+                </Text>
+                <ImageBox
+                  images={healthInfo.rightHandImages}
+                  selectedCallback={function (
+                    filename: string,
+                    uri: string,
+                  ): void {
+                    addRightHandImage({
+                      name: filename,
+                      uri: uri,
+                    });
+                  }}
+                  takePhotoCallback={function (
+                    filename: string,
+                    uri: string,
+                  ): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                  uploadCallback={function (
+                    filename: string,
+                    url: string,
+                  ): void {
+                    updateRightHandImage(filename, url);
+                  }}
+                  errorCallback={function (err: any): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                />
+              </Row>
+            </Box>
+          </Row>
         </BoxItem>
       </Column>
     </Row>

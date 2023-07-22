@@ -1,11 +1,4 @@
-import {
-  Box,
-  Text,
-  Pressable,
-  Row,
-  Icon,
-  Container,
-} from 'native-base';
+import { Box, Text, Pressable, Row, Icon, Container } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -27,9 +20,9 @@ export default function FlowScreen({
   const FlowOperators = getFlowOperatorConfigByUser();
 
   useEffect(() => {
-    requestGetFlow(currentFlowCustomer.flowId).then((res) => {
-      console.log(res);
-    });
+    // requestGetFlow(currentFlowCustomer.flowId).then((res) => {
+    //   console.log(res);
+    // });
   }, [requestGetFlow]);
 
   const [operatorIdx, setOperatorIdx] = useState(0);
@@ -87,29 +80,25 @@ export default function FlowScreen({
               borderRadius={ss(4)}
               borderColor={'#99A9BF'}
               borderWidth={1}
-              borderStyle={'solid'}
-            >
+              borderStyle={'solid'}>
               {FlowOperators.map((item, idx) => {
                 return (
                   <Pressable
                     key={item.key}
                     onPress={() => {
                       setOperatorIdx(idx);
-                    }}
-                  >
+                    }}>
                     <Box
                       minW={ss(120)}
                       px={ss(20)}
                       py={ss(10)}
                       bgColor={operatorIdx == idx ? '#03CBB2' : '#F1F1F1'}
                       borderRightWidth={idx == FlowOperators.length - 1 ? 0 : 1}
-                      borderRightColor={'#99A9BF'}
-                    >
+                      borderRightColor={'#99A9BF'}>
                       <Text
                         fontSize={sp(20)}
                         fontWeight={600}
-                        color={operatorIdx == idx ? '#fff' : '#333'}
-                      >
+                        color={operatorIdx == idx ? '#fff' : '#333'}>
                         {item.text}
                       </Text>
                     </Box>

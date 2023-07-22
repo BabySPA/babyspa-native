@@ -42,6 +42,13 @@ export interface RegisterAndCollection {
   status: CustomerStatus | -1;
 }
 
+export type UpdatingImage =
+  | {
+      name: string;
+      uri: string;
+    }
+  | string;
+
 export interface FlowState {
   operators: Operator[];
   register: RegisterAndCollection;
@@ -61,17 +68,21 @@ export interface FlowState {
   setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
   setCurrentFlowCustomer: (data: Customer) => void;
   updateHealthInfo: (data: Partial<HealthInfo>) => void;
-  uploadFile: (uri: string, fileName: string) => Promise<any>;
-  openMediaLibrary: (toast: typeof Toast) => Promise<string>;
+  addlingualImage: (updatingImage: UpdatingImage) => void;
+  updatelingualImage: (name: string, url: string) => void;
+  addLeftHandImage: (updatingImage: UpdatingImage) => void;
+  updateLeftHandImage: (name: string, url: string) => void;
+  addRightHandImage: (updatingImage: UpdatingImage) => void;
+  updateRightHandImage: (name: string, url: string) => void;
 }
 
 export interface HealthInfo {
   allergy: string;
   audioFiles: string[];
-  leftHandImages: string[];
-  rightHandImages: string[];
-  lingualImage: string[];
-  otherImages: string[];
+  leftHandImages: UpdatingImage[];
+  rightHandImages: UpdatingImage[];
+  lingualImage: UpdatingImage[];
+  otherImages: UpdatingImage[];
 }
 
 export type Flow = {
