@@ -249,7 +249,7 @@ export default function SolutionInfo() {
               }}
               mt={1}
               onValueChange={(itemValue) => {}}>
-              {Array.from({ length: 30 }).map((_, idx) => {
+              {['今', '明', '后'].map((_, idx) => {
                 return <Select.Item label={`${idx}`} value={`${idx}`} />;
               })}
             </Select>

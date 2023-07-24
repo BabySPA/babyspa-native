@@ -99,6 +99,14 @@ class Request {
     return this.instance.put(url, data, config);
   }
 
+  public patch<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<Result<T>> {
+    return this.instance.patch(url, data, config);
+  }
+
   public delete<T = any>(
     url: string,
     config?: AxiosRequestConfig,

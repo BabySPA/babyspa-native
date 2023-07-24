@@ -22,6 +22,7 @@ export default function GuidanceInfo() {
               multiline={true}
               placeholder='您可输入，或从右侧分类中选择'
               style={{
+                textAlignVertical: 'top',
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
                 borderWidth: 1,
@@ -32,6 +33,11 @@ export default function GuidanceInfo() {
                 color: '#999',
               }}
               value={currentFlow.guidance}
+              onChangeText={(text) => {
+                updateCurrentFlow({
+                  guidance: text,
+                });
+              }}
             />
           </Box>
         </BoxItem>
@@ -65,7 +71,8 @@ export default function GuidanceInfo() {
                       mt={ss(3)}
                       color={
                         selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
-                      }>
+                      }
+                      fontSize={sp(18)}>
                       {item.key}
                     </Text>
                   </Center>
@@ -94,7 +101,9 @@ export default function GuidanceInfo() {
                     borderRadius={ss(2)}
                     borderColor={'#D8D8D8'}
                     borderWidth={1}>
-                    <Text>{item}</Text>
+                    <Text fontSize={sp(18)} color='#000'>
+                      {item}
+                    </Text>
                   </Box>
                 </Pressable>
               );

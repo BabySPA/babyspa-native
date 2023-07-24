@@ -77,17 +77,26 @@ export interface FlowState {
   requestAnalyzeCustomers: () => Promise<void>;
   requestGetOperators: () => Promise<void>;
   requestPostCustomerInfo: () => Promise<any>;
+  requestPatchFlowToAnalysis: () => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
+
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
   updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
   updateCurrentFlow: (data: Partial<Flow>) => void;
   updateHealthInfo: (data: Partial<HealthInfo>) => void;
-  addlingualImage: (updating: UpdatingImage) => void;
-  updatelingualImage: (name: string, url: string) => void;
+
+  addLingualImage: (updating: UpdatingImage) => void;
+  updateLingualImage: (name: string, url: string) => void;
+
   addLeftHandImage: (updating: UpdatingImage) => void;
   updateLeftHandImage: (name: string, url: string) => void;
+
   addRightHandImage: (updating: UpdatingImage) => void;
   updateRightHandImage: (name: string, url: string) => void;
+
+  addOtherImage: (updating: UpdatingImage) => void;
+  updateOtherImage: (name: string, url: string) => void;
+
   addAudioFile: (updating: UpdatingAudioFile) => void;
   updateAudioFile: (name: string, url: string) => void;
 }

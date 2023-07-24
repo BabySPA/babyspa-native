@@ -46,7 +46,7 @@ export default function ImageBox({
   const toast = useToast();
   const navigation = useNavigation();
 
-  const { currentFlowCustomer, addlingualImage, updatelingualImage } =
+  const { currentFlowCustomer, addLingualImage, updateLingualImage } =
     useFlowStore();
   const { getOssConfig } = useOssStore();
 

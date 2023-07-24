@@ -24,10 +24,11 @@ export default function ConclusionInfo() {
               multiline={true}
               placeholder='您可输入，或从右侧分类中选择'
               style={{
+                textAlignVertical: 'top',
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
                 borderWidth: 1,
-                height: ss(221),
+                height: ss(170),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
                 fontSize: sp(14),
@@ -113,6 +114,7 @@ export default function ConclusionInfo() {
                     />
                     <Text
                       mt={ss(3)}
+                      fontSize={sp(18)}
                       color={
                         selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                       }>
@@ -144,7 +146,9 @@ export default function ConclusionInfo() {
                     borderRadius={ss(2)}
                     borderColor={'#D8D8D8'}
                     borderWidth={1}>
-                    <Text>{item}</Text>
+                    <Text fontSize={sp(18)} color='#000'>
+                      {item}
+                    </Text>
                   </Box>
                 </Pressable>
               );

@@ -1,11 +1,12 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import { Pressable, Column, Row, Text, Flex, Icon, Box } from 'native-base';
+import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
 import { StatusOperateConfig, StatusTextConfig } from '~/app/constants';
-import useFlowStore, { Customer } from '~/app/stores/flow';
+import useFlowStore from '~/app/stores/flow';
+import { Customer } from '~/app/stores/flow/type';
 import { CustomerStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';

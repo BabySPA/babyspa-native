@@ -127,11 +127,10 @@ export default function RecordBox({}) {
             uri,
           });
 
-          console.log();
+          const oss = await getOssConfig();
+          const fileUrl = await upload(uri, name, oss);
 
-          //   const oss = await getOssConfig();
-          //   const fileUrl = await upload(uri, filename, oss);
-          //   uploadCallback(name, fileUrl);
+          updateAudioFile(name, fileUrl);
         } catch (error) {
           console.log('stopRecording error ==>', error);
         }

@@ -1,32 +1,26 @@
 import { AntDesign } from '@expo/vector-icons';
-import {
-  Box,
-  Column,
-  Row,
-  Text,
-  Center,
-  Icon,
-  Pressable,
-  ScrollView,
-} from 'native-base';
+import { Box, Column, Row, Text, Center, Icon, Pressable } from 'native-base';
 import { TextInput } from 'react-native';
 import { ss, sp, ls } from '~/app/utils/style';
 import { useNavigation } from '@react-navigation/native';
-import DashedLine from 'react-native-dashed-line';
 import useFlowStore from '~/app/stores/flow';
 import ImageBox from './image-box';
 import BoxItem from './box-item';
 import RecordBox from './record-box';
+import DashedLine from 'react-native-dashed-line';
 
 export default function HealthInfo() {
   const {
-    addlingualImage,
-    updatelingualImage,
+    addLingualImage,
+    updateLingualImage,
     addLeftHandImage,
     updateLeftHandImage,
     addRightHandImage,
     updateRightHandImage,
+    addOtherImage,
+    updateOtherImage,
     currentFlow,
+    updateCurrentFlow,
   } = useFlowStore();
 
   const { healthInfo } = currentFlow;
@@ -34,20 +28,33 @@ export default function HealthInfo() {
   return (
     <Row flex={1}>
       <Column flex={1}>
-        <BoxItem title={'过敏史'} icon={require('~/assets/images/notice.png')}>
+        <BoxItem
+          title={'过敏史'}
+          icon={require('~/assets/images/notice.png')}
+          autoScroll={false}>
           <Box flex={1}>
             <TextInput
               multiline={true}
               placeholder='请输入过敏史'
+              value={healthInfo.allergy}
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
                 borderWidth: 1,
-                height: ss(221),
+                height: ss(170),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
                 fontSize: sp(14),
                 color: '#999',
+                textAlignVertical: 'top',
+              }}
+              onChangeText={(text) => {
+                updateCurrentFlow({
+                  healthInfo: {
+                    ...currentFlow.healthInfo,
+                    allergy: text,
+                  },
+                });
               }}
             />
           </Box>
@@ -75,21 +82,30 @@ export default function HealthInfo() {
               <Text fontSize={sp(12)} fontWeight={600} color='#333'>
                 其他
               </Text>
-              <Pressable>
-                <Center
-                  borderColor={'#ACACAC'}
-                  borderWidth={1}
-                  borderStyle={'dashed'}
-                  bgColor={'#FFF'}
-                  mt={ss(10)}
-                  w={ss(100)}
-                  h={ss(100)}>
-                  <Icon
-                    as={<AntDesign name='plus' size={ss(40)} />}
-                    color={'#ACACAC'}
-                  />
-                </Center>
-              </Pressable>
+              <ImageBox
+                images={healthInfo.otherImages}
+                selectedCallback={function (
+                  filename: string,
+                  uri: string,
+                ): void {
+                  addOtherImage({
+                    name: filename,
+                    uri: uri,
+                  });
+                }}
+                takePhotoCallback={function (
+                  filename: string,
+                  uri: string,
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+                uploadCallback={function (filename: string, url: string): void {
+                  updateOtherImage(filename, url);
+                }}
+                errorCallback={function (err: any): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </Box>
           </Row>
         </BoxItem>
@@ -101,7 +117,7 @@ export default function HealthInfo() {
           <ImageBox
             images={healthInfo.lingualImage}
             selectedCallback={function (filename: string, uri: string): void {
-              addlingualImage({
+              addLingualImage({
                 name: filename,
                 uri: uri,
               });
@@ -110,7 +126,7 @@ export default function HealthInfo() {
               throw new Error('Function not implemented.');
             }}
             uploadCallback={function (filename: string, url: string): void {
-              updatelingualImage(filename, url);
+              updateLingualImage(filename, url);
             }}
             errorCallback={function (err: any): void {
               throw new Error('Function not implemented.');

@@ -23,7 +23,8 @@ import Solution from './components/solution-info';
 export default function FlowScreen({
   navigation,
 }: AppStackScreenProps<'Flow'>) {
-  const { requestGetFlow, currentFlowCustomer } = useFlowStore();
+  const { requestGetFlow, currentFlowCustomer, requestPatchFlowToAnalysis } =
+    useFlowStore();
 
   const age = getAge(currentFlowCustomer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
@@ -31,7 +32,7 @@ export default function FlowScreen({
   const FlowOperators = getFlowOperatorConfigByUser();
 
   useEffect(() => {
-    // requestGetFlow(currentFlowCustomer.flowId);
+    requestGetFlow(currentFlowCustomer.flowId);
   }, [requestGetFlow]);
 
   const [operatorIdx, setOperatorIdx] = useState(0);
@@ -137,7 +138,16 @@ export default function FlowScreen({
                   </Text>
                 </Center>
               </Pressable>
-              <Pressable>
+              <Pressable
+                onPress={() => {
+                  requestPatchFlowToAnalysis()
+                    .then((res) => {
+                      console.log('requestPatchFlowToAnalysis res', res);
+                    })
+                    .catch((err) => {
+                      console.log('requestPatchFlowToAnalysis err', err);
+                    });
+                }}>
                 <Center
                   w={ls(80)}
                   h={ss(40)}
