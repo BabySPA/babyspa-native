@@ -1,8 +1,6 @@
-import { AntDesign } from '@expo/vector-icons';
 import { Box, Column, Row, Text, Center, Icon, Pressable } from 'native-base';
 import { TextInput } from 'react-native';
 import { ss, sp, ls } from '~/app/utils/style';
-import { useNavigation } from '@react-navigation/native';
 import useFlowStore from '~/app/stores/flow';
 import ImageBox from './image-box';
 import BoxItem from './box-item';
@@ -19,11 +17,9 @@ export default function HealthInfo() {
     updateRightHandImage,
     addOtherImage,
     updateOtherImage,
-    currentFlow,
-    updateCurrentFlow,
+    updateCollection,
+    currentFlow: { collect },
   } = useFlowStore();
-
-  const { healthInfo } = currentFlow;
 
   return (
     <Row flex={1}>
@@ -36,7 +32,7 @@ export default function HealthInfo() {
             <TextInput
               multiline={true}
               placeholder='请输入过敏史'
-              value={healthInfo.allergy}
+              value={collect.healthInfo.allergy}
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
@@ -49,9 +45,9 @@ export default function HealthInfo() {
                 textAlignVertical: 'top',
               }}
               onChangeText={(text) => {
-                updateCurrentFlow({
+                updateCollection({
                   healthInfo: {
-                    ...currentFlow.healthInfo,
+                    ...collect.healthInfo,
                     allergy: text,
                   },
                 });
@@ -83,7 +79,7 @@ export default function HealthInfo() {
                 其他
               </Text>
               <ImageBox
-                images={healthInfo.otherImages}
+                images={collect.healthInfo.otherImages}
                 selectedCallback={function (
                   filename: string,
                   uri: string,
@@ -115,7 +111,7 @@ export default function HealthInfo() {
           title={'舌部图片'}
           icon={require('~/assets/images/tongue.png')}>
           <ImageBox
-            images={healthInfo.lingualImage}
+            images={collect.healthInfo.lingualImage}
             selectedCallback={function (filename: string, uri: string): void {
               addLingualImage({
                 name: filename,
@@ -148,7 +144,7 @@ export default function HealthInfo() {
                   左手
                 </Text>
                 <ImageBox
-                  images={healthInfo.leftHandImages}
+                  images={collect.healthInfo.leftHandImages}
                   selectedCallback={function (
                     filename: string,
                     uri: string,
@@ -193,7 +189,7 @@ export default function HealthInfo() {
                   右手
                 </Text>
                 <ImageBox
-                  images={healthInfo.rightHandImages}
+                  images={collect.healthInfo.rightHandImages}
                   selectedCallback={function (
                     filename: string,
                     uri: string,

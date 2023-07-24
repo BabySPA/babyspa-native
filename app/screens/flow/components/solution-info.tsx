@@ -15,15 +15,16 @@ import { Pressable, TextInput } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import DashedLine from 'react-native-dashed-line';
 
 export default function SolutionInfo() {
-  const { guidanceTemplate, currentFlow, updateCurrentFlow } = useFlowStore();
+  const { currentFlow } = useFlowStore();
 
   const {
-    solution: { applications, massages },
+    analyze: {
+      solution: { applications, massages },
+    },
   } = currentFlow;
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 

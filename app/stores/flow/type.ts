@@ -77,13 +77,13 @@ export interface FlowState {
   requestAnalyzeCustomers: () => Promise<void>;
   requestGetOperators: () => Promise<void>;
   requestPostCustomerInfo: () => Promise<any>;
-  requestPatchFlowToAnalysis: () => Promise<any>;
+  requestPatchFlowToCollection: () => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
 
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
   updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
-  updateCurrentFlow: (data: Partial<Flow>) => void;
-  updateHealthInfo: (data: Partial<HealthInfo>) => void;
+  updateCollection: (data: Partial<Collect>) => void;
+  updateAnalyze: (data: Partial<Analyze>) => void;
 
   addLingualImage: (updating: UpdatingImage) => void;
   updateLingualImage: (name: string, url: string) => void;
@@ -129,28 +129,37 @@ export interface Application {
   acupoint: string;
 }
 
-export type Flow = {
-  _id: string;
-  customerId: string;
+export interface Collect {
   healthInfo: HealthInfo;
   guidance: string;
-  conclusions: Conclusion[];
+  operatorId: string;
+  updatedAt: Date;
+}
+
+export interface Analyze {
+  conclusion: string;
   solution: {
     applications: Application[];
     massages: Massage[];
-    operatorId: string;
-    remark: string;
   };
+  remark: string;
   followUp: {
     isFollowed: boolean;
     followUpTime: string;
   };
-  evaluation: {
-    rating: number;
-    content: string;
-    updatedAt: string;
-    operatorId: string;
+  next: {
+    hasNext: boolean;
+    nextTime: string;
   };
-  createdAt: string;
+  operatorId: string;
+  updatedAt: Date;
+}
+
+export type Flow = {
+  _id: string;
+  customerId: string;
+  collect: Collect;
+  analyze: Analyze;
   updatedAt: string;
+  createdAt: string;
 };

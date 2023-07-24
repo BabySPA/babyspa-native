@@ -20,31 +20,36 @@ const defaultRegisterAndCollection = {
 const defaultFlow = {
   _id: '',
   customerId: '',
-  healthInfo: {
-    allergy: '',
-    audioFiles: [],
-    leftHandImages: [],
-    rightHandImages: [],
-    lingualImage: [],
-    otherImages: [],
-  },
-  guidance: '',
-  conclusions: [],
-  solution: {
-    applications: [],
-    massages: [],
+  collect: {
+    healthInfo: {
+      allergy: '',
+      audioFiles: [],
+      leftHandImages: [],
+      rightHandImages: [],
+      lingualImage: [],
+      otherImages: [],
+    },
+    guidance: '',
     operatorId: '',
+    updatedAt: new Date(),
+  },
+  analyze: {
+    conclusion: '',
+    solution: {
+      applications: [],
+      massages: [],
+    },
+    followUp: {
+      isFollowed: false,
+      followUpTime: '',
+    },
+    next: {
+      hasNext: false,
+      nextTime: '',
+    },
     remark: '',
-  },
-  followUp: {
-    isFollowed: false,
-    followUpTime: '',
-  },
-  evaluation: {
-    rating: 5,
-    content: '',
-    updatedAt: '',
     operatorId: '',
+    updatedAt: new Date(),
   },
   createdAt: '',
   updatedAt: '',
@@ -233,14 +238,13 @@ const useFlowStore = create(
       });
     },
 
-    requestPatchFlowToAnalysis: async () => {
+    requestPatchFlowToCollection: async () => {
       const currentFlow = get().currentFlow;
 
       console.log(`currentFlow`, currentFlow);
       request
         .patch(`/flows/collection/${currentFlow._id}`, {
-          healthInfo: currentFlow.healthInfo,
-          guidance: currentFlow.guidance,
+          collect: currentFlow.collect,
         })
         .then(({ data }) => {
           set({ currentFlow: data });
@@ -269,18 +273,21 @@ const useFlowStore = create(
       });
     },
 
-    updateCurrentFlow: (data) => {
+    updateCollection: (data) => {
       return set((state) => {
-        state.currentFlow = produce(state.currentFlow, (draft) => {
-          Object.assign(draft, data);
-        });
+        state.currentFlow.collect = produce(
+          state.currentFlow.collect,
+          (draft) => {
+            Object.assign(draft, data);
+          },
+        );
       });
     },
 
-    updateHealthInfo: (data) => {
+    updateAnalyze: (data) => {
       return set((state) => {
-        state.currentFlow.healthInfo = produce(
-          state.currentFlow.healthInfo,
+        state.currentFlow.analyze = produce(
+          state.currentFlow.analyze,
           (draft) => {
             Object.assign(draft, data);
           },
@@ -290,8 +297,8 @@ const useFlowStore = create(
 
     addLingualImage: (data) => {
       return set((state) => {
-        state.currentFlow.healthInfo.lingualImage = [
-          ...state.currentFlow.healthInfo.lingualImage,
+        state.currentFlow.collect.healthInfo.lingualImage = [
+          ...state.currentFlow.collect.healthInfo.lingualImage,
           data,
         ];
       });
@@ -299,21 +306,21 @@ const useFlowStore = create(
 
     updateLingualImage: (name: string, url: string) => {
       return set((state) => {
-        const idx = state.currentFlow.healthInfo.lingualImage.findIndex(
+        const idx = state.currentFlow.collect.healthInfo.lingualImage.findIndex(
           (item) => {
             if (typeof item === 'object') {
               return item.name === name;
             }
           },
         );
-        state.currentFlow.healthInfo.lingualImage[idx] = url;
+        state.currentFlow.collect.healthInfo.lingualImage[idx] = url;
       });
     },
 
     addOtherImage: (data) => {
       return set((state) => {
-        state.currentFlow.healthInfo.otherImages = [
-          ...state.currentFlow.healthInfo.otherImages,
+        state.currentFlow.collect.healthInfo.otherImages = [
+          ...state.currentFlow.collect.healthInfo.otherImages,
           data,
         ];
       });
@@ -321,21 +328,21 @@ const useFlowStore = create(
 
     updateOtherImage: (name: string, url: string) => {
       return set((state) => {
-        const idx = state.currentFlow.healthInfo.otherImages.findIndex(
+        const idx = state.currentFlow.collect.healthInfo.otherImages.findIndex(
           (item) => {
             if (typeof item === 'object') {
               return item.name === name;
             }
           },
         );
-        state.currentFlow.healthInfo.otherImages[idx] = url;
+        state.currentFlow.collect.healthInfo.otherImages[idx] = url;
       });
     },
 
     addLeftHandImage: (data) => {
       return set((state) => {
-        state.currentFlow.healthInfo.leftHandImages = [
-          ...state.currentFlow.healthInfo.leftHandImages,
+        state.currentFlow.collect.healthInfo.leftHandImages = [
+          ...state.currentFlow.collect.healthInfo.leftHandImages,
           data,
         ];
       });
@@ -343,21 +350,22 @@ const useFlowStore = create(
 
     updateLeftHandImage: (name: string, url: string) => {
       return set((state) => {
-        const idx = state.currentFlow.healthInfo.leftHandImages.findIndex(
-          (item) => {
-            if (typeof item === 'object') {
-              return item.name === name;
-            }
-          },
-        );
-        state.currentFlow.healthInfo.leftHandImages[idx] = url;
+        const idx =
+          state.currentFlow.collect.healthInfo.leftHandImages.findIndex(
+            (item) => {
+              if (typeof item === 'object') {
+                return item.name === name;
+              }
+            },
+          );
+        state.currentFlow.collect.healthInfo.leftHandImages[idx] = url;
       });
     },
 
     addRightHandImage: (data) => {
       return set((state) => {
-        state.currentFlow.healthInfo.rightHandImages = [
-          ...state.currentFlow.healthInfo.rightHandImages,
+        state.currentFlow.collect.healthInfo.rightHandImages = [
+          ...state.currentFlow.collect.healthInfo.rightHandImages,
           data,
         ];
       });
@@ -365,21 +373,22 @@ const useFlowStore = create(
 
     updateRightHandImage: (name: string, url: string) => {
       return set((state) => {
-        const idx = state.currentFlow.healthInfo.rightHandImages.findIndex(
-          (item) => {
-            if (typeof item === 'object') {
-              return item.name === name;
-            }
-          },
-        );
-        state.currentFlow.healthInfo.rightHandImages[idx] = url;
+        const idx =
+          state.currentFlow.collect.healthInfo.rightHandImages.findIndex(
+            (item) => {
+              if (typeof item === 'object') {
+                return item.name === name;
+              }
+            },
+          );
+        state.currentFlow.collect.healthInfo.rightHandImages[idx] = url;
       });
     },
 
     addAudioFile: (data) => {
       return set((state) => {
-        state.currentFlow.healthInfo.audioFiles = [
-          ...state.currentFlow.healthInfo.audioFiles,
+        state.currentFlow.collect.healthInfo.audioFiles = [
+          ...state.currentFlow.collect.healthInfo.audioFiles,
           data,
         ];
       });
@@ -387,14 +396,14 @@ const useFlowStore = create(
 
     updateAudioFile: (name: string, url: string) => {
       return set((state) => {
-        const idx = state.currentFlow.healthInfo.audioFiles.findIndex(
+        const idx = state.currentFlow.collect.healthInfo.audioFiles.findIndex(
           (item) => {
             if (typeof item === 'object') {
               return item.name === name;
             }
           },
         );
-        state.currentFlow.healthInfo.audioFiles[idx] = url;
+        state.currentFlow.collect.healthInfo.audioFiles[idx] = url;
       });
     },
   })),

@@ -9,7 +9,11 @@ import dayjs from 'dayjs';
 import DashedLine from 'react-native-dashed-line';
 
 export default function ConclusionInfo() {
-  const { guidanceTemplate, currentFlow, updateCurrentFlow } = useFlowStore();
+  const {
+    guidanceTemplate,
+    currentFlow: { analyze },
+    updateAnalyze,
+  } = useFlowStore();
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 
@@ -34,7 +38,7 @@ export default function ConclusionInfo() {
                 fontSize: sp(14),
                 color: '#999',
               }}
-              value={currentFlow.guidance}
+              value={analyze.conclusion}
             />
           </Box>
         </BoxItem>
@@ -43,7 +47,7 @@ export default function ConclusionInfo() {
           title={'分析记录'}
           icon={require('~/assets/images/guidance.png')}>
           <Box flex={1} pt={ss(10)}>
-            {currentFlow.conclusions.map((item, idx) => {
+            {/* {currentFlow.conclusions.map((item, idx) => {
               return (
                 <Row key={idx} alignItems={'flex-start'}>
                   <Column alignItems={'center'}>
@@ -83,7 +87,7 @@ export default function ConclusionInfo() {
                   </Row>
                 </Row>
               );
-            })}
+            })} */}
           </Box>
         </BoxItem>
       </Column>
@@ -131,10 +135,10 @@ export default function ConclusionInfo() {
                 <Pressable
                   key={idx}
                   onPress={() => {
-                    updateCurrentFlow({
-                      guidance:
-                        currentFlow.guidance.trim().length > 0
-                          ? currentFlow.guidance + ',' + item
+                    updateAnalyze({
+                      conclusion:
+                        analyze.conclusion.trim().length > 0
+                          ? analyze.conclusion + ',' + item
                           : item,
                     });
                   }}>

@@ -6,11 +6,14 @@ import {
   Icon,
   Container,
   Center,
+  Modal,
+  Button,
 } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useEffect, useState } from 'react';
+import { Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import { getAge, getFlowOperatorConfigByUser } from '~/app/utils';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -20,16 +23,29 @@ import Guidance from './components/guidance-info';
 import Conclusion from './components/conclusion-info';
 import Solution from './components/solution-info';
 
+interface ResultModal {
+  type: 'success' | 'fail' | 'none';
+  message: string;
+  tip?: string;
+}
+
 export default function FlowScreen({
   navigation,
 }: AppStackScreenProps<'Flow'>) {
-  const { requestGetFlow, currentFlowCustomer, requestPatchFlowToAnalysis } =
+  const { requestGetFlow, currentFlowCustomer, requestPatchFlowToCollection } =
     useFlowStore();
 
   const age = getAge(currentFlowCustomer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
   const FlowOperators = getFlowOperatorConfigByUser();
+
+  const [showResultModal, setShowResultModal] = useState<ResultModal>({
+    type: 'none',
+    message: '',
+  });
+
+  const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
 
   useEffect(() => {
     requestGetFlow(currentFlowCustomer.flowId);
@@ -125,7 +141,10 @@ export default function FlowScreen({
           </Container>
           {(operatorIdx === 0 || operatorIdx === 1) && (
             <Row>
-              <Pressable>
+              <Pressable
+                onPress={() => {
+                  setShowFinishModal(true);
+                }}>
                 <Center
                   w={ls(80)}
                   h={ss(40)}
@@ -140,12 +159,20 @@ export default function FlowScreen({
               </Pressable>
               <Pressable
                 onPress={() => {
-                  requestPatchFlowToAnalysis()
+                  requestPatchFlowToCollection()
                     .then((res) => {
-                      console.log('requestPatchFlowToAnalysis res', res);
+                      console.log('requestPatchFlowToCollection res', res);
+                      setShowResultModal({
+                        type: 'success',
+                        message: '提交成功，待分析师处理',
+                      });
                     })
                     .catch((err) => {
-                      console.log('requestPatchFlowToAnalysis err', err);
+                      console.log('requestPatchFlowToCollection err', err);
+                      setShowResultModal({
+                        type: 'fail',
+                        message: '提交失败，' + err.message,
+                      });
                     });
                 }}>
                 <Center
@@ -165,7 +192,10 @@ export default function FlowScreen({
           )}
           {(operatorIdx === 2 || operatorIdx === 3) && (
             <Row>
-              <Pressable>
+              <Pressable
+                onPress={() => {
+                  setShowFinishModal(true);
+                }}>
                 <Center
                   w={ls(80)}
                   h={ss(40)}
@@ -202,6 +232,78 @@ export default function FlowScreen({
           {operatorIdx === 3 && <Solution />}
         </Box>
       </Box>
+
+      <Modal
+        isOpen={showResultModal.type !== 'none'}
+        onClose={() => setShowResultModal({ type: 'none', message: '' })}>
+        <Modal.Content>
+          {showResultModal.type !== 'none' && (
+            <Center py={ss(60)}>
+              <Image
+                style={{ width: ss(72), height: ss(72) }}
+                source={
+                  showResultModal.type === 'success'
+                    ? require('~/assets/images/collection-result-success.png')
+                    : require('~/assets/images/collection-result-fail.png')
+                }
+              />
+              <Text fontSize={sp(20)} color='#333' mt={ss(27)}>
+                {showResultModal.type === 'success'
+                  ? '提交成功，待分析师处理'
+                  : '提交失败，提示原因'}
+              </Text>
+            </Center>
+          )}
+        </Modal.Content>
+      </Modal>
+
+      <Modal isOpen={showFinishModal} onClose={() => setShowFinishModal(false)}>
+        <Modal.Content>
+          <Modal.CloseButton />
+          <Modal.Header>温馨提示</Modal.Header>
+          <Modal.Body>
+            <Center>
+              <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
+                是否确认结束？
+              </Text>
+              <Row mt={ss(50)} mb={ss(20)}>
+                <Pressable
+                  onPress={() => {
+                    setShowFinishModal(false);
+                  }}>
+                  <Center
+                    borderRadius={ss(4)}
+                    borderWidth={1}
+                    borderColor={'#03CBB2'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#0C1B16' fontSize={sp(14)}>
+                      否
+                    </Text>
+                  </Center>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    alert('是');
+                  }}>
+                  <Center
+                    ml={ls(20)}
+                    borderRadius={ss(4)}
+                    borderWidth={1}
+                    borderColor={'#03CBB2'}
+                    bgColor={'rgba(3, 203, 178, 0.20)'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#0C1B16' fontSize={sp(14)}>
+                      是
+                    </Text>
+                  </Center>
+                </Pressable>
+              </Row>
+            </Center>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </Box>
   );
 }

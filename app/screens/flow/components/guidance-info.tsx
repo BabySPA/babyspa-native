@@ -7,7 +7,11 @@ import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 
 export default function GuidanceInfo() {
-  const { guidanceTemplate, currentFlow, updateCurrentFlow } = useFlowStore();
+  const {
+    guidanceTemplate,
+    currentFlow: { collect },
+    updateCollection,
+  } = useFlowStore();
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 
@@ -32,9 +36,9 @@ export default function GuidanceInfo() {
                 fontSize: sp(14),
                 color: '#999',
               }}
-              value={currentFlow.guidance}
+              value={collect.guidance}
               onChangeText={(text) => {
-                updateCurrentFlow({
+                updateCollection({
                   guidance: text,
                 });
               }}
@@ -84,16 +88,16 @@ export default function GuidanceInfo() {
             {guidanceTemplate[selectTemplateGroup].children.map((item, idx) => {
               return (
                 <Pressable
+                  key={idx}
                   onPress={() => {
-                    updateCurrentFlow({
+                    updateCollection({
                       guidance:
-                        currentFlow.guidance.trim().length > 0
-                          ? currentFlow.guidance + ',' + item
+                        collect.guidance.trim().length > 0
+                          ? collect.guidance + ',' + item
                           : item,
                     });
                   }}>
                   <Box
-                    key={idx}
                     px={ls(20)}
                     py={ss(7)}
                     mr={ls(10)}
