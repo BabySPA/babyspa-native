@@ -15,17 +15,11 @@ export const StatusOperateConfig: StatusOperateConfig = {
   },
   [CustomerStatus.Completed]: {},
   [CustomerStatus.Canceled]: {},
-  [CustomerStatus.ToBeConfirmed]: {},
 };
 
 export const DOCTOR_ROLE_ID = '6Zeo5bqX6LCD55CG5biI';
 
 export const StatusTextConfig = {
-  [CustomerStatus.ToBeConfirmed]: {
-    text: '待确认',
-    textColor: '#FB6459',
-    bgColor: 'rgba(251, 100, 89, 0.2)',
-  },
   [CustomerStatus.ToBeCollected]: {
     text: '待采集',
     textColor: '#FE9505',
@@ -64,9 +58,5 @@ export const FlowOperatorConfig = [
   {
     text: '调理方案',
     key: 'solution',
-  },
-  {
-    text: '反馈',
-    key: 'evaluation',
   },
 ];

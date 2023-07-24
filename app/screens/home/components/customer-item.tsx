@@ -20,7 +20,7 @@ export default function CustomerItem({
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
-  const { setCurrentFlowCustomer } = useFlowStore();
+  const { updateCurrentFlowCustomer } = useFlowStore();
   return (
     <Row
       borderRadius={ss(8)}
@@ -104,7 +104,7 @@ export default function CustomerItem({
         <OperateButton
           text={StatusOperateConfig[customer.status].operate}
           onPress={() => {
-            setCurrentFlowCustomer(customer);
+            updateCurrentFlowCustomer(customer);
             if (customer.status === CustomerStatus.ToBeAnalyzed) {
               navigation.navigate('Flow');
             } else if (customer.status === CustomerStatus.ToBeCollected) {

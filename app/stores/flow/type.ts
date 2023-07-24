@@ -49,12 +49,25 @@ export type UpdatingImage =
     }
   | string;
 
+export type UpdatingAudioFile =
+  | {
+      name: string;
+      uri: string;
+    }
+  | string;
+
+type Template = {
+  key: string;
+  children: string[];
+};
+
 export interface FlowState {
   operators: Operator[];
   register: RegisterAndCollection;
   collection: RegisterAndCollection;
   analyze: RegisterAndCollection;
   currentFlow: Flow;
+  guidanceTemplate: Template[];
 
   currentRegisterCustomer: RegisterCustomerInfo;
   currentFlowCustomer: Customer;
@@ -65,24 +78,46 @@ export interface FlowState {
   requestGetOperators: () => Promise<void>;
   requestPostCustomerInfo: () => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
-  setCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
-  setCurrentFlowCustomer: (data: Customer) => void;
+  updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
+  updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
+  updateCurrentFlow: (data: Partial<Flow>) => void;
   updateHealthInfo: (data: Partial<HealthInfo>) => void;
-  addlingualImage: (updatingImage: UpdatingImage) => void;
+  addlingualImage: (updating: UpdatingImage) => void;
   updatelingualImage: (name: string, url: string) => void;
-  addLeftHandImage: (updatingImage: UpdatingImage) => void;
+  addLeftHandImage: (updating: UpdatingImage) => void;
   updateLeftHandImage: (name: string, url: string) => void;
-  addRightHandImage: (updatingImage: UpdatingImage) => void;
+  addRightHandImage: (updating: UpdatingImage) => void;
   updateRightHandImage: (name: string, url: string) => void;
+  addAudioFile: (updating: UpdatingAudioFile) => void;
+  updateAudioFile: (name: string, url: string) => void;
 }
 
 export interface HealthInfo {
   allergy: string;
-  audioFiles: string[];
+  audioFiles: UpdatingAudioFile[];
   leftHandImages: UpdatingImage[];
   rightHandImages: UpdatingImage[];
   lingualImage: UpdatingImage[];
   otherImages: UpdatingImage[];
+}
+
+export interface Conclusion {
+  content: string;
+  updatedAt: string;
+  operator: OperatorInfo;
+}
+
+export interface Massage {
+  name: string;
+  count: number;
+  remark: string;
+}
+
+export interface Application {
+  name: string;
+  count: number;
+  duration: number;
+  acupoint: string;
 }
 
 export type Flow = {
@@ -90,10 +125,10 @@ export type Flow = {
   customerId: string;
   healthInfo: HealthInfo;
   guidance: string;
-  conclusions: string[];
+  conclusions: Conclusion[];
   solution: {
-    applications: string[];
-    massages: string[];
+    applications: Application[];
+    massages: Massage[];
     operatorId: string;
     remark: string;
   };

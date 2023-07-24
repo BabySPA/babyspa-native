@@ -37,8 +37,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
       w={'100%'}
       mb={ss(30)}
       p={ss(20)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Row>
         <Image
           style={{ width: ss(60), height: ss(60) }}
@@ -68,16 +67,14 @@ function CustomerItem({ customer }: { customer: Customer }) {
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(6)}
-            >
+              ml={ls(6)}>
               {ageText}
             </Text>
             <Text
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(20)}
-            >
+              ml={ls(20)}>
               {customer.phoneNumber}
             </Text>
           </Row>
@@ -91,8 +88,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(5)}
-            >
+              ml={ls(5)}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
@@ -106,7 +102,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
   const {
     register: { customers },
     requestRegisterCustomers,
-    setCurrentRegisterCustomer,
+    updateCurrentRegisterCustomer,
   } = useFlowStore();
 
   useEffect(() => {
@@ -120,8 +116,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(10)}
-    >
+      borderRadius={ss(10)}>
       <Flex>
         <BoxTitle title='选择客户' />
 
@@ -153,7 +148,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
               return (
                 <Pressable
                   onPress={() => {
-                    setCurrentRegisterCustomer({
+                    updateCurrentRegisterCustomer({
                       name: item.name,
                       nickname: item.birthday,
                       gender: item.gender,
@@ -162,8 +157,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
                       allergy: item.allergy,
                       operator: item.operator,
                     });
-                  }}
-                >
+                  }}>
                   <CustomerItem customer={item} />
                 </Pressable>
               );

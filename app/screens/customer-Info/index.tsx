@@ -19,7 +19,7 @@ export default function CustomerInfoScreen({
     requestGetOperators,
     requestPostCustomerInfo,
     requestRegisterCustomers,
-    setCurrentFlowCustomer,
+    updateCurrentFlowCustomer,
   } = useFlowStore();
 
   const toast = useToast();
@@ -57,7 +57,7 @@ export default function CustomerInfoScreen({
                     navigation.goBack();
                   } else {
                     // 进入流程页面
-                    setCurrentFlowCustomer(res);
+                    updateCurrentFlowCustomer(res);
                     navigation.navigate('Flow');
                   }
                 })

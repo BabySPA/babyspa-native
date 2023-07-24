@@ -29,12 +29,54 @@ const defaultFlow = {
     otherImages: [],
   },
   guidance: '',
-  conclusions: [],
+  conclusions: [
+    {
+      content: '小儿感冒',
+      updatedAt: new Date().toString(),
+      operator: {
+        id: '',
+        name: '张三',
+        phoneNumber: '12345678901',
+      },
+    },
+    {
+      content: '小儿感冒',
+      updatedAt: new Date().toString(),
+      operator: {
+        id: '',
+        name: '张三',
+        phoneNumber: '12345678901',
+      },
+    },
+    {
+      content: '小儿感冒',
+      updatedAt: new Date().toString(),
+      operator: {
+        id: '',
+        name: '张三',
+        phoneNumber: '12345678901',
+      },
+    },
+  ],
   solution: {
-    applications: [],
-    massages: [],
-    operatorId: '',
-    remark: '',
+    applications: [
+      {
+        name: '丁桂儿脐贴',
+        count: 3,
+        duration: 240000,
+        acupoint: '太阳穴',
+      },
+    ],
+    massages: [
+      {
+        name: '小儿推拿',
+        count: 3,
+        remark:
+          '胃经↓2  运水入土2  脾经个3  内劳宫2  小肠经↓7 阴池1  大肠经↓7 内关1  肺经↓7 三关肺↓7  心经↓1 天河水↓5  肝经↓1 六腑↓5 肾经个5 脊柱↓11  板门K1 七节骨↓50  板门推向横纹 150 三阴交',
+      },
+    ],
+    operatorId: '12345',
+    remark: '多挤捏板门，促进胃蠕动，助消化',
   },
   followUp: {
     isFollowed: false,
@@ -82,6 +124,24 @@ const useFlowStore = create(
       tag: '',
       flowId: '',
     },
+
+    guidanceTemplate: [
+      {
+        key: '咳嗽',
+        children: [
+          '晨起咳嗽',
+          '上半夜咳',
+          '下半夜咳',
+          '咳嗽有痰',
+          '干咳',
+          '偶尔咳嗽',
+        ],
+      },
+      {
+        key: '感冒',
+        children: ['头痛', '流鼻涕', '清鼻涕', '黄鼻涕'],
+      },
+    ],
 
     requestRegisterCustomers: async () => {
       const {
@@ -194,7 +254,28 @@ const useFlowStore = create(
         });
     },
 
-    setCurrentRegisterCustomer: (data) => {
+    requestPostCustomerInfo: async () => {
+      // 发起登记
+      const customer = get().currentRegisterCustomer;
+
+      return request.post('/customers', {
+        phoneNumber: customer.phoneNumber,
+        name: customer.name,
+        gender: customer.gender,
+        birthday: customer.birthday,
+        allergy: customer.allergy,
+        nickname: customer.nickname,
+        operatorId: customer.operator?.id,
+      });
+    },
+
+    requestGetFlow: async (flowId: string) => {
+      request.get(`/flows/${flowId}`).then(({ data }) => {
+        set({ currentFlow: data });
+      });
+    },
+
+    updateCurrentRegisterCustomer: (data) => {
       return set((state) => {
         state.currentRegisterCustomer = produce(
           state.currentRegisterCustomer,
@@ -205,7 +286,7 @@ const useFlowStore = create(
       });
     },
 
-    setCurrentFlowCustomer: (data) => {
+    updateCurrentFlowCustomer: (data) => {
       return set((state) => {
         state.currentFlowCustomer = produce(
           state.currentFlowCustomer,
@@ -213,6 +294,14 @@ const useFlowStore = create(
             Object.assign(draft, data);
           },
         );
+      });
+    },
+
+    updateCurrentFlow: (data) => {
+      return set((state) => {
+        state.currentFlow = produce(state.currentFlow, (draft) => {
+          Object.assign(draft, data);
+        });
       });
     },
 
@@ -293,24 +382,25 @@ const useFlowStore = create(
       });
     },
 
-    requestPostCustomerInfo: async () => {
-      // 发起登记
-      const customer = get().currentRegisterCustomer;
-
-      return request.post('/customers', {
-        phoneNumber: customer.phoneNumber,
-        name: customer.name,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        allergy: customer.allergy,
-        nickname: customer.nickname,
-        operatorId: customer.operator?.id,
+    addAudioFile: (data) => {
+      return set((state) => {
+        state.currentFlow.healthInfo.audioFiles = [
+          ...state.currentFlow.healthInfo.audioFiles,
+          data,
+        ];
       });
     },
 
-    requestGetFlow: async (flowId: string) => {
-      request.get(`/flows/${flowId}`).then(({ data }) => {
-        set({ currentFlow: data });
+    updateAudioFile: (name: string, url: string) => {
+      return set((state) => {
+        const idx = state.currentFlow.healthInfo.audioFiles.findIndex(
+          (item) => {
+            if (typeof item === 'object') {
+              return item.name === name;
+            }
+          },
+        );
+        state.currentFlow.healthInfo.audioFiles[idx] = url;
       });
     },
   })),

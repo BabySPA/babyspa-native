@@ -33,7 +33,7 @@ export default function EditCustomer(params: EditCustomerParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const { currentRegisterCustomer, setCurrentRegisterCustomer } =
+  const { currentRegisterCustomer, updateCurrentRegisterCustomer } =
     useFlowStore();
 
   let currentSelectBirthday = currentRegisterCustomer.birthday;
@@ -46,8 +46,7 @@ export default function EditCustomer(params: EditCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(10)}
-    >
+      borderRadius={ss(10)}>
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -66,7 +65,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 fontSize={sp(16, { min: 12 })}
                 placeholder='请输入'
                 onChangeText={(text) => {
-                  setCurrentRegisterCustomer({ name: text });
+                  updateCurrentRegisterCustomer({ name: text });
                 }}
               />
             }
@@ -83,7 +82,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 defaultValue={currentRegisterCustomer.nickname}
                 placeholderTextColor={'#CCC'}
                 onChangeText={(text) => {
-                  setCurrentRegisterCustomer({ nickname: text });
+                  updateCurrentRegisterCustomer({ nickname: text });
                 }}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
@@ -100,9 +99,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 name='gender'
                 flexDirection={'row'}
                 onChange={(event) => {
-                  setCurrentRegisterCustomer({ gender: +event });
-                }}
-              >
+                  updateCurrentRegisterCustomer({ gender: +event });
+                }}>
                 <Radio colorScheme='green' value='1' size={'sm'}>
                   男
                 </Radio>
@@ -121,8 +119,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Pressable
                   onPress={() => {
                     showDatePicker();
-                  }}
-                >
+                  }}>
                   <Row
                     borderRadius={ss(10)}
                     justifyContent={'space-between'}
@@ -130,8 +127,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
-                    px={ss(20)}
-                  >
+                    px={ss(20)}>
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
                       {currentRegisterCustomer.birthday}
                     </Text>
@@ -157,7 +153,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 py={ss(10)}
                 px={ls(20)}
                 onChangeText={(text) => {
-                  setCurrentRegisterCustomer({ phoneNumber: text });
+                  updateCurrentRegisterCustomer({ phoneNumber: text });
                 }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
@@ -177,7 +173,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 py={ss(10)}
                 px={ls(20)}
                 onChangeText={(text) => {
-                  setCurrentRegisterCustomer({ allergy: text });
+                  updateCurrentRegisterCustomer({ allergy: text });
                 }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
@@ -195,8 +191,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <SelectDropdown
                   data={operators}
                   onSelect={(selectedItem, index) => {
-
-                    setCurrentRegisterCustomer({
+                    updateCurrentRegisterCustomer({
                       operator: {
                         id: selectedItem._id,
                         name: selectedItem.name,
@@ -266,8 +261,7 @@ export default function EditCustomer(params: EditCustomerParams) {
         isOpen={isOpenBirthdayPicker}
         onClose={() => {
           setIsOpenBirthdayPicker(false);
-        }}
-      >
+        }}>
         <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
           <DatePicker
             options={{
@@ -284,33 +278,31 @@ export default function EditCustomer(params: EditCustomerParams) {
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
               onPress={() => {
-                setCurrentRegisterCustomer({ birthday: currentSelectBirthday });
+                updateCurrentRegisterCustomer({
+                  birthday: currentSelectBirthday,
+                });
                 setIsOpenBirthdayPicker(false);
-              }}
-            >
+              }}>
               <Box
                 bgColor={'#00B49E'}
                 px={ls(26)}
                 py={ss(12)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-              >
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
                 确定
               </Box>
             </Pressable>
             <Pressable
               onPress={() => {
                 setIsOpenBirthdayPicker(false);
-              }}
-            >
+              }}>
               <Box
                 bgColor={'#D8D8D8'}
                 px={ls(26)}
                 py={ss(12)}
                 ml={ls(10)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-              >
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
                 取消
               </Box>
             </Pressable>

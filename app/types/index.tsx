@@ -29,7 +29,6 @@ export enum CustomerStatus {
   Canceled, // 已取消
   ToBeCollected, // 待收集
   ToBeAnalyzed, // 待分析
-  ToBeConfirmed, // 待确认
 }
 
 export enum Gender {

@@ -4,124 +4,21 @@ import {
   Column,
   Row,
   Text,
-  Divider,
   Center,
   Icon,
   Pressable,
-  Menu,
-  useToast,
   ScrollView,
-  Spinner,
-  Modal,
 } from 'native-base';
-import { Image } from 'expo-image';
-import { ImageSourcePropType, TextInput } from 'react-native';
+import { TextInput } from 'react-native';
 import { ss, sp, ls } from '~/app/utils/style';
-import { requestCameraPermissionsAsync } from 'expo-image-picker';
-import { toastAlert } from '~/app/utils/toast';
 import { useNavigation } from '@react-navigation/native';
 import DashedLine from 'react-native-dashed-line';
-import { useState } from 'react';
-import { Audio } from 'expo-av';
-import { getBase64ImageFormat } from '~/app/utils';
 import useFlowStore from '~/app/stores/flow';
 import ImageBox from './image-box';
-
-function TitleBar({
-  title,
-  icon,
-}: {
-  title: string;
-  icon: ImageSourcePropType;
-}) {
-  return (
-    <Box>
-      <Row alignItems={'center'}>
-        <Image style={{ width: ss(24), height: ss(24) }} source={icon} />
-        <Text ml={ss(10)} fontSize={sp(20)} color='#333' fontWeight={600}>
-          {title}
-        </Text>
-      </Row>
-      <Divider color={'#DFE1DE'} my={ss(14)} />
-    </Box>
-  );
-}
-
-const ArrowBox = () => {
-  return (
-    <Box flex={1} justifyContent='center' alignItems='center'>
-      {/* 画框框 */}
-      <Box position='relative'>
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ['#22D59C', '#1AB7BE'],
-              start: [0, 0],
-              end: [1, 1],
-            },
-          }}
-          borderRadius={8}
-          py={ss(27)}
-          px={ls(38)}>
-          <Image
-            source={require('~/assets/images/record-loading.png')}
-            style={{ height: ss(18), width: ls(72) }}
-          />
-        </Box>
-        {/* 画箭头 */}
-        <Box
-          position='absolute'
-          top='100%' // 位于底部
-          left='50%'
-          ml={-ls(10)} // 居中箭头
-          width={0}
-          height={0}
-          borderTopWidth={ss(15)} // 使用 borderTopWidth 改变箭头方向
-          borderLeftWidth={ls(10)}
-          borderRightWidth={ls(10)}
-          borderStyle='solid'
-          backgroundColor='transparent'
-          borderTopColor='#22D59C' // 箭头颜色为渐变色的起始色
-          borderBottomColor='transparent'
-          borderLeftColor='transparent'
-          borderRightColor='transparent'
-        />
-      </Box>
-    </Box>
-  );
-};
-
-function BoxItem({
-  mt,
-  title,
-  icon,
-  children,
-  autoScroll = true,
-}: {
-  mt?: number;
-  title: string;
-  icon: ImageSourcePropType;
-  children: React.ReactNode;
-  autoScroll?: boolean;
-}) {
-  return (
-    <Box
-      flex={1}
-      bgColor='#fff'
-      borderRadius={ss(10)}
-      mt={mt ?? 0}
-      px={ss(20)}
-      py={ss(18)}>
-      <TitleBar title={title} icon={icon} />
-      {autoScroll ? <ScrollView>{children}</ScrollView> : children}
-    </Box>
-  );
-}
+import BoxItem from './box-item';
+import RecordBox from './record-box';
 
 export default function HealthInfo() {
-  const navigation = useNavigation();
-  const [recording, setRecording] = useState<Audio.Recording>();
-
   const {
     addlingualImage,
     updatelingualImage,
@@ -129,62 +26,10 @@ export default function HealthInfo() {
     updateLeftHandImage,
     addRightHandImage,
     updateRightHandImage,
-    updateHealthInfo,
     currentFlow,
   } = useFlowStore();
 
   const { healthInfo } = currentFlow;
-  async function startRecording() {
-    try {
-      console.log('Requesting permissions..');
-      await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY,
-      );
-      setRecording(recording);
-      console.log('Recording started');
-    } catch (err) {
-      console.error('Failed to start recording', err);
-    }
-  }
-
-  async function stopRecording() {
-    console.log('Stopping recording..');
-    setRecording(undefined);
-    if (recording) {
-      await recording.stopAndUnloadAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-      });
-      const uri = recording.getURI();
-      console.log('Recording stopped and stored at', uri);
-
-      if (uri) {
-        const sound = new Audio.Sound();
-        await sound.loadAsync({ uri });
-        const audioStatus: any = await sound.getStatusAsync();
-        // 获取音频时长
-        const durationSeconds = audioStatus.durationMillis / 1000;
-        console.log('durationSeconds ==>', durationSeconds);
-        // const { sound } = await Audio.Sound.createAsync(
-        //   { uri },
-        //   { shouldPlay: true },
-        // );
-        // await sound.playAsync();
-        //       const durationMillis = await sound.getDurationAsync();
-      }
-
-      setRecording(undefined);
-    }
-  }
-
-  const [record, setRecord] = useState(false);
 
   return (
     <Row flex={1}>
@@ -217,47 +62,7 @@ export default function HealthInfo() {
               <Text fontSize={sp(12)} fontWeight={600} color='#333'>
                 录音
               </Text>
-              <ScrollView></ScrollView>
-              <Pressable
-                onLongPress={() => {
-                  console.log('正在长按');
-                  setRecord(true);
-                }}
-                onBlur={() => {
-                  console.log('onBlur');
-                }}
-                onTouchEnd={() => {
-                  console.log('onTouchEnd');
-                }}>
-                <Center
-                  m={ss(10)}
-                  borderRadius={ss(6)}
-                  px={ls(20)}
-                  py={ss(13)}
-                  bg={{
-                    linearGradient: {
-                      colors: ['#22D59C', '#1AB7BE'],
-                      start: [0, 0],
-                      end: [1, 1],
-                    },
-                  }}>
-                  <Text color='white' fontSize={sp(16)}>
-                    按住录音
-                  </Text>
-                </Center>
-              </Pressable>
-              <Modal
-                isOpen={record}
-                onClose={() => {
-                  setRecord(false);
-                }}>
-                <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
-                  <ArrowBox />
-                  <Text color={'white'} mt={ss(30)}>
-                    松开保存，上划取消
-                  </Text>
-                </Box>
-              </Modal>
+              <RecordBox />
             </Box>
             <DashedLine
               axis='vertical'
@@ -270,7 +75,6 @@ export default function HealthInfo() {
               <Text fontSize={sp(12)} fontWeight={600} color='#333'>
                 其他
               </Text>
-
               <Pressable>
                 <Center
                   borderColor={'#ACACAC'}

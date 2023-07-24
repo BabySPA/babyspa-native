@@ -1,4 +1,12 @@
-import { Box, Text, Pressable, Row, Icon, Container } from 'native-base';
+import {
+  Box,
+  Text,
+  Pressable,
+  Row,
+  Icon,
+  Container,
+  Center,
+} from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -8,6 +16,9 @@ import { getAge, getFlowOperatorConfigByUser } from '~/app/utils';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import HealthInfo from './components/health-info';
+import Guidance from './components/guidance-info';
+import Conclusion from './components/conclusion-info';
+import Solution from './components/solution-info';
 
 export default function FlowScreen({
   navigation,
@@ -20,9 +31,7 @@ export default function FlowScreen({
   const FlowOperators = getFlowOperatorConfigByUser();
 
   useEffect(() => {
-    // requestGetFlow(currentFlowCustomer.flowId).then((res) => {
-    //   console.log(res);
-    // });
+    // requestGetFlow(currentFlowCustomer.flowId);
   }, [requestGetFlow]);
 
   const [operatorIdx, setOperatorIdx] = useState(0);
@@ -74,8 +83,14 @@ export default function FlowScreen({
         }
       />
       <Box safeAreaLeft safeAreaBottom bgColor={'#F6F6FA'} flex={1} p={ss(10)}>
-        <Box bgColor='#fff' borderRadius={ss(10)}>
-          <Container px={ls(20)} py={ss(16)}>
+        <Row
+          bgColor='#fff'
+          borderRadius={ss(10)}
+          py={ss(16)}
+          px={ls(20)}
+          alignItems={'center'}
+          justifyContent={'space-between'}>
+          <Container>
             <Row
               borderRadius={ss(4)}
               borderColor={'#99A9BF'}
@@ -107,9 +122,74 @@ export default function FlowScreen({
               })}
             </Row>
           </Container>
-        </Box>
+          {(operatorIdx === 0 || operatorIdx === 1) && (
+            <Row>
+              <Pressable>
+                <Center
+                  w={ls(80)}
+                  h={ss(40)}
+                  bgColor={'rgba(243, 96, 30, 0.20)'}
+                  borderWidth={1}
+                  borderColor={'#F3601E'}
+                  borderRadius={ss(4)}>
+                  <Text color='#F3601E' fontSize={sp(14)}>
+                    结束
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable>
+                <Center
+                  w={ls(80)}
+                  h={ss(40)}
+                  ml={ls(20)}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  borderRadius={ss(4)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    提交分析
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          )}
+          {(operatorIdx === 2 || operatorIdx === 3) && (
+            <Row>
+              <Pressable>
+                <Center
+                  w={ls(80)}
+                  h={ss(40)}
+                  bgColor={'rgba(243, 96, 30, 0.20)'}
+                  borderWidth={1}
+                  borderColor={'#F3601E'}
+                  borderRadius={ss(4)}>
+                  <Text color='#F3601E' fontSize={sp(14)}>
+                    结束
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable>
+                <Center
+                  w={ls(80)}
+                  h={ss(40)}
+                  ml={ls(20)}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  borderRadius={ss(4)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    完成
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          )}
+        </Row>
         <Box borderRadius={ss(10)} flex={1} mt={ss(10)}>
-          <HealthInfo />
+          {operatorIdx === 0 && <HealthInfo />}
+          {operatorIdx === 1 && <Guidance />}
+          {operatorIdx === 2 && <Conclusion />}
+          {operatorIdx === 3 && <Solution />}
         </Box>
       </Box>
     </Box>
