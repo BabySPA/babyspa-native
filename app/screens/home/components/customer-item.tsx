@@ -32,7 +32,7 @@ export default function CustomerItem({
       h={ss(148)}
       mb={ss(40)}
       justifyContent={'space-between'}>
-      <Row p={ss(20)}>
+      <Row p={ss(20)} maxW={'80%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
             style={{ width: ss(60), height: ss(60) }}
@@ -88,7 +88,7 @@ export default function CustomerItem({
           </Row>
         </Flex>
       </Row>
-      <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
+      <Flex justifyContent={'space-between'} alignItems={'flex-end'} flex={1}>
         <Box
           bgColor={StatusTextConfig[customer.status].bgColor}
           px={ls(12)}

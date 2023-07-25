@@ -13,11 +13,13 @@ export default function Layout() {
   } = useLayoutConfigWithRole();
 
   const { logout } = useAuthStore();
+
   const Fragment = () => {
     return layoutConfig[currentSelected].features[
       layoutConfig[currentSelected].featureSelected
     ].fragment();
   };
+
   return (
     <Flex
       safeAreaTop
@@ -29,21 +31,18 @@ export default function Layout() {
         },
       }}
       flex={1}
-      direction='row'
-    >
+      direction='row'>
       <Box>
         <Center
           pt={ss(30)}
           px={ss(10)}
           minW={ss(120)}
           minH={ss(120)}
-          safeAreaLeft
-        >
+          safeAreaLeft>
           <Pressable
             onPress={() => {
               logout();
-            }}
-          >
+            }}>
             <Image
               source={require('~/assets/images/logo.png')}
               style={{
@@ -57,9 +56,8 @@ export default function Layout() {
             color={'white'}
             mt={ss(5)}
             fontWeight={600}
-            textAlign={'center'}
-          >
-            茗淳儿推
+            textAlign={'center'}>
+            掌阅未来
           </Text>
         </Center>
         <Box mt={ss(10)}>
@@ -69,16 +67,14 @@ export default function Layout() {
                 key={idx}
                 onPress={() => {
                   changeCurrentSelected(idx);
-                }}
-              >
+                }}>
                 <Center
                   safeAreaLeft
                   background={
                     idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
                   px={ls(10)}
-                  py={ss(16)}
-                >
+                  py={ss(16)}>
                   <Image
                     source={
                       idx == currentSelected ? item.selectedImage : item.image
@@ -89,8 +85,7 @@ export default function Layout() {
                   />
                   <Text
                     fontSize={ls(18)}
-                    color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}
-                  >
+                    color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}>
                     {item.text}
                   </Text>
                 </Center>
@@ -109,8 +104,7 @@ export default function Layout() {
                 paddingRight={'8%'}
                 onPress={() => {
                   changeFeatureSelected(idx);
-                }}
-              >
+                }}>
                 <Center>
                   <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
                     {item.text}

@@ -22,9 +22,11 @@ export default function Register() {
     requestRegisterCustomers,
     register: { customers },
   } = useFlowStore();
+
   useEffect(() => {
     requestRegisterCustomers();
   }, []);
+
   return (
     <Flex flex={1}>
       <Filter />
