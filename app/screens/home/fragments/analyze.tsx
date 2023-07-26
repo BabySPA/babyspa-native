@@ -17,6 +17,7 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
 import { OperateType } from '~/app/types';
+import EmptyBox from '~/app/components/empty-box';
 
 export default function Analyze() {
   const {
@@ -32,18 +33,22 @@ export default function Analyze() {
     <Flex flex={1}>
       <Filter />
       <ScrollView margin={ss(10)}>
-        <Row
-          flex={1}
-          bgColor='white'
-          borderRadius={ss(10)}
-          flexWrap={'wrap'}
-          p={ss(40)}>
-          {customers.map((customer, idx) => (
-            <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
-              <CustomerItem customer={customer} type={OperateType.Analyze} />
-            </Box>
-          ))}
-        </Row>
+        {customers.length == 0 ? (
+          <EmptyBox />
+        ) : (
+          <Row
+            flex={1}
+            bgColor='white'
+            borderRadius={ss(10)}
+            flexWrap={'wrap'}
+            p={ss(40)}>
+            {customers.map((customer, idx) => (
+              <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
+                <CustomerItem customer={customer} type={OperateType.Analyze} />
+              </Box>
+            ))}
+          </Row>
+        )}
       </ScrollView>
     </Flex>
   );

@@ -166,9 +166,12 @@ export default function FlowScreen({
                         type: 'success',
                         message: '提交成功，待分析师处理',
                       });
-
-                      // TODO 这里回去要刷新
-                      navigation.goBack();
+                      setTimeout(() => {
+                        setShowResultModal({
+                          type: 'none',
+                          message: '',
+                        });
+                      }, 2000);
                     })
                     .catch((err) => {
                       console.log('requestPatchFlowToCollection err', err);
@@ -176,10 +179,11 @@ export default function FlowScreen({
                         type: 'fail',
                         message: '提交失败，' + err.message,
                       });
-                    })
-                    .finally(() => {
                       setTimeout(() => {
-                        setShowResultModal({ type: 'none', message: '' });
+                        setShowResultModal({
+                          type: 'none',
+                          message: '',
+                        });
                       }, 2000);
                     });
                 }}>

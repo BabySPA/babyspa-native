@@ -1,8 +1,9 @@
-import { Box, Center, Flex, Text, Pressable } from 'native-base';
-import { ls, ss } from '~/app/utils/style';
+import { Box, Center, Flex, Text, Pressable, Icon } from 'native-base';
+import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
 import useLayoutConfigWithRole from '~/app/stores/layout';
 import useAuthStore from '~/app/stores/auth';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function Layout() {
   const {
@@ -12,7 +13,7 @@ export default function Layout() {
     changeFeatureSelected,
   } = useLayoutConfigWithRole();
 
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
   const Fragment = () => {
     return layoutConfig[currentSelected].features[
@@ -93,6 +94,32 @@ export default function Layout() {
             );
           })}
         </Box>
+        <Center px={ls(6)}>
+          <Center
+            borderRadius={ss(23)}
+            borderWidth={ss(3)}
+            borderColor={'#fff'}
+            w={ss(46)}
+            h={ss(46)}
+            bgColor={'#F7CE51'}
+            mt={ss(130)}>
+            <Text fontSize={sp(16)} color='#fff'>
+              {user?.name?.[0]}
+            </Text>
+          </Center>
+          <Text fontSize={sp(14)} color='#fff' mt={ss(4)}>
+            {user?.name} - {user?.role.name}
+          </Text>
+          <Text fontSize={sp(14)} color='#fff' mt={ss(4)}>
+            {user?.shop.name}{' '}
+            <Icon
+              ml={ss(10)}
+              as={<FontAwesome name='angle-down' />}
+              size={ss(15, { min: 12 })}
+              color='#fff'
+            />
+          </Text>
+        </Center>
       </Box>
       <Flex direction='column' flex={1}>
         <Flex direction='row' justifyContent={'center'}>
