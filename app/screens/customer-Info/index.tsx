@@ -11,7 +11,11 @@ import InfoBox from './components/info-box';
 export default function CustomerInfo({
   navigation,
 }: AppStackScreenProps<'CustomerInfo'>) {
-  const { requestGetOperators, requestPatchCustomerStatus } = useFlowStore();
+  const {
+    requestGetOperators,
+    requestPatchCustomerStatus,
+    currentRegisterCustomer,
+  } = useFlowStore();
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
@@ -32,7 +36,8 @@ export default function CustomerInfo({
           </Text>
         }
         rightElement={
-          edit ? null : (
+          !edit &&
+          currentRegisterCustomer.status !== CustomerStatus.Canceled ? (
             <Pressable
               onPress={() => {
                 if (loading) return;
@@ -65,7 +70,7 @@ export default function CustomerInfo({
                 </Text>
               </Row>
             </Pressable>
-          )
+          ) : null
         }
       />
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>

@@ -21,7 +21,7 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
 import dayjs from 'dayjs';
-import { Gender } from '~/app/types';
+import { CustomerStatus, Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
 import LabelBox from './label-box';
 
@@ -84,7 +84,11 @@ export default function InfoBox(params: InfoBoxParams) {
         </Box>
       </Column>
       <Image
-        source={require('~/assets/images/register-success.png')}
+        source={
+          currentRegisterCustomer.status === CustomerStatus.Canceled
+            ? require('~/assets/images/register-cancel.png')
+            : require('~/assets/images/register-success.png')
+        }
         style={{
           width: ss(120),
           height: ss(120),
@@ -107,7 +111,6 @@ export default function InfoBox(params: InfoBoxParams) {
             </Text>
           </Box>
         </Pressable>
-
         <Pressable
           ml={ls(74)}
           onPress={() => {
@@ -121,7 +124,9 @@ export default function InfoBox(params: InfoBoxParams) {
             borderWidth={1}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
-              修改
+              {currentRegisterCustomer.status === CustomerStatus.Canceled
+                ? '再次登记'
+                : '修改'}
             </Text>
           </Box>
         </Pressable>

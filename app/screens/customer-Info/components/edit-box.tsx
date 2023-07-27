@@ -22,6 +22,8 @@ import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
 import { getAge } from '~/app/utils';
 import { toastAlert } from '~/app/utils/toast';
+import { CustomerStatus } from '~/app/types';
+import SelectOperator from '~/app/components/select-operator';
 
 interface EditBoxParams {
   onPressCancel: () => void;
@@ -37,6 +39,7 @@ export default function EditBox(params: EditBoxParams) {
     currentRegisterCustomer,
     updateCurrentRegisterCustomer,
     operators,
+    requestPostCustomerInfo,
     requestPatchCustomerInfo,
   } = useFlowStore();
 
@@ -46,7 +49,6 @@ export default function EditBox(params: EditBoxParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const age = getAge(tempCustomer.birthday ?? '');
   let currentSelectBirthday = tempCustomer.birthday;
 
   return (
@@ -225,8 +227,8 @@ export default function EditBox(params: EditBoxParams) {
               title='理疗师'
               form={
                 <Box w={ls(380)}>
-                  <SelectDropdown
-                    data={operators}
+                  <SelectOperator
+                    operators={operators}
                     onSelect={(selectedItem, index) => {
                       setTempCustomer({
                         ...tempCustomer,
@@ -240,55 +242,6 @@ export default function EditBox(params: EditBoxParams) {
                     defaultButtonText={
                       tempCustomer?.operator?.name ?? '请选择理疗师'
                     }
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem.name;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                      return item.name;
-                    }}
-                    buttonStyle={{
-                      width: '100%',
-                      height: ss(48, { min: 26 }),
-                      backgroundColor: '#fff',
-                      borderRadius: ss(4),
-                      borderWidth: 1,
-                      borderColor: '#D8D8D8',
-                    }}
-                    buttonTextStyle={{
-                      color: '#333333',
-                      textAlign: 'left',
-                      fontSize: sp(16, { min: 12 }),
-                    }}
-                    renderDropdownIcon={(isOpened) => {
-                      return (
-                        <Icon
-                          as={
-                            <FontAwesome
-                              name={isOpened ? 'angle-up' : 'angle-down'}
-                            />
-                          }
-                          size={ss(18, { min: 15 })}
-                          color='#999'
-                        />
-                      );
-                    }}
-                    dropdownIconPosition={'right'}
-                    dropdownStyle={{
-                      backgroundColor: '#fff',
-                      borderRadius: ss(8),
-                    }}
-                    rowStyle={{
-                      backgroundColor: '#fff',
-                      borderBottomColor: '#D8D8D8',
-                    }}
-                    rowTextStyle={{
-                      color: '#333',
-                      textAlign: 'center',
-                      fontSize: sp(16, { min: 12 }),
-                    }}
-                    selectedRowStyle={{
-                      backgroundColor: '#f8f8f8',
-                    }}
                   />
                 </Box>
               }
@@ -323,17 +276,30 @@ export default function EditBox(params: EditBoxParams) {
             setLoading(true);
 
             updateCurrentRegisterCustomer(tempCustomer);
-            requestPatchCustomerInfo()
-              .then((res) => {
-                toastAlert(toast, 'success', '修改客户信息成功！');
-              })
-              .catch((err) => {
-                console.log(err);
-                toastAlert(toast, 'error', '修改客户信息失败！');
-              })
-              .finally(() => {
-                setLoading(false);
-              });
+
+            if (tempCustomer.status === CustomerStatus.Canceled) {
+              requestPostCustomerInfo()
+                .then((res) => {
+                  toastAlert(toast, 'success', '再次登记客户信息成功！');
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '再次登记客户信息失败！');
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            } else {
+              requestPatchCustomerInfo()
+                .then((res) => {
+                  toastAlert(toast, 'success', '修改客户信息成功！');
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '修改客户信息失败！');
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            }
           }}>
           <Row
             px={ls(34)}

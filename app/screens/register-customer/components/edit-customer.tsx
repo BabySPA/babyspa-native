@@ -4,7 +4,6 @@ import {
   Flex,
   Icon,
   Input,
-  Modal,
   Radio,
   Row,
   ScrollView,
@@ -13,12 +12,12 @@ import {
 import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import SelectDropdown from 'react-native-select-dropdown';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
-import DatePicker from '~/app/components/date-picker';
+import SelectOperator from '~/app/components/select-operator';
+import DatePickerModal from '~/app/components/date-picker-modal';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -35,8 +34,6 @@ export default function EditCustomer(params: EditCustomerParams) {
 
   const { currentRegisterCustomer, updateCurrentRegisterCustomer } =
     useFlowStore();
-
-  let currentSelectBirthday = currentRegisterCustomer.birthday;
 
   const { style = {} } = params;
 
@@ -188,8 +185,8 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Box w={'70%'}>
-                <SelectDropdown
-                  data={operators}
+                <SelectOperator
+                  operators={operators}
                   onSelect={(selectedItem, index) => {
                     updateCurrentRegisterCustomer({
                       operator: {
@@ -202,113 +199,25 @@ export default function EditCustomer(params: EditCustomerParams) {
                   defaultButtonText={
                     currentRegisterCustomer?.operator?.name ?? '请选择理疗师'
                   }
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.name;
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    return item.name;
-                  }}
-                  buttonStyle={{
-                    width: '100%',
-                    height: ss(48, { min: 26 }),
-                    backgroundColor: '#fff',
-                    borderRadius: ss(4),
-                    borderWidth: 1,
-                    borderColor: '#D8D8D8',
-                  }}
-                  buttonTextStyle={{
-                    color: '#333333',
-                    textAlign: 'left',
-                    fontSize: sp(16, { min: 12 }),
-                  }}
-                  renderDropdownIcon={(isOpened) => {
-                    return (
-                      <Icon
-                        as={
-                          <FontAwesome
-                            name={isOpened ? 'angle-up' : 'angle-down'}
-                          />
-                        }
-                        size={ss(18, { min: 15 })}
-                        color='#999'
-                      />
-                    );
-                  }}
-                  dropdownIconPosition={'right'}
-                  dropdownStyle={{
-                    backgroundColor: '#fff',
-                    borderRadius: ss(8),
-                  }}
-                  rowStyle={{
-                    backgroundColor: '#fff',
-                    borderBottomColor: '#D8D8D8',
-                  }}
-                  rowTextStyle={{
-                    color: '#333',
-                    textAlign: 'center',
-                    fontSize: sp(16, { min: 12 }),
-                  }}
-                  selectedRowStyle={{
-                    backgroundColor: '#f8f8f8',
-                  }}
                 />
               </Box>
             }
           />
         </Column>
       </Flex>
-      <Modal
+      <DatePickerModal
         isOpen={isOpenBirthdayPicker}
         onClose={() => {
           setIsOpenBirthdayPicker(false);
-        }}>
-        <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
-          <DatePicker
-            options={{
-              textHeaderFontSize: sp(16, { min: 12 }),
-              mainColor: '#00B49E',
-            }}
-            onSelectedChange={(date) => {
-              currentSelectBirthday = date;
-            }}
-            current={currentRegisterCustomer.birthday}
-            selected={currentRegisterCustomer.birthday}
-            mode='calendar'
-          />
-          <Row justifyContent={'flex-end'} mt={ss(12)}>
-            <Pressable
-              onPress={() => {
-                updateCurrentRegisterCustomer({
-                  birthday: currentSelectBirthday,
-                });
-                setIsOpenBirthdayPicker(false);
-              }}>
-              <Box
-                bgColor={'#00B49E'}
-                px={ls(26)}
-                py={ss(12)}
-                borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
-                确定
-              </Box>
-            </Pressable>
-            <Pressable
-              onPress={() => {
-                setIsOpenBirthdayPicker(false);
-              }}>
-              <Box
-                bgColor={'#D8D8D8'}
-                px={ls(26)}
-                py={ss(12)}
-                ml={ls(10)}
-                borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
-                取消
-              </Box>
-            </Pressable>
-          </Row>
-        </Flex>
-      </Modal>
+        }}
+        onSelectedChange={(date: string) => {
+          updateCurrentRegisterCustomer({
+            birthday: date,
+          });
+        }}
+        current={currentRegisterCustomer.birthday}
+        selected={currentRegisterCustomer.birthday}
+      />
     </ScrollView>
   );
 }
