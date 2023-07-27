@@ -102,17 +102,19 @@ export default function CustomerItem({
           {StatusTextConfig[customer.status].text}
         </Box>
 
-        <OperateButton
-          text={StatusOperateConfig[customer.status].operate}
-          onPress={() => {
-            updateCurrentFlowCustomer(customer);
-            if (customer.status === CustomerStatus.ToBeAnalyzed) {
-              navigation.navigate('Flow');
-            } else if (customer.status === CustomerStatus.ToBeCollected) {
-              navigation.navigate('Flow');
-            }
-          }}
-        />
+        {type !== OperateType.Register && (
+          <OperateButton
+            text={StatusOperateConfig[customer.status].operate}
+            onPress={() => {
+              updateCurrentFlowCustomer(customer);
+              if (customer.status === CustomerStatus.ToBeAnalyzed) {
+                navigation.navigate('Flow');
+              } else if (customer.status === CustomerStatus.ToBeCollected) {
+                navigation.navigate('Flow');
+              }
+            }}
+          />
+        )}
       </Flex>
     </Row>
   );

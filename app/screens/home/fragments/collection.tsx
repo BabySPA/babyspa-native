@@ -107,7 +107,7 @@ function Filter() {
         </Row>
         <Pressable
           onPress={() => {
-            navigation.navigate('CustomerInfo', {
+            navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.collection,
             });
           }}>

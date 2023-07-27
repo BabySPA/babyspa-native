@@ -46,9 +46,10 @@ export enum OperateType {
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackList> | undefined;
   App: NavigatorScreenParams<AppStackList> | undefined;
-  CustomerInfo: {
+  RegisterCustomer: {
     type: CustomerScreenType;
   };
+  CustomerInfo: undefined;
   Flow: undefined;
   Modal: undefined;
   NotFound: undefined;
@@ -60,9 +61,10 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type AppStackList = {
   Home: undefined;
-  CustomerInfo: {
+  RegisterCustomer: {
     type: CustomerScreenType;
   };
+  CustomerInfo: undefined;
   Flow: undefined;
   Camera: undefined;
 };

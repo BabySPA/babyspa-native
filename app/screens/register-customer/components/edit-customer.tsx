@@ -11,14 +11,14 @@ import {
   Text,
 } from 'native-base';
 import { Pressable, StyleProp, ViewStyle } from 'react-native';
-import BoxTitle from './box-title';
-import { ss, ls, sp } from '../utils/style';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown';
-import DatePicker from './date-picker';
-import useFlowStore from '../stores/flow';
-import { FormBox } from './form-box';
+import useFlowStore from '~/app/stores/flow';
+import BoxTitle from '~/app/components/box-title';
+import { ss, ls, sp } from '~/app/utils/style';
+import { FormBox } from '~/app/components/form-box';
+import DatePicker from '~/app/components/date-picker';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;

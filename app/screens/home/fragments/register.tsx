@@ -19,8 +19,10 @@ import { CustomerScreenType, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 
 export default function Register() {
+  const navigation = useNavigation();
   const {
     requestRegisterCustomers,
+    updateCurrentRegisterCustomer,
     register: { customers },
   } = useFlowStore();
 
@@ -42,9 +44,16 @@ export default function Register() {
             flexWrap={'wrap'}
             p={ss(40)}>
             {customers.map((customer, idx) => (
-              <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
+              <Pressable
+                ml={idx % 2 == 1 ? ss(20) : 0}
+                key={customer.id}
+                onPress={() => {
+                  updateCurrentRegisterCustomer(customer);
+
+                  navigation.navigate('CustomerInfo');
+                }}>
                 <CustomerItem customer={customer} type={OperateType.Register} />
-              </Box>
+              </Pressable>
             ))}
           </Row>
         )}
@@ -144,7 +153,7 @@ function Filter() {
         </Pressable>
         <Pressable
           onPress={() => {
-            navigation.navigate('CustomerInfo', {
+            navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.register,
             });
           }}>
