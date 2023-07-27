@@ -164,7 +164,8 @@ export default function RecordBox({}) {
             start: [0, 0],
             end: [1, 1],
           },
-        }}>
+        }}
+      >
         <Text color='white' fontSize={sp(12)}>
           按住录音
         </Text>
@@ -196,7 +197,8 @@ const ArrowBox = () => {
           }}
           borderRadius={8}
           py={ss(27)}
-          px={ls(38)}>
+          px={ls(38)}
+        >
           <Image
             source={require('~/assets/images/record-loading.png')}
             style={{ height: ss(18), width: ls(72) }}

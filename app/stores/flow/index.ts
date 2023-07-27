@@ -6,6 +6,8 @@ import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
 import { CustomerStatus } from '../../types';
 import { FlowState } from './type';
+import useAuthStore from '../auth';
+import { RoleAuthority } from '../auth/type';
 
 const defaultRegisterAndCollection = {
   customers: [],
@@ -105,6 +107,22 @@ const useFlowStore = create(
         children: ['头痛', '流鼻涕', '清鼻涕', '黄鼻涕'],
       },
     ],
+
+    requestInitializeData: async () => {
+      // 获取当前用户的信息
+      const hasAuthority = useAuthStore.getState().hasAuthority;
+
+      if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
+        await get().requestRegisterCustomers();
+      }
+      if (hasAuthority(RoleAuthority.FLOW_COLLECTION, 'R')) {
+        await get().requestCollectionCustomers();
+      }
+      if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
+        await get().requestAnalyzeCustomers();
+      }
+      // TODO 评价反馈
+    },
 
     requestRegisterCustomers: async () => {
       const {

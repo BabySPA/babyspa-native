@@ -31,7 +31,8 @@ export default function CustomerItem({
       w={ls(467)}
       h={ss(148)}
       mb={ss(40)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Row p={ss(20)} maxW={'80%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
@@ -65,7 +66,8 @@ export default function CustomerItem({
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(3)}>
+              ml={ls(3)}
+            >
               {ageText}
             </Text>
           </Row>
@@ -82,7 +84,8 @@ export default function CustomerItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(10)}>
+              ml={ls(10)}
+            >
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
@@ -98,7 +101,8 @@ export default function CustomerItem({
             color: StatusTextConfig[customer.status].textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
+          borderTopRightRadius={ss(8)}
+        >
           {StatusTextConfig[customer.status].text}
         </Box>
 

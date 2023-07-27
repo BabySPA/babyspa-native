@@ -41,7 +41,8 @@ export default function Analyze() {
             bgColor='white'
             borderRadius={ss(10)}
             flexWrap={'wrap'}
-            p={ss(40)}>
+            p={ss(40)}
+          >
             {customers.map((customer, idx) => (
               <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
                 <CustomerItem customer={customer} type={OperateType.Analyze} />
@@ -63,7 +64,8 @@ function Filter() {
         py={ss(20)}
         px={ls(40)}
         alignItems={'center'}
-        justifyContent={'space-between'}>
+        justifyContent={'space-between'}
+      >
         <Row alignItems={'center'}>
           <Icon
             as={<Ionicons name={'people'} />}
@@ -97,7 +99,8 @@ function Filter() {
           <Pressable
             onPress={() => {
               setShowFilter(!showFilter);
-            }}>
+            }}
+          >
             <Row alignItems={'center'}>
               <Icon
                 as={<FontAwesome name='filter' />}

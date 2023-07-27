@@ -7,6 +7,7 @@ import useFlowStore from '~/app/stores/flow';
 import { toastAlert } from '~/app/utils/toast';
 import EditBox from './components/edit-box';
 import InfoBox from './components/info-box';
+import { DialogModal } from '~/app/components/modals';
 
 export default function CustomerInfo({
   navigation,
@@ -15,16 +16,17 @@ export default function CustomerInfo({
     requestGetOperators,
     requestPatchCustomerStatus,
     currentRegisterCustomer,
+    requestInitializeData,
   } = useFlowStore();
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     requestGetOperators();
   }, [requestGetOperators]);
-
-  const [edit, setEdit] = useState(false);
 
   return (
     <Box flex={1}>
@@ -40,21 +42,7 @@ export default function CustomerInfo({
           currentRegisterCustomer.status !== CustomerStatus.Canceled ? (
             <Pressable
               onPress={() => {
-                if (loading) return;
-                setLoading(true);
-                requestPatchCustomerStatus({
-                  status: CustomerStatus.Canceled,
-                })
-                  .then((res) => {
-                    // 取消成功
-                  })
-                  .catch((err) => {
-                    // 取消失败
-                    console.log(err);
-                  })
-                  .finally(() => {
-                    setLoading(false);
-                  });
+                setShowModal(true);
               }}>
               <Row
                 bgColor={'white'}
@@ -64,7 +52,7 @@ export default function CustomerInfo({
                 {loading && <Spinner mr={ls(5)} />}
                 <Text
                   color={'#03CBB2'}
-                  opacity={loading ? 0.2 : 1}
+                  opacity={loading ? 0.6 : 1}
                   fontSize={sp(14, { min: 12 })}>
                   取消登记
                 </Text>
@@ -82,12 +70,42 @@ export default function CustomerInfo({
           />
         ) : (
           <InfoBox
+            onPressCancel={() => {
+              navigation.goBack();
+            }}
             onPressEdit={() => {
               setEdit(true);
             }}
           />
         )}
       </Row>
+      <DialogModal
+        isOpen={showModal}
+        onClose={function (): void {
+          setShowModal(false);
+        }}
+        title='是否确认取消登记？'
+        onConfirm={function (): void {
+          setShowModal(false);
+          if (loading) return;
+          setLoading(true);
+          requestPatchCustomerStatus({
+            status: CustomerStatus.Canceled,
+          })
+            .then(async (res) => {
+              // 取消成功
+              toastAlert(toast, 'success', '取消成功！');
+              await requestInitializeData();
+            })
+            .catch((err) => {
+              // 取消失败
+              toastAlert(toast, 'error', '取消失败！');
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }}
+      />
     </Box>
   );
 }

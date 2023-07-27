@@ -43,7 +43,8 @@ export default function EditCustomer(params: EditCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(10)}>
+      borderRadius={ss(10)}
+    >
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -97,7 +98,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 flexDirection={'row'}
                 onChange={(event) => {
                   updateCurrentRegisterCustomer({ gender: +event });
-                }}>
+                }}
+              >
                 <Radio colorScheme='green' value='1' size={'sm'}>
                   男
                 </Radio>
@@ -116,7 +118,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Pressable
                   onPress={() => {
                     showDatePicker();
-                  }}>
+                  }}
+                >
                   <Row
                     borderRadius={ss(10)}
                     justifyContent={'space-between'}
@@ -124,7 +127,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
-                    px={ss(20)}>
+                    px={ss(20)}
+                  >
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
                       {currentRegisterCustomer.birthday}
                     </Text>

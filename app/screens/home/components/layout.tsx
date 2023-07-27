@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Text, Pressable, Icon } from 'native-base';
+import { Box, Center, Flex, Text, Pressable, Icon, Row } from 'native-base';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
 import useLayoutConfigWithRole from '~/app/stores/layout';
@@ -94,7 +94,7 @@ export default function Layout() {
             );
           })}
         </Box>
-        <Center px={ls(6)}>
+        <Center px={ls(6)} maxW={ls(130)}>
           <Center
             borderRadius={ss(23)}
             borderWidth={ss(3)}
@@ -102,14 +102,22 @@ export default function Layout() {
             w={ss(46)}
             h={ss(46)}
             bgColor={'#F7CE51'}
-            mt={ss(130)}>
+            mt={ss(120)}>
             <Text fontSize={sp(16)} color='#fff'>
               {user?.name?.[0]}
             </Text>
           </Center>
-          <Text fontSize={sp(14)} color='#fff' mt={ss(4)}>
-            {user?.name} - {user?.role.name}
-          </Text>
+          <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4)}>
+            <Text fontSize={sp(14)} color='#fff'>
+              {user?.name}
+            </Text>
+            <Text fontSize={sp(14)} color='#fff'>
+              -
+            </Text>
+            <Text fontSize={sp(14)} color='#fff'>
+              {user?.role.name}
+            </Text>
+          </Row>
           <Text fontSize={sp(14)} color='#fff' mt={ss(4)}>
             {user?.shop.name}{' '}
             <Icon

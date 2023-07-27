@@ -42,7 +42,8 @@ export default function Register() {
             bgColor='white'
             borderRadius={ss(10)}
             flexWrap={'wrap'}
-            p={ss(40)}>
+            p={ss(40)}
+          >
             {customers.map((customer, idx) => (
               <Pressable
                 ml={idx % 2 == 1 ? ss(20) : 0}
@@ -51,7 +52,8 @@ export default function Register() {
                   updateCurrentRegisterCustomer(customer);
 
                   navigation.navigate('CustomerInfo');
-                }}>
+                }}
+              >
                 <CustomerItem customer={customer} type={OperateType.Register} />
               </Pressable>
             ))}
@@ -138,7 +140,8 @@ function Filter() {
         <Pressable
           onPress={() => {
             setShowFilter(!showFilter);
-          }}>
+          }}
+        >
           <Row alignItems={'center'}>
             <Icon
               as={<FontAwesome name='filter' />}
@@ -156,7 +159,8 @@ function Filter() {
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.register,
             });
-          }}>
+          }}
+        >
           <Box
             ml={ls(20)}
             bg={{
@@ -168,7 +172,8 @@ function Filter() {
             }}
             px={ls(26)}
             py={ss(10)}
-            _text={{ fontSize: ss(14), color: 'white' }}>
+            _text={{ fontSize: ss(14), color: 'white' }}
+          >
             登记
           </Box>
         </Pressable>

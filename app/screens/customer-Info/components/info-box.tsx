@@ -1,25 +1,8 @@
-import {
-  Box,
-  Column,
-  Flex,
-  Icon,
-  Input,
-  Modal,
-  Radio,
-  Row,
-  ScrollView,
-  Text,
-  Pressable,
-} from 'native-base';
-import { Image, StyleProp, ViewStyle } from 'react-native';
-import { useState } from 'react';
-import { FontAwesome } from '@expo/vector-icons';
-import SelectDropdown from 'react-native-select-dropdown';
+import { Box, Column, Row, Text, Pressable } from 'native-base';
+import { Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { FormBox } from '~/app/components/form-box';
-import DatePicker from '~/app/components/date-picker';
 import dayjs from 'dayjs';
 import { CustomerStatus, Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
@@ -27,6 +10,7 @@ import LabelBox from './label-box';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
+  onPressCancel: () => void;
 }
 
 export default function InfoBox(params: InfoBoxParams) {
@@ -98,7 +82,10 @@ export default function InfoBox(params: InfoBoxParams) {
         }}
       />
       <Row justifyContent={'center'} mb={ss(40)}>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            params.onPressCancel();
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}

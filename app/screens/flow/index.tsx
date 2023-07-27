@@ -22,6 +22,7 @@ import HealthInfo from './components/health-info';
 import Guidance from './components/guidance-info';
 import Conclusion from './components/conclusion-info';
 import Solution from './components/solution-info';
+import { DialogModal } from '~/app/components/modals';
 
 interface ResultModal {
   type: 'success' | 'fail' | 'none';
@@ -269,53 +270,16 @@ export default function FlowScreen({
         </Modal.Content>
       </Modal>
 
-      <Modal isOpen={showFinishModal} onClose={() => setShowFinishModal(false)}>
-        <Modal.Content>
-          <Modal.CloseButton />
-          <Modal.Header>温馨提示</Modal.Header>
-          <Modal.Body>
-            <Center>
-              <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
-                是否确认结束？
-              </Text>
-              <Row mt={ss(50)} mb={ss(20)}>
-                <Pressable
-                  onPress={() => {
-                    setShowFinishModal(false);
-                  }}>
-                  <Center
-                    borderRadius={ss(4)}
-                    borderWidth={1}
-                    borderColor={'#03CBB2'}
-                    px={ls(30)}
-                    py={ss(10)}>
-                    <Text color='#0C1B16' fontSize={sp(14)}>
-                      否
-                    </Text>
-                  </Center>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    alert('是');
-                  }}>
-                  <Center
-                    ml={ls(20)}
-                    borderRadius={ss(4)}
-                    borderWidth={1}
-                    borderColor={'#03CBB2'}
-                    bgColor={'rgba(3, 203, 178, 0.20)'}
-                    px={ls(30)}
-                    py={ss(10)}>
-                    <Text color='#0C1B16' fontSize={sp(14)}>
-                      是
-                    </Text>
-                  </Center>
-                </Pressable>
-              </Row>
-            </Center>
-          </Modal.Body>
-        </Modal.Content>
-      </Modal>
+      <DialogModal
+        isOpen={showFinishModal}
+        title='是否确认结束？'
+        onClose={function (): void {
+          setShowFinishModal(false);
+        }}
+        onConfirm={function (): void {
+          // TODO: 结束
+        }}
+      />
     </Box>
   );
 }

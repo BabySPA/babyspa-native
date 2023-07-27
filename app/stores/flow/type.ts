@@ -1,4 +1,3 @@
-import { Toast } from 'native-base';
 import { CustomerStatus, Gender } from '~/app/types';
 
 export interface Customer {
@@ -72,6 +71,7 @@ export interface FlowState {
   currentRegisterCustomer: RegisterCustomerInfo;
   currentFlowCustomer: Customer;
 
+  requestInitializeData: () => Promise<void>;
   requestRegisterCustomers: () => Promise<void>;
   requestCollectionCustomers: () => Promise<void>;
   requestAnalyzeCustomers: () => Promise<void>;

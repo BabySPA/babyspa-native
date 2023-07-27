@@ -27,7 +27,8 @@ export default function HealthInfo() {
         <BoxItem
           title={'过敏原'}
           icon={require('~/assets/images/notice.png')}
-          autoScroll={false}>
+          autoScroll={false}
+        >
           <Box flex={1}>
             <TextInput
               multiline={true}
@@ -59,7 +60,8 @@ export default function HealthInfo() {
           title={'备注'}
           icon={require('~/assets/images/notice.png')}
           mt={ss(10)}
-          autoScroll={false}>
+          autoScroll={false}
+        >
           <Row>
             <Box flex={1}>
               <Text fontSize={sp(12)} fontWeight={600} color='#333'>
@@ -109,7 +111,8 @@ export default function HealthInfo() {
       <Column flex={1} ml={ss(10)}>
         <BoxItem
           title={'舌部图片'}
-          icon={require('~/assets/images/tongue.png')}>
+          icon={require('~/assets/images/tongue.png')}
+        >
           <ImageBox
             images={collect.healthInfo.lingualImage}
             selectedCallback={function (filename: string, uri: string): void {
@@ -132,7 +135,8 @@ export default function HealthInfo() {
         <BoxItem
           title={'手部图片'}
           icon={require('~/assets/images/hand.png')}
-          mt={ss(10)}>
+          mt={ss(10)}
+        >
           <Row>
             <Box flex={1}>
               <Row>
@@ -140,7 +144,8 @@ export default function HealthInfo() {
                   mr={ls(10)}
                   fontSize={sp(12)}
                   fontWeight={600}
-                  color='#333'>
+                  color='#333'
+                >
                   左手
                 </Text>
                 <ImageBox
@@ -185,7 +190,8 @@ export default function HealthInfo() {
                   mr={ls(10)}
                   fontSize={sp(12)}
                   fontWeight={600}
-                  color='#333'>
+                  color='#333'
+                >
                   右手
                 </Text>
                 <ImageBox

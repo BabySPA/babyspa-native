@@ -34,7 +34,8 @@ export default function SolutionInfo() {
         <BoxItem
           flex={2}
           title={'贴敷'}
-          icon={require('~/assets/images/tiefu.png')}>
+          icon={require('~/assets/images/tiefu.png')}
+        >
           <Box flex={1}>
             {applications.map((item, idx) => {
               return (
@@ -45,14 +46,16 @@ export default function SolutionInfo() {
                   borderColor={'#7AB6AF'}
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
-                  p={ss(20)}>
+                  p={ss(20)}
+                >
                   <Row justifyContent={'space-between'}>
                     <Row alignItems={'center'}>
                       <Center
                         w={ss(30)}
                         h={ss(30)}
                         bgColor={'#5EACA3'}
-                        borderRadius={ss(15)}>
+                        borderRadius={ss(15)}
+                      >
                         <Text color={'#fff'}>{idx + 1}</Text>
                       </Center>
                       <Text ml={ls(10)} color='#666' fontSize={sp(20)}>
@@ -70,7 +73,8 @@ export default function SolutionInfo() {
                   <Row
                     alignItems={'center'}
                     mt={ss(25)}
-                    justifyContent={'space-between'}>
+                    justifyContent={'space-between'}
+                  >
                     <Row>
                       <Text ml={ls(10)} color='#666' fontSize={sp(16)}>
                         贴敷时长：
@@ -112,7 +116,8 @@ export default function SolutionInfo() {
           mt={ss(10)}
           title={'注意事项'}
           autoScroll={false}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+        >
           <Box flex={1} pt={ss(10)}>
             <TextInput
               multiline={true}
@@ -135,7 +140,8 @@ export default function SolutionInfo() {
         <BoxItem
           flex={2}
           title={'理疗'}
-          icon={require('~/assets/images/massages.png')}>
+          icon={require('~/assets/images/massages.png')}
+        >
           <Box flex={1}>
             {massages.map((item, idx) => {
               return (
@@ -146,14 +152,16 @@ export default function SolutionInfo() {
                   borderColor={'#7AB6AF'}
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
-                  p={ss(20)}>
+                  p={ss(20)}
+                >
                   <Row justifyContent={'space-between'}>
                     <Row alignItems={'center'}>
                       <Center
                         w={ss(30)}
                         h={ss(30)}
                         bgColor={'#5EACA3'}
-                        borderRadius={ss(15)}>
+                        borderRadius={ss(15)}
+                      >
                         <Text color={'#fff'}>{idx + 1}</Text>
                       </Center>
                       <Text ml={ls(10)} color='#666' fontSize={sp(20)}>
@@ -171,12 +179,14 @@ export default function SolutionInfo() {
                   <Row
                     alignItems={'center'}
                     mt={ss(25)}
-                    justifyContent={'space-between'}>
+                    justifyContent={'space-between'}
+                  >
                     <Text
                       ml={ls(10)}
                       color='#666'
                       fontSize={sp(16)}
-                      maxW={'70%'}>
+                      maxW={'70%'}
+                    >
                       贴敷时长：
                       <Text color='#E36C36'>{item.remark}</Text>
                     </Text>
@@ -209,7 +219,8 @@ export default function SolutionInfo() {
           mt={ss(10)}
           title={'随访'}
           autoScroll={false}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+        >
           <Row alignItems={'center'}>
             <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
               是否随访
@@ -217,7 +228,8 @@ export default function SolutionInfo() {
             <Radio.Group
               name='isFllowUp'
               flexDirection={'row'}
-              onChange={(event) => {}}>
+              onChange={(event) => {}}
+            >
               <Radio colorScheme='green' value='1' size={'sm'}>
                 <Text fontSize={sp(20)} color='#333'>
                   是
@@ -249,7 +261,8 @@ export default function SolutionInfo() {
                 ),
               }}
               mt={1}
-              onValueChange={(itemValue) => {}}>
+              onValueChange={(itemValue) => {}}
+            >
               {['今', '明', '后'].map((_, idx) => {
                 return <Select.Item label={`${idx}`} value={`${idx}`} />;
               })}
@@ -265,7 +278,8 @@ export default function SolutionInfo() {
             <Radio.Group
               name='isFllowUp'
               flexDirection={'row'}
-              onChange={(event) => {}}>
+              onChange={(event) => {}}
+            >
               <Radio colorScheme='green' value='1' size={'sm'}>
                 <Text fontSize={sp(20)} color='#333'>
                   是
@@ -297,7 +311,8 @@ export default function SolutionInfo() {
                 ),
               }}
               mt={1}
-              onValueChange={(itemValue) => {}}>
+              onValueChange={(itemValue) => {}}
+            >
               {Array.from({ length: 30 }).map((_, idx) => {
                 return <Select.Item label={`${idx}`} value={`${idx}`} />;
               })}

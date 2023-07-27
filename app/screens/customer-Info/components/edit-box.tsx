@@ -12,15 +12,13 @@ import {
   useToast,
   Spinner,
 } from 'native-base';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import SelectDropdown from 'react-native-select-dropdown';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
-import { getAge } from '~/app/utils';
 import { toastAlert } from '~/app/utils/toast';
 import { CustomerStatus } from '~/app/types';
 import SelectOperator from '~/app/components/select-operator';
@@ -41,6 +39,7 @@ export default function EditBox(params: EditBoxParams) {
     operators,
     requestPostCustomerInfo,
     requestPatchCustomerInfo,
+    requestInitializeData,
   } = useFlowStore();
 
   const [tempCustomer, setTempCustomer] = useState(currentRegisterCustomer);
@@ -279,7 +278,8 @@ export default function EditBox(params: EditBoxParams) {
 
             if (tempCustomer.status === CustomerStatus.Canceled) {
               requestPostCustomerInfo()
-                .then((res) => {
+                .then(async (res) => {
+                  await requestInitializeData();
                   toastAlert(toast, 'success', '再次登记客户信息成功！');
                 })
                 .catch((err) => {
@@ -290,7 +290,8 @@ export default function EditBox(params: EditBoxParams) {
                 });
             } else {
               requestPatchCustomerInfo()
-                .then((res) => {
+                .then(async (res) => {
+                  await requestInitializeData();
                   toastAlert(toast, 'success', '修改客户信息成功！');
                 })
                 .catch((err) => {

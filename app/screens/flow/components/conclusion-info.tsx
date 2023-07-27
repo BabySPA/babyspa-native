@@ -22,7 +22,8 @@ export default function ConclusionInfo() {
       <Column flex={1}>
         <BoxItem
           title={'分析结论'}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+        >
           <Box flex={1}>
             <TextInput
               multiline={true}
@@ -45,7 +46,8 @@ export default function ConclusionInfo() {
         <BoxItem
           mt={ss(10)}
           title={'分析记录'}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+        >
           <Box flex={1} pt={ss(10)}>
             {/* {currentFlow.conclusions.map((item, idx) => {
               return (
@@ -100,7 +102,8 @@ export default function ConclusionInfo() {
                   key={idx}
                   onPress={() => {
                     setSelectTemplateGroup(idx);
-                  }}>
+                  }}
+                >
                   <Center
                     p={ss(10)}
                     w={ss(80)}
@@ -108,7 +111,8 @@ export default function ConclusionInfo() {
                     borderTopLeftRadius={ss(10)}
                     bgColor={
                       selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                    }>
+                    }
+                  >
                     <Icon
                       as={<AntDesign name='appstore1' />}
                       size={ss(18, { min: 15 })}
@@ -121,7 +125,8 @@ export default function ConclusionInfo() {
                       fontSize={sp(18)}
                       color={
                         selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
-                      }>
+                      }
+                    >
                       {item.key}
                     </Text>
                   </Center>
@@ -141,7 +146,8 @@ export default function ConclusionInfo() {
                           ? analyze.conclusion + ',' + item
                           : item,
                     });
-                  }}>
+                  }}
+                >
                   <Box
                     px={ls(20)}
                     py={ss(7)}
@@ -149,7 +155,8 @@ export default function ConclusionInfo() {
                     mb={ss(10)}
                     borderRadius={ss(2)}
                     borderColor={'#D8D8D8'}
-                    borderWidth={1}>
+                    borderWidth={1}
+                  >
                     <Text fontSize={sp(18)} color='#000'>
                       {item}
                     </Text>
