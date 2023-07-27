@@ -7,7 +7,7 @@ interface NavigationBarParams {
   hasLeftIcon?: boolean;
   onBackIntercept: () => boolean;
   leftElement: JSX.Element;
-  rightElement: JSX.Element;
+  rightElement: JSX.Element | null;
 }
 
 export default function NavigationBar(props: NavigationBarParams) {
@@ -34,8 +34,7 @@ export default function NavigationBar(props: NavigationBarParams) {
       alignItems={'center'}
       justifyContent={'space-between'}
       px={ss(20)}
-      py={ss(20)}
-    >
+      py={ss(20)}>
       <Row alignItems={'center'}>
         <IconButton
           onPress={() => {

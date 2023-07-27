@@ -7,12 +7,12 @@ import {
   Modal,
   Radio,
   Row,
-  ScrollView,
   Text,
   Pressable,
+  useToast,
+  Spinner,
 } from 'native-base';
-import { StyleProp, ViewStyle } from 'react-native';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown';
 import useFlowStore from '~/app/stores/flow';
@@ -20,16 +20,35 @@ import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
-import LabelBox from './label-box';
-import dayjs from 'dayjs';
-import { Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
+import { toastAlert } from '~/app/utils/toast';
 
-interface EditBoxParams {}
+interface EditBoxParams {
+  onPressCancel: () => void;
+}
 
 export default function EditBox(params: EditBoxParams) {
-  const { currentRegisterCustomer } = useFlowStore();
-  const age = getAge(currentRegisterCustomer.birthday ?? '');
+  const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
+
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
+
+  const {
+    currentRegisterCustomer,
+    updateCurrentRegisterCustomer,
+    operators,
+    requestPatchCustomerInfo,
+  } = useFlowStore();
+
+  const [tempCustomer, setTempCustomer] = useState(currentRegisterCustomer);
+
+  const showDatePicker = () => {
+    setIsOpenBirthdayPicker(true);
+  };
+
+  const age = getAge(tempCustomer.birthday ?? '');
+  let currentSelectBirthday = tempCustomer.birthday;
+
   return (
     <Column
       flex={1}
@@ -41,49 +60,248 @@ export default function EditBox(params: EditBoxParams) {
         <BoxTitle title='客户信息' />
         <Box mt={ss(30)} px={ls(50)}>
           <Row alignItems={'center'}>
-            <LabelBox title='姓名' value={currentRegisterCustomer.name} />
-            <LabelBox title='乳名' value={currentRegisterCustomer.nickname} />
+            <FormBox
+              title='姓名'
+              style={{ flex: 1 }}
+              required
+              form={
+                <Input
+                  w={ls(380)}
+                  h={ss(48, { min: 26 })}
+                  py={ss(10)}
+                  px={ls(20)}
+                  defaultValue={tempCustomer.name}
+                  placeholderTextColor={'#CCC'}
+                  color={'#333333'}
+                  fontSize={sp(16, { min: 12 })}
+                  placeholder='请输入'
+                  onChangeText={(text) => {
+                    setTempCustomer({
+                      ...tempCustomer,
+                      name: text,
+                    });
+                  }}
+                />
+              }
+            />
+            <FormBox
+              title='乳名'
+              style={{ flex: 1 }}
+              form={
+                <Input
+                  w={ls(380)}
+                  h={ss(48, { min: 26 })}
+                  py={ss(10)}
+                  px={ls(20)}
+                  defaultValue={tempCustomer.nickname}
+                  placeholderTextColor={'#CCC'}
+                  color={'#333333'}
+                  fontSize={sp(16, { min: 12 })}
+                  placeholder='请输入'
+                  onChangeText={(text) => {
+                    setTempCustomer({
+                      ...tempCustomer,
+                      nickname: text,
+                    });
+                  }}
+                />
+              }
+            />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox
+            <FormBox
+              required
               title='性别'
-              value={currentRegisterCustomer.gender == Gender.MAN ? '男' : '女'}
+              style={{ flex: 1 }}
+              form={
+                <Radio.Group
+                  value={`${tempCustomer.gender}`}
+                  name='gender'
+                  flexDirection={'row'}
+                  onChange={(event) => {
+                    setTempCustomer({
+                      ...tempCustomer,
+                      gender: +event,
+                    });
+                  }}>
+                  <Radio colorScheme='green' value='1' size={'sm'}>
+                    <Text fontSize={sp(20)} color='#333'>
+                      男
+                    </Text>
+                  </Radio>
+                  <Radio colorScheme='green' value='0' ml={ls(30)} size={'sm'}>
+                    <Text fontSize={sp(20)} color='#333'>
+                      女
+                    </Text>
+                  </Radio>
+                </Radio.Group>
+              }
             />
-            <LabelBox
+            <FormBox
               title='生日'
-              value={dayjs(currentRegisterCustomer.birthday).format(
-                'YYYY年MM月DD日',
-              )}
+              style={{ flex: 1 }}
+              required
+              form={
+                <Box w={ls(380)}>
+                  <Pressable
+                    onPress={() => {
+                      showDatePicker();
+                    }}>
+                    <Row
+                      borderRadius={ss(10)}
+                      justifyContent={'space-between'}
+                      alignItems={'center'}
+                      borderWidth={1}
+                      borderColor={'#D8D8D8'}
+                      py={ss(10)}
+                      px={ss(20)}>
+                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                        {tempCustomer.birthday}
+                      </Text>
+                      <Icon
+                        as={<FontAwesome name='angle-down' />}
+                        size={ss(18, { min: 15 })}
+                        color='#999'
+                      />
+                    </Row>
+                  </Pressable>
+                </Box>
+              }
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='年龄' value={`${age?.year}岁${age?.month}月`} />
-            <LabelBox
+            <FormBox
+              required
               title='电话'
-              value={currentRegisterCustomer.phoneNumber}
+              style={{ flex: 1 }}
+              form={
+                <Input
+                  w={ls(380)}
+                  defaultValue={tempCustomer.phoneNumber}
+                  h={ss(48, { min: 26 })}
+                  py={ss(10)}
+                  px={ls(20)}
+                  onChangeText={(text) => {
+                    setTempCustomer({
+                      ...tempCustomer,
+                      phoneNumber: text,
+                    });
+                  }}
+                  placeholderTextColor={'#CCC'}
+                  color={'#333333'}
+                  fontSize={sp(16, { min: 12 })}
+                  placeholder='请输入'
+                />
+              }
+            />
+            <FormBox
+              required
+              title='过敏原'
+              style={{ flex: 1 }}
+              form={
+                <Input
+                  defaultValue={tempCustomer.allergy}
+                  w={ls(380)}
+                  h={ss(48, { min: 26 })}
+                  py={ss(10)}
+                  px={ls(20)}
+                  onChangeText={(text) => {
+                    setTempCustomer({
+                      ...tempCustomer,
+                      allergy: text,
+                    });
+                  }}
+                  placeholderTextColor={'#CCC'}
+                  color={'#333333'}
+                  fontSize={sp(16, { min: 12 })}
+                  placeholder='请输入'
+                />
+              }
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='过敏原' value={currentRegisterCustomer.allergy} />
-            <LabelBox
-              title='调理师'
-              value={currentRegisterCustomer.operator?.name}
+            <FormBox
+              required
+              title='理疗师'
+              form={
+                <Box w={ls(380)}>
+                  <SelectDropdown
+                    data={operators}
+                    onSelect={(selectedItem, index) => {
+                      setTempCustomer({
+                        ...tempCustomer,
+                        operator: {
+                          id: selectedItem._id,
+                          name: selectedItem.name,
+                          phoneNumber: selectedItem.phoneNumber,
+                        },
+                      });
+                    }}
+                    defaultButtonText={
+                      tempCustomer?.operator?.name ?? '请选择理疗师'
+                    }
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem.name;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item.name;
+                    }}
+                    buttonStyle={{
+                      width: '100%',
+                      height: ss(48, { min: 26 }),
+                      backgroundColor: '#fff',
+                      borderRadius: ss(4),
+                      borderWidth: 1,
+                      borderColor: '#D8D8D8',
+                    }}
+                    buttonTextStyle={{
+                      color: '#333333',
+                      textAlign: 'left',
+                      fontSize: sp(16, { min: 12 }),
+                    }}
+                    renderDropdownIcon={(isOpened) => {
+                      return (
+                        <Icon
+                          as={
+                            <FontAwesome
+                              name={isOpened ? 'angle-up' : 'angle-down'}
+                            />
+                          }
+                          size={ss(18, { min: 15 })}
+                          color='#999'
+                        />
+                      );
+                    }}
+                    dropdownIconPosition={'right'}
+                    dropdownStyle={{
+                      backgroundColor: '#fff',
+                      borderRadius: ss(8),
+                    }}
+                    rowStyle={{
+                      backgroundColor: '#fff',
+                      borderBottomColor: '#D8D8D8',
+                    }}
+                    rowTextStyle={{
+                      color: '#333',
+                      textAlign: 'center',
+                      fontSize: sp(16, { min: 12 }),
+                    }}
+                    selectedRowStyle={{
+                      backgroundColor: '#f8f8f8',
+                    }}
+                  />
+                </Box>
+              }
             />
-          </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox
-              title='登记时间'
-              value={dayjs(currentRegisterCustomer.updatedAt).format(
-                'YYYY-MM-DD HH:mm:ss',
-              )}
-            />
-            <LabelBox title='登记号码' value={currentRegisterCustomer.tag} />
           </Row>
         </Box>
       </Column>
 
       <Row justifyContent={'center'} mb={ss(40)}>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            params.onPressCancel();
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
@@ -97,20 +315,95 @@ export default function EditBox(params: EditBoxParams) {
           </Box>
         </Pressable>
 
-        <Pressable ml={ls(74)}>
-          <Box
+        <Pressable
+          ml={ls(74)}
+          onPress={() => {
+            if (loading) return;
+
+            setLoading(true);
+
+            updateCurrentRegisterCustomer(tempCustomer);
+            requestPatchCustomerInfo()
+              .then((res) => {
+                toastAlert(toast, 'success', '修改客户信息成功！');
+              })
+              .catch((err) => {
+                console.log(err);
+                toastAlert(toast, 'error', '修改客户信息失败！');
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }}>
+          <Row
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
             borderWidth={1}
+            alignItems={'center'}
             borderColor={'#00B49E'}>
+            {loading && <Spinner mr={ls(5)} />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
             </Text>
-          </Box>
+          </Row>
         </Pressable>
       </Row>
+
+      <Modal
+        isOpen={isOpenBirthdayPicker}
+        onClose={() => {
+          setIsOpenBirthdayPicker(false);
+        }}>
+        <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
+          <DatePicker
+            options={{
+              textHeaderFontSize: sp(16, { min: 12 }),
+              mainColor: '#00B49E',
+            }}
+            onSelectedChange={(date) => {
+              currentSelectBirthday = date;
+            }}
+            current={tempCustomer.birthday}
+            selected={tempCustomer.birthday}
+            mode='calendar'
+          />
+          <Row justifyContent={'flex-end'} mt={ss(12)}>
+            <Pressable
+              onPress={() => {
+                setTempCustomer({
+                  ...tempCustomer,
+                  birthday: currentSelectBirthday,
+                });
+                setIsOpenBirthdayPicker(false);
+              }}>
+              <Box
+                bgColor={'#00B49E'}
+                px={ls(26)}
+                py={ss(12)}
+                borderRadius={ss(8)}
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+                确定
+              </Box>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setIsOpenBirthdayPicker(false);
+              }}>
+              <Box
+                bgColor={'#D8D8D8'}
+                px={ls(26)}
+                py={ss(12)}
+                ml={ls(10)}
+                borderRadius={ss(8)}
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+                取消
+              </Box>
+            </Pressable>
+          </Row>
+        </Flex>
+      </Modal>
     </Column>
   );
 }

@@ -232,6 +232,29 @@ const useFlowStore = create(
       });
     },
 
+    requestPatchCustomerInfo: async () => {
+      // 修改登记信息
+      const customer = get().currentRegisterCustomer;
+
+      return request.patch(`/customers/${customer.id}`, {
+        phoneNumber: customer.phoneNumber,
+        name: customer.name,
+        gender: customer.gender,
+        birthday: customer.birthday,
+        allergy: customer.allergy,
+        nickname: customer.nickname,
+        operatorId: customer.operator?.id,
+      });
+    },
+
+    requestPatchCustomerStatus: async ({ status }: { status: number }) => {
+      // 修改登记信息
+      const customer = get().currentRegisterCustomer;
+      return request.patch(`/customers/status/${customer.id}`, {
+        status,
+      });
+    },
+
     requestGetFlow: async (flowId: string) => {
       request.get(`/flows/${flowId}`).then(({ data }) => {
         set({ currentFlow: data });
@@ -241,7 +264,6 @@ const useFlowStore = create(
     requestPatchFlowToCollection: async () => {
       const currentFlow = get().currentFlow;
 
-      console.log(`currentFlow`, currentFlow);
       request
         .patch(`/flows/collection/${currentFlow._id}`, {
           collect: currentFlow.collect,

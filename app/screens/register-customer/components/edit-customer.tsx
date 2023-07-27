@@ -163,7 +163,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
-            title='过敏史'
+            title='过敏原'
             style={{ marginTop: ss(20) }}
             form={
               <Input

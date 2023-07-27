@@ -4,7 +4,7 @@ import HomeScreen from '../screens/home';
 import RegisterScreen from '../screens/register-customer';
 import FlowScreen from '../screens/flow';
 import CameraScreen from '../screens/camera';
-import CustomerInfo from '../screens/customer-info';
+import CustomerInfo from '../screens/customer-Info';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 

@@ -25,13 +25,13 @@ export default function HealthInfo() {
     <Row flex={1}>
       <Column flex={1}>
         <BoxItem
-          title={'过敏史'}
+          title={'过敏原'}
           icon={require('~/assets/images/notice.png')}
           autoScroll={false}>
           <Box flex={1}>
             <TextInput
               multiline={true}
-              placeholder='请输入过敏史'
+              placeholder='请输入过敏原'
               value={collect.healthInfo.allergy}
               style={{
                 borderRadius: ss(4),

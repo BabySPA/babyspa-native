@@ -77,7 +77,9 @@ export interface FlowState {
   requestAnalyzeCustomers: () => Promise<void>;
   requestGetOperators: () => Promise<void>;
   requestPostCustomerInfo: () => Promise<any>;
+  requestPatchCustomerInfo: () => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
+  requestPatchCustomerStatus: (data: { status: number }) => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
 
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;

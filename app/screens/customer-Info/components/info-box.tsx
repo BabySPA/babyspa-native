@@ -20,10 +20,10 @@ import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
-import LabelBox from './label-box';
 import dayjs from 'dayjs';
 import { Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
+import LabelBox from './label-box';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
