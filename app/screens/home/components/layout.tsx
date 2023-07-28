@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function Layout() {
   const {
     currentSelected,
-    layoutConfig,
+    getLayoutConfig,
     changeCurrentSelected,
     changeFeatureSelected,
   } = useLayoutConfigWithRole();
@@ -16,8 +16,8 @@ export default function Layout() {
   const { logout, user } = useAuthStore();
 
   const Fragment = () => {
-    return layoutConfig[currentSelected].features[
-      layoutConfig[currentSelected].featureSelected
+    return getLayoutConfig()[currentSelected].features[
+      getLayoutConfig()[currentSelected].featureSelected
     ].fragment();
   };
 
@@ -62,7 +62,7 @@ export default function Layout() {
           </Text>
         </Center>
         <Box mt={ss(10)}>
-          {layoutConfig.map((item, idx) => {
+          {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
                 key={idx}
@@ -131,7 +131,7 @@ export default function Layout() {
       </Box>
       <Flex direction='column' flex={1}>
         <Flex direction='row' justifyContent={'center'}>
-          {layoutConfig[currentSelected].features.map((item, idx) => {
+          {getLayoutConfig()[currentSelected].features.map((item, idx) => {
             return (
               <Pressable
                 key={idx}
@@ -144,7 +144,8 @@ export default function Layout() {
                   <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
                     {item.text}
                   </Text>
-                  {layoutConfig[currentSelected].featureSelected == idx && (
+                  {getLayoutConfig()[currentSelected].featureSelected ==
+                    idx && (
                     <Box w={ss(40)} h={ss(4)} bgColor={'white'} mt={ss(5)} />
                   )}
                 </Center>

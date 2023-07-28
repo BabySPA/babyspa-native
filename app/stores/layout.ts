@@ -11,6 +11,8 @@ import StatisticsShop from '../screens/home/fragments/statistics-shop';
 import StatisticsMassage from '../screens/home/fragments/statistics-massage';
 import { ImageSourcePropType } from 'react-native';
 import { immer } from 'zustand/middleware/immer';
+import useAuthStore from './auth';
+import { AuthorityConfig, RoleAuthority } from './auth/type';
 
 interface ILayoutConfig {
   image: ImageSourcePropType;
@@ -20,14 +22,30 @@ interface ILayoutConfig {
   features: {
     text: string;
     fragment: () => JSX.Element;
+    auth: RoleAuthority;
   }[];
 }
 
 type LayoutConfigWithRole = {
   layoutConfig: ILayoutConfig[];
+  getLayoutConfig: () => ILayoutConfig[];
   currentSelected: number;
   changeCurrentSelected: (index: number) => void;
   changeFeatureSelected: (index: number) => void;
+};
+
+const getFilteredLayoutConfig = (authorityConfig: AuthorityConfig[]) => {
+  const filteredConfig = LayoutConfig.map((tab) => {
+    const features = tab.features.filter((feature) => {
+      const featureAuthority = feature.auth;
+      return authorityConfig.some(
+        (authority) => authority.authority === featureAuthority,
+      );
+    });
+    return { ...tab, features };
+  }).filter((tab) => tab.features.length > 0);
+
+  return filteredConfig;
 };
 
 const LayoutConfig: ILayoutConfig[] = [
@@ -40,18 +58,22 @@ const LayoutConfig: ILayoutConfig[] = [
       {
         text: '登记',
         fragment: Register,
+        auth: RoleAuthority.FLOW_REGISTER,
       },
       {
         text: '信息采集',
         fragment: Collection,
+        auth: RoleAuthority.FLOW_COLLECTION,
       },
       {
         text: '信息分析',
         fragment: Analyze,
+        auth: RoleAuthority.FLOW_ANALYZE,
       },
       {
         text: '信息反馈',
         fragment: Feedback,
+        auth: RoleAuthority.FLOW_FEEDBACK,
       },
     ],
   },
@@ -64,10 +86,12 @@ const LayoutConfig: ILayoutConfig[] = [
       {
         text: '客户档案',
         fragment: Archive,
+        auth: RoleAuthority.CUSTOMER_ARCHIVE,
       },
       {
         text: '客户随访',
         fragment: FollowUpVisit,
+        auth: RoleAuthority.CUSTOMER_FOLLOWUP,
       },
     ],
   },
@@ -80,6 +104,7 @@ const LayoutConfig: ILayoutConfig[] = [
       {
         text: '门店中心',
         fragment: ShopCenter,
+        auth: RoleAuthority.MANAGER_SHOP,
       },
     ],
   },
@@ -92,14 +117,22 @@ const LayoutConfig: ILayoutConfig[] = [
       {
         text: '门店统计',
         fragment: StatisticsShop,
+        auth: RoleAuthority.STATISTIC_SHOP,
       },
       {
-        text: '理疗统计',
+        text: '调理统计',
         fragment: StatisticsMassage,
+        auth: RoleAuthority.STATISTIC_MASSAGE,
+      },
+      {
+        text: '分析统计',
+        fragment: StatisticsVisit,
+        auth: RoleAuthority.STATISTIC_ANALYZE,
       },
       {
         text: '随访统计',
         fragment: StatisticsVisit,
+        auth: RoleAuthority.STATISTIC_FOLLOWUP,
       },
     ],
   },
@@ -107,14 +140,31 @@ const LayoutConfig: ILayoutConfig[] = [
 
 export default create(
   immer<LayoutConfigWithRole>((set, get) => ({
-    layoutConfig: LayoutConfig,
+    layoutConfig: [],
+    getLayoutConfig: () => {
+      if (get().layoutConfig.length > 0) {
+        return get().layoutConfig;
+      }
+      const user = useAuthStore.getState().user;
+      if (!user) {
+        return [];
+      }
+      if (user.isGlobalAdmin) {
+        return LayoutConfig;
+      }
+
+      const filterConfig = getFilteredLayoutConfig(user?.role.authorities);
+
+      set({ layoutConfig: filterConfig });
+      return filterConfig;
+    },
     currentSelected: 0,
     changeCurrentSelected: (index: number) => {
       set({ currentSelected: index });
     },
     changeFeatureSelected: (index: number) => {
       return set((state) => {
-        state.layoutConfig[state.currentSelected].featureSelected = index;
+        state.getLayoutConfig()[state.currentSelected].featureSelected = index;
       });
     },
   })),
