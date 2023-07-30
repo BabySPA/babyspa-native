@@ -17,15 +17,67 @@ import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
+import { SolutionDefault } from '~/app/constants';
+
+function AddCountSelector({
+  count,
+  onSubtraction,
+  onAddition,
+}: {
+  count: number;
+  onSubtraction: () => void;
+  onAddition: () => void;
+}) {
+  return (
+    <>
+      <Pressable
+        onPress={() => {
+          onSubtraction();
+        }}>
+        <Icon
+          as={<AntDesign name='minuscircle' />}
+          size={ss(20, { min: 16 })}
+          color={'#99A9BF'}
+        />
+      </Pressable>
+      <Text color='#E36C36' fontSize={sp(18)} mx={ss(20)}>
+        {count}
+      </Text>
+      <Pressable
+        onPress={() => {
+          onAddition();
+        }}>
+        <Icon
+          as={<AntDesign name='pluscircle' />}
+          size={ss(20, { min: 16 })}
+          color={'#99A9BF'}
+        />
+      </Pressable>
+    </>
+  );
+}
 
 export default function SolutionInfo() {
-  const { currentFlow } = useFlowStore();
+  const {
+    currentFlow,
+    updateSolutionMassage,
+    updateSolutionApplication,
+    addSolutionApplication,
+    removeSolutionApplication,
+    updateAnalyzeRemark,
+    addSolutionMassage,
+    removeSolutionMassage,
+  } = useFlowStore();
 
   const {
     analyze: {
       solution: { applications, massages },
+      remark,
+      followUp,
+      next,
     },
   } = currentFlow;
+
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 
   return (
@@ -34,9 +86,8 @@ export default function SolutionInfo() {
         <BoxItem
           flex={2}
           title={'贴敷'}
-          icon={require('~/assets/images/tiefu.png')}
-        >
-          <Box flex={1}>
+          icon={require('~/assets/images/tiefu.png')}>
+          <Box>
             {applications.map((item, idx) => {
               return (
                 <Box
@@ -46,23 +97,25 @@ export default function SolutionInfo() {
                   borderColor={'#7AB6AF'}
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
-                  p={ss(20)}
-                >
+                  mt={idx === 0 ? 0 : ss(10)}
+                  p={ss(20)}>
                   <Row justifyContent={'space-between'}>
                     <Row alignItems={'center'}>
                       <Center
                         w={ss(30)}
                         h={ss(30)}
                         bgColor={'#5EACA3'}
-                        borderRadius={ss(15)}
-                      >
+                        borderRadius={ss(15)}>
                         <Text color={'#fff'}>{idx + 1}</Text>
                       </Center>
                       <Text ml={ls(10)} color='#666' fontSize={sp(20)}>
                         {item.name}
                       </Text>
                     </Row>
-                    <Pressable>
+                    <Pressable
+                      onPress={() => {
+                        removeSolutionApplication(idx);
+                      }}>
                       <Icon
                         as={<AntDesign name='delete' />}
                         size={ss(20, { min: 16 })}
@@ -73,8 +126,7 @@ export default function SolutionInfo() {
                   <Row
                     alignItems={'center'}
                     mt={ss(25)}
-                    justifyContent={'space-between'}
-                  >
+                    justifyContent={'space-between'}>
                     <Row>
                       <Text ml={ls(10)} color='#666' fontSize={sp(16)}>
                         贴敷时长：
@@ -88,40 +140,62 @@ export default function SolutionInfo() {
                       </Text>
                     </Row>
                     <Row alignItems={'center'}>
-                      <Pressable>
-                        <Icon
-                          as={<AntDesign name='minuscircle' />}
-                          size={ss(20, { min: 16 })}
-                          color={'#99A9BF'}
-                        />
-                      </Pressable>
-                      <Text color='#E36C36' fontSize={sp(18)} mx={ss(20)}>
-                        {item.count}
-                      </Text>
-                      <Pressable>
-                        <Icon
-                          as={<AntDesign name='pluscircle' />}
-                          size={ss(20, { min: 16 })}
-                          color={'#99A9BF'}
-                        />
-                      </Pressable>
+                      <AddCountSelector
+                        count={item.count}
+                        onSubtraction={function (): void {
+                          updateSolutionApplication(
+                            { ...item, count: item.count - 1 },
+                            idx,
+                          );
+                        }}
+                        onAddition={function (): void {
+                          updateSolutionApplication(
+                            { ...item, count: item.count + 1 },
+                            idx,
+                          );
+                        }}
+                      />
                     </Row>
                   </Row>
                 </Box>
               );
             })}
+            <Row justifyContent={'flex-end'}>
+              <Pressable
+                onPress={() => {
+                  addSolutionApplication(SolutionDefault.application);
+                }}>
+                <Center
+                  mt={ss(20)}
+                  bgColor={'#fff'}
+                  borderRadius={ss(4)}
+                  borderWidth={1}
+                  borderColor={'#5EACA3'}
+                  w={ls(120)}
+                  h={ss(40)}
+                  _text={{
+                    color: '#5EACA3',
+                    fontSize: sp(18),
+                  }}>
+                  新增贴敷
+                </Center>
+              </Pressable>
+            </Row>
           </Box>
         </BoxItem>
         <BoxItem
           mt={ss(10)}
           title={'注意事项'}
           autoScroll={false}
-          icon={require('~/assets/images/guidance.png')}
-        >
+          icon={require('~/assets/images/guidance.png')}>
           <Box flex={1} pt={ss(10)}>
             <TextInput
               multiline={true}
               placeholder='您可输入，或从模板选择'
+              value={remark}
+              onChangeText={(text) => {
+                updateAnalyzeRemark(text);
+              }}
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
@@ -140,9 +214,8 @@ export default function SolutionInfo() {
         <BoxItem
           flex={2}
           title={'理疗'}
-          icon={require('~/assets/images/massages.png')}
-        >
-          <Box flex={1}>
+          icon={require('~/assets/images/massages.png')}>
+          <Box>
             {massages.map((item, idx) => {
               return (
                 <Box
@@ -152,23 +225,25 @@ export default function SolutionInfo() {
                   borderColor={'#7AB6AF'}
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
-                  p={ss(20)}
-                >
+                  mt={idx === 0 ? 0 : ss(10)}
+                  p={ss(20)}>
                   <Row justifyContent={'space-between'}>
                     <Row alignItems={'center'}>
                       <Center
                         w={ss(30)}
                         h={ss(30)}
                         bgColor={'#5EACA3'}
-                        borderRadius={ss(15)}
-                      >
+                        borderRadius={ss(15)}>
                         <Text color={'#fff'}>{idx + 1}</Text>
                       </Center>
                       <Text ml={ls(10)} color='#666' fontSize={sp(20)}>
                         {item.name}
                       </Text>
                     </Row>
-                    <Pressable>
+                    <Pressable
+                      onPress={() => {
+                        removeSolutionMassage(idx);
+                      }}>
                       <Icon
                         as={<AntDesign name='delete' />}
                         size={ss(20, { min: 16 })}
@@ -179,57 +254,73 @@ export default function SolutionInfo() {
                   <Row
                     alignItems={'center'}
                     mt={ss(25)}
-                    justifyContent={'space-between'}
-                  >
+                    justifyContent={'space-between'}>
                     <Text
                       ml={ls(10)}
                       color='#666'
                       fontSize={sp(16)}
-                      maxW={'70%'}
-                    >
-                      贴敷时长：
+                      maxW={'70%'}>
+                      备注：
                       <Text color='#E36C36'>{item.remark}</Text>
                     </Text>
                     <Row alignItems={'center'}>
-                      <Pressable>
-                        <Icon
-                          as={<AntDesign name='minuscircle' />}
-                          size={ss(20, { min: 16 })}
-                          color={'#99A9BF'}
-                        />
-                      </Pressable>
-                      <Text color='#E36C36' fontSize={sp(18)} mx={ss(20)}>
-                        {item.count}
-                      </Text>
-                      <Pressable>
-                        <Icon
-                          as={<AntDesign name='pluscircle' />}
-                          size={ss(20, { min: 16 })}
-                          color={'#99A9BF'}
-                        />
-                      </Pressable>
+                      <AddCountSelector
+                        count={item.count}
+                        onSubtraction={function (): void {
+                          updateSolutionMassage(
+                            { ...item, count: item.count - 1 },
+                            idx,
+                          );
+                        }}
+                        onAddition={function (): void {
+                          updateSolutionMassage(
+                            { ...item, count: item.count + 1 },
+                            idx,
+                          );
+                        }}
+                      />
                     </Row>
                   </Row>
                 </Box>
               );
             })}
+            <Row justifyContent={'flex-end'}>
+              <Pressable
+                onPress={() => {
+                  addSolutionMassage(SolutionDefault.massage);
+                }}>
+                <Center
+                  mt={ss(20)}
+                  bgColor={'#fff'}
+                  borderRadius={ss(4)}
+                  borderWidth={1}
+                  borderColor={'#5EACA3'}
+                  w={ls(120)}
+                  h={ss(40)}
+                  _text={{
+                    color: '#5EACA3',
+                    fontSize: sp(18),
+                  }}>
+                  新增理疗
+                </Center>
+              </Pressable>
+            </Row>
           </Box>
         </BoxItem>
         <BoxItem
           mt={ss(10)}
           title={'随访'}
           autoScroll={false}
-          icon={require('~/assets/images/guidance.png')}
-        >
+          icon={require('~/assets/images/guidance.png')}>
           <Row alignItems={'center'}>
             <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
               是否随访
             </Text>
             <Radio.Group
-              name='isFllowUp'
+              name='isFollowUp'
               flexDirection={'row'}
-              onChange={(event) => {}}
-            >
+              defaultValue={followUp.isFollowed ? '1' : '0'}
+              onChange={(event) => {}}>
               <Radio colorScheme='green' value='1' size={'sm'}>
                 <Text fontSize={sp(20)} color='#333'>
                   是
@@ -246,7 +337,7 @@ export default function SolutionInfo() {
             </Text>
             <Select
               ml={ss(20)}
-              selectedValue={`1`}
+              selectedValue={'今'}
               minWidth={ss(80)}
               accessibilityLabel='Choose Service'
               placeholder='Choose Service'
@@ -261,10 +352,9 @@ export default function SolutionInfo() {
                 ),
               }}
               mt={1}
-              onValueChange={(itemValue) => {}}
-            >
+              onValueChange={(itemValue) => {}}>
               {['今', '明', '后'].map((_, idx) => {
-                return <Select.Item label={`${idx}`} value={`${idx}`} />;
+                return <Select.Item key={idx} label={_} value={_} />;
               })}
             </Select>
             <Text fontSize={sp(20)} color='#333' ml={ls(10)}>
@@ -276,10 +366,10 @@ export default function SolutionInfo() {
               继续调理
             </Text>
             <Radio.Group
-              name='isFllowUp'
+              name='isFollowUp'
               flexDirection={'row'}
-              onChange={(event) => {}}
-            >
+              defaultValue={followUp.isFollowed ? '1' : '0'}
+              onChange={(event) => {}}>
               <Radio colorScheme='green' value='1' size={'sm'}>
                 <Text fontSize={sp(20)} color='#333'>
                   是
@@ -311,10 +401,9 @@ export default function SolutionInfo() {
                 ),
               }}
               mt={1}
-              onValueChange={(itemValue) => {}}
-            >
-              {Array.from({ length: 30 }).map((_, idx) => {
-                return <Select.Item label={`${idx}`} value={`${idx}`} />;
+              onValueChange={(itemValue) => {}}>
+              {['今', '明', '后'].map((_, idx) => {
+                return <Select.Item key={idx} label={_} value={_} />;
               })}
             </Select>
             <Text fontSize={sp(20)} color='#333' ml={ls(10)}>

@@ -24,7 +24,7 @@ import { CustomerStatus } from '~/app/types';
 import SelectOperator from '~/app/components/select-operator';
 
 interface EditBoxParams {
-  onPressCancel: () => void;
+  onEditFinish: () => void;
 }
 
 export default function EditBox(params: EditBoxParams) {
@@ -252,7 +252,7 @@ export default function EditBox(params: EditBoxParams) {
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
           onPress={() => {
-            params.onPressCancel();
+            params.onEditFinish();
           }}>
           <Box
             px={ls(34)}
@@ -281,6 +281,7 @@ export default function EditBox(params: EditBoxParams) {
                 .then(async (res) => {
                   await requestInitializeData();
                   toastAlert(toast, 'success', '再次登记客户信息成功！');
+                  params.onEditFinish();
                 })
                 .catch((err) => {
                   toastAlert(toast, 'error', '再次登记客户信息失败！');
@@ -293,6 +294,7 @@ export default function EditBox(params: EditBoxParams) {
                 .then(async (res) => {
                   await requestInitializeData();
                   toastAlert(toast, 'success', '修改客户信息成功！');
+                  params.onEditFinish();
                 })
                 .catch((err) => {
                   toastAlert(toast, 'error', '修改客户信息失败！');
@@ -310,7 +312,7 @@ export default function EditBox(params: EditBoxParams) {
             borderWidth={1}
             alignItems={'center'}
             borderColor={'#00B49E'}>
-            {loading && <Spinner mr={ls(5)} />}
+            {loading && <Spinner mr={ls(5)} color='emerald.500' />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
             </Text>

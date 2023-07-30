@@ -16,10 +16,13 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
 import { CustomerScreenType, OperateType } from '~/app/types';
+import EmptyBox from '~/app/components/empty-box';
 
 export default function Collection() {
+  const navigation = useNavigation();
   const {
     requestCollectionCustomers,
+    updateCurrentRegisterCustomer,
     collection: { customers },
   } = useFlowStore();
 
@@ -31,19 +34,33 @@ export default function Collection() {
     <Flex flex={1}>
       <Filter />
       <ScrollView margin={ss(10)}>
-        <Row
-          flex={1}
-          bgColor='white'
-          borderRadius={ss(10)}
-          flexWrap={'wrap'}
-          p={ss(40)}
-        >
-          {customers.map((customer, idx) => (
-            <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
-              <CustomerItem customer={customer} type={OperateType.Collection} />
-            </Box>
-          ))}
-        </Row>
+        {customers.length == 0 ? (
+          <EmptyBox />
+        ) : (
+          <Row
+            flex={1}
+            bgColor='white'
+            borderRadius={ss(10)}
+            flexWrap={'wrap'}
+            p={ss(40)}>
+            {customers.map((customer, idx) => {
+              return (
+                <Pressable
+                  ml={idx % 2 == 1 ? ss(20) : 0}
+                  key={customer.id}
+                  onPress={() => {
+                    updateCurrentRegisterCustomer(customer);
+                    navigation.navigate('CustomerInfo');
+                  }}>
+                  <CustomerItem
+                    customer={customer}
+                    type={OperateType.Collection}
+                  />
+                </Pressable>
+              );
+            })}
+          </Row>
+        )}
       </ScrollView>
     </Flex>
   );
@@ -58,8 +75,7 @@ function Filter() {
         py={ss(20)}
         px={ls(40)}
         alignItems={'center'}
-        justifyContent={'space-between'}
-      >
+        justifyContent={'space-between'}>
         <Row alignItems={'center'}>
           <Icon
             as={<Ionicons name={'people'} />}
@@ -93,8 +109,7 @@ function Filter() {
           <Pressable
             onPress={() => {
               setShowFilter(!showFilter);
-            }}
-          >
+            }}>
             <Row alignItems={'center'}>
               <Icon
                 as={<FontAwesome name='filter' />}
@@ -113,8 +128,7 @@ function Filter() {
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.collection,
             });
-          }}
-        >
+          }}>
           <Box
             ml={ls(20)}
             bg={{
@@ -126,8 +140,7 @@ function Filter() {
             }}
             px={ls(26)}
             py={ss(10)}
-            _text={{ fontSize: ss(14), color: 'white' }}
-          >
+            _text={{ fontSize: ss(14), color: 'white' }}>
             快速采集
           </Box>
         </Pressable>

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import request from '~/app/api';
-import { DOCTOR_ROLE_ID } from '../../constants';
+import { FlowOperatorConfig, SolutionDefault } from '../../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
@@ -88,6 +88,7 @@ const useFlowStore = create(
       updatedAt: '',
       tag: '',
       flowId: '',
+      shop: null,
     },
 
     guidanceTemplate: [
@@ -211,7 +212,7 @@ const useFlowStore = create(
         params.endDate = startDate;
       }
 
-      request.get('/customers', { params }).then(({ data }) => {
+      request.get('/customers/analyzes', { params }).then(({ data }) => {
         const { docs, hasNextPage } = data;
         set({
           analyze: {
@@ -224,58 +225,88 @@ const useFlowStore = create(
     },
 
     requestGetOperators: async () => {
-      request
-        .get('/users', {
-          params: {
-            roleKey: DOCTOR_ROLE_ID,
-          },
-        })
-        .then(({ data }) => {
-          set({ operators: data });
-        });
+      request.get('/users/operators').then(({ data }) => {
+        set({ operators: data });
+      });
     },
 
     requestPostCustomerInfo: async () => {
       // 发起登记
       const customer = get().currentRegisterCustomer;
 
-      return request.post('/customers', {
-        phoneNumber: customer.phoneNumber,
-        name: customer.name,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        allergy: customer.allergy,
-        nickname: customer.nickname,
-        operatorId: customer.operator?.id,
-      });
+      return request
+        .post('/customers', {
+          phoneNumber: customer.phoneNumber,
+          name: customer.name,
+          gender: customer.gender,
+          birthday: customer.birthday,
+          allergy: customer.allergy,
+          nickname: customer.nickname,
+          operatorId: customer.operator?.id,
+        })
+        .then(({ data }) => {
+          set((state) => {
+            state.currentRegisterCustomer = data;
+          });
+          return data;
+        });
     },
 
     requestPatchCustomerInfo: async () => {
       // 修改登记信息
       const customer = get().currentRegisterCustomer;
 
-      return request.patch(`/customers/${customer.id}`, {
-        phoneNumber: customer.phoneNumber,
-        name: customer.name,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        allergy: customer.allergy,
-        nickname: customer.nickname,
-        operatorId: customer.operator?.id,
-      });
+      return request
+        .patch(`/customers/${customer.id}`, {
+          phoneNumber: customer.phoneNumber,
+          name: customer.name,
+          gender: customer.gender,
+          birthday: customer.birthday,
+          allergy: customer.allergy,
+          nickname: customer.nickname,
+          operatorId: customer.operator?.id,
+        })
+        .then(({ data }) => {
+          get().updateCurrentRegisterCustomer({ status: data.status });
+          return data;
+        })
+        .catch((err) => {
+          return err;
+        });
     },
 
-    requestPatchCustomerStatus: async ({ status }: { status: number }) => {
+    requestPatchCustomerStatus: async ({ status, type }) => {
       // 修改登记信息
-      const customer = get().currentRegisterCustomer;
-      return request.patch(`/customers/status/${customer.id}`, {
-        status,
-      });
+      let customer;
+      if (type === 'flow') {
+        customer = get().currentFlowCustomer;
+      } else {
+        customer = get().currentRegisterCustomer;
+      }
+
+      return request
+        .patch(`/customers/status/${customer.id}`, {
+          status,
+        })
+        .then(({ data }) => {
+          get().updateCurrentRegisterCustomer({ status: data.status });
+          return data;
+        });
     },
 
     requestGetFlow: async (flowId: string) => {
-      request.get(`/flows/${flowId}`).then(({ data }) => {
+      return request.get(`/flows/${flowId}`).then(({ data }) => {
+        const { applications, massages } = data.analyze.solution;
+
+        if (applications.length === 0) {
+          applications.push(SolutionDefault.application);
+        }
+
+        if (massages.length === 0) {
+          massages.push(SolutionDefault.massage);
+        }
         set({ currentFlow: data });
+        return data;
       });
     },
 
@@ -285,6 +316,18 @@ const useFlowStore = create(
       request
         .patch(`/flows/collection/${currentFlow._id}`, {
           collect: currentFlow.collect,
+        })
+        .then(({ data }) => {
+          set({ currentFlow: data });
+        });
+    },
+
+    requestPatchFlowToAnalyze: async () => {
+      const currentFlow = get().currentFlow;
+
+      request
+        .patch(`/flows/analyze/${currentFlow._id}`, {
+          analyze: currentFlow.analyze,
         })
         .then(({ data }) => {
           set({ currentFlow: data });
@@ -445,6 +488,69 @@ const useFlowStore = create(
         );
         state.currentFlow.collect.healthInfo.audioFiles[idx] = url;
       });
+    },
+
+    updateSolutionApplication: (application, idx) => {
+      return set((state) => {
+        state.currentFlow.analyze.solution.applications[idx] = application;
+      });
+    },
+
+    addSolutionApplication: (application) => {
+      return set((state) => {
+        state.currentFlow.analyze.solution.applications.push(application);
+      });
+    },
+
+    removeSolutionApplication: (idx) => {
+      return set((state) => {
+        state.currentFlow.analyze.solution.applications.splice(idx, 1);
+      });
+    },
+
+    updateSolutionMassage: (massage, idx) => {
+      return set((state) => {
+        state.currentFlow.analyze.solution.massages[idx] = massage;
+      });
+    },
+
+    addSolutionMassage: (massage) => {
+      return set((state) => {
+        state.currentFlow.analyze.solution.massages.push(massage);
+      });
+    },
+
+    removeSolutionMassage: (idx) => {
+      return set((state) => {
+        state.currentFlow.analyze.solution.massages.splice(idx, 1);
+      });
+    },
+
+    updateAnalyzeRemark: (remark) => {
+      return set((state) => {
+        state.currentFlow.analyze.remark = remark;
+      });
+    },
+
+    getFlowOperatorConfigByUser(type: CustomerStatus) {
+      if (type === CustomerStatus.ToBeAnalyzed) {
+        return {
+          configs: FlowOperatorConfig.map((item) => {
+            if (item.auth != RoleAuthority.FLOW_ANALYZE) {
+              item.disabled = true;
+            }
+            return item;
+          }),
+          selectIdx: 2,
+        };
+      } else {
+        return {
+          configs: FlowOperatorConfig.filter(
+            (item) => item.auth != RoleAuthority.FLOW_ANALYZE,
+          ),
+          selectIdx: 0,
+        };
+      }
     },
   })),
 );

@@ -29,10 +29,9 @@ export default function CustomerItem({
       borderWidth={1}
       borderColor={'#15BD8F'}
       w={ls(467)}
-      h={ss(148)}
+      minH={ss(148)}
       mb={ss(40)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Row p={ss(20)} maxW={'80%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
@@ -51,7 +50,7 @@ export default function CustomerItem({
         <Flex ml={ls(20)}>
           <Row alignItems={'center'}>
             <Text color='#333' fontSize={sp(20)} fontWeight={400}>
-              {customer.name}({customer.nickname} {customer.gender})
+              {customer.name}({customer.nickname})
             </Text>
             <Icon
               as={
@@ -66,14 +65,18 @@ export default function CustomerItem({
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(3)}
-            >
+              ml={ls(3)}>
               {ageText}
             </Text>
           </Row>
           <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
             理疗师：{customer.operator?.name}
           </Text>
+          {type == OperateType.Analyze && (
+            <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
+              门店：{customer.shop?.name}
+            </Text>
+          )}
           <Row alignItems={'center'} mt={ss(10)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}
@@ -84,8 +87,7 @@ export default function CustomerItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(10)}
-            >
+              ml={ls(10)}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
@@ -101,24 +103,35 @@ export default function CustomerItem({
             color: StatusTextConfig[customer.status].textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}
-        >
+          borderTopRightRadius={ss(8)}>
           {StatusTextConfig[customer.status].text}
         </Box>
 
-        {type !== OperateType.Register && (
-          <OperateButton
-            text={StatusOperateConfig[customer.status].operate}
-            onPress={() => {
-              updateCurrentFlowCustomer(customer);
-              if (customer.status === CustomerStatus.ToBeAnalyzed) {
-                navigation.navigate('Flow');
-              } else if (customer.status === CustomerStatus.ToBeCollected) {
-                navigation.navigate('Flow');
-              }
-            }}
-          />
-        )}
+        {type === OperateType.Collection &&
+          customer.status == CustomerStatus.ToBeCollected && (
+            <OperateButton
+              text={StatusOperateConfig[customer.status].operate}
+              onPress={() => {
+                updateCurrentFlowCustomer(customer);
+                navigation.navigate('Flow', {
+                  type: CustomerStatus.ToBeCollected,
+                });
+              }}
+            />
+          )}
+
+        {type === OperateType.Analyze &&
+          customer.status == CustomerStatus.ToBeAnalyzed && (
+            <OperateButton
+              text={StatusOperateConfig[customer.status].operate}
+              onPress={() => {
+                updateCurrentFlowCustomer(customer);
+                navigation.navigate('Flow', {
+                  type: CustomerStatus.ToBeAnalyzed,
+                });
+              }}
+            />
+          )}
       </Flex>
     </Row>
   );

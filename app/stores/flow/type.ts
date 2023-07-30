@@ -1,7 +1,9 @@
+import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { CustomerStatus, Gender } from '~/app/types';
 
 export interface Customer {
   operator: OperatorInfo | null;
+  shop: ShopInfo | null;
   id: string;
   name: string;
   gender: Gender;
@@ -27,6 +29,11 @@ export interface OperatorInfo {
   id: string;
   name: string;
   phoneNumber: string;
+}
+
+export interface ShopInfo {
+  id: string;
+  name: string;
 }
 
 export type RegisterCustomerInfo = Partial<Customer>;
@@ -60,6 +67,8 @@ type Template = {
   children: string[];
 };
 
+type PatchCustomerStatusType = 'register' | 'flow';
+
 export interface FlowState {
   operators: Operator[];
   register: RegisterAndCollection;
@@ -79,7 +88,12 @@ export interface FlowState {
   requestPostCustomerInfo: () => Promise<any>;
   requestPatchCustomerInfo: () => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
-  requestPatchCustomerStatus: (data: { status: number }) => Promise<any>;
+  requestPatchFlowToAnalyze: () => Promise<any>;
+
+  requestPatchCustomerStatus: (data: {
+    status: number;
+    type: PatchCustomerStatusType;
+  }) => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
 
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
@@ -101,6 +115,21 @@ export interface FlowState {
 
   addAudioFile: (updating: UpdatingAudioFile) => void;
   updateAudioFile: (name: string, url: string) => void;
+
+  addSolutionApplication: (application: Application) => void;
+  updateSolutionApplication: (application: Application, idx: number) => void;
+  removeSolutionApplication: (idx: number) => void;
+
+  addSolutionMassage: (massage: Massage) => void;
+  updateSolutionMassage: (massage: Massage, idx: number) => void;
+  removeSolutionMassage: (idx: number) => void;
+
+  updateAnalyzeRemark: (text: string) => void;
+
+  getFlowOperatorConfigByUser: (status: CustomerStatus) => {
+    configs: FlowOperatorConfigItem[];
+    selectIdx: number;
+  };
 }
 
 export interface HealthInfo {
@@ -136,6 +165,10 @@ export interface Collect {
   guidance: string;
   operatorId: string;
   updatedAt: Date;
+  operator?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface Analyze {
@@ -152,6 +185,10 @@ export interface Analyze {
   next: {
     hasNext: boolean;
     nextTime: string;
+  };
+  operator?: {
+    id: string;
+    name: string;
   };
   operatorId: string;
   updatedAt: Date;

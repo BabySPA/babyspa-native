@@ -49,7 +49,7 @@ export default function CustomerInfo({
                 borderRadius={ss(4)}
                 px={ls(26)}
                 py={ss(10)}>
-                {loading && <Spinner mr={ls(5)} />}
+                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
@@ -64,7 +64,7 @@ export default function CustomerInfo({
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>
         {edit ? (
           <EditBox
-            onPressCancel={() => {
+            onEditFinish={function (): void {
               setEdit(false);
             }}
           />
@@ -91,6 +91,7 @@ export default function CustomerInfo({
           setLoading(true);
           requestPatchCustomerStatus({
             status: CustomerStatus.Canceled,
+            type: 'register',
           })
             .then(async (res) => {
               // 取消成功

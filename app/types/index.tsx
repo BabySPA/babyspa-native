@@ -50,7 +50,10 @@ export type RootStackParamList = {
     type: CustomerScreenType;
   };
   CustomerInfo: undefined;
-  Flow: undefined;
+  Flow: {
+    type: CustomerStatus;
+  };
+  FlowInfo: undefined;
   Modal: undefined;
   NotFound: undefined;
   Camera: undefined;
@@ -65,7 +68,10 @@ export type AppStackList = {
     type: CustomerScreenType;
   };
   CustomerInfo: undefined;
-  Flow: undefined;
+  Flow: {
+    type: CustomerStatus;
+  };
+  FlowInfo: undefined;
   Camera: undefined;
 };
 

@@ -94,15 +94,15 @@ export default function Layout() {
             );
           })}
         </Box>
-        <Center px={ls(6)} maxW={ls(130)}>
+
+        <Center px={ls(6)} maxW={ls(130)} position={'absolute'} bottom={ss(80)}>
           <Center
             borderRadius={ss(23)}
             borderWidth={ss(3)}
             borderColor={'#fff'}
             w={ss(46)}
             h={ss(46)}
-            bgColor={'#F7CE51'}
-            mt={ss(120)}>
+            bgColor={'#F7CE51'}>
             <Text fontSize={sp(16)} color='#fff'>
               {user?.name?.[0]}
             </Text>

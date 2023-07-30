@@ -16,12 +16,14 @@ import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
-import { OperateType } from '~/app/types';
+import { CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 
 export default function Analyze() {
+  const navigation = useNavigation();
   const {
     requestAnalyzeCustomers,
+    updateCurrentFlowCustomer,
     analyze: { customers },
   } = useFlowStore();
 
@@ -41,13 +43,26 @@ export default function Analyze() {
             bgColor='white'
             borderRadius={ss(10)}
             flexWrap={'wrap'}
-            p={ss(40)}
-          >
-            {customers.map((customer, idx) => (
-              <Box ml={idx % 2 == 1 ? ss(20) : 0} key={customer.id}>
-                <CustomerItem customer={customer} type={OperateType.Analyze} />
-              </Box>
-            ))}
+            p={ss(40)}>
+            {customers.map((customer, idx) => {
+              return (
+                <Pressable
+                  key={customer.id}
+                  onPress={() => {
+                    if (customer.status === CustomerStatus.Completed) {
+                      updateCurrentFlowCustomer(customer);
+                      navigation.navigate('FlowInfo');
+                    }
+                  }}>
+                  <Box ml={idx % 2 == 1 ? ss(20) : 0}>
+                    <CustomerItem
+                      customer={customer}
+                      type={OperateType.Analyze}
+                    />
+                  </Box>
+                </Pressable>
+              );
+            })}
           </Row>
         )}
       </ScrollView>
@@ -64,8 +79,7 @@ function Filter() {
         py={ss(20)}
         px={ls(40)}
         alignItems={'center'}
-        justifyContent={'space-between'}
-      >
+        justifyContent={'space-between'}>
         <Row alignItems={'center'}>
           <Icon
             as={<Ionicons name={'people'} />}
@@ -99,8 +113,7 @@ function Filter() {
           <Pressable
             onPress={() => {
               setShowFilter(!showFilter);
-            }}
-          >
+            }}>
             <Row alignItems={'center'}>
               <Icon
                 as={<FontAwesome name='filter' />}
