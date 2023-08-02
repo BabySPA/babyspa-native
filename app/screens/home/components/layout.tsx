@@ -95,7 +95,12 @@ export default function Layout() {
           })}
         </Box>
 
-        <Center px={ls(6)} maxW={ls(130)} position={'absolute'} bottom={ss(80)}>
+        <Center
+          px={ls(6)}
+          maxW={ls(130)}
+          w={'100%'}
+          position={'absolute'}
+          bottom={ss(80)}>
           <Center
             borderRadius={ss(23)}
             borderWidth={ss(3)}
@@ -118,12 +123,16 @@ export default function Layout() {
               {currentShopWithRole?.role.name}
             </Text>
           </Row>
-          <Text fontSize={sp(14)} color='#fff' mt={ss(4)}>
+          <Text
+            fontSize={sp(14)}
+            py={ss(3)}
+            color='#fff'
+            mt={ss(4, { min: 1 })}>
             {currentShopWithRole?.shop.name}
             <Icon
               ml={ss(10)}
               as={<FontAwesome name='angle-down' />}
-              size={ss(15, { min: 12 })}
+              size={ss(15, { min: 7 })}
               color='#fff'
             />
           </Text>

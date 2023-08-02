@@ -55,12 +55,11 @@ export type UpdatingImage =
     }
   | string;
 
-export type UpdatingAudioFile =
-  | {
-      name: string;
-      uri: string;
-    }
-  | string;
+export type UpdatingAudioFile = {
+  name: string;
+  uri: string;
+  duration: number;
+};
 
 type Template = {
   key: string;

@@ -29,6 +29,12 @@ export default create(
       const currentShopWithRole = useAuthStore.getState().currentShopWithRole;
 
       if (!currentShopWithRole) {
+        // 重新登录
+        useAuthStore.getState().logout();
+        return [];
+      }
+
+      if (!currentShopWithRole) {
         set({ layoutConfig: [] });
         return [];
       }

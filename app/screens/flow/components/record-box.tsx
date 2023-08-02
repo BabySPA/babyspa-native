@@ -1,9 +1,18 @@
 import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
-import { Box, Center, Modal, Pressable, Text } from 'native-base';
+import {
+  Box,
+  Center,
+  Container,
+  Modal,
+  Pressable,
+  Row,
+  Text,
+} from 'native-base';
 import { useRef, useState } from 'react';
 import { Image, PanResponder } from 'react-native';
 import { upload } from '~/app/api/upload';
+import SoundList from '~/app/components/sound-list';
 import useFlowStore from '~/app/stores/flow';
 import useOssStore from '~/app/stores/oss';
 import { ss, ls, sp } from '~/app/utils/style';
@@ -15,7 +24,16 @@ export default function RecordBox({}) {
 
   const [showRecordBox, setShowRecordBox] = useState(false);
   const [recorder, setRecorder] = useState<Audio.Recording>();
-  const { currentFlowCustomer, addAudioFile, updateAudioFile } = useFlowStore();
+  const {
+    currentFlowCustomer,
+    addAudioFile,
+    updateAudioFile,
+    currentFlow: {
+      collect: {
+        healthInfo: { audioFiles },
+      },
+    },
+  } = useFlowStore();
   const { getOssConfig } = useOssStore();
 
   const startRecording = async () => {
@@ -116,13 +134,14 @@ export default function RecordBox({}) {
           // @ts-ignore
           clearTimeout(longPressTimer.current);
           setShowRecordBox(false);
-          const { uri } = await stopRecording();
+          const { uri, duration } = await stopRecording();
           const recordType = uri.split('.').pop();
           const name = `${currentFlowCustomer.tag}-${
             currentFlowCustomer.flowId
           }-${dayjs().format('YYYYMMDDHHmmss')}.${recordType}`;
 
           addAudioFile({
+            duration,
             name,
             uri,
           });
@@ -141,17 +160,23 @@ export default function RecordBox({}) {
   return (
     <>
       <Center flex={1}>
-        <Image
-          source={require('~/assets/images/empty-record.png')}
-          style={{
-            width: ls(180),
-            height: ss(80),
-          }}
-          resizeMode='contain'
-        />
-        <Text my={ss(15)} fontSize={sp(10)} color='#1E262F' opacity={0.4}>
-          您可以录下咳嗽等声音哦
-        </Text>
+        {audioFiles.length > 0 ? (
+          <SoundList audioFiles={audioFiles} />
+        ) : (
+          <Center>
+            <Image
+              source={require('~/assets/images/empty-record.png')}
+              style={{
+                width: ls(180),
+                height: ss(80),
+              }}
+              resizeMode='contain'
+            />
+            <Text my={ss(15)} fontSize={sp(10)} color='#1E262F' opacity={0.4}>
+              您可以录下咳嗽等声音哦
+            </Text>
+          </Center>
+        )}
       </Center>
       <Center
         {...panResponder.panHandlers}
@@ -164,8 +189,7 @@ export default function RecordBox({}) {
             start: [0, 0],
             end: [1, 1],
           },
-        }}
-      >
+        }}>
         <Text color='white' fontSize={sp(12)}>
           按住录音
         </Text>
@@ -197,8 +221,7 @@ const ArrowBox = () => {
           }}
           borderRadius={8}
           py={ss(27)}
-          px={ls(38)}
-        >
+          px={ls(38)}>
           <Image
             source={require('~/assets/images/record-loading.png')}
             style={{ height: ss(18), width: ls(72) }}

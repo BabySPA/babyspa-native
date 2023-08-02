@@ -497,7 +497,7 @@ const useFlowStore = create(
             }
           },
         );
-        state.currentFlow.collect.healthInfo.audioFiles[idx] = url;
+        state.currentFlow.collect.healthInfo.audioFiles[idx].uri = url;
       });
     },
 

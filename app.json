@@ -4,7 +4,6 @@
     "slug": "babyspa",
     "version": "1.0.0",
     "icon": "./assets/images/icon.png",
-    "orientation": "landscape",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
