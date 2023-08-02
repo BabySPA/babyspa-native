@@ -126,6 +126,9 @@ export interface FlowState {
 
   updateAnalyzeRemark: (text: string) => void;
 
+  updateFollowUp: (data: Partial<FollowUp>) => void;
+  updateNextTime: (data: Partial<NextTime>) => void;
+
   getFlowOperatorConfigByUser: (status: CustomerStatus) => {
     configs: FlowOperatorConfigItem[];
     selectIdx: number;
@@ -171,6 +174,16 @@ export interface Collect {
   };
 }
 
+export interface FollowUp {
+  isFollowed: boolean;
+  followUpTime: string;
+}
+
+export interface NextTime {
+  hasNext: boolean;
+  nextTime: string;
+}
+
 export interface Analyze {
   conclusion: string;
   solution: {
@@ -178,14 +191,8 @@ export interface Analyze {
     massages: Massage[];
   };
   remark: string;
-  followUp: {
-    isFollowed: boolean;
-    followUpTime: string;
-  };
-  next: {
-    hasNext: boolean;
-    nextTime: string;
-  };
+  followUp: FollowUp;
+  next: NextTime;
   operator?: {
     id: string;
     name: string;

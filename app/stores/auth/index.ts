@@ -2,13 +2,14 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import request from '~/app/api';
-import { AuthState, RW, RoleAuthority } from './type';
+import { AuthState, RW, RoleAuthority, ShopsWithRole } from './type';
 
 const useAuthStore = create(
   persist<AuthState>(
     (set, get) => ({
       accessToken: null,
       user: null,
+      currentShopWithRole: null,
       login: async (username: string, password: string) => {
         return new Promise((resolve, reject) => {
           request
@@ -16,14 +17,22 @@ const useAuthStore = create(
             .then((res) => {
               const { accessToken, ...rest } = res.data;
               const user = { ...rest };
-              const isGlobalAdmin =
-                user?.role?.authorities.findIndex(
-                  (item: any) => item.authority === RoleAuthority.ALL,
-                ) !== -1;
+              user.shopsWithRole = user.shopsWithRole.map(
+                (item: ShopsWithRole) => ({
+                  ...item,
+                  isGlobalAdmin:
+                    item?.role?.authorities.findIndex(
+                      (item) => item.authority === RoleAuthority.ALL,
+                    ) !== -1,
+                }),
+              );
+
               set({
                 accessToken: accessToken,
-                user: { ...rest, isGlobalAdmin },
+                user: { ...rest },
+                currentShopWithRole: user.shopsWithRole[0],
               });
+
               resolve();
             })
             .catch((err) => {
@@ -31,26 +40,38 @@ const useAuthStore = create(
             });
         });
       },
+      setCurrentShopWithRole: (shopId: string) => {
+        const user = get().user;
+        const idx = user?.shopsWithRole.findIndex(
+          (item) => item.shop._id === shopId,
+        );
+        if (idx) {
+          set({ currentShopWithRole: user?.shopsWithRole[idx] });
+        } else {
+          console.log('切换门店失败！');
+        }
+      },
       logout: async () => {
         set({ accessToken: null, user: null });
         return Promise.resolve();
       },
       hasAuthority: (authorityKey: RoleAuthority, rw: RW) => {
-        console.log(authorityKey, rw);
-        if (get().user?.isGlobalAdmin) {
+        if (get().currentShopWithRole?.isGlobalAdmin) {
           return true;
         }
         return (
-          get().user?.role.authorities.findIndex((item, index) => {
-            if (item.authority === authorityKey) {
-              if (rw === 'R') {
-                return true;
-              } else {
-                return item.rw === rw;
+          get().currentShopWithRole?.role.authorities.findIndex(
+            (item, index) => {
+              if (item.authority === authorityKey) {
+                if (rw === 'R') {
+                  return true;
+                } else {
+                  return item.rw === rw;
+                }
               }
-            }
-            return false;
-          }) !== -1
+              return false;
+            },
+          ) !== -1
         );
       },
     }),

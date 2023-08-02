@@ -13,7 +13,7 @@ export default function Layout() {
     changeFeatureSelected,
   } = useLayoutConfigWithRole();
 
-  const { logout, user } = useAuthStore();
+  const { logout, user, currentShopWithRole } = useAuthStore();
 
   const Fragment = () => {
     return getLayoutConfig()[currentSelected].features[
@@ -115,11 +115,11 @@ export default function Layout() {
               -
             </Text>
             <Text fontSize={sp(14)} color='#fff'>
-              {user?.role.name}
+              {currentShopWithRole?.role.name}
             </Text>
           </Row>
           <Text fontSize={sp(14)} color='#fff' mt={ss(4)}>
-            {user?.shop.name}{' '}
+            {currentShopWithRole?.shop.name}
             <Icon
               ml={ss(10)}
               as={<FontAwesome name='angle-down' />}

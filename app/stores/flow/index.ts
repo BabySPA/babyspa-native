@@ -146,6 +146,8 @@ const useFlowStore = create(
         params.endDate = startDate;
       }
 
+      params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
+
       request.get('/customers', { params }).then(({ data }) => {
         const { docs, hasNextPage } = data;
         set({
@@ -178,6 +180,8 @@ const useFlowStore = create(
       if (endDate) {
         params.endDate = startDate;
       }
+
+      params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/customers', { params }).then(({ data }) => {
         const { docs, hasNextPage } = data;
@@ -225,7 +229,10 @@ const useFlowStore = create(
     },
 
     requestGetOperators: async () => {
-      request.get('/users/operators').then(({ data }) => {
+      const params = {
+        shopId: useAuthStore.getState().currentShopWithRole?.shop._id,
+      };
+      request.get('/users/operators', { params }).then(({ data }) => {
         set({ operators: data });
       });
     },
@@ -243,6 +250,7 @@ const useFlowStore = create(
           allergy: customer.allergy,
           nickname: customer.nickname,
           operatorId: customer.operator?.id,
+          shopId: useAuthStore.getState().currentShopWithRole?.shop._id,
         })
         .then(({ data }) => {
           set((state) => {
@@ -296,6 +304,7 @@ const useFlowStore = create(
 
     requestGetFlow: async (flowId: string) => {
       return request.get(`/flows/${flowId}`).then(({ data }) => {
+        console.log(22222, data);
         const { applications, massages } = data.analyze.solution;
 
         if (applications.length === 0) {
@@ -313,6 +322,8 @@ const useFlowStore = create(
     requestPatchFlowToCollection: async () => {
       const currentFlow = get().currentFlow;
 
+      console.log(22222, currentFlow);
+      if (!currentFlow._id) return;
       request
         .patch(`/flows/collection/${currentFlow._id}`, {
           collect: currentFlow.collect,
@@ -529,6 +540,24 @@ const useFlowStore = create(
     updateAnalyzeRemark: (remark) => {
       return set((state) => {
         state.currentFlow.analyze.remark = remark;
+      });
+    },
+
+    updateFollowUp: (followUp) => {
+      return set((state) => {
+        state.currentFlow.analyze.followUp = {
+          ...state.currentFlow.analyze.followUp,
+          ...followUp,
+        };
+      });
+    },
+
+    updateNextTime: (nextTime) => {
+      return set((state) => {
+        state.currentFlow.analyze.next = {
+          ...state.currentFlow.analyze.next,
+          ...nextTime,
+        };
       });
     },
 

@@ -26,18 +26,20 @@ export default create(
       if (get().layoutConfig.length > 0) {
         return get().layoutConfig;
       }
-      const user = useAuthStore.getState().user;
+      const currentShopWithRole = useAuthStore.getState().currentShopWithRole;
 
-      if (!user) {
+      if (!currentShopWithRole) {
         set({ layoutConfig: [] });
         return [];
       }
-      if (user.isGlobalAdmin) {
+      if (currentShopWithRole.isGlobalAdmin) {
         set({ layoutConfig: LayoutConfig });
         return LayoutConfig;
       }
 
-      const filterConfig = getFilteredLayoutConfig(user?.role.authorities);
+      const filterConfig = getFilteredLayoutConfig(
+        currentShopWithRole?.role.authorities,
+      );
 
       set({ layoutConfig: filterConfig });
       return filterConfig;

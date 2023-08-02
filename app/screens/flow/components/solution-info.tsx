@@ -18,44 +18,8 @@ import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { SolutionDefault } from '~/app/constants';
-
-function AddCountSelector({
-  count,
-  onSubtraction,
-  onAddition,
-}: {
-  count: number;
-  onSubtraction: () => void;
-  onAddition: () => void;
-}) {
-  return (
-    <>
-      <Pressable
-        onPress={() => {
-          onSubtraction();
-        }}>
-        <Icon
-          as={<AntDesign name='minuscircle' />}
-          size={ss(20, { min: 16 })}
-          color={'#99A9BF'}
-        />
-      </Pressable>
-      <Text color='#E36C36' fontSize={sp(18)} mx={ss(20)}>
-        {count}
-      </Text>
-      <Pressable
-        onPress={() => {
-          onAddition();
-        }}>
-        <Icon
-          as={<AntDesign name='pluscircle' />}
-          size={ss(20, { min: 16 })}
-          color={'#99A9BF'}
-        />
-      </Pressable>
-    </>
-  );
-}
+import SelectDay, { getDay } from '~/app/components/select-day';
+import AddCountSelector from '~/app/components/add-count-selector';
 
 export default function SolutionInfo() {
   const {
@@ -67,6 +31,8 @@ export default function SolutionInfo() {
     updateAnalyzeRemark,
     addSolutionMassage,
     removeSolutionMassage,
+    updateFollowUp,
+    updateNextTime,
   } = useFlowStore();
 
   const {
@@ -320,7 +286,11 @@ export default function SolutionInfo() {
               name='isFollowUp'
               flexDirection={'row'}
               defaultValue={followUp.isFollowed ? '1' : '0'}
-              onChange={(event) => {}}>
+              onChange={(event) => {
+                updateFollowUp({
+                  isFollowed: event === '1',
+                });
+              }}>
               <Radio colorScheme='green' value='1' size={'sm'}>
                 <Text fontSize={sp(20)} color='#333'>
                   是
@@ -335,28 +305,24 @@ export default function SolutionInfo() {
             <Text fontSize={sp(20)} color='#333' ml={ls(60)}>
               随访时间
             </Text>
-            <Select
-              ml={ss(20)}
-              selectedValue={'今'}
-              minWidth={ss(80)}
-              accessibilityLabel='Choose Service'
-              placeholder='Choose Service'
-              _selectedItem={{
-                bg: 'teal.600',
-                endIcon: (
-                  <Icon
-                    as={<AntDesign name='delete' />}
-                    size={ss(20, { min: 16 })}
-                    color={'#99A9BF'}
-                  />
-                ),
+            <SelectDay
+              onSelect={function (selectedItem: any, index: number): void {
+                updateFollowUp({
+                  followUpTime: dayjs()
+                    .add(selectedItem.value, 'day')
+                    .format('YYYY-MM-DD HH:mm'),
+                });
               }}
-              mt={1}
-              onValueChange={(itemValue) => {}}>
-              {['今', '明', '后'].map((_, idx) => {
-                return <Select.Item key={idx} label={_} value={_} />;
-              })}
-            </Select>
+              defaultButtonText={
+                followUp.followUpTime
+                  ? '今'
+                  : getDay(
+                      Math.ceil(
+                        dayjs('2023-08-02 05:49').diff(dayjs(), 'hours') / 24,
+                      ),
+                    )
+              }
+            />
             <Text fontSize={sp(20)} color='#333' ml={ls(10)}>
               天
             </Text>
@@ -366,10 +332,14 @@ export default function SolutionInfo() {
               继续调理
             </Text>
             <Radio.Group
-              name='isFollowUp'
+              name='next'
               flexDirection={'row'}
-              defaultValue={followUp.isFollowed ? '1' : '0'}
-              onChange={(event) => {}}>
+              defaultValue={next.hasNext ? '1' : '0'}
+              onChange={(event) => {
+                updateNextTime({
+                  hasNext: event === '1',
+                });
+              }}>
               <Radio colorScheme='green' value='1' size={'sm'}>
                 <Text fontSize={sp(20)} color='#333'>
                   是
@@ -384,28 +354,24 @@ export default function SolutionInfo() {
             <Text fontSize={sp(20)} color='#333' ml={ls(60)}>
               复推时间
             </Text>
-            <Select
-              ml={ss(20)}
-              selectedValue={`1`}
-              minWidth={ss(80)}
-              accessibilityLabel='Choose Service'
-              placeholder='Choose Service'
-              _selectedItem={{
-                bg: 'teal.600',
-                endIcon: (
-                  <Icon
-                    as={<AntDesign name='delete' />}
-                    size={ss(20, { min: 16 })}
-                    color={'#99A9BF'}
-                  />
-                ),
+            <SelectDay
+              onSelect={function (selectedItem: any, index: number): void {
+                updateNextTime({
+                  nextTime: dayjs()
+                    .add(selectedItem.value, 'day')
+                    .format('YYYY-MM-DD HH:mm'),
+                });
               }}
-              mt={1}
-              onValueChange={(itemValue) => {}}>
-              {['今', '明', '后'].map((_, idx) => {
-                return <Select.Item key={idx} label={_} value={_} />;
-              })}
-            </Select>
+              defaultButtonText={
+                next.nextTime
+                  ? '今'
+                  : getDay(
+                      Math.ceil(
+                        dayjs('2023-08-02 05:49').diff(dayjs(), 'hours') / 24,
+                      ),
+                    )
+              }
+            />
             <Text fontSize={sp(20)} color='#333' ml={ls(10)}>
               天
             </Text>

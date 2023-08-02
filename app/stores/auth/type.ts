@@ -22,25 +22,31 @@ export type AuthorityConfig = {
   rw: RW;
 };
 
+export interface ShopsWithRole {
+  role: {
+    _id: string;
+    name: string;
+    authorities: AuthorityConfig[];
+  };
+  shop: {
+    _id: string;
+    name: string;
+    address: string;
+    region: string;
+  };
+  isGlobalAdmin: boolean;
+}
+
 export interface AuthState {
   accessToken: string | null;
   user: {
     name: string;
     username: string;
     phoneNumber: string;
-    shop: {
-      id: string;
-      name: string;
-      region: string;
-      address: string;
-    };
-    role: {
-      id: string;
-      name: string;
-      authorities: AuthorityConfig[];
-    };
-    isGlobalAdmin: boolean;
+    shopsWithRole: ShopsWithRole[];
   } | null;
+  currentShopWithRole: ShopsWithRole | null;
+  setCurrentShopWithRole: (shopId: string) => void;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   hasAuthority: (authorityKey: RoleAuthority, rw: RW) => boolean;
