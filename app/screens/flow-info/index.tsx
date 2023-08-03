@@ -16,6 +16,7 @@ import useFlowStore from '~/app/stores/flow';
 import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
 import AnalyzeCard from '~/app/components/info-cards/analyze-card';
+import EvaluateCard from '~/app/components/info-cards/evaluate-card';
 
 export default function FlowInfo({
   navigation,
@@ -45,14 +46,10 @@ export default function FlowInfo({
           </Text>
         }
         rightElement={
-          from == 'analyze' || evaluate ? (
+          from == 'analyze' ? (
             <Pressable
               onPress={() => {
-                if (from === 'analyze') {
-                  // TODO 打印
-                } else {
-                  // 评价
-                }
+                // TODO 打印
               }}>
               <Row
                 bgColor={'white'}
@@ -64,7 +61,27 @@ export default function FlowInfo({
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
                   fontSize={sp(14, { min: 12 })}>
-                  {from == 'analyze' ? '打印' : '评价'}
+                  打印
+                </Text>
+              </Row>
+            </Pressable>
+          ) : // 从评价详情进入，并且未评价
+          from == 'evaluate-detail' && !evaluate ? (
+            <Pressable
+              onPress={() => {
+                // TODO 评价弹窗
+              }}>
+              <Row
+                bgColor={'white'}
+                borderRadius={ss(4)}
+                px={ls(26)}
+                py={ss(10)}>
+                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+                <Text
+                  color={'#03CBB2'}
+                  opacity={loading ? 0.6 : 1}
+                  fontSize={sp(14, { min: 12 })}>
+                  评价
                 </Text>
               </Row>
             </Pressable>
@@ -76,11 +93,15 @@ export default function FlowInfo({
           <ScrollView>
             <RegisterCard />
             <CollectionCard style={{ marginTop: ls(10) }} />
+            {from == 'evaluate' && (
+              <AnalyzeCard edit={false} style={{ marginTop: ls(10) }} />
+            )}
           </ScrollView>
         </Column>
         <Column flex={1} ml={ls(10)}>
           <ScrollView>
-            <AnalyzeCard edit={from == 'analyze'} />
+            {from != 'evaluate' && <AnalyzeCard edit={from == 'analyze'} />}
+            {from == 'evaluate' && <EvaluateCard />}
           </ScrollView>
         </Column>
       </Row>

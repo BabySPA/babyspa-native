@@ -53,6 +53,7 @@ const defaultFlow = {
     operatorId: '',
     updatedAt: new Date(),
   },
+  evaluate: null,
   createdAt: '',
   updatedAt: '',
 };
@@ -62,6 +63,7 @@ const useFlowStore = create(
     register: defaultRegisterAndCollection,
     collection: defaultRegisterAndCollection,
     analyze: defaultRegisterAndCollection,
+    evaluate: defaultRegisterAndCollection,
     currentFlow: defaultFlow,
     operators: [],
 
@@ -162,7 +164,7 @@ const useFlowStore = create(
 
     requestCollectionCustomers: async () => {
       const {
-        register: { searchKeywords, status, startDate, endDate, page },
+        collection: { searchKeywords, status, startDate, endDate, page },
       } = get();
       const params: any = {
         page: page,
@@ -197,7 +199,7 @@ const useFlowStore = create(
 
     requestAnalyzeCustomers: async () => {
       const {
-        register: { searchKeywords, status, startDate, endDate, page },
+        analyze: { searchKeywords, status, startDate, endDate, page },
       } = get();
       const params: any = {
         page: page,
@@ -221,6 +223,40 @@ const useFlowStore = create(
         set({
           analyze: {
             ...get().analyze,
+            customers: docs,
+            hasNextPage: hasNextPage,
+          },
+        });
+      });
+    },
+
+    requestEvaluateCustomers: async () => {
+      const {
+        evaluate: { searchKeywords, status, startDate, endDate, page },
+      } = get();
+      const params: any = {
+        page: page,
+        pageSize: 100,
+      };
+      if (searchKeywords) {
+        params.search = searchKeywords;
+      }
+      if (status !== -1) {
+        params.status = status;
+      }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = startDate;
+      }
+
+      request.get('/customers/evaluates', { params }).then(({ data }) => {
+        const { docs, hasNextPage } = data;
+
+        set({
+          evaluate: {
+            ...get().evaluate,
             customers: docs,
             hasNextPage: hasNextPage,
           },
@@ -304,7 +340,6 @@ const useFlowStore = create(
 
     requestGetFlow: async (flowId: string) => {
       return request.get(`/flows/${flowId}`).then(({ data }) => {
-        console.log(22222, data);
         const { applications, massages } = data.analyze.solution;
 
         if (applications.length === 0) {
@@ -322,7 +357,6 @@ const useFlowStore = create(
     requestPatchFlowToCollection: async () => {
       const currentFlow = get().currentFlow;
 
-      console.log(22222, currentFlow);
       if (!currentFlow._id) return;
       request
         .patch(`/flows/collection/${currentFlow._id}`, {

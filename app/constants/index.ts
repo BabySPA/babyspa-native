@@ -1,7 +1,7 @@
 import Register from '../screens/home/fragments/register';
 import Collection from '../screens/home/fragments/collection';
 import Analyze from '../screens/home/fragments/analyze';
-import Feedback from '../screens/home/fragments/feedback';
+import Evaluate from '../screens/home/fragments/evaluate';
 import FollowUpVisit from '../screens/home/fragments/follow-up-visit';
 import Archive from '../screens/home/fragments/archive';
 import ShopCenter from '../screens/home/fragments/archive';
@@ -27,6 +27,19 @@ export const StatusOperateConfig: StatusOperateConfig = {
   },
   [CustomerStatus.Completed]: {},
   [CustomerStatus.Canceled]: {},
+};
+
+export const EvaluateTextConfig = {
+  ['TODO']: {
+    text: '待评价',
+    textColor: '#FE9505',
+    bgColor: 'rgba(254, 149, 5, 0.2)',
+  },
+  ['DONE']: {
+    text: '已评价',
+    textColor: '#00B49E',
+    bgColor: 'rgba(0, 180, 158, 0.2)',
+  },
 };
 
 export const StatusTextConfig = {
@@ -76,8 +89,8 @@ export const LayoutConfig: ILayoutConfig[] = [
       },
       {
         text: '评价反馈',
-        fragment: Feedback,
-        auth: RoleAuthority.FLOW_FEEDBACK,
+        fragment: Evaluate,
+        auth: RoleAuthority.FLOW_EVALUATE,
       },
     ],
   },

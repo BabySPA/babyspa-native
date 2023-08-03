@@ -41,10 +41,10 @@ export enum OperateType {
   Register = 0,
   Collection,
   Analyze,
-  Feedback,
+  Evaluate,
 }
 
-export type FlowFrom = 'analyze' | 'analyze' | 'feedback';
+export type FlowFrom = 'analyze' | 'evaluate' | 'evaluate-detail';
 
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackList> | undefined;

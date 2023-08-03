@@ -2,7 +2,7 @@ export enum RoleAuthority {
   FLOW_REGISTER = 1000, // 门店信息登记
   FLOW_COLLECTION = 1001, // 门店信息采集
   FLOW_ANALYZE = 1002, // 门店信息分析
-  FLOW_FEEDBACK = 1003, // 评价反馈
+  FLOW_EVALUATE = 1003, // 评价反馈
   CUSTOMER_ARCHIVE = 2000, // 客户-客户档案
   CUSTOMER_FOLLOWUP = 2001, // 客户-随访
   MANAGER_SHOP = 3000, // 门店管理

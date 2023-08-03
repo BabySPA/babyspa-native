@@ -3,6 +3,7 @@ import { CustomerStatus, Gender } from '~/app/types';
 
 export interface Customer {
   operator: OperatorInfo | null;
+  analyst: OperatorInfo | null;
   shop: ShopInfo | null;
   id: string;
   name: string;
@@ -15,6 +16,7 @@ export interface Customer {
   updatedAt: string;
   tag: string;
   flowId: string;
+  flowEvalute: Evaluate | null;
 }
 
 export interface Operator {
@@ -73,6 +75,7 @@ export interface FlowState {
   register: RegisterAndCollection;
   collection: RegisterAndCollection;
   analyze: RegisterAndCollection;
+  evaluate: RegisterAndCollection;
   currentFlow: Flow;
   guidanceTemplate: Template[];
 
@@ -83,6 +86,7 @@ export interface FlowState {
   requestRegisterCustomers: () => Promise<void>;
   requestCollectionCustomers: () => Promise<void>;
   requestAnalyzeCustomers: () => Promise<void>;
+  requestEvaluateCustomers: () => Promise<void>;
   requestGetOperators: () => Promise<void>;
   requestPostCustomerInfo: () => Promise<any>;
   requestPatchCustomerInfo: () => Promise<any>;

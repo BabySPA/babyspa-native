@@ -19,18 +19,19 @@ import CustomerItem from '../components/customer-item';
 import { CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 
-export default function Feedback() {
+export default function Evaluate() {
   const navigation = useNavigation();
   const {
-    requestAnalyzeCustomers,
+    requestEvaluateCustomers,
     updateCurrentFlowCustomer,
-    analyze: { customers },
+    evaluate: { customers },
   } = useFlowStore();
 
   useEffect(() => {
-    requestAnalyzeCustomers();
+    requestEvaluateCustomers();
   }, []);
 
+  console.log('Evaluate customers', customers);
   return (
     <Flex flex={1}>
       <Filter />
@@ -51,13 +52,15 @@ export default function Feedback() {
                   onPress={() => {
                     if (customer.status === CustomerStatus.Completed) {
                       updateCurrentFlowCustomer(customer);
-                      navigation.navigate('FlowInfo', { from: 'feedback' });
+                      navigation.navigate('FlowInfo', {
+                        from: 'evaluate-detail',
+                      });
                     }
                   }}>
                   <Box ml={idx % 2 == 1 ? ss(20) : 0}>
                     <CustomerItem
                       customer={customer}
-                      type={OperateType.Feedback}
+                      type={OperateType.Evaluate}
                     />
                   </Box>
                 </Pressable>

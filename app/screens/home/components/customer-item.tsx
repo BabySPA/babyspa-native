@@ -4,7 +4,11 @@ import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
-import { StatusOperateConfig, StatusTextConfig } from '~/app/constants';
+import {
+  EvaluateTextConfig,
+  StatusOperateConfig,
+  StatusTextConfig,
+} from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
 import { Customer } from '~/app/stores/flow/type';
 import { CustomerStatus, OperateType } from '~/app/types';
@@ -18,7 +22,6 @@ export default function CustomerItem({
   customer: Customer;
   type: OperateType;
 }) {
-  console.log('customer', customer);
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
@@ -70,10 +73,17 @@ export default function CustomerItem({
               {ageText}
             </Text>
           </Row>
-          <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
-            理疗师：{customer.operator?.name}
-          </Text>
-          {type == OperateType.Analyze && (
+          <Row alignItems={'center'}>
+            <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
+              理疗师：{customer.operator?.name}
+            </Text>
+            {type == OperateType.Evaluate && (
+              <Text mt={ss(10)} color={'#666'} fontSize={sp(18)} ml={ss(30)}>
+                分析师：{customer.analyst?.name}
+              </Text>
+            )}
+          </Row>
+          {(type == OperateType.Analyze || type == OperateType.Evaluate) && (
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
               门店：{customer.shop?.name}
             </Text>
@@ -95,18 +105,37 @@ export default function CustomerItem({
         </Flex>
       </Row>
       <Flex justifyContent={'space-between'} alignItems={'flex-end'} flex={1}>
-        <Box
-          bgColor={StatusTextConfig[customer.status].bgColor}
-          px={ls(12)}
-          py={ss(6)}
-          _text={{
-            fontSize: sp(16),
-            color: StatusTextConfig[customer.status].textColor,
-          }}
-          borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
-          {StatusTextConfig[customer.status].text}
-        </Box>
+        {type === OperateType.Evaluate ? (
+          <Box
+            bgColor={
+              EvaluateTextConfig[customer.flowEvalute ? 'DONE' : 'TODO'].bgColor
+            }
+            px={ls(12)}
+            py={ss(6)}
+            _text={{
+              fontSize: sp(16),
+              color:
+                EvaluateTextConfig[customer.flowEvalute ? 'DONE' : 'TODO']
+                  .textColor,
+            }}
+            borderBottomLeftRadius={ss(8)}
+            borderTopRightRadius={ss(8)}>
+            {EvaluateTextConfig[customer.flowEvalute ? 'DONE' : 'TODO'].text}
+          </Box>
+        ) : (
+          <Box
+            bgColor={StatusTextConfig[customer.status].bgColor}
+            px={ls(12)}
+            py={ss(6)}
+            _text={{
+              fontSize: sp(16),
+              color: StatusTextConfig[customer.status].textColor,
+            }}
+            borderBottomLeftRadius={ss(8)}
+            borderTopRightRadius={ss(8)}>
+            {StatusTextConfig[customer.status].text}
+          </Box>
+        )}
 
         {type === OperateType.Collection &&
           customer.status == CustomerStatus.ToBeCollected && (
@@ -133,6 +162,18 @@ export default function CustomerItem({
               }}
             />
           )}
+
+        {type === OperateType.Evaluate && !customer.flowEvalute && (
+          <OperateButton
+            text={'评价'}
+            onPress={() => {
+              updateCurrentFlowCustomer(customer);
+              navigation.navigate('FlowInfo', {
+                from: 'evaluate',
+              });
+            }}
+          />
+        )}
       </Flex>
     </Row>
   );
