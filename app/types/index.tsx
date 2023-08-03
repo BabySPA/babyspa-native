@@ -41,7 +41,10 @@ export enum OperateType {
   Register = 0,
   Collection,
   Analyze,
+  Feedback,
 }
+
+export type FlowFrom = 'analyze' | 'analyze' | 'feedback';
 
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackList> | undefined;
@@ -53,7 +56,9 @@ export type RootStackParamList = {
   Flow: {
     type: CustomerStatus;
   };
-  FlowInfo: undefined;
+  FlowInfo: {
+    from: FlowFrom;
+  };
   Modal: undefined;
   NotFound: undefined;
   Camera: undefined;
@@ -71,7 +76,9 @@ export type AppStackList = {
   Flow: {
     type: CustomerStatus;
   };
-  FlowInfo: undefined;
+  FlowInfo: {
+    from: FlowFrom;
+  };
   Camera: undefined;
 };
 

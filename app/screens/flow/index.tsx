@@ -319,6 +319,9 @@ export default function FlowScreen({
                         });
                         await requestInitializeData();
                         // navigation.goBack();
+                        navigation.replace('FlowInfo', {
+                          from: 'analyze',
+                        });
                       }, 2000);
                     })
                     .catch((err) => {})

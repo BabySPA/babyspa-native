@@ -39,6 +39,9 @@ export default function ConclusionInfo() {
                 color: '#999',
               }}
               value={analyze.conclusion}
+              onChangeText={(text) => {
+                updateAnalyze({ conclusion: text });
+              }}
             />
           </Box>
         </BoxItem>

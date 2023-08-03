@@ -200,11 +200,33 @@ export interface Analyze {
   updatedAt: Date;
 }
 
+export interface Evaluate {
+  /**
+   * 评分
+   */
+  score: number;
+  /**
+   * 评价
+   */
+  remark: string;
+
+  /**
+   * 评价人
+   */
+  operatorId: string;
+
+  /**
+   * 评价时间
+   */
+  updatedAt: Date;
+}
+
 export type Flow = {
   _id: string;
   customerId: string;
   collect: Collect;
   analyze: Analyze;
+  evaluate: Evaluate | null;
   updatedAt: string;
   createdAt: string;
 };

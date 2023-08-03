@@ -18,6 +18,7 @@ export default function CustomerItem({
   customer: Customer;
   type: OperateType;
 }) {
+  console.log('customer', customer);
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();

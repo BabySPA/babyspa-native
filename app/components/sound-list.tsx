@@ -28,7 +28,7 @@ export default function SoundList({ audioFiles }: SoundListProps) {
         return (
           <Pressable
             key={idx}
-            mt={ss(5)}
+            mt={idx === 0 ? 0 : ss(10)}
             onPress={() => {
               playSound(audioFile.uri);
             }}>

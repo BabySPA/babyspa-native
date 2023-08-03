@@ -1,20 +1,27 @@
-import { Column, Divider, Icon, Row, Text } from 'native-base';
+import { Column, Divider, Icon, Pressable, Row, Text } from 'native-base';
 import { StyleProp, ViewStyle } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
 import dayjs from 'dayjs';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppStackList, CustomerStatus } from '~/app/types';
 
 interface AnalyzeCardParams {
   style?: StyleProp<ViewStyle>;
+  edit: boolean;
 }
 
 export default function AnalyzeCard(params: AnalyzeCardParams) {
   const {
     currentFlow: { analyze },
   } = useFlowStore();
-  const { style = {} } = params;
+  const { style = {}, edit } = params;
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AppStackList, 'FlowInfo'>>();
 
   return (
     <Column
@@ -23,7 +30,23 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
       p={ss(20)}
       borderRadius={ss(10)}
       style={style}>
-      <BoxTitle title='分析信息' />
+      <BoxTitle
+        title='分析信息'
+        rightElement={
+          edit && (
+            <Pressable
+              onPress={() => {
+                navigation.replace('Flow', {
+                  type: CustomerStatus.ToBeAnalyzed,
+                });
+              }}>
+              <Text fontSize={sp(14)} color='#03CBB2'>
+                修改
+              </Text>
+            </Pressable>
+          )
+        }
+      />
       <Divider color={'#DFE1DE'} my={ss(14)} />
       <Column px={ls(20)}>
         {analyze.solution.applications.map((item, idx) => {

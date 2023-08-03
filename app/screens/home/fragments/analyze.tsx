@@ -51,7 +51,7 @@ export default function Analyze() {
                   onPress={() => {
                     if (customer.status === CustomerStatus.Completed) {
                       updateCurrentFlowCustomer(customer);
-                      navigation.navigate('FlowInfo');
+                      navigation.navigate('FlowInfo', { from: 'analyze' });
                     }
                   }}>
                   <Box ml={idx % 2 == 1 ? ss(20) : 0}>

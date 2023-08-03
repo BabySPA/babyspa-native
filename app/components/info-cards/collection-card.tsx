@@ -5,6 +5,7 @@ import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
 import dayjs from 'dayjs';
+import SoundList from '../sound-list';
 
 interface CollectionCardParams {
   style?: StyleProp<ViewStyle>;
@@ -57,9 +58,10 @@ export default function CollectionCard(params: CollectionCardParams) {
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             左手手相：
           </Text>
-          {collect.healthInfo.leftHandImages.map((item) => {
+          {collect.healthInfo.leftHandImages.map((item, idx) => {
             return (
               <Image
+                key={idx}
                 style={{
                   width: ss(100),
                   height: ss(100),
@@ -75,9 +77,10 @@ export default function CollectionCard(params: CollectionCardParams) {
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             右手手相：
           </Text>
-          {collect.healthInfo.rightHandImages.map((item) => {
+          {collect.healthInfo.rightHandImages.map((item, idx) => {
             return (
               <Image
+                key={idx}
                 style={{
                   width: ss(100),
                   height: ss(100),
@@ -94,28 +97,7 @@ export default function CollectionCard(params: CollectionCardParams) {
             录音：
           </Text>
           {collect.healthInfo.audioFiles.length > 0 ? (
-            collect.healthInfo.audioFiles.map((item) => {
-              return (
-                <Row
-                  borderRadius={ss(4)}
-                  borderColor={'#A4D4D6'}
-                  borderWidth={1}
-                  alignItems={'center'}
-                  w={ls(253)}
-                  p={ss(10)}>
-                  <Image
-                    source={require('~/assets/images/signal.png')}
-                    style={{
-                      width: ss(20),
-                      height: ss(20),
-                    }}
-                  />
-                  <Text color='#000000' fontSize={sp(18)} ml={ls(10)}>
-                    10 "
-                  </Text>
-                </Row>
-              );
-            })
+            <SoundList audioFiles={collect.healthInfo.audioFiles} />
           ) : (
             <Text fontSize={sp(18)} color='#333'>
               暂无录音

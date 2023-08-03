@@ -75,7 +75,7 @@ export const LayoutConfig: ILayoutConfig[] = [
         auth: RoleAuthority.FLOW_ANALYZE,
       },
       {
-        text: '信息反馈',
+        text: '评价反馈',
         fragment: Feedback,
         auth: RoleAuthority.FLOW_FEEDBACK,
       },

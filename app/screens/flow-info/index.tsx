@@ -17,10 +17,17 @@ import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
 import AnalyzeCard from '~/app/components/info-cards/analyze-card';
 
-export default function CustomerInfo({
+export default function FlowInfo({
   navigation,
+  route: { params },
 }: AppStackScreenProps<'FlowInfo'>) {
-  const { requestGetFlow, currentFlowCustomer } = useFlowStore();
+  const {
+    requestGetFlow,
+    currentFlowCustomer,
+    currentFlow: { evaluate },
+  } = useFlowStore();
+
+  const { from } = params;
 
   useEffect(() => {
     requestGetFlow(currentFlowCustomer.flowId);
@@ -38,17 +45,30 @@ export default function CustomerInfo({
           </Text>
         }
         rightElement={
-          <Pressable onPress={() => {}}>
-            <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
-              {loading && <Spinner mr={ls(5)} color='emerald.500' />}
-              <Text
-                color={'#03CBB2'}
-                opacity={loading ? 0.6 : 1}
-                fontSize={sp(14, { min: 12 })}>
-                评价
-              </Text>
-            </Row>
-          </Pressable>
+          from == 'analyze' || evaluate ? (
+            <Pressable
+              onPress={() => {
+                if (from === 'analyze') {
+                  // TODO 打印
+                } else {
+                  // 评价
+                }
+              }}>
+              <Row
+                bgColor={'white'}
+                borderRadius={ss(4)}
+                px={ls(26)}
+                py={ss(10)}>
+                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+                <Text
+                  color={'#03CBB2'}
+                  opacity={loading ? 0.6 : 1}
+                  fontSize={sp(14, { min: 12 })}>
+                  {from == 'analyze' ? '打印' : '评价'}
+                </Text>
+              </Row>
+            </Pressable>
+          ) : null
         }
       />
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>
@@ -60,7 +80,7 @@ export default function CustomerInfo({
         </Column>
         <Column flex={1} ml={ls(10)}>
           <ScrollView>
-            <AnalyzeCard />
+            <AnalyzeCard edit={from == 'analyze'} />
           </ScrollView>
         </Column>
       </Row>
