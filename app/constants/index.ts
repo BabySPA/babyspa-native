@@ -11,6 +11,7 @@ import StatisticsMassage from '../screens/home/fragments/statistics-massage';
 import { RW, RoleAuthority } from '../stores/auth/type';
 import { CustomerStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
+import { Score } from '../stores/flow/type';
 
 type StatusOperateConfig = {
   [key in CustomerStatus]: {
@@ -208,4 +209,17 @@ export const SolutionDefault = {
     count: 1,
     remark: '暂无',
   },
+};
+export const EvaluateStores: Score[] = [1, 2, 3, 4, 5];
+export const EvaluateStoreConfig: Record<Score, string> = {
+  // 1分：不满意
+  // 2分：一般
+  // 3分：满意
+  // 4分：很满意
+  // 5分：非常满意
+  1: '不满意',
+  2: '一般',
+  3: '满意',
+  4: '很满意',
+  5: '非常满意',
 };

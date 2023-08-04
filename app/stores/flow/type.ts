@@ -131,6 +131,7 @@ export interface FlowState {
 
   updateFollowUp: (data: Partial<FollowUp>) => void;
   updateNextTime: (data: Partial<NextTime>) => void;
+  updateEvaluate: (data: Pick<Evaluate, 'score' | 'remark'>) => void;
 
   getFlowOperatorConfigByUser: (status: CustomerStatus) => {
     configs: FlowOperatorConfigItem[];
@@ -204,11 +205,13 @@ export interface Analyze {
   updatedAt: Date;
 }
 
+export type Score = 1 | 2 | 3 | 4 | 5;
+
 export interface Evaluate {
   /**
    * 评分
    */
-  score: number;
+  score: Score;
   /**
    * 评价
    */
@@ -217,12 +220,12 @@ export interface Evaluate {
   /**
    * 评价人
    */
-  operatorId: string;
+  operatorId?: string;
 
   /**
    * 评价时间
    */
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 export type Flow = {

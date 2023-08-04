@@ -31,7 +31,6 @@ export default function Evaluate() {
     requestEvaluateCustomers();
   }, []);
 
-  console.log('Evaluate customers', customers);
   return (
     <Flex flex={1}>
       <Filter />

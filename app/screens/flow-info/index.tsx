@@ -101,7 +101,7 @@ export default function FlowInfo({
         <Column flex={1} ml={ls(10)}>
           <ScrollView>
             {from != 'evaluate' && <AnalyzeCard edit={from == 'analyze'} />}
-            {from == 'evaluate' && <EvaluateCard />}
+            {from == 'evaluate' && <EvaluateCard type='card' />}
           </ScrollView>
         </Column>
       </Row>

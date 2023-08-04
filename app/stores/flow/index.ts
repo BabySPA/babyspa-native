@@ -91,6 +91,8 @@ const useFlowStore = create(
       tag: '',
       flowId: '',
       shop: null,
+      analyst: null,
+      flowEvalute: null,
     },
 
     guidanceTemplate: [
@@ -591,6 +593,15 @@ const useFlowStore = create(
         state.currentFlow.analyze.next = {
           ...state.currentFlow.analyze.next,
           ...nextTime,
+        };
+      });
+    },
+
+    updateEvaluate: (evaluate) => {
+      return set((state) => {
+        state.currentFlow.evaluate = {
+          ...state.currentFlow.evaluate,
+          ...evaluate,
         };
       });
     },
