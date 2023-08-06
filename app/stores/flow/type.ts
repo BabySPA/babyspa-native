@@ -79,6 +79,8 @@ export interface FlowState {
   currentFlow: Flow;
   guidanceTemplate: Template[];
 
+  customersArchive: RegisterAndCollection;
+
   currentRegisterCustomer: RegisterCustomerInfo;
   currentFlowCustomer: Customer;
 
@@ -92,6 +94,8 @@ export interface FlowState {
   requestPatchCustomerInfo: () => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
   requestPatchFlowToAnalyze: () => Promise<any>;
+  // 客户档案
+  requestCustomersArchive: () => Promise<void>;
 
   requestPatchCustomerStatus: (data: {
     status: number;

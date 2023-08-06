@@ -4,7 +4,7 @@ import Analyze from '../screens/home/fragments/analyze';
 import Evaluate from '../screens/home/fragments/evaluate';
 import FollowUpVisit from '../screens/home/fragments/follow-up-visit';
 import Archive from '../screens/home/fragments/archive';
-import ShopCenter from '../screens/home/fragments/archive';
+import ShopCenter from '../screens/home/fragments/shop-center';
 import StatisticsVisit from '../screens/home/fragments/statistics-visit';
 import StatisticsShop from '../screens/home/fragments/statistics-shop';
 import StatisticsMassage from '../screens/home/fragments/statistics-massage';

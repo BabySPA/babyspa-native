@@ -65,6 +65,9 @@ const useFlowStore = create(
     analyze: defaultRegisterAndCollection,
     evaluate: defaultRegisterAndCollection,
     currentFlow: defaultFlow,
+
+    customersArchive: defaultRegisterAndCollection,
+
     operators: [],
 
     currentRegisterCustomer: {
@@ -157,6 +160,42 @@ const useFlowStore = create(
         set({
           register: {
             ...get().register,
+            customers: docs,
+            hasNextPage: hasNextPage,
+          },
+        });
+      });
+    },
+
+    requestCustomersArchive: async () => {
+      const {
+        customersArchive: { searchKeywords, status, startDate, endDate, page },
+      } = get();
+      const params: any = {
+        page: page,
+        pageSize: 100,
+      };
+      if (searchKeywords) {
+        params.search = searchKeywords;
+      }
+      if (status !== -1) {
+        params.status = status;
+      }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = startDate;
+      }
+
+      // TODO
+      params.shopId = '64c6120c3c4c6d15c1432802';
+
+      request.get('/customers', { params }).then(({ data }) => {
+        const { docs, hasNextPage } = data;
+        set({
+          customersArchive: {
+            ...get().customersArchive,
             customers: docs,
             hasNextPage: hasNextPage,
           },
