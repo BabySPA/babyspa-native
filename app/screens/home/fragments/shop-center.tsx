@@ -1,18 +1,7 @@
-import {
-  Box,
-  Flex,
-  Text,
-  ScrollView,
-  Icon,
-  Input,
-  Row,
-  Column,
-  Pressable,
-} from 'native-base';
-import { useEffect, useState } from 'react';
+import { Flex, Text, Column } from 'native-base';
+import { useEffect } from 'react';
 import useFlowStore from '~/app/stores/flow';
-import { ls, sp, ss } from '~/app/utils/style';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { ss } from '~/app/utils/style';
 import { useNavigation } from '@react-navigation/native';
 
 export default function ShopCenter() {

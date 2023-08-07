@@ -7,11 +7,13 @@ export enum RoleAuthority {
   CUSTOMER_FOLLOWUP = 2001, // 客户-随访
   MANAGER_SHOP = 3000, // 门店管理
   MANAGER_STAFF = 3001, // 员工管理
-  LOG_OPERATOR = 4000, // 操作日志
-  STATISTIC_SHOP = 5000, // 门店统计
-  STATISTIC_MASSAGE = 5001, // 调理统计
-  STATISTIC_ANALYZE = 5002, // 分析统计
-  STATISTIC_FOLLOWUP = 5002, // 随访统计
+  MANAGER_ROLE = 3002, // 角色管理
+  MANAGER_TEMPLATE = 3003, // 模板管理
+  MANAGER_LOGGER = 3004, // 操作日志
+  STATISTIC_SHOP = 4000, // 门店统计
+  STATISTIC_MASSAGE = 4001, // 调理统计
+  STATISTIC_ANALYZE = 4002, // 分析统计
+  STATISTIC_FOLLOWUP = 4003, // 随访统计
   ALL = 9999, // 全部
 }
 
