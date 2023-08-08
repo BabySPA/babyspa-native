@@ -1,8 +1,10 @@
-import { Flex, Text, Column } from 'native-base';
+import { Flex, Text, Column, Row } from 'native-base';
 import { useEffect } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ss } from '~/app/utils/style';
 import { useNavigation } from '@react-navigation/native';
+import ShopCenterHeader from '../components/shop-center-header';
+import ShopCenterBox from '../components/shop-center-box';
 
 export default function ShopCenter() {
   const navigation = useNavigation();
@@ -19,7 +21,14 @@ export default function ShopCenter() {
   return (
     <Flex flex={1}>
       <Column margin={ss(10)}>
-        <Text>门店中心</Text>
+        <ShopCenterHeader />
+        <Row flexWrap={'wrap'} mt={ss(10)}>
+          <ShopCenterBox />
+          <ShopCenterBox />
+          <ShopCenterBox />
+          <ShopCenterBox />
+          <ShopCenterBox />
+        </Row>
       </Column>
     </Flex>
   );

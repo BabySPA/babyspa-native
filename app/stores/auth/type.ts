@@ -35,6 +35,9 @@ export interface ShopsWithRole {
     name: string;
     address: string;
     region: string;
+    openingTime: string;
+    closingTime: string;
+    phoneNumber: string;
   };
   isGlobalAdmin: boolean;
 }

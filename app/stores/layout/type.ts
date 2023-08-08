@@ -6,6 +6,8 @@ export interface ILayoutConfig {
   selectedImage: ImageSourcePropType;
   text: string;
   featureSelected: number;
+  noTab?: boolean; // 是否不显示tab
+  fragment?: () => JSX.Element; // 若非tab layout，则需要传入fragment
   features: {
     text: string;
     fragment: () => JSX.Element;

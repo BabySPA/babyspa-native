@@ -50,7 +50,7 @@ export default create(
       set({ layoutConfig: filterConfig });
       return filterConfig;
     },
-    currentSelected: 1,
+    currentSelected: 2,
     changeCurrentSelected: (index: number) => {
       set({ currentSelected: index });
     },

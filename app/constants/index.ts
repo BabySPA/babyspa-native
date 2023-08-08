@@ -12,6 +12,11 @@ import { RW, RoleAuthority } from '../stores/auth/type';
 import { CustomerStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
 import { Score } from '../stores/flow/type';
+import ManagerShop from '../screens/manager/manager-shop';
+import ManagerUser from '../screens/manager/manager-user';
+import ManagerRole from '../screens/manager/manager-role';
+import ManagerTemplate from '../screens/manager/manager-template';
+import ManagerLogger from '../screens/manager/manager-logger';
 
 type StatusOperateConfig = {
   [key in CustomerStatus]: {
@@ -116,13 +121,35 @@ export const LayoutConfig: ILayoutConfig[] = [
   {
     image: require('~/assets/images/tab_03.png'),
     selectedImage: require('~/assets/images/tab_03_selected.png'),
+    noTab: true,
     text: '管理',
     featureSelected: 0,
+    fragment: ShopCenter,
     features: [
       {
-        text: '门店中心',
-        fragment: ShopCenter,
+        text: '门店管理',
+        fragment: ManagerShop,
         auth: RoleAuthority.MANAGER_SHOP,
+      },
+      {
+        text: '员工管理',
+        fragment: ManagerUser,
+        auth: RoleAuthority.MANAGER_STAFF,
+      },
+      {
+        text: '角色管理',
+        fragment: ManagerRole,
+        auth: RoleAuthority.MANAGER_ROLE,
+      },
+      {
+        text: '模版管理',
+        fragment: ManagerTemplate,
+        auth: RoleAuthority.MANAGER_TEMPLATE,
+      },
+      {
+        text: '操作日志',
+        fragment: ManagerLogger,
+        auth: RoleAuthority.MANAGER_LOGGER,
       },
     ],
   },

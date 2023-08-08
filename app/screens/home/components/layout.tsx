@@ -14,11 +14,18 @@ export default function Layout() {
   } = useLayoutConfigWithRole();
 
   const { logout, user, currentShopWithRole } = useAuthStore();
+  const currentSelectedModule = getLayoutConfig()[currentSelected];
 
   const Fragment = () => {
-    return getLayoutConfig()[currentSelected].features[
-      getLayoutConfig()[currentSelected].featureSelected
+    return currentSelectedModule.features[
+      currentSelectedModule.featureSelected
     ].fragment();
+  };
+
+  const NoTabFragment = () => {
+    return currentSelectedModule.fragment
+      ? currentSelectedModule.fragment()
+      : null;
   };
 
   return (
@@ -139,31 +146,34 @@ export default function Layout() {
         </Center>
       </Box>
       <Flex direction='column' flex={1}>
-        <Flex direction='row' justifyContent={'center'}>
-          {getLayoutConfig()[currentSelected].features.map((item, idx) => {
-            return (
-              <Pressable
-                key={idx}
-                p={ss(16)}
-                paddingRight={'8%'}
-                onPress={() => {
-                  changeFeatureSelected(idx);
-                }}>
-                <Center>
-                  <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
-                    {item.text}
-                  </Text>
-                  {getLayoutConfig()[currentSelected].featureSelected ==
-                    idx && (
-                    <Box w={ss(40)} h={ss(4)} bgColor={'white'} mt={ss(5)} />
-                  )}
-                </Center>
-              </Pressable>
-            );
-          })}
+        <Flex
+          direction='row'
+          justifyContent={'center'}
+          h={ss(70)}
+          alignItems={'center'}>
+          {!currentSelectedModule.noTab &&
+            currentSelectedModule.features.map((item, idx) => {
+              return (
+                <Pressable
+                  key={idx}
+                  paddingRight={'8%'}
+                  onPress={() => {
+                    changeFeatureSelected(idx);
+                  }}>
+                  <Center>
+                    <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
+                      {item.text}
+                    </Text>
+                    {currentSelectedModule.featureSelected == idx && (
+                      <Box w={ss(40)} h={ss(4)} bgColor={'white'} mt={ss(5)} />
+                    )}
+                  </Center>
+                </Pressable>
+              );
+            })}
         </Flex>
         <Flex bgColor={'#E6EEF1'} flex={1} borderTopLeftRadius={ss(10)}>
-          <Fragment />
+          {currentSelectedModule.noTab ? <NoTabFragment /> : <Fragment />}
         </Flex>
       </Flex>
     </Flex>
