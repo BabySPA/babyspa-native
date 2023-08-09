@@ -9,9 +9,7 @@ import EditBox from './components/edit-box';
 import InfoBox from './components/info-box';
 import { DialogModal } from '~/app/components/modals';
 
-export default function CustomerInfo({
-  navigation,
-}: AppStackScreenProps<'CustomerInfo'>) {
+export default function CustomerDetail({ navigation }: AppStackScreenProps<'CustomerDetail'>) {
   const {
     requestGetOperators,
     requestPatchCustomerStatus,

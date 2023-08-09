@@ -52,7 +52,7 @@ export type RootStackParamList = {
   RegisterCustomer: {
     type: CustomerScreenType;
   };
-  CustomerInfo: undefined;
+  CustomerDetail: undefined;
   Flow: {
     type: CustomerStatus;
   };
@@ -62,6 +62,11 @@ export type RootStackParamList = {
   Modal: undefined;
   NotFound: undefined;
   Camera: undefined;
+  ManagerLogger: undefined;
+  ManagerShop: undefined;
+  ManagerRole: undefined;
+  ManagerTemplate: undefined;
+  ManagerUser: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -72,7 +77,7 @@ export type AppStackList = {
   RegisterCustomer: {
     type: CustomerScreenType;
   };
-  CustomerInfo: undefined;
+  CustomerDetail: undefined;
   Flow: {
     type: CustomerStatus;
   };
@@ -80,6 +85,11 @@ export type AppStackList = {
     from: FlowFrom;
   };
   Camera: undefined;
+  ManagerLogger: undefined;
+  ManagerShop: undefined;
+  ManagerRole: undefined;
+  ManagerTemplate: undefined;
+  ManagerUser: undefined;
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =

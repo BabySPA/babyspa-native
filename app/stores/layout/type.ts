@@ -10,7 +10,7 @@ export interface ILayoutConfig {
   fragment?: () => JSX.Element; // 若非tab layout，则需要传入fragment
   features: {
     text: string;
-    fragment: () => JSX.Element;
+    fragment?: () => JSX.Element;
     auth: RoleAuthority;
   }[];
 }

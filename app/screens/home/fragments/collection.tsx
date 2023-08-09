@@ -50,7 +50,7 @@ export default function Collection() {
                   key={customer.id}
                   onPress={() => {
                     updateCurrentRegisterCustomer(customer);
-                    navigation.navigate('CustomerInfo');
+                    navigation.navigate('CustomerDetail');
                   }}>
                   <CustomerItem
                     customer={customer}

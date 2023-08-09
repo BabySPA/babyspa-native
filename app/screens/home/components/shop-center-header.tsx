@@ -10,6 +10,7 @@ export default function ShopCenterHeader() {
       <Image
         size={ss(100)}
         source={require('~/assets/images/shop-header.png')}
+        alt=''
       />
       <Column ml={ls(20)}>
         <Text color='#5EACA3' fontSize={sp(26)}>

@@ -50,7 +50,7 @@ export default function Register() {
                 onPress={() => {
                   updateCurrentRegisterCustomer(customer);
 
-                  navigation.navigate('CustomerInfo');
+                  navigation.navigate('CustomerDetail');
                 }}>
                 <CustomerItem customer={customer} type={OperateType.Register} />
               </Pressable>

@@ -1,4 +1,4 @@
-import { Box, Icon, IconButton, Row } from 'native-base';
+import { Box, Icon, IconButton, Pressable, Row } from 'native-base';
 import { ls, ss, sp } from '../utils/style';
 import { MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -34,24 +34,22 @@ export default function NavigationBar(props: NavigationBarParams) {
       alignItems={'center'}
       justifyContent={'space-between'}
       px={ss(20)}
-      py={ss(20)}
-    >
-      <Row alignItems={'center'}>
-        <IconButton
-          onPress={() => {
-            if (onBackIntercept()) return;
-            navigation.goBack();
-          }}
-          variant='ghost'
-          _icon={{
-            as: SimpleLineIcons,
-            name: 'arrow-left',
-            size: ss(20, { min: 14 }),
-            color: 'white',
-          }}
-        />
-        {leftElement}
-      </Row>
+      py={ss(20)}>
+      <Pressable
+        onPress={() => {
+          if (onBackIntercept()) return;
+          navigation.goBack();
+        }}>
+        <Row alignItems={'center'}>
+          <Icon
+            as={<SimpleLineIcons name='arrow-left' />}
+            size={ss(20, { min: 16 })}
+            color={'#FFF'}
+            mr={ls(10)}
+          />
+          {leftElement}
+        </Row>
+      </Pressable>
       {rightElement}
     </Row>
   );
