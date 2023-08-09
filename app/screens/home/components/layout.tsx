@@ -19,7 +19,7 @@ export default function Layout() {
   const Fragment = () => {
     return currentSelectedModule.features[
       currentSelectedModule.featureSelected
-    ].fragment();
+    ].fragment?.();
   };
 
   const NoTabFragment = () => {

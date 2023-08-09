@@ -6,21 +6,27 @@ import {
   Input,
   Pressable,
   Row,
-  ScrollView,
   Text,
+  Image,
+  Center,
+  Container,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { AppStackScreenProps } from '~/app/types';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import useManagerStore from '~/app/stores/manager';
 
 export default function ManagerShop({
   navigation,
 }: AppStackScreenProps<'ManagerShop'>) {
+  const { shops, requestGetShops, setCurrentShop } = useManagerStore();
 
-  
+  useEffect(() => {
+    requestGetShops();
+  }, []);
 
   const List = () => {
     return (
@@ -33,42 +39,126 @@ export default function ManagerShop({
           borderTopRadius={ss(10)}
           width={'100%'}
           justifyContent={'space-around'}>
-          <Box w={ls(90)}>
+          <Row w={ls(150)}>
             <Text fontSize={sp(18)} color={'#333'}>
               门店名称
             </Text>
-          </Box>
-          <Box w={ls(90)}>
+          </Row>
+          <Row w={ls(90)}>
             <Text fontSize={sp(18)} color={'#333'}>
               负责人
             </Text>
-          </Box>
-          <Box w={ls(140)}>
+          </Row>
+          <Row w={ls(140)}>
             <Text fontSize={sp(18)} color={'#333'}>
               所属区域
             </Text>
-          </Box>
-          <Box w={ls(140)}>
+          </Row>
+          <Row w={ls(140)}>
             <Text fontSize={sp(18)} color={'#333'}>
               详细地址
             </Text>
-          </Box>
-          <Box w={ls(140)}>
+          </Row>
+          <Row w={ls(140)}>
             <Text fontSize={sp(18)} color={'#333'}>
               联系电话
             </Text>
-          </Box>
-          <Box w={ls(140)}>
+          </Row>
+          <Row w={ls(140)}>
             <Text fontSize={sp(18)} color={'#333'}>
               营业时间
             </Text>
-          </Box>
-          <Box w={ls(140)}>
+          </Row>
+          <Row w={ls(150)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               操作
             </Text>
-          </Box>
+          </Row>
         </Row>
+        {shops.map((shop, idx) => {
+          return (
+            <Row
+              key={idx}
+              px={ls(40)}
+              h={ss(60)}
+              alignItems={'center'}
+              borderTopRadius={ss(10)}
+              width={'100%'}
+              borderBottomWidth={1}
+              borderBottomColor={'#DFE1DE'}
+              borderBottomStyle={'solid'}
+              justifyContent={'space-around'}>
+              <Row w={ls(150)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {shop.name}
+                </Text>
+              </Row>
+              <Row w={ls(90)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {shop.maintainer}
+                </Text>
+              </Row>
+              <Row w={ls(140)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {shop.region}
+                </Text>
+              </Row>
+              <Row w={ls(140)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {shop.address}
+                </Text>
+              </Row>
+              <Row w={ls(140)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {shop.phoneNumber}
+                </Text>
+              </Row>
+              <Row w={ls(140)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {shop.openingTime} - {shop.closingTime}
+                </Text>
+              </Row>
+              <Row w={ls(150)}>
+                <Row>
+                  <Pressable
+                    onPress={() => {
+                      setCurrentShop(shop);
+                      navigation.navigate('ShopDetail');
+                    }}>
+                    <Row alignItems={'center'}>
+                      <Image
+                        source={require('~/assets/images/list-detail.png')}
+                        size={ss(20)}
+                        alt=''
+                      />
+                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                        查看
+                      </Text>
+                    </Row>
+                  </Pressable>
+                  <Pressable
+                    ml={ls(24)}
+                    onPress={() => {
+                      // navigation.navigate('ManagerShopDetail', {
+                      //   shopId: shop.id,
+                      // });
+                    }}>
+                    <Row alignItems={'center'}>
+                      <Image
+                        source={require('~/assets/images/list-edit.png')}
+                        size={ss(20)}
+                        alt=''
+                      />
+                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                        编辑
+                      </Text>
+                    </Row>
+                  </Pressable>
+                </Row>
+              </Row>
+            </Row>
+          );
+        })}
       </Column>
     );
   };
@@ -103,21 +193,17 @@ export default function ManagerShop({
 }
 
 function Filter() {
-  const [showFilter, setShowFilter] = useState(false);
   const navigation = useNavigation();
+  const { setCurrentShop } = useManagerStore();
   return (
-    <Column bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
-        <Icon
-          as={<Ionicons name={'people'} />}
-          size={ss(40)}
-          color={'#5EACA3'}
-        />
-        <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
-          已登记：<Text color='#5EACA3'>7</Text>
-        </Text>
+    <Row
+      bgColor='white'
+      borderRadius={ss(10)}
+      justifyContent={'space-between'}
+      alignItems={'center'}
+      px={ls(40)}>
+      <Row py={ss(20)} alignItems={'center'}>
         <Input
-          ml={ls(30)}
           w={ls(240)}
           minH={ss(40, { max: 18 })}
           p={ss(8)}
@@ -132,66 +218,26 @@ function Filter() {
               ml={ss(10)}
             />
           }
-          placeholder='请输入客户姓名、手机号'
+          placeholder='请输入门店名称搜索'
         />
-        <Input
-          ml={ls(20)}
-          w={ls(160)}
-          minH={ss(40, { max: 18 })}
-          p={ss(8)}
-          placeholderTextColor={'#AFB0B4'}
-          color={'#333333'}
-          fontSize={ss(18)}
-          InputLeftElement={
-            <Icon
-              as={<MaterialIcons name='date-range' />}
-              size={ss(25)}
-              color='#AFB0B4'
-              ml={ss(10)}
-            />
-          }
-          value='2023-02-21'
-          isReadOnly
-        />
-        <Text mx={ls(10)} color='#333' fontSize={sp(16)}>
-          至
-        </Text>
-        <Input
-          ml={ls(20)}
-          w={ls(160)}
-          minH={ss(40, { max: 18 })}
-          p={ss(8)}
-          placeholderTextColor={'#AFB0B4'}
-          color={'#333333'}
-          fontSize={ss(18)}
-          InputLeftElement={
-            <Icon
-              as={<MaterialIcons name='date-range' />}
-              size={ss(25)}
-              color='#AFB0B4'
-              ml={ss(10)}
-            />
-          }
-          value='2023-02-21'
-          isReadOnly
-        />
-        <Pressable
-          onPress={() => {
-            setShowFilter(!showFilter);
-          }}>
-          <Row alignItems={'center'}>
-            <Icon
-              as={<FontAwesome name='filter' />}
-              size={ss(16)}
-              color='#00B49E'
-              ml={ss(10)}
-            />
-            <Text color='#00B49E' fontSize={sp(18)} ml={ls(4)}>
-              筛选
-            </Text>
-          </Row>
-        </Pressable>
       </Row>
-    </Column>
+      <Pressable
+        onPress={() => {
+          setCurrentShop(null);
+          navigation.navigate('ShopDetail');
+        }}>
+        <Row
+          bgColor={'#E1F6EF'}
+          borderRadius={ss(4)}
+          px={ls(26)}
+          py={ss(10)}
+          borderColor={'#15BD8F'}
+          borderWidth={1}>
+          <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
+            新增门店
+          </Text>
+        </Row>
+      </Pressable>
+    </Row>
   );
 }
