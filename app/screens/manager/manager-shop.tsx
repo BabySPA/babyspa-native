@@ -19,6 +19,9 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 export default function ManagerShop({
   navigation,
 }: AppStackScreenProps<'ManagerShop'>) {
+
+  
+
   const List = () => {
     return (
       <Column>
