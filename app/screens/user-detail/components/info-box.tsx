@@ -1,8 +1,21 @@
-import { Box, Column, Row, Text, Pressable } from 'native-base';
+import {
+  Box,
+  Column,
+  Row,
+  Text,
+  Pressable,
+  Image,
+  useToast,
+} from 'native-base';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import LabelBox from './label-box';
 import useManagerStore from '~/app/stores/manager';
+import { Gender } from '~/app/types';
+import { decodePassword, maskString } from '~/app/utils';
+import { DialogModal } from '~/app/components/modals';
+import { useState } from 'react';
+import { toastAlert } from '~/app/utils/toast';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
@@ -10,7 +23,9 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const { currentShop } = useManagerStore();
+  const { currentUser, requestPatchUserPassword } = useManagerStore();
+  const [isResetPassDialogOpen, setIsResetPassDialogOpen] = useState(false);
+  const toast = useToast();
   return (
     <Column
       flex={1}
@@ -19,25 +34,66 @@ export default function InfoBox(params: InfoBoxParams) {
       borderRadius={ss(10)}
       justifyContent={'space-between'}>
       <Column>
-        <BoxTitle title='门店信息' />
+        <BoxTitle title='员工信息' />
         <Box mt={ss(30)} px={ls(20)}>
           <Row alignItems={'center'}>
-            <LabelBox title='门店名称' value={currentShop?.name} />
-            <LabelBox title='负责人' value={currentShop?.maintainer} />
-          </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='联系电话' value={currentShop?.phoneNumber} />
-            <LabelBox title='所属区域' value={currentShop?.region} />
-          </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+            <LabelBox title='员工姓名' value={currentUser?.name} />
             <LabelBox
-              title='营业时间'
-              value={`${currentShop?.openingTime}至${currentShop?.closingTime}`}
+              title='性别'
+              value={currentUser?.gender == Gender.MAN ? '男' : '女'}
             />
-            <LabelBox title='详细地址' value={currentShop?.address} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='门店介绍' value={currentShop?.description} />
+            <LabelBox title='角色' value={currentUser?.role?.name} />
+            <LabelBox title='身份证号' value={currentUser?.idCardNumber} />
+          </Row>
+          <Row alignItems={'center'} mt={ss(40)}>
+            <LabelBox title='联系电话' value={currentUser?.phoneNumber} />
+            <LabelBox title='账号' value={currentUser?.username} />
+          </Row>
+          <Row alignItems={'center'} mt={ss(40)}>
+            <LabelBox title='所属门店' value={currentUser?.shop?.name} />
+
+            <LabelBox
+              title='密码'
+              value={maskString(decodePassword(currentUser?.password))}
+              rightElement={
+                <Pressable
+                  onPress={() => {
+                    setIsResetPassDialogOpen(true);
+                  }}>
+                  <Row alignItems={'center'} ml={ls(40)}>
+                    <Image
+                      alt=''
+                      source={require('~/assets/images/reset-pass.png')}
+                      size={ss(16)}
+                    />
+                    <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
+                      重置密码
+                    </Text>
+                    <DialogModal
+                      isOpen={isResetPassDialogOpen}
+                      title='确认重置密码为身份证后六位？'
+                      onClose={function (): void {
+                        setIsResetPassDialogOpen(false);
+                      }}
+                      onConfirm={function (): void {
+                        requestPatchUserPassword()
+                          .then(() => {
+                            toastAlert(toast, 'success', '重置密码成功');
+                          })
+                          .catch(() => {
+                            toastAlert(toast, 'error', '重置密码失败');
+                          })
+                          .finally(() => {
+                            setIsResetPassDialogOpen(false);
+                          });
+                      }}
+                    />
+                  </Row>
+                </Pressable>
+              }
+            />
           </Row>
         </Box>
       </Column>

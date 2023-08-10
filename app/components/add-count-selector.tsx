@@ -19,7 +19,7 @@ export default function AddCountSelector({
         }}>
         <Icon
           as={<AntDesign name='minuscircle' />}
-          size={ss(20, { min: 16 })}
+          size={ss(20)}
           color={'#99A9BF'}
         />
       </Pressable>
@@ -32,7 +32,7 @@ export default function AddCountSelector({
         }}>
         <Icon
           as={<AntDesign name='pluscircle' />}
-          size={ss(20, { min: 16 })}
+          size={ss(20)}
           color={'#99A9BF'}
         />
       </Pressable>

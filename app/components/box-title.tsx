@@ -10,7 +10,7 @@ export default function BoxTitle(props: BoxTitleParams) {
     <Row alignItems={'center'} justifyContent={'space-between'}>
       <Row alignItems={'center'}>
         <Box bgColor={'#00B49E'} w={ss(4)} h={ss(20)} />
-        <Text fontSize={sp(20, { min: 14 })} ml={ss(20)} color={'#000'}>
+        <Text fontSize={sp(20)} ml={ss(20)} color={'#000'}>
           {props.title}
         </Text>
       </Row>

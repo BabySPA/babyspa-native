@@ -22,8 +22,7 @@ export default function DatePickerModal({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-      }}
-    >
+      }}>
       <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
         <DatePicker
           options={{
@@ -42,31 +41,27 @@ export default function DatePickerModal({
             onPress={() => {
               onSelectedChange(currentSelectBirthday ?? '');
               onClose();
-            }}
-          >
+            }}>
             <Box
               bgColor={'#00B49E'}
               px={ls(26)}
               py={ss(12)}
               borderRadius={ss(8)}
-              _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-            >
+              _text={{ fontSize: ss(16), color: 'white' }}>
               确定
             </Box>
           </Pressable>
           <Pressable
             onPress={() => {
               onClose();
-            }}
-          >
+            }}>
             <Box
               bgColor={'#D8D8D8'}
               px={ls(26)}
               py={ss(12)}
               ml={ls(10)}
               borderRadius={ss(8)}
-              _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-            >
+              _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
               取消
             </Box>
           </Pressable>

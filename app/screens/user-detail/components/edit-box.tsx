@@ -19,6 +19,8 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
+import SelectShop from '~/app/components/select-shop';
+import { Shop } from '~/app/stores/manager/type';
 
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -34,6 +36,7 @@ export default function EditBox(params: EditBoxParams) {
     requestGetUsers,
     requestPatchUser,
     setCurrentUser,
+    shops,
   } = useManagerStore();
 
   const [tempUser, setTempUser] = useState(currentUser);
@@ -51,7 +54,7 @@ export default function EditBox(params: EditBoxParams) {
           <Row alignItems={'center'}>
             <FormBox
               title='员工姓名'
-              style={{ flex: 1, marginLeft: ls(20) }}
+              style={{ flex: 1 }}
               required
               form={
                 <Input
@@ -75,14 +78,18 @@ export default function EditBox(params: EditBoxParams) {
             />
             <FormBox
               title='性别'
-              style={{ marginTop: ss(20) }}
+              required
+              style={{ flex: 1 }}
               form={
                 <Radio.Group
                   value={`${tempUser.gender}`}
                   name='gender'
                   flexDirection={'row'}
                   onChange={(event) => {
-                    // updateCurrentRegisterCustomer({ gender: +event });
+                    setTempUser({
+                      ...(tempUser || {}),
+                      gender: +event,
+                    });
                   }}>
                   <Radio colorScheme='green' value='1' size={'sm'}>
                     男
@@ -94,104 +101,97 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          {/* <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(40)}>
+            <FormBox
+              required
+              title='所属门店'
+              style={{ flex: 1 }}
+              form={
+                <SelectShop
+                  onSelect={function (selectedItem: Shop, index: number): void {
+                    setTempUser({
+                      ...(tempUser || {}),
+                      shop: {
+                        shopId: selectedItem._id as string,
+                        name: selectedItem.name,
+                      },
+                    });
+                  }}
+                  defaultButtonText={shops[0]?.name || '请选择门店'}
+                  buttonHeight={ss(40)}
+                  buttonWidth={ls(380)}
+                />
+              }
+            />
+            <FormBox
+              required
+              title='角色'
+              style={{ flex: 1 }}
+              form={
+                <Box flex={1}>
+                  <Pressable onPress={() => {}}>
+                    <Row
+                      borderRadius={ss(10)}
+                      justifyContent={'space-between'}
+                      alignItems={'center'}
+                      borderWidth={1}
+                      borderColor={'#D8D8D8'}
+                      py={ss(10)}
+                      px={ss(20)}>
+                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                        {tempUser.role?.name || '请选择'}
+                      </Text>
+                      <Icon
+                        as={<FontAwesome name='angle-down' />}
+                        size={ss(18, { min: 15 })}
+                        color='#999'
+                      />
+                    </Row>
+                  </Pressable>
+                </Box>
+              }
+            />
+          </Row>
+          <Row alignItems={'center'} mt={ss(40)}>
             <FormBox
               required
               title='联系电话'
-              style={{ flex: 1, marginLeft: ls(20) }}
+              style={{ flex: 1 }}
               form={
                 <Input
+                  defaultValue={tempUser.phoneNumber}
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
-                  defaultValue={tempShop.phoneNumber}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
-                  placeholder='请输入'
                   onChangeText={(text) => {
-                    setTempShop({
-                      ...tempShop,
+                    setTempUser({
+                      ...tempUser,
                       phoneNumber: text,
                     });
                   }}
+                  placeholderTextColor={'#CCC'}
+                  color={'#333333'}
+                  fontSize={sp(16, { min: 12 })}
+                  placeholder='请输入'
                 />
               }
             />
             <FormBox
-              title='所属区域'
-              style={{ flex: 1, marginLeft: ls(20) }}
               required
-              form={
-                <Box flex={1}>
-                  <Pressable onPress={() => {}}>
-                    <Row
-                      borderRadius={ss(10)}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      borderWidth={1}
-                      borderColor={'#D8D8D8'}
-                      py={ss(10)}
-                      px={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                        {tempShop.region || '请选择'}
-                      </Text>
-                      <Icon
-                        as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
-                        color='#999'
-                      />
-                    </Row>
-                  </Pressable>
-                </Box>
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
-            <FormBox
-              required
-              title='营业时间'
-              style={{ flex: 1, marginLeft: ls(20) }}
-              form={
-                <Box flex={1}>
-                  <Pressable onPress={() => {}}>
-                    <Row
-                      borderRadius={ss(10)}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      borderWidth={1}
-                      borderColor={'#D8D8D8'}
-                      py={ss(10)}
-                      px={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                        {tempShop.region || '请选择'}
-                      </Text>
-                      <Icon
-                        as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
-                        color='#999'
-                      />
-                    </Row>
-                  </Pressable>
-                </Box>
-              }
-            />
-            <FormBox
-              required
-              title='详细地址'
-              style={{ flex: 1, marginLeft: ls(20) }}
+              title='账号'
+              style={{ flex: 1 }}
               form={
                 <Input
-                  defaultValue={tempShop.address}
+                  defaultValue={tempUser.username}
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
                   onChangeText={(text) => {
-                    setTempShop({
-                      ...tempShop,
-                      address: text,
+                    setTempUser({
+                      ...tempUser,
+                      username: text,
                     });
                   }}
                   placeholderTextColor={'#CCC'}
@@ -204,18 +204,45 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <FormBox
-              title='门店介绍'
+              required
+              title='身份证号'
+              style={{ flex: 1 }}
+              form={
+                <Input
+                  defaultValue={tempUser.idCardNumber}
+                  w={ls(380)}
+                  h={ss(48, { min: 26 })}
+                  py={ss(10)}
+                  px={ls(20)}
+                  onChangeText={(text) => {
+                    setTempUser({
+                      ...tempUser,
+                      idCardNumber: text,
+                    });
+                  }}
+                  placeholderTextColor={'#CCC'}
+                  color={'#333333'}
+                  fontSize={sp(16, { min: 12 })}
+                  placeholder='请输入'
+                />
+              }
+            />
+          </Row>
+          <Row alignItems={'center'} mt={ss(40)}>
+            <FormBox
+              required
+              title='员工简介'
               style={{ alignItems: 'flex-start', flex: 1 }}
               form={
                 <Input
-                  defaultValue={tempShop.description}
+                  defaultValue={tempUser.description}
                   flex={1}
                   h={ss(128)}
                   py={ss(10)}
                   px={ls(20)}
                   onChangeText={(text) => {
-                    setTempShop({
-                      ...tempShop,
+                    setTempUser({
+                      ...tempUser,
                       description: text,
                     });
                   }}
@@ -227,7 +254,7 @@ export default function EditBox(params: EditBoxParams) {
                 />
               }
             />
-          </Row> */}
+          </Row>
         </Box>
       </Column>
 
@@ -254,39 +281,38 @@ export default function EditBox(params: EditBoxParams) {
           onPress={() => {
             if (loading) return;
 
-            // setLoading(true);
+            setLoading(true);
 
-            // setCurrentShop(tempShop);
+            setCurrentUser(tempUser);
 
-            // if (tempShop._id) {
-            //   // 修改门店信息
-            //   requestPatchShop()
-            //     .then(async (res) => {
-            //       await requestGetShops();
-            //       toastAlert(toast, 'success', '修改门店信息成功！');
-            //       params.onEditFinish();
-            //     })
-            //     .catch((err) => {
-            //       toastAlert(toast, 'error', '修改门店信息失败！');
-            //     })
-            //     .finally(() => {
-            //       setLoading(false);
-            //     });
-            // } else {
-            //   // 新增门店信息
-            //   requestPostShop()
-            //     .then(async (res) => {
-            //       await requestGetShops();
-            //       toastAlert(toast, 'success', '新增门店成功！');
-            //       params.onEditFinish();
-            //     })
-            //     .catch((err) => {
-            //       toastAlert(toast, 'error', '新增门店失败！');
-            //     })
-            //     .finally(() => {
-            //       setLoading(false);
-            //     });
-            // }
+            if (tempUser._id) {
+              // 修改门店信息
+              requestPatchUser()
+                .then(async (res) => {
+                  toastAlert(toast, 'success', '修改员工信息成功！');
+                  params.onEditFinish();
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '修改员工信息失败！');
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            } else {
+              // 新增门店信息
+              requestPostUser()
+                .then(async (res) => {
+                  // await requestGetShops();
+                  toastAlert(toast, 'success', '新增员工成功！');
+                  params.onEditFinish();
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '新增员工失败！');
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            }
           }}>
           <Row
             px={ls(34)}

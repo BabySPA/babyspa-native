@@ -26,7 +26,11 @@ export interface User {
   gender: number;
   phoneNumber: string;
   idCardNumber: string;
-  shopId?: string;
+  password: string;
+  shop?: {
+    shopId: string;
+    name: string;
+  };
   role?: {
     name: string;
     roleKey: string;
@@ -54,6 +58,7 @@ export interface ManangerState {
   requestGetUsers: (shopId: string) => Promise<any>;
   requestPostUser: () => Promise<any>;
   requestPatchUser: () => Promise<any>;
+  requestPatchUserPassword: (password?: string) => Promise<any>;
 
   // action
   setCurrentUser: (user: User) => void;

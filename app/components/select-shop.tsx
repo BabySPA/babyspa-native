@@ -2,20 +2,26 @@ import SelectDropdown from 'react-native-select-dropdown';
 import { ss, ls, sp } from '../utils/style';
 import { Icon } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
+import useManagerStore from '../stores/manager';
+import { useEffect } from 'react';
 
 export default function SelectShop({
-  shops,
   onSelect,
   defaultButtonText,
   buttonHeight,
   buttonWidth,
 }: {
-  shops: any;
   onSelect: (selectedItem: any, index: number) => void;
   defaultButtonText: string;
   buttonHeight?: number;
   buttonWidth?: number;
 }) {
+  const { shops, requestGetShops } = useManagerStore();
+
+  useEffect(() => {
+    requestGetShops();
+  }, []);
+
   return (
     <SelectDropdown
       data={shops}

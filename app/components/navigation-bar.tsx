@@ -41,12 +41,14 @@ export default function NavigationBar(props: NavigationBarParams) {
           navigation.goBack();
         }}>
         <Row alignItems={'center'}>
-          <Icon
-            as={<SimpleLineIcons name='arrow-left' />}
-            size={ss(20, { min: 16 })}
-            color={'#FFF'}
-            mr={ls(10)}
-          />
+          {hasLeftIcon && (
+            <Icon
+              as={<SimpleLineIcons name='arrow-left' />}
+              size={ss(20)}
+              color={'#FFF'}
+              mr={ls(10)}
+            />
+          )}
           {leftElement}
         </Row>
       </Pressable>

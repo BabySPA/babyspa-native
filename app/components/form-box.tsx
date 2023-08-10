@@ -18,7 +18,7 @@ export function FormBox(props: FormBoxParams) {
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>
-        <Text fontSize={sp(20, { min: 12 })} color='#333'>
+        <Text fontSize={sp(20, { min: 12 })} width={ls(80)} color='#333'>
           {title}
         </Text>
       </Row>

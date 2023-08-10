@@ -4,10 +4,12 @@ import { sp, ls } from '~/app/utils/style';
 export default function LabelBox({
   title,
   value,
+  rightElement,
   flex,
 }: {
   title: string;
   value: string | undefined;
+  rightElement?: React.ReactNode;
   flex?: number;
 }) {
   return (
@@ -18,6 +20,7 @@ export default function LabelBox({
       <Text fontSize={sp(20)} color='#333'>
         {value}
       </Text>
+      {rightElement}
     </Row>
   );
 }

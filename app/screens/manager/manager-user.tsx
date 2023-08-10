@@ -128,8 +128,8 @@ export default function ManagerUser({
                 <Row>
                   <Pressable
                     onPress={() => {
-                      // setCurrentShop(shop);
-                      // navigation.navigate('ShopDetail', { type: 'detail' });
+                      setCurrentUser(user);
+                      navigation.navigate('UserDetail', { type: 'detail' });
                     }}>
                     <Row alignItems={'center'}>
                       <Image
@@ -145,8 +145,8 @@ export default function ManagerUser({
                   <Pressable
                     ml={ls(24)}
                     onPress={() => {
-                      // setCurrentShop(shop);
-                      // navigation.navigate('ShopDetail', { type: 'edit' });
+                      setCurrentUser(user);
+                      navigation.navigate('UserDetail', { type: 'edit' });
                     }}>
                     <Row alignItems={'center'}>
                       <Image
@@ -236,7 +236,6 @@ function Filter({ onSelect }: { onSelect: (shop: Shop) => void }) {
           placeholder='请输入员工名称搜索'
         />
         <SelectShop
-          shops={shops}
           onSelect={function (selectedItem: any, index: number): void {
             onSelect(shops[index]);
           }}

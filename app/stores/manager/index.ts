@@ -21,6 +21,11 @@ export const DefaultUser = {
   gender: 1,
   phoneNumber: '',
   idCardNumber: '',
+  password: '',
+  shop: {
+    shopId: '',
+    name: '',
+  },
   role: {
     name: '',
     roleKey: '',
@@ -68,21 +73,15 @@ const useManagerStore = create(
       const shop = get().currentShop;
       return request.patch(`/users/${shop._id}`, get().currentUser);
     },
+    requestPatchUserPassword: async (password) => {
+      const user = get().currentUser;
+      return request.patch(`/users/password/${user._id}`, { password });
+    },
     setCurrentUser: (user) => {
       set((state) => {
         state.currentUser = user;
       });
     },
-
-    // register: defaultRegisterAndCollection,
-    // updateEvaluate: (evaluate) => {
-    //   return set((state) => {
-    //     state.currentFlow.evaluate = {
-    //       ...state.currentFlow.evaluate,
-    //       ...evaluate,
-    //     };
-    //   });
-    // },
   })),
 );
 
