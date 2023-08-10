@@ -67,7 +67,12 @@ export type RootStackParamList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
-  ShopDetail: undefined;
+  ShopDetail: {
+    type: 'edit' | 'detail';
+  };
+  UserDetail: {
+    type: 'edit' | 'detail';
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -91,7 +96,12 @@ export type AppStackList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
-  ShopDetail: undefined;
+  ShopDetail: {
+    type: 'edit' | 'detail';
+  };
+  UserDetail: {
+    type: 'edit' | 'detail';
+  };
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =

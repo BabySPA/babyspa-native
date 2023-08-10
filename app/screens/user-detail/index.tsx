@@ -1,4 +1,4 @@
-import { Box, Text, Row, useToast } from 'native-base';
+import { Box, Text, Row } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss } from '~/app/utils/style';
@@ -8,13 +8,13 @@ import useManagerStore from '~/app/stores/manager';
 import dayjs from 'dayjs';
 import EditBox from './components/edit-box';
 
-export default function ShopDetail({
+export default function UserDetail({
   navigation,
   route: { params },
-}: AppStackScreenProps<'ShopDetail'>) {
-  const { currentShop } = useManagerStore();
+}: AppStackScreenProps<'UserDetail'>) {
+  const { currentUser } = useManagerStore();
 
-  const [edit, setEdit] = useState(params.type === 'edit' || !currentShop._id);
+  const [edit, setEdit] = useState(params.type === 'edit' || !currentUser._id);
 
   return (
     <Box flex={1}>
@@ -22,7 +22,7 @@ export default function ShopDetail({
         onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
-            {currentShop._id ? '门店详情' : '新增门店'}
+            {currentUser._id ? '员工详情' : '新增员工'}
           </Text>
         }
         rightElement={

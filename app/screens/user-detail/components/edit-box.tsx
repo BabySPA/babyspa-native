@@ -14,14 +14,10 @@ import {
 } from 'native-base';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
-import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
-import { CustomerStatus } from '~/app/types';
-import SelectOperator from '~/app/components/select-operator';
 import useManagerStore from '~/app/stores/manager';
 
 interface EditBoxParams {
@@ -33,14 +29,14 @@ export default function EditBox(params: EditBoxParams) {
   const [loading, setLoading] = useState(false);
 
   const {
-    currentShop,
-    requestPostShop,
-    requestGetShops,
-    requestPatchShop,
-    setCurrentShop,
+    currentUser,
+    requestPostUser,
+    requestGetUsers,
+    requestPatchUser,
+    setCurrentUser,
   } = useManagerStore();
 
-  const [tempShop, setTempShop] = useState(currentShop);
+  const [tempUser, setTempUser] = useState(currentUser);
 
   return (
     <Column
@@ -50,11 +46,11 @@ export default function EditBox(params: EditBoxParams) {
       borderRadius={ss(10)}
       justifyContent={'space-between'}>
       <Column>
-        <BoxTitle title={'门店信息'} />
+        <BoxTitle title={'员工信息'} />
         <Box mt={ss(30)} px={ls(20)}>
           <Row alignItems={'center'}>
             <FormBox
-              title='门店名称'
+              title='员工姓名'
               style={{ flex: 1, marginLeft: ls(20) }}
               required
               form={
@@ -63,14 +59,14 @@ export default function EditBox(params: EditBoxParams) {
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
-                  defaultValue={tempShop.name}
+                  defaultValue={tempUser.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16, { min: 12 })}
                   placeholder='请输入'
                   onChangeText={(text) => {
-                    setTempShop({
-                      ...(tempShop || {}),
+                    setTempUser({
+                      ...(tempUser || {}),
                       name: text,
                     });
                   }}
@@ -78,31 +74,27 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
-              title='负责人'
-              required
-              style={{ flex: 1, marginLeft: ls(20) }}
+              title='性别'
+              style={{ marginTop: ss(20) }}
               form={
-                <Input
-                  flex={1}
-                  h={ss(48, { min: 26 })}
-                  py={ss(10)}
-                  px={ls(20)}
-                  defaultValue={tempShop.maintainer}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
-                  placeholder='请输入'
-                  onChangeText={(text) => {
-                    setTempShop({
-                      ...tempShop,
-                      maintainer: text,
-                    });
-                  }}
-                />
+                <Radio.Group
+                  value={`${tempUser.gender}`}
+                  name='gender'
+                  flexDirection={'row'}
+                  onChange={(event) => {
+                    // updateCurrentRegisterCustomer({ gender: +event });
+                  }}>
+                  <Radio colorScheme='green' value='1' size={'sm'}>
+                    男
+                  </Radio>
+                  <Radio colorScheme='green' value='0' ml={ls(40)} size={'sm'}>
+                    女
+                  </Radio>
+                </Radio.Group>
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          {/* <Row alignItems={'center'} mt={ss(40)}>
             <FormBox
               required
               title='联系电话'
@@ -235,7 +227,7 @@ export default function EditBox(params: EditBoxParams) {
                 />
               }
             />
-          </Row>
+          </Row> */}
         </Box>
       </Column>
 
@@ -262,55 +254,38 @@ export default function EditBox(params: EditBoxParams) {
           onPress={() => {
             if (loading) return;
 
-            setLoading(true);
+            // setLoading(true);
 
-            setCurrentShop(tempShop);
+            // setCurrentShop(tempShop);
 
-            if (tempShop._id) {
-              // 修改门店信息
-              requestPatchShop()
-                .then(async (res) => {
-                  await requestGetShops();
-                  toastAlert(toast, 'success', '修改门店信息成功！');
-                  params.onEditFinish();
-                })
-                .catch((err) => {
-                  toastAlert(toast, 'error', '修改门店信息失败！');
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            } else {
-              // 新增门店信息
-              requestPostShop()
-                .then(async (res) => {
-                  await requestGetShops();
-                  toastAlert(toast, 'success', '新增门店成功！');
-                  params.onEditFinish();
-                })
-                .catch((err) => {
-                  toastAlert(toast, 'error', '新增门店失败！');
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            }
-
-            // if (tempCustomer.status === CustomerStatus.Canceled) {
-            //   requestPostCustomerInfo()
+            // if (tempShop._id) {
+            //   // 修改门店信息
+            //   requestPatchShop()
             //     .then(async (res) => {
-            //       await requestInitializeData();
-            //       toastAlert(toast, 'success', '再次登记客户信息成功！');
+            //       await requestGetShops();
+            //       toastAlert(toast, 'success', '修改门店信息成功！');
             //       params.onEditFinish();
             //     })
             //     .catch((err) => {
-            //       toastAlert(toast, 'error', '再次登记客户信息失败！');
+            //       toastAlert(toast, 'error', '修改门店信息失败！');
             //     })
             //     .finally(() => {
             //       setLoading(false);
             //     });
             // } else {
-
+            //   // 新增门店信息
+            //   requestPostShop()
+            //     .then(async (res) => {
+            //       await requestGetShops();
+            //       toastAlert(toast, 'success', '新增门店成功！');
+            //       params.onEditFinish();
+            //     })
+            //     .catch((err) => {
+            //       toastAlert(toast, 'error', '新增门店失败！');
+            //     })
+            //     .finally(() => {
+            //       setLoading(false);
+            //     });
             // }
           }}>
           <Row

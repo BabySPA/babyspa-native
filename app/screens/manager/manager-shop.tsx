@@ -8,16 +8,14 @@ import {
   Row,
   Text,
   Image,
-  Center,
-  Container,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { AppStackScreenProps } from '~/app/types';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import useManagerStore from '~/app/stores/manager';
+import { MaterialIcons } from '@expo/vector-icons';
+import useManagerStore, { DefaultShop } from '~/app/stores/manager';
 
 export default function ManagerShop({
   navigation,
@@ -123,7 +121,7 @@ export default function ManagerShop({
                   <Pressable
                     onPress={() => {
                       setCurrentShop(shop);
-                      navigation.navigate('ShopDetail');
+                      navigation.navigate('ShopDetail', { type: 'detail' });
                     }}>
                     <Row alignItems={'center'}>
                       <Image
@@ -139,9 +137,8 @@ export default function ManagerShop({
                   <Pressable
                     ml={ls(24)}
                     onPress={() => {
-                      // navigation.navigate('ManagerShopDetail', {
-                      //   shopId: shop.id,
-                      // });
+                      setCurrentShop(shop);
+                      navigation.navigate('ShopDetail', { type: 'edit' });
                     }}>
                     <Row alignItems={'center'}>
                       <Image
@@ -223,8 +220,8 @@ function Filter() {
       </Row>
       <Pressable
         onPress={() => {
-          setCurrentShop(null);
-          navigation.navigate('ShopDetail');
+          setCurrentShop(DefaultShop);
+          navigation.navigate('ShopDetail', { type: 'edit' });
         }}>
         <Row
           bgColor={'#E1F6EF'}
