@@ -66,6 +66,122 @@ export const StatusTextConfig = {
   },
 };
 
+export interface IConfigAuth {
+  text: string;
+  hasAuth: boolean;
+  isOpen: boolean;
+  features: {
+    text: string;
+    hasAuth: boolean;
+    auth: RoleAuthority;
+  }[];
+}
+export const ConfigAuthTree: IConfigAuth[] = [
+  {
+    text: '门店',
+    hasAuth: true,
+    isOpen: true,
+    features: [
+      {
+        text: '信息登记',
+        hasAuth: true,
+        auth: RoleAuthority.FLOW_REGISTER,
+      },
+      {
+        text: '信息采集',
+        hasAuth: true,
+        auth: RoleAuthority.FLOW_COLLECTION,
+      },
+      {
+        text: '信息分析',
+        hasAuth: true,
+        auth: RoleAuthority.FLOW_ANALYZE,
+      },
+      {
+        text: '评价反馈',
+        hasAuth: true,
+        auth: RoleAuthority.FLOW_EVALUATE,
+      },
+    ],
+  },
+  {
+    text: '客户',
+    hasAuth: true,
+    isOpen: true,
+    features: [
+      {
+        text: '客户档案',
+        hasAuth: true,
+        auth: RoleAuthority.CUSTOMER_ARCHIVE,
+      },
+      {
+        text: '客户随访',
+        hasAuth: true,
+        auth: RoleAuthority.CUSTOMER_FOLLOWUP,
+      },
+    ],
+  },
+  {
+    text: '管理',
+    hasAuth: true,
+    isOpen: true,
+    features: [
+      {
+        text: '门店管理',
+        auth: RoleAuthority.MANAGER_SHOP,
+        hasAuth: true,
+      },
+      {
+        text: '员工管理',
+        auth: RoleAuthority.MANAGER_STAFF,
+        hasAuth: true,
+      },
+      {
+        text: '角色管理',
+        auth: RoleAuthority.MANAGER_ROLE,
+        hasAuth: true,
+      },
+      {
+        text: '模版管理',
+        auth: RoleAuthority.MANAGER_TEMPLATE,
+        hasAuth: true,
+      },
+      {
+        text: '操作日志',
+        auth: RoleAuthority.MANAGER_LOGGER,
+        hasAuth: true,
+      },
+    ],
+  },
+  {
+    text: '统计',
+    hasAuth: true,
+    isOpen: true,
+    features: [
+      {
+        text: '门店统计',
+        auth: RoleAuthority.STATISTIC_SHOP,
+        hasAuth: true,
+      },
+      {
+        text: '调理统计',
+        auth: RoleAuthority.STATISTIC_MASSAGE,
+        hasAuth: true,
+      },
+      {
+        text: '分析统计',
+        auth: RoleAuthority.STATISTIC_ANALYZE,
+        hasAuth: true,
+      },
+      {
+        text: '随访统计',
+        auth: RoleAuthority.STATISTIC_FOLLOWUP,
+        hasAuth: true,
+      },
+    ],
+  },
+];
+
 export const LayoutConfig: ILayoutConfig[] = [
   {
     image: require('~/assets/images/tab_01.png'),
@@ -74,7 +190,7 @@ export const LayoutConfig: ILayoutConfig[] = [
     featureSelected: 0,
     features: [
       {
-        text: '登记',
+        text: '信息登记',
         fragment: Register,
         auth: RoleAuthority.FLOW_REGISTER,
       },

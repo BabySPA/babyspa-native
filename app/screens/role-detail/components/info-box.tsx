@@ -10,14 +10,14 @@ import {
 } from 'native-base';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import LabelBox from '~/app/components/label-box';
 import useManagerStore from '~/app/stores/manager';
-import { Gender } from '~/app/types';
-import { decodePassword, maskString } from '~/app/utils';
 import { DialogModal } from '~/app/components/modals';
 import { useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 import { useNavigation } from '@react-navigation/native';
+import LabelBox from '~/app/components/label-box';
+import { RoleStatus } from '~/app/stores/manager/type';
+import { generateRuleAuthText } from '~/app/utils';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
@@ -25,13 +25,7 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const {
-    currentUser,
-    requestPatchUserPassword,
-    requestGetUsers,
-    requestDeleteUser,
-  } = useManagerStore();
-  const [isResetPassDialogOpen, setIsResetPassDialogOpen] = useState(false);
+  const { currentRole, requestDeleteRole, requestGetRoles } = useManagerStore();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const toast = useToast();
@@ -46,7 +40,7 @@ export default function InfoBox(params: InfoBoxParams) {
       justifyContent={'space-between'}>
       <Column>
         <BoxTitle
-          title='员工信息'
+          title='角色信息'
           rightElement={
             <Pressable
               onPress={() => {
@@ -69,62 +63,19 @@ export default function InfoBox(params: InfoBoxParams) {
         />
         <Box mt={ss(30)} px={ls(20)}>
           <Row alignItems={'center'}>
-            <LabelBox title='员工姓名' value={currentUser?.name} />
+            <LabelBox title='角色名称' value={currentRole?.name} />
             <LabelBox
-              title='性别'
-              value={currentUser?.gender == Gender.MAN ? '男' : '女'}
+              title='状态'
+              value={currentRole.status == RoleStatus.OPEN ? '启用' : '禁用'}
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='角色' value={currentUser?.role?.name} />
-            <LabelBox title='身份证号' value={currentUser?.idCardNumber} />
+            <LabelBox title='角色说明' value={currentRole?.description} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='联系电话' value={currentUser?.phoneNumber} />
-            <LabelBox title='账号' value={currentUser?.username} />
-          </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='所属门店' value={currentUser?.shop?.name} />
-
             <LabelBox
-              title='密码'
-              value={maskString(decodePassword(currentUser?.password))}
-              rightElement={
-                <Pressable
-                  onPress={() => {
-                    setIsResetPassDialogOpen(true);
-                  }}>
-                  <Row alignItems={'center'} ml={ls(40)}>
-                    <Image
-                      alt=''
-                      source={require('~/assets/images/reset-pass.png')}
-                      size={ss(16)}
-                    />
-                    <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
-                      重置密码
-                    </Text>
-                    <DialogModal
-                      isOpen={isResetPassDialogOpen}
-                      title='确认重置密码为身份证后六位？'
-                      onClose={function (): void {
-                        setIsResetPassDialogOpen(false);
-                      }}
-                      onConfirm={function (): void {
-                        requestPatchUserPassword()
-                          .then(() => {
-                            toastAlert(toast, 'success', '重置密码成功');
-                          })
-                          .catch(() => {
-                            toastAlert(toast, 'error', '重置密码失败');
-                          })
-                          .finally(() => {
-                            setIsResetPassDialogOpen(false);
-                          });
-                      }}
-                    />
-                  </Row>
-                </Pressable>
-              }
+              title='功能权限'
+              value={generateRuleAuthText(currentRole?.authorities)}
             />
           </Row>
         </Box>
@@ -169,22 +120,22 @@ export default function InfoBox(params: InfoBoxParams) {
         onClose={function (): void {
           setIsDeleteDialogOpen(false);
         }}
-        title='是否确认删除门店员工？'
+        title='是否确认删除该角色，所有配置该角色的员工可能会出现问题，请谨慎操作！'
         onConfirm={function (): void {
           setIsDeleteDialogOpen(false);
           if (deleteLoading) return;
           setDeleteLoading(true);
 
-          requestDeleteUser()
+          requestDeleteRole()
             .then(async (res) => {
               // 取消成功
-              requestGetUsers();
-              toastAlert(toast, 'success', '删除员工成功！');
+              requestGetRoles();
+              toastAlert(toast, 'success', '删除角色成功！');
               navigation.goBack();
             })
             .catch((err) => {
               // 取消失败
-              toastAlert(toast, 'error', '删除员工失败！');
+              toastAlert(toast, 'error', '删除角色失败！');
             })
             .finally(() => {
               setDeleteLoading(false);

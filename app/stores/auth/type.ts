@@ -1,3 +1,6 @@
+/**
+ * Auth store type
+ */
 export enum RoleAuthority {
   FLOW_REGISTER = 1000, // 门店信息登记
   FLOW_COLLECTION = 1001, // 门店信息采集
@@ -14,7 +17,6 @@ export enum RoleAuthority {
   STATISTIC_MASSAGE = 4001, // 调理统计
   STATISTIC_ANALYZE = 4002, // 分析统计
   STATISTIC_FOLLOWUP = 4003, // 随访统计
-  ALL = 9999, // 全部
 }
 
 export type RW = 'RW' | 'R';
@@ -39,7 +41,6 @@ export interface ShopsWithRole {
     closingTime: string;
     phoneNumber: string;
   };
-  isGlobalAdmin: boolean;
 }
 
 export interface AuthState {

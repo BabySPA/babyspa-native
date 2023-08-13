@@ -22,17 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function ManagerUser({
   navigation,
 }: AppStackScreenProps<'ManagerUser'>) {
-  const { users, requestGetUsers, setCurrentUser, shops } = useManagerStore();
-
-  useEffect(() => {
-    if (shops[0]?._id) {
-      requestGetUsers(shops[0]?._id ?? '');
-    }
-  }, [shops]);
-
-  const onSelectShop = (shop: Shop) => {
-    requestGetUsers(shop._id ?? '');
-  };
+  const { users, setCurrentUser, userFilter } = useManagerStore();
 
   const List = () => {
     return (
@@ -189,11 +179,7 @@ export default function ManagerUser({
         flex={1}
         p={ss(10)}
         safeAreaBottom>
-        <Filter
-          onSelect={function (shop: Shop): void {
-            onSelectShop(shop);
-          }}
-        />
+        <Filter />
         <Box mt={ss(10)}>
           <List />
         </Box>
@@ -202,13 +188,34 @@ export default function ManagerUser({
   );
 }
 
-function Filter({ onSelect }: { onSelect: (shop: Shop) => void }) {
+function Filter() {
   const navigation = useNavigation();
-  const { shops, requestGetShops, setCurrentUser } = useManagerStore();
+  const {
+    shops,
+    requestGetShops,
+    setCurrentUser,
+    requestGetUsers,
+    userFilter,
+    setUserFilter,
+  } = useManagerStore();
 
   useEffect(() => {
     requestGetShops();
   }, []);
+
+  useEffect(() => {
+    if (shops[0]) {
+      setUserFilter({
+        ...userFilter,
+        shop: {
+          id: shops[0]._id as string,
+          name: shops[0].name,
+        },
+      });
+      requestGetUsers();
+    }
+  }, [shops]);
+
   return (
     <Row
       bgColor='white'
@@ -234,12 +241,26 @@ function Filter({ onSelect }: { onSelect: (shop: Shop) => void }) {
             />
           }
           placeholder='请输入员工名称搜索'
+          onChangeText={(text) => {
+            setUserFilter({
+              ...userFilter,
+              name: text,
+            });
+          }}
         />
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
-            onSelect(shops[index]);
+            setUserFilter({
+              ...userFilter,
+              shop: {
+                id: selectedItem._id as string,
+                name: selectedItem.name,
+              },
+            }).then(() => {
+              requestGetUsers();
+            });
           }}
-          defaultButtonText={shops[0]?.name || '请选择门店'}
+          defaultButtonText={userFilter.shop.name}
           buttonHeight={ss(40)}
           buttonWidth={ls(160)}
         />

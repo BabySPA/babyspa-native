@@ -13,12 +13,12 @@ interface FormBoxParams {
 export function FormBox(props: FormBoxParams) {
   const { required, form, title, style } = props;
   return (
-    <Row style={style} h={ls(48)} alignItems={'center'}>
-      <Row alignItems={'center'} mr={ls(30)} minW={ls(75)}>
+    <Row style={style} minH={ls(48)} alignItems={'center'}>
+      <Row alignItems={'center'} mr={ls(30)} justifyItems={'flex-end'}>
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>
-        <Text fontSize={sp(20, { min: 12 })} width={ls(80)} color='#333'>
+        <Text fontSize={sp(20, { min: 12 })} color='#333'>
           {title}
         </Text>
       </Row>

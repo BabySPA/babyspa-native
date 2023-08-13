@@ -13,6 +13,7 @@ import ManagerTemplate from '../screens/manager/manager-template';
 import ManagerUser from '../screens/manager/manager-user';
 import ShopDetail from '../screens/shop-detail';
 import UserDetail from '../screens/user-detail';
+import RoleDetail from '../screens/role-detail';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
@@ -32,6 +33,7 @@ export default function AppNavigator() {
       <Stack.Screen name='ManagerUser' component={ManagerUser} />
       <Stack.Screen name='ShopDetail' component={ShopDetail} />
       <Stack.Screen name='UserDetail' component={UserDetail} />
+      <Stack.Screen name='RoleDetail' component={RoleDetail} />
     </Stack.Navigator>
   );
 }

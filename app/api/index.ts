@@ -109,9 +109,11 @@ class Request {
 
   public delete<T = any>(
     url: string,
-    config?: AxiosRequestConfig,
+    data?: Record<string, any>,
   ): Promise<Result<T>> {
-    return this.instance.delete(url, config);
+    return this.instance.delete(url, {
+      data: data,
+    });
   }
 }
 

@@ -16,19 +16,19 @@ export default function SelectShop({
   buttonHeight?: number;
   buttonWidth?: number;
 }) {
-  const { shops, requestGetShops } = useManagerStore();
+  const { roles, requestGetRoles } = useManagerStore();
 
   useEffect(() => {
-    requestGetShops();
+    requestGetRoles();
   }, []);
 
   return (
     <SelectDropdown
-      data={shops}
+      data={roles}
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
-      defaultButtonText={defaultButtonText || '请选择门店'}
+      defaultButtonText={defaultButtonText || '请选择角色'}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.name;
       }}

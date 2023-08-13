@@ -15,17 +15,10 @@ const useAuthStore = create(
           request
             .post('/auth/login', { username, password })
             .then((res) => {
+              console.log(res);
+
               const { accessToken, ...rest } = res.data;
               const user = { ...rest };
-              user.shopsWithRole = user.shopsWithRole.map(
-                (item: ShopsWithRole) => ({
-                  ...item,
-                  isGlobalAdmin:
-                    item?.role?.authorities.findIndex(
-                      (item) => item.authority === RoleAuthority.ALL,
-                    ) !== -1,
-                }),
-              );
 
               set({
                 accessToken: accessToken,
@@ -56,9 +49,6 @@ const useAuthStore = create(
         return Promise.resolve();
       },
       hasAuthority: (authorityKey: RoleAuthority, rw: RW) => {
-        if (get().currentShopWithRole?.isGlobalAdmin) {
-          return true;
-        }
         return (
           get().currentShopWithRole?.role.authorities.findIndex(
             (item, index) => {

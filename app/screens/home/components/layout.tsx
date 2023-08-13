@@ -15,6 +15,7 @@ export default function Layout() {
 
   const { logout, user, currentShopWithRole } = useAuthStore();
   const currentSelectedModule = getLayoutConfig()[currentSelected];
+  console.log(currentSelectedModule);
 
   const Fragment = () => {
     return currentSelectedModule.features[
@@ -151,8 +152,8 @@ export default function Layout() {
           justifyContent={'center'}
           h={ss(70)}
           alignItems={'center'}>
-          {!currentSelectedModule.noTab &&
-            currentSelectedModule.features.map((item, idx) => {
+          {!currentSelectedModule?.noTab &&
+            currentSelectedModule?.features.map((item, idx) => {
               return (
                 <Pressable
                   key={idx}

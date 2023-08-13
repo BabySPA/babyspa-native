@@ -13,11 +13,11 @@ export default function LabelBox({
   flex?: number;
 }) {
   return (
-    <Row alignItems={'center'} flex={flex || 1}>
+    <Row alignItems={'flex-start'} flex={flex || 1}>
       <Text fontSize={sp(20)} color='#999' w={ls(120)} textAlign={'right'}>
         {title}：
       </Text>
-      <Text fontSize={sp(20)} color='#333'>
+      <Text fontSize={sp(20)} color='#333' maxW={'80%'}>
         {value}
       </Text>
       {rightElement}

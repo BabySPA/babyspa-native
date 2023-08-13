@@ -1,3 +1,6 @@
+import { ConfigAuthTree, IConfigAuth, LayoutConfig } from '../constants';
+import { AuthorityConfig, RoleAuthority } from '../stores/auth/type';
+
 export function getAge(birthday: string) {
   if (birthday) {
     const birthdays = birthday.split('-');
@@ -113,4 +116,91 @@ export function maskString(inputString: string) {
   const maskedPart = '*'.repeat(inputString.length);
 
   return maskedPart;
+}
+
+/**
+ * 传入权限，获取权限文本 门店：信息登记、信息采集、信息分析 ；   客户：客户档案、客户随访；
+ * @param auth
+ * @returns
+ */
+export function generateRuleAuthText(auth: AuthorityConfig[]): string {
+  let authTextObj: Record<string, string[]> = {};
+
+  auth.forEach((config) => {
+    const authorityObject = LayoutConfig.flatMap((tab) => tab.features).find(
+      (feature) => feature.auth === config.authority,
+    );
+
+    if (authorityObject) {
+      const tabText = LayoutConfig.find((tab) =>
+        tab.features.includes(authorityObject),
+      )?.text;
+
+      if (tabText) {
+        if (!authTextObj[tabText]) authTextObj[tabText] = [];
+        authTextObj[tabText].push(authorityObject.text);
+      }
+    }
+  });
+
+  // 去除末尾的逗号并返回
+  return generateUserAuthText(authTextObj);
+}
+
+/**
+ * 传入 {"门店":["信息分析","评价反馈"],"客户":["客户档案"],"管理":["门店管理","员工管理","角色管理","模版管理","操作日志"],"统计":["门店统计","调理统计","分析统计","随访统计"]}
+输出 门店：信息分析、评价反馈；客户：客户档案；管理：门店管理、员工管理、角色管理、模板管理、操作日志；统计：门店统计、调理统计、分析统计、随访统计 
+*/
+export function generateUserAuthText(auth: Record<string, string[]>) {
+  let authTextObj: Record<string, string[]> = {};
+
+  Object.keys(auth).forEach((key) => {
+    if (auth[key].length > 0) {
+      authTextObj[key] = auth[key];
+    }
+  });
+
+  let authText = '';
+
+  Object.keys(authTextObj).forEach((key) => {
+    authText += `${key}：${authTextObj[key].join('、')}；`;
+  });
+
+  return authText;
+}
+
+export function generateAuthorityTreeConfig(
+  auth: AuthorityConfig[],
+): IConfigAuth[] {
+  let config: IConfigAuth[] = [];
+  ConfigAuthTree.forEach((node, nodeIdx) => {
+    config.push(node);
+    node.features.forEach((feature, featureIdx) => {
+      let hasAuth = auth.findIndex((item) => item.authority == feature.auth);
+      config[nodeIdx].features[featureIdx].hasAuth = hasAuth != -1;
+    });
+    config[nodeIdx].hasAuth = config[nodeIdx].features.every(
+      (item) => item.hasAuth,
+    );
+  });
+
+  return config;
+}
+
+export function generateAuthorityConfig(
+  auth: IConfigAuth[],
+): AuthorityConfig[] {
+  let config: AuthorityConfig[] = [];
+  auth.forEach((node) => {
+    node.features.forEach((feature) => {
+      if (feature.hasAuth) {
+        config.push({
+          authority: feature.auth,
+          rw: 'RW',
+        });
+      }
+    });
+  });
+
+  return config;
 }

@@ -1,3 +1,6 @@
+import { IConfigAuth } from '~/app/constants';
+import { AuthorityConfig } from '../auth/type';
+
 export interface Shop {
   _id?: string;
   name: string;
@@ -19,6 +22,11 @@ export enum ShopType {
   HEADQUARTERS = 2, // 总店
 }
 
+export enum RoleStatus {
+  CLOSE = 0,
+  OPEN = 1,
+}
+
 export interface User {
   _id?: string;
   name: string;
@@ -28,6 +36,7 @@ export interface User {
   idCardNumber: string;
   password: string;
   shop?: {
+    originalShopId?: string; // 员工编辑 - 更新门店时，需要记录更新前的门店id，若与shopId不同，则后端需要决定是否删除原有门店
     shopId: string;
     name: string;
   };
@@ -40,7 +49,18 @@ export interface User {
   updatedAt?: string;
 }
 
-export interface ManangerState {
+export interface Role {
+  _id?: string;
+  name: string;
+  roleKey: string;
+  description: string;
+  status: RoleStatus;
+  authorities: AuthorityConfig[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface ShopState {
   shops: Shop[];
   currentShop: Shop;
   // request
@@ -50,16 +70,68 @@ export interface ManangerState {
 
   // action
   setCurrentShop: (shop: Shop) => void;
+}
 
+interface UserFilter {
+  name: string;
+  shop: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface UserState {
   // 员工
   users: User[];
   currentUser: User;
+  userFilter: UserFilter;
   // request
-  requestGetUsers: (shopId: string) => Promise<any>;
+  requestGetUsers: () => Promise<any>;
   requestPostUser: () => Promise<any>;
   requestPatchUser: () => Promise<any>;
   requestPatchUserPassword: (password?: string) => Promise<any>;
+  requestDeleteUser: () => Promise<any>;
 
   // action
   setCurrentUser: (user: User) => void;
+  setUserFilter: (user: UserFilter) => Promise<any>;
 }
+
+interface RoleState {
+  roles: Role[];
+  currentRole: Role;
+  configAuthTree: IConfigAuth[];
+  // request
+  requestGetRoles: () => Promise<any>;
+  requestPostRole: () => Promise<any>;
+  requestPatchRole: () => Promise<any>;
+  requestDeleteRole: () => Promise<any>;
+
+  // action
+  setCurrentRole: (role: Role) => void;
+  setConfigAuthTree: (authorities: IConfigAuth[]) => void;
+}
+
+export interface TemplateItem {
+  name: string;
+  children: string[];
+}
+
+export interface Template {
+  _id: string;
+  key: string;
+  name: string;
+  template: TemplateItem[];
+}
+
+interface TemplateState {
+  templates: Template[];
+  currentSelectTemplateIdx: number;
+  setCurrentSelectTemplateIdx: (idx: number) => void;
+}
+
+export interface ManangerState
+  extends ShopState,
+    UserState,
+    RoleState,
+    TemplateState {}

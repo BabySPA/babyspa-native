@@ -38,10 +38,6 @@ export default create(
         set({ layoutConfig: [] });
         return [];
       }
-      if (currentShopWithRole.isGlobalAdmin) {
-        set({ layoutConfig: LayoutConfig });
-        return LayoutConfig;
-      }
 
       const filterConfig = getFilteredLayoutConfig(
         currentShopWithRole?.role.authorities,

@@ -1,7 +1,7 @@
 import { Box, Column, Row, Text, Pressable } from 'native-base';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import LabelBox from './label-box';
+import LabelBox from '~/app/components/label-box';
 import useManagerStore from '~/app/stores/manager';
 
 interface InfoBoxParams {

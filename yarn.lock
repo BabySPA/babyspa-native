@@ -4903,6 +4903,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-native: 0.71.8
+    react-native-checkbox-tree: ^2.1.0
     react-native-dashed-line: ^1.1.0
     react-native-dotenv: ^3.4.9
     react-native-mime-types: ^2.4.0
@@ -11288,6 +11289,19 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-checkbox-tree@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "react-native-checkbox-tree@npm:2.1.0"
+  peerDependencies:
+    "@expo/vector-icons": "*"
+    lodash: "*"
+    react: "*"
+    react-native: "*"
+    react-native-vector-icons: "*"
+  checksum: 040ea823ddafd72b635d00fdfa47a3cd3095b318c4712bf1909d79bb778b204b9cef69863c6010826f30829321d1d1d02224a6699e3b982626d4d3a5dd5dfcf2
   languageName: node
   linkType: hard
 

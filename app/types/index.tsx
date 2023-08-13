@@ -73,6 +73,9 @@ export type RootStackParamList = {
   UserDetail: {
     type: 'edit' | 'detail';
   };
+  RoleDetail: {
+    type: 'edit' | 'detail';
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -100,6 +103,9 @@ export type AppStackList = {
     type: 'edit' | 'detail';
   };
   UserDetail: {
+    type: 'edit' | 'detail';
+  };
+  RoleDetail: {
     type: 'edit' | 'detail';
   };
 };

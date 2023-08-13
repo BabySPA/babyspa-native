@@ -1,10 +1,8 @@
 import {
   Box,
   Column,
-  Flex,
   Icon,
   Input,
-  Modal,
   Radio,
   Row,
   Text,
@@ -13,7 +11,6 @@ import {
   Spinner,
 } from 'native-base';
 import { useState } from 'react';
-import { FontAwesome } from '@expo/vector-icons';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
@@ -21,6 +18,7 @@ import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import SelectShop from '~/app/components/select-shop';
 import { Shop } from '~/app/stores/manager/type';
+import SelectRole from '~/app/components/select-role';
 
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -79,7 +77,7 @@ export default function EditBox(params: EditBoxParams) {
             <FormBox
               title='性别'
               required
-              style={{ flex: 1 }}
+              style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <Radio.Group
                   value={`${tempUser.gender}`}
@@ -112,12 +110,13 @@ export default function EditBox(params: EditBoxParams) {
                     setTempUser({
                       ...(tempUser || {}),
                       shop: {
+                        originalShopId: tempUser.shop?.shopId,
                         shopId: selectedItem._id as string,
                         name: selectedItem.name,
                       },
                     });
                   }}
-                  defaultButtonText={shops[0]?.name || '请选择门店'}
+                  defaultButtonText={currentUser.shop?.name}
                   buttonHeight={ss(40)}
                   buttonWidth={ls(380)}
                 />
@@ -126,29 +125,22 @@ export default function EditBox(params: EditBoxParams) {
             <FormBox
               required
               title='角色'
-              style={{ flex: 1 }}
+              style={{ flex: 1, marginLeft: ls(20) }}
               form={
-                <Box flex={1}>
-                  <Pressable onPress={() => {}}>
-                    <Row
-                      borderRadius={ss(10)}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      borderWidth={1}
-                      borderColor={'#D8D8D8'}
-                      py={ss(10)}
-                      px={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                        {tempUser.role?.name || '请选择'}
-                      </Text>
-                      <Icon
-                        as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
-                        color='#999'
-                      />
-                    </Row>
-                  </Pressable>
-                </Box>
+                <SelectRole
+                  onSelect={function (selectedItem): void {
+                    setTempUser({
+                      ...(tempUser || {}),
+                      role: {
+                        roleKey: selectedItem.roleKey,
+                        name: selectedItem.name,
+                      },
+                    });
+                  }}
+                  defaultButtonText={currentUser.role?.name}
+                  buttonHeight={ss(40)}
+                  buttonWidth={ls(380)}
+                />
               }
             />
           </Row>
@@ -180,7 +172,7 @@ export default function EditBox(params: EditBoxParams) {
             <FormBox
               required
               title='账号'
-              style={{ flex: 1 }}
+              style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <Input
                   defaultValue={tempUser.username}
@@ -289,10 +281,12 @@ export default function EditBox(params: EditBoxParams) {
               // 修改门店信息
               requestPatchUser()
                 .then(async (res) => {
+                  requestGetUsers();
                   toastAlert(toast, 'success', '修改员工信息成功！');
                   params.onEditFinish();
                 })
                 .catch((err) => {
+                  console.log(err);
                   toastAlert(toast, 'error', '修改员工信息失败！');
                 })
                 .finally(() => {
@@ -302,7 +296,8 @@ export default function EditBox(params: EditBoxParams) {
               // 新增门店信息
               requestPostUser()
                 .then(async (res) => {
-                  // await requestGetShops();
+                  setCurrentUser(res.data);
+                  requestGetUsers();
                   toastAlert(toast, 'success', '新增员工成功！');
                   params.onEditFinish();
                 })
