@@ -330,9 +330,15 @@ const useManagerStore = create(
     // template
     templates: DefaultTemplate,
     currentSelectTemplateIdx: 0,
+    currentSelectItemTemplateIdx: 0,
     setCurrentSelectTemplateIdx: (idx) => {
       set((state) => {
         state.currentSelectTemplateIdx = idx;
+      });
+    },
+    setCurrentSelectItemTemplateIdx: (idx) => {
+      set((state) => {
+        state.currentSelectItemTemplateIdx = idx;
       });
     },
   })),

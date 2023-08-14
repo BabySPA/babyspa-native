@@ -1,5 +1,6 @@
 import { ConfigAuthTree, IConfigAuth, LayoutConfig } from '../constants';
 import { AuthorityConfig, RoleAuthority } from '../stores/auth/type';
+import { Role, RoleStatus } from '../stores/manager/type';
 
 export function getAge(birthday: string) {
   if (birthday) {
@@ -203,4 +204,47 @@ export function generateAuthorityConfig(
   });
 
   return config;
+}
+
+export function generateMixinRoles(roles: Role[]) {
+  const mixRole: Pick<Role, 'name' | 'authorities'> = {
+    name: '',
+    authorities: [],
+  };
+
+  for (let i = 0; i < roles.length; i++) {
+    const role = roles[i];
+    mixRole.name += role.name + '、';
+    if (role.status == RoleStatus.OPEN) {
+      mixRole.authorities = mergeAndRemoveDuplicates(
+        mixRole.authorities || [],
+        roles[i].authorities,
+      );
+    }
+    mixRole.authorities = mixRole.authorities?.concat(roles[i].authorities);
+  }
+
+  if (mixRole.name)
+    mixRole.name = mixRole.name.slice(0, mixRole.name.length - 1);
+
+  return mixRole;
+}
+
+function mergeAndRemoveDuplicates(
+  arr1: AuthorityConfig[],
+  arr2: AuthorityConfig[],
+): AuthorityConfig[] {
+  const mergedArray = [...arr1]; // 先将第一个数组拷贝到合并数组中
+
+  for (const obj of arr2) {
+    // 检查是否已存在相同的对象
+    const existingObj = mergedArray.find(
+      (item) => item.authority === obj.authority,
+    );
+    if (!existingObj) {
+      mergedArray.push(obj); // 如果不存在则将对象添加到合并数组中
+    }
+  }
+
+  return mergedArray;
 }

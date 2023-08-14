@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import request from '~/app/api';
 import { AuthState, RW, RoleAuthority, ShopsWithRole } from './type';
+import { generateMixinRoles } from '~/app/utils';
 
 const useAuthStore = create(
   persist<AuthState>(
@@ -15,15 +16,16 @@ const useAuthStore = create(
           request
             .post('/auth/login', { username, password })
             .then((res) => {
-              console.log(res);
-
               const { accessToken, ...rest } = res.data;
               const user = { ...rest };
-
               set({
                 accessToken: accessToken,
                 user: { ...rest },
-                currentShopWithRole: user.shopsWithRole[0],
+
+                currentShopWithRole: {
+                  shop: user.shopsWithRole[0].shop,
+                  role: generateMixinRoles(user.shopsWithRole[0].roles),
+                },
               });
 
               resolve();

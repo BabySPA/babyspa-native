@@ -20,8 +20,8 @@ export default function LoginScreen({
   navigation,
 }: AuthStackScreenProps<'Login'>) {
   const { login } = useAuthStore();
-  const [username, setUsername] = useState('13333330001');
-  const [password, setPassword] = useState('330001');
+  const [username, setUsername] = useState('13333330000');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectAgreement, setSelectAgreement] = useState(true);
   const toast = useToast();
@@ -39,6 +39,7 @@ export default function LoginScreen({
           });
         })
         .catch((error) => {
+          console.log(error);
           toast.show({
             variant: 'left-accent',
             placement: 'top',

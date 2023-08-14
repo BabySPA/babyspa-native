@@ -127,7 +127,9 @@ export interface Template {
 interface TemplateState {
   templates: Template[];
   currentSelectTemplateIdx: number;
+  currentSelectItemTemplateIdx: number;
   setCurrentSelectTemplateIdx: (idx: number) => void;
+  setCurrentSelectItemTemplateIdx: (idx: number) => void;
 }
 
 export interface ManangerState

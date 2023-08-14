@@ -6,6 +6,9 @@ import {
   ScrollView,
   Divider,
   Pressable,
+  Icon,
+  HStack,
+  Avatar,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { AppStackScreenProps } from '~/app/types';
@@ -13,10 +16,27 @@ import { ls, sp, ss } from '~/app/utils/style';
 import dayjs from 'dayjs';
 import useManagerStore from '~/app/stores/manager';
 import BoxTitle from '~/app/components/box-title';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 export default function ManagerTemplate({
   navigation,
 }: AppStackScreenProps<'ManagerTemplate'>) {
+  const {
+    templates,
+    currentSelectTemplateIdx,
+    currentSelectItemTemplateIdx,
+    setCurrentSelectItemTemplateIdx,
+  } = useManagerStore();
+  const [currentSelectTemplate, setCurrentSelectTemplate] = useState(
+    templates[currentSelectTemplateIdx].template,
+  );
+
+  useEffect(() => {
+    setCurrentSelectTemplate(templates[currentSelectTemplateIdx].template);
+  }, [currentSelectTemplateIdx]);
+
   return (
     <Box flex={1}>
       <NavigationBar
@@ -44,33 +64,91 @@ export default function ManagerTemplate({
             <Tabs />
           </Box>
           <Row mt={ss(10)} flex={1}>
-            <Column
-              w={ss(400)}
-              bgColor={'#fff'}
-              borderRadius={ss(10)}
-              p={ss(20)}>
-              <BoxTitle
-                title='模版列表'
-                rightElement={
-                  <Pressable
-                    onPress={() => {
-                      // TODO 新增模版
-                    }}>
-                    <Row
-                      bgColor={'#E1F6EF'}
-                      borderRadius={ss(4)}
-                      px={ls(12)}
-                      py={ss(10)}
-                      borderColor={'#15BD8F'}
-                      borderWidth={1}>
-                      <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
-                        新增模版
-                      </Text>
+            <Column w={ss(400)} bgColor={'#fff'} borderRadius={ss(10)}>
+              <Box p={ss(20)}>
+                <BoxTitle
+                  title='模版列表'
+                  rightElement={
+                    <Pressable
+                      onPress={() => {
+                        // TODO 新增模版
+                      }}>
+                      <Row
+                        bgColor={'#E1F6EF'}
+                        borderRadius={ss(4)}
+                        px={ls(12)}
+                        py={ss(10)}
+                        borderColor={'#15BD8F'}
+                        borderWidth={1}>
+                        <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
+                          新增模版
+                        </Text>
+                      </Row>
+                    </Pressable>
+                  }
+                />
+              </Box>
+              <Box bg='white' safeArea flex={1}>
+                <SwipeListView
+                  data={currentSelectTemplate}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <Box>
+                        <Pressable
+                          onPress={() => {
+                            setCurrentSelectItemTemplateIdx(index);
+                          }}
+                          alignItems='flex-start'
+                          bg={
+                            currentSelectItemTemplateIdx === index
+                              ? '#1AB7BE'
+                              : '#fff'
+                          }
+                          justifyContent='center'
+                          borderBottomColor='trueGray.200'
+                          borderBottomWidth={1}
+                          px={ls(20)}
+                          py={ss(16)}>
+                          <Text
+                            fontSize={sp(20)}
+                            color={
+                              currentSelectItemTemplateIdx === index
+                                ? '#fff'
+                                : '#333'
+                            }>
+                            {item.name}
+                          </Text>
+                        </Pressable>
+                      </Box>
+                    );
+                  }}
+                  renderHiddenItem={(data, rowMap) => (
+                    <Row flex={1}>
+                      <Box flex={1} />
+                      <Pressable
+                        w={ls(72)}
+                        bg='red.500'
+                        justifyContent='center'
+                        onPress={() => {}}
+                        alignItems='center'
+                        _pressed={{
+                          opacity: 0.5,
+                        }}>
+                        <Text fontSize={sp(14)} color={'#fff'}>
+                          删除
+                        </Text>
+                      </Pressable>
                     </Row>
-                  </Pressable>
-                }
-              />
-              {/* TODO https://snack.expo.dev/@jemise111/react-native-swipe-list-view?platform=web */}
+                  )}
+                  disableRightSwipe
+                  rightOpenValue={-ls(72)}
+                  previewOpenValue={-40}
+                  previewOpenDelay={3000}
+                  onRowDidOpen={(rowKey) => {
+                    console.log(rowKey);
+                  }}
+                />
+              </Box>
             </Column>
             <Column
               flex={1}

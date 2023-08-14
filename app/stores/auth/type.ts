@@ -1,3 +1,5 @@
+import { Role, RoleStatus, Shop } from '../manager/type';
+
 /**
  * Auth store type
  */
@@ -27,20 +29,8 @@ export type AuthorityConfig = {
 };
 
 export interface ShopsWithRole {
-  role: {
-    _id: string;
-    name: string;
-    authorities: AuthorityConfig[];
-  };
-  shop: {
-    _id: string;
-    name: string;
-    address: string;
-    region: string;
-    openingTime: string;
-    closingTime: string;
-    phoneNumber: string;
-  };
+  role: Pick<Role, 'name' | 'authorities'>;
+  shop: Shop;
 }
 
 export interface AuthState {
