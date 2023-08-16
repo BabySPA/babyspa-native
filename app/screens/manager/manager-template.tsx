@@ -9,6 +9,7 @@ import {
   Icon,
   HStack,
   Avatar,
+  Input,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { AppStackScreenProps } from '~/app/types';
@@ -16,9 +17,10 @@ import { ls, sp, ss } from '~/app/utils/style';
 import dayjs from 'dayjs';
 import useManagerStore from '~/app/stores/manager';
 import BoxTitle from '~/app/components/box-title';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { useRef, useState } from 'react';
+import { DialogModal } from '~/app/components/modals';
 
 export default function ManagerTemplate({
   navigation,
@@ -28,14 +30,19 @@ export default function ManagerTemplate({
     currentSelectTemplateIdx,
     currentSelectItemTemplateIdx,
     setCurrentSelectItemTemplateIdx,
+    getCurrentSelectTemplates,
+    getCurrentSelectTemplateItems,
   } = useManagerStore();
-  const [currentSelectTemplate, setCurrentSelectTemplate] = useState(
-    templates[currentSelectTemplateIdx].template,
-  );
 
-  useEffect(() => {
-    setCurrentSelectTemplate(templates[currentSelectTemplateIdx].template);
-  }, [currentSelectTemplateIdx]);
+  const [canEdit, setCanEdit] = useState(false);
+  const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
+  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState(false);
+
+  const swiperlistRef = useRef(null);
+
+  const closeRow = (rowMap: any, rowKey: any) => {
+    rowMap[rowKey]?.closeRow();
+  };
 
   return (
     <Box flex={1}>
@@ -88,14 +95,36 @@ export default function ManagerTemplate({
                   }
                 />
               </Box>
-              <Box bg='white' safeArea flex={1}>
+
+              <Input
+                h={ss(50)}
+                p={ss(10)}
+                mx={ls(20)}
+                placeholderTextColor={'#C0CCDA'}
+                color={'#333333'}
+                fontSize={ss(16)}
+                borderColor={'#C0CCDA'}
+                InputLeftElement={
+                  <Icon
+                    as={<MaterialIcons name='search' />}
+                    size={ss(25)}
+                    color='#C0CCDA'
+                    ml={ss(10)}
+                  />
+                }
+                placeholder='搜索模版名称'
+              />
+
+              <Box bg='white' flex={1} mt={ss(20)}>
                 <SwipeListView
-                  data={currentSelectTemplate}
+                  ref={swiperlistRef}
+                  data={getCurrentSelectTemplates()}
+                  keyExtractor={(item, index) => item.name}
                   renderItem={({ item, index }) => {
                     return (
                       <Box>
                         <Pressable
-                          onPress={() => {
+                          onLongPress={() => {
                             setCurrentSelectItemTemplateIdx(index);
                           }}
                           alignItems='flex-start'
@@ -122,14 +151,18 @@ export default function ManagerTemplate({
                       </Box>
                     );
                   }}
-                  renderHiddenItem={(data, rowMap) => (
+                  renderHiddenItem={(rowData, rowMap) => (
                     <Row flex={1}>
                       <Box flex={1} />
                       <Pressable
                         w={ls(72)}
                         bg='red.500'
                         justifyContent='center'
-                        onPress={() => {}}
+                        onPress={() => {
+                          // setShowDeleteTemplateModal(true);
+                          // @ts-ignore
+                          closeRow(rowMap, rowData.item.name);
+                        }}
                         alignItems='center'
                         _pressed={{
                           opacity: 0.5,
@@ -140,15 +173,15 @@ export default function ManagerTemplate({
                       </Pressable>
                     </Row>
                   )}
-                  disableRightSwipe
                   rightOpenValue={-ls(72)}
                   previewOpenValue={-40}
                   previewOpenDelay={3000}
-                  onRowDidOpen={(rowKey) => {
-                    console.log(rowKey);
-                  }}
                 />
               </Box>
+
+              <Text textAlign={'center'} fontSize={sp(14)} color={'#999'}>
+                长按组名或模版支持编辑，左滑支持删除
+              </Text>
             </Column>
             <Column
               flex={1}
@@ -157,10 +190,101 @@ export default function ManagerTemplate({
               borderRadius={ss(10)}
               p={ss(20)}>
               <BoxTitle title='模版详情' />
+              <Row mt={ss(28)}>
+                {getCurrentSelectTemplateItems().map((item, index) => {
+                  return (
+                    <Pressable
+                      key={index}
+                      onLongPress={() => {
+                        setCanEdit(true);
+                      }}
+                      mr={ls(10)}
+                      mb={ss(10)}
+                      borderWidth={1}
+                      borderRadius={2}
+                      borderColor={'#D8D8D8'}
+                      px={ls(20)}
+                      py={ss(7)}>
+                      <Row alignItems={'center'}>
+                        <Text>{item}</Text>
+                        {canEdit && (
+                          <Pressable
+                            onPress={() => {
+                              // 删除
+                              setShowDeleteItemModal(true);
+                            }}>
+                            <Icon
+                              ml={ls(10)}
+                              as={<Ionicons name='ios-close-circle-outline' />}
+                              size={ss(20)}
+                              color='#FB6459'
+                            />
+                            <DialogModal
+                              isOpen={showDeleteItemModal}
+                              onClose={function (): void {
+                                setShowDeleteItemModal(false);
+                              }}
+                              title='是否确认删除模版？'
+                              onConfirm={function (): void {
+                                setShowDeleteItemModal(false);
+
+                                // requestPatchCustomerStatus({
+                                //   status: CustomerStatus.Canceled,
+                                //   type: 'register',
+                                // })
+                                //   .then(async (res) => {
+                                //     // 取消成功
+                                //     toastAlert(toast, 'success', '取消成功！');
+                                //     await requestInitializeData();
+                                //   })
+                                //   .catch((err) => {
+                                //     // 取消失败
+                                //     toastAlert(toast, 'error', '取消失败！');
+                                //   })
+                                //   .finally(() => {
+                                //     setLoading(false);
+                                //   });
+                              }}
+                            />
+                          </Pressable>
+                        )}
+                      </Row>
+                    </Pressable>
+                  );
+                })}
+              </Row>
             </Column>
           </Row>
         </Box>
       </Column>
+
+      <DialogModal
+        isOpen={showDeleteTemplateModal}
+        onClose={function (): void {
+          setShowDeleteTemplateModal(false);
+        }}
+        title='是否确认删除整个模版组？'
+        onConfirm={function (): void {
+          setShowDeleteTemplateModal(false);
+
+          // requestPatchCustomerStatus({
+          //   status: CustomerStatus.Canceled,
+          //   type: 'register',
+          // })
+          //   .then(async (res) => {
+          //     // 取消成功
+          //     toastAlert(toast, 'success', '取消成功！');
+          //     await requestInitializeData();
+          //   })
+          //   .catch((err) => {
+          //     // 取消失败
+          //     toastAlert(toast, 'error', '取消失败！');
+          //   })
+          //   .finally(() => {
+          //     setLoading(false);
+          //   });
+        }}
+      />
     </Box>
   );
 }

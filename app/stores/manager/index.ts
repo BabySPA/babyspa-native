@@ -334,12 +334,23 @@ const useManagerStore = create(
     setCurrentSelectTemplateIdx: (idx) => {
       set((state) => {
         state.currentSelectTemplateIdx = idx;
+        state.currentSelectItemTemplateIdx = 0;
       });
     },
     setCurrentSelectItemTemplateIdx: (idx) => {
       set((state) => {
         state.currentSelectItemTemplateIdx = idx;
       });
+    },
+    getCurrentSelectTemplates: () => {
+      const idx = get().currentSelectTemplateIdx;
+      return get().templates[idx].template;
+    },
+    getCurrentSelectTemplateItems: () => {
+      const idx = get().currentSelectTemplateIdx;
+      const itemIdx = get().currentSelectItemTemplateIdx;
+
+      return get().templates[idx].template[itemIdx].children;
     },
   })),
 );
