@@ -11,17 +11,25 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "requireFullScreen": true
+      "requireFullScreen": true,
+      "bundleIdentifier": "com.mcbabyspa.managemenet"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA", "RECORD_AUDIO"]
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.mcbabyspa.managemenet"
     },
     "web": {
       "bundler": "metro",
@@ -53,6 +61,11 @@
           "microphonePermission": "允许 $(PRODUCT_NAME) 使用您的麦克风"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "54d1ba33-faa9-4f06-9f0f-29edbba8f0e2"
+      }
+    }
   }
 }
