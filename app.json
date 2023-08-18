@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "babyspa",
+    "name": "掌阅未来",
     "slug": "babyspa",
     "version": "1.0.0",
     "icon": "./assets/images/icon.png",
@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
