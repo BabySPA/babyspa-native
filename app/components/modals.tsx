@@ -100,8 +100,7 @@ export function TemplateModal({
   onConfirm,
 }: TemplateModalParams) {
   const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
-  const textInputRef = useRef<TextInput>(null);
-  let templateText = defaultText;
+  const [templateText, setTemplateText] = useState(defaultText);
   return (
     <Modal
       isOpen={isOpen}
@@ -130,7 +129,6 @@ export function TemplateModal({
         </Row>
         <Row>
           <Input
-            ref={textInputRef}
             multiline
             placeholder='请输入或选择内容'
             placeholderTextColor={'#ccc'}
@@ -144,7 +142,7 @@ export function TemplateModal({
             autoCorrect={false}
             defaultValue={templateText}
             onChangeText={(text) => {
-              templateText = text;
+              setTemplateText(text);
             }}
           />
           <Column w={ls(470)} h={ss(350)}>
@@ -186,12 +184,9 @@ export function TemplateModal({
                         key={idx}
                         onPress={() => {
                           const text = templateText.trim();
-                          templateText =
-                            text.length > 0 ? text + ',' + item : item;
-                          console.log(templateText);
-                          textInputRef.current?.setNativeProps({
-                            text: templateText,
-                          });
+                          setTemplateText(
+                            text.length > 0 ? templateText + ',' + item : item,
+                          );
                         }}>
                         <Box
                           px={ls(20)}

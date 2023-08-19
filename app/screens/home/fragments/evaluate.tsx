@@ -74,7 +74,6 @@ export default function Evaluate() {
 
 function Filter() {
   const [showFilter, setShowFilter] = useState(false);
-  const navigation = useNavigation();
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row

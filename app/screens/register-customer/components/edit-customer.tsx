@@ -172,7 +172,7 @@ export default function EditCustomer(params: EditCustomerParams) {
           />
           <FormBox
             title='过敏原'
-            style={{ marginTop: ss(20) }}
+            style={{ marginTop: ss(20), alignItems: 'flex-start' }}
             form={
               <Box w={'70%'}>
                 <Pressable
@@ -188,7 +188,10 @@ export default function EditCustomer(params: EditCustomerParams) {
                     py={ss(10)}
                     pl={ss(20)}
                     pr={ss(8)}>
-                    <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                    <Text
+                      color={'#333'}
+                      fontSize={sp(16, { min: 12 })}
+                      maxW={ls(240)}>
                       {currentRegisterCustomer.allergy || '请选择或输入'}
                     </Text>
                     <Icon

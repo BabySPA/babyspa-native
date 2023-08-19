@@ -53,7 +53,13 @@ export default function CustomerItem({
 
         <Flex ml={ls(20)}>
           <Row alignItems={'center'}>
-            <Text color='#333' fontSize={sp(20)} fontWeight={400}>
+            <Text
+              color='#333'
+              fontSize={sp(20)}
+              fontWeight={400}
+              maxW={ls(200)}
+              numberOfLines={1}
+              ellipsizeMode='tail'>
               {customer.name}({customer.nickname})
             </Text>
             <Icon

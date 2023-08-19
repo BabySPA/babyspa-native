@@ -70,6 +70,7 @@ const defaultFlow = {
 };
 
 const initialState = {
+  allCustomers: [],
   register: {
     ...defaultRegisterAndCollection,
     allStatus: [
@@ -107,8 +108,6 @@ const initialState = {
     analyst: null,
     flowEvalute: null,
   },
-
-  guidanceTemplate: [],
 };
 
 const useFlowStore = create(
@@ -130,9 +129,21 @@ const useFlowStore = create(
       if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
         await get().requestAnalyzeCustomers();
       }
-      // TODO 评价反馈
+      if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
+        await get().requestEvaluateCustomers();
+      }
     },
-
+    requestAllCustomers: async (searchKeywords: string) => {
+      const params: any = {
+        search: searchKeywords,
+      };
+      request.get('/customers', { params }).then(({ data }) => {
+        const { docs } = data;
+        set({
+          allCustomers: docs,
+        });
+      });
+    },
     requestRegisterCustomers: async () => {
       const {
         register: { status, searchKeywords, startDate, endDate },

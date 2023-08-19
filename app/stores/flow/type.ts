@@ -79,13 +79,13 @@ type PatchCustomerStatusType = 'register' | 'flow';
 export interface FlowState {
   clearCache: () => void;
 
+  allCustomers: Customer[];
   operators: Operator[];
   register: RegisterAndCollection;
   collection: RegisterAndCollection;
   analyze: RegisterAndCollection;
   evaluate: RegisterAndCollection;
   currentFlow: Flow;
-  guidanceTemplate: Template[];
 
   customersArchive: RegisterAndCollection;
 
@@ -93,6 +93,7 @@ export interface FlowState {
   currentFlowCustomer: Customer;
 
   requestInitializeData: () => Promise<void>;
+  requestAllCustomers: (searchKeywords: string) => Promise<void>;
   requestRegisterCustomers: () => Promise<void>;
   requestCollectionCustomers: () => Promise<void>;
   requestAnalyzeCustomers: () => Promise<void>;

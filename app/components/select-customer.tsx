@@ -22,6 +22,7 @@ import {
 import { getAge } from '../utils';
 import dayjs from 'dayjs';
 import { Customer } from '../stores/flow/type';
+import debounce from 'lodash/debounce';
 
 interface SelectCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -100,14 +101,11 @@ function CustomerItem({ customer }: { customer: Customer }) {
 }
 
 export default function SelectCustomer(params: SelectCustomerParams) {
-  const {
-    register: { customers },
-    requestRegisterCustomers,
-    updateCurrentRegisterCustomer,
-  } = useFlowStore();
+  const { requestAllCustomers, updateCurrentRegisterCustomer, allCustomers } =
+    useFlowStore();
 
   useEffect(() => {
-    requestRegisterCustomers();
+    requestAllCustomers('');
   }, []);
   const { style = {} } = params;
 
@@ -140,11 +138,14 @@ export default function SelectCustomer(params: SelectCustomerParams) {
             />
           }
           placeholder='姓名、手机号'
+          onChangeText={debounce((text) => {
+            requestAllCustomers(text);
+          }, 1000)}
         />
 
         <Box mt={ss(30)}>
           <FlatList
-            data={customers}
+            data={allCustomers}
             maxH={ss(520)}
             renderItem={({ item }) => {
               return (
