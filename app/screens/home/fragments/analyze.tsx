@@ -93,6 +93,7 @@ function Filter() {
             已分析：<Text color='#5EACA3'>1</Text>
           </Text>
           <Input
+            autoCorrect={false}
             ml={ls(30)}
             w={ls(240)}
             h={ss(40)}

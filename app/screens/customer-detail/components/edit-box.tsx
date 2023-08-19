@@ -67,6 +67,7 @@ export default function EditBox(params: EditBoxParams) {
               required
               form={
                 <Input
+                  autoCorrect={false}
                   w={ls(380)}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
@@ -90,6 +91,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1 }}
               form={
                 <Input
+                  autoCorrect={false}
                   w={ls(380)}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
@@ -177,6 +179,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1 }}
               form={
                 <Input
+                  autoCorrect={false}
                   w={ls(380)}
                   defaultValue={tempCustomer.phoneNumber}
                   h={ss(48, { min: 26 })}
@@ -200,6 +203,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1 }}
               form={
                 <Input
+                  autoCorrect={false}
                   defaultValue={tempCustomer.allergy}
                   w={ls(380)}
                   h={ss(48, { min: 26 })}

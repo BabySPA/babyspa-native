@@ -98,6 +98,7 @@ export default function ManagerTemplate({
               </Box>
 
               <Input
+                autoCorrect={false}
                 h={ss(50)}
                 p={ss(10)}
                 mx={ls(20)}

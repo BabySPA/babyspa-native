@@ -56,6 +56,7 @@ export default function EditBox(params: EditBoxParams) {
               required
               form={
                 <Input
+                  autoCorrect={false}
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
@@ -151,6 +152,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1 }}
               form={
                 <Input
+                  autoCorrect={false}
                   defaultValue={tempUser.phoneNumber}
                   flex={1}
                   h={ss(48, { min: 26 })}
@@ -175,6 +177,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <Input
+                  autoCorrect={false}
                   defaultValue={tempUser.username}
                   flex={1}
                   h={ss(48, { min: 26 })}
@@ -201,6 +204,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1 }}
               form={
                 <Input
+                  autoCorrect={false}
                   defaultValue={tempUser.idCardNumber}
                   w={ls(380)}
                   h={ss(48, { min: 26 })}
@@ -227,6 +231,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ alignItems: 'flex-start', flex: 1 }}
               form={
                 <Input
+                  autoCorrect={false}
                   defaultValue={tempUser.description}
                   flex={1}
                   h={ss(128)}

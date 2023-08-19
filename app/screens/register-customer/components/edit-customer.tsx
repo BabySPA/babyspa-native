@@ -59,6 +59,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             required
             form={
               <Input
+                autoCorrect={false}
                 w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
@@ -79,6 +80,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
+                autoCorrect={false}
                 w={'70%'}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
@@ -152,6 +154,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             style={{ marginTop: ss(20) }}
             form={
               <Input
+                autoCorrect={false}
                 w={'70%'}
                 defaultValue={currentRegisterCustomer.phoneNumber}
                 h={ss(48, { min: 26 })}
@@ -203,8 +206,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                       setIsOpenTemplatePicker(false);
                     }}
                     onConfirm={function (text): void {
-                      console.log(text);
-                      // throw new Error('Function not implemented.');
+                      updateCurrentRegisterCustomer({ allergy: text });
+                      setIsOpenTemplatePicker(false);
                     }}
                   />
                 </Pressable>

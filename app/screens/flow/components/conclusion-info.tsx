@@ -1,20 +1,22 @@
-import { Box, Center, Column, Container, Icon, Row, Text } from 'native-base';
+import { Box, Center, Column, Icon, Row, Text } from 'native-base';
 import BoxItem from './box-item';
 import { Pressable, TextInput } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import dayjs from 'dayjs';
-import DashedLine from 'react-native-dashed-line';
+import useManagerStore from '~/app/stores/manager';
 
 export default function ConclusionInfo() {
   const {
-    guidanceTemplate,
     currentFlow: { analyze },
     updateAnalyze,
   } = useFlowStore();
 
+  const { templates } = useManagerStore();
+  const getConclusionemplates = () => {
+    return templates.find((template) => template.key === 'conclusion');
+  };
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 
   return (
@@ -25,6 +27,7 @@ export default function ConclusionInfo() {
           icon={require('~/assets/images/guidance.png')}>
           <Box flex={1}>
             <TextInput
+              autoCorrect={false}
               multiline={true}
               placeholder='您可输入，或从右侧分类中选择'
               style={{
@@ -98,7 +101,7 @@ export default function ConclusionInfo() {
       <Column flex={1} ml={ss(10)}>
         <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
           <Column bgColor={'#EDF7F6'}>
-            {guidanceTemplate.map((item, idx) => {
+            {getConclusionemplates()?.groups.map((item, idx) => {
               return (
                 <Pressable
                   key={idx}
@@ -126,7 +129,7 @@ export default function ConclusionInfo() {
                       color={
                         selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                       }>
-                      {item.key}
+                      {item.name}
                     </Text>
                   </Center>
                 </Pressable>
@@ -134,33 +137,35 @@ export default function ConclusionInfo() {
             })}
           </Column>
           <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-            {guidanceTemplate[selectTemplateGroup].children.map((item, idx) => {
-              return (
-                <Pressable
-                  key={idx}
-                  onPress={() => {
-                    updateAnalyze({
-                      conclusion:
-                        analyze.conclusion.trim().length > 0
-                          ? analyze.conclusion + ',' + item
-                          : item,
-                    });
-                  }}>
-                  <Box
-                    px={ls(20)}
-                    py={ss(7)}
-                    mr={ls(10)}
-                    mb={ss(10)}
-                    borderRadius={ss(2)}
-                    borderColor={'#D8D8D8'}
-                    borderWidth={1}>
-                    <Text fontSize={sp(18)} color='#000'>
-                      {item}
-                    </Text>
-                  </Box>
-                </Pressable>
-              );
-            })}
+            {getConclusionemplates()?.groups[selectTemplateGroup].children.map(
+              (item, idx) => {
+                return (
+                  <Pressable
+                    key={idx}
+                    onPress={() => {
+                      updateAnalyze({
+                        conclusion:
+                          analyze.conclusion.trim().length > 0
+                            ? analyze.conclusion + ',' + item
+                            : item,
+                      });
+                    }}>
+                    <Box
+                      px={ls(20)}
+                      py={ss(7)}
+                      mr={ls(10)}
+                      mb={ss(10)}
+                      borderRadius={ss(2)}
+                      borderColor={'#D8D8D8'}
+                      borderWidth={1}>
+                      <Text fontSize={sp(18)} color='#000'>
+                        {item}
+                      </Text>
+                    </Box>
+                  </Pressable>
+                );
+              },
+            )}
           </Row>
         </Row>
       </Column>

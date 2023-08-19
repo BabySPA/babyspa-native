@@ -8,6 +8,7 @@ import { CustomerStatus } from '../../types';
 import { FlowState } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
+import { reject } from 'lodash';
 
 const defaultRegisterAndCollection = {
   customers: [],
@@ -334,6 +335,10 @@ const useFlowStore = create(
             state.currentRegisterCustomer = data;
           });
           return data;
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(e);
         });
     },
 

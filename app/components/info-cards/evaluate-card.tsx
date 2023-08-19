@@ -118,6 +118,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         </Text>
         <Box flex={1} ml={ss(12)}>
           <TextInput
+            autoCorrect={false}
             multiline={true}
             placeholder='您可以从分析速度、调理方案准确性、以及客户满意度等方面进行评价'
             style={{

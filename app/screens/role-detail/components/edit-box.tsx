@@ -129,6 +129,7 @@ export default function EditBox(params: EditBoxParams) {
               required
               form={
                 <Input
+                  autoCorrect={false}
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
@@ -179,6 +180,7 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1, alignItems: 'flex-start' }}
               form={
                 <Input
+                  autoCorrect={false}
                   defaultValue={tempRole.description}
                   flex={1}
                   multiline

@@ -122,6 +122,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
         <BoxTitle title='选择客户' />
 
         <Input
+          autoCorrect={false}
           mt={ss(30)}
           w={'100%'}
           h={ss(50)}

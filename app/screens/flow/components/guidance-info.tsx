@@ -5,25 +5,30 @@ import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
+import useManagerStore from '~/app/stores/manager';
 
 export default function GuidanceInfo() {
   const {
-    guidanceTemplate,
     currentFlow: { collect },
     updateCollection,
   } = useFlowStore();
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 
+  const { templates } = useManagerStore();
+  const getGuidanceTemplates = () => {
+    return templates.find((template) => template.key === 'guidance');
+  };
+
   return (
     <Row flex={1}>
       <Column flex={1}>
         <BoxItem
           title={'调理导向'}
-          icon={require('~/assets/images/guidance.png')}
-        >
+          icon={require('~/assets/images/guidance.png')}>
           <Box flex={1}>
             <TextInput
+              autoCorrect={false}
               multiline={true}
               placeholder='您可输入，或从右侧分类中选择'
               style={{
@@ -50,14 +55,13 @@ export default function GuidanceInfo() {
       <Column flex={1} ml={ss(10)}>
         <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
           <Column bgColor={'#EDF7F6'}>
-            {guidanceTemplate.map((item, idx) => {
+            {getGuidanceTemplates()?.groups.map((item, idx) => {
               return (
                 <Pressable
                   key={idx}
                   onPress={() => {
                     setSelectTemplateGroup(idx);
-                  }}
-                >
+                  }}>
                   <Center
                     p={ss(10)}
                     w={ss(80)}
@@ -65,8 +69,7 @@ export default function GuidanceInfo() {
                     borderTopLeftRadius={ss(10)}
                     bgColor={
                       selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                    }
-                  >
+                    }>
                     <Icon
                       as={<AntDesign name='appstore1' />}
                       size={ss(18, { min: 15 })}
@@ -79,9 +82,8 @@ export default function GuidanceInfo() {
                       color={
                         selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                       }
-                      fontSize={sp(18)}
-                    >
-                      {item.key}
+                      fontSize={sp(18)}>
+                      {item.name}
                     </Text>
                   </Center>
                 </Pressable>
@@ -89,35 +91,35 @@ export default function GuidanceInfo() {
             })}
           </Column>
           <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-            {guidanceTemplate[selectTemplateGroup].children.map((item, idx) => {
-              return (
-                <Pressable
-                  key={idx}
-                  onPress={() => {
-                    updateCollection({
-                      guidance:
-                        collect.guidance.trim().length > 0
-                          ? collect.guidance + ',' + item
-                          : item,
-                    });
-                  }}
-                >
-                  <Box
-                    px={ls(20)}
-                    py={ss(7)}
-                    mr={ls(10)}
-                    mb={ss(10)}
-                    borderRadius={ss(2)}
-                    borderColor={'#D8D8D8'}
-                    borderWidth={1}
-                  >
-                    <Text fontSize={sp(18)} color='#000'>
-                      {item}
-                    </Text>
-                  </Box>
-                </Pressable>
-              );
-            })}
+            {getGuidanceTemplates()?.groups[selectTemplateGroup].children.map(
+              (item, idx) => {
+                return (
+                  <Pressable
+                    key={idx}
+                    onPress={() => {
+                      updateCollection({
+                        guidance:
+                          collect.guidance.trim().length > 0
+                            ? collect.guidance + ',' + item
+                            : item,
+                      });
+                    }}>
+                    <Box
+                      px={ls(20)}
+                      py={ss(7)}
+                      mr={ls(10)}
+                      mb={ss(10)}
+                      borderRadius={ss(2)}
+                      borderColor={'#D8D8D8'}
+                      borderWidth={1}>
+                      <Text fontSize={sp(18)} color='#000'>
+                        {item}
+                      </Text>
+                    </Box>
+                  </Pressable>
+                );
+              },
+            )}
           </Row>
         </Row>
       </Column>

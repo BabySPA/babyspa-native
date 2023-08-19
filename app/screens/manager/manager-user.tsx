@@ -225,6 +225,7 @@ function Filter() {
       px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
+          autoCorrect={false}
           w={ls(240)}
           minH={ss(40, { max: 18 })}
           p={ss(8)}

@@ -156,6 +156,7 @@ export default function SolutionInfo() {
           icon={require('~/assets/images/guidance.png')}>
           <Box flex={1} pt={ss(10)}>
             <TextInput
+              autoCorrect={false}
               multiline={true}
               placeholder='您可输入，或从模板选择'
               value={remark}

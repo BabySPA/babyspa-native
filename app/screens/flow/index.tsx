@@ -27,6 +27,7 @@ import { DialogModal } from '~/app/components/modals';
 import { toastAlert } from '~/app/utils/toast';
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { RoleAuthority } from '~/app/stores/auth/type';
+import useManagerStore from '~/app/stores/manager';
 
 interface ResultModal {
   type: 'success' | 'fail' | 'none';
@@ -51,6 +52,7 @@ export default function FlowScreen({
     currentFlow: { collect },
   } = useFlowStore();
 
+  const { requestGetTemplates } = useManagerStore();
   const age = getAge(currentFlowCustomer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
@@ -75,7 +77,8 @@ export default function FlowScreen({
 
   useEffect(() => {
     requestGetFlow(currentFlowCustomer.flowId);
-  }, [requestGetFlow]);
+    requestGetTemplates();
+  }, []);
 
   return (
     <Box flex={1}>

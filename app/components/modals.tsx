@@ -129,22 +129,22 @@ export function TemplateModal({
           </Pressable>
         </Row>
         <Row>
-          <TextInput
+          <Input
             ref={textInputRef}
             multiline
             placeholder='请输入或选择内容'
             placeholderTextColor={'#ccc'}
-            style={{
-              color: '#333',
-              textAlignVertical: 'top',
-              fontSize: sp(16),
-              width: ls(340),
-              height: ss(350),
-              marginLeft: ls(30),
-            }}
+            fontSize={sp(16)}
+            color='#333'
+            borderColor={'#E4E4E4'}
+            textAlignVertical='top'
+            w={ls(340)}
+            h={ss(350)}
+            ml={ls(30)}
+            autoCorrect={false}
             defaultValue={templateText}
             onChangeText={(text) => {
-              templateText = templateText + text;
+              templateText = text;
             }}
           />
           <Column w={ls(470)} h={ss(350)}>
@@ -159,7 +159,6 @@ export function TemplateModal({
                       }}>
                       <Center
                         p={ss(10)}
-                        w={ss(80)}
                         h={ss(80)}
                         bgColor={
                           selectTemplateItemsIdx === idx ? '#ffffff' : '#EDF7F6'
@@ -189,6 +188,7 @@ export function TemplateModal({
                           const text = templateText.trim();
                           templateText =
                             text.length > 0 ? text + ',' + item : item;
+                          console.log(templateText);
                           textInputRef.current?.setNativeProps({
                             text: templateText,
                           });

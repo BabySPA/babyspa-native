@@ -101,6 +101,7 @@ export default function LoginScreen({
               }
             />
             <Input
+              autoCorrect={false}
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChangeText={setPassword}

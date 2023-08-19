@@ -79,6 +79,7 @@ function Filter() {
           已登记：<Text color='#5EACA3'>7</Text>
         </Text>
         <Input
+          autoCorrect={false}
           ml={ls(30)}
           w={ls(240)}
           minH={ss(40, { max: 18 })}
@@ -97,6 +98,7 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Input
+          autoCorrect={false}
           ml={ls(20)}
           w={ls(160)}
           minH={ss(40, { max: 18 })}
@@ -119,6 +121,7 @@ function Filter() {
           至
         </Text>
         <Input
+          autoCorrect={false}
           ml={ls(20)}
           w={ls(160)}
           minH={ss(40, { max: 18 })}
