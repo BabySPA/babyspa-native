@@ -18,6 +18,8 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import SelectOperator from '~/app/components/select-operator';
 import DatePickerModal from '~/app/components/date-picker-modal';
+import { TemplateModal } from '~/app/components/modals';
+import useManagerStore from '~/app/stores/manager';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -25,9 +27,14 @@ interface EditCustomerParams {
 
 export default function EditCustomer(params: EditCustomerParams) {
   const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
+  const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
 
   const { operators } = useFlowStore();
 
+  const { templates } = useManagerStore();
+  const getAllergyTemplates = () => {
+    return templates.find((template) => template.key === 'allergy');
+  };
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
   };
@@ -43,8 +50,7 @@ export default function EditCustomer(params: EditCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(10)}
-    >
+      borderRadius={ss(4)}>
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -98,8 +104,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 flexDirection={'row'}
                 onChange={(event) => {
                   updateCurrentRegisterCustomer({ gender: +event });
-                }}
-              >
+                }}>
                 <Radio colorScheme='green' value='1' size={'sm'}>
                   男
                 </Radio>
@@ -118,17 +123,16 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Pressable
                   onPress={() => {
                     showDatePicker();
-                  }}
-                >
+                  }}>
                   <Row
-                    borderRadius={ss(10)}
+                    borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
-                    px={ss(20)}
-                  >
+                    pl={ss(20)}
+                    pr={ss(8)}>
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
                       {currentRegisterCustomer.birthday}
                     </Text>
@@ -167,20 +171,44 @@ export default function EditCustomer(params: EditCustomerParams) {
             title='过敏原'
             style={{ marginTop: ss(20) }}
             form={
-              <Input
-                defaultValue={currentRegisterCustomer.allergy}
-                w={'70%'}
-                h={ss(48, { min: 26 })}
-                py={ss(10)}
-                px={ls(20)}
-                onChangeText={(text) => {
-                  updateCurrentRegisterCustomer({ allergy: text });
-                }}
-                placeholderTextColor={'#CCC'}
-                color={'#333333'}
-                fontSize={sp(16, { min: 12 })}
-                placeholder='请输入'
-              />
+              <Box w={'70%'}>
+                <Pressable
+                  onPress={() => {
+                    setIsOpenTemplatePicker(true);
+                  }}>
+                  <Row
+                    borderRadius={ss(4)}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    borderWidth={1}
+                    borderColor={'#D8D8D8'}
+                    py={ss(10)}
+                    pl={ss(20)}
+                    pr={ss(8)}>
+                    <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      {currentRegisterCustomer.allergy || '请选择或输入'}
+                    </Text>
+                    <Icon
+                      as={<FontAwesome name='angle-down' />}
+                      size={ss(18, { min: 15 })}
+                      color='#999'
+                    />
+                  </Row>
+
+                  <TemplateModal
+                    defaultText={currentRegisterCustomer.allergy || ''}
+                    template={getAllergyTemplates()}
+                    isOpen={isOpenTemplatePicker}
+                    onClose={function (): void {
+                      setIsOpenTemplatePicker(false);
+                    }}
+                    onConfirm={function (text): void {
+                      console.log(text);
+                      // throw new Error('Function not implemented.');
+                    }}
+                  />
+                </Pressable>
+              </Box>
             }
           />
           <FormBox

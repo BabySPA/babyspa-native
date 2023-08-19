@@ -11,6 +11,7 @@ import SelectCustomer from '~/app/components/select-customer';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { toastAlert } from '~/app/utils/toast';
+import useManagerStore from '~/app/stores/manager';
 
 export default function RegisterCustomerScreen({
   navigation,
@@ -26,12 +27,15 @@ export default function RegisterCustomerScreen({
     updateCurrentFlowCustomer,
   } = useFlowStore();
 
+  const { requestGetTemplates } = useManagerStore();
+
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     requestGetOperators();
-  }, [requestGetOperators]);
+    requestGetTemplates();
+  }, []);
 
   return (
     <Box flex={1}>

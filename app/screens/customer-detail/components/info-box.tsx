@@ -82,13 +82,14 @@ export default function InfoBox(params: InfoBoxParams) {
         }}
       />
       <Row justifyContent={'center'} mb={ss(40)}>
-        <Pressable
+        {/* <Pressable
           onPress={() => {
             params.onPressCancel();
           }}>
           <Box
             px={ls(34)}
             py={ss(12)}
+            mr={ls(74)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={ss(4)}
             borderWidth={1}
@@ -97,9 +98,8 @@ export default function InfoBox(params: InfoBoxParams) {
               取消
             </Text>
           </Box>
-        </Pressable>
+        </Pressable> */}
         <Pressable
-          ml={ls(74)}
           onPress={() => {
             params.onPressEdit();
           }}>

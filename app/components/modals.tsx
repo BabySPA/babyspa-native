@@ -1,5 +1,19 @@
-import { Center, Modal, Text, Row, Pressable } from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
+import {
+  Center,
+  Modal,
+  Text,
+  Row,
+  Pressable,
+  Input,
+  Column,
+  Icon,
+  Box,
+} from 'native-base';
 import { sp, ss, ls } from '~/app/utils/style';
+import { Template } from '../stores/manager/type';
+import { useRef, useState } from 'react';
+import { TextInput } from 'react-native';
 
 interface DialogParams {
   isOpen: boolean;
@@ -7,6 +21,14 @@ interface DialogParams {
   title?: string;
   onClose: () => void;
   onConfirm: () => void;
+}
+
+interface TemplateModalParams {
+  template: Template | undefined;
+  defaultText: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (text: string) => void;
 }
 export function DialogModal({
   isOpen,
@@ -66,6 +88,167 @@ export function DialogModal({
           </Center>
         </Modal.Body>
       </Modal.Content>
+    </Modal>
+  );
+}
+
+export function TemplateModal({
+  template,
+  defaultText,
+  isOpen,
+  onClose,
+  onConfirm,
+}: TemplateModalParams) {
+  const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
+  const textInputRef = useRef<TextInput>(null);
+  let templateText = defaultText;
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Column bgColor={'white'} borderRadius={ss(10)}>
+        <Row
+          px={ls(30)}
+          py={ss(20)}
+          alignItems={'center'}
+          justifyContent={'space-between'}>
+          <Text fontSize={sp(20)} color={'#000'}>
+            {template?.name}
+          </Text>
+          <Pressable
+            onPress={() => {
+              onClose();
+            }}>
+            <Icon
+              as={<AntDesign name={'close'} />}
+              size={ss(24)}
+              color='#999'
+            />
+          </Pressable>
+        </Row>
+        <Row>
+          <TextInput
+            ref={textInputRef}
+            multiline
+            placeholder='请输入或选择内容'
+            placeholderTextColor={'#ccc'}
+            style={{
+              color: '#333',
+              textAlignVertical: 'top',
+              fontSize: sp(16),
+              width: ls(340),
+              height: ss(350),
+              marginLeft: ls(30),
+            }}
+            defaultValue={templateText}
+            onChangeText={(text) => {
+              templateText = templateText + text;
+            }}
+          />
+          <Column w={ls(470)} h={ss(350)}>
+            <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
+              <Column bgColor={'#EDF7F6'}>
+                {template?.groups.map((item, idx) => {
+                  return (
+                    <Pressable
+                      key={idx}
+                      onPress={() => {
+                        setSelectTemplateItemsIdx(idx);
+                      }}>
+                      <Center
+                        p={ss(10)}
+                        w={ss(80)}
+                        h={ss(80)}
+                        bgColor={
+                          selectTemplateItemsIdx === idx ? '#ffffff' : '#EDF7F6'
+                        }>
+                        <Text
+                          mt={ss(3)}
+                          color={
+                            selectTemplateItemsIdx === idx
+                              ? '#5EACA3'
+                              : '#99A9BF'
+                          }
+                          fontSize={sp(18)}>
+                          {item.name}
+                        </Text>
+                      </Center>
+                    </Pressable>
+                  );
+                })}
+              </Column>
+              <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+                {template?.groups[selectTemplateItemsIdx].children.map(
+                  (item, idx) => {
+                    return (
+                      <Pressable
+                        key={idx}
+                        onPress={() => {
+                          const text = templateText.trim();
+                          templateText =
+                            text.length > 0 ? text + ',' + item : item;
+                          textInputRef.current?.setNativeProps({
+                            text: templateText,
+                          });
+                        }}>
+                        <Box
+                          px={ls(20)}
+                          py={ss(7)}
+                          mr={ls(10)}
+                          mb={ss(10)}
+                          borderRadius={ss(2)}
+                          borderColor={'#D8D8D8'}
+                          borderWidth={1}>
+                          <Text fontSize={sp(18)} color='#000'>
+                            {item}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    );
+                  },
+                )}
+              </Row>
+            </Row>
+          </Column>
+        </Row>
+
+        <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
+          <Pressable
+            onPress={() => {
+              onClose();
+            }}
+            borderRadius={ss(4)}
+            borderWidth={1}
+            w={ls(100)}
+            h={ss(46)}
+            justifyContent={'center'}
+            alignItems={'center'}
+            borderColor='#D8D8D8'>
+            <Text color='#333' fontSize={sp(16)}>
+              取消
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              onConfirm(templateText);
+            }}
+            borderRadius={ss(4)}
+            borderWidth={1}
+            borderColor='#00B49E'
+            w={ls(100)}
+            h={ss(46)}
+            justifyContent={'center'}
+            alignItems={'center'}
+            ml={ls(40)}
+            bgColor={'rgba(0, 180, 158, 0.10)'}>
+            <Text color='#00B49E' fontSize={sp(16)}>
+              保存
+            </Text>
+          </Pressable>
+        </Row>
+      </Column>
     </Modal>
   );
 }

@@ -48,6 +48,12 @@ export interface RegisterAndCollection {
   startDate: string;
   endDate: string;
   status: CustomerStatus | -1;
+
+  // 用于筛选
+  allStatus: {
+    value: number;
+    label: string;
+  }[];
 }
 
 export type UpdatingImage =
@@ -105,6 +111,7 @@ export interface FlowState {
   }) => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
 
+  updateRegisterFilter: (data: Partial<RegisterAndCollection>) => void;
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
   updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
   updateCollection: (data: Partial<Collect>) => void;

@@ -108,7 +108,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
 
   useEffect(() => {
     requestRegisterCustomers();
-  }, [requestRegisterCustomers]);
+  }, []);
   const { style = {} } = params;
 
   return (

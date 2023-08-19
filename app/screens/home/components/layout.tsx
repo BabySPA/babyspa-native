@@ -15,7 +15,6 @@ export default function Layout() {
 
   const { logout, user, currentShopWithRole } = useAuthStore();
   const currentSelectedModule = getLayoutConfig()[currentSelected];
-  console.log(currentSelectedModule);
 
   const Fragment = () => {
     return currentSelectedModule.features[

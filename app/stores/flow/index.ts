@@ -15,8 +15,18 @@ const defaultRegisterAndCollection = {
   hasNextPage: false, // hasNextPage:false
   searchKeywords: '',
   status: -1,
-  startDate: '',
-  endDate: '',
+  startDate: dayjs().format('YYYY-MM-DD'),
+  endDate: dayjs().format('YYYY-MM-DD'),
+};
+
+export const DefaultRegisterCustomer = {
+  name: '',
+  nickname: '',
+  gender: 1,
+  birthday: dayjs().format('YYYY-MM-DD'),
+  phoneNumber: '',
+  allergy: '',
+  operator: null,
 };
 
 const defaultFlow = {
@@ -59,25 +69,25 @@ const defaultFlow = {
 };
 
 const initialState = {
-  register: defaultRegisterAndCollection,
-  collection: defaultRegisterAndCollection,
-  analyze: defaultRegisterAndCollection,
-  evaluate: defaultRegisterAndCollection,
+  register: {
+    ...defaultRegisterAndCollection,
+    allStatus: [
+      { label: '全部', value: -1 },
+      { label: '待采集', value: CustomerStatus.ToBeCollected },
+      { label: '待分析', value: CustomerStatus.ToBeAnalyzed },
+      { label: '已完成', value: CustomerStatus.Completed },
+    ],
+  },
+  collection: { ...defaultRegisterAndCollection, allStatus: [] },
+  analyze: { ...defaultRegisterAndCollection, allStatus: [] },
+  evaluate: { ...defaultRegisterAndCollection, allStatus: [] },
   currentFlow: defaultFlow,
 
-  customersArchive: defaultRegisterAndCollection,
+  customersArchive: { ...defaultRegisterAndCollection, allStatus: [] },
 
   operators: [],
 
-  currentRegisterCustomer: {
-    name: '',
-    nickname: '',
-    gender: 1,
-    birthday: dayjs().format('YYYY-MM-DD'),
-    phoneNumber: '',
-    allergy: '',
-    operator: null,
-  },
+  currentRegisterCustomer: DefaultRegisterCustomer,
 
   currentFlowCustomer: {
     operator: null,
@@ -124,15 +134,14 @@ const useFlowStore = create(
 
     requestRegisterCustomers: async () => {
       const {
-        register: { searchKeywords, status, startDate, endDate, page },
+        register: { status, searchKeywords, startDate, endDate },
       } = get();
-      const params: any = {
-        page: page,
-        pageSize: 100,
-      };
+      const params: any = {};
+
       if (searchKeywords) {
         params.search = searchKeywords;
       }
+
       if (status !== -1) {
         params.status = status;
       }
@@ -300,6 +309,7 @@ const useFlowStore = create(
         shopId: useAuthStore.getState().currentShopWithRole?.shop._id,
       };
       request.get('/users/operators', { params }).then(({ data }) => {
+        console.log(data);
         set({ operators: data });
       });
     },
@@ -654,6 +664,12 @@ const useFlowStore = create(
           selectIdx: 0,
         };
       }
+    },
+
+    updateRegisterFilter(data) {
+      return set((state) => {
+        state.register = { ...state.register, ...data };
+      });
     },
   })),
 );

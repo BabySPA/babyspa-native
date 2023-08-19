@@ -196,7 +196,6 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
-              required
               title='过敏原'
               style={{ flex: 1 }}
               form={
