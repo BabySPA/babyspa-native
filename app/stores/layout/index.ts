@@ -19,9 +19,17 @@ const getFilteredLayoutConfig = (authorityConfig: AuthorityConfig[]) => {
   return filteredConfig;
 };
 
+const initialState = {
+  layoutConfig: [],
+  currentSelected: 0,
+};
+
 export default create(
   immer<LayoutConfigWithRole>((set, get) => ({
-    layoutConfig: [],
+    ...initialState,
+    clearCache: () => {
+      set({ ...initialState });
+    },
     getLayoutConfig: () => {
       if (get().layoutConfig.length > 0) {
         return get().layoutConfig;
@@ -46,7 +54,6 @@ export default create(
       set({ layoutConfig: filterConfig });
       return filterConfig;
     },
-    currentSelected: 2,
     changeCurrentSelected: (index: number) => {
       set({ currentSelected: index });
     },

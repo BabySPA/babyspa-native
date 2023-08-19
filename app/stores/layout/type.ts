@@ -16,6 +16,7 @@ export interface ILayoutConfig {
 }
 
 export type LayoutConfigWithRole = {
+  clearCache: () => void;
   layoutConfig: ILayoutConfig[];
   getLayoutConfig: () => ILayoutConfig[];
   currentSelected: number;

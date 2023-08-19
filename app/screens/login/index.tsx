@@ -12,7 +12,12 @@ import {
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';
-import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {
+  AntDesign,
+  Ionicons,
+  MaterialIcons,
+  Octicons,
+} from '@expo/vector-icons';
 import { ImageBackground, Image } from 'react-native';
 import { ls, ss, sp } from '~/app/utils/style';
 
@@ -24,6 +29,7 @@ export default function LoginScreen({
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectAgreement, setSelectAgreement] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
 
   const onClickLogin = async () => {
@@ -95,7 +101,7 @@ export default function LoginScreen({
               }
             />
             <Input
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChangeText={setPassword}
               borderRadius={ss(40)}
@@ -114,12 +120,21 @@ export default function LoginScreen({
                 />
               }
               InputRightElement={
-                <Icon
-                  as={<AntDesign name='eye' />}
-                  size={sp(22)}
+                <Pressable
                   mr={ls(20)}
-                  color={'#999999'}
-                />
+                  onPress={() => {
+                    setShowPassword(!showPassword);
+                  }}>
+                  <Icon
+                    as={
+                      <Ionicons
+                        name={showPassword ? 'md-eye' : 'md-eye-off-sharp'}
+                      />
+                    }
+                    size={sp(22)}
+                    color={'#999999'}
+                  />
+                </Pressable>
               }
             />
             <Pressable

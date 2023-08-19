@@ -7,8 +7,6 @@ import {
   Divider,
   Pressable,
   Icon,
-  HStack,
-  Avatar,
   Input,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
@@ -19,20 +17,23 @@ import useManagerStore from '~/app/stores/manager';
 import BoxTitle from '~/app/components/box-title';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DialogModal } from '~/app/components/modals';
 
 export default function ManagerTemplate({
   navigation,
 }: AppStackScreenProps<'ManagerTemplate'>) {
   const {
-    templates,
-    currentSelectTemplateIdx,
-    currentSelectItemTemplateIdx,
-    setCurrentSelectItemTemplateIdx,
-    getCurrentSelectTemplates,
-    getCurrentSelectTemplateItems,
+    currentSelectTemplateGroupIdx,
+    requestGetTemplates,
+    setCurrentSelectTemplateGroupIdx,
+    getCurrentSelectTemplateGroups,
+    getCurrentSelectTemplateGroupItems,
   } = useManagerStore();
+
+  useEffect(() => {
+    requestGetTemplates();
+  }, []);
 
   const [canEdit, setCanEdit] = useState(false);
   const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
@@ -118,18 +119,18 @@ export default function ManagerTemplate({
               <Box bg='white' flex={1} mt={ss(20)}>
                 <SwipeListView
                   ref={swiperlistRef}
-                  data={getCurrentSelectTemplates()}
+                  data={getCurrentSelectTemplateGroups()}
                   keyExtractor={(item, index) => item.name}
                   renderItem={({ item, index }) => {
                     return (
                       <Box>
                         <Pressable
                           onLongPress={() => {
-                            setCurrentSelectItemTemplateIdx(index);
+                            setCurrentSelectTemplateGroupIdx(index);
                           }}
                           alignItems='flex-start'
                           bg={
-                            currentSelectItemTemplateIdx === index
+                            currentSelectTemplateGroupIdx === index
                               ? '#1AB7BE'
                               : '#fff'
                           }
@@ -141,7 +142,7 @@ export default function ManagerTemplate({
                           <Text
                             fontSize={sp(20)}
                             color={
-                              currentSelectItemTemplateIdx === index
+                              currentSelectTemplateGroupIdx === index
                                 ? '#fff'
                                 : '#333'
                             }>
@@ -191,67 +192,71 @@ export default function ManagerTemplate({
               p={ss(20)}>
               <BoxTitle title='模版详情' />
               <Row mt={ss(28)}>
-                {getCurrentSelectTemplateItems().map((item, index) => {
-                  return (
-                    <Pressable
-                      key={index}
-                      onLongPress={() => {
-                        setCanEdit(true);
-                      }}
-                      mr={ls(10)}
-                      mb={ss(10)}
-                      borderWidth={1}
-                      borderRadius={2}
-                      borderColor={'#D8D8D8'}
-                      px={ls(20)}
-                      py={ss(7)}>
-                      <Row alignItems={'center'}>
-                        <Text>{item}</Text>
-                        {canEdit && (
-                          <Pressable
-                            onPress={() => {
-                              // 删除
-                              setShowDeleteItemModal(true);
-                            }}>
-                            <Icon
-                              ml={ls(10)}
-                              as={<Ionicons name='ios-close-circle-outline' />}
-                              size={ss(20)}
-                              color='#FB6459'
-                            />
-                            <DialogModal
-                              isOpen={showDeleteItemModal}
-                              onClose={function (): void {
-                                setShowDeleteItemModal(false);
-                              }}
-                              title='是否确认删除模版？'
-                              onConfirm={function (): void {
-                                setShowDeleteItemModal(false);
+                {getCurrentSelectTemplateGroupItems().map(
+                  (item: any, index: any) => {
+                    return (
+                      <Pressable
+                        key={index}
+                        onLongPress={() => {
+                          setCanEdit(true);
+                        }}
+                        mr={ls(10)}
+                        mb={ss(10)}
+                        borderWidth={1}
+                        borderRadius={2}
+                        borderColor={'#D8D8D8'}
+                        px={ls(20)}
+                        py={ss(7)}>
+                        <Row alignItems={'center'}>
+                          <Text>{item}</Text>
+                          {canEdit && (
+                            <Pressable
+                              onPress={() => {
+                                // 删除
+                                setShowDeleteItemModal(true);
+                              }}>
+                              <Icon
+                                ml={ls(10)}
+                                as={
+                                  <Ionicons name='ios-close-circle-outline' />
+                                }
+                                size={ss(20)}
+                                color='#FB6459'
+                              />
+                              <DialogModal
+                                isOpen={showDeleteItemModal}
+                                onClose={function (): void {
+                                  setShowDeleteItemModal(false);
+                                }}
+                                title='是否确认删除模版？'
+                                onConfirm={function (): void {
+                                  setShowDeleteItemModal(false);
 
-                                // requestPatchCustomerStatus({
-                                //   status: CustomerStatus.Canceled,
-                                //   type: 'register',
-                                // })
-                                //   .then(async (res) => {
-                                //     // 取消成功
-                                //     toastAlert(toast, 'success', '取消成功！');
-                                //     await requestInitializeData();
-                                //   })
-                                //   .catch((err) => {
-                                //     // 取消失败
-                                //     toastAlert(toast, 'error', '取消失败！');
-                                //   })
-                                //   .finally(() => {
-                                //     setLoading(false);
-                                //   });
-                              }}
-                            />
-                          </Pressable>
-                        )}
-                      </Row>
-                    </Pressable>
-                  );
-                })}
+                                  // requestPatchCustomerStatus({
+                                  //   status: CustomerStatus.Canceled,
+                                  //   type: 'register',
+                                  // })
+                                  //   .then(async (res) => {
+                                  //     // 取消成功
+                                  //     toastAlert(toast, 'success', '取消成功！');
+                                  //     await requestInitializeData();
+                                  //   })
+                                  //   .catch((err) => {
+                                  //     // 取消失败
+                                  //     toastAlert(toast, 'error', '取消失败！');
+                                  //   })
+                                  //   .finally(() => {
+                                  //     setLoading(false);
+                                  //   });
+                                }}
+                              />
+                            </Pressable>
+                          )}
+                        </Row>
+                      </Pressable>
+                    );
+                  },
+                )}
               </Row>
             </Column>
           </Row>

@@ -71,6 +71,8 @@ type Template = {
 type PatchCustomerStatusType = 'register' | 'flow';
 
 export interface FlowState {
+  clearCache: () => void;
+
   operators: Operator[];
   register: RegisterAndCollection;
   collection: RegisterAndCollection;

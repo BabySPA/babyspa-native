@@ -4,13 +4,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import request from '~/app/api';
 import { AuthState, RW, RoleAuthority, ShopsWithRole } from './type';
 import { generateMixinRoles } from '~/app/utils';
+import useLayoutStore from '../layout';
+import useFlowStore from '../flow';
+import useManagerStore from '../manager';
+
+const initialState = {
+  accessToken: null,
+  user: null,
+  currentShopWithRole: null,
+};
 
 const useAuthStore = create(
   persist<AuthState>(
     (set, get) => ({
-      accessToken: null,
-      user: null,
-      currentShopWithRole: null,
+      ...initialState,
+      clearCache: () => {
+        set({ ...initialState });
+      },
       login: async (username: string, password: string) => {
         return new Promise((resolve, reject) => {
           request
@@ -47,7 +57,7 @@ const useAuthStore = create(
         }
       },
       logout: async () => {
-        set({ accessToken: null, user: null });
+        get().clearAllStoreCache();
         return Promise.resolve();
       },
       hasAuthority: (authorityKey: RoleAuthority, rw: RW) => {
@@ -65,6 +75,12 @@ const useAuthStore = create(
             },
           ) !== -1
         );
+      },
+      clearAllStoreCache: () => {
+        useAuthStore.getState().clearCache();
+        useLayoutStore.getState().clearCache();
+        useFlowStore.getState().clearCache();
+        useManagerStore.getState().clearCache();
       },
     }),
     {

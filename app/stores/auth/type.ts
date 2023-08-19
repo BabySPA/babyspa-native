@@ -46,4 +46,6 @@ export interface AuthState {
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   hasAuthority: (authorityKey: RoleAuthority, rw: RW) => boolean;
+  clearCache: () => void;
+  clearAllStoreCache: () => void;
 }

@@ -19,7 +19,6 @@ export interface Shop {
 export enum ShopType {
   CENTER = 0, // 中心
   SHOP = 1, // 门店
-  HEADQUARTERS = 2, // 总店
 }
 
 export enum RoleStatus {
@@ -39,10 +38,12 @@ export interface User {
     originalShopId?: string; // 员工编辑 - 更新门店时，需要记录更新前的门店id，若与shopId不同，则后端需要决定是否删除原有门店
     shopId: string;
     name: string;
+    type: ShopType;
   };
   role?: {
     name: string;
     roleKey: string;
+    type: ShopType;
   };
   description: string;
   createdAt?: string;
@@ -56,6 +57,7 @@ export interface Role {
   description: string;
   status: RoleStatus;
   authorities: AuthorityConfig[];
+  type: ShopType;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -121,21 +123,29 @@ export interface Template {
   _id: string;
   key: string;
   name: string;
-  template: TemplateItem[];
+  groups: TemplateItem[];
 }
 
 interface TemplateState {
   templates: Template[];
   currentSelectTemplateIdx: number;
-  currentSelectItemTemplateIdx: number;
+  currentSelectTemplateGroupIdx: number;
+
+  requestGetTemplates: () => Promise<any>;
+
   setCurrentSelectTemplateIdx: (idx: number) => void;
-  setCurrentSelectItemTemplateIdx: (idx: number) => void;
-  getCurrentSelectTemplates: () => TemplateItem[];
-  getCurrentSelectTemplateItems: () => string[];
+
+  setCurrentSelectTemplateGroupIdx: (idx: number) => void;
+
+  getCurrentSelectTemplateGroups: () => TemplateItem[];
+
+  getCurrentSelectTemplateGroupItems: () => string[];
 }
 
 export interface ManangerState
   extends ShopState,
     UserState,
     RoleState,
-    TemplateState {}
+    TemplateState {
+  clearCache: () => void;
+}

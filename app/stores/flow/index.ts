@@ -58,64 +58,54 @@ const defaultFlow = {
   updatedAt: '',
 };
 
+const initialState = {
+  register: defaultRegisterAndCollection,
+  collection: defaultRegisterAndCollection,
+  analyze: defaultRegisterAndCollection,
+  evaluate: defaultRegisterAndCollection,
+  currentFlow: defaultFlow,
+
+  customersArchive: defaultRegisterAndCollection,
+
+  operators: [],
+
+  currentRegisterCustomer: {
+    name: '',
+    nickname: '',
+    gender: 1,
+    birthday: dayjs().format('YYYY-MM-DD'),
+    phoneNumber: '',
+    allergy: '',
+    operator: null,
+  },
+
+  currentFlowCustomer: {
+    operator: null,
+    id: '',
+    name: '',
+    gender: 1,
+    birthday: '',
+    nickname: '',
+    phoneNumber: '',
+    status: CustomerStatus.Completed,
+    allergy: '',
+    updatedAt: '',
+    tag: '',
+    flowId: '',
+    shop: null,
+    analyst: null,
+    flowEvalute: null,
+  },
+
+  guidanceTemplate: [],
+};
+
 const useFlowStore = create(
   immer<FlowState>((set, get) => ({
-    register: defaultRegisterAndCollection,
-    collection: defaultRegisterAndCollection,
-    analyze: defaultRegisterAndCollection,
-    evaluate: defaultRegisterAndCollection,
-    currentFlow: defaultFlow,
-
-    customersArchive: defaultRegisterAndCollection,
-
-    operators: [],
-
-    currentRegisterCustomer: {
-      name: '',
-      nickname: '',
-      gender: 1,
-      birthday: dayjs().format('YYYY-MM-DD'),
-      phoneNumber: '',
-      allergy: '',
-      operator: null,
+    ...initialState,
+    clearCache: () => {
+      set({ ...initialState });
     },
-
-    currentFlowCustomer: {
-      operator: null,
-      id: '',
-      name: '',
-      gender: 1,
-      birthday: '',
-      nickname: '',
-      phoneNumber: '',
-      status: CustomerStatus.Completed,
-      allergy: '',
-      updatedAt: '',
-      tag: '',
-      flowId: '',
-      shop: null,
-      analyst: null,
-      flowEvalute: null,
-    },
-
-    guidanceTemplate: [
-      {
-        key: '咳嗽',
-        children: [
-          '晨起咳嗽',
-          '上半夜咳',
-          '下半夜咳',
-          '咳嗽有痰',
-          '干咳',
-          '偶尔咳嗽',
-        ],
-      },
-      {
-        key: '感冒',
-        children: ['头痛', '流鼻涕', '清鼻涕', '黄鼻涕'],
-      },
-    ],
-
     requestInitializeData: async () => {
       // 获取当前用户的信息
       const hasAuthority = useAuthStore.getState().hasAuthority;

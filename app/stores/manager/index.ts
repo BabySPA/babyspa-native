@@ -4,140 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import { ManangerState, RoleStatus, ShopType } from './type';
 import { ConfigAuthTree, LayoutConfig } from '~/app/constants';
 import { generateAuthorityConfig } from '~/app/utils';
-export const DefaultTemplate = [
-  {
-    _id: '1',
-    key: 'allergy',
-    name: '过敏原',
-    template: [
-      {
-        name: '风寒感冒',
-        children: ['头痛', '鼻塞', '流涕'],
-      },
-      {
-        name: '风热感冒',
-        children: ['咽喉痛', '咳嗽', '发热'],
-      },
-      {
-        name: '咳嗽',
-        children: ['干咳', '咳痰'],
-      },
-      {
-        name: '腹泻',
-        children: ['腹痛', '腹泻'],
-      },
-    ],
-  },
-  {
-    _id: '2',
-    key: 'guidance',
-    name: '调理导向',
-    template: [
-      {
-        name: '咳嗽',
-        children: [
-          '晨起咳嗽',
-          '上半夜咳',
-          '下半夜咳',
-          '咳嗽有痰',
-          '干咳',
-          '偶尔咳嗽',
-        ],
-      },
-      {
-        name: '感冒',
-        children: ['头痛', '流鼻涕', '清鼻涕', '黄鼻涕'],
-      },
-    ],
-  },
-  {
-    _id: '3',
-    key: 'conslutsion',
-    name: '分析结论',
-    template: [
-      {
-        name: '咳嗽',
-        children: [
-          '晨起咳嗽',
-          '上半夜咳',
-          '下半夜咳',
-          '咳嗽有痰',
-          '干咳',
-          '偶尔咳嗽',
-        ],
-      },
-      {
-        name: '感冒',
-        children: ['头痛', '流鼻涕', '清鼻涕', '黄鼻涕'],
-      },
-    ],
-  },
-  {
-    _id: '4',
-    key: 'application-acupoint',
-    name: '调理方案-贴敷穴位',
-    template: [
-      {
-        name: '上部',
-        children: ['腰阳关穴', '三阴交穴'],
-      },
-      {
-        name: '中部',
-        children: ['曲池穴'],
-      },
-      {
-        name: '下部',
-        children: ['足三里穴', '足底涌泉穴'],
-      },
-    ],
-  },
-  {
-    _id: '5',
-    key: 'massage-remark',
-    name: '调理方案-推拿备注',
-    template: [
-      {
-        name: '受风重',
-        children: [
-          `胃经↓2 运水入土1 脾经个5 一窝蜂1  小肠经↓3 外劳宫1 大肠经↓5 阳池1 `,
-        ],
-      },
-      {
-        name: '受风内热',
-        children: [
-          `肺经个7 外关1 心经51 三关肺个7 肝经”51 天河水↓3 肾经个3 六腑↓5`,
-        ],
-      },
-    ],
-  },
-  {
-    _id: '6',
-    key: 'flow-remark',
-    name: '注意事项',
-    template: [
-      {
-        name: '吃',
-        children: ['吃饭吃稀的'],
-      },
-      {
-        name: '喝',
-        children: ['喝水喝热的'],
-      },
-      {
-        name: '穿',
-        children: ['穿衣穿暖的'],
-      },
-      {
-        name: '睡',
-        children: ['睡觉睡足的'],
-      },
-      {
-        name: '洗',
-        children: ['洗澡洗热的'],
-      },
-    ],
-  },
-];
+export const DefaultTemplate = [];
 
 export const DefaultShop = {
   name: '',
@@ -161,10 +28,12 @@ export const DefaultUser = {
   shop: {
     shopId: '',
     name: '',
+    type: ShopType.SHOP,
   },
   role: {
     name: '',
     roleKey: '',
+    type: ShopType.SHOP,
   },
   description: '',
 };
@@ -174,16 +43,47 @@ export const DefaultRole = {
   roleKey: '',
   description: '',
   status: RoleStatus.OPEN,
+  type: ShopType.SHOP,
   authorities: [],
+};
+
+const initialState = {
+  // shops
+  shops: [],
+  currentShop: DefaultShop,
+
+  // 员工
+  users: [],
+  userFilter: {
+    name: '',
+    shop: {
+      id: '',
+      name: '',
+    },
+  },
+  currentUser: DefaultUser,
+
+  // 角色
+  roles: [],
+  currentRole: DefaultRole,
+  configAuthTree: ConfigAuthTree,
+
+  // template
+  templates: DefaultTemplate,
+  currentSelectTemplateIdx: 0,
+  currentSelectTemplateGroupIdx: 0,
 };
 
 const useManagerStore = create(
   immer<ManangerState>((set, get) => ({
-    // shops
-    shops: [],
-    currentShop: DefaultShop,
+    ...initialState,
+    clearCache: () => {
+      set({ ...initialState });
+    },
+
+    // 门店
     requestGetShops: async () => {
-      const { data } = await request.get('/shops');
+      const { data } = await request.get('/shops?type=' + ShopType.SHOP);
       set((state) => {
         state.shops = data;
       });
@@ -202,15 +102,6 @@ const useManagerStore = create(
     },
 
     // 员工
-    users: [],
-    userFilter: {
-      name: '',
-      shop: {
-        id: '',
-        name: '',
-      },
-    },
-    currentUser: DefaultUser,
     requestGetUsers: async () => {
       const shopId = get().userFilter.shop.id;
 
@@ -275,9 +166,6 @@ const useManagerStore = create(
     },
 
     // 角色
-    roles: [],
-    currentRole: DefaultRole,
-    configAuthTree: ConfigAuthTree,
 
     requestGetRoles: async () => {
       const { data } = await request.get('/roles');
@@ -328,29 +216,37 @@ const useManagerStore = create(
     },
 
     // template
-    templates: DefaultTemplate,
-    currentSelectTemplateIdx: 0,
-    currentSelectItemTemplateIdx: 0,
+
     setCurrentSelectTemplateIdx: (idx) => {
       set((state) => {
         state.currentSelectTemplateIdx = idx;
-        state.currentSelectItemTemplateIdx = 0;
+        state.currentSelectTemplateGroupIdx = 0;
       });
     },
-    setCurrentSelectItemTemplateIdx: (idx) => {
-      set((state) => {
-        state.currentSelectItemTemplateIdx = idx;
-      });
-    },
-    getCurrentSelectTemplates: () => {
-      const idx = get().currentSelectTemplateIdx;
-      return get().templates[idx].template;
-    },
-    getCurrentSelectTemplateItems: () => {
-      const idx = get().currentSelectTemplateIdx;
-      const itemIdx = get().currentSelectItemTemplateIdx;
 
-      return get().templates[idx].template[itemIdx].children;
+    setCurrentSelectTemplateGroupIdx: (idx) => {
+      set((state) => {
+        state.currentSelectTemplateGroupIdx = idx;
+      });
+    },
+
+    getCurrentSelectTemplateGroups: () => {
+      const idx = get().currentSelectTemplateIdx;
+      return get().templates[idx]?.groups;
+    },
+
+    getCurrentSelectTemplateGroupItems: () => {
+      const idx = get().currentSelectTemplateIdx;
+      const itemIdx = get().currentSelectTemplateGroupIdx;
+
+      return get().templates[idx]?.groups?.[itemIdx]?.children || [];
+    },
+
+    requestGetTemplates: async () => {
+      const { data } = await request.get('/templates');
+      set((state) => {
+        state.templates = data;
+      });
     },
   })),
 );
