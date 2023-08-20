@@ -137,6 +137,8 @@ interface TemplateState {
 
   setCurrentSelectTemplateGroupIdx: (idx: number) => void;
 
+  getTemplateGroups: (groupKey: string) => Template | undefined;
+
   getCurrentSelectTemplateGroups: () => TemplateItem[];
 
   getCurrentSelectTemplateGroupItems: () => string[];

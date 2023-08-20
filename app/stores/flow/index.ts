@@ -9,6 +9,7 @@ import { FlowState } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { reject } from 'lodash';
+import { fuzzySearch } from '~/app/utils';
 
 const defaultRegisterAndCollection = {
   customers: [],
@@ -16,7 +17,8 @@ const defaultRegisterAndCollection = {
   hasNextPage: false, // hasNextPage:false
   searchKeywords: '',
   status: -1,
-  startDate: dayjs().format('YYYY-MM-DD'),
+  statusCount: {},
+  startDate: dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
@@ -80,9 +82,31 @@ const initialState = {
       { label: '已完成', value: CustomerStatus.Completed },
     ],
   },
-  collection: { ...defaultRegisterAndCollection, allStatus: [] },
-  analyze: { ...defaultRegisterAndCollection, allStatus: [] },
-  evaluate: { ...defaultRegisterAndCollection, allStatus: [] },
+  collection: {
+    ...defaultRegisterAndCollection,
+    allStatus: [
+      { label: '全部', value: -1 },
+      { label: '待采集', value: CustomerStatus.ToBeCollected },
+      { label: '待分析', value: CustomerStatus.ToBeAnalyzed },
+      { label: '已完成', value: CustomerStatus.Completed },
+    ],
+  },
+  analyze: {
+    ...defaultRegisterAndCollection,
+    allStatus: [
+      { label: '全部', value: -1 },
+      { label: '待分析', value: CustomerStatus.ToBeAnalyzed },
+      { label: '已完成', value: CustomerStatus.Completed },
+    ],
+  },
+  evaluate: {
+    ...defaultRegisterAndCollection,
+    allStatus: [
+      { label: '全部', value: -1 },
+      { label: '待评价', value: CustomerStatus.ToBeEvaluated },
+      { label: '已评价', value: CustomerStatus.Evaluated },
+    ],
+  },
   currentFlow: defaultFlow,
 
   customersArchive: { ...defaultRegisterAndCollection, allStatus: [] },
@@ -150,10 +174,6 @@ const useFlowStore = create(
       } = get();
       const params: any = {};
 
-      if (searchKeywords) {
-        params.search = searchKeywords;
-      }
-
       if (status !== -1) {
         params.status = status;
       }
@@ -161,18 +181,22 @@ const useFlowStore = create(
         params.startDate = startDate;
       }
       if (endDate) {
-        params.endDate = startDate;
+        params.endDate = endDate;
       }
 
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/customers', { params }).then(({ data }) => {
-        const { docs, hasNextPage } = data;
+        const { docs, hasNextPage, statusCount } = data;
+
         set({
           register: {
             ...get().register,
-            customers: docs,
+            customers: searchKeywords
+              ? fuzzySearch(docs, searchKeywords)
+              : docs,
             hasNextPage: hasNextPage,
+            statusCount,
           },
         });
       });
@@ -180,15 +204,13 @@ const useFlowStore = create(
 
     requestCustomersArchive: async () => {
       const {
-        customersArchive: { searchKeywords, status, startDate, endDate, page },
+        customersArchive: { status, startDate, endDate, searchKeywords, page },
       } = get();
       const params: any = {
         page: page,
         pageSize: 100,
       };
-      if (searchKeywords) {
-        params.search = searchKeywords;
-      }
+
       if (status !== -1) {
         params.status = status;
       }
@@ -196,19 +218,22 @@ const useFlowStore = create(
         params.startDate = startDate;
       }
       if (endDate) {
-        params.endDate = startDate;
+        params.endDate = endDate;
       }
 
       // TODO
       params.shopId = '64c6120c3c4c6d15c1432802';
 
       request.get('/customers', { params }).then(({ data }) => {
-        const { docs, hasNextPage } = data;
+        const { docs, hasNextPage, statusCount } = data;
         set({
           customersArchive: {
             ...get().customersArchive,
-            customers: docs,
+            customers: searchKeywords
+              ? fuzzySearch(docs, searchKeywords)
+              : docs,
             hasNextPage: hasNextPage,
+            statusCount,
           },
         });
       });
@@ -216,15 +241,12 @@ const useFlowStore = create(
 
     requestCollectionCustomers: async () => {
       const {
-        collection: { searchKeywords, status, startDate, endDate, page },
+        collection: { status, startDate, searchKeywords, endDate, page },
       } = get();
       const params: any = {
         page: page,
         pageSize: 100,
       };
-      if (searchKeywords) {
-        params.search = searchKeywords;
-      }
       if (status !== -1) {
         params.status = status;
       }
@@ -232,18 +254,21 @@ const useFlowStore = create(
         params.startDate = startDate;
       }
       if (endDate) {
-        params.endDate = startDate;
+        params.endDate = endDate;
       }
 
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/customers', { params }).then(({ data }) => {
-        const { docs, hasNextPage } = data;
+        const { docs, hasNextPage, statusCount } = data;
         set({
           collection: {
             ...get().collection,
-            customers: docs,
+            customers: searchKeywords
+              ? fuzzySearch(docs, searchKeywords)
+              : docs,
             hasNextPage: hasNextPage,
+            statusCount,
           },
         });
       });
@@ -251,15 +276,13 @@ const useFlowStore = create(
 
     requestAnalyzeCustomers: async () => {
       const {
-        analyze: { searchKeywords, status, startDate, endDate, page },
+        analyze: { status, startDate, endDate, searchKeywords, page },
       } = get();
       const params: any = {
         page: page,
         pageSize: 100,
       };
-      if (searchKeywords) {
-        params.search = searchKeywords;
-      }
+
       if (status !== -1) {
         params.status = status;
       }
@@ -267,16 +290,19 @@ const useFlowStore = create(
         params.startDate = startDate;
       }
       if (endDate) {
-        params.endDate = startDate;
+        params.endDate = endDate;
       }
 
       request.get('/customers/analyzes', { params }).then(({ data }) => {
-        const { docs, hasNextPage } = data;
+        const { docs, hasNextPage, statusCount } = data;
         set({
           analyze: {
             ...get().analyze,
-            customers: docs,
+            customers: searchKeywords
+              ? fuzzySearch(docs, searchKeywords)
+              : docs,
             hasNextPage: hasNextPage,
+            statusCount,
           },
         });
       });
@@ -284,15 +310,12 @@ const useFlowStore = create(
 
     requestEvaluateCustomers: async () => {
       const {
-        evaluate: { searchKeywords, status, startDate, endDate, page },
+        evaluate: { status, startDate, searchKeywords, endDate, page },
       } = get();
       const params: any = {
         page: page,
         pageSize: 100,
       };
-      if (searchKeywords) {
-        params.search = searchKeywords;
-      }
       if (status !== -1) {
         params.status = status;
       }
@@ -300,17 +323,20 @@ const useFlowStore = create(
         params.startDate = startDate;
       }
       if (endDate) {
-        params.endDate = startDate;
+        params.endDate = endDate;
       }
 
       request.get('/customers/evaluates', { params }).then(({ data }) => {
-        const { docs, hasNextPage } = data;
+        const { docs, hasNextPage, statusCount } = data;
 
         set({
           evaluate: {
             ...get().evaluate,
-            customers: docs,
+            customers: searchKeywords
+              ? fuzzySearch(docs, searchKeywords)
+              : docs,
             hasNextPage: hasNextPage,
+            statusCount,
           },
         });
       });
@@ -321,7 +347,6 @@ const useFlowStore = create(
         shopId: useAuthStore.getState().currentShopWithRole?.shop._id,
       };
       request.get('/users/operators', { params }).then(({ data }) => {
-        console.log(data);
         set({ operators: data });
       });
     },
@@ -346,10 +371,6 @@ const useFlowStore = create(
             state.currentRegisterCustomer = data;
           });
           return data;
-        })
-        .catch((e) => {
-          console.log(e);
-          reject(e);
         });
     },
 
@@ -426,7 +447,6 @@ const useFlowStore = create(
 
     requestPatchFlowToAnalyze: async () => {
       const currentFlow = get().currentFlow;
-
       request
         .patch(`/flows/analyze/${currentFlow._id}`, {
           analyze: currentFlow.analyze,
@@ -639,15 +659,17 @@ const useFlowStore = create(
         state.currentFlow.analyze.followUp = {
           ...state.currentFlow.analyze.followUp,
           ...followUp,
+          followUpTime: followUp.followUpTime || dayjs().format('YYYY-MM-DD'),
         };
       });
     },
 
-    updateNextTime: (nextTime) => {
+    updateNextTime: (next) => {
       return set((state) => {
         state.currentFlow.analyze.next = {
           ...state.currentFlow.analyze.next,
-          ...nextTime,
+          ...next,
+          nextTime: next.nextTime || dayjs().format('YYYY-MM-DD'),
         };
       });
     },
@@ -685,6 +707,24 @@ const useFlowStore = create(
     updateRegisterFilter(data) {
       return set((state) => {
         state.register = { ...state.register, ...data };
+      });
+    },
+
+    updateCollectionFilter(data) {
+      return set((state) => {
+        state.collection = { ...state.collection, ...data };
+      });
+    },
+
+    updateAnalyzeFilter(data) {
+      return set((state) => {
+        state.analyze = { ...state.analyze, ...data };
+      });
+    },
+
+    updateEvaluateFilter(data) {
+      return set((state) => {
+        state.evaluate = { ...state.evaluate, ...data };
       });
     },
   })),

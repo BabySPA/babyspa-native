@@ -9,6 +9,7 @@ import {
   Column,
   Icon,
   Box,
+  ScrollView,
 } from 'native-base';
 import { sp, ss, ls } from '~/app/utils/style';
 import { Template } from '../stores/manager/type';
@@ -147,7 +148,7 @@ export function TemplateModal({
           />
           <Column w={ls(470)} h={ss(350)}>
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-              <Column bgColor={'#EDF7F6'}>
+              <ScrollView bgColor={'#EDF7F6'} maxW={ls(130)}>
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
@@ -175,7 +176,7 @@ export function TemplateModal({
                     </Pressable>
                   );
                 })}
-              </Column>
+              </ScrollView>
               <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
                 {template?.groups[selectTemplateItemsIdx].children.map(
                   (item, idx) => {

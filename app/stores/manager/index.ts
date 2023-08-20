@@ -242,6 +242,10 @@ const useManagerStore = create(
       return get().templates[idx]?.groups?.[itemIdx]?.children || [];
     },
 
+    getTemplateGroups: (groupKey) => {
+      return get().templates.find((template) => template.key === groupKey);
+    },
+
     requestGetTemplates: async () => {
       const { data } = await request.get('/templates');
       set((state) => {

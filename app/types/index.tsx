@@ -25,10 +25,12 @@ export interface OssConfig {
 }
 
 export enum CustomerStatus {
-  Completed = 0, // 已完成
+  Completed, // 已完成
   Canceled, // 已取消
   ToBeCollected, // 待收集
   ToBeAnalyzed, // 待分析
+  ToBeEvaluated, // 待评价
+  Evaluated, // 已评价
 }
 
 export enum Gender {

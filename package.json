@@ -34,7 +34,7 @@
     "expo-print": "~12.2.1",
     "expo-screen-orientation": "~5.1.1",
     "expo-sharing": "~11.2.2",
-    "expo-splash-screen": "~0.18.2",
+    "expo-splash-screen": "0.18.2",
     "expo-status-bar": "~1.4.4",
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.4",

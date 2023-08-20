@@ -13,23 +13,6 @@ import { CustomerStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
 import { Score } from '../stores/flow/type';
 
-type StatusOperateConfig = {
-  [key in CustomerStatus]: {
-    operate?: string;
-  };
-};
-
-export const StatusOperateConfig: StatusOperateConfig = {
-  [CustomerStatus.ToBeCollected]: {
-    operate: '采集',
-  },
-  [CustomerStatus.ToBeAnalyzed]: {
-    operate: '分析',
-  },
-  [CustomerStatus.Completed]: {},
-  [CustomerStatus.Canceled]: {},
-};
-
 export const EvaluateTextConfig = {
   ['TODO']: {
     text: '待评价',
@@ -43,27 +26,32 @@ export const EvaluateTextConfig = {
   },
 };
 
-export const StatusTextConfig = {
-  [CustomerStatus.ToBeCollected]: {
-    text: '待采集',
-    textColor: '#FE9505',
-    bgColor: 'rgba(254, 149, 5, 0.2)',
-  },
-  [CustomerStatus.ToBeAnalyzed]: {
-    text: '待分析',
-    textColor: '#2AA1F7',
-    bgColor: 'rgba(42, 161, 247, 0.2)',
-  },
-  [CustomerStatus.Completed]: {
-    text: '已完成',
-    textColor: '#00B49E',
-    bgColor: 'rgba(0, 180, 158, 0.2)',
-  },
-  [CustomerStatus.Canceled]: {
-    text: '已取消',
-    textColor: '#777',
-    bgColor: 'rgba(119, 119, 119, 0.2)',
-  },
+export const getStatusTextConfig = (status: CustomerStatus) => {
+  if (status == CustomerStatus.ToBeCollected) {
+    return {
+      text: '待采集',
+      textColor: '#FE9505',
+      bgColor: 'rgba(254, 149, 5, 0.2)',
+    };
+  } else if (status == CustomerStatus.ToBeAnalyzed) {
+    return {
+      text: '待分析',
+      textColor: '#2AA1F7',
+      bgColor: 'rgba(42, 161, 247, 0.2)',
+    };
+  } else if (status == CustomerStatus.Completed) {
+    return {
+      text: '已完成',
+      textColor: '#00B49E',
+      bgColor: 'rgba(0, 180, 158, 0.2)',
+    };
+  } else if (status == CustomerStatus.Canceled) {
+    return {
+      text: '已取消',
+      textColor: '#777',
+      bgColor: 'rgba(119, 119, 119, 0.2)',
+    };
+  }
 };
 
 export interface IConfigAuth {
@@ -335,7 +323,7 @@ export const SolutionDefault = {
     name: '消肿止痛贴（0.4g/2ml）',
     count: 1,
     duration: 0,
-    acupoint: '太阳穴',
+    acupoint: '',
   },
   massage: {
     name: '小儿推拿',
@@ -355,4 +343,13 @@ export const EvaluateStoreConfig: Record<Score, string> = {
   3: '满意',
   4: '很满意',
   5: '非常满意',
+};
+
+export const TemplateGroupKeys = {
+  allergy: 'allergy',
+  guidance: 'guidance',
+  conclusion: 'conclusion',
+  ['application-acupoint']: 'application-acupoint',
+  ['massage-remark']: 'massage-remark',
+  ['flow-remark']: 'flow-remark',
 };

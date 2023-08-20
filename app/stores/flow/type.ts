@@ -48,7 +48,7 @@ export interface RegisterAndCollection {
   startDate: string;
   endDate: string;
   status: CustomerStatus | -1;
-
+  statusCount: any;
   // 用于筛选
   allStatus: {
     value: number;
@@ -113,9 +113,13 @@ export interface FlowState {
   requestGetFlow: (flowId: string) => Promise<void>;
 
   updateRegisterFilter: (data: Partial<RegisterAndCollection>) => void;
+  updateCollectionFilter: (data: Partial<RegisterAndCollection>) => void;
+  updateEvaluateFilter: (data: Partial<RegisterAndCollection>) => void;
+
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
   updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
   updateCollection: (data: Partial<Collect>) => void;
+  updateAnalyzeFilter: (data: Partial<RegisterAndCollection>) => void;
   updateAnalyze: (data: Partial<Analyze>) => void;
 
   addLingualImage: (updating: UpdatingImage) => void;

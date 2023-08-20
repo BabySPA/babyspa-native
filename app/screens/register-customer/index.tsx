@@ -23,7 +23,7 @@ export default function RegisterCustomerScreen({
   const {
     requestGetOperators,
     requestPostCustomerInfo,
-    requestRegisterCustomers,
+    requestInitializeData,
     updateCurrentFlowCustomer,
   } = useFlowStore();
 
@@ -60,7 +60,7 @@ export default function RegisterCustomerScreen({
                     'success',
                     isRegister ? '登记成功！' : '快速采集客户信息成功！',
                   );
-                  requestRegisterCustomers();
+                  requestInitializeData();
                   if (isRegister) {
                     navigation.goBack();
                   } else {

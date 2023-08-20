@@ -5,21 +5,23 @@ import {
   Column,
   Container,
   Icon,
+  Pressable,
   Radio,
   Row,
-  Select,
   Text,
 } from 'native-base';
 import BoxItem from './box-item';
-import { Pressable, TextInput } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import { SolutionDefault } from '~/app/constants';
+import { SolutionDefault, TemplateGroupKeys } from '~/app/constants';
 import SelectDay, { getDay } from '~/app/components/select-day';
 import AddCountSelector from '~/app/components/add-count-selector';
+import { TemplateModal } from '~/app/components/modals';
+import useManagerStore from '~/app/stores/manager';
+import SelectTimeLength from '~/app/components/select-time-length';
 
 export default function SolutionInfo() {
   const {
@@ -35,6 +37,8 @@ export default function SolutionInfo() {
     updateNextTime,
   } = useFlowStore();
 
+  const { getTemplateGroups } = useManagerStore();
+
   const {
     analyze: {
       solution: { applications, massages },
@@ -44,7 +48,9 @@ export default function SolutionInfo() {
     },
   } = currentFlow;
 
-  const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
+  const [showRemarkModal, setShowRemarkModal] = useState(false);
+  const [showMassageRemarkModal, setShowMassageRemarkModal] = useState(false);
+  const [showAcupointModal, setShowAcupointModal] = useState(false);
 
   return (
     <Row flex={1}>
@@ -93,17 +99,62 @@ export default function SolutionInfo() {
                     alignItems={'center'}
                     mt={ss(25)}
                     justifyContent={'space-between'}>
-                    <Row>
+                    <Row alignItems={'flex-start'}>
                       <Text ml={ls(10)} color='#666' fontSize={sp(16)}>
                         贴敷时长：
-                        <Text color='#E36C36'>
-                          {dayjs(item.duration).minute()} 分钟
+                      </Text>
+                      <SelectTimeLength
+                        onSelect={function (
+                          selectedItem: any,
+                          index: number,
+                        ): void {
+                          updateSolutionApplication(
+                            { ...item, duration: selectedItem.value },
+                            idx,
+                          );
+                        }}
+                        defaultButtonText={
+                          item.duration === 0
+                            ? '请选择'
+                            : dayjs(item.duration).minute() + '分钟'
+                        }
+                      />
+                      <Row alignItems={'flex-start'}>
+                        <Text color='#666' fontSize={sp(16)}>
+                          穴位：
                         </Text>
-                      </Text>
-                      <Text ml={ls(30)} color='#666' fontSize={sp(16)}>
-                        穴位：
-                        <Text color='#E36C36'>{item.acupoint}</Text>
-                      </Text>
+
+                        <Pressable
+                          onPress={() => {
+                            setShowAcupointModal(true);
+                          }}>
+                          <Text
+                            color='#E36C36'
+                            fontSize={sp(16)}
+                            maxW={ls(130)}>
+                            {item.acupoint || '请选择'}
+                          </Text>
+
+                          <TemplateModal
+                            template={getTemplateGroups(
+                              TemplateGroupKeys['application-acupoint'],
+                            )}
+                            defaultText={remark}
+                            isOpen={showAcupointModal}
+                            onClose={function (): void {
+                              setShowAcupointModal(false);
+                            }}
+                            onConfirm={function (text: string): void {
+                              // update(text);
+                              updateSolutionApplication(
+                                { ...item, acupoint: text },
+                                idx,
+                              );
+                              setShowAcupointModal(false);
+                            }}
+                          />
+                        </Pressable>
+                      </Row>
                     </Row>
                     <Row alignItems={'center'}>
                       <AddCountSelector
@@ -154,15 +205,13 @@ export default function SolutionInfo() {
           title={'注意事项'}
           autoScroll={false}
           icon={require('~/assets/images/guidance.png')}>
-          <Box flex={1} pt={ss(10)}>
-            <TextInput
-              autoCorrect={false}
-              multiline={true}
-              placeholder='您可输入，或从模板选择'
-              value={remark}
-              onChangeText={(text) => {
-                updateAnalyzeRemark(text);
-              }}
+          <Pressable
+            flex={1}
+            pt={ss(10)}
+            onPress={() => {
+              setShowRemarkModal(true);
+            }}>
+            <Text
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
@@ -172,9 +221,22 @@ export default function SolutionInfo() {
                 padding: ss(10),
                 fontSize: sp(18),
                 color: '#999',
+              }}>
+              {remark || '您可输入，或从模板选择'}
+            </Text>
+            <TemplateModal
+              template={getTemplateGroups(TemplateGroupKeys['flow-remark'])}
+              defaultText={remark}
+              isOpen={showRemarkModal}
+              onClose={function (): void {
+                setShowRemarkModal(false);
+              }}
+              onConfirm={function (text: string): void {
+                updateAnalyzeRemark(text);
+                setShowRemarkModal(false);
               }}
             />
-          </Box>
+          </Pressable>
         </BoxItem>
       </Column>
       <Column flex={1} ml={ss(10)}>
@@ -222,14 +284,38 @@ export default function SolutionInfo() {
                     alignItems={'center'}
                     mt={ss(25)}
                     justifyContent={'space-between'}>
-                    <Text
-                      ml={ls(10)}
-                      color='#666'
-                      fontSize={sp(16)}
-                      maxW={'70%'}>
-                      备注：
-                      <Text color='#E36C36'>{item.remark}</Text>
-                    </Text>
+                    <Row alignItems={'flex-start'} maxW={'65%'}>
+                      <Text ml={ls(10)} color='#666' fontSize={sp(16)}>
+                        备注：
+                      </Text>
+                      <Pressable
+                        onPress={() => {
+                          setShowMassageRemarkModal(true);
+                        }}>
+                        <Text color='#E36C36' fontSize={sp(16)}>
+                          {item.remark}
+                        </Text>
+                        <TemplateModal
+                          template={getTemplateGroups(
+                            TemplateGroupKeys['massage-remark'],
+                          )}
+                          defaultText={remark}
+                          isOpen={showMassageRemarkModal}
+                          onClose={function (): void {
+                            setShowMassageRemarkModal(false);
+                          }}
+                          onConfirm={function (text: string): void {
+                            // update(text);
+                            updateSolutionMassage(
+                              { ...item, remark: text },
+                              idx,
+                            );
+                            setShowMassageRemarkModal(false);
+                          }}
+                        />
+                      </Pressable>
+                    </Row>
+
                     <Row alignItems={'center'}>
                       <AddCountSelector
                         count={item.count}
@@ -303,7 +389,7 @@ export default function SolutionInfo() {
                 </Text>
               </Radio>
             </Radio.Group>
-            <Text fontSize={sp(20)} color='#333' ml={ls(60)}>
+            <Text fontSize={sp(20)} color='#333' ml={ls(60)} mr={ls(10)}>
               随访时间
             </Text>
             <SelectDay
@@ -319,7 +405,8 @@ export default function SolutionInfo() {
                   ? '今'
                   : getDay(
                       Math.ceil(
-                        dayjs('2023-08-02 05:49').diff(dayjs(), 'hours') / 24,
+                        dayjs(followUp.followUpTime).diff(dayjs(), 'hours') /
+                          24,
                       ),
                     )
               }
@@ -352,7 +439,7 @@ export default function SolutionInfo() {
                 </Text>
               </Radio>
             </Radio.Group>
-            <Text fontSize={sp(20)} color='#333' ml={ls(60)}>
+            <Text fontSize={sp(20)} color='#333' ml={ls(60)} mr={ls(10)}>
               复推时间
             </Text>
             <SelectDay
@@ -368,7 +455,7 @@ export default function SolutionInfo() {
                   ? '今'
                   : getDay(
                       Math.ceil(
-                        dayjs('2023-08-02 05:49').diff(dayjs(), 'hours') / 24,
+                        dayjs(next.nextTime).diff(dayjs(), 'hours') / 24,
                       ),
                     )
               }

@@ -75,7 +75,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                 <Text fontSize={sp(18)} color='#999'>
                   贴敷时长：
                   <Text fontSize={sp(16)} color='#333'>
-                    {item.duration / (1000 * 60 * 60)}小时
+                    {dayjs(item.duration).minute() + '分钟'}
                   </Text>
                 </Text>
                 <Text fontSize={sp(18)} color='#999' noOfLines={4} maxW={'60%'}>

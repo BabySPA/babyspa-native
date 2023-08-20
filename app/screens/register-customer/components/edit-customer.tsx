@@ -20,6 +20,7 @@ import SelectOperator from '~/app/components/select-operator';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
+import { TemplateGroupKeys } from '~/app/constants';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -31,10 +32,8 @@ export default function EditCustomer(params: EditCustomerParams) {
 
   const { operators } = useFlowStore();
 
-  const { templates } = useManagerStore();
-  const getAllergyTemplates = () => {
-    return templates.find((template) => template.key === 'allergy');
-  };
+  const { templates, getTemplateGroups } = useManagerStore();
+
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
   };
@@ -203,7 +202,7 @@ export default function EditCustomer(params: EditCustomerParams) {
 
                   <TemplateModal
                     defaultText={currentRegisterCustomer.allergy || ''}
-                    template={getAllergyTemplates()}
+                    template={getTemplateGroups(TemplateGroupKeys.allergy)}
                     isOpen={isOpenTemplatePicker}
                     onClose={function (): void {
                       setIsOpenTemplatePicker(false);

@@ -15,7 +15,7 @@ import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
-import { CustomerScreenType, OperateType } from '~/app/types';
+import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import debounce from 'lodash/debounce';
@@ -91,7 +91,10 @@ function Filter() {
           color={'#5EACA3'}
         />
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
-          已登记：<Text color='#5EACA3'>7</Text>
+          已登记：
+          <Text color='#5EACA3'>
+            {register.statusCount[CustomerStatus.ToBeCollected] || 0}
+          </Text>
         </Text>
         <Input
           ml={ls(30)}
@@ -106,6 +109,7 @@ function Filter() {
             updateRegisterFilter({
               searchKeywords: text,
             });
+
             requestRegisterCustomers();
           }, 1000)}
           InputLeftElement={
@@ -299,7 +303,6 @@ function Filter() {
               });
             }}
             onSelectedChange={(date: string) => {
-              // updateRegisterFilter
               if (!isOpenDatePicker.type) return;
               if (isOpenDatePicker.type == 'start') {
                 updateRegisterFilter({

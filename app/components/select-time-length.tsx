@@ -1,31 +1,42 @@
 import SelectDropdown from 'react-native-select-dropdown';
 import { ss, ls, sp } from '../utils/style';
-import { Icon } from 'native-base';
-import { FontAwesome } from '@expo/vector-icons';
 
-export const getDay = (day: number) => {
-  const d: { [key: number]: string } = {
-    0: '今',
-    1: '明',
-    2: '后',
-  };
-  if (day in d) {
-    return d[day];
-  }
-  if (day) {
-    return '已过期';
-  } else {
-    return '今';
-  }
-};
-
-export const Days = [
-  { name: '今', value: 0 },
-  { name: '明', value: 1 },
-  { name: '后', value: 2 },
+const times = [
+  {
+    name: '15分钟',
+    value: 15 * 60 * 1000,
+  },
+  {
+    name: '30分钟',
+    value: 30 * 60 * 1000,
+  },
+  {
+    name: '45分钟',
+    value: 45 * 60 * 1000,
+  },
+  {
+    name: '1小时',
+    value: 60 * 60 * 1000,
+  },
+  {
+    name: '1小时15分钟',
+    value: 75 * 60 * 1000,
+  },
+  {
+    name: '1小时30分钟',
+    value: 90 * 60 * 1000,
+  },
+  {
+    name: '1小时45分钟',
+    value: 105 * 60 * 1000,
+  },
+  {
+    name: '2小时',
+    value: 120 * 60 * 1000,
+  },
 ];
 
-export default function SelectDay({
+export default function SelectTimeLength({
   onSelect,
   defaultButtonText,
 }: {
@@ -34,7 +45,7 @@ export default function SelectDay({
 }) {
   return (
     <SelectDropdown
-      data={Days}
+      data={times}
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
@@ -46,26 +57,19 @@ export default function SelectDay({
         return item.name;
       }}
       buttonStyle={{
-        width: ls(72),
-        height: ss(48, { min: 26 }),
-        backgroundColor: '#fff',
-        borderRadius: ss(4),
-        borderWidth: 1,
-        borderColor: '#D8D8D8',
+        width: ls(120),
+        height: ss(26),
+        backgroundColor: 'transparent',
+        padding: 0,
       }}
       buttonTextStyle={{
-        color: '#333333',
+        color: '#E36C36',
+        fontSize: sp(16),
         textAlign: 'left',
-        fontSize: sp(16, { min: 12 }),
+        marginLeft: ls(-5),
       }}
       renderDropdownIcon={(isOpened) => {
-        return (
-          <Icon
-            as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18, { min: 15 })}
-            color='#999'
-          />
-        );
+        return null;
       }}
       dropdownIconPosition={'right'}
       dropdownStyle={{

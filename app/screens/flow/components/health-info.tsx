@@ -6,6 +6,10 @@ import ImageBox from './image-box';
 import BoxItem from './box-item';
 import RecordBox from './record-box';
 import DashedLine from 'react-native-dashed-line';
+import { TemplateModal } from '~/app/components/modals';
+import useManagerStore from '~/app/stores/manager';
+import { TemplateGroupKeys } from '~/app/constants';
+import { useState } from 'react';
 
 export default function HealthInfo() {
   const {
@@ -21,6 +25,8 @@ export default function HealthInfo() {
     currentFlow: { collect },
   } = useFlowStore();
 
+  const { getTemplateGroups } = useManagerStore();
+  const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
   return (
     <Row flex={1}>
       <Column flex={1}>
@@ -29,11 +35,10 @@ export default function HealthInfo() {
           icon={require('~/assets/images/notice.png')}
           autoScroll={false}>
           <Box flex={1}>
-            <TextInput
-              autoCorrect={false}
-              multiline={true}
-              placeholder='请输入过敏原'
-              value={collect.healthInfo.allergy}
+            <Text
+              onPress={() => {
+                setIsOpenTemplatePicker(true);
+              }}
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
@@ -44,14 +49,24 @@ export default function HealthInfo() {
                 fontSize: sp(14),
                 color: '#999',
                 textAlignVertical: 'top',
+              }}>
+              {collect.healthInfo.allergy || '请输入或选择过敏原'}
+            </Text>
+            <TemplateModal
+              defaultText={collect.healthInfo.allergy || ''}
+              template={getTemplateGroups(TemplateGroupKeys.allergy)}
+              isOpen={isOpenTemplatePicker}
+              onClose={function (): void {
+                setIsOpenTemplatePicker(false);
               }}
-              onChangeText={(text) => {
+              onConfirm={function (text): void {
                 updateCollection({
                   healthInfo: {
                     ...collect.healthInfo,
                     allergy: text,
                   },
                 });
+                setIsOpenTemplatePicker(false);
               }}
             />
           </Box>

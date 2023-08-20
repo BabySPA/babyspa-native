@@ -1,5 +1,6 @@
 import { ConfigAuthTree, IConfigAuth, LayoutConfig } from '../constants';
 import { AuthorityConfig, RoleAuthority } from '../stores/auth/type';
+import { Customer } from '../stores/flow/type';
 import { Role, RoleStatus } from '../stores/manager/type';
 
 export function getAge(birthday: string) {
@@ -247,4 +248,17 @@ function mergeAndRemoveDuplicates(
   }
 
   return mergedArray;
+}
+
+export function fuzzySearch(data: Customer[], searchTerm: string) {
+  searchTerm = searchTerm.toLowerCase(); // 将搜索条件转换为小写以进行不区分大小写的匹配
+  const regex = new RegExp(searchTerm, 'i'); // 创建不区分大小写的正则表达式
+
+  return data.filter((item) => {
+    const name = item.name.toLowerCase();
+    const phoneNumber = item.phoneNumber;
+
+    // 使用正则表达式测试是否匹配搜索条件
+    return regex.test(name) || regex.test(phoneNumber);
+  });
 }

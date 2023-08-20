@@ -6,6 +6,7 @@ import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
+import { TemplateGroupKeys } from '~/app/constants';
 
 export default function ConclusionInfo() {
   const {
@@ -13,10 +14,8 @@ export default function ConclusionInfo() {
     updateAnalyze,
   } = useFlowStore();
 
-  const { templates } = useManagerStore();
-  const getConclusionemplates = () => {
-    return templates.find((template) => template.key === 'conclusion');
-  };
+  const { templates, getTemplateGroups } = useManagerStore();
+
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
 
   return (
@@ -101,71 +100,73 @@ export default function ConclusionInfo() {
       <Column flex={1} ml={ss(10)}>
         <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
           <Column bgColor={'#EDF7F6'}>
-            {getConclusionemplates()?.groups.map((item, idx) => {
-              return (
-                <Pressable
-                  key={idx}
-                  onPress={() => {
-                    setSelectTemplateGroup(idx);
-                  }}>
-                  <Center
-                    p={ss(10)}
-                    w={ss(80)}
-                    h={ss(80)}
-                    borderTopLeftRadius={ss(10)}
-                    bgColor={
-                      selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                    }>
-                    <Icon
-                      as={<AntDesign name='appstore1' />}
-                      size={ss(18, { min: 15 })}
-                      color={
-                        selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
-                      }
-                    />
-                    <Text
-                      mt={ss(3)}
-                      fontSize={sp(18)}
-                      color={
-                        selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
-                      }>
-                      {item.name}
-                    </Text>
-                  </Center>
-                </Pressable>
-              );
-            })}
-          </Column>
-          <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-            {getConclusionemplates()?.groups[selectTemplateGroup].children.map(
+            {getTemplateGroups(TemplateGroupKeys.conclusion)?.groups.map(
               (item, idx) => {
                 return (
                   <Pressable
                     key={idx}
                     onPress={() => {
-                      updateAnalyze({
-                        conclusion:
-                          analyze.conclusion.trim().length > 0
-                            ? analyze.conclusion + ',' + item
-                            : item,
-                      });
+                      setSelectTemplateGroup(idx);
                     }}>
-                    <Box
-                      px={ls(20)}
-                      py={ss(7)}
-                      mr={ls(10)}
-                      mb={ss(10)}
-                      borderRadius={ss(2)}
-                      borderColor={'#D8D8D8'}
-                      borderWidth={1}>
-                      <Text fontSize={sp(18)} color='#000'>
-                        {item}
+                    <Center
+                      p={ss(10)}
+                      w={ss(80)}
+                      h={ss(80)}
+                      borderTopLeftRadius={ss(10)}
+                      bgColor={
+                        selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
+                      }>
+                      <Icon
+                        as={<AntDesign name='appstore1' />}
+                        size={ss(18, { min: 15 })}
+                        color={
+                          selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
+                        }
+                      />
+                      <Text
+                        mt={ss(3)}
+                        fontSize={sp(18)}
+                        color={
+                          selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
+                        }>
+                        {item.name}
                       </Text>
-                    </Box>
+                    </Center>
                   </Pressable>
                 );
               },
             )}
+          </Column>
+          <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+            {getTemplateGroups(TemplateGroupKeys.conclusion)?.groups[
+              selectTemplateGroup
+            ].children.map((item, idx) => {
+              return (
+                <Pressable
+                  key={idx}
+                  onPress={() => {
+                    updateAnalyze({
+                      conclusion:
+                        analyze.conclusion.trim().length > 0
+                          ? analyze.conclusion + ',' + item
+                          : item,
+                    });
+                  }}>
+                  <Box
+                    px={ls(20)}
+                    py={ss(7)}
+                    mr={ls(10)}
+                    mb={ss(10)}
+                    borderRadius={ss(2)}
+                    borderColor={'#D8D8D8'}
+                    borderWidth={1}>
+                    <Text fontSize={sp(18)} color='#000'>
+                      {item}
+                    </Text>
+                  </Box>
+                </Pressable>
+              );
+            })}
           </Row>
         </Row>
       </Column>

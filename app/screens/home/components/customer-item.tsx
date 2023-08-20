@@ -4,11 +4,7 @@ import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
-import {
-  EvaluateTextConfig,
-  StatusOperateConfig,
-  StatusTextConfig,
-} from '~/app/constants';
+import { EvaluateTextConfig, getStatusTextConfig } from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
 import { Customer } from '~/app/stores/flow/type';
 import { CustomerStatus, OperateType } from '~/app/types';
@@ -130,23 +126,23 @@ export default function CustomerItem({
           </Box>
         ) : (
           <Box
-            bgColor={StatusTextConfig[customer.status].bgColor}
+            bgColor={getStatusTextConfig(customer.status)?.bgColor}
             px={ls(12)}
             py={ss(6)}
             _text={{
               fontSize: sp(16),
-              color: StatusTextConfig[customer.status].textColor,
+              color: getStatusTextConfig(customer.status)?.textColor,
             }}
             borderBottomLeftRadius={ss(8)}
             borderTopRightRadius={ss(8)}>
-            {StatusTextConfig[customer.status].text}
+            {getStatusTextConfig(customer.status)?.text}
           </Box>
         )}
 
         {type === OperateType.Collection &&
           customer.status == CustomerStatus.ToBeCollected && (
             <OperateButton
-              text={StatusOperateConfig[customer.status].operate}
+              text={'采集'}
               onPress={() => {
                 updateCurrentFlowCustomer(customer);
                 navigation.navigate('Flow', {
@@ -159,7 +155,7 @@ export default function CustomerItem({
         {type === OperateType.Analyze &&
           customer.status == CustomerStatus.ToBeAnalyzed && (
             <OperateButton
-              text={StatusOperateConfig[customer.status].operate}
+              text={'分析'}
               onPress={() => {
                 updateCurrentFlowCustomer(customer);
                 navigation.navigate('Flow', {
