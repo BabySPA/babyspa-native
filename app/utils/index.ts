@@ -207,49 +207,6 @@ export function generateAuthorityConfig(
   return config;
 }
 
-export function generateMixinRoles(roles: Role[]) {
-  const mixRole: Pick<Role, 'name' | 'authorities'> = {
-    name: '',
-    authorities: [],
-  };
-
-  for (let i = 0; i < roles.length; i++) {
-    const role = roles[i];
-    mixRole.name += role.name + '、';
-    if (role.status == RoleStatus.OPEN) {
-      mixRole.authorities = mergeAndRemoveDuplicates(
-        mixRole.authorities || [],
-        roles[i].authorities,
-      );
-    }
-    mixRole.authorities = mixRole.authorities?.concat(roles[i].authorities);
-  }
-
-  if (mixRole.name)
-    mixRole.name = mixRole.name.slice(0, mixRole.name.length - 1);
-
-  return mixRole;
-}
-
-function mergeAndRemoveDuplicates(
-  arr1: AuthorityConfig[],
-  arr2: AuthorityConfig[],
-): AuthorityConfig[] {
-  const mergedArray = [...arr1]; // 先将第一个数组拷贝到合并数组中
-
-  for (const obj of arr2) {
-    // 检查是否已存在相同的对象
-    const existingObj = mergedArray.find(
-      (item) => item.authority === obj.authority,
-    );
-    if (!existingObj) {
-      mergedArray.push(obj); // 如果不存在则将对象添加到合并数组中
-    }
-  }
-
-  return mergedArray;
-}
-
 export function fuzzySearch(data: Customer[], searchTerm: string) {
   searchTerm = searchTerm.toLowerCase(); // 将搜索条件转换为小写以进行不区分大小写的匹配
   const regex = new RegExp(searchTerm, 'i'); // 创建不区分大小写的正则表达式

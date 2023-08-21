@@ -3,7 +3,6 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import request from '~/app/api';
 import { AuthState, RW, RoleAuthority, ShopsWithRole } from './type';
-import { generateMixinRoles } from '~/app/utils';
 import useLayoutStore from '../layout';
 import useFlowStore from '../flow';
 import useManagerStore from '../manager';
@@ -32,10 +31,7 @@ const useAuthStore = create(
                 accessToken: accessToken,
                 user: { ...rest },
 
-                currentShopWithRole: {
-                  shop: user.shopsWithRole[0].shop,
-                  role: generateMixinRoles(user.shopsWithRole[0].roles),
-                },
+                currentShopWithRole: user.currentShopWithRole,
               });
 
               resolve();

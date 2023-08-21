@@ -40,6 +40,11 @@ class Request {
         if (accessToken) {
           config.headers!.Authorization = `Bearer ${accessToken}`;
         }
+
+        const currentShopWithRole = useAuthStore.getState().currentShopWithRole;
+        config.headers!['x-current-shopid'] = currentShopWithRole?.shop._id;
+        config.headers!['x-current-rolekey'] =
+          currentShopWithRole?.role.roleKey;
         return config;
       },
       (err: any) => {

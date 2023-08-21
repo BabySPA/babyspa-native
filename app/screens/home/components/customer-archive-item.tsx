@@ -38,7 +38,11 @@ export default function CustomerArchiveItem({
 
         <Flex ml={ls(12)}>
           <Row alignItems={'center'}>
-            <Text color='#333' fontSize={sp(20)} fontWeight={400}>
+            <Text
+              color='#333'
+              fontSize={sp(20)}
+              fontWeight={400}
+              maxW={ls(150)}>
               {customer.name}({customer.nickname})
             </Text>
             <Icon

@@ -72,6 +72,9 @@ const initialState = {
   templates: DefaultTemplate,
   currentSelectTemplateIdx: 0,
   currentSelectTemplateGroupIdx: 0,
+
+  // logs
+  logs: [],
 };
 
 const useManagerStore = create(
@@ -216,7 +219,6 @@ const useManagerStore = create(
     },
 
     // template
-
     setCurrentSelectTemplateIdx: (idx) => {
       set((state) => {
         state.currentSelectTemplateIdx = idx;
@@ -250,6 +252,16 @@ const useManagerStore = create(
       const { data } = await request.get('/templates');
       set((state) => {
         state.templates = data;
+      });
+    },
+
+    // logs
+    requestGetLogs: async () => {
+      const { data } = await request.get('/logs');
+
+      const { docs } = data;
+      set((state) => {
+        state.logs = docs;
       });
     },
   })),

@@ -126,6 +126,11 @@ export interface Template {
   groups: TemplateItem[];
 }
 
+interface LogState {
+  logs: any[];
+  requestGetLogs: () => Promise<any>;
+}
+
 interface TemplateState {
   templates: Template[];
   currentSelectTemplateIdx: number;
@@ -148,6 +153,7 @@ export interface ManangerState
   extends ShopState,
     UserState,
     RoleState,
-    TemplateState {
+    TemplateState,
+    LogState {
   clearCache: () => void;
 }

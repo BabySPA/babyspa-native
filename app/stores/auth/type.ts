@@ -29,7 +29,7 @@ export type AuthorityConfig = {
 };
 
 export interface ShopsWithRole {
-  role: Pick<Role, 'name' | 'authorities'>;
+  role: Pick<Role, 'name' | 'authorities' | 'roleKey'>;
   shop: Shop;
 }
 
