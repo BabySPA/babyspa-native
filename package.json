@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start:client": "expo start --dev-client",
-    "start": "expo start --clear",
+    "start": "expo start",
+    "start:clear": "expo start --clear",
     "test": "jest --watchAll",
     "postinstall": "patch-package",
     "format": "prettier --write \"app/**/*.{ts,tsx}\"",

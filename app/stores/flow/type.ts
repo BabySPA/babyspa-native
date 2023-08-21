@@ -16,7 +16,7 @@ export interface Customer {
   updatedAt: string;
   tag: string;
   flowId: string;
-  flowEvalute: Evaluate | null;
+  flowEvaluate: Evaluate | null;
 }
 
 export interface Operator {
@@ -103,6 +103,8 @@ export interface FlowState {
   requestPatchCustomerInfo: () => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
   requestPatchFlowToAnalyze: () => Promise<any>;
+  requestPutFlowToEvaluate: (evaluate: Evaluate) => Promise<any>;
+
   // 客户档案
   requestCustomersArchive: () => Promise<void>;
 

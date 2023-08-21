@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import request from '~/app/api';
 import { immer } from 'zustand/middleware/immer';
 import { ManangerState, RoleStatus, ShopType } from './type';
-import { ConfigAuthTree, LayoutConfig } from '~/app/constants';
+import { ConfigAuthTree } from '~/app/constants';
 import { generateAuthorityConfig } from '~/app/utils';
 export const DefaultTemplate = [];
 

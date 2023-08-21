@@ -110,19 +110,19 @@ export default function CustomerItem({
         {type === OperateType.Evaluate ? (
           <Box
             bgColor={
-              EvaluateTextConfig[customer.flowEvalute ? 'DONE' : 'TODO'].bgColor
+              EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].bgColor
             }
             px={ls(12)}
             py={ss(6)}
             _text={{
               fontSize: sp(16),
               color:
-                EvaluateTextConfig[customer.flowEvalute ? 'DONE' : 'TODO']
+                EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO']
                   .textColor,
             }}
             borderBottomLeftRadius={ss(8)}
             borderTopRightRadius={ss(8)}>
-            {EvaluateTextConfig[customer.flowEvalute ? 'DONE' : 'TODO'].text}
+            {EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].text}
           </Box>
         ) : (
           <Box
@@ -165,7 +165,7 @@ export default function CustomerItem({
             />
           )}
 
-        {type === OperateType.Evaluate && !customer.flowEvalute && (
+        {type === OperateType.Evaluate && !customer.flowEvaluate && (
           <OperateButton
             text={'评价'}
             onPress={() => {

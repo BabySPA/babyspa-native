@@ -130,7 +130,7 @@ const initialState = {
     flowId: '',
     shop: null,
     analyst: null,
-    flowEvalute: null,
+    flowEvaluate: null,
   },
 };
 
@@ -364,7 +364,6 @@ const useFlowStore = create(
           allergy: customer.allergy,
           nickname: customer.nickname,
           operatorId: customer.operator?.id,
-          shopId: useAuthStore.getState().currentShopWithRole?.shop._id,
         })
         .then(({ data }) => {
           set((state) => {
@@ -450,6 +449,18 @@ const useFlowStore = create(
       request
         .patch(`/flows/analyze/${currentFlow._id}`, {
           analyze: currentFlow.analyze,
+        })
+        .then(({ data }) => {
+          set({ currentFlow: data });
+        });
+    },
+
+    requestPutFlowToEvaluate: async (evaluate) => {
+      const currentFlow = get().currentFlow;
+      request
+        .put(`/flows/evaluate/${currentFlow._id}`, {
+          score: evaluate?.score,
+          remark: evaluate?.remark,
         })
         .then(({ data }) => {
           set({ currentFlow: data });
@@ -659,7 +670,8 @@ const useFlowStore = create(
         state.currentFlow.analyze.followUp = {
           ...state.currentFlow.analyze.followUp,
           ...followUp,
-          followUpTime: followUp.followUpTime || dayjs().format('YYYY-MM-DD'),
+          followUpTime:
+            followUp.followUpTime || dayjs().format('YYYY-MM-DD HH:mm'),
         };
       });
     },
@@ -669,7 +681,7 @@ const useFlowStore = create(
         state.currentFlow.analyze.next = {
           ...state.currentFlow.analyze.next,
           ...next,
-          nextTime: next.nextTime || dayjs().format('YYYY-MM-DD'),
+          nextTime: next.nextTime || dayjs().format('YYYY-MM-DD HH:mm'),
         };
       });
     },

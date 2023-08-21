@@ -18,10 +18,7 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
-import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
-import { CustomerStatus } from '~/app/types';
-import SelectOperator from '~/app/components/select-operator';
 import useManagerStore from '~/app/stores/manager';
 
 interface EditBoxParams {
@@ -300,23 +297,6 @@ export default function EditBox(params: EditBoxParams) {
                   setLoading(false);
                 });
             }
-
-            // if (tempCustomer.status === CustomerStatus.Canceled) {
-            //   requestPostCustomerInfo()
-            //     .then(async (res) => {
-            //       await requestInitializeData();
-            //       toastAlert(toast, 'success', '再次登记客户信息成功！');
-            //       params.onEditFinish();
-            //     })
-            //     .catch((err) => {
-            //       toastAlert(toast, 'error', '再次登记客户信息失败！');
-            //     })
-            //     .finally(() => {
-            //       setLoading(false);
-            //     });
-            // } else {
-
-            // }
           }}>
           <Row
             px={ls(34)}

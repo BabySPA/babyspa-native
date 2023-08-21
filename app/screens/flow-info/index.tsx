@@ -16,7 +16,9 @@ import useFlowStore from '~/app/stores/flow';
 import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
 import AnalyzeCard from '~/app/components/info-cards/analyze-card';
-import EvaluateCard from '~/app/components/info-cards/evaluate-card';
+import EvaluateCard, {
+  EvaluateCardDialog,
+} from '~/app/components/info-cards/evaluate-card';
 
 export default function FlowInfo({
   navigation,
@@ -36,6 +38,8 @@ export default function FlowInfo({
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
+  const [isEvaluateCardDialogShow, setIsEvaluateCardDialogShow] =
+    useState(false);
   return (
     <Box flex={1}>
       <NavigationBar
@@ -69,7 +73,7 @@ export default function FlowInfo({
           from == 'evaluate-detail' && !evaluate ? (
             <Pressable
               onPress={() => {
-                // TODO 评价弹窗
+                setIsEvaluateCardDialogShow(true);
               }}>
               <Row
                 bgColor={'white'}
@@ -101,10 +105,20 @@ export default function FlowInfo({
         <Column flex={1} ml={ls(10)}>
           <ScrollView>
             {from != 'evaluate' && <AnalyzeCard edit={from == 'analyze'} />}
-            {from == 'evaluate' && <EvaluateCard type='card' />}
+            {/* (从评价按钮点进来)或者(从评价点击卡片并且已经评价完成) */}
+            {(from == 'evaluate' ||
+              (from == 'evaluate-detail' && evaluate)) && (
+              <EvaluateCard type='card' canEdit={from == 'evaluate'} />
+            )}
           </ScrollView>
         </Column>
       </Row>
+      <EvaluateCardDialog
+        isOpen={isEvaluateCardDialogShow}
+        onClose={function (): void {
+          setIsEvaluateCardDialogShow(false);
+        }}
+      />
     </Box>
   );
 }
