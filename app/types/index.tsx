@@ -4,6 +4,7 @@
  */
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Customer } from '../stores/flow/type';
 
 declare global {
   namespace ReactNavigation {
@@ -55,6 +56,7 @@ export type RootStackParamList = {
     type: CustomerScreenType;
   };
   CustomerDetail: undefined;
+  AddNewCustomer: undefined;
   Flow: {
     type: CustomerStatus;
   };
@@ -69,6 +71,9 @@ export type RootStackParamList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
+  CustomerArchive: {
+    customer: Customer;
+  };
   ShopDetail: {
     type: 'edit' | 'detail';
   };
@@ -89,6 +94,7 @@ export type AppStackList = {
     type: CustomerScreenType;
   };
   CustomerDetail: undefined;
+  AddNewCustomer: undefined;
   Flow: {
     type: CustomerStatus;
   };
@@ -101,6 +107,9 @@ export type AppStackList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
+  CustomerArchive: {
+    customer: Customer;
+  };
   ShopDetail: {
     type: 'edit' | 'detail';
   };

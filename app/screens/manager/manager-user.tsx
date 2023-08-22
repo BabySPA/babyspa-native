@@ -22,7 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function ManagerUser({
   navigation,
 }: AppStackScreenProps<'ManagerUser'>) {
-  const { users, setCurrentUser, userFilter } = useManagerStore();
+  const { users, setCurrentUser } = useManagerStore();
 
   const List = () => {
     return (

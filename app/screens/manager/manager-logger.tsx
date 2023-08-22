@@ -37,16 +37,17 @@ export default function ManagerLogger({
           borderTopRadius={ss(10)}
           width={'100%'}
           justifyContent={'space-around'}>
+          <Row w={ls(150)}>
+            <Text fontSize={sp(18)} color={'#333'}>
+              账号
+            </Text>
+          </Row>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               操作人
             </Text>
           </Row>
-          <Row w={ls(150)}>
-            <Text fontSize={sp(18)} color={'#333'}>
-              角色
-            </Text>
-          </Row>
+
           <Row w={ls(150)}>
             <Text fontSize={sp(18)} color={'#333'}>
               模块名称
@@ -77,14 +78,14 @@ export default function ManagerLogger({
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
               justifyContent={'space-around'}>
+              <Row w={ls(150)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {log.username}
+                </Text>
+              </Row>
               <Row w={ls(100)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {log.name}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {log.roleName}
                 </Text>
               </Row>
               <Row w={ls(150)}>

@@ -56,7 +56,8 @@ export default function CustomerItem({
               maxW={ls(200)}
               numberOfLines={1}
               ellipsizeMode='tail'>
-              {customer.name}({customer.nickname})
+              {customer.name}
+              {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
             <Icon
               as={
@@ -110,7 +111,8 @@ export default function CustomerItem({
         {type === OperateType.Evaluate ? (
           <Box
             bgColor={
-              EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].bgColor
+              EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO']
+                .bgColor
             }
             px={ls(12)}
             py={ss(6)}

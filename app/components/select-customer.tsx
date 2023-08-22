@@ -53,7 +53,8 @@ function CustomerItem({ customer }: { customer: Customer }) {
         <Flex ml={ls(20)}>
           <Row alignItems={'center'}>
             <Text color='#333' fontSize={sp(14)} fontWeight={400}>
-              {customer.name}({customer.nickname} {customer.gender})
+              {customer.name}
+              {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
             <Icon
               as={

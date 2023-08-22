@@ -14,6 +14,8 @@ import ManagerUser from '../screens/manager/manager-user';
 import ShopDetail from '../screens/shop-detail';
 import UserDetail from '../screens/user-detail';
 import RoleDetail from '../screens/role-detail';
+import AddNewCustomer from '../screens/customer-detail/new-customer';
+import CustomerArchive from '../screens/customer-archive';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
@@ -23,6 +25,7 @@ export default function AppNavigator() {
       <Stack.Screen name='Home' component={HomeScreen} />
       <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />
       <Stack.Screen name='CustomerDetail' component={CustomerDetail} />
+      <Stack.Screen name='AddNewCustomer' component={AddNewCustomer} />
       <Stack.Screen name='Flow' component={FlowScreen} />
       <Stack.Screen name='FlowInfo' component={FlowInfoScreen} />
       <Stack.Screen name='Camera' component={CameraScreen} />
@@ -34,6 +37,7 @@ export default function AppNavigator() {
       <Stack.Screen name='ShopDetail' component={ShopDetail} />
       <Stack.Screen name='UserDetail' component={UserDetail} />
       <Stack.Screen name='RoleDetail' component={RoleDetail} />
+      <Stack.Screen name='CustomerArchive' component={CustomerArchive} />
     </Stack.Navigator>
   );
 }

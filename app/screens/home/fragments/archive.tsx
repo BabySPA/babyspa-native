@@ -14,8 +14,7 @@ import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/customer-item';
-import { CustomerScreenType, OperateType } from '~/app/types';
+import { CustomerScreenType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
 
@@ -49,9 +48,8 @@ export default function Archive() {
                 mr={(idx + 1) % 3 == 0 ? 0 : ss(15)}
                 key={customer.id}
                 onPress={() => {
-                  updateCurrentFlowCustomer(customer);
-                  navigation.navigate('FlowInfo', {
-                    from: 'analyze',
+                  navigation.navigate('CustomerArchive', {
+                    customer: customer,
                   });
                 }}>
                 <CustomerArchiveItem customer={customer} />
@@ -70,17 +68,8 @@ function Filter() {
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
-        <Icon
-          as={<Ionicons name={'people'} />}
-          size={ss(40)}
-          color={'#5EACA3'}
-        />
-        <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
-          已登记：<Text color='#5EACA3'>7</Text>
-        </Text>
         <Input
           autoCorrect={false}
-          ml={ls(30)}
           w={ls(240)}
           minH={ss(40, { max: 18 })}
           p={ss(8)}
@@ -122,7 +111,6 @@ function Filter() {
         </Text>
         <Input
           autoCorrect={false}
-          ml={ls(20)}
           w={ls(160)}
           minH={ss(40, { max: 18 })}
           p={ss(8)}
@@ -140,27 +128,9 @@ function Filter() {
           value='2023-02-21'
           isReadOnly
         />
-        <Pressable
+        {/* <Pressable
           onPress={() => {
-            setShowFilter(!showFilter);
-          }}>
-          <Row alignItems={'center'}>
-            <Icon
-              as={<FontAwesome name='filter' />}
-              size={ss(16)}
-              color='#00B49E'
-              ml={ss(10)}
-            />
-            <Text color='#00B49E' fontSize={sp(18)} ml={ls(4)}>
-              筛选
-            </Text>
-          </Row>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate('RegisterCustomer', {
-              type: CustomerScreenType.register,
-            });
+            navigation.navigate('AddNewCustomer');
           }}>
           <Box
             ml={ls(20)}
@@ -174,18 +144,10 @@ function Filter() {
             px={ls(26)}
             py={ss(10)}
             _text={{ fontSize: ss(14), color: 'white' }}>
-            登记
+            新增客户
           </Box>
-        </Pressable>
+        </Pressable> */}
       </Row>
-      {showFilter && (
-        <Row pl={ls(40)}>
-          <Text fontSize={sp(18)} color='#666'>
-            状态选择
-          </Text>
-          <Text>TODO 筛选</Text>
-        </Row>
-      )}
     </Column>
   );
 }

@@ -76,6 +76,12 @@ type Template = {
 
 type PatchCustomerStatusType = 'register' | 'flow';
 
+export interface FlowArchive extends Partial<Flow> {
+  shop: {
+    id: string;
+    name: string;
+  };
+}
 export interface FlowState {
   clearCache: () => void;
 
@@ -107,6 +113,7 @@ export interface FlowState {
 
   // 客户档案
   requestCustomersArchive: () => Promise<void>;
+  requestCustomerArchiveHistory: (customerId: string) => Promise<FlowArchive[]>;
 
   requestPatchCustomerStatus: (data: {
     status: number;

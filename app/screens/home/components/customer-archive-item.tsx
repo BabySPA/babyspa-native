@@ -42,8 +42,11 @@ export default function CustomerArchiveItem({
               color='#333'
               fontSize={sp(20)}
               fontWeight={400}
-              maxW={ls(150)}>
-              {customer.name}({customer.nickname})
+              maxW={ls(150)}
+              ellipsizeMode='tail'
+              numberOfLines={1}>
+              {customer.name}
+              {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
             <Icon
               as={

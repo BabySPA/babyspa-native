@@ -10,6 +10,7 @@ import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { reject } from 'lodash';
 import { fuzzySearch } from '~/app/utils';
+import { ShopType } from '../manager/type';
 
 const defaultRegisterAndCollection = {
   customers: [],
@@ -30,6 +31,7 @@ export const DefaultRegisterCustomer = {
   phoneNumber: '',
   allergy: '',
   operator: null,
+  status: CustomerStatus.ToBeCollected,
 };
 
 const defaultFlow = {
@@ -221,8 +223,10 @@ const useFlowStore = create(
         params.endDate = endDate;
       }
 
-      // TODO
-      params.shopId = '64c6120c3c4c6d15c1432802';
+      const user = useAuthStore.getState().currentShopWithRole;
+      if (user?.shop.type === ShopType.SHOP) {
+        params.shopId = user?.shop._id;
+      }
 
       request.get('/customers', { params }).then(({ data }) => {
         const { docs, hasNextPage, statusCount } = data;
@@ -236,6 +240,12 @@ const useFlowStore = create(
             statusCount,
           },
         });
+      });
+    },
+
+    requestCustomerArchiveHistory(customerId) {
+      return request.get(`/flows/archive/history/${customerId}`).then(({ data }) => {
+        return data;
       });
     },
 
