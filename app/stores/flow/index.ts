@@ -243,12 +243,26 @@ const useFlowStore = create(
       });
     },
 
-    requestCustomerArchiveHistory(customerId) {
-      return request.get(`/flows/archive/history/${customerId}`).then(({ data }) => {
-        return data;
-      });
+    async requestCustomerArchiveHistory(customerId) {
+      const { data } = await request.get(
+        `/flows/archive/history/${customerId}`,
+      );
+      return data;
     },
 
+    async requestCustomerArchiveCourses(customerId) {
+      const { data } = await request.get(
+        `/flows/archive/courses/${customerId}`,
+      );
+      return data;
+    },
+
+    async requestCustomerGrowthCurve(customerId) {
+      const { data } = await request.get(
+        `/customers/growth-curve/statistics/${customerId}`,
+      );
+      return data;
+    },
     requestCollectionCustomers: async () => {
       const {
         collection: { status, startDate, searchKeywords, endDate, page },

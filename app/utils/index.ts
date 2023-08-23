@@ -1,6 +1,10 @@
 import { ConfigAuthTree, IConfigAuth, LayoutConfig } from '../constants';
 import { AuthorityConfig, RoleAuthority } from '../stores/auth/type';
-import { Customer } from '../stores/flow/type';
+import {
+  Customer,
+  GrowthCurveHeightComparison,
+  GrowthCurveWeightComparison,
+} from '../stores/flow/type';
 import { Role, RoleStatus } from '../stores/manager/type';
 
 export function getAge(birthday: string) {
@@ -218,4 +222,72 @@ export function fuzzySearch(data: Customer[], searchTerm: string) {
     // 使用正则表达式测试是否匹配搜索条件
     return regex.test(name) || regex.test(phoneNumber);
   });
+}
+
+export function arabicToChineseNumber(arabicNumber: number) {
+  const chineseNumbers = [
+    '零',
+    '一',
+    '二',
+    '三',
+    '四',
+    '五',
+    '六',
+    '七',
+    '八',
+    '九',
+  ];
+  const units = ['', '十', '百', '千'];
+
+  const numberString = arabicNumber.toString();
+  const length = numberString.length;
+
+  let chineseNumber = '';
+  let zeroFlag = false; // 用于处理连续的零
+
+  for (let i = 0; i < length; i++) {
+    const digit = parseInt(numberString[i]);
+
+    // 处理零
+    if (digit === 0) {
+      zeroFlag = true;
+    } else {
+      // 当前数字不是零，需要加上单位
+      if (zeroFlag) {
+        chineseNumber += chineseNumbers[0]; // 添加一个零
+        zeroFlag = false;
+      }
+
+      chineseNumber += chineseNumbers[digit] + units[length - i - 1];
+    }
+  }
+
+  // 处理结尾的零
+  if (chineseNumber.endsWith(chineseNumbers[0])) {
+    chineseNumber = chineseNumber.slice(0, -1);
+  }
+
+  return chineseNumber;
+}
+
+export function getHeightComparsionText(
+  heightComparison: GrowthCurveHeightComparison,
+) {
+  return {
+    [GrowthCurveHeightComparison.Small]: '矮小',
+    [GrowthCurveHeightComparison.Shorter]: '偏矮',
+    [GrowthCurveHeightComparison.Normal]: '正常',
+    [GrowthCurveHeightComparison.Taller]: '偏高',
+  }[heightComparison];
+}
+
+export function getWeightComparsionText(
+  weightComparison: GrowthCurveWeightComparison,
+) {
+  return {
+    [GrowthCurveWeightComparison.Lighter]: '偏瘦',
+    [GrowthCurveWeightComparison.Normal]: '正常',
+    [GrowthCurveWeightComparison.Heavier]: '超重',
+    [GrowthCurveWeightComparison.Obesity]: '肥胖',
+  }[weightComparison];
 }

@@ -76,6 +76,38 @@ type Template = {
 
 type PatchCustomerStatusType = 'register' | 'flow';
 
+export interface GrowthCurveStatisticsResponse {
+  date: string;
+  heightData: GrowthCurveStatisticsHeight;
+  weightData: GrowthCurveStatisticsWeight;
+}
+
+export interface GrowthCurveStatisticsHeight {
+  height: number;
+  heightStandard: number;
+  heightComparison: GrowthCurveHeightComparison;
+}
+
+export interface GrowthCurveStatisticsWeight {
+  weight: number;
+  weightStandard: number;
+  weightComparison: GrowthCurveWeightComparison;
+}
+
+export enum GrowthCurveHeightComparison {
+  Small = 'Small', // 矮小
+  Shorter = 'Shorter', // 偏矮
+  Normal = 'Normal', // 正常
+  Taller = 'Taller', // 偏高
+}
+
+export enum GrowthCurveWeightComparison {
+  Lighter = 'Lighter', // 偏瘦
+  Normal = 'Normal', // 正常
+  Heavier = 'Heavier', // 超重
+  Obesity = 'Obesity', // 肥胖
+}
+
 export interface FlowArchive extends Partial<Flow> {
   shop: {
     id: string;
@@ -114,7 +146,12 @@ export interface FlowState {
   // 客户档案
   requestCustomersArchive: () => Promise<void>;
   requestCustomerArchiveHistory: (customerId: string) => Promise<FlowArchive[]>;
-
+  requestCustomerArchiveCourses: (
+    customerId: string,
+  ) => Promise<FlowArchive[][]>;
+  requestCustomerGrowthCurve: (
+    customerId: string,
+  ) => Promise<GrowthCurveStatisticsResponse[]>;
   requestPatchCustomerStatus: (data: {
     status: number;
     type: PatchCustomerStatusType;

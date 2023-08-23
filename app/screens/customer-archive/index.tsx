@@ -23,7 +23,10 @@ import { ShopArchive } from './components/shop-archive';
 import { HistoryArchive } from './components/history-archive';
 import { GrowthCurve } from './components/growth-curve';
 import useFlowStore from '~/app/stores/flow';
-import { FlowArchive } from '~/app/stores/flow/type';
+import {
+  FlowArchive,
+  GrowthCurveStatisticsResponse,
+} from '~/app/stores/flow/type';
 
 const configs = [
   {
@@ -47,13 +50,30 @@ export default function CustomerArchive({
 }: AppStackScreenProps<'CustomerArchive'>) {
   useEffect(() => {}, []);
   const age = getAge(customer.birthday);
-  const { requestCustomerArchiveHistory } = useFlowStore();
+  const {
+    requestCustomerArchiveHistory,
+    requestCustomerArchiveCourses,
+    requestCustomerGrowthCurve,
+  } = useFlowStore();
 
   const [archives, setArchives] = useState<FlowArchive[]>([]);
+  const [courses, setCourses] = useState<FlowArchive[][]>([]);
+  const [growthCurves, setGrowthCurves] = useState<
+    GrowthCurveStatisticsResponse[]
+  >([]);
 
   useEffect(() => {
     requestCustomerArchiveHistory(customer.id).then((res) => {
       setArchives(res);
+    });
+
+    requestCustomerArchiveCourses(customer.id).then((res) => {
+      setCourses(res);
+    });
+
+    requestCustomerGrowthCurve(customer.id).then((res) => {
+      console.log(res);
+      setGrowthCurves(res);
     });
   }, []);
 
@@ -198,10 +218,10 @@ export default function CustomerArchive({
             <ShopArchive archives={archives} />
           )}
           {configs[selectFragment].key == 'history-archive' && (
-            <HistoryArchive customerId={customer.id} />
+            <HistoryArchive courses={courses} />
           )}
           {configs[selectFragment].key == 'growth-curve' && (
-            <GrowthCurve customerId={customer.id} />
+            <GrowthCurve growthCurves={growthCurves} />
           )}
         </Box>
       </Column>
