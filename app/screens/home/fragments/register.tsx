@@ -20,7 +20,7 @@ import EmptyBox from '~/app/components/empty-box';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import debounce from 'lodash/debounce';
 
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 export default function Register() {
   const navigation = useNavigation();

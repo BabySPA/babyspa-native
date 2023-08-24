@@ -1,5 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { Column, Row, Text, Flex, Icon } from 'native-base';
 import { Image } from 'react-native';
 import { Customer } from '~/app/stores/flow/type';

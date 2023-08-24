@@ -18,7 +18,7 @@ import CustomerItem from '../components/customer-item';
 import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import debounce from 'lodash/debounce';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function Collection() {

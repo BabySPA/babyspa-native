@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Animated, Easing, I18nManager } from 'react-native';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 const m = dayjs();
 

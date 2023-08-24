@@ -257,12 +257,6 @@ const useFlowStore = create(
       return data;
     },
 
-    async requestCustomerGrowthCurve(customerId) {
-      const { data } = await request.get(
-        `/customers/growth-curve/statistics/${customerId}`,
-      );
-      return data;
-    },
     requestCollectionCustomers: async () => {
       const {
         collection: { status, startDate, searchKeywords, endDate, page },
@@ -296,6 +290,42 @@ const useFlowStore = create(
           },
         });
       });
+    },
+    async requestCustomerGrowthCurve(customerId) {
+      const { data } = await request.get(
+        `/customers/growth-curve/statistics/${customerId}`,
+      );
+      return data;
+    },
+    requestPutCustomerGrowthCurve: async (
+      customerId: string,
+      { height, weight }: { height: number; weight: number },
+    ) => {
+      const { data } = await request.put(
+        `/customers/growth-curve/${customerId}`,
+        {
+          height,
+          weight,
+        },
+      );
+      return data;
+    },
+    requestPatchCustomerGrowthCurve: async (
+      customerId: string,
+      {
+        height,
+        weight,
+        date,
+      }: { height: number; weight: number; date: string },
+    ) => {
+      const { data } = await request.put(
+        `/customers/growth-curve/${customerId}`,
+        {
+          height,
+          weight,
+        },
+      );
+      return data;
     },
 
     requestAnalyzeCustomers: async () => {

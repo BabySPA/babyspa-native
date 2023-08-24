@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { Audio } from 'expo-av';
 import {
   Box,

@@ -8,6 +8,7 @@ import {
   Text,
   Image,
   Container,
+  useToast,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -28,6 +29,7 @@ import {
   GrowthCurveStatisticsResponse,
 } from '~/app/stores/flow/type';
 import { GrowthCurveModal } from '~/app/components/modals';
+import { toastAlert } from '~/app/utils/toast';
 
 const configs = [
   {
@@ -51,10 +53,14 @@ export default function CustomerArchive({
 }: AppStackScreenProps<'CustomerArchive'>) {
   useEffect(() => {}, []);
   const age = getAge(customer.birthday);
+  const toast = useToast();
   const {
     requestCustomerArchiveHistory,
     requestCustomerArchiveCourses,
     requestCustomerGrowthCurve,
+    requestPutCustomerGrowthCurve,
+    requestPatchCustomerGrowthCurve,
+    updateCurrentFlowCustomer,
   } = useFlowStore();
 
   const [archives, setArchives] = useState<FlowArchive[]>([]);
@@ -71,15 +77,23 @@ export default function CustomerArchive({
     requestCustomerArchiveCourses(customer.id).then((res) => {
       setCourses(res);
     });
+    getGrowthCurveDatas();
+  }, []);
 
+  const getGrowthCurveDatas = () => {
     requestCustomerGrowthCurve(customer.id).then((res) => {
       setGrowthCurves(res);
     });
-  }, []);
+  };
 
   const [selectFragment, setSelectedFragment] = useState(0);
 
-  const [showEditGrowthCurve, setShowEditGrowthCurve] = useState(false);
+  const [showEditGrowthCurve, setShowEditGrowthCurve] = useState({
+    isOpen: false,
+    date: '',
+    defaultHeight: 0,
+    defaultWeight: 0,
+  });
 
   return (
     <Box flex={1}>
@@ -220,7 +234,12 @@ export default function CustomerArchive({
             {configs[selectFragment].key == 'growth-curve' && (
               <Pressable
                 onPress={() => {
-                  setShowEditGrowthCurve(true);
+                  setShowEditGrowthCurve({
+                    isOpen: true,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
                 }}
                 bgColor={'rgba(0, 180, 158, 0.10)'}
                 borderColor={'#00B49E'}
@@ -231,38 +250,120 @@ export default function CustomerArchive({
                 <Text color='#03CBB2' fontSize={sp(14)}>
                   新建
                 </Text>
-                <GrowthCurveModal
-                  isOpen={showEditGrowthCurve}
-                  defaultHeight={0}
-                  defaultWeight={0}
-                  onClose={function (): void {
-                    setShowEditGrowthCurve(false);
-                  }}
-                  onConfirm={function ({
-                    height,
-                    weight,
-                  }: {
-                    height: number;
-                    weight: number;
-                  }): void {
-                    // throw new Error('Function not implemented.');
-                  }}
-                />
               </Pressable>
             )}
           </Row>
 
           {configs[selectFragment].key == 'shop-archive' && (
-            <ShopArchive archives={archives} />
+            <ShopArchive
+              archives={archives}
+              onPressToFlowInfo={function (): void {
+                updateCurrentFlowCustomer(customer);
+                navigation.navigate('FlowInfo', {
+                  from: 'analyze',
+                });
+              }}
+            />
           )}
           {configs[selectFragment].key == 'history-archive' && (
-            <HistoryArchive courses={courses} />
+            <HistoryArchive
+              courses={courses}
+              onPressToFlowInfo={function (): void {
+                updateCurrentFlowCustomer(customer);
+                navigation.navigate('FlowInfo', {
+                  from: 'analyze',
+                });
+              }}
+            />
           )}
           {configs[selectFragment].key == 'growth-curve' && (
-            <GrowthCurve growthCurves={growthCurves} />
+            <GrowthCurve
+              growthCurves={growthCurves}
+              onEditClick={function (
+                item: GrowthCurveStatisticsResponse,
+              ): void {
+                setShowEditGrowthCurve({
+                  isOpen: true,
+                  date: item.date,
+                  defaultHeight: item.heightData.height,
+                  defaultWeight: item.weightData.weight,
+                });
+              }}
+            />
           )}
         </Box>
       </Column>
+      <GrowthCurveModal
+        isOpen={showEditGrowthCurve.isOpen}
+        defaultHeight={showEditGrowthCurve.defaultHeight}
+        defaultWeight={showEditGrowthCurve.defaultHeight}
+        onClose={function (): void {
+          setShowEditGrowthCurve({
+            isOpen: false,
+            date: '',
+            defaultHeight: 0,
+            defaultWeight: 0,
+          });
+        }}
+        onConfirm={function ({
+          height,
+          weight,
+        }: {
+          height: number;
+          weight: number;
+        }): void {
+          if (showEditGrowthCurve.date.length > 0) {
+            requestPatchCustomerGrowthCurve(customer.id, {
+              height,
+              weight,
+              date: showEditGrowthCurve.date,
+            })
+              .then((res) => {
+                toastAlert(toast, 'success', '修改信息成功！');
+                getGrowthCurveDatas();
+                setShowEditGrowthCurve({
+                  isOpen: false,
+                  date: '',
+                  defaultHeight: 0,
+                  defaultWeight: 0,
+                });
+              })
+              .catch((err) => {
+                toastAlert(toast, 'error', '修改信息失败！');
+                setShowEditGrowthCurve({
+                  isOpen: false,
+                  date: '',
+                  defaultHeight: 0,
+                  defaultWeight: 0,
+                });
+              });
+          } else {
+            requestPutCustomerGrowthCurve(customer.id, {
+              height,
+              weight,
+            })
+              .then((res) => {
+                toastAlert(toast, 'success', '添加成功！');
+                getGrowthCurveDatas();
+                setShowEditGrowthCurve({
+                  isOpen: false,
+                  date: '',
+                  defaultHeight: 0,
+                  defaultWeight: 0,
+                });
+              })
+              .catch((err) => {
+                toastAlert(toast, 'error', '添加失败！');
+                setShowEditGrowthCurve({
+                  isOpen: false,
+                  date: '',
+                  defaultHeight: 0,
+                  defaultWeight: 0,
+                });
+              });
+          }
+        }}
+      />
     </Box>
   );
 }

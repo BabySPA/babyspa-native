@@ -12,7 +12,7 @@ import {
 import NavigationBar from '~/app/components/navigation-bar';
 import { AppStackScreenProps } from '~/app/types';
 import { ls, sp, ss } from '~/app/utils/style';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import useManagerStore from '~/app/stores/manager';
 import BoxTitle from '~/app/components/box-title';
 import { SwipeListView } from 'react-native-swipe-list-view';

@@ -5,6 +5,7 @@ import {
   Circle,
   Column,
   Image,
+  Pressable,
   Row,
   ScrollView,
   Text,
@@ -14,6 +15,7 @@ import { ls, sp, ss } from '~/app/utils/style';
 
 interface ShopArchiveParams {
   archives: FlowArchive[];
+  onPressToFlowInfo: () => void;
 }
 export function ShopArchive(params: ShopArchiveParams) {
   return (
@@ -21,7 +23,12 @@ export function ShopArchive(params: ShopArchiveParams) {
       <ScrollView horizontal mt={ss(30)}>
         {params.archives.map((archive) => {
           return (
-            <Column key={archive._id} w={ls(302)}>
+            <Pressable
+              key={archive._id}
+              w={ls(302)}
+              onPress={() => {
+                params.onPressToFlowInfo();
+              }}>
               <Row alignItems={'center'}>
                 <Circle size={ss(20)} borderRadius={ss(18)} bgColor={'#DCEEED'}>
                   <Circle size={ss(12)} bgColor={'#5EACA3'} />
@@ -51,7 +58,7 @@ export function ShopArchive(params: ShopArchiveParams) {
                   </Text>
                 </Box>
               </Column>
-            </Column>
+            </Pressable>
           );
         })}
       </ScrollView>

@@ -16,6 +16,7 @@ import { ls, ss, sp } from '~/app/utils/style';
 
 interface HistoryArchiveParams {
   courses: FlowArchive[][];
+  onPressToFlowInfo: () => void;
 }
 export function HistoryArchive(params: HistoryArchiveParams) {
   const [selectIdx, setSelectIdx] = useState(0);
@@ -56,7 +57,10 @@ export function HistoryArchive(params: HistoryArchiveParams) {
           <ScrollView horizontal ml={ls(30)} mt={ss(30)} flex={1}>
             {params.courses[selectIdx].map((course, idx) => {
               return (
-                <Column
+                <Pressable
+                  onPress={() => {
+                    params.onPressToFlowInfo();
+                  }}
                   key={idx}
                   w={ls(370)}
                   maxH={ss(270)}
@@ -111,7 +115,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                       </Text>
                     </Row>
                   </Row>
-                </Column>
+                </Pressable>
               );
             })}
           </ScrollView>

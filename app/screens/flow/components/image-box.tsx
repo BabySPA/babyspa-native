@@ -24,7 +24,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getBase64ImageFormat } from '~/app/utils';
 import useFlowStore from '~/app/stores/flow';
 import { UpdatingImage } from '~/app/stores/flow/type';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import useOssStore from '~/app/stores/oss';
 import { upload } from '~/app/api/upload';
 

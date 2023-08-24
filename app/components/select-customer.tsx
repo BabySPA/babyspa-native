@@ -20,7 +20,7 @@ import {
   MaterialIcons,
 } from '@expo/vector-icons';
 import { getAge } from '../utils';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { Customer } from '../stores/flow/type';
 import debounce from 'lodash/debounce';
 

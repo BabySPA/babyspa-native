@@ -4,7 +4,7 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackList, CustomerStatus } from '~/app/types';

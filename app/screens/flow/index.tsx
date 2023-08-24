@@ -18,7 +18,7 @@ import { Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import { getAge } from '~/app/utils';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import HealthInfo from './components/health-info';
 import Guidance from './components/guidance-info';
 import Conclusion from './components/conclusion-info';

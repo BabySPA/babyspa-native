@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import request from '~/app/api';
 import { OssConfig } from '../types';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 interface OssState {
   oss: OssConfig;

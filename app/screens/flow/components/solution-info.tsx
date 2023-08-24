@@ -15,7 +15,7 @@ import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { SolutionDefault, TemplateGroupKeys } from '~/app/constants';
 import SelectDay, { getDay } from '~/app/components/select-day';
 import AddCountSelector from '~/app/components/add-count-selector';

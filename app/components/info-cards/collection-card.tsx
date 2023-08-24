@@ -4,7 +4,7 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import SoundList from '../sound-list';
 
 interface CollectionCardParams {

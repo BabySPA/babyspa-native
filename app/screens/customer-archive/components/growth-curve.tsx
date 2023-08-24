@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import {
   Box,
   Center,
@@ -16,22 +15,22 @@ import { LineChart } from 'echarts/charts';
 import { GridComponent } from 'echarts/components';
 import { SVGRenderer, SkiaChart } from '@wuba/react-native-echarts';
 import { useEffect, useRef, useState } from 'react';
-import { Dimensions } from 'react-native';
-import { center } from '@shopify/react-native-skia';
+import dayjs from 'dayjs';
 
 echarts.use([SVGRenderer, LineChart, GridComponent]);
 
 interface GrowthCurveParams {
   growthCurves: GrowthCurveStatisticsResponse[];
+  onEditClick: (item: GrowthCurveStatisticsResponse) => void;
 }
 export function GrowthCurve(params: GrowthCurveParams) {
   const skiaRef = useRef<any>(null);
-  const { growthCurves } = params;
+  const { growthCurves, onEditClick } = params;
 
   // 获取最大高度
   const getMaxAndMinHeight = () => {
-    let max = 0;
-    let min = 0;
+    let max = growthCurves[0].heightData.height;
+    let min = growthCurves[0].heightData.height;
     growthCurves.forEach((item) => {
       if (item.heightData.height > max) {
         max = item.heightData.height;
@@ -41,18 +40,15 @@ export function GrowthCurve(params: GrowthCurveParams) {
       }
     });
     return {
-      max: Math.ceil((max + 10) / 10) * 10,
-      min:
-        Math.floor((max - 10) / 10) * 10 > 0
-          ? Math.floor((max - 10) / 10) * 10
-          : 0,
+      max: max,
+      min: min,
     };
   };
 
   // 获取最大体重
   const getMaxAndMinWeight = () => {
-    let max = 0;
-    let min = 0;
+    let max = growthCurves[0].weightData.weight;
+    let min = growthCurves[0].weightData.weight;
     growthCurves.forEach((item) => {
       if (item.weightData.weight > max) {
         max = item.weightData.weight;
@@ -62,11 +58,8 @@ export function GrowthCurve(params: GrowthCurveParams) {
       }
     });
     return {
-      max: Math.ceil((max + 10) / 10) * 10,
-      min:
-        Math.floor((max - 10) / 10) * 10 > 0
-          ? Math.floor((max - 10) / 10) * 10
-          : 0,
+      max: max,
+      min: min,
     };
   };
 
@@ -181,7 +174,10 @@ export function GrowthCurve(params: GrowthCurveParams) {
               </Row>
 
               <Row w={ls(120)}>
-                <Pressable>
+                <Pressable
+                  onPress={() => {
+                    onEditClick(growthCurve);
+                  }}>
                   <Text fontSize={sp(14)} color={'#03CBB2'}>
                     编辑
                   </Text>
@@ -238,14 +234,14 @@ export function GrowthCurve(params: GrowthCurveParams) {
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
-          end: 60, // 初始数据显示的范围，这里设置为显示前60%的数据
+          start: 40,
+          end: 100, // 初始数据显示的范围，这里设置为显示前60%的数据
         },
       ],
       yAxis: [
         {
           type: 'value',
-          max: maxHeight,
+          min: minHeight,
           axisLabel: {
             formatter: '{value}cm', // 在刻度标签后添加"cm"
           },
@@ -322,14 +318,14 @@ export function GrowthCurve(params: GrowthCurveParams) {
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
-          end: 60, // 初始数据显示的范围，这里设置为显示前60%的数据
+          start: 40,
+          end: 100, // 初始数据显示的范围，这里设置为显示前60%的数据
         },
       ],
       yAxis: [
         {
           type: 'value',
-          max: maxWeight,
+          min: minWeight,
           axisLabel: {
             formatter: '{value}kg', // 在刻度标签后添加"cm"
           },
@@ -379,7 +375,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
       chart.setOption(options[selectOption]);
     }
     return () => chart?.dispose();
-  }, [selectOption]);
+  }, [growthCurves, selectOption]);
   return (
     <ScrollView>
       <Column

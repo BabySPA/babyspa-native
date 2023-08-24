@@ -152,6 +152,15 @@ export interface FlowState {
   requestCustomerGrowthCurve: (
     customerId: string,
   ) => Promise<GrowthCurveStatisticsResponse[]>;
+
+  requestPutCustomerGrowthCurve: (
+    customerId: string,
+    { height, weight }: { height: number; weight: number },
+  ) => Promise<GrowthCurveStatisticsResponse>;
+  requestPatchCustomerGrowthCurve: (
+    customerId: string,
+    { height, weight, date }: { height: number; weight: number; date: string },
+  ) => Promise<GrowthCurveStatisticsResponse>;
   requestPatchCustomerStatus: (data: {
     status: number;
     type: PatchCustomerStatusType;
