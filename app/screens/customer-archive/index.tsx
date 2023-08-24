@@ -72,12 +72,14 @@ export default function CustomerArchive({
     });
 
     requestCustomerGrowthCurve(customer.id).then((res) => {
-      console.log(res);
       setGrowthCurves(res);
     });
   }, []);
 
   const [selectFragment, setSelectedFragment] = useState(0);
+
+  const [showEditGrowthCurve, setShowEditGrowthCurve] = useState(false);
+
   return (
     <Box flex={1}>
       <NavigationBar
@@ -173,46 +175,62 @@ export default function CustomerArchive({
           borderRadius={ss(10)}
           flex={1}
           p={ss(40)}>
-          <Container>
-            <Row
-              borderRadius={ss(4)}
-              borderColor={'#99A9BF'}
-              borderWidth={1}
-              borderStyle={'solid'}>
-              {configs.map((item, idx) => {
-                return (
-                  <Pressable
-                    key={item.key}
-                    onPress={() => {
-                      setSelectedFragment(idx);
-                    }}>
-                    <Box
-                      minW={ss(120)}
-                      px={ss(20)}
-                      py={ss(10)}
-                      bgColor={
-                        configs[selectFragment].key == item.key
-                          ? '#03CBB2'
-                          : '#fff'
-                      }
-                      borderRightWidth={idx == configs.length - 1 ? 0 : 1}
-                      borderRightColor={'#99A9BF'}>
-                      <Text
-                        fontSize={sp(20)}
-                        fontWeight={600}
-                        color={
+          <Row alignItems={'center'} justifyContent={'space-between'}>
+            <Container>
+              <Row
+                borderRadius={ss(4)}
+                borderColor={'#99A9BF'}
+                borderWidth={1}
+                borderStyle={'solid'}>
+                {configs.map((item, idx) => {
+                  return (
+                    <Pressable
+                      key={item.key}
+                      onPress={() => {
+                        setSelectedFragment(idx);
+                      }}>
+                      <Box
+                        minW={ss(120)}
+                        px={ss(20)}
+                        py={ss(10)}
+                        bgColor={
                           configs[selectFragment].key == item.key
-                            ? '#fff'
-                            : '#333'
-                        }>
-                        {item.text}
-                      </Text>
-                    </Box>
-                  </Pressable>
-                );
-              })}
-            </Row>
-          </Container>
+                            ? '#03CBB2'
+                            : '#fff'
+                        }
+                        borderRightWidth={idx == configs.length - 1 ? 0 : 1}
+                        borderRightColor={'#99A9BF'}>
+                        <Text
+                          fontSize={sp(20)}
+                          fontWeight={600}
+                          color={
+                            configs[selectFragment].key == item.key
+                              ? '#fff'
+                              : '#333'
+                          }>
+                          {item.text}
+                        </Text>
+                      </Box>
+                    </Pressable>
+                  );
+                })}
+              </Row>
+            </Container>
+            {configs[selectFragment].key == 'growth-curve' && (
+              <Pressable
+                onPress={() => {}}
+                bgColor={'rgba(0, 180, 158, 0.10)'}
+                borderColor={'#00B49E'}
+                borderRadius={ss(4)}
+                borderWidth={1}
+                px={ls(16)}
+                py={ss(8)}>
+                <Text color='#03CBB2' fontSize={sp(14)}>
+                  新建
+                </Text>
+              </Pressable>
+            )}
+          </Row>
 
           {configs[selectFragment].key == 'shop-archive' && (
             <ShopArchive archives={archives} />
