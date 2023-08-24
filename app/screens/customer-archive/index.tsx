@@ -27,6 +27,7 @@ import {
   FlowArchive,
   GrowthCurveStatisticsResponse,
 } from '~/app/stores/flow/type';
+import { GrowthCurveModal } from '~/app/components/modals';
 
 const configs = [
   {
@@ -218,7 +219,9 @@ export default function CustomerArchive({
             </Container>
             {configs[selectFragment].key == 'growth-curve' && (
               <Pressable
-                onPress={() => {}}
+                onPress={() => {
+                  setShowEditGrowthCurve(true);
+                }}
                 bgColor={'rgba(0, 180, 158, 0.10)'}
                 borderColor={'#00B49E'}
                 borderRadius={ss(4)}
@@ -228,6 +231,23 @@ export default function CustomerArchive({
                 <Text color='#03CBB2' fontSize={sp(14)}>
                   新建
                 </Text>
+                <GrowthCurveModal
+                  isOpen={showEditGrowthCurve}
+                  defaultHeight={0}
+                  defaultWeight={0}
+                  onClose={function (): void {
+                    setShowEditGrowthCurve(false);
+                  }}
+                  onConfirm={function ({
+                    height,
+                    weight,
+                  }: {
+                    height: number;
+                    weight: number;
+                  }): void {
+                    // throw new Error('Function not implemented.');
+                  }}
+                />
               </Pressable>
             )}
           </Row>

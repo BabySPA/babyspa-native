@@ -15,6 +15,7 @@ import { sp, ss, ls } from '~/app/utils/style';
 import { Template } from '../stores/manager/type';
 import { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
+import { set } from 'lodash';
 
 interface DialogParams {
   isOpen: boolean;
@@ -245,6 +246,111 @@ export function TemplateModal({
           </Pressable>
         </Row>
       </Column>
+    </Modal>
+  );
+}
+
+interface GrowthCurveModalParams {
+  isOpen: boolean;
+  defaultHeight: number;
+  defaultWeight: number;
+  onClose: () => void;
+  onConfirm: ({ height, weight }: { height: number; weight: number }) => void;
+}
+export function GrowthCurveModal({
+  isOpen,
+  defaultHeight,
+  defaultWeight,
+  onClose,
+  onConfirm,
+}: GrowthCurveModalParams) {
+  const [height, setHeight] = useState(defaultHeight || 0);
+  const [weight, setWeight] = useState(defaultWeight || 0);
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Modal.Content>
+        <Modal.CloseButton />
+        <Modal.Header>{'生长记录'}</Modal.Header>
+        <Modal.Body>
+          <Center>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                身高
+              </Text>
+              <Input
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                inputMode='numeric'
+                onChangeText={(h) => {
+                  setHeight(+h);
+                }}
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                体重
+              </Text>
+              <Input
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                inputMode='numeric'
+                onChangeText={(w) => {
+                  setWeight(+w);
+                }}
+              />
+            </Row>
+            <Row mt={ss(80)} mb={ss(20)}>
+              <Pressable
+                onPress={() => {
+                  onClose();
+                }}>
+                <Center
+                  borderRadius={ss(4)}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    取消
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  onConfirm({
+                    height: height,
+                    weight: weight,
+                  });
+                }}>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={ss(4)}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    确定
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          </Center>
+        </Modal.Body>
+      </Modal.Content>
     </Modal>
   );
 }
