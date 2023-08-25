@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import useManagerStore from '../stores/manager';
 import { useEffect } from 'react';
 
-export default function SelectShop({
+export default function SelectRole({
   onSelect,
   defaultButtonText,
   buttonHeight,

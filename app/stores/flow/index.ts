@@ -204,7 +204,13 @@ const useFlowStore = create(
 
     requestCustomersArchive: async () => {
       const {
-        customersArchive: { status, startDate, endDate, searchKeywords },
+        customersArchive: {
+          status,
+          startDate,
+          endDate,
+          searchKeywords,
+          shopId,
+        },
       } = get();
       const params: any = {};
 
@@ -218,9 +224,8 @@ const useFlowStore = create(
         params.endDate = endDate;
       }
 
-      const user = useAuthStore.getState().currentShopWithRole;
-      if (user?.shop.type === ShopType.SHOP) {
-        params.shopId = user?.shop._id;
+      if (shopId) {
+        params.shopId = shopId;
       }
 
       request.get('/customers', { params }).then(({ data }) => {
@@ -392,7 +397,7 @@ const useFlowStore = create(
       const customer = get().currentRegisterCustomer;
 
       return request
-        .post('/customers', {
+        .post('/customers/register', {
           phoneNumber: customer.phoneNumber,
           name: customer.name,
           gender: customer.gender,
@@ -773,6 +778,18 @@ const useFlowStore = create(
     updateEvaluateFilter(data) {
       return set((state) => {
         state.evaluate = { ...state.evaluate, ...data };
+      });
+    },
+
+    updateCustomersArchiveFilter(data) {
+      return set((state) => {
+        state.customersArchive = { ...state.customersArchive, ...data };
+      });
+    },
+
+    updateCustomersFollowupFilter(data) {
+      return set((state) => {
+        state.customersFollowUp = { ...state.customersFollowUp, ...data };
       });
     },
 

@@ -25,7 +25,6 @@ import {
 import Dot from '../dot';
 import { useState } from 'react';
 import { DialogModal } from '../modals';
-import { set } from 'lodash';
 
 interface FollowUpCardParams {
   style?: StyleProp<ViewStyle>;
@@ -49,7 +48,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
     followUp?.followUpResult || 0,
   );
 
-  const [isEdit, setIsEdit] = useState(edit);
+  const [isEdit] = useState(edit);
 
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
@@ -294,6 +293,35 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 }}
               />
             </Row>
+          </Column>
+        ) : followUp.followUpStatus == FollowUpStatus.CANCEL ? (
+          <Column
+            flex={1}
+            bgColor={'#fff'}
+            p={ss(20)}
+            borderRadius={ss(10)}
+            style={style}>
+            <BoxTitle title='随访单' rightElement={null} />
+            <Divider color={'#DFE1DE'} my={ss(14)} />
+            <Image
+              source={require('~/assets/images/followup-cancel.png')}
+              style={{
+                width: ss(100),
+                height: ss(100),
+                position: 'absolute',
+                right: ls(20),
+                top: ss(20),
+              }}
+            />
+            <Column alignItems={'center'}>
+              <Image
+                source={require('~/assets/images/empty-box.png')}
+                style={{ width: ls(360), height: ss(283) }}
+              />
+              <Text color='#909499' fontSize={sp(24)}>
+                暂无随访信息
+              </Text>
+            </Column>
           </Column>
         ) : (
           <Column
