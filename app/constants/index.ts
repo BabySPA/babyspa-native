@@ -11,7 +11,7 @@ import StatisticsMassage from '../screens/home/fragments/statistics-massage';
 import { RW, RoleAuthority } from '../stores/auth/type';
 import { CustomerStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
-import { Score } from '../stores/flow/type';
+import { FollowUpStatus, Score } from '../stores/flow/type';
 
 export const EvaluateTextConfig = {
   ['TODO']: {
@@ -24,6 +24,36 @@ export const EvaluateTextConfig = {
     textColor: '#00B49E',
     bgColor: 'rgba(0, 180, 158, 0.2)',
   },
+};
+
+export const FollowUpStatusTextConfig = {
+  [FollowUpStatus.WAIT]: {
+    text: '待随访',
+    textColor: '#FE9505',
+    bgColor: 'rgba(254, 149, 5, 0.2)',
+  },
+  [FollowUpStatus.DONE]: {
+    text: '已随访',
+    textColor: '#00B49E',
+    bgColor: 'rgba(0, 180, 158, 0.2)',
+  },
+  [FollowUpStatus.OVERDUE]: {
+    text: '已逾期',
+    textColor: '#FB6459',
+    bgColor: 'rgba(251, 100, 89, 0.2)',
+  },
+  [FollowUpStatus.CANCEL]: {
+    text: '已取消',
+    textColor: '#777777',
+    bgColor: 'rgba(119, 119, 119, 0.2)',
+  },
+};
+
+export const getFollowUpStatusTextConfig = (
+  status: FollowUpStatus | undefined,
+) => {
+  // @ts-ignore
+  return FollowUpStatusTextConfig[status];
 };
 
 export const getStatusTextConfig = (status: CustomerStatus) => {

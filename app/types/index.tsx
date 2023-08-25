@@ -45,6 +45,7 @@ export enum OperateType {
   Collection,
   Analyze,
   Evaluate,
+  FOLLOWUP,
 }
 
 export type FlowFrom = 'analyze' | 'evaluate' | 'evaluate-detail';

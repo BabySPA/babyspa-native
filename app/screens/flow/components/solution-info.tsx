@@ -15,13 +15,14 @@ import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { SolutionDefault, TemplateGroupKeys } from '~/app/constants';
 import SelectDay, { getDay } from '~/app/components/select-day';
 import AddCountSelector from '~/app/components/add-count-selector';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
 import SelectTimeLength from '~/app/components/select-time-length';
+import { FollowUpStatus } from '~/app/stores/flow/type';
 
 export default function SolutionInfo() {
   const {
@@ -372,10 +373,15 @@ export default function SolutionInfo() {
             <Radio.Group
               name='isFollowUp'
               flexDirection={'row'}
-              defaultValue={followUp.isFollowed ? '1' : '0'}
+              defaultValue={
+                followUp.followUpStatus === FollowUpStatus.NOT_SET ? '0' : '1'
+              }
               onChange={(event) => {
                 updateFollowUp({
-                  isFollowed: event === '1',
+                  followUpStatus:
+                    event === '1'
+                      ? FollowUpStatus.WAIT
+                      : FollowUpStatus.NOT_SET,
                 });
               }}>
               <Radio colorScheme='green' value='1' size={'sm'}>

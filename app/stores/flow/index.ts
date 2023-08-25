@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
 import { CustomerStatus } from '../../types';
-import { FlowState } from './type';
+import { FlowState, FollowUpStatus } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { reject } from 'lodash';
@@ -14,12 +14,10 @@ import { ShopType } from '../manager/type';
 
 const defaultRegisterAndCollection = {
   customers: [],
-  page: 1,
-  hasNextPage: false, // hasNextPage:false
   searchKeywords: '',
   status: -1,
   statusCount: {},
-  startDate: dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
+  startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
@@ -57,7 +55,7 @@ const defaultFlow = {
       massages: [],
     },
     followUp: {
-      isFollowed: false,
+      followUpStatus: FollowUpStatus.NOT_SET,
       followUpTime: '',
     },
     next: {
@@ -112,6 +110,7 @@ const initialState = {
   currentFlow: defaultFlow,
 
   customersArchive: { ...defaultRegisterAndCollection, allStatus: [] },
+  customersFollowUp: { ...defaultRegisterAndCollection },
 
   operators: [],
 
@@ -189,7 +188,7 @@ const useFlowStore = create(
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/customers', { params }).then(({ data }) => {
-        const { docs, hasNextPage, statusCount } = data;
+        const { docs, statusCount } = data;
 
         set({
           register: {
@@ -197,7 +196,6 @@ const useFlowStore = create(
             customers: searchKeywords
               ? fuzzySearch(docs, searchKeywords)
               : docs,
-            hasNextPage: hasNextPage,
             statusCount,
           },
         });
@@ -206,12 +204,9 @@ const useFlowStore = create(
 
     requestCustomersArchive: async () => {
       const {
-        customersArchive: { status, startDate, endDate, searchKeywords, page },
+        customersArchive: { status, startDate, endDate, searchKeywords },
       } = get();
-      const params: any = {
-        page: page,
-        pageSize: 100,
-      };
+      const params: any = {};
 
       if (status !== -1) {
         params.status = status;
@@ -229,14 +224,13 @@ const useFlowStore = create(
       }
 
       request.get('/customers', { params }).then(({ data }) => {
-        const { docs, hasNextPage, statusCount } = data;
+        const { docs, statusCount } = data;
         set({
           customersArchive: {
             ...get().customersArchive,
             customers: searchKeywords
               ? fuzzySearch(docs, searchKeywords)
               : docs,
-            hasNextPage: hasNextPage,
             statusCount,
           },
         });
@@ -259,12 +253,9 @@ const useFlowStore = create(
 
     requestCollectionCustomers: async () => {
       const {
-        collection: { status, startDate, searchKeywords, endDate, page },
+        collection: { status, startDate, searchKeywords, endDate },
       } = get();
-      const params: any = {
-        page: page,
-        pageSize: 100,
-      };
+      const params: any = {};
       if (status !== -1) {
         params.status = status;
       }
@@ -278,14 +269,13 @@ const useFlowStore = create(
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/customers', { params }).then(({ data }) => {
-        const { docs, hasNextPage, statusCount } = data;
+        const { docs, statusCount } = data;
         set({
           collection: {
             ...get().collection,
             customers: searchKeywords
               ? fuzzySearch(docs, searchKeywords)
               : docs,
-            hasNextPage: hasNextPage,
             statusCount,
           },
         });
@@ -330,12 +320,9 @@ const useFlowStore = create(
 
     requestAnalyzeCustomers: async () => {
       const {
-        analyze: { status, startDate, endDate, searchKeywords, page },
+        analyze: { status, startDate, endDate, searchKeywords },
       } = get();
-      const params: any = {
-        page: page,
-        pageSize: 100,
-      };
+      const params: any = {};
 
       if (status !== -1) {
         params.status = status;
@@ -348,14 +335,13 @@ const useFlowStore = create(
       }
 
       request.get('/customers/analyzes', { params }).then(({ data }) => {
-        const { docs, hasNextPage, statusCount } = data;
+        const { docs, statusCount } = data;
         set({
           analyze: {
             ...get().analyze,
             customers: searchKeywords
               ? fuzzySearch(docs, searchKeywords)
               : docs,
-            hasNextPage: hasNextPage,
             statusCount,
           },
         });
@@ -364,12 +350,9 @@ const useFlowStore = create(
 
     requestEvaluateCustomers: async () => {
       const {
-        evaluate: { status, startDate, searchKeywords, endDate, page },
+        evaluate: { status, startDate, searchKeywords, endDate },
       } = get();
-      const params: any = {
-        page: page,
-        pageSize: 100,
-      };
+      const params: any = {};
       if (status !== -1) {
         params.status = status;
       }
@@ -381,7 +364,7 @@ const useFlowStore = create(
       }
 
       request.get('/customers/evaluates', { params }).then(({ data }) => {
-        const { docs, hasNextPage, statusCount } = data;
+        const { docs, statusCount } = data;
 
         set({
           evaluate: {
@@ -389,7 +372,6 @@ const useFlowStore = create(
             customers: searchKeywords
               ? fuzzySearch(docs, searchKeywords)
               : docs,
-            hasNextPage: hasNextPage,
             statusCount,
           },
         });
@@ -791,6 +773,41 @@ const useFlowStore = create(
     updateEvaluateFilter(data) {
       return set((state) => {
         state.evaluate = { ...state.evaluate, ...data };
+      });
+    },
+
+    // 客户随访
+    async requestGetFollowUps() {
+      const {
+        customersFollowUp: { status, startDate, endDate, searchKeywords },
+      } = get();
+      const params: any = {};
+
+      if (status !== -1) {
+        params.status = status;
+      }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
+
+      const user = useAuthStore.getState().currentShopWithRole;
+      if (user?.shop.type === ShopType.SHOP) {
+        params.shopId = user?.shop._id;
+      }
+
+      request.get('/customers/follow-ups', { params }).then(({ data }) => {
+        const { docs } = data;
+        set({
+          customersFollowUp: {
+            ...get().customersFollowUp,
+            customers: searchKeywords
+              ? fuzzySearch(docs, searchKeywords)
+              : docs,
+          },
+        });
       });
     },
   })),

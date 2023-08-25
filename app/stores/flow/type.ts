@@ -17,6 +17,7 @@ export interface Customer {
   tag: string;
   flowId: string;
   flowEvaluate: Evaluate | null;
+  flowFollowUp?: FollowUp | null;
 }
 
 export interface Operator {
@@ -42,15 +43,13 @@ export type RegisterCustomerInfo = Partial<Customer>;
 
 export interface RegisterAndCollection {
   customers: Customer[];
-  page: number;
-  hasNextPage: boolean;
   searchKeywords: string;
   startDate: string;
   endDate: string;
   status: CustomerStatus | -1;
-  statusCount: any;
+  statusCount?: any;
   // 用于筛选
-  allStatus: {
+  allStatus?: {
     value: number;
     label: string;
   }[];
@@ -127,6 +126,8 @@ export interface FlowState {
 
   customersArchive: RegisterAndCollection;
 
+  customersFollowUp: RegisterAndCollection;
+
   currentRegisterCustomer: RegisterCustomerInfo;
   currentFlowCustomer: Customer;
 
@@ -166,6 +167,9 @@ export interface FlowState {
     type: PatchCustomerStatusType;
   }) => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<void>;
+
+  // 客户随访
+  requestGetFollowUps: () => Promise<any>;
 
   updateRegisterFilter: (data: Partial<RegisterAndCollection>) => void;
   updateCollectionFilter: (data: Partial<RegisterAndCollection>) => void;
@@ -251,9 +255,65 @@ export interface Collect {
   };
 }
 
+/**
+ * 随访
+ */
 export interface FollowUp {
-  isFollowed: boolean;
+  /**
+   * 随访编号
+   */
+  id?: string;
+  /**
+   * 随访状态
+   */
+  followUpStatus: FollowUpStatus;
+
+  /**
+   * 随访时间
+   */
   followUpTime: string;
+
+  /**
+   * 实际随访时间
+   */
+  actualFollowUpTime?: string;
+
+  /**
+   * 随访人
+   */
+  operatorId?: string;
+
+  /**
+   * 随访结果
+   */
+  followUpResult?: FollowUpResult;
+
+  /**
+   * 随访内容
+   */
+  followUpContent?: string;
+}
+
+export enum FollowUpStatus {
+  // 随访未设置
+  NOT_SET = 0,
+  // 待随访
+  WAIT,
+  // 已随访
+  DONE,
+  // 取消随访
+  CANCEL,
+  // 已逾期
+  OVERDUE,
+}
+
+export enum FollowUpResult {
+  // 恢复良好
+  GOOD = 0,
+  // 恢复欠佳
+  BAD,
+  // 未恢复已加重
+  WORSE,
 }
 
 export interface NextTime {

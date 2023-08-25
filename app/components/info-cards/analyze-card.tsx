@@ -4,10 +4,11 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackList, CustomerStatus } from '~/app/types';
+import { FollowUpStatus } from '~/app/stores/flow/type';
 
 interface AnalyzeCardParams {
   style?: StyleProp<ViewStyle>;
@@ -156,11 +157,11 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             随访时间：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
-            {analyze.followUp.isFollowed
-              ? dayjs(analyze.followUp?.followUpTime).format(
+            {analyze.followUp.followUpStatus === FollowUpStatus.NOT_SET
+              ? '未设置随访'
+              : dayjs(analyze.followUp?.followUpTime).format(
                   'YYYY-MM-DD HH:mm:ss',
-                )
-              : '未设置随访'}
+                )}
           </Text>
         </Row>
 

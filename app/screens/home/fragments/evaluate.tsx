@@ -19,7 +19,7 @@ import CustomerItem from '../components/customer-item';
 import { CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import debounce from 'lodash/debounce';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function Evaluate() {
@@ -50,7 +50,7 @@ export default function Evaluate() {
             {customers.map((customer, idx) => {
               return (
                 <Pressable
-                  key={customer.id}
+                  key={idx}
                   onPress={() => {
                     if (customer.status === CustomerStatus.Completed) {
                       updateCurrentFlowCustomer(customer);
@@ -218,7 +218,7 @@ function Filter() {
               状态选择
             </Text>
             <Row ml={ls(20)}>
-              {evaluate.allStatus.map((status) => {
+              {evaluate.allStatus?.map((status) => {
                 return (
                   <Pressable
                     onPress={() => {

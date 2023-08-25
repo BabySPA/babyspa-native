@@ -18,7 +18,7 @@ import CustomerItem from '../components/customer-item';
 import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import debounce from 'lodash/debounce';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function Collection() {
@@ -50,7 +50,7 @@ export default function Collection() {
               return (
                 <Pressable
                   ml={idx % 2 == 1 ? ss(20) : 0}
-                  key={customer.id}
+                  key={idx}
                   onPress={() => {
                     updateCurrentRegisterCustomer(customer);
                     navigation.navigate('CustomerDetail');
@@ -235,7 +235,7 @@ function Filter() {
               状态选择
             </Text>
             <Row ml={ls(20)}>
-              {collection.allStatus.map((status) => {
+              {collection.allStatus?.map((status) => {
                 return (
                   <Pressable
                     onPress={() => {

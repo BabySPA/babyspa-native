@@ -22,7 +22,6 @@ export default function Archive() {
   const navigation = useNavigation();
   const {
     requestCustomersArchive,
-    updateCurrentFlowCustomer,
     customersArchive: { customers },
   } = useFlowStore();
 
@@ -46,7 +45,7 @@ export default function Archive() {
             {customers.map((customer, idx) => (
               <Pressable
                 mr={(idx + 1) % 3 == 0 ? 0 : ss(15)}
-                key={customer.id}
+                key={idx}
                 onPress={() => {
                   navigation.navigate('CustomerArchive', {
                     customer: customer,

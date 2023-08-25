@@ -20,7 +20,7 @@ import EmptyBox from '~/app/components/empty-box';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import debounce from 'lodash/debounce';
 
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -50,7 +50,7 @@ export default function Register() {
             {customers.map((customer, idx) => (
               <Pressable
                 ml={idx % 2 == 1 ? ss(20) : 0}
-                key={customer.id}
+                key={idx}
                 onPress={() => {
                   updateCurrentRegisterCustomer(customer);
 
@@ -227,7 +227,7 @@ function Filter() {
               状态选择
             </Text>
             <Row ml={ls(20)}>
-              {register.allStatus.map((status) => {
+              {register.allStatus?.map((status, idx) => {
                 return (
                   <Pressable
                     onPress={() => {
@@ -235,7 +235,7 @@ function Filter() {
                         status: status.value,
                       });
                     }}
-                    key={status.value}
+                    key={idx}
                     w={ls(90)}
                     h={ss(40)}
                     borderRadius={ss(4)}

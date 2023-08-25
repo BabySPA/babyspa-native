@@ -1,12 +1,17 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
-import { EvaluateTextConfig, getStatusTextConfig } from '~/app/constants';
+import {
+  EvaluateTextConfig,
+  FollowUpStatusTextConfig,
+  getFollowUpStatusTextConfig,
+  getStatusTextConfig,
+} from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
-import { Customer } from '~/app/stores/flow/type';
+import { Customer, FollowUpStatus } from '~/app/stores/flow/type';
 import { CustomerStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
@@ -22,6 +27,67 @@ export default function CustomerItem({
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
   const { updateCurrentFlowCustomer } = useFlowStore();
+  const OperatorStatusFlag = () => {
+    if (type === OperateType.Evaluate) {
+      return (
+        <Box
+          bgColor={
+            EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].bgColor
+          }
+          px={ls(12)}
+          py={ss(6)}
+          _text={{
+            fontSize: sp(16),
+            color:
+              EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO']
+                .textColor,
+          }}
+          borderBottomLeftRadius={ss(8)}
+          borderTopRightRadius={ss(8)}>
+          {EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].text}
+        </Box>
+      );
+    } else if (type === OperateType.FOLLOWUP) {
+      return (
+        <Box
+          bgColor={
+            getFollowUpStatusTextConfig(customer.flowFollowUp?.followUpStatus)
+              .bgColor
+          }
+          px={ls(12)}
+          py={ss(6)}
+          _text={{
+            fontSize: sp(16),
+            color: getFollowUpStatusTextConfig(
+              customer.flowFollowUp?.followUpStatus,
+            )?.textColor,
+          }}
+          borderBottomLeftRadius={ss(8)}
+          borderTopRightRadius={ss(8)}>
+          {
+            getFollowUpStatusTextConfig(customer.flowFollowUp?.followUpStatus)
+              ?.text
+          }
+        </Box>
+      );
+      return null;
+    } else {
+      return (
+        <Box
+          bgColor={getStatusTextConfig(customer.status)?.bgColor}
+          px={ls(12)}
+          py={ss(6)}
+          _text={{
+            fontSize: sp(16),
+            color: getStatusTextConfig(customer.status)?.textColor,
+          }}
+          borderBottomLeftRadius={ss(8)}
+          borderTopRightRadius={ss(8)}>
+          {getStatusTextConfig(customer.status)?.text}
+        </Box>
+      );
+    }
+  };
   return (
     <Row
       borderRadius={ss(8)}
@@ -108,38 +174,7 @@ export default function CustomerItem({
         </Flex>
       </Row>
       <Flex justifyContent={'space-between'} alignItems={'flex-end'} flex={1}>
-        {type === OperateType.Evaluate ? (
-          <Box
-            bgColor={
-              EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO']
-                .bgColor
-            }
-            px={ls(12)}
-            py={ss(6)}
-            _text={{
-              fontSize: sp(16),
-              color:
-                EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO']
-                  .textColor,
-            }}
-            borderBottomLeftRadius={ss(8)}
-            borderTopRightRadius={ss(8)}>
-            {EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].text}
-          </Box>
-        ) : (
-          <Box
-            bgColor={getStatusTextConfig(customer.status)?.bgColor}
-            px={ls(12)}
-            py={ss(6)}
-            _text={{
-              fontSize: sp(16),
-              color: getStatusTextConfig(customer.status)?.textColor,
-            }}
-            borderBottomLeftRadius={ss(8)}
-            borderTopRightRadius={ss(8)}>
-            {getStatusTextConfig(customer.status)?.text}
-          </Box>
-        )}
+        <OperatorStatusFlag />
 
         {type === OperateType.Collection &&
           customer.status == CustomerStatus.ToBeCollected && (
