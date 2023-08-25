@@ -4,12 +4,7 @@ import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
-import {
-  EvaluateTextConfig,
-  FollowUpStatusTextConfig,
-  getFollowUpStatusTextConfig,
-  getStatusTextConfig,
-} from '~/app/constants';
+import { EvaluateTextConfig, getStatusTextConfig } from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
 import { Customer, FollowUpStatus } from '~/app/stores/flow/type';
 import { CustomerStatus, OperateType } from '~/app/types';
@@ -47,30 +42,6 @@ export default function CustomerItem({
           {EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].text}
         </Box>
       );
-    } else if (type === OperateType.FOLLOWUP) {
-      return (
-        <Box
-          bgColor={
-            getFollowUpStatusTextConfig(customer.flowFollowUp?.followUpStatus)
-              .bgColor
-          }
-          px={ls(12)}
-          py={ss(6)}
-          _text={{
-            fontSize: sp(16),
-            color: getFollowUpStatusTextConfig(
-              customer.flowFollowUp?.followUpStatus,
-            )?.textColor,
-          }}
-          borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
-          {
-            getFollowUpStatusTextConfig(customer.flowFollowUp?.followUpStatus)
-              ?.text
-          }
-        </Box>
-      );
-      return null;
     } else {
       return (
         <Box

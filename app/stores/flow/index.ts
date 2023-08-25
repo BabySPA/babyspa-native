@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
 import { CustomerStatus } from '../../types';
-import { FlowState, FollowUpStatus } from './type';
+import { FlowState, FollowUp, FollowUpStatus } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { reject } from 'lodash';
@@ -809,6 +809,18 @@ const useFlowStore = create(
           },
         });
       });
+    },
+
+    async requestPatchFollowUp(followUp: Partial<FollowUp>) {
+      const currentFlow = get().currentFlow;
+
+      request
+        .patch(`/flows/follow-up/${currentFlow._id}`, {
+          ...followUp,
+        })
+        .then(({ data }) => {
+          set({ currentFlow: data });
+        });
     },
   })),
 );

@@ -170,6 +170,7 @@ export interface FlowState {
 
   // 客户随访
   requestGetFollowUps: () => Promise<any>;
+  requestPatchFollowUp: (data: Partial<FollowUp>) => Promise<any>;
 
   updateRegisterFilter: (data: Partial<RegisterAndCollection>) => void;
   updateCollectionFilter: (data: Partial<RegisterAndCollection>) => void;
@@ -282,6 +283,8 @@ export interface FollowUp {
    * 随访人
    */
   operatorId?: string;
+
+  operator?: OperatorInfo;
 
   /**
    * 随访结果

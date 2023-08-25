@@ -108,7 +108,7 @@ export default function CollectionCard(params: CollectionCardParams) {
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             调理导向：
           </Text>
-          <Text fontSize={sp(18)} color='#333'>
+          <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
             {collect.guidance}
           </Text>
         </Row>

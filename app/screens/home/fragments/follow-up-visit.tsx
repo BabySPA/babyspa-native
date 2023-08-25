@@ -14,18 +14,19 @@ import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/customer-item';
-import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
+import { CustomerScreenType, CustomerStatus } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import debounce from 'lodash/debounce';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
+import CustomerFollowUpItem from '../components/customer-followup-item';
 
 export default function FollowUpVisit() {
   const navigation = useNavigation();
   const {
     requestGetFollowUps,
     customersFollowUp: { customers },
+    updateCurrentFlowCustomer,
   } = useFlowStore();
 
   useEffect(() => {
@@ -51,13 +52,12 @@ export default function FollowUpVisit() {
                   ml={idx % 2 == 1 ? ss(20) : 0}
                   key={idx}
                   onPress={() => {
-                    // updateCurrentRegisterCustomer(customer);
-                    // navigation.navigate('CustomerDetail');
+                    updateCurrentFlowCustomer(customer);
+                    navigation.navigate('FlowInfo', {
+                      from: 'follow-up-detail',
+                    });
                   }}>
-                  <CustomerItem
-                    customer={customer}
-                    type={OperateType.FOLLOWUP}
-                  />
+                  <CustomerFollowUpItem customer={customer} />
                 </Pressable>
               );
             })}

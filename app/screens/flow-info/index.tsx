@@ -19,6 +19,7 @@ import AnalyzeCard from '~/app/components/info-cards/analyze-card';
 import EvaluateCard, {
   EvaluateCardDialog,
 } from '~/app/components/info-cards/evaluate-card';
+import FollowUpCard from '~/app/components/info-cards/follow-up-card';
 
 export default function FlowInfo({
   navigation,
@@ -34,7 +35,7 @@ export default function FlowInfo({
 
   useEffect(() => {
     requestGetFlow(currentFlowCustomer.flowId);
-  }, [requestGetFlow]);
+  }, []);
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -97,18 +98,27 @@ export default function FlowInfo({
           <ScrollView>
             <RegisterCard />
             <CollectionCard style={{ marginTop: ls(10) }} />
-            {from == 'evaluate' && (
+            {(from == 'evaluate' || from == 'follow-up') && (
               <AnalyzeCard edit={false} style={{ marginTop: ls(10) }} />
             )}
           </ScrollView>
         </Column>
         <Column flex={1} ml={ls(10)}>
           <ScrollView>
-            {from != 'evaluate' && <AnalyzeCard edit={from == 'analyze'} />}
+            {from !== 'evaluate' && from !== 'follow-up' && (
+              <AnalyzeCard edit={from == 'analyze'} />
+            )}
             {/* (从评价按钮点进来)或者(从评价点击卡片并且已经评价完成) */}
             {(from == 'evaluate' ||
               (from == 'evaluate-detail' && evaluate)) && (
               <EvaluateCard type='card' canEdit={from == 'evaluate'} />
+            )}
+            {/* 从随访点击卡片进来 */}
+            {(from == 'follow-up' || from === 'follow-up-detail') && (
+              <FollowUpCard
+                edit={from == 'follow-up'}
+                style={from == 'follow-up-detail' ? { marginTop: ss(10) } : {}}
+              />
             )}
           </ScrollView>
         </Column>

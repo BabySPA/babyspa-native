@@ -11,7 +11,7 @@ import StatisticsMassage from '../screens/home/fragments/statistics-massage';
 import { RW, RoleAuthority } from '../stores/auth/type';
 import { CustomerStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
-import { FollowUpStatus, Score } from '../stores/flow/type';
+import { FollowUpResult, FollowUpStatus, Score } from '../stores/flow/type';
 
 export const EvaluateTextConfig = {
   ['TODO']: {
@@ -382,4 +382,13 @@ export const TemplateGroupKeys = {
   ['application-acupoint']: 'application-acupoint',
   ['massage-remark']: 'massage-remark',
   ['flow-remark']: 'flow-remark',
+};
+
+export const FollowUpResultText = {
+  // 恢复良好
+  [FollowUpResult.GOOD]: '恢复良好',
+  // 恢复欠佳
+  [FollowUpResult.BAD]: '恢复欠佳',
+  // 未恢复已加重
+  [FollowUpResult.WORSE]: '未恢复已加重',
 };

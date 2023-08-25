@@ -1,9 +1,9 @@
 import { Box, Center } from 'native-base';
 import { ss, ls } from '../utils/style';
 
-export default function Dot(props: { color?: string }) {
+export default function Dot(props: { color?: string; w: number; h: number }) {
   return (
-    <Center w={ls(28)} h={ls(28)}>
+    <Center w={props.w ?? ls(28)} h={props.h ?? ls(28)}>
       <Box
         w={ss(8, { min: 2 })}
         h={ss(8, { min: 2 })}
