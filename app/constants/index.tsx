@@ -1,6 +1,6 @@
 import Register from '../screens/home/fragments/register';
 import Collection from '../screens/home/fragments/collection';
-import AnalyzeFragment from '../screens/home/fragments/analyze';
+import Analyze from '../screens/home/fragments/analyze';
 import Evaluate from '../screens/home/fragments/evaluate';
 import FollowUpVisit from '../screens/home/fragments/follow-up-visit';
 import Archive from '../screens/home/fragments/archive';
@@ -11,12 +11,7 @@ import StatisticsMassage from '../screens/home/fragments/statistics-massage';
 import { RW, RoleAuthority } from '../stores/auth/type';
 import { CustomerStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
-import {
-  FollowUpResult,
-  FollowUpStatus,
-  Score,
-  Analyze,
-} from '../stores/flow/type';
+import { FollowUpResult, FollowUpStatus, Score } from '../stores/flow/type';
 
 export const EvaluateTextConfig = {
   ['TODO']: {
@@ -214,22 +209,22 @@ export const LayoutConfig: ILayoutConfig[] = [
     features: [
       {
         text: '信息登记',
-        fragment: <Register />,
+        fragment: Register,
         auth: RoleAuthority.FLOW_REGISTER,
       },
       {
         text: '信息采集',
-        fragment: <Collection />,
+        fragment: Collection,
         auth: RoleAuthority.FLOW_COLLECTION,
       },
       {
         text: '信息分析',
-        fragment: <AnalyzeFragment />,
+        fragment: Analyze,
         auth: RoleAuthority.FLOW_ANALYZE,
       },
       {
         text: '评价反馈',
-        fragment: <Evaluate />,
+        fragment: Evaluate,
         auth: RoleAuthority.FLOW_EVALUATE,
       },
     ],
@@ -242,12 +237,12 @@ export const LayoutConfig: ILayoutConfig[] = [
     features: [
       {
         text: '客户档案',
-        fragment: <Archive />,
+        fragment: Archive,
         auth: RoleAuthority.CUSTOMER_ARCHIVE,
       },
       {
         text: '客户随访',
-        fragment: <FollowUpVisit />,
+        fragment: FollowUpVisit,
         auth: RoleAuthority.CUSTOMER_FOLLOWUP,
       },
     ],
@@ -258,7 +253,7 @@ export const LayoutConfig: ILayoutConfig[] = [
     noTab: true,
     text: '管理',
     featureSelected: 0,
-    fragment: <ShopCenter />,
+    fragment: ShopCenter,
     features: [
       {
         text: '门店管理',
@@ -290,22 +285,22 @@ export const LayoutConfig: ILayoutConfig[] = [
     features: [
       {
         text: '门店统计',
-        fragment: <StatisticsShop />,
+        fragment: StatisticsShop,
         auth: RoleAuthority.STATISTIC_SHOP,
       },
       {
         text: '调理统计',
-        fragment: <StatisticsMassage />,
+        fragment: StatisticsMassage,
         auth: RoleAuthority.STATISTIC_MASSAGE,
       },
       {
         text: '分析统计',
-        fragment: <StatisticsVisit />,
+        fragment: StatisticsVisit,
         auth: RoleAuthority.STATISTIC_ANALYZE,
       },
       {
         text: '随访统计',
-        fragment: <StatisticsVisit />,
+        fragment: StatisticsVisit,
         auth: RoleAuthority.STATISTIC_FOLLOWUP,
       },
     ],

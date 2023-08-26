@@ -22,13 +22,14 @@ export default function Layout() {
   const currentSelectedModule = getLayoutConfig()[currentSelected];
 
   const Fragment = () => {
-    return currentSelectedModule.features[currentSelectedModule.featureSelected]
-      .fragment;
+    return currentSelectedModule.features[
+      currentSelectedModule.featureSelected
+    ].fragment?.();
   };
 
   const NoTabFragment = () => {
     return currentSelectedModule.fragment
-      ? currentSelectedModule.fragment
+      ? currentSelectedModule.fragment()
       : null;
   };
 
@@ -144,9 +145,7 @@ export default function Layout() {
           <SelectUser
             style={{ marginTop: ss(4) }}
             onSelect={function (selectedItem: any): void {
-              if (selectedItem.shop._id === currentShopWithRole?.shop?._id) {
-                changeCurrentShopWithRole(selectedItem);
-              }
+              changeCurrentShopWithRole(selectedItem);
             }}
           />
         </Center>
