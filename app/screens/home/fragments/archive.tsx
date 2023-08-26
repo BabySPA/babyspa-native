@@ -80,7 +80,6 @@ function Filter() {
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
-            console.log('selectedItem', selectedItem);
             updateCustomersArchiveFilter({
               shopId: selectedItem._id,
             });

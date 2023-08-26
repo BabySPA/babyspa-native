@@ -129,10 +129,12 @@ export default function Personal({
                                   toastAlert(
                                     toast,
                                     'success',
-                                    '修改密码成功，正在退出请重新登录',
+                                    '修改密码成功，正在退出请重新登录...',
                                   );
 
-                                  logout();
+                                  setTimeout(() => {
+                                    logout();
+                                  }, 2000);
                                 })
                                 .catch(() => {
                                   toastAlert(toast, 'error', '修改密码失败');

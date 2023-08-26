@@ -144,7 +144,9 @@ export default function Layout() {
           <SelectUser
             style={{ marginTop: ss(4) }}
             onSelect={function (selectedItem: any): void {
-              changeCurrentShopWithRole(selectedItem);
+              if (selectedItem.shop._id === currentShopWithRole?.shop?._id) {
+                changeCurrentShopWithRole(selectedItem);
+              }
             }}
           />
         </Center>
