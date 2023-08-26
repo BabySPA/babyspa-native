@@ -12,9 +12,7 @@ import { DialogModal } from '~/app/components/modals';
 export default function AddNewCustomer({
   navigation,
 }: AppStackScreenProps<'AddNewCustomer'>) {
-  const { requestGetOperators } = useFlowStore();
-
-  const toast = useToast();
+  const { requestGetOperators, currentArchiveCustomer } = useFlowStore();
 
   useEffect(() => {
     requestGetOperators();
@@ -26,13 +24,18 @@ export default function AddNewCustomer({
         onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
-            新增客户
+            {currentArchiveCustomer.id ? '编辑客户信息' : '新增客户'}
           </Text>
         }
         rightElement={null}
       />
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>
-        {/* <EditBox onEditFinish={function (): void {}} type='new' /> */}
+        <EditBox
+          onEditFinish={function (): void {
+            navigation.goBack();
+          }}
+          type={currentArchiveCustomer.id ? 'archive-edit' : 'archive-new'}
+        />
       </Row>
     </Box>
   );

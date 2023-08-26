@@ -1,3 +1,4 @@
+import { Gender } from '~/app/types';
 import { Role, RoleStatus, Shop } from '../manager/type';
 
 /**
@@ -36,15 +37,19 @@ export interface ShopsWithRole {
 export interface AuthState {
   accessToken: string | null;
   user: {
+    id: string;
     name: string;
     username: string;
     phoneNumber: string;
+    idCardNumber: string;
+    gender: Gender;
+    password: string;
     shopsWithRole: ShopsWithRole[];
   } | null;
   currentShopWithRole: ShopsWithRole | null;
-  setCurrentShopWithRole: (shopId: string) => void;
-  login: (username: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  changeCurrentShopWithRole: (shopWithRole: ShopsWithRole) => void;
+  login: (username: string, password: string) => Promise<any>;
+  logout: () => Promise<any>;
   hasAuthority: (authorityKey: RoleAuthority, rw: RW) => boolean;
   clearCache: () => void;
   clearAllStoreCache: () => void;

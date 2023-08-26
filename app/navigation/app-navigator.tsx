@@ -16,6 +16,7 @@ import UserDetail from '../screens/user-detail';
 import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
+import Personal from '../screens/personal';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
@@ -38,6 +39,7 @@ export default function AppNavigator() {
       <Stack.Screen name='UserDetail' component={UserDetail} />
       <Stack.Screen name='RoleDetail' component={RoleDetail} />
       <Stack.Screen name='CustomerArchive' component={CustomerArchive} />
+      <Stack.Screen name='Personal' component={Personal} />
     </Stack.Navigator>
   );
 }

@@ -131,22 +131,26 @@ export interface FlowState {
 
   currentRegisterCustomer: RegisterCustomerInfo;
   currentFlowCustomer: Customer;
+  currentArchiveCustomer: RegisterCustomerInfo;
 
-  requestInitializeData: () => Promise<void>;
-  requestAllCustomers: (searchKeywords: string) => Promise<void>;
-  requestRegisterCustomers: () => Promise<void>;
-  requestCollectionCustomers: () => Promise<void>;
-  requestAnalyzeCustomers: () => Promise<void>;
-  requestEvaluateCustomers: () => Promise<void>;
-  requestGetOperators: () => Promise<void>;
+  requestGetInitializeData: () => Promise<any>;
+  requestAllCustomers: (searchKeywords: string) => Promise<any>;
+  requestGetRegisterCustomers: () => Promise<any>;
+  requestGetCollectionCustomers: () => Promise<any>;
+  requestGetAnalyzeCustomers: () => Promise<any>;
+  requestGetEvaluateCustomers: () => Promise<any>;
+  requestGetOperators: () => Promise<any>;
+  requestPostCreateCustomer: (customer: Partial<Customer>) => Promise<any>;
+  requestDeleteCustomer: (customerId: string) => Promise<any>;
   requestPostCustomerInfo: () => Promise<any>;
   requestPatchCustomerInfo: () => Promise<any>;
+  requestPatchCustomerArchive: (customer: Partial<Customer>) => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
   requestPatchFlowToAnalyze: () => Promise<any>;
   requestPutFlowToEvaluate: (evaluate: Evaluate) => Promise<any>;
 
   // 客户档案
-  requestCustomersArchive: () => Promise<void>;
+  requestCustomersArchive: () => Promise<any>;
   requestCustomerArchiveHistory: (customerId: string) => Promise<FlowArchive[]>;
   requestCustomerArchiveCourses: (
     customerId: string,
@@ -167,7 +171,7 @@ export interface FlowState {
     status: number;
     type: PatchCustomerStatusType;
   }) => Promise<any>;
-  requestGetFlow: (flowId: string) => Promise<void>;
+  requestGetFlow: (flowId: string) => Promise<any>;
 
   // 客户随访
   requestGetFollowUps: () => Promise<any>;
@@ -181,6 +185,7 @@ export interface FlowState {
 
   updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
   updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
+  updateCurrentArchiveCustomer: (data: Partial<Customer>) => void;
   updateCollection: (data: Partial<Collect>) => void;
   updateAnalyzeFilter: (data: Partial<RegisterAndCollection>) => void;
   updateAnalyze: (data: Partial<Analyze>) => void;

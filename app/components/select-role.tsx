@@ -1,4 +1,4 @@
-import SelectDropdown from 'react-native-select-dropdown';
+import SelectDropdown from '~/app/components/select-dropdown';
 import { ss, ls, sp } from '../utils/style';
 import { Icon } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';

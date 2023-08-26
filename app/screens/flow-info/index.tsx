@@ -41,6 +41,7 @@ export default function FlowInfo({
 
   const [isEvaluateCardDialogShow, setIsEvaluateCardDialogShow] =
     useState(false);
+
   return (
     <Box flex={1}>
       <NavigationBar

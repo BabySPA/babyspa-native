@@ -1,4 +1,4 @@
-import SelectDropdown from 'react-native-select-dropdown';
+import SelectDropdown from '~/app/components/select-dropdown';
 import { ss, ls, sp } from '../utils/style';
 import { Icon } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
@@ -34,11 +34,14 @@ export default function SelectShop({
       if (isCenter) {
         setDefaultText(shops[0].name);
         setUseShop(shops);
+        onSelect(shops[0], 0);
       } else {
         setDefaultText(currentShopWithRole?.shop.name || '请选择门店');
-        setUseShop(
-          shops.filter((item) => item._id === currentShopWithRole?.shop._id),
+        const selectShop = shops.filter(
+          (item) => item._id === currentShopWithRole?.shop._id,
         );
+        setUseShop(selectShop);
+        onSelect(selectShop[0], 0);
       }
     }
   }, [shops]);

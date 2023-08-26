@@ -7,7 +7,12 @@ import useColorScheme from './app/hooks/use-color-scheme';
 import Navigation from './app/navigation/root-navigator';
 import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs(['Require cycle', 'Constants.platform', 'No native splash']);
+LogBox.ignoreLogs([
+  'Require cycle',
+  'Constants.platform',
+  'No native splash',
+  'Cannot update a component',
+]);
 
 const config = {
   dependencies: {

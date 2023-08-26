@@ -12,12 +12,7 @@ import {
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';
-import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-  Octicons,
-} from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ImageBackground, Image } from 'react-native';
 import { ls, ss, sp } from '~/app/utils/style';
 
@@ -205,32 +200,4 @@ export default function LoginScreen({
       </Center>
     </ImageBackground>
   );
-}
-
-{
-  /* <Center h={'full'}>
-  <Box safeArea p='2' py='8' w='90%' maxW='290'>
-    <Heading
-      size='lg'
-      fontWeight='600'
-      color='coolGray.800'
-      _dark={{
-        color: 'warmGray.50',
-      }}>
-      Welcome
-    </Heading>
-    <Heading
-      mt='1'
-      _dark={{
-        color: 'warmGray.200',
-      }}
-      color='coolGray.600'
-      fontWeight='medium'
-      size='xs'>
-      登录以继续
-    </Heading>
-
-   
-  </Box>
-</Center>; */
 }

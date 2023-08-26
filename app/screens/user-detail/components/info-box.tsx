@@ -110,7 +110,7 @@ export default function InfoBox(params: InfoBoxParams) {
                         setIsResetPassDialogOpen(false);
                       }}
                       onConfirm={function (): void {
-                        requestPatchUserPassword()
+                        requestPatchUserPassword(currentUser._id as string)
                           .then(() => {
                             toastAlert(toast, 'success', '重置密码成功');
                           })

@@ -10,12 +10,15 @@ import {
   Icon,
   Box,
   ScrollView,
+  useToast,
 } from 'native-base';
 import { sp, ss, ls } from '~/app/utils/style';
 import { Template } from '../stores/manager/type';
 import { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { set } from 'lodash';
+import { decodePassword } from '../utils';
+import { toastAlert } from '../utils/toast';
 
 interface DialogParams {
   isOpen: boolean;
@@ -344,6 +347,140 @@ export function GrowthCurveModal({
                   py={ss(10)}>
                   <Text color='#0C1B16' fontSize={sp(14)}>
                     确定
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          </Center>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal>
+  );
+}
+
+interface ChangePasswordParams {
+  password: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (newPassword: string) => void;
+}
+export function ChangePasswordModal({
+  password,
+  isOpen,
+  onClose,
+  onConfirm,
+}: ChangePasswordParams) {
+  const [originalPassword, setOriginalPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const toast = useToast();
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Modal.Content>
+        <Modal.CloseButton />
+        <Modal.Header>{'修改密码'}</Modal.Header>
+        <Modal.Body>
+          <Center>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                原密码
+              </Text>
+              <Input
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入原密码'
+                keyboardType='email-address'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                inputMode='numeric'
+                onChangeText={(text) => {
+                  setOriginalPassword(text);
+                }}
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                新密码
+              </Text>
+              <Input
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='密码由超过6位数字和字母组成'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                inputMode='numeric'
+                onChangeText={(text) => {
+                  setNewPassword(text);
+                }}
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                确认新密码
+              </Text>
+              <Input
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请再次输入新密码确认'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                inputMode='numeric'
+                onChangeText={(text) => {
+                  setConfirmPassword(text);
+                }}
+              />
+            </Row>
+            <Row mt={ss(80)} mb={ss(20)}>
+              <Pressable
+                onPress={() => {
+                  onClose();
+                }}>
+                <Center
+                  borderRadius={ss(4)}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    取消
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  console.log(decodePassword(password), originalPassword);
+                  if (decodePassword(password) !== originalPassword) {
+                    toastAlert(toast, 'error', '原密码错误');
+                    return;
+                  }
+                  if (newPassword !== confirmPassword) {
+                    toastAlert(toast, 'error', '两次密码不一致');
+                    return;
+                  }
+                  if (newPassword.length < 6) {
+                    toastAlert(toast, 'error', '新密码长度不能小于6位');
+                    return;
+                  }
+                  onConfirm(newPassword);
+                }}>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={ss(4)}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    保存
                   </Text>
                 </Center>
               </Pressable>

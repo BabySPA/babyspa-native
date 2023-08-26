@@ -25,13 +25,13 @@ import dayjs from 'dayjs';
 export default function Register() {
   const navigation = useNavigation();
   const {
-    requestRegisterCustomers,
+    requestGetRegisterCustomers,
     updateCurrentRegisterCustomer,
     register: { customers },
   } = useFlowStore();
 
   useEffect(() => {
-    requestRegisterCustomers();
+    requestGetRegisterCustomers();
   }, []);
 
   return (
@@ -78,7 +78,7 @@ function Filter() {
   const {
     register,
     updateRegisterFilter,
-    requestRegisterCustomers,
+    requestGetRegisterCustomers,
     updateCurrentRegisterCustomer,
   } = useFlowStore();
 
@@ -110,7 +110,7 @@ function Filter() {
               searchKeywords: text,
             });
 
-            requestRegisterCustomers();
+            requestGetRegisterCustomers();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -279,7 +279,7 @@ function Filter() {
             </Pressable>
             <Pressable
               onPress={() => {
-                requestRegisterCustomers();
+                requestGetRegisterCustomers();
               }}
               borderRadius={ss(4)}
               borderWidth={1}

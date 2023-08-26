@@ -25,13 +25,13 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 export default function Analyze() {
   const navigation = useNavigation();
   const {
-    requestAnalyzeCustomers,
+    requestGetAnalyzeCustomers,
     updateCurrentFlowCustomer,
     analyze: { customers },
   } = useFlowStore();
 
   useEffect(() => {
-    requestAnalyzeCustomers();
+    requestGetAnalyzeCustomers();
   }, []);
 
   return (
@@ -85,7 +85,7 @@ function Filter() {
   const {
     analyze,
     updateAnalyzeFilter,
-    requestAnalyzeCustomers,
+    requestGetAnalyzeCustomers,
     updateCurrentFlowCustomer,
   } = useFlowStore();
 
@@ -122,7 +122,7 @@ function Filter() {
             updateAnalyzeFilter({
               searchKeywords: text,
             });
-            requestAnalyzeCustomers();
+            requestGetAnalyzeCustomers();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -269,7 +269,7 @@ function Filter() {
             </Pressable>
             <Pressable
               onPress={() => {
-                requestAnalyzeCustomers();
+                requestGetAnalyzeCustomers();
               }}
               borderRadius={ss(4)}
               borderWidth={1}

@@ -111,6 +111,7 @@ const initialState = {
 
   customersArchive: { ...defaultRegisterAndCollection, allStatus: [] },
   customersFollowUp: { ...defaultRegisterAndCollection },
+  currentArchiveCustomer: DefaultRegisterCustomer,
 
   operators: [],
 
@@ -141,35 +142,35 @@ const useFlowStore = create(
     clearCache: () => {
       set({ ...initialState });
     },
-    requestInitializeData: async () => {
+    requestGetInitializeData: async () => {
       // 获取当前用户的信息
       const hasAuthority = useAuthStore.getState().hasAuthority;
 
       if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
-        await get().requestRegisterCustomers();
+        await get().requestGetRegisterCustomers();
       }
       if (hasAuthority(RoleAuthority.FLOW_COLLECTION, 'R')) {
-        await get().requestCollectionCustomers();
+        await get().requestGetCollectionCustomers();
       }
       if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
-        await get().requestAnalyzeCustomers();
+        await get().requestGetAnalyzeCustomers();
       }
       if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
-        await get().requestEvaluateCustomers();
+        await get().requestGetEvaluateCustomers();
       }
     },
     requestAllCustomers: async (searchKeywords: string) => {
       const params: any = {
         search: searchKeywords,
       };
-      request.get('/customers', { params }).then(({ data }) => {
+      request.get('/customers/all', { params }).then(({ data }) => {
         const { docs } = data;
         set({
           allCustomers: docs,
         });
       });
     },
-    requestRegisterCustomers: async () => {
+    requestGetRegisterCustomers: async () => {
       const {
         register: { status, searchKeywords, startDate, endDate },
       } = get();
@@ -228,7 +229,7 @@ const useFlowStore = create(
         params.shopId = shopId;
       }
 
-      request.get('/customers', { params }).then(({ data }) => {
+      request.get('/customers/all', { params }).then(({ data }) => {
         const { docs, statusCount } = data;
         set({
           customersArchive: {
@@ -256,7 +257,7 @@ const useFlowStore = create(
       return data;
     },
 
-    requestCollectionCustomers: async () => {
+    requestGetCollectionCustomers: async () => {
       const {
         collection: { status, startDate, searchKeywords, endDate },
       } = get();
@@ -323,7 +324,7 @@ const useFlowStore = create(
       return data;
     },
 
-    requestAnalyzeCustomers: async () => {
+    requestGetAnalyzeCustomers: async () => {
       const {
         analyze: { status, startDate, endDate, searchKeywords },
       } = get();
@@ -353,7 +354,7 @@ const useFlowStore = create(
       });
     },
 
-    requestEvaluateCustomers: async () => {
+    requestGetEvaluateCustomers: async () => {
       const {
         evaluate: { status, startDate, searchKeywords, endDate },
       } = get();
@@ -392,6 +393,17 @@ const useFlowStore = create(
       });
     },
 
+    requestPostCreateCustomer: async (customer) => {
+      return request
+        .post('/customers', {
+          ...customer,
+          shopId: get().customersArchive.shopId,
+        })
+        .then(({ data }) => {
+          return data;
+        });
+    },
+
     requestPostCustomerInfo: async () => {
       // 发起登记
       const customer = get().currentRegisterCustomer;
@@ -414,6 +426,10 @@ const useFlowStore = create(
         });
     },
 
+    requestDeleteCustomer: async (customerId) => {
+      return request.delete(`/customers/${customerId}`);
+    },
+
     requestPatchCustomerInfo: async () => {
       // 修改登记信息
       const customer = get().currentRegisterCustomer;
@@ -434,6 +450,16 @@ const useFlowStore = create(
         })
         .catch((err) => {
           return err;
+        });
+    },
+
+    requestPatchCustomerArchive: async (customer) => {
+      return request
+        .patch(`/customers/${customer.id}`, {
+          ...customer,
+        })
+        .then(({ data }) => {
+          return data;
         });
     },
 
@@ -512,6 +538,16 @@ const useFlowStore = create(
       return set((state) => {
         state.currentRegisterCustomer = produce(
           state.currentRegisterCustomer,
+          (draft) => {
+            Object.assign(draft, data);
+          },
+        );
+      });
+    },
+    updateCurrentArchiveCustomer: (data) => {
+      return set((state) => {
+        state.currentArchiveCustomer = produce(
+          state.currentArchiveCustomer,
           (draft) => {
             Object.assign(draft, data);
           },

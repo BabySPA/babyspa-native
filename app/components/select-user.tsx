@@ -1,69 +1,53 @@
 import SelectDropdown from '~/app/components/select-dropdown';
-import { ss, ls, sp } from '../utils/style';
+import { ss, sp, ls } from '../utils/style';
 import { Icon } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
+import useAuthStore from '../stores/auth';
 
-export const getDay = (day: number) => {
-  const d: { [key: number]: string } = {
-    0: '今',
-    1: '明',
-    2: '后',
-  };
-  if (day in d) {
-    return d[day];
-  }
-  if (day) {
-    return '已过期';
-  } else {
-    return '今';
-  }
-};
-
-export const Days = [
-  { name: '今', value: 0 },
-  { name: '明', value: 1 },
-  { name: '后', value: 2 },
-];
-
-export default function SelectDay({
+export default function SelectUser({
   onSelect,
-  defaultButtonText,
+  buttonHeight,
+  buttonWidth,
+  style,
 }: {
   onSelect: (selectedItem: any, index: number) => void;
-  defaultButtonText: string;
+  defaultButtonText?: string;
+  buttonHeight?: number;
+  buttonWidth?: number;
+  style?: any;
 }) {
+  const { user, currentShopWithRole } = useAuthStore();
+
   return (
     <SelectDropdown
-      data={Days}
+      data={user?.shopsWithRole || []}
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
-      defaultButtonText={defaultButtonText}
+      defaultButtonText={currentShopWithRole?.shop.name}
       buttonTextAfterSelection={(selectedItem, index) => {
-        return selectedItem.name;
+        return selectedItem.shop.name;
       }}
       rowTextForSelection={(item, index) => {
-        return item.name;
+        return item.shop.name;
       }}
+      numberOfLines={2}
       buttonStyle={{
-        width: ls(72),
-        height: ss(48, { min: 26 }),
-        backgroundColor: '#fff',
-        borderRadius: ss(4),
-        borderWidth: 1,
-        borderColor: '#D8D8D8',
+        width: ls(120),
+        height: buttonHeight || ss(40),
+        backgroundColor: 'transparent',
+        ...style,
       }}
       buttonTextStyle={{
-        color: '#333333',
-        textAlign: 'left',
-        fontSize: sp(16, { min: 12 }),
+        color: '#fff',
+        fontSize: sp(14),
       }}
       renderDropdownIcon={(isOpened) => {
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18, { min: 15 })}
-            color='#999'
+            size={ss(15)}
+            color='#fff'
           />
         );
       }}
@@ -79,7 +63,7 @@ export default function SelectDay({
       rowTextStyle={{
         color: '#333',
         textAlign: 'center',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(14),
       }}
       selectedRowStyle={{
         backgroundColor: '#f8f8f8',

@@ -6,14 +6,16 @@ export default function LabelBox({
   value,
   rightElement,
   flex,
+  alignItems,
 }: {
   title: string;
   value: string | undefined;
   rightElement?: React.ReactNode;
   flex?: number;
+  alignItems?: 'flex-start' | 'center' | 'flex-end';
 }) {
   return (
-    <Row alignItems={'flex-start'} flex={flex || 1}>
+    <Row alignItems={alignItems || 'flex-start'} flex={flex || 1}>
       <Text fontSize={sp(20)} color='#999' w={ls(120)} textAlign={'right'}>
         {title}：
       </Text>

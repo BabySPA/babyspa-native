@@ -91,7 +91,7 @@ export interface UserState {
   requestGetUsers: () => Promise<any>;
   requestPostUser: () => Promise<any>;
   requestPatchUser: () => Promise<any>;
-  requestPatchUserPassword: (password?: string) => Promise<any>;
+  requestPatchUserPassword: (userId: string, password?: string) => Promise<any>;
   requestDeleteUser: () => Promise<any>;
 
   // action

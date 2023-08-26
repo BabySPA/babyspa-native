@@ -24,13 +24,13 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 export default function Collection() {
   const navigation = useNavigation();
   const {
-    requestCollectionCustomers,
+    requestGetCollectionCustomers,
     updateCurrentRegisterCustomer,
     collection: { customers },
   } = useFlowStore();
 
   useEffect(() => {
-    requestCollectionCustomers();
+    requestGetCollectionCustomers();
   }, []);
 
   return (
@@ -81,7 +81,7 @@ function Filter() {
   const {
     collection,
     updateCollectionFilter,
-    requestCollectionCustomers,
+    requestGetCollectionCustomers,
     updateCurrentRegisterCustomer,
   } = useFlowStore();
 
@@ -118,7 +118,7 @@ function Filter() {
             updateCollectionFilter({
               searchKeywords: text,
             });
-            requestCollectionCustomers();
+            requestGetCollectionCustomers();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -287,7 +287,7 @@ function Filter() {
             </Pressable>
             <Pressable
               onPress={() => {
-                requestCollectionCustomers();
+                requestGetCollectionCustomers();
               }}
               borderRadius={ss(4)}
               borderWidth={1}

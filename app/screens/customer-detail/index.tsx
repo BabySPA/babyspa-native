@@ -9,12 +9,14 @@ import EditBox from './components/edit-box';
 import InfoBox from './components/info-box';
 import { DialogModal } from '~/app/components/modals';
 
-export default function CustomerDetail({ navigation }: AppStackScreenProps<'CustomerDetail'>) {
+export default function CustomerDetail({
+  navigation,
+}: AppStackScreenProps<'CustomerDetail'>) {
   const {
     requestGetOperators,
     requestPatchCustomerStatus,
     currentRegisterCustomer,
-    requestInitializeData,
+    requestGetInitializeData,
   } = useFlowStore();
 
   const toast = useToast();
@@ -65,6 +67,7 @@ export default function CustomerDetail({ navigation }: AppStackScreenProps<'Cust
             onEditFinish={function (): void {
               setEdit(false);
             }}
+            type={'edit'}
           />
         ) : (
           <InfoBox
@@ -94,7 +97,7 @@ export default function CustomerDetail({ navigation }: AppStackScreenProps<'Cust
             .then(async (res) => {
               // 取消成功
               toastAlert(toast, 'success', '取消成功！');
-              await requestInitializeData();
+              await requestGetInitializeData();
             })
             .catch((err) => {
               // 取消失败

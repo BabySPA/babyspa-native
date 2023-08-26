@@ -25,6 +25,7 @@ import SelectOperator from '~/app/components/select-operator';
 
 interface EditBoxParams {
   onEditFinish: () => void;
+  type: 'archive-edit' | 'archive-new' | 'edit';
 }
 
 export default function EditBox(params: EditBoxParams) {
@@ -39,10 +40,17 @@ export default function EditBox(params: EditBoxParams) {
     operators,
     requestPostCustomerInfo,
     requestPatchCustomerInfo,
-    requestInitializeData,
+    requestGetInitializeData,
+    requestPostCreateCustomer,
+    requestCustomersArchive,
+    requestPatchCustomerArchive,
+    currentArchiveCustomer,
+    updateCurrentArchiveCustomer,
   } = useFlowStore();
 
-  const [tempCustomer, setTempCustomer] = useState(currentRegisterCustomer);
+  const [tempCustomer, setTempCustomer] = useState(
+    params.type === 'edit' ? currentRegisterCustomer : currentArchiveCustomer,
+  );
 
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
@@ -198,57 +206,61 @@ export default function EditBox(params: EditBoxParams) {
                 />
               }
             />
-            <FormBox
-              title='过敏原'
-              style={{ flex: 1 }}
-              form={
-                <Input
-                  autoCorrect={false}
-                  defaultValue={tempCustomer.allergy}
-                  w={ls(380)}
-                  h={ss(48, { min: 26 })}
-                  py={ss(10)}
-                  px={ls(20)}
-                  onChangeText={(text) => {
-                    setTempCustomer({
-                      ...tempCustomer,
-                      allergy: text,
-                    });
-                  }}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
-                  placeholder='请输入'
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
-            <FormBox
-              required
-              title='理疗师'
-              form={
-                <Box w={ls(380)}>
-                  <SelectOperator
-                    operators={operators}
-                    onSelect={(selectedItem, index) => {
+            {params.type == 'edit' && (
+              <FormBox
+                title='过敏原'
+                style={{ flex: 1 }}
+                form={
+                  <Input
+                    autoCorrect={false}
+                    defaultValue={tempCustomer.allergy}
+                    w={ls(380)}
+                    h={ss(48, { min: 26 })}
+                    py={ss(10)}
+                    px={ls(20)}
+                    onChangeText={(text) => {
                       setTempCustomer({
                         ...tempCustomer,
-                        operator: {
-                          id: selectedItem._id,
-                          name: selectedItem.name,
-                          phoneNumber: selectedItem.phoneNumber,
-                        },
+                        allergy: text,
                       });
                     }}
-                    defaultButtonText={
-                      tempCustomer?.operator?.name ?? '请选择理疗师'
-                    }
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16, { min: 12 })}
+                    placeholder='请输入'
                   />
-                </Box>
-              }
-            />
+                }
+              />
+            )}
           </Row>
+          {params.type == 'edit' && (
+            <Row alignItems={'center'} mt={ss(40)}>
+              <FormBox
+                required
+                title='理疗师'
+                form={
+                  <Box w={ls(380)}>
+                    <SelectOperator
+                      operators={operators}
+                      onSelect={(selectedItem, index) => {
+                        setTempCustomer({
+                          ...tempCustomer,
+                          operator: {
+                            id: selectedItem._id,
+                            name: selectedItem.name,
+                            phoneNumber: selectedItem.phoneNumber,
+                          },
+                        });
+                      }}
+                      defaultButtonText={
+                        tempCustomer?.operator?.name ?? '请选择理疗师'
+                      }
+                    />
+                  </Box>
+                }
+              />
+            </Row>
+          )}
         </Box>
       </Column>
 
@@ -277,34 +289,86 @@ export default function EditBox(params: EditBoxParams) {
 
             setLoading(true);
 
-            updateCurrentRegisterCustomer(tempCustomer);
-
-            if (tempCustomer.status === CustomerStatus.Canceled) {
-              requestPostCustomerInfo()
-                .then(async (res) => {
-                  await requestInitializeData();
-                  toastAlert(toast, 'success', '再次登记客户信息成功！');
-                  params.onEditFinish();
+            if (params.type !== 'edit') {
+              if (currentArchiveCustomer.id) {
+                // 编辑客户信息
+                requestPatchCustomerArchive({
+                  id: currentArchiveCustomer.id,
+                  name: tempCustomer.name,
+                  nickname: tempCustomer.nickname,
+                  phoneNumber: tempCustomer.phoneNumber,
+                  gender: tempCustomer.gender,
+                  birthday: tempCustomer.birthday,
                 })
-                .catch((err) => {
-                  toastAlert(toast, 'error', '再次登记客户信息失败！');
+                  .then(async (res) => {
+                    updateCurrentArchiveCustomer({
+                      name: tempCustomer.name,
+                      nickname: tempCustomer.nickname,
+                      phoneNumber: tempCustomer.phoneNumber,
+                      gender: tempCustomer.gender,
+                      birthday: tempCustomer.birthday,
+                    });
+                    await requestCustomersArchive();
+                    toastAlert(toast, 'success', '修改客户成功！');
+                    params.onEditFinish();
+                  })
+                  .catch(() => {
+                    toastAlert(toast, 'error', '修改客户失败！');
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              } else {
+                // 新增客户
+                requestPostCreateCustomer({
+                  name: tempCustomer.name,
+                  nickname: tempCustomer.nickname,
+                  phoneNumber: tempCustomer.phoneNumber,
+                  gender: tempCustomer.gender,
+                  birthday: tempCustomer.birthday,
                 })
-                .finally(() => {
-                  setLoading(false);
-                });
+                  .then(async (res) => {
+                    await requestCustomersArchive();
+                    toastAlert(toast, 'success', '新增客户成功！');
+                    params.onEditFinish();
+                  })
+                  .catch((err) => {
+                    toastAlert(toast, 'error', '新增客户失败！');
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              }
             } else {
-              requestPatchCustomerInfo()
-                .then(async (res) => {
-                  await requestInitializeData();
-                  toastAlert(toast, 'success', '修改客户信息成功！');
-                  params.onEditFinish();
-                })
-                .catch((err) => {
-                  toastAlert(toast, 'error', '修改客户信息失败！');
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
+              updateCurrentRegisterCustomer(tempCustomer);
+
+              if (tempCustomer.status === CustomerStatus.Canceled) {
+                requestPostCustomerInfo()
+                  .then(async (res) => {
+                    await requestGetInitializeData();
+                    toastAlert(toast, 'success', '再次登记客户信息成功！');
+                    params.onEditFinish();
+                  })
+                  .catch((err) => {
+                    toastAlert(toast, 'error', '再次登记客户信息失败！');
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              } else {
+                requestPatchCustomerInfo()
+                  .then(async (res) => {
+                    await requestGetInitializeData();
+                    toastAlert(toast, 'success', '修改客户信息成功！');
+                    params.onEditFinish();
+                  })
+                  .catch((err) => {
+                    toastAlert(toast, 'error', '修改客户信息失败！');
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              }
             }
           }}>
           <Row

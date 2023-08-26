@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import request from '~/app/api';
-import { AuthState, RW, RoleAuthority, ShopsWithRole } from './type';
+import { AuthState, RW, RoleAuthority } from './type';
 import useLayoutStore from '../layout';
 import useFlowStore from '../flow';
 import useManagerStore from '../manager';
@@ -34,23 +34,22 @@ const useAuthStore = create(
                 currentShopWithRole: user.currentShopWithRole,
               });
 
-              resolve();
+              resolve({ accessToken, user });
             })
             .catch((err) => {
               reject(err);
             });
         });
       },
-      setCurrentShopWithRole: (shopId: string) => {
-        const user = get().user;
-        const idx = user?.shopsWithRole.findIndex(
-          (item) => item.shop._id === shopId,
-        );
-        if (idx) {
-          set({ currentShopWithRole: user?.shopsWithRole[idx] });
-        } else {
-          console.log('切换门店失败！');
-        }
+      changeCurrentShopWithRole: (shopWithRole) => {
+        set({ currentShopWithRole: shopWithRole });
+
+        setTimeout(() => {
+          useLayoutStore.getState().clearCache();
+          useFlowStore.getState().clearCache();
+          useManagerStore.getState().clearCache();
+          useFlowStore.getState().requestGetInitializeData();
+        }, 1000);
       },
       logout: async () => {
         get().clearAllStoreCache();

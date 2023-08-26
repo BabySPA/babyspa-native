@@ -145,9 +145,8 @@ const useManagerStore = create(
 
       return request.patch(`/users/${currentUser._id}`, postUser);
     },
-    requestPatchUserPassword: async (password) => {
-      const user = get().currentUser;
-      return request.patch(`/users/password/${user._id}`, { password });
+    requestPatchUserPassword: async (userId, password) => {
+      return request.patch(`/users/password/${userId}`, { password });
     },
     requestDeleteUser: async () => {
       const user = get().currentUser;

@@ -10,15 +10,13 @@ import {
   Pressable,
 } from 'native-base';
 import { useEffect, useState } from 'react';
-import useFlowStore from '~/app/stores/flow';
+import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { CustomerScreenType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
 import SelectShop from '~/app/components/select-shop';
-import useAuthStore from '~/app/stores/auth';
 import debounce from 'lodash/debounce';
 import DatePickerModal from '~/app/components/date-picker-modal';
 
@@ -27,11 +25,8 @@ export default function Archive() {
   const {
     requestCustomersArchive,
     customersArchive: { customers },
+    updateCurrentArchiveCustomer,
   } = useFlowStore();
-
-  useEffect(() => {
-    requestCustomersArchive();
-  }, []);
 
   return (
     <Flex flex={1}>
@@ -51,9 +46,8 @@ export default function Archive() {
                 mr={(idx + 1) % 3 == 0 ? 0 : ss(15)}
                 key={idx}
                 onPress={() => {
-                  navigation.navigate('CustomerArchive', {
-                    customer: customer,
-                  });
+                  updateCurrentArchiveCustomer(customer);
+                  navigation.navigate('CustomerArchive');
                 }}>
                 <CustomerArchiveItem customer={customer} />
               </Pressable>
@@ -70,6 +64,7 @@ function Filter() {
   const {
     customersArchive,
     updateCustomersArchiveFilter,
+    updateCurrentArchiveCustomer,
     requestCustomersArchive,
   } = useFlowStore();
 
@@ -85,6 +80,7 @@ function Filter() {
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
+            console.log('selectedItem', selectedItem);
             updateCustomersArchiveFilter({
               shopId: selectedItem._id,
             });
@@ -174,6 +170,7 @@ function Filter() {
         </Pressable>
         <Pressable
           onPress={() => {
+            updateCurrentArchiveCustomer(DefaultRegisterCustomer);
             navigation.navigate('AddNewCustomer');
           }}>
           <Box

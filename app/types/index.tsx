@@ -76,9 +76,8 @@ export type RootStackParamList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
-  CustomerArchive: {
-    customer: Customer;
-  };
+  CustomerArchive: undefined;
+  Personal: undefined;
   ShopDetail: {
     type: 'edit' | 'detail';
   };
@@ -112,9 +111,8 @@ export type AppStackList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
-  CustomerArchive: {
-    customer: Customer;
-  };
+  CustomerArchive: undefined;
+  Personal: undefined;
   ShopDetail: {
     type: 'edit' | 'detail';
   };

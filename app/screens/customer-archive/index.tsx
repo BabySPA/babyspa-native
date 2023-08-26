@@ -9,6 +9,7 @@ import {
   Image,
   Container,
   useToast,
+  Center,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -28,8 +29,9 @@ import {
   FlowArchive,
   GrowthCurveStatisticsResponse,
 } from '~/app/stores/flow/type';
-import { GrowthCurveModal } from '~/app/components/modals';
+import { DialogModal, GrowthCurveModal } from '~/app/components/modals';
 import { toastAlert } from '~/app/utils/toast';
+import EmptyBox from '~/app/components/empty-box';
 
 const configs = [
   {
@@ -47,13 +49,9 @@ const configs = [
 ];
 export default function CustomerArchive({
   navigation,
-  route: {
-    params: { customer },
-  },
 }: AppStackScreenProps<'CustomerArchive'>) {
   useEffect(() => {}, []);
-  const age = getAge(customer.birthday);
-  const toast = useToast();
+
   const {
     requestCustomerArchiveHistory,
     requestCustomerArchiveCourses,
@@ -61,7 +59,13 @@ export default function CustomerArchive({
     requestPutCustomerGrowthCurve,
     requestPatchCustomerGrowthCurve,
     updateCurrentFlowCustomer,
+    requestDeleteCustomer,
+    requestCustomersArchive,
+    currentArchiveCustomer: customer,
   } = useFlowStore();
+
+  const age = getAge(customer?.birthday || dayjs().format('YYYY-MM-DD'));
+  const toast = useToast();
 
   const [archives, setArchives] = useState<FlowArchive[]>([]);
   const [courses, setCourses] = useState<FlowArchive[][]>([]);
@@ -70,18 +74,18 @@ export default function CustomerArchive({
   >([]);
 
   useEffect(() => {
-    requestCustomerArchiveHistory(customer.id).then((res) => {
+    requestCustomerArchiveHistory(customer?.id || '').then((res) => {
       setArchives(res);
     });
 
-    requestCustomerArchiveCourses(customer.id).then((res) => {
+    requestCustomerArchiveCourses(customer?.id || '').then((res) => {
       setCourses(res);
     });
     getGrowthCurveDatas();
   }, []);
 
   const getGrowthCurveDatas = () => {
-    requestCustomerGrowthCurve(customer.id).then((res) => {
+    requestCustomerGrowthCurve(customer?.id || '').then((res) => {
       setGrowthCurves(res);
     });
   };
@@ -94,6 +98,8 @@ export default function CustomerArchive({
     defaultHeight: 0,
     defaultWeight: 0,
   });
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <Box flex={1}>
@@ -157,7 +163,11 @@ export default function CustomerArchive({
           </Row>
 
           <Row>
-            <Pressable>
+            <Pressable
+              onPress={() => {
+                // 删除客户
+                setShowDeleteDialog(true);
+              }}>
               <Row alignItems={'center'}>
                 <Icon
                   as={<AntDesign name='delete' />}
@@ -169,7 +179,32 @@ export default function CustomerArchive({
                 </Text>
               </Row>
             </Pressable>
-            <Pressable ml={ls(40)}>
+            <DialogModal
+              isOpen={showDeleteDialog}
+              title={'是否确认删除客户？'}
+              onClose={function (): void {
+                setShowDeleteDialog(false);
+              }}
+              onConfirm={function (): void {
+                requestDeleteCustomer(customer?.id || '')
+                  .then(async (res) => {
+                    toastAlert(toast, 'success', '删除成功！');
+                    await requestCustomersArchive();
+                    navigation.goBack();
+                  })
+                  .catch((err) => {
+                    toastAlert(toast, 'error', '删除失败！');
+                  })
+                  .finally(() => {
+                    setShowDeleteDialog(false);
+                  });
+              }}
+            />
+            <Pressable
+              ml={ls(40)}
+              onPress={() => {
+                navigation.navigate('AddNewCustomer');
+              }}>
               <Row alignItems={'center'}>
                 <Icon
                   as={<FontAwesome name='edit' />}
@@ -254,43 +289,52 @@ export default function CustomerArchive({
             )}
           </Row>
 
-          {configs[selectFragment].key == 'shop-archive' && (
-            <ShopArchive
-              archives={archives}
-              onPressToFlowInfo={function (): void {
-                updateCurrentFlowCustomer(customer);
-                navigation.navigate('FlowInfo', {
-                  from: 'analyze',
-                });
-              }}
-            />
-          )}
-          {configs[selectFragment].key == 'history-archive' && (
-            <HistoryArchive
-              courses={courses}
-              onPressToFlowInfo={function (): void {
-                updateCurrentFlowCustomer(customer);
-                navigation.navigate('FlowInfo', {
-                  from: 'analyze',
-                });
-              }}
-            />
-          )}
-          {configs[selectFragment].key == 'growth-curve' && (
-            <GrowthCurve
-              growthCurves={growthCurves}
-              onEditClick={function (
-                item: GrowthCurveStatisticsResponse,
-              ): void {
-                setShowEditGrowthCurve({
-                  isOpen: true,
-                  date: item.date,
-                  defaultHeight: item.heightData.height,
-                  defaultWeight: item.weightData.weight,
-                });
-              }}
-            />
-          )}
+          {configs[selectFragment].key == 'shop-archive' &&
+            (archives.length > 0 ? (
+              <ShopArchive
+                archives={archives}
+                onPressToFlowInfo={function (): void {
+                  updateCurrentFlowCustomer(customer);
+                  navigation.navigate('FlowInfo', {
+                    from: 'analyze',
+                  });
+                }}
+              />
+            ) : (
+              <EmptyBox />
+            ))}
+          {configs[selectFragment].key == 'history-archive' &&
+            (courses.length > 0 ? (
+              <HistoryArchive
+                courses={courses}
+                onPressToFlowInfo={function (): void {
+                  updateCurrentFlowCustomer(customer);
+                  navigation.navigate('FlowInfo', {
+                    from: 'analyze',
+                  });
+                }}
+              />
+            ) : (
+              <EmptyBox />
+            ))}
+          {configs[selectFragment].key == 'growth-curve' &&
+            (growthCurves.length > 0 ? (
+              <GrowthCurve
+                growthCurves={growthCurves}
+                onEditClick={function (
+                  item: GrowthCurveStatisticsResponse,
+                ): void {
+                  setShowEditGrowthCurve({
+                    isOpen: true,
+                    date: item.date,
+                    defaultHeight: item.heightData.height,
+                    defaultWeight: item.weightData.weight,
+                  });
+                }}
+              />
+            ) : (
+              <EmptyBox />
+            ))}
         </Box>
       </Column>
       <GrowthCurveModal
@@ -313,7 +357,7 @@ export default function CustomerArchive({
           weight: number;
         }): void {
           if (showEditGrowthCurve.date.length > 0) {
-            requestPatchCustomerGrowthCurve(customer.id, {
+            requestPatchCustomerGrowthCurve(customer?.id || '', {
               height,
               weight,
               date: showEditGrowthCurve.date,
@@ -338,7 +382,7 @@ export default function CustomerArchive({
                 });
               });
           } else {
-            requestPutCustomerGrowthCurve(customer.id, {
+            requestPutCustomerGrowthCurve(customer?.id || '', {
               height,
               weight,
             })

@@ -18,7 +18,7 @@ import { Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import { getAge } from '~/app/utils';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import HealthInfo from './components/health-info';
 import Guidance from './components/guidance-info';
 import Conclusion from './components/conclusion-info';
@@ -47,7 +47,7 @@ export default function FlowScreen({
     requestPatchFlowToCollection,
     getFlowOperatorConfigByUser,
     requestPatchCustomerStatus,
-    requestInitializeData,
+    requestGetInitializeData,
     requestPatchFlowToAnalyze,
     currentFlow: { collect },
   } = useFlowStore();
@@ -246,7 +246,7 @@ export default function FlowScreen({
                             message: '',
                             tip: '',
                           });
-                          await requestInitializeData();
+                          await requestGetInitializeData();
                           navigation.goBack();
                         }, 2000);
                       })
@@ -320,7 +320,7 @@ export default function FlowScreen({
                           message: '',
                           tip: '',
                         });
-                        await requestInitializeData();
+                        await requestGetInitializeData();
                         // navigation.goBack();
                         navigation.replace('FlowInfo', {
                           from: 'analyze',
@@ -399,7 +399,7 @@ export default function FlowScreen({
             .then(async (res) => {
               // 取消成功
               toastAlert(toast, 'success', '取消成功！');
-              await requestInitializeData();
+              await requestGetInitializeData();
               navigation.goBack();
             })
             .catch((err) => {

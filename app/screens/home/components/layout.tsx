@@ -4,6 +4,8 @@ import { Image } from 'react-native';
 import useLayoutConfigWithRole from '~/app/stores/layout';
 import useAuthStore from '~/app/stores/auth';
 import { FontAwesome } from '@expo/vector-icons';
+import SelectUser from '~/app/components/select-user';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Layout() {
   const {
@@ -13,18 +15,20 @@ export default function Layout() {
     changeFeatureSelected,
   } = useLayoutConfigWithRole();
 
-  const { logout, user, currentShopWithRole } = useAuthStore();
+  const navigation = useNavigation();
+  const { logout, user, currentShopWithRole, changeCurrentShopWithRole } =
+    useAuthStore();
+
   const currentSelectedModule = getLayoutConfig()[currentSelected];
 
   const Fragment = () => {
-    return currentSelectedModule.features[
-      currentSelectedModule.featureSelected
-    ].fragment?.();
+    return currentSelectedModule.features[currentSelectedModule.featureSelected]
+      .fragment;
   };
 
   const NoTabFragment = () => {
     return currentSelectedModule.fragment
-      ? currentSelectedModule.fragment()
+      ? currentSelectedModule.fragment
       : null;
   };
 
@@ -108,41 +112,41 @@ export default function Layout() {
           w={'100%'}
           position={'absolute'}
           bottom={ss(80)}>
-          <Center
-            borderRadius={ss(23)}
-            borderWidth={ss(3)}
-            borderColor={'#fff'}
-            w={ss(46)}
-            h={ss(46)}
-            bgColor={'#F7CE51'}>
-            <Text fontSize={sp(16)} color='#fff'>
-              {user?.name?.[0]}
-            </Text>
-          </Center>
-          <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4)}>
-            <Text fontSize={sp(14)} color='#fff'>
-              {user?.name}
-            </Text>
-            <Text fontSize={sp(14)} color='#fff'>
-              -
-            </Text>
-            <Text fontSize={sp(14)} color='#fff'>
-              {currentShopWithRole?.role.name}
-            </Text>
-          </Row>
-          <Text
-            fontSize={sp(14)}
-            py={ss(3)}
-            color='#fff'
-            mt={ss(4, { min: 1 })}>
-            {currentShopWithRole?.shop.name}
-            <Icon
-              ml={ss(10)}
-              as={<FontAwesome name='angle-down' />}
-              size={ss(15, { min: 7 })}
-              color='#fff'
-            />
-          </Text>
+          <Pressable
+            alignItems={'center'}
+            onPress={() => {
+              // 跳转到个人中心
+              navigation.navigate('Personal');
+            }}>
+            <Center
+              borderRadius={ss(23)}
+              borderWidth={ss(3)}
+              borderColor={'#fff'}
+              w={ss(46)}
+              h={ss(46)}
+              bgColor={'#F7CE51'}>
+              <Text fontSize={sp(16)} color='#fff'>
+                {user?.name?.[0]}
+              </Text>
+            </Center>
+            <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4)}>
+              <Text fontSize={sp(14)} color='#fff'>
+                {user?.name}
+              </Text>
+              <Text fontSize={sp(14)} color='#fff'>
+                -
+              </Text>
+              <Text fontSize={sp(14)} color='#fff'>
+                {currentShopWithRole?.role.name}
+              </Text>
+            </Row>
+          </Pressable>
+          <SelectUser
+            style={{ marginTop: ss(4) }}
+            onSelect={function (selectedItem: any): void {
+              changeCurrentShopWithRole(selectedItem);
+            }}
+          />
         </Center>
       </Box>
       <Flex direction='column' flex={1}>
