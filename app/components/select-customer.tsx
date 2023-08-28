@@ -151,6 +151,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
             renderItem={({ item }) => {
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     updateCurrentRegisterCustomer({
                       name: item.name,

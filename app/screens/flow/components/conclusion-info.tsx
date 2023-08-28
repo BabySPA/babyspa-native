@@ -108,6 +108,7 @@ export default function ConclusionInfo({
               (item, idx) => {
                 return (
                   <Pressable
+                    hitSlop={ss(10)}
                     key={idx}
                     onPress={() => {
                       setSelectTemplateGroup(idx);
@@ -147,6 +148,7 @@ export default function ConclusionInfo({
             ].children.map((item, idx) => {
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   key={idx}
                   onPress={() => {
                     updateAnalyze({

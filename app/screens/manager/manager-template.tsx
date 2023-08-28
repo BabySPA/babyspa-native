@@ -115,6 +115,7 @@ export default function ManagerTemplate({
                   title='模版列表'
                   rightElement={
                     <Pressable
+                      hitSlop={ss(10)}
                       onPress={() => {
                         setShowEditTemplateModal({
                           isOpen: true,
@@ -172,6 +173,7 @@ export default function ManagerTemplate({
                     return (
                       <Box>
                         <Pressable
+                          hitSlop={ss(10)}
                           onPress={() => {
                             setCurrentSelectTemplateGroupIdx(index);
                           }}
@@ -212,6 +214,7 @@ export default function ManagerTemplate({
                     <Row flex={1}>
                       <Box flex={1} />
                       <Pressable
+                        hitSlop={ss(10)}
                         w={ls(72)}
                         bg='red.500'
                         justifyContent='center'
@@ -259,6 +262,7 @@ export default function ManagerTemplate({
                   (item: any, index: any) => {
                     return (
                       <Pressable
+                        hitSlop={ss(10)}
                         key={index}
                         onLongPress={() => {
                           setCanEdit(true);
@@ -274,6 +278,7 @@ export default function ManagerTemplate({
                           <Text>{item}</Text>
                           {canEdit && (
                             <Pressable
+                              hitSlop={ss(10)}
                               onPress={() => {
                                 // 删除
                                 setShowDeleteItemModal({
@@ -297,6 +302,7 @@ export default function ManagerTemplate({
                   },
                 )}
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setShowEditTemplateModal({
                       isOpen: true,
@@ -456,6 +462,7 @@ function Tabs() {
         {templates.map((item, index) => {
           return (
             <Pressable
+              hitSlop={ss(10)}
               key={index}
               onPress={() => {
                 setCurrentSelectTemplateIdx(index);

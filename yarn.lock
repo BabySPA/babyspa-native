@@ -3338,16 +3338,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/picker@npm:^1.8.1":
-  version: 1.8.1
-  resolution: "@react-native-community/picker@npm:1.8.1"
-  peerDependencies:
-    react: ^16.0
-    react-native: ">=0.57"
-  checksum: a38132feb910ea2f79acbdeda523a17641b8eb27d83f62f4a8932f2699e16227f05ce1006f2ba833f10d6054250f88cb3be8b915c4c912c7fd38ff0a2aaf2a55
-  languageName: node
-  linkType: hard
-
 "@react-native/assets@npm:1.0.0":
   version: 1.0.0
   resolution: "@react-native/assets@npm:1.0.0"
@@ -4901,7 +4891,6 @@ __metadata:
     "@expo/vector-icons": ^13.0.0
     "@react-native-async-storage/async-storage": 1.17.11
     "@react-native-community/datetimepicker": 6.7.3
-    "@react-native-community/picker": ^1.8.1
     "@react-navigation/native": ^6.0.2
     "@react-navigation/native-stack": ^6.9.13
     "@types/lodash": ^4.14.197
@@ -4943,6 +4932,7 @@ __metadata:
     react-native-dotenv: ^3.4.9
     react-native-gesture-handler: ~2.9.0
     react-native-mime-types: ^2.4.0
+    react-native-picker: ^4.3.7
     react-native-pickers: ^2.0.0
     react-native-safe-area-context: 4.5.0
     react-native-screens: ~3.20.0
@@ -11468,6 +11458,13 @@ __metadata:
   dependencies:
     mime-db: ~1.37.0
   checksum: d7ec56f8b4193537179c386edf485a341a6b31f4e63ef18ee7947b14b3c5ac2998a3e29c9893105caa5213e347e445da17e811ce2b58dd30bc9ce646e29db1c8
+  languageName: node
+  linkType: hard
+
+"react-native-picker@npm:^4.3.7":
+  version: 4.3.7
+  resolution: "react-native-picker@npm:4.3.7"
+  checksum: 581c7460595648766ac0d75cf90cec456abb08af95a5a89b6807b81558ccfb2e91c1de006bdd338c40a36ccd6986f5f53f03a04d2956f643645fa28baa9a7f67
   languageName: node
   linkType: hard
 

@@ -50,6 +50,7 @@ export default function Analyze() {
             {customers.map((customer, idx) => {
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   key={idx}
                   onPress={() => {
                     if (
@@ -138,6 +139,7 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             setShowFilter(!showFilter);
           }}>
@@ -161,6 +163,7 @@ function Filter() {
               时间选择
             </Text>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -190,6 +193,7 @@ function Filter() {
               至
             </Text>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -223,6 +227,7 @@ function Filter() {
               {analyze.allStatus?.map((status) => {
                 return (
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
                       updateAnalyzeFilter({
                         status: status.value,
@@ -252,6 +257,7 @@ function Filter() {
           </Row>
           <Row alignItems={'center'} mt={ss(20)} justifyContent={'flex-end'}>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 updateAnalyzeFilter({
                   startDate: dayjs().format('YYYY-MM-DD'),
@@ -271,6 +277,7 @@ function Filter() {
               </Text>
             </Pressable>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 requestGetAnalyzeCustomers();
               }}

@@ -105,6 +105,7 @@ export default function CameraScreen({
           </Center>
         )}
         <Pressable
+          hitSlop={ss(10)}
           onPress={takePhoto}
           alignItems={'center'}
           flex={1}

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import {
   Box,
   Column,
@@ -15,14 +15,28 @@ import { AppStackScreenProps, Gender } from '~/app/types';
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import useManagerStore, { DefaultUser } from '~/app/stores/manager';
-import SelectShop from '~/app/components/select-shop';
-import { Shop } from '~/app/stores/manager/type';
+import { Shop, ShopType, User } from '~/app/stores/manager/type';
 import { useNavigation } from '@react-navigation/native';
+import { debounce, throttle } from 'lodash';
+import useAuthStore from '~/app/stores/auth';
+import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 
 export default function ManagerUser({
   navigation,
 }: AppStackScreenProps<'ManagerUser'>) {
   const { users, setCurrentUser } = useManagerStore();
+
+  const [filterUsers, setFilterUsers] = useState<User[]>([]);
+  const [nameFilter, setNameFilter] = useState('');
+  useEffect(() => {
+    const filterRegex = new RegExp(nameFilter, 'i');
+    setFilterUsers(
+      users.filter((user) => {
+        // 使用正则表达式进行模糊匹配
+        return filterRegex.test(user.name);
+      }),
+    );
+  }, [users, nameFilter]);
 
   const List = () => {
     return (
@@ -71,7 +85,7 @@ export default function ManagerUser({
             </Text>
           </Row>
         </Row>
-        {users.map((user, idx) => {
+        {filterUsers.map((user, idx) => {
           return (
             <Row
               key={idx}
@@ -117,6 +131,7 @@ export default function ManagerUser({
               <Row w={ls(150)}>
                 <Row>
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
                       setCurrentUser(user);
                       navigation.navigate('UserDetail', { type: 'detail' });
@@ -133,6 +148,7 @@ export default function ManagerUser({
                     </Row>
                   </Pressable>
                   <Pressable
+                    hitSlop={ss(10)}
                     ml={ls(24)}
                     onPress={() => {
                       setCurrentUser(user);
@@ -179,7 +195,11 @@ export default function ManagerUser({
         flex={1}
         p={ss(10)}
         safeAreaBottom>
-        <Filter />
+        <Filter
+          onSearchChangeText={(text) => {
+            setNameFilter(text);
+          }}
+        />
         <Box mt={ss(10)}>
           <List />
         </Box>
@@ -188,33 +208,28 @@ export default function ManagerUser({
   );
 }
 
-function Filter() {
+function Filter({
+  onSearchChangeText,
+}: {
+  onSearchChangeText: (text: string) => void;
+}) {
   const navigation = useNavigation();
-  const {
-    shops,
-    requestGetShops,
-    setCurrentUser,
-    requestGetUsers,
-    userFilter,
-    setUserFilter,
-  } = useManagerStore();
+  const { setCurrentUser, requestGetUsers, userFilter, setUserFilter } =
+    useManagerStore();
+
+  const [defaultShop, selectShops] = useSelectShops(false);
 
   useEffect(() => {
-    requestGetShops();
-  }, []);
-
-  useEffect(() => {
-    if (shops[0]) {
-      setUserFilter({
-        ...userFilter,
-        shop: {
-          id: shops[0]._id as string,
-          name: shops[0].name,
-        },
-      });
+    setUserFilter({
+      ...userFilter,
+      shop: {
+        id: defaultShop?._id as string,
+        name: defaultShop?.name as string,
+      },
+    }).then(() => {
       requestGetUsers();
-    }
-  }, [shops]);
+    });
+  }, [defaultShop]);
 
   return (
     <Row
@@ -242,15 +257,12 @@ function Filter() {
             />
           }
           placeholder='请输入员工名称搜索'
-          onChangeText={(text) => {
-            setUserFilter({
-              ...userFilter,
-              name: text,
-            });
-          }}
+          onChangeText={debounce((text) => {
+            onSearchChangeText(text);
+          }, 1000)}
         />
         <SelectShop
-          onSelect={function (selectedItem: any, index: number): void {
+          onSelect={throttle(function (selectedItem: any, index: number): void {
             setUserFilter({
               ...userFilter,
               shop: {
@@ -260,13 +272,15 @@ function Filter() {
             }).then(() => {
               requestGetUsers();
             });
-          }}
+          }, 1000)}
           defaultButtonText={userFilter.shop.name}
           buttonHeight={ss(40)}
           buttonWidth={ls(160)}
+          shops={selectShops}
         />
       </Row>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           setCurrentUser(DefaultUser);
           navigation.navigate('UserDetail', { type: 'edit' });

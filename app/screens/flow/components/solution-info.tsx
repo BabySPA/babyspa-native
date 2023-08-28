@@ -27,6 +27,7 @@ import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
 import SelectTimeLength from '~/app/components/select-time-length';
 import { FollowUpStatus } from '~/app/stores/flow/type';
+import { RadioBox } from '~/app/components/radio';
 
 export default function SolutionInfo({
   selectedConfig,
@@ -94,6 +95,7 @@ export default function SolutionInfo({
                       </Text>
                     </Row>
                     <Pressable
+                      hitSlop={ss(10)}
                       onPress={() => {
                         removeSolutionApplication(idx);
                       }}>
@@ -134,6 +136,7 @@ export default function SolutionInfo({
                         </Text>
 
                         <Pressable
+                          hitSlop={ss(10)}
                           onPress={() => {
                             setShowAcupointModal(true);
                           }}>
@@ -188,6 +191,7 @@ export default function SolutionInfo({
             })}
             <Row justifyContent={'flex-end'}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   addSolutionApplication(SolutionDefault.application);
                 }}>
@@ -215,6 +219,7 @@ export default function SolutionInfo({
           autoScroll={false}
           icon={require('~/assets/images/guidance.png')}>
           <Pressable
+            hitSlop={ss(10)}
             flex={1}
             pt={ss(10)}
             onPress={() => {
@@ -279,6 +284,7 @@ export default function SolutionInfo({
                       </Text>
                     </Row>
                     <Pressable
+                      hitSlop={ss(10)}
                       onPress={() => {
                         removeSolutionMassage(idx);
                       }}>
@@ -298,6 +304,7 @@ export default function SolutionInfo({
                         备注：
                       </Text>
                       <Pressable
+                        hitSlop={ss(10)}
                         onPress={() => {
                           setShowMassageRemarkModal(true);
                         }}>
@@ -348,6 +355,7 @@ export default function SolutionInfo({
             })}
             <Row justifyContent={'flex-end'}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   addSolutionMassage(SolutionDefault.massage);
                 }}>
@@ -378,31 +386,22 @@ export default function SolutionInfo({
             <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
               是否随访
             </Text>
-            <Radio.Group
-              name='isFollowUp'
-              flexDirection={'row'}
-              defaultValue={
-                followUp.followUpStatus === FollowUpStatus.NOT_SET ? '0' : '1'
+            <RadioBox
+              margin={ss(20)}
+              config={[
+                { label: '是', value: 1 },
+                { label: '否', value: 0 },
+              ]}
+              current={
+                followUp.followUpStatus === FollowUpStatus.NOT_SET ? 0 : 1
               }
-              onChange={(event) => {
+              onChange={({ label, value }) => {
                 updateFollowUp({
                   followUpStatus:
-                    event === '1'
-                      ? FollowUpStatus.WAIT
-                      : FollowUpStatus.NOT_SET,
+                    value == 1 ? FollowUpStatus.WAIT : FollowUpStatus.NOT_SET,
                 });
-              }}>
-              <Radio colorScheme='green' value='1' size={'sm'}>
-                <Text fontSize={sp(20)} color='#333'>
-                  是
-                </Text>
-              </Radio>
-              <Radio colorScheme='green' value='0' ml={ls(20)} size={'sm'}>
-                <Text fontSize={sp(20)} color='#333'>
-                  否
-                </Text>
-              </Radio>
-            </Radio.Group>
+              }}
+            />
             <Text fontSize={sp(20)} color='#333' ml={ls(60)} mr={ls(10)}>
               随访时间
             </Text>
@@ -433,26 +432,19 @@ export default function SolutionInfo({
             <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
               继续调理
             </Text>
-            <Radio.Group
-              name='next'
-              flexDirection={'row'}
-              defaultValue={next.hasNext ? '1' : '0'}
-              onChange={(event) => {
+            <RadioBox
+              margin={ss(20)}
+              config={[
+                { label: '是', value: 1 },
+                { label: '否', value: 0 },
+              ]}
+              current={next.hasNext ? 1 : 0}
+              onChange={({ label, value }) => {
                 updateNextTime({
-                  hasNext: event === '1',
+                  hasNext: value == 1,
                 });
-              }}>
-              <Radio colorScheme='green' value='1' size={'sm'}>
-                <Text fontSize={sp(20)} color='#333'>
-                  是
-                </Text>
-              </Radio>
-              <Radio colorScheme='green' value='0' ml={ls(20)} size={'sm'}>
-                <Text fontSize={sp(20)} color='#333'>
-                  否
-                </Text>
-              </Radio>
-            </Radio.Group>
+              }}
+            />
             <Text fontSize={sp(20)} color='#333' ml={ls(60)} mr={ls(10)}>
               复推时间
             </Text>

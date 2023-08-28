@@ -1,7 +1,6 @@
 import {
   Box,
   Column,
-  Icon,
   Input,
   Radio,
   Row,
@@ -11,7 +10,7 @@ import {
   Spinner,
   ScrollView,
 } from 'native-base';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
@@ -19,79 +18,11 @@ import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import CT from './checkbox-tree';
 import { generateAuthorityTreeConfig } from '~/app/utils';
+import { RadioBox } from '~/app/components/radio';
 
 interface EditBoxParams {
   onEditFinish: () => void;
 }
-
-const recursiveData = [
-  {
-    shopReportName: 'Name 1',
-    shopCode: '00001',
-    shopType: '2',
-    shopId: 1,
-    shopName: 'Name 1',
-    childs: [
-      {
-        shopReportName: 'Name 2',
-        shopCode: '00002',
-        shopType: '3',
-        shopId: 2,
-        shopName: 'Name 2',
-        childs: [
-          {
-            shopReportName: 'Name 3',
-            shopCode: '00003',
-            shopType: '4',
-            shopId: 3,
-            shopName: 'Name 3',
-            childs: [
-              {
-                shopReportName: 'Name 4',
-                shopCode: '00004',
-                shopType: '4',
-                shopId: 4,
-                shopName: 'Name 4',
-              },
-              {
-                shopReportName: 'Name 5',
-                shopCode: '00005',
-                shopType: '4',
-                shopId: 5,
-                shopName: 'Name 5',
-                childs: [
-                  {
-                    shopReportName: 'Name 6',
-                    shopCode: '00006',
-                    shopType: '4',
-                    shopId: 7,
-                    shopName: 'Name 6',
-                    childs: [
-                      {
-                        shopReportName: 'Name 7',
-                        shopCode: '00007',
-                        shopType: '4',
-                        shopId: 7,
-                        shopName: 'Name 7',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                shopReportName: 'Name 8',
-                shopCode: '00008',
-                shopType: '4',
-                shopId: 8,
-                shopName: 'Name 8',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
 
 export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
@@ -148,28 +79,48 @@ export default function EditBox(params: EditBoxParams) {
                 />
               }
             />
+          </Row>
+          <Row mt={ss(40)}>
             <FormBox
               title='状态'
               required
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
-                <Radio.Group
-                  value={`${tempRole.status}`}
-                  name='status'
-                  flexDirection={'row'}
-                  onChange={(event) => {
+                <RadioBox
+                  margin={ss(20)}
+                  config={[
+                    { label: '启用', value: 1 },
+                    { label: '禁用', value: 0 },
+                  ]}
+                  current={tempRole.status}
+                  onChange={({ label, value }) => {
                     setTempRole({
                       ...(tempRole || {}),
-                      status: +event,
+                      status: +value,
                     });
-                  }}>
-                  <Radio colorScheme='green' value='1' size={'sm'}>
-                    启用
-                  </Radio>
-                  <Radio colorScheme='green' value='0' ml={ls(40)} size={'sm'}>
-                    禁用
-                  </Radio>
-                </Radio.Group>
+                  }}
+                />
+              }
+            />
+            <FormBox
+              title='类型'
+              required
+              style={{ flex: 1, marginLeft: ls(20) }}
+              form={
+                <RadioBox
+                  margin={ss(20)}
+                  config={[
+                    { label: '门店角色', value: 1 },
+                    { label: '中心角色', value: 0 },
+                  ]}
+                  current={tempRole.status}
+                  onChange={({ label, value }) => {
+                    setTempRole({
+                      ...(tempRole || {}),
+                      type: +value,
+                    });
+                  }}
+                />
               }
             />
           </Row>
@@ -219,6 +170,7 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
           }}>
@@ -236,6 +188,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;

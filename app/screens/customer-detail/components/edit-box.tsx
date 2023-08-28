@@ -11,6 +11,7 @@ import {
   Pressable,
   useToast,
   Spinner,
+  ScrollView,
 } from 'native-base';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
@@ -25,6 +26,7 @@ import SelectOperator from '~/app/components/select-operator';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
 import { TemplateGroupKeys } from '~/app/constants';
+import { RadioBox } from '~/app/components/radio';
 
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -131,27 +133,20 @@ export default function EditBox(params: EditBoxParams) {
               title='性别'
               style={{ flex: 1 }}
               form={
-                <Radio.Group
-                  value={`${tempCustomer.gender}`}
-                  name='gender'
-                  flexDirection={'row'}
-                  onChange={(event) => {
+                <RadioBox
+                  margin={ss(20)}
+                  config={[
+                    { label: '男', value: 1 },
+                    { label: '女', value: 0 },
+                  ]}
+                  current={tempCustomer.gender}
+                  onChange={({ label, value }) => {
                     setTempCustomer({
                       ...tempCustomer,
-                      gender: +event,
+                      gender: +value,
                     });
-                  }}>
-                  <Radio colorScheme='green' value='1' size={'sm'}>
-                    <Text fontSize={sp(20)} color='#333'>
-                      男
-                    </Text>
-                  </Radio>
-                  <Radio colorScheme='green' value='0' ml={ls(30)} size={'sm'}>
-                    <Text fontSize={sp(20)} color='#333'>
-                      女
-                    </Text>
-                  </Radio>
-                </Radio.Group>
+                  }}
+                />
               }
             />
             <FormBox
@@ -161,17 +156,19 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box w={ls(380)}>
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
                       showDatePicker();
                     }}>
                     <Row
-                      borderRadius={ss(10)}
+                      borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
-                      px={ss(20)}>
+                      pr={ss(10)}
+                      pl={ss(20)}>
                       <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
                         {tempCustomer.birthday}
                       </Text>
@@ -219,6 +216,7 @@ export default function EditBox(params: EditBoxParams) {
                 form={
                   <Box w={'70%'}>
                     <Pressable
+                      hitSlop={ss(10)}
                       onPress={() => {
                         setIsOpenTemplatePicker(true);
                       }}>
@@ -295,6 +293,7 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
           }}>
@@ -312,6 +311,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
@@ -436,6 +436,7 @@ export default function EditBox(params: EditBoxParams) {
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setTempCustomer({
                   ...tempCustomer,
@@ -453,6 +454,7 @@ export default function EditBox(params: EditBoxParams) {
               </Box>
             </Pressable>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsOpenBirthdayPicker(false);
               }}>

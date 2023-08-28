@@ -12,17 +12,14 @@ import {
   useToast,
   Spinner,
 } from 'native-base';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
-// @ts-ignore
-import { AreaPicker } from 'react-native-pickers';
-import AreaJson from '~/app/constants/area.json';
+import { showAreaPicker, showTimePicker } from '~/app/utils/picker';
 interface EditBoxParams {
   onEditFinish: () => void;
 }
@@ -40,7 +37,6 @@ export default function EditBox(params: EditBoxParams) {
   } = useManagerStore();
 
   const [tempShop, setTempShop] = useState(currentShop);
-  const areaPickerRef = useRef(null);
 
   return (
     <Column
@@ -137,11 +133,17 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box flex={1}>
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
-                      // @ts-ignore
+                      showAreaPicker(tempShop.region.split('-'), (val) => {
+                        setTempShop({
+                          ...tempShop,
+                          region: val.join('-'),
+                        });
+                      });
                     }}>
                     <Row
-                      borderRadius={ss(10)}
+                      borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
@@ -158,14 +160,6 @@ export default function EditBox(params: EditBoxParams) {
                       />
                     </Row>
                   </Pressable>
-                  {/* <AreaPicker
-                    areaJson={AreaJson}
-                    onPickerCancel={() => {}}
-                    onPickerConfirm={(value: any) => {
-                      alert(JSON.stringify(value));
-                    }}
-                    ref={areaPickerRef}
-                  /> */}
                 </Box>
               }
             />
@@ -176,18 +170,27 @@ export default function EditBox(params: EditBoxParams) {
               title='营业时间'
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
-                <Box flex={1}>
-                  <Pressable onPress={() => {}}>
+                <Row flex={1} alignItems={'center'}>
+                  <Pressable
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      showTimePicker(tempShop.openingTime.split(':'), (val) => {
+                        setTempShop({
+                          ...tempShop,
+                          openingTime: val.join(':'),
+                        });
+                      });
+                    }}>
                     <Row
-                      borderRadius={ss(10)}
+                      borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
-                      px={ss(20)}>
+                      px={ss(10)}>
                       <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                        {tempShop.region || '请选择'}
+                        {tempShop.openingTime || '请选择'}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
@@ -196,7 +199,38 @@ export default function EditBox(params: EditBoxParams) {
                       />
                     </Row>
                   </Pressable>
-                </Box>
+                  <Text mx={ls(12)} fontSize={sp(14)}>
+                    至
+                  </Text>
+                  <Pressable
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      showTimePicker(tempShop.closingTime.split(':'), (val) => {
+                        setTempShop({
+                          ...tempShop,
+                          closingTime: val.join(':'),
+                        });
+                      });
+                    }}>
+                    <Row
+                      borderRadius={ss(4)}
+                      justifyContent={'space-between'}
+                      alignItems={'center'}
+                      borderWidth={1}
+                      borderColor={'#D8D8D8'}
+                      py={ss(10)}
+                      px={ss(10)}>
+                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                        {tempShop.closingTime || '请选择'}
+                      </Text>
+                      <Icon
+                        as={<FontAwesome name='angle-down' />}
+                        size={ss(18, { min: 15 })}
+                        color='#999'
+                      />
+                    </Row>
+                  </Pressable>
+                </Row>
               }
             />
             <FormBox
@@ -257,6 +291,7 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
           }}>
@@ -274,6 +309,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;

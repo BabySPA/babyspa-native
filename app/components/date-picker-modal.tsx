@@ -38,6 +38,7 @@ export default function DatePickerModal({
         />
         <Row justifyContent={'flex-end'} mt={ss(12)}>
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               onSelectedChange(currentSelectBirthday ?? '');
               onClose();
@@ -52,6 +53,7 @@ export default function DatePickerModal({
             </Box>
           </Pressable>
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               onClose();
             }}>

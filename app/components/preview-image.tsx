@@ -14,6 +14,7 @@ export default function PreviewImage({
   return (
     <>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           setShowImageModal(true);
         }}>

@@ -164,6 +164,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Row>
                   {Object.keys(FollowUpResultText).map((key) => (
                     <Pressable
+                      hitSlop={ss(10)}
                       key={key}
                       onPress={() => {
                         setSelectResult(Number(key) as FollowUpResult);
@@ -218,6 +219,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
             </Column>
             <Row mt={ss(100)} justifyContent={'flex-end'} pr={ss(30)}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   // 取消随访
                   setShowCancelDialog(true);
@@ -237,6 +239,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 </Text>
               </Pressable>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   // 随访
                   setShowConfirmDialog(true);

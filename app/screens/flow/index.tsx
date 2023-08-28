@@ -111,6 +111,7 @@ export default function FlowScreen({
               {currentFlowCustomer.phoneNumber}
             </Text>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 // 跳转到历史记录
                 updateCurrentArchiveCustomer(currentFlowCustomer);
@@ -157,6 +158,7 @@ export default function FlowScreen({
             </Text>
           </Row>
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               setShowWarn(false);
             }}>
@@ -184,6 +186,7 @@ export default function FlowScreen({
               {configs.map((item, idx) => {
                 return (
                   <Pressable
+                    hitSlop={ss(10)}
                     key={item.key}
                     onPress={() => {
                       setSelectedConfig(item);
@@ -219,6 +222,7 @@ export default function FlowScreen({
             !selectedConfig.disabled && (
               <Row>
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setShowFinishModal(true);
                   }}>
@@ -237,6 +241,7 @@ export default function FlowScreen({
                   </Row>
                 </Pressable>
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     requestPatchFlowToCollection()
                       .then((res) => {
@@ -290,6 +295,7 @@ export default function FlowScreen({
           {selectedConfig.auth == RoleAuthority.FLOW_ANALYZE && (
             <Row>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   setShowFinishModal(true);
                 }}>
@@ -308,6 +314,7 @@ export default function FlowScreen({
                 </Row>
               </Pressable>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   if (finishLoading) return;
 

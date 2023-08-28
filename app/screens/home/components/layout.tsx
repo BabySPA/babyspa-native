@@ -72,6 +72,7 @@ export default function Layout() {
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
+                hitSlop={ss(10)}
                 key={idx}
                 onPress={() => {
                   changeCurrentSelected(idx);
@@ -109,6 +110,7 @@ export default function Layout() {
           position={'absolute'}
           bottom={ss(80)}>
           <Pressable
+            hitSlop={ss(10)}
             alignItems={'center'}
             onPress={() => {
               // 跳转到个人中心
@@ -155,6 +157,7 @@ export default function Layout() {
             currentSelectedModule?.features.map((item, idx) => {
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   key={idx}
                   paddingRight={'8%'}
                   onPress={() => {

@@ -21,6 +21,7 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
 import { TemplateGroupKeys } from '~/app/constants';
+import { RadioBox } from '~/app/components/radio';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -99,20 +100,17 @@ export default function EditCustomer(params: EditCustomerParams) {
             title='性别'
             style={{ marginTop: ss(20) }}
             form={
-              <Radio.Group
-                value={`${currentRegisterCustomer.gender}`}
-                name='gender'
-                flexDirection={'row'}
-                onChange={(event) => {
-                  updateCurrentRegisterCustomer({ gender: +event });
-                }}>
-                <Radio colorScheme='green' value='1' size={'sm'}>
-                  男
-                </Radio>
-                <Radio colorScheme='green' value='0' ml={ls(40)} size={'sm'}>
-                  女
-                </Radio>
-              </Radio.Group>
+              <RadioBox
+                margin={ss(20)}
+                config={[
+                  { label: '男', value: 1 },
+                  { label: '女', value: 0 },
+                ]}
+                current={currentRegisterCustomer.gender}
+                onChange={({ label, value }) => {
+                  updateCurrentRegisterCustomer({ gender: +value });
+                }}
+              />
             }
           />
           <FormBox
@@ -122,6 +120,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Box w={'70%'}>
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     showDatePicker();
                   }}>
@@ -175,6 +174,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Box w={'70%'}>
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setIsOpenTemplatePicker(true);
                   }}>

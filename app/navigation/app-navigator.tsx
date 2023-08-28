@@ -17,29 +17,39 @@ import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
+import { Box } from 'native-base';
+import { Keyboard, PanResponder } from 'react-native';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderGrant: () => {
+      Keyboard.dismiss();
+    },
+  });
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Home' component={HomeScreen} />
-      <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />
-      <Stack.Screen name='CustomerDetail' component={CustomerDetail} />
-      <Stack.Screen name='AddNewCustomer' component={AddNewCustomer} />
-      <Stack.Screen name='Flow' component={FlowScreen} />
-      <Stack.Screen name='FlowInfo' component={FlowInfoScreen} />
-      <Stack.Screen name='Camera' component={CameraScreen} />
-      <Stack.Screen name='ManagerLogger' component={ManagerLogger} />
-      <Stack.Screen name='ManagerShop' component={ManagerShop} />
-      <Stack.Screen name='ManagerRole' component={ManagerRole} />
-      <Stack.Screen name='ManagerTemplate' component={ManagerTemplate} />
-      <Stack.Screen name='ManagerUser' component={ManagerUser} />
-      <Stack.Screen name='ShopDetail' component={ShopDetail} />
-      <Stack.Screen name='UserDetail' component={UserDetail} />
-      <Stack.Screen name='RoleDetail' component={RoleDetail} />
-      <Stack.Screen name='CustomerArchive' component={CustomerArchive} />
-      <Stack.Screen name='Personal' component={Personal} />
-    </Stack.Navigator>
+    <Box flex={1} bgColor='white' {...panResponder.panHandlers}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Home' component={HomeScreen} />
+        <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />
+        <Stack.Screen name='CustomerDetail' component={CustomerDetail} />
+        <Stack.Screen name='AddNewCustomer' component={AddNewCustomer} />
+        <Stack.Screen name='Flow' component={FlowScreen} />
+        <Stack.Screen name='FlowInfo' component={FlowInfoScreen} />
+        <Stack.Screen name='Camera' component={CameraScreen} />
+        <Stack.Screen name='ManagerLogger' component={ManagerLogger} />
+        <Stack.Screen name='ManagerShop' component={ManagerShop} />
+        <Stack.Screen name='ManagerRole' component={ManagerRole} />
+        <Stack.Screen name='ManagerTemplate' component={ManagerTemplate} />
+        <Stack.Screen name='ManagerUser' component={ManagerUser} />
+        <Stack.Screen name='ShopDetail' component={ShopDetail} />
+        <Stack.Screen name='UserDetail' component={UserDetail} />
+        <Stack.Screen name='RoleDetail' component={RoleDetail} />
+        <Stack.Screen name='CustomerArchive' component={CustomerArchive} />
+        <Stack.Screen name='Personal' component={Personal} />
+      </Stack.Navigator>
+    </Box>
   );
 }

@@ -30,6 +30,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
               const latestCourse = course[0];
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setSelectIdx(idx);
                   }}
@@ -58,6 +59,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
             {params.courses[selectIdx].map((course, idx) => {
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     params.onPressToFlowInfo();
                   }}

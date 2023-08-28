@@ -48,6 +48,7 @@ export default function RegisterCustomerScreen({
         }
         rightElement={
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               if (loading) return;
 

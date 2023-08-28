@@ -56,6 +56,7 @@ export function DialogModal({
             </Text>
             <Row mt={ss(50)} mb={ss(20)}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onClose();
                 }}>
@@ -71,6 +72,7 @@ export function DialogModal({
                 </Center>
               </Pressable>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onConfirm();
                 }}>
@@ -121,6 +123,7 @@ export function TemplateModal({
             {template?.name}
           </Text>
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               onClose();
             }}>
@@ -155,6 +158,7 @@ export function TemplateModal({
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
+                      hitSlop={ss(10)}
                       key={idx}
                       onPress={() => {
                         setSelectTemplateItemsIdx(idx);
@@ -185,6 +189,7 @@ export function TemplateModal({
                   (item, idx) => {
                     return (
                       <Pressable
+                        hitSlop={ss(10)}
                         key={idx}
                         onPress={() => {
                           const text = templateText.trim();
@@ -215,6 +220,7 @@ export function TemplateModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               onClose();
             }}
@@ -230,6 +236,7 @@ export function TemplateModal({
             </Text>
           </Pressable>
           <Pressable
+            hitSlop={ss(10)}
             onPress={() => {
               onConfirm(templateText);
             }}
@@ -317,6 +324,7 @@ export function GrowthCurveModal({
             </Row>
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onClose();
                 }}>
@@ -332,6 +340,7 @@ export function GrowthCurveModal({
                 </Center>
               </Pressable>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onConfirm({
                     height: height,
@@ -441,6 +450,7 @@ export function ChangePasswordModal({
             </Row>
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onClose();
                 }}>
@@ -456,6 +466,7 @@ export function ChangePasswordModal({
                 </Center>
               </Pressable>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   console.log(decodePassword(password), originalPassword);
                   if (decodePassword(password) !== originalPassword) {
@@ -546,6 +557,7 @@ export function NewTemplateModalModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onClose();
                 }}>
@@ -561,6 +573,7 @@ export function NewTemplateModalModal({
                 </Center>
               </Pressable>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   onConfirm(name);
                 }}>

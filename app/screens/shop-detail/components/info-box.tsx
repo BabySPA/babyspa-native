@@ -43,6 +43,7 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onPressCancel();
           }}>
@@ -59,6 +60,7 @@ export default function InfoBox(params: InfoBoxParams) {
           </Box>
         </Pressable>
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             params.onPressEdit();

@@ -4,6 +4,8 @@ import { immer } from 'zustand/middleware/immer';
 import { ManangerState, RoleStatus, ShopType } from './type';
 import { ConfigAuthTree } from '~/app/constants';
 import { generateAuthorityConfig } from '~/app/utils';
+import { produce } from 'immer';
+import dayjs from 'dayjs';
 export const DefaultTemplate = [];
 
 export const DefaultShop = {
@@ -75,6 +77,11 @@ const initialState = {
 
   // logs
   logs: [],
+  logFilter: {
+    searchKeywords: '',
+    startDate: dayjs().format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD'),
+  },
 };
 
 const useManagerStore = create(
@@ -86,9 +93,7 @@ const useManagerStore = create(
 
     // 门店
     requestGetShops: async (searchKeyword) => {
-      const params: any = {
-        type: ShopType.SHOP,
-      };
+      const params: any = {};
       if (searchKeyword) {
         params.search = searchKeyword;
       }
@@ -115,10 +120,16 @@ const useManagerStore = create(
     requestGetUsers: async () => {
       const shopId = get().userFilter.shop.id;
 
-      const { data } = await request.get(`/users?shopId=${shopId}`);
-      set((state) => {
-        state.users = data;
-      });
+      const params: any = {
+        shopId: shopId,
+      };
+
+      if (shopId) {
+        const { data } = await request.get(`/users`, { params });
+        set((state) => {
+          state.users = data;
+        });
+      }
     },
     requestPostUser: () => {
       const currentUser = get().currentUser;
@@ -168,6 +179,15 @@ const useManagerStore = create(
       });
       return Promise.resolve();
     },
+
+    updateCurrentUser: (user) => {
+      set((state) => {
+        state.currentUser = produce(state.currentUser, (draft) => {
+          Object.assign(draft, user);
+        });
+      });
+    },
+
     setUserFilter: async (filter) => {
       set((state) => {
         state.userFilter = filter;
@@ -203,6 +223,7 @@ const useManagerStore = create(
         status: role.status,
         description: role.description,
         authorities: authorities,
+        type: role.type,
       };
       return request.patch(`/roles/${role._id}`, patchRole);
     },
@@ -275,11 +296,24 @@ const useManagerStore = create(
 
     // logs
     requestGetLogs: async () => {
-      const { data } = await request.get('/logs');
+      const params: any = {};
+      const filter = get().logFilter;
+      params.search = filter.searchKeywords;
+      params.startDate = filter.startDate;
+      params.endDate = filter.endDate;
+      const { data } = await request.get('/logs', { params });
 
       const { docs } = data;
       set((state) => {
         state.logs = docs;
+      });
+    },
+
+    setLogFilter: async (filter) => {
+      set((state) => {
+        state.logFilter = produce(state.logFilter, (draft) => {
+          Object.assign(draft, filter);
+        });
       });
     },
   })),

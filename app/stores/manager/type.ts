@@ -96,6 +96,7 @@ export interface UserState {
 
   // action
   setCurrentUser: (user: User) => void;
+  updateCurrentUser: (user: Partial<User>) => void;
   setUserFilter: (user: UserFilter) => Promise<any>;
 }
 
@@ -128,7 +129,19 @@ export interface Template {
 
 interface LogState {
   logs: any[];
+  logFilter: {
+    searchKeywords: string;
+    startDate: string;
+    endDate: string;
+  };
   requestGetLogs: () => Promise<any>;
+  setLogFilter: (
+    filter: Partial<{
+      searchKeywords: string;
+      startDate: string;
+      endDate: string;
+    }>,
+  ) => Promise<any>;
 }
 
 interface TemplateState {

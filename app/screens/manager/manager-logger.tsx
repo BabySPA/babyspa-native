@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import {
   Box,
   Column,
@@ -8,14 +8,17 @@ import {
   Row,
   Text,
   Image,
+  ScrollView,
+  FlatList,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { AppStackScreenProps, Gender } from '~/app/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import useManagerStore, { DefaultRole } from '~/app/stores/manager';
 import { useNavigation } from '@react-navigation/native';
+import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function ManagerLogger({
   navigation,
@@ -58,54 +61,58 @@ export default function ManagerLogger({
               操作内容
             </Text>
           </Row>
-          <Row w={ls(150)} justifyContent={'center'}>
+          <Row w={ls(200)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               操作时间
             </Text>
           </Row>
         </Row>
-        {logs.map((log, idx) => {
-          return (
-            <Row
-              key={idx}
-              px={ls(40)}
-              minH={ss(60)}
-              py={ss(10)}
-              alignItems={'center'}
-              borderTopRadius={ss(10)}
-              width={'100%'}
-              borderBottomWidth={1}
-              borderBottomColor={'#DFE1DE'}
-              borderBottomStyle={'solid'}
-              justifyContent={'space-around'}>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {log.username}
-                </Text>
+        <FlatList
+          data={logs}
+          maxH={ss(520)}
+          renderItem={({ item: log }) => {
+            return (
+              <Row
+                px={ls(40)}
+                minH={ss(60)}
+                py={ss(10)}
+                alignItems={'center'}
+                borderTopRadius={ss(10)}
+                width={'100%'}
+                borderBottomWidth={1}
+                borderBottomColor={'#DFE1DE'}
+                borderBottomStyle={'solid'}
+                justifyContent={'space-around'}>
+                <Row w={ls(150)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {log.username}
+                  </Text>
+                </Row>
+                <Row w={ls(100)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {log.name}
+                  </Text>
+                </Row>
+                <Row w={ls(150)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {log.module}
+                  </Text>
+                </Row>
+                <Row w={ls(150)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {log.action}
+                  </Text>
+                </Row>
+                <Row w={ls(200)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {dayjs(log.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                  </Text>
+                </Row>
               </Row>
-              <Row w={ls(100)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {log.name}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {log.module}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {log.action}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {log.createdAt}
-                </Text>
-              </Row>
-            </Row>
-          );
-        })}
+            );
+          }}
+          keyExtractor={(item) => item._id}
+        />
       </Column>
     );
   };
@@ -141,8 +148,13 @@ export default function ManagerLogger({
 }
 
 function Filter() {
-  const navigation = useNavigation();
-  const { setCurrentRole } = useManagerStore();
+  const { logFilter, setLogFilter, requestGetLogs } = useManagerStore();
+  const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
+    type?: 'start' | 'end';
+    isOpen: boolean;
+  }>({
+    isOpen: false,
+  });
 
   return (
     <Row
@@ -171,7 +183,96 @@ function Filter() {
           placeholder='请输入操作人员姓名搜索'
           onChangeText={(text) => {}}
         />
+        <Pressable
+          hitSlop={ss(10)}
+          onPress={() => {
+            setIsOpenDatePicker({
+              isOpen: true,
+              type: 'start',
+            });
+          }}
+          flexDirection={'row'}
+          ml={ls(20)}
+          minH={ss(40, { max: 18 })}
+          alignItems={'center'}
+          py={ss(8)}
+          pl={ls(12)}
+          pr={ls(25)}
+          borderRadius={ss(4)}
+          borderColor={'#D8D8D8'}
+          borderWidth={1}>
+          <Icon
+            as={<MaterialIcons name='date-range' />}
+            size={ss(20)}
+            color='rgba(0,0,0,0.2)'
+          />
+          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+            {logFilter.startDate}
+          </Text>
+        </Pressable>
+        <Text mx={ls(10)} color='#333' fontSize={sp(16)}>
+          至
+        </Text>
+        <Pressable
+          hitSlop={ss(10)}
+          onPress={() => {
+            setIsOpenDatePicker({
+              isOpen: true,
+              type: 'end',
+            });
+          }}
+          flexDirection={'row'}
+          minH={ss(40, { max: 18 })}
+          py={ss(8)}
+          pl={ls(12)}
+          pr={ls(25)}
+          alignItems={'center'}
+          borderRadius={ss(4)}
+          borderColor={'#D8D8D8'}
+          borderWidth={1}>
+          <Icon
+            as={<MaterialIcons name='date-range' />}
+            size={ss(20)}
+            color='rgba(0,0,0,0.2)'
+          />
+          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+            {logFilter.endDate}
+          </Text>
+        </Pressable>
       </Row>
+
+      <DatePickerModal
+        isOpen={isOpenDatePicker.isOpen}
+        onClose={() => {
+          setIsOpenDatePicker({
+            isOpen: false,
+          });
+        }}
+        onSelectedChange={(date: string) => {
+          if (!isOpenDatePicker.type) return;
+          if (isOpenDatePicker.type == 'start') {
+            setLogFilter({
+              startDate: date,
+            });
+            requestGetLogs();
+          } else {
+            setLogFilter({
+              endDate: date,
+            });
+            requestGetLogs();
+          }
+        }}
+        current={
+          isOpenDatePicker.type == 'start'
+            ? logFilter.startDate
+            : logFilter.endDate
+        }
+        selected={
+          isOpenDatePicker.type == logFilter.startDate
+            ? logFilter.startDate
+            : logFilter.endDate
+        }
+      />
     </Row>
   );
 }

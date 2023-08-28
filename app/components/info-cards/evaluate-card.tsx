@@ -43,6 +43,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   const DialogBtn = () => (
     <Row justifyContent={'center'} mt={ss(110)}>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           onClose?.();
         }}>
@@ -58,6 +59,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         </Box>
       </Pressable>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           evaluateNow();
           onClose?.();
@@ -103,6 +105,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   const CardBtn = () => (
     <Row justifyContent={'flex-end'} mt={ss(40)}>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           evaluateNow();
         }}>
@@ -141,6 +144,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           {EvaluateStores.map((item: Score) => {
             return (
               <Pressable
+                hitSlop={ss(10)}
                 key={item}
                 mr={ss(10)}
                 onPress={() => {

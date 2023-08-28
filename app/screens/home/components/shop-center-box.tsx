@@ -14,7 +14,7 @@ export default function ShopCenterBox({
   onPress: () => void;
 }) {
   return (
-    <Pressable onPress={onPress}>
+    <Pressable hitSlop={ss(10)} onPress={onPress}>
       <Row
         bgColor={'#fff'}
         minH={ss(128)}

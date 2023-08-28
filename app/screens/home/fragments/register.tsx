@@ -49,6 +49,7 @@ export default function Register() {
             p={ss(40)}>
             {customers.map((customer, idx) => (
               <Pressable
+                hitSlop={ss(10)}
                 ml={idx % 2 == 1 ? ss(20) : 0}
                 key={idx}
                 onPress={() => {
@@ -122,6 +123,7 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             setShowFilter(!showFilter);
           }}>
@@ -138,6 +140,7 @@ function Filter() {
           </Row>
         </Pressable>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             updateCurrentRegisterCustomer(DefaultRegisterCustomer);
             navigation.navigate('RegisterCustomer', {
@@ -167,6 +170,7 @@ function Filter() {
               时间选择
             </Text>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -196,6 +200,7 @@ function Filter() {
               至
             </Text>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -229,6 +234,7 @@ function Filter() {
               {register.allStatus?.map((status, idx) => {
                 return (
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
                       updateRegisterFilter({
                         status: status.value,
@@ -258,6 +264,7 @@ function Filter() {
           </Row>
           <Row alignItems={'center'} mt={ss(20)} justifyContent={'flex-end'}>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 updateRegisterFilter({
                   startDate: dayjs().format('YYYY-MM-DD'),
@@ -277,6 +284,7 @@ function Filter() {
               </Text>
             </Pressable>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 requestGetRegisterCustomers();
               }}

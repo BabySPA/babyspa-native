@@ -41,6 +41,7 @@ export default function CustomerDetail({
           !edit &&
           currentRegisterCustomer.status !== CustomerStatus.Canceled ? (
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setShowModal(true);
               }}>

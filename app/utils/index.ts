@@ -6,6 +6,7 @@ import {
   GrowthCurveWeightComparison,
 } from '../stores/flow/type';
 import { Role, RoleStatus } from '../stores/manager/type';
+import area from '~/app/constants/area.json';
 
 export function getAge(birthday: string) {
   if (birthday) {
@@ -290,4 +291,23 @@ export function getWeightComparsionText(
     [GrowthCurveWeightComparison.Heavier]: '超重',
     [GrowthCurveWeightComparison.Obesity]: '肥胖',
   }[weightComparison];
+}
+
+export function createAreaData() {
+  let data = [];
+  let len = area.length;
+  for (let i = 0; i < len; i++) {
+    let city = [];
+    for (let j = 0, cityLen = area[i]['city'].length; j < cityLen; j++) {
+      let _city: any = {};
+      //
+      _city[area[i]['city'][j]['name']] = area[i]['city'][j]['area'];
+      city.push(_city);
+    }
+
+    let _data: any = {};
+    _data[area[i]['name']] = city;
+    data.push(_data);
+  }
+  return data;
 }

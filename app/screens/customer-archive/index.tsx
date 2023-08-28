@@ -164,6 +164,7 @@ export default function CustomerArchive({
 
           <Row>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 // 删除客户
                 setShowDeleteDialog(true);
@@ -201,6 +202,7 @@ export default function CustomerArchive({
               }}
             />
             <Pressable
+              hitSlop={ss(10)}
               ml={ls(40)}
               onPress={() => {
                 navigation.navigate('AddNewCustomer');
@@ -235,6 +237,7 @@ export default function CustomerArchive({
                 {configs.map((item, idx) => {
                   return (
                     <Pressable
+                      hitSlop={ss(10)}
                       key={item.key}
                       onPress={() => {
                         setSelectedFragment(idx);
@@ -268,6 +271,7 @@ export default function CustomerArchive({
             </Container>
             {configs[selectFragment].key == 'growth-curve' && (
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   setShowEditGrowthCurve({
                     isOpen: true,

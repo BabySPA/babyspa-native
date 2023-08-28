@@ -9,54 +9,24 @@ import { Shop, ShopType } from '../stores/manager/type';
 
 export default function SelectShop({
   onSelect,
+  shops,
   defaultButtonText,
   buttonHeight,
   buttonWidth,
 }: {
+  shops: Shop[];
   onSelect: (selectedItem: any, index: number) => void;
   defaultButtonText?: string;
   buttonHeight?: number;
   buttonWidth?: number;
 }) {
-  const { shops, requestGetShops } = useManagerStore();
-  const { currentShopWithRole } = useAuthStore();
-
-  const isCenter = currentShopWithRole?.shop?.type === ShopType.CENTER;
-
-  const [defaultText, setDefaultText] = useState<string>(
-    defaultButtonText || '请选择门店',
-  );
-
-  const [useShops, setUseShop] = useState<Shop[]>([]);
-
-  useEffect(() => {
-    if (shops.length > 0) {
-      if (isCenter) {
-        setDefaultText(shops[0].name);
-        setUseShop(shops);
-        onSelect(shops[0], 0);
-      } else {
-        setDefaultText(currentShopWithRole?.shop.name || '请选择门店');
-        const selectShop = shops.filter(
-          (item) => item._id === currentShopWithRole?.shop._id,
-        );
-        setUseShop(selectShop);
-        onSelect(selectShop[0], 0);
-      }
-    }
-  }, [shops]);
-
-  useEffect(() => {
-    requestGetShops();
-  }, []);
-
   return (
     <SelectDropdown
-      data={useShops}
+      data={shops}
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
-      defaultButtonText={defaultText}
+      defaultButtonText={defaultButtonText || '请选择门店'}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.name;
       }}
@@ -104,4 +74,34 @@ export default function SelectShop({
       }}
     />
   );
+}
+
+export function useSelectShops(filterCenter: boolean): [Shop | null, Shop[]] {
+  const { currentShopWithRole } = useAuthStore();
+  const { shops, requestGetShops } = useManagerStore();
+
+  const [defaultSelectShop, setDefaultSelectShop] = useState<Shop | null>();
+  const [selectShops, setSelectShops] = useState<Shop[]>([]);
+  useEffect(() => {
+    if (shops.length > 0) {
+      if (currentShopWithRole?.shop.type === ShopType.CENTER) {
+        setDefaultSelectShop(shops[0]);
+        setSelectShops(
+          filterCenter
+            ? shops.filter((item) => item.type === ShopType.CENTER)
+            : shops,
+        );
+      } else {
+        setDefaultSelectShop(currentShopWithRole?.shop);
+        const selectShop = shops.filter(
+          (item) => item._id === currentShopWithRole?.shop._id,
+        );
+        setSelectShops(selectShop);
+      }
+    } else {
+      requestGetShops();
+    }
+  }, [shops]);
+
+  return [defaultSelectShop as Shop, selectShops];
 }

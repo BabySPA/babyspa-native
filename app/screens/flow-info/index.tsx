@@ -20,6 +20,7 @@ import EvaluateCard, {
   EvaluateCardDialog,
 } from '~/app/components/info-cards/evaluate-card';
 import FollowUpCard from '~/app/components/info-cards/follow-up-card';
+import { PrintButton } from '~/app/components/print-button';
 
 export default function FlowInfo({
   navigation,
@@ -53,27 +54,11 @@ export default function FlowInfo({
         }
         rightElement={
           from == 'analyze' ? (
-            <Pressable
-              onPress={() => {
-                // TODO 打印
-              }}>
-              <Row
-                bgColor={'white'}
-                borderRadius={ss(4)}
-                px={ls(26)}
-                py={ss(10)}>
-                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
-                <Text
-                  color={'#03CBB2'}
-                  opacity={loading ? 0.6 : 1}
-                  fontSize={sp(14, { min: 12 })}>
-                  打印
-                </Text>
-              </Row>
-            </Pressable>
+            <PrintButton />
           ) : // 从评价详情进入，并且未评价
           from == 'evaluate-detail' && !evaluate ? (
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsEvaluateCardDialogShow(true);
               }}>

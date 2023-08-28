@@ -7,6 +7,7 @@ import {
   Image,
   useToast,
   Spinner,
+  Icon,
 } from 'native-base';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
@@ -18,6 +19,7 @@ import { DialogModal } from '~/app/components/modals';
 import { useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
@@ -30,13 +32,14 @@ export default function InfoBox(params: InfoBoxParams) {
     requestPatchUserPassword,
     requestGetUsers,
     requestDeleteUser,
+    updateCurrentUser,
   } = useManagerStore();
   const [isResetPassDialogOpen, setIsResetPassDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const toast = useToast();
   const navigation = useNavigation();
-
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <Column
       flex={1}
@@ -49,6 +52,7 @@ export default function InfoBox(params: InfoBoxParams) {
           title='员工信息'
           rightElement={
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsDeleteDialogOpen(true);
               }}
@@ -88,13 +92,35 @@ export default function InfoBox(params: InfoBoxParams) {
 
             <LabelBox
               title='密码'
-              value={maskString(decodePassword(currentUser?.password))}
+              value={
+                showPassword
+                  ? decodePassword(currentUser?.password as string)
+                  : maskString(decodePassword(currentUser?.password as string))
+              }
               rightElement={
                 <Pressable
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setIsResetPassDialogOpen(true);
                   }}>
                   <Row alignItems={'center'} ml={ls(40)}>
+                    <Pressable
+                      hitSlop={ss(10)}
+                      mr={ls(20)}
+                      onPress={() => {
+                        setShowPassword(!showPassword);
+                      }}>
+                      <Icon
+                        as={
+                          <Ionicons
+                            name={showPassword ? 'md-eye' : 'md-eye-off-sharp'}
+                          />
+                        }
+                        size={ss(22)}
+                        color={'#00B49E'}
+                      />
+                    </Pressable>
+
                     <Image
                       alt=''
                       source={require('~/assets/images/reset-pass.png')}
@@ -111,8 +137,11 @@ export default function InfoBox(params: InfoBoxParams) {
                       }}
                       onConfirm={function (): void {
                         requestPatchUserPassword(currentUser._id as string)
-                          .then(() => {
+                          .then(({ data }) => {
                             toastAlert(toast, 'success', '重置密码成功');
+                            updateCurrentUser({
+                              password: data.password,
+                            });
                           })
                           .catch(() => {
                             toastAlert(toast, 'error', '重置密码失败');
@@ -131,6 +160,7 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onPressCancel();
           }}>
@@ -147,6 +177,7 @@ export default function InfoBox(params: InfoBoxParams) {
           </Box>
         </Pressable>
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             params.onPressEdit();

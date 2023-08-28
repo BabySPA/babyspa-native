@@ -36,6 +36,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
         rightElement={
           edit && (
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 navigation.replace('Flow', {
                   type: CustomerStatus.ToBeAnalyzed,
@@ -117,7 +118,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                   mt={ss(20)}>
                   备注：
                   <Text fontSize={sp(16)} color='#333'>
-                    {item.remark}
+                    {item.remark || '未设置'}
                   </Text>
                 </Text>
               </Column>
@@ -130,7 +131,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             注意事项：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
-            {analyze.remark}
+            {analyze.remark || '未设置'}
           </Text>
         </Row>
 

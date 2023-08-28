@@ -19,7 +19,8 @@ import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import CustomerFollowUpItem from '../components/customer-followup-item';
-import SelectShop from '~/app/components/select-shop';
+import SelectShop, { useSelectShops } from '~/app/components/select-shop';
+import { ShopType } from '~/app/stores/manager/type';
 
 export default function FollowUpVisit() {
   const navigation = useNavigation();
@@ -49,6 +50,7 @@ export default function FollowUpVisit() {
             {customers.map((customer, idx) => {
               return (
                 <Pressable
+                  hitSlop={ss(10)}
                   ml={idx % 2 == 1 ? ss(20) : 0}
                   key={idx}
                   onPress={() => {
@@ -83,6 +85,8 @@ function Filter() {
     isOpen: false,
   });
 
+  const [defaultSelectShop, selectShops] = useSelectShops(true);
+
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
@@ -93,8 +97,10 @@ function Filter() {
             });
             requestGetFollowUps();
           }}
+          defaultButtonText={defaultSelectShop?.name}
           buttonHeight={ss(40)}
           buttonWidth={ls(160)}
+          shops={selectShops}
         />
         <Input
           autoCorrect={false}
@@ -122,6 +128,7 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -151,6 +158,7 @@ function Filter() {
           至
         </Text>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,

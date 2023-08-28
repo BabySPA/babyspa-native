@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 import { useNavigation } from '@react-navigation/native';
 import LabelBox from '~/app/components/label-box';
-import { RoleStatus } from '~/app/stores/manager/type';
+import { RoleStatus, ShopType } from '~/app/stores/manager/type';
 import { generateRuleAuthText } from '~/app/utils';
 
 interface InfoBoxParams {
@@ -43,6 +43,7 @@ export default function InfoBox(params: InfoBoxParams) {
           title='角色信息'
           rightElement={
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 setIsDeleteDialogOpen(true);
               }}
@@ -68,6 +69,10 @@ export default function InfoBox(params: InfoBoxParams) {
               title='状态'
               value={currentRole.status == RoleStatus.OPEN ? '启用' : '禁用'}
             />
+            <LabelBox
+              title='角色类型'
+              value={currentRole.type == ShopType.CENTER ? '中心' : '门店'}
+            />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox title='角色说明' value={currentRole?.description} />
@@ -82,6 +87,7 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onPressCancel();
           }}>
@@ -98,6 +104,7 @@ export default function InfoBox(params: InfoBoxParams) {
           </Box>
         </Pressable>
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             params.onPressEdit();

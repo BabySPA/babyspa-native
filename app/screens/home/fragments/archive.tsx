@@ -16,9 +16,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
-import SelectShop from '~/app/components/select-shop';
+import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import { debounce } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
+import { ShopType } from '~/app/stores/manager/type';
 
 export default function Archive() {
   const navigation = useNavigation();
@@ -28,6 +29,9 @@ export default function Archive() {
     updateCurrentArchiveCustomer,
   } = useFlowStore();
 
+  useEffect(() => {
+    requestCustomersArchive();
+  }, []);
   return (
     <Flex flex={1}>
       <Filter />
@@ -43,6 +47,7 @@ export default function Archive() {
             p={ss(20)}>
             {customers.map((customer, idx) => (
               <Pressable
+                hitSlop={ss(10)}
                 ml={idx % 3 == 0 ? 0 : ss(10)}
                 key={idx}
                 onPress={() => {
@@ -75,6 +80,8 @@ function Filter() {
     isOpen: false,
   });
 
+  const [defaultSelectShop, selectShops] = useSelectShops(true);
+
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
@@ -87,6 +94,8 @@ function Filter() {
           }}
           buttonHeight={ss(40)}
           buttonWidth={ls(160)}
+          shops={selectShops}
+          defaultButtonText={defaultSelectShop?.name}
         />
         <Input
           autoCorrect={false}
@@ -114,6 +123,7 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -143,6 +153,7 @@ function Filter() {
           至
         </Text>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -168,6 +179,7 @@ function Filter() {
           </Text>
         </Pressable>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             updateCurrentArchiveCustomer(DefaultRegisterCustomer);
             navigation.navigate('AddNewCustomer');

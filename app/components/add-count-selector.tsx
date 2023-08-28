@@ -14,6 +14,7 @@ export default function AddCountSelector({
   return (
     <>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           onSubtraction();
         }}>
@@ -27,6 +28,7 @@ export default function AddCountSelector({
         {count}
       </Text>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           onAddition();
         }}>

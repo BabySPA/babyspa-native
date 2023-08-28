@@ -3,32 +3,54 @@ import { ss, ls, sp } from '../utils/style';
 import { Icon } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import useManagerStore from '../stores/manager';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ShopType } from '../stores/manager/type';
 
 export default function SelectRole({
   onSelect,
+  type,
   defaultButtonText,
   buttonHeight,
   buttonWidth,
 }: {
   onSelect: (selectedItem: any, index: number) => void;
+  type: ShopType;
   defaultButtonText?: string;
   buttonHeight?: number;
   buttonWidth?: number;
 }) {
   const { roles, requestGetRoles } = useManagerStore();
 
+  const [filterRoles, setFilterRoles] = useState(roles);
+  const [defaultValue, setDefaultValue] = useState('');
+
   useEffect(() => {
     requestGetRoles();
   }, []);
 
+  useEffect(() => {
+    setFilterRoles(roles.filter((role) => role.type === type));
+  }, [type]);
+
+  useEffect(() => {
+    if (filterRoles.length > 0) {
+      const idx = filterRoles.findIndex((role) => role.name === defaultValue);
+      if (idx == -1) {
+        setDefaultValue('');
+      }
+    }
+  }, [filterRoles]);
+  useEffect(() => {
+    setDefaultValue(defaultButtonText || '');
+  }, [defaultButtonText]);
+
   return (
     <SelectDropdown
-      data={roles}
+      data={filterRoles}
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
-      defaultButtonText={defaultButtonText || '请选择角色'}
+      defaultButtonText={defaultValue || '请选择角色'}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.name;
       }}

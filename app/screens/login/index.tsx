@@ -117,6 +117,7 @@ export default function LoginScreen({
               }
               InputRightElement={
                 <Pressable
+                  hitSlop={ss(10)}
                   mr={ls(20)}
                   onPress={() => {
                     setShowPassword(!showPassword);
@@ -134,6 +135,7 @@ export default function LoginScreen({
               }
             />
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 onClickLogin();
               }}>
@@ -163,6 +165,7 @@ export default function LoginScreen({
 
             <Row mt={ss(20)} alignItems={'center'}>
               <Pressable
+                hitSlop={ss(10)}
                 onPress={() => {
                   setSelectAgreement(!selectAgreement);
                 }}>

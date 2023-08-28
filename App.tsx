@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { NativeBaseProvider, extendTheme } from 'native-base';
+import { NativeBaseProvider, ScrollView, extendTheme } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import useCachedResources from './app/hooks/use-cached-resources';

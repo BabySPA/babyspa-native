@@ -48,7 +48,7 @@ export default function ManagerShop({
               负责人
             </Text>
           </Row>
-          <Row w={ls(140)}>
+          <Row w={ls(200)}>
             <Text fontSize={sp(18)} color={'#333'}>
               所属区域
             </Text>
@@ -97,7 +97,7 @@ export default function ManagerShop({
                   {shop.maintainer}
                 </Text>
               </Row>
-              <Row w={ls(140)}>
+              <Row w={ls(200)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {shop.region}
                 </Text>
@@ -120,6 +120,7 @@ export default function ManagerShop({
               <Row w={ls(150)}>
                 <Row>
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
                       setCurrentShop(shop);
                       navigation.navigate('ShopDetail', { type: 'detail' });
@@ -136,6 +137,7 @@ export default function ManagerShop({
                     </Row>
                   </Pressable>
                   <Pressable
+                    hitSlop={ss(10)}
                     ml={ls(24)}
                     onPress={() => {
                       setCurrentShop(shop);
@@ -224,6 +226,7 @@ function Filter() {
         />
       </Row>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           setCurrentShop(DefaultShop);
           navigation.navigate('ShopDetail', { type: 'edit' });

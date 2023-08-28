@@ -14,7 +14,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
   const [isDone, setIsDone] = useState(true);
   const longPressTimer = useRef(null);
   const toast = useToast();
-  const [showRecordBox, setShowRecordBox] = useState(true);
+  const [showRecordBox, setShowRecordBox] = useState(false);
   const [recorder, setRecorder] = useState<Audio.Recording>();
   const {
     currentFlowCustomer,

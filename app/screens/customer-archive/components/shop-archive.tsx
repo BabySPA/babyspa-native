@@ -24,6 +24,7 @@ export function ShopArchive(params: ShopArchiveParams) {
         {params.archives.map((archive, idx) => {
           return (
             <Pressable
+              hitSlop={ss(10)}
               key={archive._id}
               w={ls(302)}
               onPress={() => {

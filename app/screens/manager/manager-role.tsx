@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import {
   Box,
   Column,
@@ -14,13 +14,10 @@ import { sp, ss, ls } from '~/app/utils/style';
 import { AppStackScreenProps, Gender } from '~/app/types';
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import useManagerStore, {
-  DefaultRole,
-  DefaultUser,
-} from '~/app/stores/manager';
-import SelectShop from '~/app/components/select-shop';
+import useManagerStore, { DefaultRole } from '~/app/stores/manager';
 import { useNavigation } from '@react-navigation/native';
-import { RoleStatus } from '~/app/stores/manager/type';
+import { Role, RoleStatus, ShopType } from '~/app/stores/manager/type';
+import { debounce } from 'lodash';
 
 export default function ManagerRole({
   navigation,
@@ -30,6 +27,19 @@ export default function ManagerRole({
   useEffect(() => {
     requestGetRoles();
   }, []);
+
+  const [filterRoles, setFilterRoles] = useState<Role[]>([]);
+
+  const [nameFilter, setNameFilter] = useState('');
+  useEffect(() => {
+    const filterRegex = new RegExp(nameFilter, 'i');
+    setFilterRoles(
+      roles.filter((role) => {
+        // 使用正则表达式进行模糊匹配
+        return filterRegex.test(role.name);
+      }),
+    );
+  }, [roles, nameFilter]);
 
   const List = () => {
     return (
@@ -57,6 +67,11 @@ export default function ManagerRole({
               状态
             </Text>
           </Row>
+          <Row w={ls(80)}>
+            <Text fontSize={sp(18)} color={'#333'}>
+              角色类型
+            </Text>
+          </Row>
           <Row w={ls(200)}>
             <Text fontSize={sp(18)} color={'#333'}>
               更新时间
@@ -68,7 +83,7 @@ export default function ManagerRole({
             </Text>
           </Row>
         </Row>
-        {roles.map((role, idx) => {
+        {filterRoles.map((role, idx) => {
           return (
             <Row
               key={idx}
@@ -97,6 +112,11 @@ export default function ManagerRole({
                   {role.status == RoleStatus.OPEN ? '启用' : '禁用'}
                 </Text>
               </Row>
+              <Row w={ls(80)}>
+                <Text fontSize={sp(18)} color={'#333'}>
+                  {role.type == ShopType.CENTER ? '中心' : '门店'}
+                </Text>
+              </Row>
               <Row w={ls(200)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {dayjs(role.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
@@ -105,6 +125,7 @@ export default function ManagerRole({
               <Row w={ls(150)}>
                 <Row>
                   <Pressable
+                    hitSlop={ss(10)}
                     onPress={() => {
                       setCurrentRole(role);
                       navigation.navigate('RoleDetail', { type: 'detail' });
@@ -121,6 +142,7 @@ export default function ManagerRole({
                     </Row>
                   </Pressable>
                   <Pressable
+                    hitSlop={ss(10)}
                     ml={ls(24)}
                     onPress={() => {
                       setCurrentRole(role);
@@ -167,7 +189,11 @@ export default function ManagerRole({
         flex={1}
         p={ss(10)}
         safeAreaBottom>
-        <Filter />
+        <Filter
+          onSearchChangeText={(text) => {
+            setNameFilter(text);
+          }}
+        />
         <Box mt={ss(10)}>
           <List />
         </Box>
@@ -176,13 +202,13 @@ export default function ManagerRole({
   );
 }
 
-function Filter() {
+function Filter({
+  onSearchChangeText,
+}: {
+  onSearchChangeText: (text: string) => void;
+}) {
   const navigation = useNavigation();
-  const {
-    setCurrentRole,
-    // userFilter,
-    // setUserFilter,
-  } = useManagerStore();
+  const { setCurrentRole } = useManagerStore();
 
   return (
     <Row
@@ -209,10 +235,13 @@ function Filter() {
             />
           }
           placeholder='请输入角色名称搜索'
-          onChangeText={(text) => {}}
+          onChangeText={debounce((text) => {
+            onSearchChangeText(text);
+          }, 1000)}
         />
       </Row>
       <Pressable
+        hitSlop={ss(10)}
         onPress={() => {
           setCurrentRole(DefaultRole);
           navigation.navigate('RoleDetail', { type: 'edit' });

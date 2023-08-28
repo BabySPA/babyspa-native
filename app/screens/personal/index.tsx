@@ -86,9 +86,9 @@ export default function Personal({
                   }
                   alignItems='center'
                   rightElement={
-                    <Row alignItems={'center'} ml={ls(26)}>
+                    <Row alignItems={'center'} ml={ls(18)}>
                       <Pressable
-                        mr={ls(20)}
+                        hitSlop={ss(10)}
                         onPress={() => {
                           setShowPassword(!showPassword);
                         }}>
@@ -105,6 +105,7 @@ export default function Personal({
                         />
                       </Pressable>
                       <Pressable
+                        hitSlop={ss(10)}
                         onPress={() => {
                           setIsResetPassDialogOpen(true);
                         }}>
@@ -154,6 +155,7 @@ export default function Personal({
           </Column>
           <Row justifyContent={'center'} mb={ss(60)}>
             <Pressable
+              hitSlop={ss(10)}
               onPress={() => {
                 logout();
               }}>

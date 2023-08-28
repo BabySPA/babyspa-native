@@ -1,7 +1,6 @@
 import {
   Box,
   Column,
-  Icon,
   Input,
   Radio,
   Row,
@@ -16,9 +15,11 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
-import SelectShop from '~/app/components/select-shop';
-import { Shop } from '~/app/stores/manager/type';
+import SelectShop, { useSelectShops } from '~/app/components/select-shop';
+import { Shop, ShopType } from '~/app/stores/manager/type';
 import SelectRole from '~/app/components/select-role';
+import useAuthStore from '~/app/stores/auth';
+import { RadioBox } from '~/app/components/radio';
 
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -38,6 +39,8 @@ export default function EditBox(params: EditBoxParams) {
   } = useManagerStore();
 
   const [tempUser, setTempUser] = useState(currentUser);
+
+  const [defaultSelect, selectShops] = useSelectShops(false);
 
   return (
     <Column
@@ -80,23 +83,20 @@ export default function EditBox(params: EditBoxParams) {
               required
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
-                <Radio.Group
-                  value={`${tempUser.gender}`}
-                  name='gender'
-                  flexDirection={'row'}
-                  onChange={(event) => {
+                <RadioBox
+                  margin={ss(20)}
+                  config={[
+                    { label: '男', value: 1 },
+                    { label: '女', value: 0 },
+                  ]}
+                  current={tempUser.gender}
+                  onChange={({ label, value }) => {
                     setTempUser({
                       ...(tempUser || {}),
-                      gender: +event,
+                      gender: +value,
                     });
-                  }}>
-                  <Radio colorScheme='green' value='1' size={'sm'}>
-                    男
-                  </Radio>
-                  <Radio colorScheme='green' value='0' ml={ls(40)} size={'sm'}>
-                    女
-                  </Radio>
-                </Radio.Group>
+                  }}
+                />
               }
             />
           </Row>
@@ -114,27 +114,31 @@ export default function EditBox(params: EditBoxParams) {
                         originalShopId: tempUser.shop?.shopId,
                         shopId: selectedItem._id as string,
                         name: selectedItem.name,
+                        type: selectedItem.type,
                       },
                     });
                   }}
-                  defaultButtonText={currentUser.shop?.name}
+                  defaultButtonText={tempUser.shop?.name}
                   buttonHeight={ss(40)}
                   buttonWidth={ls(380)}
+                  shops={selectShops}
                 />
               }
             />
             <FormBox
               required
-              title='角色'
+              title={'角色'}
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <SelectRole
+                  type={tempUser.shop?.type as ShopType}
                   onSelect={function (selectedItem): void {
                     setTempUser({
                       ...(tempUser || {}),
                       role: {
                         roleKey: selectedItem.roleKey,
                         name: selectedItem.name,
+                        type: selectedItem.type,
                       },
                     });
                   }}
@@ -257,6 +261,7 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
           }}>
@@ -274,6 +279,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          hitSlop={ss(10)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
