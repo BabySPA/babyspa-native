@@ -70,7 +70,9 @@ export type RootStackParamList = {
   };
   Modal: undefined;
   NotFound: undefined;
-  Camera: undefined;
+  Camera: {
+    type: 'lingual' | 'lefthand' | 'righthand' | 'other';
+  };
   ManagerLogger: undefined;
   ManagerShop: undefined;
   ManagerRole: undefined;
@@ -105,7 +107,9 @@ export type AppStackList = {
   FlowInfo: {
     from: FlowFrom;
   };
-  Camera: undefined;
+  Camera: {
+    type: 'lingual' | 'lefthand' | 'righthand' | 'other';
+  };
   ManagerLogger: undefined;
   ManagerShop: undefined;
   ManagerRole: undefined;

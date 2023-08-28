@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
 import SelectShop from '~/app/components/select-shop';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function Archive() {
@@ -40,10 +40,10 @@ export default function Archive() {
             bgColor='white'
             borderRadius={ss(10)}
             flexWrap={'wrap'}
-            p={ss(40)}>
+            p={ss(20)}>
             {customers.map((customer, idx) => (
               <Pressable
-                mr={(idx + 1) % 3 == 0 ? 0 : ss(15)}
+                ml={idx % 3 == 0 ? 0 : ss(10)}
                 key={idx}
                 onPress={() => {
                   updateCurrentArchiveCustomer(customer);

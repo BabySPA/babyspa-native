@@ -1,5 +1,4 @@
-import { Box, Column, Row, Text, Center, Icon, Pressable } from 'native-base';
-import { TextInput } from 'react-native';
+import { Box, Column, Row, Text, useToast } from 'native-base';
 import { ss, sp, ls } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import ImageBox from './image-box';
@@ -8,10 +7,15 @@ import RecordBox from './record-box';
 import DashedLine from 'react-native-dashed-line';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
-import { TemplateGroupKeys } from '~/app/constants';
+import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 import { useState } from 'react';
+import { toastAlert } from '~/app/utils/toast';
 
-export default function HealthInfo() {
+export default function HealthInfo({
+  selectedConfig,
+}: {
+  selectedConfig: FlowOperatorConfigItem;
+}) {
   const {
     addLingualImage,
     updateLingualImage,
@@ -22,11 +26,17 @@ export default function HealthInfo() {
     addOtherImage,
     updateOtherImage,
     updateCollection,
+    removeOtherImage,
+    removeLingualImage,
+    removeLeftHandImage,
+    removeRightHandImage,
     currentFlow: { collect },
   } = useFlowStore();
 
   const { getTemplateGroups } = useManagerStore();
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
+  const toast = useToast();
+
   return (
     <Row flex={1}>
       <Column flex={1}>
@@ -37,6 +47,9 @@ export default function HealthInfo() {
           <Box flex={1}>
             <Text
               onPress={() => {
+                if (selectedConfig.disabled) {
+                  return;
+                }
                 setIsOpenTemplatePicker(true);
               }}
               style={{
@@ -76,12 +89,9 @@ export default function HealthInfo() {
           icon={require('~/assets/images/notice.png')}
           mt={ss(10)}
           autoScroll={false}>
-          <Row>
+          <Row flex={1}>
             <Box flex={1}>
-              <Text fontSize={sp(12)} fontWeight={600} color='#333'>
-                录音
-              </Text>
-              <RecordBox />
+              <RecordBox edit={selectedConfig.disabled ? false : true} />
             </Box>
             <DashedLine
               axis='vertical'
@@ -95,6 +105,7 @@ export default function HealthInfo() {
                 其他
               </Text>
               <ImageBox
+                edit={selectedConfig.disabled ? false : true}
                 images={collect.healthInfo.otherImages}
                 selectedCallback={function (
                   filename: string,
@@ -109,13 +120,20 @@ export default function HealthInfo() {
                   filename: string,
                   uri: string,
                 ): void {
-                  throw new Error('Function not implemented.');
+                  addOtherImage({
+                    name: filename,
+                    uri: uri,
+                  });
                 }}
                 uploadCallback={function (filename: string, url: string): void {
                   updateOtherImage(filename, url);
                 }}
                 errorCallback={function (err: any): void {
-                  throw new Error('Function not implemented.');
+                  toastAlert(toast, 'error', '上传图片失败');
+                }}
+                type={'other'}
+                removedCallback={function (idx: number): void {
+                  removeOtherImage(idx);
                 }}
               />
             </Box>
@@ -127,6 +145,7 @@ export default function HealthInfo() {
           title={'舌部图片'}
           icon={require('~/assets/images/tongue.png')}>
           <ImageBox
+            edit={selectedConfig.disabled ? false : true}
             images={collect.healthInfo.lingualImage}
             selectedCallback={function (filename: string, uri: string): void {
               addLingualImage({
@@ -135,13 +154,20 @@ export default function HealthInfo() {
               });
             }}
             takePhotoCallback={function (filename: string, uri: string): void {
-              throw new Error('Function not implemented.');
+              addLingualImage({
+                name: filename,
+                uri: uri,
+              });
             }}
             uploadCallback={function (filename: string, url: string): void {
               updateLingualImage(filename, url);
             }}
             errorCallback={function (err: any): void {
-              throw new Error('Function not implemented.');
+              toastAlert(toast, 'error', '上传图片失败');
+            }}
+            type={'lingual'}
+            removedCallback={function (idx: number): void {
+              removeLingualImage(idx);
             }}
           />
         </BoxItem>
@@ -151,15 +177,12 @@ export default function HealthInfo() {
           mt={ss(10)}>
           <Row>
             <Box flex={1}>
-              <Row>
-                <Text
-                  mr={ls(10)}
-                  fontSize={sp(12)}
-                  fontWeight={600}
-                  color='#333'>
-                  左手
-                </Text>
+              <Text mr={ls(10)} fontSize={sp(12)} fontWeight={600} color='#333'>
+                左手
+              </Text>
+              <Row mt={ss(10)}>
                 <ImageBox
+                  edit={selectedConfig.disabled ? false : true}
                   images={collect.healthInfo.leftHandImages}
                   selectedCallback={function (
                     filename: string,
@@ -174,7 +197,10 @@ export default function HealthInfo() {
                     filename: string,
                     uri: string,
                   ): void {
-                    throw new Error('Function not implemented.');
+                    addLeftHandImage({
+                      name: filename,
+                      uri: uri,
+                    });
                   }}
                   uploadCallback={function (
                     filename: string,
@@ -183,7 +209,11 @@ export default function HealthInfo() {
                     updateLeftHandImage(filename, url);
                   }}
                   errorCallback={function (err: any): void {
-                    throw new Error('Function not implemented.');
+                    toastAlert(toast, 'error', '上传图片失败');
+                  }}
+                  type={'lefthand'}
+                  removedCallback={function (idx: number): void {
+                    removeLeftHandImage(idx);
                   }}
                 />
               </Row>
@@ -196,15 +226,12 @@ export default function HealthInfo() {
               style={{ marginHorizontal: ls(15) }}
             />
             <Box flex={1}>
-              <Row>
-                <Text
-                  mr={ls(10)}
-                  fontSize={sp(12)}
-                  fontWeight={600}
-                  color='#333'>
-                  右手
-                </Text>
+              <Text mr={ls(10)} fontSize={sp(12)} fontWeight={600} color='#333'>
+                右手
+              </Text>
+              <Row mt={ss(10)}>
                 <ImageBox
+                  edit={selectedConfig.disabled ? false : true}
                   images={collect.healthInfo.rightHandImages}
                   selectedCallback={function (
                     filename: string,
@@ -219,7 +246,10 @@ export default function HealthInfo() {
                     filename: string,
                     uri: string,
                   ): void {
-                    throw new Error('Function not implemented.');
+                    addRightHandImage({
+                      name: filename,
+                      uri: uri,
+                    });
                   }}
                   uploadCallback={function (
                     filename: string,
@@ -228,7 +258,11 @@ export default function HealthInfo() {
                     updateRightHandImage(filename, url);
                   }}
                   errorCallback={function (err: any): void {
-                    throw new Error('Function not implemented.');
+                    toastAlert(toast, 'error', '上传图片失败');
+                  }}
+                  type={'righthand'}
+                  removedCallback={function (idx: number): void {
+                    removeRightHandImage(idx);
                   }}
                 />
               </Row>

@@ -47,7 +47,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                   </Text>
 
                   <Text fontSize={sp(14)} color={'#999'} mt={ss(6)}>
-                    调理时间{' '}
+                    调理时间
                     {dayjs(latestCourse.updatedAt).format('YYYY-MM-DD')}
                   </Text>
                 </Pressable>
@@ -63,10 +63,11 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                   }}
                   key={idx}
                   w={ls(370)}
-                  maxH={ss(270)}
+                  maxH={ss(280)}
                   borderRadius={ss(4)}
                   borderWidth={1}
                   mr={ls(40)}
+                  pb={ss(20)}
                   borderColor={'#B1DAD5'}>
                   <Text
                     fontSize={sp(16)}

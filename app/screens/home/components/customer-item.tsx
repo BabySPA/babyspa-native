@@ -67,9 +67,9 @@ export default function CustomerItem({
       borderColor={'#15BD8F'}
       w={ls(467)}
       minH={ss(148)}
-      mb={ss(40)}
+      mb={ss(20)}
       justifyContent={'space-between'}>
-      <Row p={ss(20)} maxW={'80%'}>
+      <Row p={ss(20)} maxW={'70%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
             style={{ width: ss(60), height: ss(60) }}
@@ -90,7 +90,7 @@ export default function CustomerItem({
               color='#333'
               fontSize={sp(20)}
               fontWeight={400}
-              maxW={ls(200)}
+              maxW={ls(180)}
               numberOfLines={1}
               ellipsizeMode='tail'>
               {customer.name}

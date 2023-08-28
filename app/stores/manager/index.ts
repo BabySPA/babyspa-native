@@ -85,8 +85,15 @@ const useManagerStore = create(
     },
 
     // 门店
-    requestGetShops: async () => {
-      const { data } = await request.get('/shops?type=' + ShopType.SHOP);
+    requestGetShops: async (searchKeyword) => {
+      const params: any = {
+        type: ShopType.SHOP,
+      };
+      if (searchKeyword) {
+        params.search = searchKeyword;
+      }
+
+      const { data } = await request.get('/shops', { params });
       set((state) => {
         state.shops = data;
       });
@@ -231,11 +238,6 @@ const useManagerStore = create(
       });
     },
 
-    getCurrentSelectTemplateGroups: () => {
-      const idx = get().currentSelectTemplateIdx;
-      return get().templates[idx]?.groups;
-    },
-
     getCurrentSelectTemplateGroupItems: () => {
       const idx = get().currentSelectTemplateIdx;
       const itemIdx = get().currentSelectTemplateGroupIdx;
@@ -251,6 +253,23 @@ const useManagerStore = create(
       const { data } = await request.get('/templates');
       set((state) => {
         state.templates = data;
+      });
+    },
+
+    requestPatchTemplateGroup: async (group) => {
+      const idx = get().currentSelectTemplateIdx;
+      const template = get().templates[idx];
+
+      return request.patch(`/templates/${template._id}/group`, { ...group });
+    },
+
+    requestDeleteTemplateGroup: async (groupName) => {
+      const idx = get().currentSelectTemplateIdx;
+      const template = get().templates[idx];
+
+      console.log('template', template);
+      return request.delete(`/templates/${template._id}/group`, {
+        name: groupName,
       });
     },
 

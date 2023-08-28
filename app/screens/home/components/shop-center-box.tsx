@@ -18,7 +18,7 @@ export default function ShopCenterBox({
       <Row
         bgColor={'#fff'}
         minH={ss(128)}
-        w={ls(340)}
+        w={ls(330)}
         borderRadius={ss(8)}
         mr={ls(10)}
         mb={ss(10)}

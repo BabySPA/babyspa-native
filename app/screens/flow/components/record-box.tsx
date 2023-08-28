@@ -1,33 +1,26 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
-import {
-  Box,
-  Center,
-  Container,
-  Modal,
-  Pressable,
-  Row,
-  Text,
-} from 'native-base';
+import { Box, Center, Modal, ScrollView, Text, useToast } from 'native-base';
 import { useRef, useState } from 'react';
-import { Image, PanResponder } from 'react-native';
+import { Image, PanResponder, Vibration } from 'react-native';
 import { upload } from '~/app/api/upload';
 import SoundList from '~/app/components/sound-list';
 import useFlowStore from '~/app/stores/flow';
 import useOssStore from '~/app/stores/oss';
 import { ss, ls, sp } from '~/app/utils/style';
+import { toastAlert } from '~/app/utils/toast';
 
-export default function RecordBox({}) {
-  const [isLongPress, setIsLongPress] = useState(false);
+export default function RecordBox({ edit }: { edit: boolean }) {
   const [isDone, setIsDone] = useState(true);
   const longPressTimer = useRef(null);
-
-  const [showRecordBox, setShowRecordBox] = useState(false);
+  const toast = useToast();
+  const [showRecordBox, setShowRecordBox] = useState(true);
   const [recorder, setRecorder] = useState<Audio.Recording>();
   const {
     currentFlowCustomer,
     addAudioFile,
     updateAudioFile,
+    removeAudioFile,
     currentFlow: {
       collect: {
         healthInfo: { audioFiles },
@@ -35,10 +28,12 @@ export default function RecordBox({}) {
     },
   } = useFlowStore();
   const { getOssConfig } = useOssStore();
+  const [isTouchNow, setIsTouchNow] = useState(false);
 
   const startRecording = async () => {
     try {
       console.log('Requesting permissions..');
+      Vibration.vibrate(200);
 
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
@@ -46,6 +41,8 @@ export default function RecordBox({}) {
       });
 
       console.log('Starting recording..');
+      setShowRecordBox(true);
+
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY,
       );
@@ -90,6 +87,7 @@ export default function RecordBox({}) {
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: () => {
+      setIsTouchNow(true);
       if (isDone) {
         // 开始触摸时，设置一个计时器，判断是否长按
         // @ts-ignore
@@ -98,7 +96,6 @@ export default function RecordBox({}) {
             const permission = await Audio.requestPermissionsAsync();
             if (permission.status === 'granted') {
               await startRecording();
-              setShowRecordBox(true);
             } else {
               console.log('permission ==>', permission);
               // @ts-ignore
@@ -109,6 +106,8 @@ export default function RecordBox({}) {
             // @ts-ignore
             clearTimeout(longPressTimer.current);
             setShowRecordBox(false);
+          } finally {
+            setIsTouchNow(false);
           }
         }, 500); // 500毫秒为长按的时间阈值，可以根据需要调整
       }
@@ -135,6 +134,11 @@ export default function RecordBox({}) {
           clearTimeout(longPressTimer.current);
           setShowRecordBox(false);
           const { uri, duration } = await stopRecording();
+
+          if (duration < 1000) {
+            toastAlert(toast, 'error', '录音时间太短');
+            return;
+          }
           const recordType = uri.split('.').pop();
           const name = `${currentFlowCustomer.tag}-${
             currentFlowCustomer.flowId
@@ -160,41 +164,58 @@ export default function RecordBox({}) {
   return (
     <>
       <Center flex={1}>
-        {audioFiles.length > 0 ? (
-          <SoundList audioFiles={audioFiles} />
-        ) : (
-          <Center>
-            <Image
-              source={require('~/assets/images/empty-record.png')}
-              style={{
-                width: ls(180),
-                height: ss(80),
+        <ScrollView scrollEnabled={!showRecordBox}>
+          {audioFiles.length > 0 ? (
+            <SoundList
+              audioFiles={audioFiles}
+              edit={edit}
+              removedCallback={function (idx: number): void {
+                removeAudioFile(idx);
               }}
-              resizeMode='contain'
             />
-            <Text my={ss(15)} fontSize={sp(10)} color='#1E262F' opacity={0.4}>
-              您可以录下咳嗽等声音哦
-            </Text>
-          </Center>
-        )}
+          ) : (
+            <Center flex={1}>
+              <Image
+                source={require('~/assets/images/empty-record.png')}
+                style={{
+                  marginTop: ss(30),
+                  width: ls(180),
+                  height: ss(80),
+                }}
+                resizeMode='contain'
+              />
+              <Text my={ss(16)} fontSize={sp(10)} color='#1E262F' opacity={0.4}>
+                您可以录下咳嗽等声音哦
+              </Text>
+            </Center>
+          )}
+        </ScrollView>
       </Center>
-      <Center
-        {...panResponder.panHandlers}
-        borderRadius={ss(6)}
-        px={ls(20)}
-        py={ss(10)}
-        bg={{
-          linearGradient: {
-            colors: ['#22D59C', '#1AB7BE'],
-            start: [0, 0],
-            end: [1, 1],
-          },
+      {edit && (
+        <Center
+          {...panResponder.panHandlers}
+          borderRadius={ss(6)}
+          px={ls(20)}
+          py={ss(10)}
+          mt={ss(20)}
+          bg={{
+            linearGradient: {
+              colors: ['#22D59C', '#1AB7BE'],
+              start: [0, 0],
+              end: [1, 1],
+            },
+          }}
+          opacity={isTouchNow ? 0.5 : 1}>
+          <Text color='white' fontSize={sp(12)}>
+            按住录音
+          </Text>
+        </Center>
+      )}
+      <Modal
+        isOpen={showRecordBox}
+        onClose={() => {
+          setShowRecordBox(false);
         }}>
-        <Text color='white' fontSize={sp(12)}>
-          按住录音
-        </Text>
-      </Center>
-      <Modal isOpen={showRecordBox}>
         <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
           <ArrowBox />
           <Text color={'white'} mt={ss(30)}>

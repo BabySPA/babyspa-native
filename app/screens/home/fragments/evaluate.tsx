@@ -18,7 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/customer-item';
 import { CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 

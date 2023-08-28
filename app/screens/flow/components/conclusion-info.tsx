@@ -6,9 +6,13 @@ import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
-import { TemplateGroupKeys } from '~/app/constants';
+import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 
-export default function ConclusionInfo() {
+export default function ConclusionInfo({
+  selectedConfig,
+}: {
+  selectedConfig: FlowOperatorConfigItem;
+}) {
   const {
     currentFlow: { analyze },
     updateAnalyze,

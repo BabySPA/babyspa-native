@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { CustomerStatus, Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
 import LabelBox from './label-box';
@@ -50,7 +50,11 @@ export default function InfoBox(params: InfoBoxParams) {
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='过敏原' value={currentRegisterCustomer.allergy} />
+            <LabelBox
+              title='过敏原'
+              value={currentRegisterCustomer.allergy}
+              alignItems='flex-start'
+            />
             <LabelBox
               title='调理师'
               value={currentRegisterCustomer.operator?.name}

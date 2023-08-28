@@ -52,18 +52,13 @@ export default function Layout() {
           minW={ss(120)}
           minH={ss(120)}
           safeAreaLeft>
-          <Pressable
-            onPress={() => {
-              logout();
-            }}>
-            <Image
-              source={require('~/assets/images/logo.png')}
-              style={{
-                width: ss(60, { min: 45 }),
-                height: ss(60, { min: 45 }),
-              }}
-            />
-          </Pressable>
+          <Image
+            source={require('~/assets/images/logo.png')}
+            style={{
+              width: ss(60, { min: 45 }),
+              height: ss(60, { min: 45 }),
+            }}
+          />
           <Text
             fontSize={ls(20)}
             color={'white'}

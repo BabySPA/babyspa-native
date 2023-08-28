@@ -150,7 +150,7 @@ export default function CustomerArchive({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={sp(26)}
+              size={ss(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text ml={ls(16)} fontSize={sp(20)} color={'#666'}>
@@ -340,7 +340,7 @@ export default function CustomerArchive({
       <GrowthCurveModal
         isOpen={showEditGrowthCurve.isOpen}
         defaultHeight={showEditGrowthCurve.defaultHeight}
-        defaultWeight={showEditGrowthCurve.defaultHeight}
+        defaultWeight={showEditGrowthCurve.defaultWeight}
         onClose={function (): void {
           setShowEditGrowthCurve({
             isOpen: false,

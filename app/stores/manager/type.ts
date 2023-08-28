@@ -66,7 +66,7 @@ interface ShopState {
   shops: Shop[];
   currentShop: Shop;
   // request
-  requestGetShops: () => Promise<any>;
+  requestGetShops: (searchKeyword?: string) => Promise<any>;
   requestPostShop: () => Promise<any>;
   requestPatchShop: () => Promise<any>;
 
@@ -133,18 +133,22 @@ interface LogState {
 
 interface TemplateState {
   templates: Template[];
+
   currentSelectTemplateIdx: number;
   currentSelectTemplateGroupIdx: number;
 
   requestGetTemplates: () => Promise<any>;
+  requestPatchTemplateGroup: (
+    group: TemplateItem & { originalName?: string },
+  ) => Promise<any>;
+
+  requestDeleteTemplateGroup: (groupName: string) => Promise<any>;
 
   setCurrentSelectTemplateIdx: (idx: number) => void;
 
   setCurrentSelectTemplateGroupIdx: (idx: number) => void;
 
   getTemplateGroups: (groupKey: string) => Template | undefined;
-
-  getCurrentSelectTemplateGroups: () => TemplateItem[];
 
   getCurrentSelectTemplateGroupItems: () => string[];
 }

@@ -15,7 +15,7 @@ import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import CustomerFollowUpItem from '../components/customer-followup-item';

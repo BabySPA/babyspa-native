@@ -82,7 +82,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                 <Text fontSize={sp(18)} color='#999' noOfLines={4} maxW={'60%'}>
                   穴位：
                   <Text fontSize={sp(16)} color='#333'>
-                    {item.acupoint}
+                    {item.acupoint || '未设置'}
                   </Text>
                 </Text>
               </Row>

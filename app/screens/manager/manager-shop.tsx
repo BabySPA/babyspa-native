@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import {
   Box,
   Column,
@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import useManagerStore, { DefaultShop } from '~/app/stores/manager';
+import { debounce } from 'lodash';
 
 export default function ManagerShop({
   navigation,
@@ -191,7 +192,7 @@ export default function ManagerShop({
 
 function Filter() {
   const navigation = useNavigation();
-  const { setCurrentShop } = useManagerStore();
+  const { setCurrentShop, requestGetShops } = useManagerStore();
   return (
     <Row
       bgColor='white'
@@ -217,6 +218,9 @@ function Filter() {
             />
           }
           placeholder='请输入门店名称搜索'
+          onChangeText={debounce((text) => {
+            requestGetShops(text);
+          }, 1000)}
         />
       </Row>
       <Pressable

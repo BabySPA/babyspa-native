@@ -1,82 +1,125 @@
 import { Camera, CameraType } from 'expo-camera';
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect } from 'react';
+import { DeviceEventEmitter } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { useNavigation } from '@react-navigation/native';
+import { AppStackScreenProps } from '~/app/types';
+import {
+  Button,
+  Box,
+  Center,
+  Circle,
+  Image,
+  Text,
+  Pressable,
+} from 'native-base';
+import { sp, ss } from '~/app/utils/style';
 
-export default function CameraScreen() {
+const config = {
+  lingual: {
+    bg: require('~/assets/images/lingual.png'),
+    tip: '当前拍摄舌部照片，请将舌头对准以下位置',
+    width: ss(348),
+    height: ss(400),
+    mt: ss(102),
+  },
+  lefthand: {
+    bg: require('~/assets/images/lefthand.png'),
+    tip: '当前拍摄左手照片，请将左手对准以下位置',
+    width: ss(660),
+    height: ss(660),
+    mt: ss(60),
+  },
+  righthand: {
+    bg: require('~/assets/images/righthand.png'),
+    tip: '当前拍摄右手照片，请将右手对准以下位置',
+    width: ss(660),
+    height: ss(660),
+    mt: ss(60),
+  },
+  other: null,
+};
+
+export default function CameraScreen({
+  navigation,
+  route: {
+    params: { type },
+  },
+}: AppStackScreenProps<'Camera'>) {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   let cameraRef: Camera | null = null;
-  const navigation = useNavigation();
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-    return () => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    };
-  });
+
+  let flag = true;
+  // useEffect(() => {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+  //   return () => {
+  //     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+  //   };
+  // }, []);
 
   if (!permission) {
     // Camera permissions are still loading
-    return <View />;
+    return <Box />;
   }
 
   if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
-      <View style={styles.container}>
+      <Center>
         <Text style={{ textAlign: 'center' }}>
-          We need your permission to show the camera
+          需要授予相机权限才能使用此功能
         </Text>
-        <Button onPress={requestPermission} title='grant permission' />
-      </View>
+        <Button onPress={requestPermission}>授予权限</Button>
+      </Center>
     );
   }
 
   const takePhoto = async () => {
     if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
+      const photo = await cameraRef.takePictureAsync({ skipProcessing: true });
+      if (flag) {
+        flag = false;
+        DeviceEventEmitter.emit('event.take.photo', { photo, type });
+      }
     }
     navigation.goBack();
   };
 
   return (
-    <View style={styles.container}>
+    <Box flex={1}>
       <Camera
-        style={styles.camera}
+        style={{ flex: 1 }}
         type={CameraType.back}
-        ref={(ref) => (cameraRef = ref)}
-      >
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={takePhoto}>
-            <Text style={styles.text}>take photo</Text>
-          </TouchableOpacity>
-        </View>
+        ref={(ref) => (cameraRef = ref)}>
+        {config[type] && (
+          <Center height={'80%'}>
+            <Text color={'#fff'} fontSize={sp(16)}>
+              {config[type]?.tip}
+            </Text>
+            <Image
+              mt={config[type]?.mt}
+              source={config[type]?.bg}
+              width={config[type]?.width}
+              height={config[type]?.height}
+              alt=''
+            />
+          </Center>
+        )}
+        <Pressable
+          onPress={takePhoto}
+          alignItems={'center'}
+          flex={1}
+          mb={ss(60)}
+          justifyContent={'flex-end'}>
+          <Circle bgColor={'#fff'} size={ss(60)} opacity={0.8}>
+            <Circle
+              size={ss(50)}
+              bgColor={'#fff'}
+              borderWidth={ss(3)}
+              borderColor={'#333'}
+            />
+          </Circle>
+        </Pressable>
       </Camera>
-    </View>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-});

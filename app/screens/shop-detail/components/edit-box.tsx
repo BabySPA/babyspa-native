@@ -12,7 +12,7 @@ import {
   useToast,
   Spinner,
 } from 'native-base';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
@@ -20,7 +20,9 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
-
+// @ts-ignore
+import { AreaPicker } from 'react-native-pickers';
+import AreaJson from '~/app/constants/area.json';
 interface EditBoxParams {
   onEditFinish: () => void;
 }
@@ -38,6 +40,7 @@ export default function EditBox(params: EditBoxParams) {
   } = useManagerStore();
 
   const [tempShop, setTempShop] = useState(currentShop);
+  const areaPickerRef = useRef(null);
 
   return (
     <Column
@@ -133,7 +136,10 @@ export default function EditBox(params: EditBoxParams) {
               required
               form={
                 <Box flex={1}>
-                  <Pressable onPress={() => {}}>
+                  <Pressable
+                    onPress={() => {
+                      // @ts-ignore
+                    }}>
                     <Row
                       borderRadius={ss(10)}
                       justifyContent={'space-between'}
@@ -152,6 +158,14 @@ export default function EditBox(params: EditBoxParams) {
                       />
                     </Row>
                   </Pressable>
+                  {/* <AreaPicker
+                    areaJson={AreaJson}
+                    onPickerCancel={() => {}}
+                    onPickerConfirm={(value: any) => {
+                      alert(JSON.stringify(value));
+                    }}
+                    ref={areaPickerRef}
+                  /> */}
                 </Box>
               }
             />

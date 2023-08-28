@@ -50,6 +50,7 @@ export default function FlowScreen({
     requestGetInitializeData,
     requestPatchFlowToAnalyze,
     currentFlow: { collect },
+    updateCurrentArchiveCustomer,
   } = useFlowStore();
 
   const { requestGetTemplates } = useManagerStore();
@@ -109,7 +110,12 @@ export default function FlowScreen({
             <Text color={'#FFF'} fontWeight={400} fontSize={sp(20)} ml={ls(12)}>
               {currentFlowCustomer.phoneNumber}
             </Text>
-            <Pressable>
+            <Pressable
+              onPress={() => {
+                // 跳转到历史记录
+                updateCurrentArchiveCustomer(currentFlowCustomer);
+                navigation.navigate('CustomerArchive');
+              }}>
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
                 <Text color='#03CBB2'>历史记录</Text>
                 <Icon
@@ -174,7 +180,7 @@ export default function FlowScreen({
               borderRadius={ss(4)}
               borderColor={'#99A9BF'}
               borderWidth={1}
-              borderStyle={'solid'}>
+              borderRightWidth={1}>
               {configs.map((item, idx) => {
                 return (
                   <Pressable
@@ -191,9 +197,9 @@ export default function FlowScreen({
                           ? '#03CBB2'
                           : item.disabled
                           ? '#F1F1F1'
-                          : '#fff'
+                          : 'transparent'
                       }
-                      borderRightWidth={idx == configs.length - 1 ? 0 : 1}
+                      borderRightWidth={idx == configs.length - 1 ? 1 : 0}
                       borderRightColor={'#99A9BF'}>
                       <Text
                         fontSize={sp(20)}
@@ -351,10 +357,18 @@ export default function FlowScreen({
           )}
         </Row>
         <Box borderRadius={ss(10)} flex={1} mt={ss(10)}>
-          {selectedConfig.key == FlowOperatorKey.healthInfo && <HealthInfo />}
-          {selectedConfig.key == FlowOperatorKey.guidance && <Guidance />}
-          {selectedConfig.key == FlowOperatorKey.conclusions && <Conclusion />}
-          {selectedConfig.key == FlowOperatorKey.solution && <Solution />}
+          {selectedConfig.key == FlowOperatorKey.healthInfo && (
+            <HealthInfo selectedConfig={selectedConfig} />
+          )}
+          {selectedConfig.key == FlowOperatorKey.guidance && (
+            <Guidance selectedConfig={selectedConfig} />
+          )}
+          {selectedConfig.key == FlowOperatorKey.conclusions && (
+            <Conclusion selectedConfig={selectedConfig} />
+          )}
+          {selectedConfig.key == FlowOperatorKey.solution && (
+            <Solution selectedConfig={selectedConfig} />
+          )}
         </Box>
       </Box>
       <Modal

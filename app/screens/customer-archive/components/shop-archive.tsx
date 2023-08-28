@@ -21,7 +21,7 @@ export function ShopArchive(params: ShopArchiveParams) {
   return (
     <Box>
       <ScrollView horizontal mt={ss(30)}>
-        {params.archives.map((archive) => {
+        {params.archives.map((archive, idx) => {
           return (
             <Pressable
               key={archive._id}
@@ -33,7 +33,9 @@ export function ShopArchive(params: ShopArchiveParams) {
                 <Circle size={ss(20)} borderRadius={ss(18)} bgColor={'#DCEEED'}>
                   <Circle size={ss(12)} bgColor={'#5EACA3'} />
                 </Circle>
-                <Box w={'100%'} h={ss(1)} bgColor={'#DFE1DE'} />
+                {idx !== params.archives.length - 1 && (
+                  <Box w={'100%'} h={ss(1)} bgColor={'#DFE1DE'} />
+                )}
               </Row>
 
               <Text color='#5EACA3' fontSize={sp(16)} my={ss(10)}>

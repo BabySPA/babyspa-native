@@ -5,12 +5,13 @@ import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
 import { CustomerStatus } from '../../types';
-import { FlowState, FollowUp, FollowUpStatus } from './type';
+import { FlowState, FollowUp, FollowUpStatus, UpdatingImage } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { reject } from 'lodash';
 import { fuzzySearch } from '~/app/utils';
 import { ShopType } from '../manager/type';
+import useManagerStore from '../manager';
 
 const defaultRegisterAndCollection = {
   customers: [],
@@ -22,6 +23,7 @@ const defaultRegisterAndCollection = {
 };
 
 export const DefaultRegisterCustomer = {
+  id: '',
   name: '',
   nickname: '',
   gender: 1,
@@ -158,6 +160,8 @@ const useFlowStore = create(
       if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
         await get().requestGetEvaluateCustomers();
       }
+
+      useManagerStore.getState().requestGetTemplates();
     },
     requestAllCustomers: async (searchKeywords: string) => {
       const params: any = {
@@ -314,11 +318,12 @@ const useFlowStore = create(
         date,
       }: { height: number; weight: number; date: string },
     ) => {
-      const { data } = await request.put(
+      const { data } = await request.patch(
         `/customers/growth-curve/${customerId}`,
         {
           height,
           weight,
+          date,
         },
       );
       return data;
@@ -419,9 +424,7 @@ const useFlowStore = create(
           operatorId: customer.operator?.id,
         })
         .then(({ data }) => {
-          set((state) => {
-            state.currentRegisterCustomer = data;
-          });
+          get().updateCurrentRegisterCustomer(data);
           return data;
         });
     },
@@ -610,6 +613,12 @@ const useFlowStore = create(
       });
     },
 
+    removeLingualImage: (idx: number) => {
+      return set((state) => {
+        state.currentFlow.collect.healthInfo.lingualImage.splice(idx, 1);
+      });
+    },
+
     addOtherImage: (data) => {
       return set((state) => {
         state.currentFlow.collect.healthInfo.otherImages = [
@@ -629,6 +638,12 @@ const useFlowStore = create(
           },
         );
         state.currentFlow.collect.healthInfo.otherImages[idx] = url;
+      });
+    },
+
+    removeOtherImage: (idx: number) => {
+      return set((state) => {
+        state.currentFlow.collect.healthInfo.otherImages.splice(idx, 1);
       });
     },
 
@@ -655,6 +670,12 @@ const useFlowStore = create(
       });
     },
 
+    removeLeftHandImage: (idx: number) => {
+      return set((state) => {
+        state.currentFlow.collect.healthInfo.leftHandImages.splice(idx, 1);
+      });
+    },
+
     addRightHandImage: (data) => {
       return set((state) => {
         state.currentFlow.collect.healthInfo.rightHandImages = [
@@ -678,6 +699,12 @@ const useFlowStore = create(
       });
     },
 
+    removeRightHandImage: (idx: number) => {
+      return set((state) => {
+        state.currentFlow.collect.healthInfo.rightHandImages.splice(idx, 1);
+      });
+    },
+
     addAudioFile: (data) => {
       return set((state) => {
         state.currentFlow.collect.healthInfo.audioFiles = [
@@ -697,6 +724,12 @@ const useFlowStore = create(
           },
         );
         state.currentFlow.collect.healthInfo.audioFiles[idx].uri = url;
+      });
+    },
+
+    removeAudioFile: (idx: number) => {
+      return set((state) => {
+        state.currentFlow.collect.healthInfo.audioFiles.splice(idx, 1);
       });
     },
 

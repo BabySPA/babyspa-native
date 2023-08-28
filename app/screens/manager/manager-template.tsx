@@ -8,6 +8,7 @@ import {
   Pressable,
   Icon,
   Input,
+  useToast,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { AppStackScreenProps } from '~/app/types';
@@ -18,16 +19,23 @@ import BoxTitle from '~/app/components/box-title';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
-import { DialogModal } from '~/app/components/modals';
+import { DialogModal, NewTemplateModalModal } from '~/app/components/modals';
+import { toastAlert } from '~/app/utils/toast';
+import { debounce, set } from 'lodash';
+import { TemplateItem } from '~/app/stores/manager/type';
+import { PanResponder } from 'react-native';
 
 export default function ManagerTemplate({
   navigation,
 }: AppStackScreenProps<'ManagerTemplate'>) {
   const {
+    templates,
     currentSelectTemplateGroupIdx,
+    currentSelectTemplateIdx,
     requestGetTemplates,
+    requestPatchTemplateGroup,
+    requestDeleteTemplateGroup,
     setCurrentSelectTemplateGroupIdx,
-    getCurrentSelectTemplateGroups,
     getCurrentSelectTemplateGroupItems,
   } = useManagerStore();
 
@@ -35,16 +43,45 @@ export default function ManagerTemplate({
     requestGetTemplates();
   }, []);
 
+  const [groupFilter, setGroupFilter] = useState<string>('');
+
+  useEffect(() => {
+    const filterRegex = new RegExp(groupFilter, 'i');
+    const filteredGroups = templates[currentSelectTemplateIdx]?.groups?.filter(
+      (group) => {
+        // 使用正则表达式进行模糊匹配
+        return filterRegex.test(group.name);
+      },
+    );
+    setGroups(filteredGroups);
+  }, [templates, currentSelectTemplateIdx, groupFilter]);
+
   const [canEdit, setCanEdit] = useState(false);
-  const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
-  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState(false);
+  const [groups, setGroups] = useState<TemplateItem[]>([]);
+  const [showDeleteItemModal, setShowDeleteItemModal] = useState({
+    isOpen: false,
+    item: '',
+  });
+  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState({
+    isOpen: false,
+    groupName: '',
+  });
+  const [showEditTemplateModal, setShowEditTemplateModal] = useState({
+    isOpen: false,
+    isEdit: false,
+    type: 'group',
+    title: '',
+    defaultName: '',
+  });
 
+  const toast = useToast();
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderGrant: () => {
+      canEdit && setCanEdit(false);
+    },
+  });
   const swiperlistRef = useRef(null);
-
-  const closeRow = (rowMap: any, rowKey: any) => {
-    rowMap[rowKey]?.closeRow();
-  };
-
   return (
     <Box flex={1}>
       <NavigationBar
@@ -79,7 +116,13 @@ export default function ManagerTemplate({
                   rightElement={
                     <Pressable
                       onPress={() => {
-                        // TODO 新增模版
+                        setShowEditTemplateModal({
+                          isOpen: true,
+                          isEdit: false,
+                          type: 'group',
+                          title: '新增模版组',
+                          defaultName: '',
+                        });
                       }}>
                       <Row
                         bgColor={'#E1F6EF'}
@@ -115,19 +158,31 @@ export default function ManagerTemplate({
                   />
                 }
                 placeholder='搜索模版名称'
+                onChangeText={debounce((text) => {
+                  setGroupFilter(text);
+                }, 1000)}
               />
 
               <Box bg='white' flex={1} mt={ss(20)}>
                 <SwipeListView
                   ref={swiperlistRef}
-                  data={getCurrentSelectTemplateGroups()}
+                  data={groups}
                   keyExtractor={(item, index) => item.name}
                   renderItem={({ item, index }) => {
                     return (
                       <Box>
                         <Pressable
-                          onLongPress={() => {
+                          onPress={() => {
                             setCurrentSelectTemplateGroupIdx(index);
+                          }}
+                          onLongPress={() => {
+                            setShowEditTemplateModal({
+                              isOpen: true,
+                              isEdit: true,
+                              type: 'group',
+                              title: '编辑模版组',
+                              defaultName: item.name,
+                            });
                           }}
                           alignItems='flex-start'
                           bg={
@@ -161,9 +216,10 @@ export default function ManagerTemplate({
                         bg='red.500'
                         justifyContent='center'
                         onPress={() => {
-                          // setShowDeleteTemplateModal(true);
-                          // @ts-ignore
-                          closeRow(rowMap, rowData.item.name);
+                          setShowDeleteTemplateModal({
+                            isOpen: true,
+                            groupName: rowData.item.name,
+                          });
                         }}
                         alignItems='center'
                         _pressed={{
@@ -181,17 +237,23 @@ export default function ManagerTemplate({
                 />
               </Box>
 
-              <Text textAlign={'center'} fontSize={sp(14)} color={'#999'}>
-                长按组名或模版支持编辑，左滑支持删除
+              <Text
+                textAlign={'center'}
+                fontSize={sp(14)}
+                color={'#999'}
+                mb={ss(20)}>
+                长按组名或模版项支持编辑，左滑支持删除
               </Text>
             </Column>
             <Column
+              {...panResponder.panHandlers}
               flex={1}
               ml={ls(10)}
               bgColor={'#fff'}
               borderRadius={ss(10)}
               p={ss(20)}>
               <BoxTitle title='模版详情' />
+
               <Row mt={ss(28)}>
                 {getCurrentSelectTemplateGroupItems().map(
                   (item: any, index: any) => {
@@ -214,7 +276,10 @@ export default function ManagerTemplate({
                             <Pressable
                               onPress={() => {
                                 // 删除
-                                setShowDeleteItemModal(true);
+                                setShowDeleteItemModal({
+                                  isOpen: true,
+                                  item: item,
+                                });
                               }}>
                               <Icon
                                 ml={ls(10)}
@@ -224,33 +289,6 @@ export default function ManagerTemplate({
                                 size={ss(20)}
                                 color='#FB6459'
                               />
-                              <DialogModal
-                                isOpen={showDeleteItemModal}
-                                onClose={function (): void {
-                                  setShowDeleteItemModal(false);
-                                }}
-                                title='是否确认删除模版？'
-                                onConfirm={function (): void {
-                                  setShowDeleteItemModal(false);
-
-                                  // requestPatchCustomerStatus({
-                                  //   status: CustomerStatus.Canceled,
-                                  //   type: 'register',
-                                  // })
-                                  //   .then(async (res) => {
-                                  //     // 取消成功
-                                  //     toastAlert(toast, 'success', '取消成功！');
-                                  //     await requestGetInitializeData();
-                                  //   })
-                                  //   .catch((err) => {
-                                  //     // 取消失败
-                                  //     toastAlert(toast, 'error', '取消失败！');
-                                  //   })
-                                  //   .finally(() => {
-                                  //     setLoading(false);
-                                  //   });
-                                }}
-                              />
                             </Pressable>
                           )}
                         </Row>
@@ -258,37 +296,151 @@ export default function ManagerTemplate({
                     );
                   },
                 )}
+                <Pressable
+                  onPress={() => {
+                    setShowEditTemplateModal({
+                      isOpen: true,
+                      isEdit: false,
+                      title: '新增模版',
+                      type: 'item',
+                      defaultName: '',
+                    });
+                  }}
+                  mr={ls(10)}
+                  mb={ss(10)}
+                  borderWidth={1}
+                  borderRadius={2}
+                  borderColor={'#D8D8D8'}
+                  px={ls(20)}
+                  py={ss(7)}>
+                  <Text color='#BCBCBC'>+ 自定义添加</Text>
+                </Pressable>
               </Row>
             </Column>
           </Row>
         </Box>
       </Column>
-
       <DialogModal
-        isOpen={showDeleteTemplateModal}
+        isOpen={showDeleteTemplateModal.isOpen}
         onClose={function (): void {
-          setShowDeleteTemplateModal(false);
+          setShowDeleteTemplateModal({
+            isOpen: false,
+            groupName: '',
+          });
         }}
-        title='是否确认删除整个模版组？'
+        title={`是否确认删除${showDeleteTemplateModal.groupName}整个模版组？`}
         onConfirm={function (): void {
-          setShowDeleteTemplateModal(false);
+          requestDeleteTemplateGroup(showDeleteTemplateModal.groupName)
+            .then((res) => {
+              toastAlert(
+                toast,
+                'success',
+                `删除模版组${showDeleteTemplateModal.groupName}成功！`,
+              );
+              requestGetTemplates();
+            })
+            .catch((err) => {
+              toastAlert(
+                toast,
+                'error',
+                `删除模版组${showDeleteTemplateModal.groupName}失败！`,
+              );
+            })
+            .finally(() => {
+              setShowDeleteTemplateModal({
+                isOpen: false,
+                groupName: '',
+              });
+            });
+        }}
+      />
+      <NewTemplateModalModal
+        title={showEditTemplateModal.title}
+        isOpen={showEditTemplateModal.isOpen}
+        defaultName={showEditTemplateModal.defaultName}
+        type={showEditTemplateModal.type === 'group' ? 'group' : 'item'}
+        onClose={function (): void {
+          setShowEditTemplateModal({
+            isOpen: false,
+            isEdit: false,
+            type: 'group',
+            title: '',
+            defaultName: '',
+          });
+        }}
+        onConfirm={function (text: string): void {
+          const group: any = {};
 
-          // requestPatchCustomerStatus({
-          //   status: CustomerStatus.Canceled,
-          //   type: 'register',
-          // })
-          //   .then(async (res) => {
-          //     // 取消成功
-          //     toastAlert(toast, 'success', '取消成功！');
-          //     await requestGetInitializeData();
-          //   })
-          //   .catch((err) => {
-          //     // 取消失败
-          //     toastAlert(toast, 'error', '取消失败！');
-          //   })
-          //   .finally(() => {
-          //     setLoading(false);
-          //   });
+          if (showEditTemplateModal.type === 'group') {
+            group.name = text;
+            group.children = getCurrentSelectTemplateGroupItems();
+            if (showEditTemplateModal.isEdit) {
+              group.originalName = showEditTemplateModal.defaultName;
+            }
+          } else {
+            group.name = groups[currentSelectTemplateGroupIdx].name;
+            group.children = getCurrentSelectTemplateGroupItems().concat(text);
+          }
+
+          requestPatchTemplateGroup(group)
+            .then((res) => {
+              toastAlert(
+                toast,
+                'success',
+                showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
+              );
+              requestGetTemplates();
+            })
+            .catch((err) => {
+              toastAlert(
+                toast,
+                'error',
+                showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
+              );
+            })
+            .finally(() => {
+              setShowEditTemplateModal({
+                isOpen: false,
+                isEdit: false,
+                type: 'group',
+                title: '',
+                defaultName: '',
+              });
+            });
+        }}
+      />
+      <DialogModal
+        isOpen={showDeleteItemModal.isOpen}
+        onClose={function (): void {
+          setShowDeleteItemModal({
+            isOpen: false,
+            item: '',
+          });
+        }}
+        title='是否确认删除模版项？'
+        onConfirm={function (): void {
+          const currentGroup = groups[currentSelectTemplateGroupIdx];
+          const group: any = {
+            name: currentGroup.name,
+            children: getCurrentSelectTemplateGroupItems().filter(
+              (child) => child !== showDeleteItemModal.item,
+            ),
+          };
+
+          requestPatchTemplateGroup(group)
+            .then((res) => {
+              toastAlert(toast, 'success', '删除模板项成功！');
+              requestGetTemplates();
+            })
+            .catch((err) => {
+              toastAlert(toast, 'error', '删除模板项失败！');
+            })
+            .finally(() => {
+              setShowDeleteItemModal({
+                isOpen: false,
+                item: '',
+              });
+            });
         }}
       />
     </Box>

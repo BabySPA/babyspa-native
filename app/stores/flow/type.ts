@@ -192,18 +192,19 @@ export interface FlowState {
 
   addLingualImage: (updating: UpdatingImage) => void;
   updateLingualImage: (name: string, url: string) => void;
-
+  removeLingualImage: (idx: number) => void;
   addLeftHandImage: (updating: UpdatingImage) => void;
   updateLeftHandImage: (name: string, url: string) => void;
-
+  removeLeftHandImage: (idx: number) => void;
   addRightHandImage: (updating: UpdatingImage) => void;
   updateRightHandImage: (name: string, url: string) => void;
-
+  removeRightHandImage: (idx: number) => void;
   addOtherImage: (updating: UpdatingImage) => void;
   updateOtherImage: (name: string, url: string) => void;
-
+  removeOtherImage: (idx: number) => void;
   addAudioFile: (updating: UpdatingAudioFile) => void;
   updateAudioFile: (name: string, url: string) => void;
+  removeAudioFile: (idx: number) => void;
 
   addSolutionApplication: (application: Application) => void;
   updateSolutionApplication: (application: Application, idx: number) => void;

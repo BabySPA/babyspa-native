@@ -12,19 +12,29 @@ import { getHeightComparsionText, getWeightComparsionText } from '~/app/utils';
 import { ls, ss, sp } from '~/app/utils/style';
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
-import { GridComponent } from 'echarts/components';
-import { SVGRenderer, SkiaChart } from '@wuba/react-native-echarts';
+import {
+  GridComponent,
+  DataZoomComponent,
+  TooltipComponent,
+} from 'echarts/components';
+import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 
-echarts.use([SVGRenderer, LineChart, GridComponent]);
+echarts.use([
+  SVGRenderer,
+  LineChart,
+  GridComponent,
+  DataZoomComponent,
+  TooltipComponent,
+]);
 
 interface GrowthCurveParams {
   growthCurves: GrowthCurveStatisticsResponse[];
   onEditClick: (item: GrowthCurveStatisticsResponse) => void;
 }
 export function GrowthCurve(params: GrowthCurveParams) {
-  const skiaRef = useRef<any>(null);
+  const svgRef = useRef<any>(null);
   const { growthCurves, onEditClick } = params;
 
   // 获取最大高度
@@ -262,7 +272,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
             color: '#18A0FB',
             width: 2, // 设置线的宽度
           },
-          symbol: 'none',
+
           data: growthCurves.map((item) => item.heightData.height),
         },
         {
@@ -273,7 +283,6 @@ export function GrowthCurve(params: GrowthCurveParams) {
             color: '#2FC25B',
             width: 2, // 设置线的宽度
           },
-          symbol: 'none',
           data: growthCurves.map((item) => item.heightData.heightStandard),
         },
       ],
@@ -299,7 +308,6 @@ export function GrowthCurve(params: GrowthCurveParams) {
         data: growthCurves.map((item) => {
           return dayjs(item.date).format('YYYY-MM-DD');
         }),
-
         axisLine: {
           lineStyle: {
             color: '#DCDFE6', // 设置X轴刻度线的颜色为红色
@@ -346,7 +354,6 @@ export function GrowthCurve(params: GrowthCurveParams) {
             color: '#FAA037',
             width: 2, // 设置线的宽度
           },
-          symbol: 'none',
           data: growthCurves.map((item) => item.weightData.weight),
         },
         {
@@ -357,7 +364,6 @@ export function GrowthCurve(params: GrowthCurveParams) {
             color: '#2FC25B',
             width: 2, // 设置线的宽度
           },
-          symbol: 'none',
           data: growthCurves.map((item) => item.weightData.weightStandard),
         },
       ],
@@ -366,8 +372,8 @@ export function GrowthCurve(params: GrowthCurveParams) {
 
   useEffect(() => {
     let chart: any;
-    if (skiaRef.current) {
-      chart = echarts.init(skiaRef.current, 'light', {
+    if (svgRef.current) {
+      chart = echarts.init(svgRef.current, 'light', {
         renderer: 'svg',
         height: ss(306),
         width: ls(1046),
@@ -471,7 +477,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
             标准值
           </Text>
         </Row>
-        <SkiaChart ref={skiaRef} useRNGH />
+        <SvgChart ref={svgRef} />
       </Column>
       <List />
     </ScrollView>

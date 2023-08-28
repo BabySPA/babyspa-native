@@ -1,5 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon } from 'native-base';
 import { Image } from 'react-native';
 import { Customer } from '~/app/stores/flow/type';
@@ -20,7 +20,7 @@ export default function CustomerArchiveItem({
       borderStyle={'dashed'}
       borderWidth={1}
       borderColor={'#15BD8F'}
-      w={ls(312)}
+      w={ls(322)}
       minH={ss(128)}
       mb={ss(20)}
       justifyContent={'space-between'}>

@@ -16,7 +16,11 @@ import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import { SolutionDefault, TemplateGroupKeys } from '~/app/constants';
+import {
+  FlowOperatorConfigItem,
+  SolutionDefault,
+  TemplateGroupKeys,
+} from '~/app/constants';
 import SelectDay, { getDay } from '~/app/components/select-day';
 import AddCountSelector from '~/app/components/add-count-selector';
 import { TemplateModal } from '~/app/components/modals';
@@ -24,7 +28,11 @@ import useManagerStore from '~/app/stores/manager';
 import SelectTimeLength from '~/app/components/select-time-length';
 import { FollowUpStatus } from '~/app/stores/flow/type';
 
-export default function SolutionInfo() {
+export default function SolutionInfo({
+  selectedConfig,
+}: {
+  selectedConfig: FlowOperatorConfigItem;
+}) {
   const {
     currentFlow,
     updateSolutionMassage,
@@ -140,7 +148,7 @@ export default function SolutionInfo() {
                             template={getTemplateGroups(
                               TemplateGroupKeys['application-acupoint'],
                             )}
-                            defaultText={remark}
+                            defaultText={item.acupoint}
                             isOpen={showAcupointModal}
                             onClose={function (): void {
                               setShowAcupointModal(false);

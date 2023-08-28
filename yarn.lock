@@ -3338,6 +3338,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/picker@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "@react-native-community/picker@npm:1.8.1"
+  peerDependencies:
+    react: ^16.0
+    react-native: ">=0.57"
+  checksum: a38132feb910ea2f79acbdeda523a17641b8eb27d83f62f4a8932f2699e16227f05ce1006f2ba833f10d6054250f88cb3be8b915c4c912c7fd38ff0a2aaf2a55
+  languageName: node
+  linkType: hard
+
 "@react-native/assets@npm:1.0.0":
   version: 1.0.0
   resolution: "@react-native/assets@npm:1.0.0"
@@ -3990,31 +4000,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/react-native-skia@npm:0.1.172":
-  version: 0.1.172
-  resolution: "@shopify/react-native-skia@npm:0.1.172"
-  dependencies:
-    "@types/pixelmatch": ^5.2.4
-    "@types/pngjs": ^6.0.1
-    "@types/ws": ^8.5.3
-    canvaskit-wasm: 0.38.0
-    pixelmatch: ^5.3.0
-    pngjs: ^6.0.0
-    react-reconciler: ^0.27.0
-    ws: ^8.11.0
-  peerDependencies:
-    react: ">=18.0"
-    react-native: ">=0.64"
-    react-native-reanimated: ">=2.0.0"
-  peerDependenciesMeta:
-    react-native-reanimated:
-      optional: true
-  bin:
-    setup-skia-web: scripts/setup-canvaskit.js
-  checksum: 469526c9c8b884bc9abda9e456e96f61dadd4883b52bcaf9f6ee0a52cac3f669b3a1167c0c1abc3573ac2422b90352d99914458050975406631d1d9f33e12787
-  languageName: node
-  linkType: hard
-
 "@sideway/address@npm:^4.1.3":
   version: 4.1.4
   resolution: "@sideway/address@npm:4.1.4"
@@ -4186,24 +4171,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pixelmatch@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "@types/pixelmatch@npm:5.2.4"
-  dependencies:
-    "@types/node": "*"
-  checksum: 8920c3b7df22851ad69192fb7637206cb8f7dc73520f602202e36dd6f6b7701a4b56746175e7d7391ed9dc2c636d4d9bc5d7bd26fc3f1b11df1a63fb86418b91
-  languageName: node
-  linkType: hard
-
-"@types/pngjs@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "@types/pngjs@npm:6.0.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: 5673a301c81edc6cfcf5c969d743c2e4f79c28e85d24c261be36273d557b131a98b35d9c79a00dc968f206cc7f73b603e261c6a6f7066c99ed98874299f369b9
-  languageName: node
-  linkType: hard
-
 "@types/prop-types@npm:*":
   version: 15.7.5
   resolution: "@types/prop-types@npm:15.7.5"
@@ -4215,26 +4182,6 @@ __metadata:
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
   checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
-  languageName: node
-  linkType: hard
-
-"@types/react-native-modern-datepicker@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@types/react-native-modern-datepicker@npm:1.0.1"
-  dependencies:
-    "@types/react": "*"
-  checksum: 9d52d2932de326f58dff3d9a3120e5332e420942e255f8c72a8d03c8b43f73206f812212a82ee6ae5e1bad076820a06fe9df08570cd9602c43b21619f15f39d8
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:*":
-  version: 18.2.18
-  resolution: "@types/react@npm:18.2.18"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 2e0d75de2b618e76780019e52478b1bec2b015a9187aea30f84518c0c3ddc639055bdfea50864aece937bad0cb0544d0100b80d30f5461e72fbc1c3c0be8b140
   languageName: node
   linkType: hard
 
@@ -4267,15 +4214,6 @@ __metadata:
   version: 4.0.2
   resolution: "@types/tough-cookie@npm:4.0.2"
   checksum: e055556ffdaa39ad85ede0af192c93f93f986f4bd9e9426efdc2948e3e2632db3a4a584d4937dbf6d7620527419bc99e6182d3daf2b08685e710f2eda5291905
-  languageName: node
-  linkType: hard
-
-"@types/ws@npm:^8.5.3":
-  version: 8.5.5
-  resolution: "@types/ws@npm:8.5.5"
-  dependencies:
-    "@types/node": "*"
-  checksum: d00bf8070e6938e3ccf933010921c6ce78ac3606696ce37a393b27a9a603f7bd93ea64f3c5fa295a2f743575ba9c9a9fdb904af0f5fe2229bf2adf0630386e4a
   languageName: node
   linkType: hard
 
@@ -4963,12 +4901,11 @@ __metadata:
     "@expo/vector-icons": ^13.0.0
     "@react-native-async-storage/async-storage": 1.17.11
     "@react-native-community/datetimepicker": 6.7.3
+    "@react-native-community/picker": ^1.8.1
     "@react-navigation/native": ^6.0.2
     "@react-navigation/native-stack": ^6.9.13
-    "@shopify/react-native-skia": 0.1.172
     "@types/lodash": ^4.14.197
     "@types/react": ~18.0.14
-    "@types/react-native-modern-datepicker": ^1.0.1
     "@wuba/react-native-echarts": all
     axios: ^1.4.0
     dayjs: ^1.11.9
@@ -4995,7 +4932,7 @@ __metadata:
     immer: ^10.0.2
     jest: ^29.2.1
     jest-expo: ~48.0.0
-    lodash.debounce: ^4.0.8
+    lodash: ^4.17.21
     native-base: ^3.4.28
     patch-package: ^7.0.0
     prettier: ^3.0.0
@@ -5006,11 +4943,11 @@ __metadata:
     react-native-dotenv: ^3.4.9
     react-native-gesture-handler: ~2.9.0
     react-native-mime-types: ^2.4.0
+    react-native-pickers: ^2.0.0
     react-native-safe-area-context: 4.5.0
     react-native-screens: ~3.20.0
     react-native-svg: 13.4.0
     react-native-swipe-list-view: ^3.2.9
-    react-native-table-component: ^1.2.2
     react-native-web: ~0.18.10
     react-test-renderer: 18.2.0
     typescript: ^4.9.4
@@ -5380,13 +5317,6 @@ __metadata:
   version: 1.0.30001518
   resolution: "caniuse-lite@npm:1.0.30001518"
   checksum: 1b63272f6e3d628ac52e2547e0b75fc477004d4b19b63e34b2c045de7f2e48909f9ea513978fc5a46c4ab5ac6c9daf9cc5e6a78466e90684fb824c3f2105e8f5
-  languageName: node
-  linkType: hard
-
-"canvaskit-wasm@npm:0.38.0":
-  version: 0.38.0
-  resolution: "canvaskit-wasm@npm:0.38.0"
-  checksum: 5a743d7623187949241e1b18aa2bb43016dc837fa903594921afed4afb6b58032bccf81a30cdf71e23f185fc3827864f8ce780799c38de5325492a0fe2425e4e
   languageName: node
   linkType: hard
 
@@ -11103,17 +11033,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pixelmatch@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "pixelmatch@npm:5.3.0"
-  dependencies:
-    pngjs: ^6.0.0
-  bin:
-    pixelmatch: bin/pixelmatch
-  checksum: f542713d89536551181ad9ddb666a1792ba00a8632d831093232a075cb3ccac05856e7a453ed7d0a41aaef64dcb5962e8ae5cbe646dd2761790d8ee51b0a0743
-  languageName: node
-  linkType: hard
-
 "pkg-dir@npm:^3.0.0":
   version: 3.0.0
   resolution: "pkg-dir@npm:3.0.0"
@@ -11163,13 +11082,6 @@ __metadata:
   version: 5.0.0
   resolution: "pngjs@npm:5.0.0"
   checksum: 04e912cc45fb9601564e2284efaf0c5d20d131d9b596244f8a6789fc6cdb6b18d2975a6bbf7a001858d7e159d5c5c5dd7b11592e97629b7137f7f5cef05904c8
-  languageName: node
-  linkType: hard
-
-"pngjs@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "pngjs@npm:6.0.0"
-  checksum: ab6c285086060087097eab9fe6b5a528a24f9e79c03dea2b4fd6264ed4fdb5beff4a3257eeeaf2a9dc18249b539609c2a4e4013c567164a1f6b5ba2c974d5ecb
   languageName: node
   linkType: hard
 
@@ -11559,6 +11471,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-pickers@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "react-native-pickers@npm:2.0.0"
+  checksum: 04900ea42195eab5d00fed62db587e6114c7e08b94dc75c98b70d927ce758002e34de38e88dff359a73ff23c4e97ca64f29370645b9521358f3a7f17738f94a5
+  languageName: node
+  linkType: hard
+
 "react-native-safe-area-context@npm:4.5.0":
   version: 4.5.0
   resolution: "react-native-safe-area-context@npm:4.5.0"
@@ -11603,13 +11522,6 @@ __metadata:
     react: ">=0.14.8"
     react-native: ">=0.23.1"
   checksum: e6fa7f60bcdffdffe0567144e01f4e53b78eff2dfb7f5bad0f560336d039afc5b02603281b5ef0c8b0de86f1cd94c50f943676f25c3f42cc390bedb02df9536d
-  languageName: node
-  linkType: hard
-
-"react-native-table-component@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "react-native-table-component@npm:1.2.2"
-  checksum: 906a0ae3b23bcf4a98237d07853bb416feb3d512a4f28e758470a3c45154f15e92445d57ef272e3c3c24c7355ec6ccbf6b53e7ce917ed1964b9f973084d88c46
   languageName: node
   linkType: hard
 
@@ -11674,18 +11586,6 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: fe887c1b8bded23f9efea9dc10a8a8b2f32147e06418fc9a78294944874797abb0185ebcb0fdc5ce88046280bca72264ae8d119f4ca681a3e0bc502d0f75bfbe
-  languageName: node
-  linkType: hard
-
-"react-reconciler@npm:^0.27.0":
-  version: 0.27.0
-  resolution: "react-reconciler@npm:0.27.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    scheduler: ^0.21.0
-  peerDependencies:
-    react: ^18.0.0
-  checksum: c2ae111f150c2a46970182df12ea8254719fdfec5e26574711b1838fc37863c63671460a351570fd359c088d891e7bb0ff89023c2f7c1582393b57dd517b92c2
   languageName: node
   linkType: hard
 
@@ -12143,15 +12043,6 @@ __metadata:
   dependencies:
     xmlchars: ^2.2.0
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.21.0":
-  version: 0.21.0
-  resolution: "scheduler@npm:0.21.0"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: 4f8285076041ed2c81acdd1faa987f1655fdbd30554bc667c1ea64743fc74fb3a04ca7d27454b3d678735df5a230137a3b84756061b43dc5796e80701b66d124
   languageName: node
   linkType: hard
 

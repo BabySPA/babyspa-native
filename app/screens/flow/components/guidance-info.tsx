@@ -6,9 +6,13 @@ import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
-import { TemplateGroupKeys } from '~/app/constants';
+import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 
-export default function GuidanceInfo() {
+export default function GuidanceInfo({
+  selectedConfig,
+}: {
+  selectedConfig: FlowOperatorConfigItem;
+}) {
   const {
     currentFlow: { collect },
     updateCollection,
@@ -41,6 +45,7 @@ export default function GuidanceInfo() {
                 color: '#999',
               }}
               value={collect.guidance}
+              editable={selectedConfig.disabled ? false : true}
               onChangeText={(text) => {
                 updateCollection({
                   guidance: text,
@@ -98,12 +103,14 @@ export default function GuidanceInfo() {
                 <Pressable
                   key={idx}
                   onPress={() => {
-                    updateCollection({
-                      guidance:
-                        collect.guidance.trim().length > 0
-                          ? collect.guidance + ',' + item
-                          : item,
-                    });
+                    if (!selectedConfig.disabled) {
+                      updateCollection({
+                        guidance:
+                          collect.guidance.trim().length > 0
+                            ? collect.guidance + ',' + item
+                            : item,
+                      });
+                    }
                   }}>
                   <Box
                     px={ls(20)}

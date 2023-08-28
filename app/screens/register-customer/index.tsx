@@ -71,14 +71,22 @@ export default function RegisterCustomerScreen({
                     });
                   }
                 })
-                .catch(() => {
-                  toastAlert(
-                    toast,
-                    'error',
-                    isRegister
-                      ? '登记失败，请检查客户信息是否正确！'
-                      : '快速采集客户信息失败！',
-                  );
+                .catch((err) => {
+                  if (err.code === 30004) {
+                    toastAlert(
+                      toast,
+                      'error',
+                      '当前客户正在流程中，不可登记。',
+                    );
+                  } else {
+                    toastAlert(
+                      toast,
+                      'error',
+                      isRegister
+                        ? '登记失败，请检查客户信息是否正确！'
+                        : '快速采集客户信息失败！',
+                    );
+                  }
                 })
                 .finally(() => {
                   setLoading(false);

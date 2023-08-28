@@ -100,7 +100,7 @@ export default function Personal({
                               }
                             />
                           }
-                          size={sp(22)}
+                          size={ss(22)}
                           color={'#00B49E'}
                         />
                       </Pressable>
@@ -152,6 +152,31 @@ export default function Personal({
               </Row>
             </Box>
           </Column>
+          <Row justifyContent={'center'} mb={ss(60)}>
+            <Pressable
+              onPress={() => {
+                logout();
+              }}>
+              <Row
+                alignItems={'center'}
+                justifyContent={'center'}
+                w={ls(260)}
+                h={ss(50)}
+                mt={ss(50)}
+                borderRadius={ss(30)}
+                bg={{
+                  linearGradient: {
+                    colors: ['#22D59C', '#1AB7BE'],
+                    start: [0, 0],
+                    end: [1, 1],
+                  },
+                }}>
+                <Text color='#fff' fontSize={sp(18)}>
+                  退出登录
+                </Text>
+              </Row>
+            </Pressable>
+          </Row>
         </Column>
       </Row>
     </Box>

@@ -24,8 +24,7 @@ export default function BoxItem({
       borderRadius={ss(10)}
       mt={mt ?? 0}
       px={ss(20)}
-      py={ss(18)}
-    >
+      py={ss(18)}>
       <TitleBar title={title} icon={icon} />
       {autoScroll ? <ScrollView>{children}</ScrollView> : children}
     </Box>

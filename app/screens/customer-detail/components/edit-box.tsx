@@ -22,6 +22,9 @@ import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
 import { CustomerStatus } from '~/app/types';
 import SelectOperator from '~/app/components/select-operator';
+import { TemplateModal } from '~/app/components/modals';
+import useManagerStore from '~/app/stores/manager';
+import { TemplateGroupKeys } from '~/app/constants';
 
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -57,6 +60,9 @@ export default function EditBox(params: EditBoxParams) {
   };
 
   let currentSelectBirthday = tempCustomer.birthday;
+  const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
+
+  const { templates, getTemplateGroups } = useManagerStore();
 
   return (
     <Column
@@ -211,24 +217,47 @@ export default function EditBox(params: EditBoxParams) {
                 title='过敏原'
                 style={{ flex: 1 }}
                 form={
-                  <Input
-                    autoCorrect={false}
-                    defaultValue={tempCustomer.allergy}
-                    w={ls(380)}
-                    h={ss(48, { min: 26 })}
-                    py={ss(10)}
-                    px={ls(20)}
-                    onChangeText={(text) => {
-                      setTempCustomer({
-                        ...tempCustomer,
-                        allergy: text,
-                      });
-                    }}
-                    placeholderTextColor={'#CCC'}
-                    color={'#333333'}
-                    fontSize={sp(16, { min: 12 })}
-                    placeholder='请输入'
-                  />
+                  <Box w={'70%'}>
+                    <Pressable
+                      onPress={() => {
+                        setIsOpenTemplatePicker(true);
+                      }}>
+                      <Row
+                        borderRadius={ss(4)}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        borderWidth={1}
+                        borderColor={'#D8D8D8'}
+                        py={ss(10)}
+                        pl={ss(20)}
+                        pr={ss(8)}>
+                        <Text
+                          color={'#333'}
+                          fontSize={sp(16, { min: 12 })}
+                          maxW={ls(240)}>
+                          {currentRegisterCustomer.allergy || '请选择或输入'}
+                        </Text>
+                        <Icon
+                          as={<FontAwesome name='angle-down' />}
+                          size={ss(18, { min: 15 })}
+                          color='#999'
+                        />
+                      </Row>
+
+                      <TemplateModal
+                        defaultText={tempCustomer.allergy || ''}
+                        template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                        isOpen={isOpenTemplatePicker}
+                        onClose={function (): void {
+                          setIsOpenTemplatePicker(false);
+                        }}
+                        onConfirm={function (text): void {
+                          updateCurrentRegisterCustomer({ allergy: text });
+                          setIsOpenTemplatePicker(false);
+                        }}
+                      />
+                    </Pressable>
+                  </Box>
                 }
               />
             )}

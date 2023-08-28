@@ -1,15 +1,21 @@
-import { Column, Pressable, Row, Text } from 'native-base';
+import { Column, Icon, Pressable, Row, Text } from 'native-base';
 import { Image } from 'react-native';
 import { ss, ls, sp } from '../utils/style';
 import { UpdatingAudioFile } from '../stores/flow/type';
-import { useEffect, useRef } from 'react';
 import { Audio } from 'expo-av';
+import { AntDesign } from '@expo/vector-icons';
 
 interface SoundListProps {
   audioFiles: UpdatingAudioFile[];
+  edit: boolean;
+  removedCallback: (index: number) => void;
 }
 
-export default function SoundList({ audioFiles }: SoundListProps) {
+export default function SoundList({
+  audioFiles,
+  edit = false,
+  removedCallback = (idx) => {},
+}: SoundListProps) {
   async function playSound(uri: string) {
     const { sound: playbackObject } = await Audio.Sound.createAsync(
       { uri },
@@ -18,12 +24,12 @@ export default function SoundList({ audioFiles }: SoundListProps) {
     const status = playbackObject.playAsync();
 
     status.then((res) => {
-      console.log('playbackObject.playAsync() finished', res.isLoaded);
+      console.log('playbackObject.playAsync() finished', res);
     });
   }
 
   return (
-    <Column>
+    <Column mt={ss(10)}>
       {audioFiles.map((audioFile, idx) => {
         return (
           <Pressable
@@ -37,18 +43,33 @@ export default function SoundList({ audioFiles }: SoundListProps) {
               borderColor={'#A4D4D6'}
               borderWidth={1}
               alignItems={'center'}
+              justifyContent={'space-between'}
               w={ls(253)}
               p={ss(10)}>
-              <Image
-                source={require('~/assets/images/signal.png')}
-                style={{
-                  width: ss(20),
-                  height: ss(20),
-                }}
-              />
-              <Text color='#000000' fontSize={sp(18)} ml={ls(10)}>
-                {Math.floor(audioFile.duration / 1000)} "
-              </Text>
+              <Row alignItems={'center'}>
+                <Image
+                  source={require('~/assets/images/signal.png')}
+                  style={{
+                    width: ss(20),
+                    height: ss(20),
+                  }}
+                />
+                <Text color='#000000' fontSize={sp(18)} ml={ls(10)}>
+                  {Math.floor(audioFile.duration / 1000)} "
+                </Text>
+              </Row>
+              {edit && (
+                <Pressable
+                  onPress={() => {
+                    removedCallback(idx);
+                  }}>
+                  <Icon
+                    as={<AntDesign name={'delete'} />}
+                    size={ss(20)}
+                    color='#99A9BF'
+                  />
+                </Pressable>
+              )}
             </Row>
           </Pressable>
         );

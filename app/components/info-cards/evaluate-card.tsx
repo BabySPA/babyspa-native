@@ -31,6 +31,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   let {
     currentFlow: { evaluate },
     requestPutFlowToEvaluate,
+    requestGetEvaluateCustomers,
   } = useFlowStore();
 
   const toast = useToast();
@@ -86,8 +87,9 @@ export default function EvaluateCard(params: EvaluateCardParams) {
       }
       setLoading(true);
       requestPutFlowToEvaluate(templateEvaluate)
-        .then((res) => {
+        .then(async (res) => {
           toastAlert(toast, 'success', '评价成功！');
+          await requestGetEvaluateCustomers();
         })
         .catch((e) => {
           console.log('评价失败', e);

@@ -18,7 +18,7 @@ import CustomerItem from '../components/customer-item';
 import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import DatePickerModal from '~/app/components/date-picker-modal';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 
 import dayjs from 'dayjs';
 
@@ -53,7 +53,6 @@ export default function Register() {
                 key={idx}
                 onPress={() => {
                   updateCurrentRegisterCustomer(customer);
-
                   navigation.navigate('CustomerDetail');
                 }}>
                 <CustomerItem customer={customer} type={OperateType.Register} />

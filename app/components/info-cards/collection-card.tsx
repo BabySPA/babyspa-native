@@ -4,8 +4,9 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import SoundList from '../sound-list';
+import PreviewImage from '../preview-image';
 
 interface CollectionCardParams {
   style?: StyleProp<ViewStyle>;
@@ -40,18 +41,7 @@ export default function CollectionCard(params: CollectionCardParams) {
             舌象：
           </Text>
           {collect.healthInfo.lingualImage.map((item, idx) => {
-            return (
-              <Image
-                key={idx}
-                style={{
-                  width: ss(100),
-                  height: ss(100),
-                }}
-                source={item}
-                contentFit='cover'
-                transition={1000}
-              />
-            );
+            return <PreviewImage source={item as string} key={idx} />;
           })}
         </Row>
         <Row mt={ss(20)}>
@@ -59,18 +49,7 @@ export default function CollectionCard(params: CollectionCardParams) {
             左手手相：
           </Text>
           {collect.healthInfo.leftHandImages.map((item, idx) => {
-            return (
-              <Image
-                key={idx}
-                style={{
-                  width: ss(100),
-                  height: ss(100),
-                }}
-                source={item}
-                contentFit='cover'
-                transition={1000}
-              />
-            );
+            return <PreviewImage source={item as string} key={idx} />;
           })}
         </Row>
         <Row mt={ss(20)}>
@@ -78,18 +57,7 @@ export default function CollectionCard(params: CollectionCardParams) {
             右手手相：
           </Text>
           {collect.healthInfo.rightHandImages.map((item, idx) => {
-            return (
-              <Image
-                key={idx}
-                style={{
-                  width: ss(100),
-                  height: ss(100),
-                }}
-                source={item}
-                contentFit='cover'
-                transition={1000}
-              />
-            );
+            return <PreviewImage source={item as string} key={idx} />;
           })}
         </Row>
         <Row mt={ss(20)}>
@@ -97,7 +65,13 @@ export default function CollectionCard(params: CollectionCardParams) {
             录音：
           </Text>
           {collect.healthInfo.audioFiles.length > 0 ? (
-            <SoundList audioFiles={collect.healthInfo.audioFiles} />
+            <SoundList
+              audioFiles={collect.healthInfo.audioFiles}
+              edit={false}
+              removedCallback={function (index: number): void {
+                console.log(index);
+              }}
+            />
           ) : (
             <Text fontSize={sp(18)} color='#333'>
               暂无录音

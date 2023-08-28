@@ -5,7 +5,7 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { getAge } from '~/app/utils';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 interface RegisterCardParams {
   style?: StyleProp<ViewStyle>;
@@ -31,11 +31,19 @@ export default function RegisterCard(params: RegisterCardParams) {
         />
         <Column ml={ss(20)}>
           <Row alignItems={'center'}>
-            <Text fontSize={ss(24)} color={'#333'}>
-              {currentFlowCustomer.name}({currentFlowCustomer.nickname})
+            <Text
+              fontSize={ss(22)}
+              color={'#333'}
+              maxW={ls(160)}
+              ellipsizeMode='tail'
+              numberOfLines={1}>
+              {currentFlowCustomer.name}{' '}
+              {currentFlowCustomer.nickname && (
+                <Text>({currentFlowCustomer.nickname})</Text>
+              )}
             </Text>
             <Icon
-              ml={ss(20)}
+              ml={ss(12)}
               as={
                 <MaterialCommunityIcons
                   name={
@@ -45,13 +53,13 @@ export default function RegisterCard(params: RegisterCardParams) {
                   }
                 />
               }
-              size={sp(26)}
+              size={ss(26)}
               color={currentFlowCustomer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
-            <Text fontSize={sp(20)} color={'#666'} ml={ss(20)}>
+            <Text fontSize={sp(20)} color={'#666'} ml={ss(12)}>
               {age?.year}岁{age?.month}月
             </Text>
-            <Text fontSize={sp(20)} color={'#03CBB2'} ml={ss(20)}>
+            <Text fontSize={sp(20)} color={'#03CBB2'} ml={ss(12)}>
               {currentFlowCustomer.phoneNumber}
             </Text>
           </Row>
@@ -65,12 +73,11 @@ export default function RegisterCard(params: RegisterCardParams) {
                 )}
               </Text>
             </Text>
-            <Text fontSize={sp(18)} color='#999' ml={ls(30)}>
-              门店：
-              <Text color='#333'>{currentFlowCustomer.shop?.name}</Text>
-            </Text>
           </Row>
-
+          <Text fontSize={sp(18)} color='#999' mt={ss(16)}>
+            门店：
+            <Text color='#333'>{currentFlowCustomer.shop?.name}</Text>
+          </Text>
           <Row alignItems={'center'} mt={ss(16)}>
             <Text fontSize={sp(18)} color='#999'>
               登记号码：
