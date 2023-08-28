@@ -32,7 +32,6 @@ export default function RecordBox({ edit }: { edit: boolean }) {
 
   const startRecording = async () => {
     try {
-      console.log('Requesting permissions..');
       Vibration.vibrate(200);
 
       await Audio.setAudioModeAsync({
@@ -40,14 +39,12 @@ export default function RecordBox({ edit }: { edit: boolean }) {
         playsInSilentModeIOS: true,
       });
 
-      console.log('Starting recording..');
       setShowRecordBox(true);
 
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY,
       );
       setRecorder(recording);
-      console.log('Recording started', recording);
     } catch (err) {
       console.error('Failed to start recording', err);
     }
@@ -55,14 +52,12 @@ export default function RecordBox({ edit }: { edit: boolean }) {
 
   const stopRecording = (): Promise<{ uri: string; duration: number }> => {
     return new Promise(async (resolve, reject) => {
-      console.log('Stopping recording..', recorder);
       if (recorder) {
         await recorder.stopAndUnloadAsync();
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: false,
         });
         const uri = recorder.getURI();
-        console.log('Recording stopped and stored at', uri);
 
         if (uri) {
           const sound = new Audio.Sound();
@@ -118,7 +113,6 @@ export default function RecordBox({ edit }: { edit: boolean }) {
         if (showRecordBox && dy < -200) {
           try {
             setShowRecordBox(false);
-            console.log(recorder);
             await stopRecording();
           } catch (error) {
             console.log('stopRecording error ==>', error);

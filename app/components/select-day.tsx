@@ -38,6 +38,7 @@ export default function SelectDay({
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
+      defaultValue={defaultButtonText}
       defaultButtonText={defaultButtonText}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.name;
@@ -82,7 +83,7 @@ export default function SelectDay({
         fontSize: sp(16, { min: 12 }),
       }}
       selectedRowStyle={{
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#CBEDE2',
       }}
     />
   );

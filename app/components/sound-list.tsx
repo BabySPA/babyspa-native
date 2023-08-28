@@ -8,7 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 interface SoundListProps {
   audioFiles: UpdatingAudioFile[];
   edit: boolean;
-  removedCallback: (index: number) => void;
+  removedCallback?: (index: number) => void;
 }
 
 export default function SoundList({

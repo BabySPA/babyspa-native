@@ -155,7 +155,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
                   onPress={() => {
                     updateCurrentRegisterCustomer({
                       name: item.name,
-                      nickname: item.birthday,
+                      nickname: item.nickname,
                       gender: item.gender,
                       birthday: item.birthday,
                       phoneNumber: item.phoneNumber,

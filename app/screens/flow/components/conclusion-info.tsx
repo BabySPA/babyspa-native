@@ -3,21 +3,30 @@ import BoxItem from './box-item';
 import { Pressable, TextInput } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
+import { Flow, FlowArchive } from '~/app/stores/flow/type';
+import DashedLine from 'react-native-dashed-line';
+import dayjs from 'dayjs';
 
 export default function ConclusionInfo({
   selectedConfig,
 }: {
   selectedConfig: FlowOperatorConfigItem;
 }) {
-  const {
-    currentFlow: { analyze },
-    updateAnalyze,
-  } = useFlowStore();
+  const { currentFlow, updateAnalyze, requestCustomerArchiveHistory } =
+    useFlowStore();
 
+  const [analyzeHistory, setAnalyzeHistory] = useState<FlowArchive[]>([]);
+
+  useEffect(() => {
+    if (currentFlow.customerId)
+      requestCustomerArchiveHistory(currentFlow.customerId).then((res) => {
+        setAnalyzeHistory(res);
+      });
+  }, [currentFlow.customerId]);
   const { templates, getTemplateGroups } = useManagerStore();
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
@@ -44,7 +53,7 @@ export default function ConclusionInfo({
                 fontSize: sp(14),
                 color: '#999',
               }}
-              value={analyze.conclusion}
+              value={currentFlow.analyze.conclusion}
               onChangeText={(text) => {
                 updateAnalyze({ conclusion: text });
               }}
@@ -56,8 +65,7 @@ export default function ConclusionInfo({
           title={'分析记录'}
           icon={require('~/assets/images/guidance.png')}>
           <Box flex={1} pt={ss(10)}>
-            {/* TODO */}
-            {/* {currentFlow.conclusions.map((item, idx) => {
+            {analyzeHistory.map((item, idx) => {
               return (
                 <Row key={idx} alignItems={'flex-start'}>
                   <Column alignItems={'center'}>
@@ -67,7 +75,7 @@ export default function ConclusionInfo({
                       borderRadius={ss(5)}
                       bgColor={'#5EACA3'}
                     />
-                    {idx !== currentFlow.conclusions.length - 1 && (
+                    {analyzeHistory.length - 1 !== idx && (
                       <DashedLine
                         axis='vertical'
                         dashLength={ss(2)}
@@ -88,16 +96,16 @@ export default function ConclusionInfo({
                         {dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm')}
                       </Text>
                       <Text color='#333' fontSize={sp(18)} mt={ss(7)}>
-                        {item.content}
+                        {item.analyze?.conclusion}
                       </Text>
                     </Column>
                     <Text color='#BCBCBC' fontSize={sp(18)}>
-                      {item.operator.name}
+                      {item.analyze?.operator?.name}
                     </Text>
                   </Row>
                 </Row>
               );
-            })} */}
+            })}
           </Box>
         </BoxItem>
       </Column>
@@ -153,8 +161,8 @@ export default function ConclusionInfo({
                   onPress={() => {
                     updateAnalyze({
                       conclusion:
-                        analyze.conclusion.trim().length > 0
-                          ? analyze.conclusion + ',' + item
+                        currentFlow.analyze.conclusion.trim().length > 0
+                          ? currentFlow.analyze.conclusion + ',' + item
                           : item,
                     });
                   }}>

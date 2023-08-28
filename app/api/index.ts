@@ -71,6 +71,7 @@ class Request {
           const { logout } = useAuthStore.getState();
           logout();
         }
+        console.log(response);
         return Promise.reject(response.data);
       },
     );

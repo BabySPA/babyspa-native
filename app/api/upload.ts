@@ -30,7 +30,6 @@ export async function upload(
         },
       })
       .then((res) => {
-        console.log('upload success', res);
         if (res?.status === 200) {
           resolve(oss.host + '/' + key);
         } else {
@@ -38,8 +37,6 @@ export async function upload(
         }
       })
       .catch((err) => {
-        console.log('upload fail', err);
-
         reject(err);
       });
   });

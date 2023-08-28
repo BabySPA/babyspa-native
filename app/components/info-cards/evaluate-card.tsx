@@ -94,7 +94,6 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           await requestGetEvaluateCustomers();
         })
         .catch((e) => {
-          console.log('评价失败', e);
           toastAlert(toast, 'error', '评价失败！请稍后重试。');
         })
         .finally(() => {

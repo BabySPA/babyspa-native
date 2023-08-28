@@ -62,6 +62,7 @@ const SelectDropdown = (
   const disabledInternalSearch = !!onChangeSearchInputText;
   /* ******************* hooks ******************* */
   const { dropdownButtonRef, dropDownFlatlistRef } = useRefs();
+
   const {
     dataArr, //
     selectedItem,

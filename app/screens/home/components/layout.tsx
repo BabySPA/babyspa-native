@@ -1,11 +1,22 @@
-import { Box, Center, Flex, Text, Pressable, Icon, Row } from 'native-base';
+import {
+  Box,
+  Center,
+  Flex,
+  Text,
+  Pressable,
+  Icon,
+  Row,
+  Modal,
+  Spinner,
+} from 'native-base';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
 import useLayoutConfigWithRole from '~/app/stores/layout';
 import useAuthStore from '~/app/stores/auth';
-import { FontAwesome } from '@expo/vector-icons';
 import SelectUser from '~/app/components/select-user';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { set } from 'lodash';
 
 export default function Layout() {
   const {
@@ -22,9 +33,11 @@ export default function Layout() {
   const currentSelectedModule = getLayoutConfig()[currentSelected];
 
   const Fragment = () => {
-    return currentSelectedModule.features[
-      currentSelectedModule.featureSelected
-    ].fragment?.();
+    return (
+      currentSelectedModule.features[
+        currentSelectedModule.featureSelected
+      ].fragment?.() ?? null
+    );
   };
 
   const NoTabFragment = () => {
@@ -32,6 +45,8 @@ export default function Layout() {
       ? currentSelectedModule.fragment()
       : null;
   };
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <Flex
@@ -141,10 +156,26 @@ export default function Layout() {
           </Pressable>
           <SelectUser
             style={{ marginTop: ss(4) }}
-            onSelect={function (selectedItem: any): void {
-              changeCurrentShopWithRole(selectedItem);
+            onSelect={async function (selectedItem: any) {
+              setLoading(true);
+              changeCurrentShopWithRole(selectedItem)
+                .then(() => {})
+                .finally(() => {
+                  setTimeout(() => {
+                    setLoading(false);
+                  }, 1000);
+                });
             }}
           />
+          <Modal
+            isOpen={loading}
+            onClose={() => {
+              setLoading(false);
+            }}>
+            <Row alignItems={'center'}>
+              <Spinner size={sp(40)} color='#fff' />
+            </Row>
+          </Modal>
         </Center>
       </Box>
       <Flex direction='column' flex={1}>

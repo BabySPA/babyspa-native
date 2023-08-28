@@ -3,7 +3,7 @@ import { MANAGER_API_URL } from '@env';
 
 const Environment = {
   api: {
-    manager: 'http://192.168.110.211:4000/manager',
+    manager: 'http://121.36.108.137:4000/manager',
   },
 };
 

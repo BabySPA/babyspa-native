@@ -26,6 +26,7 @@ export default function SelectShop({
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
+      defaultValue={defaultButtonText}
       defaultButtonText={defaultButtonText || '请选择门店'}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.name;
@@ -70,7 +71,7 @@ export default function SelectShop({
         fontSize: sp(16, { min: 12 }),
       }}
       selectedRowStyle={{
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#CBEDE2',
       }}
     />
   );

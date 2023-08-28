@@ -468,7 +468,6 @@ export function ChangePasswordModal({
               <Pressable
                 hitSlop={ss(10)}
                 onPress={() => {
-                  console.log(decodePassword(password), originalPassword);
                   if (decodePassword(password) !== originalPassword) {
                     toastAlert(toast, 'error', '原密码错误');
                     return;

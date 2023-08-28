@@ -68,9 +68,6 @@ export default function CollectionCard(params: CollectionCardParams) {
             <SoundList
               audioFiles={collect.healthInfo.audioFiles}
               edit={false}
-              removedCallback={function (index: number): void {
-                console.log(index);
-              }}
             />
           ) : (
             <Text fontSize={sp(18)} color='#333'>

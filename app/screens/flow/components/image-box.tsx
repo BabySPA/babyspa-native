@@ -71,7 +71,6 @@ export default function ImageBox({
         if (res.status !== 'granted') {
           toastAlert(toast, 'error', '请授予相机权限');
         } else {
-          console.log('准备打开相机');
           navigation.navigate('Camera', {
             type,
           });

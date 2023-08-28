@@ -288,7 +288,6 @@ const useManagerStore = create(
       const idx = get().currentSelectTemplateIdx;
       const template = get().templates[idx];
 
-      console.log('template', template);
       return request.delete(`/templates/${template._id}/group`, {
         name: groupName,
       });

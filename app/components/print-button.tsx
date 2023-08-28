@@ -1,6 +1,5 @@
 import { Pressable, Text, Row } from 'native-base';
 import { ss, ls, sp } from '../utils/style';
-import { useState } from 'react';
 import * as Print from 'expo-print';
 import useFlowStore from '../stores/flow';
 import { getAge } from '../utils';
@@ -9,7 +8,6 @@ import dayjs from 'dayjs';
 export function PrintButton() {
   const { currentFlow, currentFlowCustomer } = useFlowStore();
   const age = getAge(currentFlowCustomer.birthday);
-  console.log(currentFlowCustomer);
 
   let massageHtml = '';
   currentFlow.analyze.solution.massages.forEach((item) => {
@@ -124,7 +122,9 @@ export function PrintButton() {
       </h1>
       <div class="row-space-between px-10 py-10">
         <span class="ct">理疗时间: ${currentFlow.updatedAt}</span>
-        <span class="ct">项目单号: ${currentFlow._id}</span>
+        <span class="ct">项目单号: ${
+          currentFlow.projectId || currentFlow._id
+        }</span>
       </div>
       <table class="w-100">
         <tbody>

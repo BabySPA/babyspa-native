@@ -117,7 +117,9 @@ export default function CustomerItem({
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
               理疗师：{customer.operator?.name}
             </Text>
-            {type == OperateType.Evaluate && (
+            {(type == OperateType.Evaluate ||
+              (type == OperateType.Analyze &&
+                customer.status === CustomerStatus.Completed)) && (
               <Text mt={ss(10)} color={'#666'} fontSize={sp(18)} ml={ss(30)}>
                 分析师：{customer.analyst?.name}
               </Text>

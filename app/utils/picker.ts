@@ -66,12 +66,6 @@ export const showTimePicker = (
     onPickerConfirm: (pickedValue) => {
       onPickerConfirm(pickedValue);
     },
-    onPickerCancel: (pickedValue) => {
-      console.log('area', pickedValue);
-    },
-    onPickerSelect: (pickedValue) => {
-      console.log(pickedValue);
-    },
   });
   Picker.show();
 };

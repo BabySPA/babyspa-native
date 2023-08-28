@@ -347,6 +347,7 @@ export interface Analyze {
     name: string;
   };
   operatorId: string;
+  editable?: number | boolean;
   updatedAt: Date;
 }
 
@@ -381,4 +382,5 @@ export type Flow = {
   evaluate: Evaluate | null;
   updatedAt: string;
   createdAt: string;
+  projectId?: string;
 };

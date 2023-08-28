@@ -34,7 +34,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
       <BoxTitle
         title='分析信息'
         rightElement={
-          edit && (
+          edit &&
+          analyze.editable !== false && (
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
@@ -53,78 +54,90 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
       <Column px={ls(20)}>
         {analyze.solution.applications.map((item, idx) => {
           return (
-            <Column
-              key={idx}
-              mt={idx === 0 ? 0 : ss(20)}
-              bgColor={'#F2F9F8'}
-              borderRadius={1}
-              borderStyle={'dashed'}
-              borderWidth={1}
-              borderColor={'#7AB6AF'}
-              p={ss(20)}>
-              <Row alignItems={'flex-start'} justifyContent={'space-between'}>
-                <Text fontSize={sp(20)} color='#666'>
-                  {item.name}
-                </Text>
-                <Text fontSize={sp(18)} color='#999'>
-                  贴数： {item.count}贴
-                </Text>
-              </Row>
-              <Row
-                alignItems={'flex-start'}
-                justifyContent={'space-between'}
-                mt={ss(20)}>
-                <Text fontSize={sp(18)} color='#999'>
-                  贴敷时长：
-                  <Text fontSize={sp(16)} color='#333'>
-                    {dayjs(item.duration).minute() + '分钟'}
-                  </Text>
-                </Text>
-                <Text fontSize={sp(18)} color='#999' noOfLines={4} maxW={'60%'}>
-                  穴位：
-                  <Text fontSize={sp(16)} color='#333'>
-                    {item.acupoint || '未设置'}
-                  </Text>
-                </Text>
-              </Row>
+            <Column key={idx}>
+              {item.count ? (
+                <Column
+                  mt={idx === 0 ? 0 : ss(20)}
+                  bgColor={'#F2F9F8'}
+                  borderRadius={1}
+                  borderStyle={'dashed'}
+                  borderWidth={1}
+                  borderColor={'#7AB6AF'}
+                  p={ss(20)}>
+                  <Row
+                    alignItems={'flex-start'}
+                    justifyContent={'space-between'}>
+                    <Text fontSize={sp(20)} color='#666'>
+                      {item.name}
+                    </Text>
+                    <Text fontSize={sp(18)} color='#999'>
+                      贴数： {item.count}贴
+                    </Text>
+                  </Row>
+                  <Row
+                    alignItems={'flex-start'}
+                    justifyContent={'space-between'}
+                    mt={ss(20)}>
+                    <Text fontSize={sp(18)} color='#999'>
+                      贴敷时长：
+                      <Text fontSize={sp(16)} color='#333'>
+                        {dayjs(item.duration).minute() + '分钟'}
+                      </Text>
+                    </Text>
+                    <Text
+                      fontSize={sp(18)}
+                      color='#999'
+                      noOfLines={4}
+                      maxW={'60%'}>
+                      穴位：
+                      <Text fontSize={sp(16)} color='#333'>
+                        {item.acupoint || '未设置'}
+                      </Text>
+                    </Text>
+                  </Row>
+                </Column>
+              ) : null}
             </Column>
           );
         })}
-        <Column mt={ss(20)}>
-          {analyze.solution.massages.map((item, idx) => {
-            return (
-              <Column
-                key={idx}
-                mt={idx === 0 ? 0 : ss(20)}
-                bgColor={'#F2F9F8'}
-                borderRadius={1}
-                borderStyle={'dashed'}
-                borderWidth={1}
-                borderColor={'#7AB6AF'}
-                p={ss(20)}>
-                <Row alignItems={'flex-start'} justifyContent={'space-between'}>
-                  <Text fontSize={sp(20)} color='#666'>
-                    {item.name}
+        {analyze.solution.massages.map((item, idx) => {
+          return (
+            <Column key={idx}>
+              {item.count ? (
+                <Column
+                  mt={ss(20)}
+                  bgColor={'#F2F9F8'}
+                  borderRadius={1}
+                  borderStyle={'dashed'}
+                  borderWidth={1}
+                  borderColor={'#7AB6AF'}
+                  p={ss(20)}>
+                  <Row
+                    alignItems={'flex-start'}
+                    justifyContent={'space-between'}>
+                    <Text fontSize={sp(20)} color='#666'>
+                      {item.name}
+                    </Text>
+                    <Text fontSize={sp(18)} color='#999'>
+                      次数： {item.count}次
+                    </Text>
+                  </Row>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    noOfLines={4}
+                    maxW={'60%'}
+                    mt={ss(20)}>
+                    备注：
+                    <Text fontSize={sp(16)} color='#333'>
+                      {item.remark || '未设置'}
+                    </Text>
                   </Text>
-                  <Text fontSize={sp(18)} color='#999'>
-                    次数： {item.count}次
-                  </Text>
-                </Row>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  noOfLines={4}
-                  maxW={'60%'}
-                  mt={ss(20)}>
-                  备注：
-                  <Text fontSize={sp(16)} color='#333'>
-                    {item.remark || '未设置'}
-                  </Text>
-                </Text>
-              </Column>
-            );
-          })}
-        </Column>
+                </Column>
+              ) : null}
+            </Column>
+          );
+        })}
 
         <Row mt={ss(20)}>
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
@@ -140,7 +153,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             分析师：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
-            {analyze.operator?.name}
+            {analyze.operator?.name || '未分析'}
           </Text>
         </Row>
 

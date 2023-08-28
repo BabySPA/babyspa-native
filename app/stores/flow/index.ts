@@ -1,14 +1,17 @@
 import { create } from 'zustand';
 import request from '~/app/api';
-import { FlowOperatorConfig, SolutionDefault } from '../../constants';
+import {
+  FlowOperatorConfigItem,
+  FlowOperatorKey,
+  SolutionDefault,
+} from '../../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
 import { CustomerStatus } from '../../types';
-import { FlowState, FollowUp, FollowUpStatus, UpdatingImage } from './type';
+import { FlowState, FollowUp, FollowUpStatus } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
-import { reject } from 'lodash';
 import { fuzzySearch } from '~/app/utils';
 import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
@@ -232,8 +235,6 @@ const useFlowStore = create(
       if (shopId) {
         params.shopId = shopId;
       }
-
-      console.log(params);
 
       request.get('/customers/all', { params }).then(({ data }) => {
         const { docs, statusCount } = data;
@@ -808,6 +809,32 @@ const useFlowStore = create(
     },
 
     getFlowOperatorConfigByUser(type: CustomerStatus) {
+      const FlowOperatorConfig: FlowOperatorConfigItem[] = [
+        {
+          text: '健康资料',
+          key: FlowOperatorKey.healthInfo,
+          auth: RoleAuthority.FLOW_COLLECTION,
+          disabled: false,
+        },
+        {
+          text: '调理导向',
+          key: FlowOperatorKey.guidance,
+          auth: RoleAuthority.FLOW_COLLECTION,
+          disabled: false,
+        },
+        {
+          text: '分析结论',
+          key: FlowOperatorKey.conclusions,
+          auth: RoleAuthority.FLOW_ANALYZE,
+          disabled: false,
+        },
+        {
+          text: '调理方案',
+          key: FlowOperatorKey.solution,
+          auth: RoleAuthority.FLOW_ANALYZE,
+          disabled: false,
+        },
+      ];
       if (type === CustomerStatus.ToBeAnalyzed) {
         return {
           configs: FlowOperatorConfig.map((item) => {

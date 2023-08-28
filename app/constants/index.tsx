@@ -321,43 +321,16 @@ export enum FlowOperatorKey {
   solution = 'solution',
 }
 
-export const FlowOperatorConfig: FlowOperatorConfigItem[] = [
-  {
-    text: '健康资料',
-    key: FlowOperatorKey.healthInfo,
-    auth: RoleAuthority.FLOW_COLLECTION,
-    disabled: false,
-  },
-  {
-    text: '调理导向',
-    key: FlowOperatorKey.guidance,
-    auth: RoleAuthority.FLOW_COLLECTION,
-    disabled: false,
-  },
-  {
-    text: '分析结论',
-    key: FlowOperatorKey.conclusions,
-    auth: RoleAuthority.FLOW_ANALYZE,
-    disabled: false,
-  },
-  {
-    text: '调理方案',
-    key: FlowOperatorKey.solution,
-    auth: RoleAuthority.FLOW_ANALYZE,
-    disabled: false,
-  },
-];
-
 export const SolutionDefault = {
   application: {
     name: '消肿止痛贴（0.4g/2ml）',
-    count: 1,
+    count: 0,
     duration: 0,
     acupoint: '',
   },
   massage: {
     name: '小儿推拿',
-    count: 1,
+    count: 0,
     remark: '暂无',
   },
 };

@@ -18,19 +18,12 @@ import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
 import { Box } from 'native-base';
-import { Keyboard, PanResponder } from 'react-native';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => {
-      Keyboard.dismiss();
-    },
-  });
   return (
-    <Box flex={1} bgColor='white' {...panResponder.panHandlers}>
+    <Box flex={1} bgColor='white'>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />

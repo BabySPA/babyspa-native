@@ -77,9 +77,14 @@ export default function FlowScreen({
   const [finishLoading, setFinishLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    requestGetFlow(currentFlowCustomer.flowId);
     requestGetTemplates();
   }, []);
+
+  useEffect(() => {
+    if (currentFlowCustomer.flowId) {
+      requestGetFlow(currentFlowCustomer.flowId);
+    }
+  }, [currentFlowCustomer.flowId]);
 
   return (
     <Box flex={1}>
@@ -245,7 +250,6 @@ export default function FlowScreen({
                   onPress={() => {
                     requestPatchFlowToCollection()
                       .then((res) => {
-                        console.log('requestPatchFlowToCollection res', res);
                         setShowResultModal({
                           type: 'success',
                           message: '提交成功，待分析师处理',
@@ -262,7 +266,6 @@ export default function FlowScreen({
                         }, 2000);
                       })
                       .catch((err) => {
-                        console.log('requestPatchFlowToCollection err', err);
                         setShowResultModal({
                           type: 'fail',
                           message: '提交失败，' + err.message,

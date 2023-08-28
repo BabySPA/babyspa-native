@@ -50,6 +50,7 @@ export default function SelectRole({
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
+      defaultValue={defaultValue}
       defaultButtonText={defaultValue || '请选择角色'}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.name;
@@ -94,7 +95,7 @@ export default function SelectRole({
         fontSize: sp(16, { min: 12 }),
       }}
       selectedRowStyle={{
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#CBEDE2',
       }}
     />
   );

@@ -24,6 +24,7 @@ export default function SelectUser({
       onSelect={(selectedItem, index) => {
         onSelect(selectedItem, index);
       }}
+      defaultValue={currentShopWithRole?.shop.name}
       defaultButtonText={currentShopWithRole?.shop.name}
       buttonTextAfterSelection={(selectedItem, index) => {
         return selectedItem.shop.name;
@@ -66,7 +67,7 @@ export default function SelectUser({
         fontSize: sp(14),
       }}
       selectedRowStyle={{
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#CBEDE2',
       }}
     />
   );

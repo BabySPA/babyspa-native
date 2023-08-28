@@ -29,7 +29,10 @@ export default function FlowInfo({
   const {
     requestGetFlow,
     currentFlowCustomer,
-    currentFlow: { evaluate },
+    currentFlow: {
+      evaluate,
+      analyze: { editable },
+    },
   } = useFlowStore();
 
   const { from } = params;
@@ -37,11 +40,14 @@ export default function FlowInfo({
   useEffect(() => {
     requestGetFlow(currentFlowCustomer.flowId);
   }, []);
-  const toast = useToast();
   const [loading, setLoading] = useState(false);
 
   const [isEvaluateCardDialogShow, setIsEvaluateCardDialogShow] =
     useState(false);
+
+  const ShowPrintButton = () => {
+    return <>{editable !== false ? <PrintButton /> : null}</>;
+  };
 
   return (
     <Box flex={1}>
@@ -54,7 +60,7 @@ export default function FlowInfo({
         }
         rightElement={
           from == 'analyze' ? (
-            <PrintButton />
+            <ShowPrintButton />
           ) : // 从评价详情进入，并且未评价
           from == 'evaluate-detail' && !evaluate ? (
             <Pressable

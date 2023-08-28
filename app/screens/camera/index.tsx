@@ -1,7 +1,5 @@
 import { Camera, CameraType } from 'expo-camera';
-import { useEffect } from 'react';
 import { DeviceEventEmitter } from 'react-native';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import { AppStackScreenProps } from '~/app/types';
 import {
   Button,
@@ -12,6 +10,7 @@ import {
   Text,
   Pressable,
 } from 'native-base';
+import { manipulateAsync } from 'expo-image-manipulator';
 import { sp, ss } from '~/app/utils/style';
 
 const config = {
@@ -76,9 +75,17 @@ export default function CameraScreen({
   const takePhoto = async () => {
     if (cameraRef) {
       const photo = await cameraRef.takePictureAsync({ skipProcessing: true });
+      const manipResult = await manipulateAsync(
+        photo.uri,
+        [], // 空的resize选项，不调整宽高
+        { compress: 0.1 }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
+      );
       if (flag) {
         flag = false;
-        DeviceEventEmitter.emit('event.take.photo', { photo, type });
+        DeviceEventEmitter.emit('event.take.photo', {
+          photo: manipResult,
+          type,
+        });
       }
     }
     navigation.goBack();

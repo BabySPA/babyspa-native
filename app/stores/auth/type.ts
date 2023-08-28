@@ -47,7 +47,7 @@ export interface AuthState {
     shopsWithRole: ShopsWithRole[];
   } | null;
   currentShopWithRole: ShopsWithRole | null;
-  changeCurrentShopWithRole: (shopWithRole: ShopsWithRole) => void;
+  changeCurrentShopWithRole: (shopWithRole: ShopsWithRole) => Promise<void>;
   login: (username: string, password: string) => Promise<any>;
   logout: () => Promise<any>;
   hasAuthority: (authorityKey: RoleAuthority, rw: RW) => boolean;

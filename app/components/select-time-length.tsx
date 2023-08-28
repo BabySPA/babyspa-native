@@ -86,7 +86,7 @@ export default function SelectTimeLength({
         fontSize: sp(16, { min: 12 }),
       }}
       selectedRowStyle={{
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#CBEDE2',
       }}
     />
   );

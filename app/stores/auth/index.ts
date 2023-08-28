@@ -41,15 +41,13 @@ const useAuthStore = create(
             });
         });
       },
-      changeCurrentShopWithRole: (shopWithRole) => {
+      changeCurrentShopWithRole: async (shopWithRole) => {
         set({ currentShopWithRole: shopWithRole });
 
-        setTimeout(() => {
-          useLayoutStore.getState().clearCache();
-          useFlowStore.getState().clearCache();
-          useManagerStore.getState().clearCache();
-          useFlowStore.getState().requestGetInitializeData();
-        }, 1000);
+        useLayoutStore.getState().clearCache();
+        useFlowStore.getState().clearCache();
+        useManagerStore.getState().clearCache();
+        await useFlowStore.getState().requestGetInitializeData();
       },
       logout: async () => {
         get().clearAllStoreCache();
