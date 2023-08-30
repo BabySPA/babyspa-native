@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "scripts": {
     "start:client": "expo start --dev-client",
-    "start": "expo start",
+    "start": "expo start --dev-client",
     "start:clear": "expo start --clear",
     "test": "jest --watchAll",
     "postinstall": "patch-package",
     "format": "prettier --write \"app/**/*.{ts,tsx}\"",
-    "eas:android": "eas build -p android --profile preview --local"
+    "eas:android": "eas build -p android --profile preview --local",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "jest": {
     "preset": "jest-expo"
@@ -38,7 +40,7 @@
     "expo-print": "~12.2.1",
     "expo-screen-orientation": "~5.1.1",
     "expo-sharing": "~11.2.2",
-    "expo-splash-screen": "0.18.2",
+    "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.4",
@@ -54,7 +56,6 @@
     "react-native-gesture-handler": "~2.9.0",
     "react-native-mime-types": "^2.4.0",
     "react-native-picker": "^4.3.7",
-    "react-native-pickers": "^2.0.0",
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",

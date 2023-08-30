@@ -21,7 +21,7 @@ const defaultRegisterAndCollection = {
   searchKeywords: '',
   status: -1,
   statusCount: {},
-  startDate: dayjs().format('YYYY-MM-DD'),
+  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
