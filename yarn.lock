@@ -4933,7 +4933,7 @@ __metadata:
     react-native-dotenv: ^3.4.9
     react-native-gesture-handler: ~2.9.0
     react-native-mime-types: ^2.4.0
-    react-native-picker: ^4.3.7
+    react-native-patchpicker: ^4.3.7
     react-native-safe-area-context: 4.5.0
     react-native-screens: ~3.20.0
     react-native-svg: 13.4.0
@@ -11472,10 +11472,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-picker@npm:^4.3.7":
+"react-native-patchpicker@npm:^4.3.7":
   version: 4.3.7
-  resolution: "react-native-picker@npm:4.3.7"
-  checksum: 581c7460595648766ac0d75cf90cec456abb08af95a5a89b6807b81558ccfb2e91c1de006bdd338c40a36ccd6986f5f53f03a04d2956f643645fa28baa9a7f67
+  resolution: "react-native-patchpicker@npm:4.3.7"
+  checksum: 552e74511a0b2ff0ee8339879e92b250a6100f59d6ba05de78afbc33d93423a5e7539f26ca259ee6e6282041b59960a38ae4028fed961b2b06a9d3fc8142ca1c
   languageName: node
   linkType: hard
 
