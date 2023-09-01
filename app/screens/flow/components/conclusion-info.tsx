@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
-import { Flow, FlowArchive } from '~/app/stores/flow/type';
+import { FlowArchive } from '~/app/stores/flow/type';
 import DashedLine from 'react-native-dashed-line';
 import dayjs from 'dayjs';
 

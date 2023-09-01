@@ -15,8 +15,8 @@ import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/customer-item';
-import { CustomerStatus, OperateType } from '~/app/types';
+import CustomerItem from '../components/flow-customer-item';
+import { FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
@@ -25,19 +25,19 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 export default function Evaluate() {
   const navigation = useNavigation();
   const {
-    requestGetEvaluateCustomers,
+    // requestGetEvaluateCustomers,
     updateCurrentFlowCustomer,
-    evaluate: { customers },
+    evaluate: { flows },
   } = useFlowStore();
 
   useEffect(() => {
-    requestGetEvaluateCustomers();
+    // requestGetEvaluateCustomers();
   }, []);
 
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      {/* <ScrollView margin={ss(10)}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -53,7 +53,7 @@ export default function Evaluate() {
                   hitSlop={ss(10)}
                   key={idx}
                   onPress={() => {
-                    if (customer.status === CustomerStatus.Completed) {
+                    if (customer.status === FlowStatus.Completed) {
                       updateCurrentFlowCustomer(customer);
                       navigation.navigate('FlowInfo', {
                         from: 'evaluate-detail',
@@ -71,7 +71,7 @@ export default function Evaluate() {
             })}
           </Row>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </Flex>
   );
 }
@@ -102,13 +102,13 @@ function Filter() {
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           待评价：
           <Text color='#F7BA2A'>
-            {evaluate.statusCount[CustomerStatus.ToBeEvaluated] || 0}
+            {evaluate.statusCount[FlowStatus.ToBeEvaluated] || 0}
           </Text>
         </Text>
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已评价：
           <Text color='#5EACA3'>
-            {evaluate.statusCount[CustomerStatus.Evaluated] || 0}
+            {evaluate.statusCount[FlowStatus.Evaluated] || 0}
           </Text>
         </Text>
         <Input

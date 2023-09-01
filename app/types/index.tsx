@@ -25,13 +25,22 @@ export interface OssConfig {
   expire: number;
 }
 
-export enum CustomerStatus {
-  Completed, // 已完成
-  Canceled, // 已取消
-  ToBeCollected, // 待收集
+export enum FlowStatus {
+  NO_SET, // 无状态
+  Registered, // 已登记
+  RegisterCanceled, // 登记取消
+  ToBeCollected, // 待采集
+  Collected, // 已采集
+  CollectCanceled, // 采集取消
   ToBeAnalyzed, // 待分析
+  Analyzed, // 已分析
+  AnalyzeCanceled, // 分析取消
   ToBeEvaluated, // 待评价
   Evaluated, // 已评价
+  EvaluateCanceled, // 评价取消
+  ToBeFollowedUp, // 待跟进
+  FollowedUp, // 已跟进
+  FollowUpCanceled, // 跟进取消
 }
 
 export enum Gender {
@@ -63,7 +72,7 @@ export type RootStackParamList = {
   CustomerDetail: undefined;
   AddNewCustomer: undefined;
   Flow: {
-    type: CustomerStatus;
+    type: FlowStatus;
   };
   FlowInfo: {
     from: FlowFrom;
@@ -102,7 +111,7 @@ export type AppStackList = {
   CustomerDetail: undefined;
   AddNewCustomer: undefined;
   Flow: {
-    type: CustomerStatus;
+    type: FlowStatus;
   };
   FlowInfo: {
     from: FlowFrom;

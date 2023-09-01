@@ -8,7 +8,7 @@ import {
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
-import { CustomerStatus } from '../../types';
+import { FlowStatus } from '../../types';
 import { FlowState, FollowUp, FollowUpStatus } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
@@ -16,8 +16,8 @@ import { fuzzySearch } from '~/app/utils';
 import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
 
-const defaultRegisterAndCollection = {
-  customers: [],
+const defaultFlowListData = {
+  flows: [],
   searchKeywords: '',
   status: -1,
   statusCount: {},
@@ -34,7 +34,7 @@ export const DefaultRegisterCustomer = {
   phoneNumber: '',
   allergy: '',
   operator: null,
-  status: CustomerStatus.ToBeCollected,
+  status: FlowStatus.ToBeCollected,
 };
 
 const defaultFlow = {
@@ -79,48 +79,48 @@ const defaultFlow = {
 const initialState = {
   allCustomers: [],
   register: {
-    ...defaultRegisterAndCollection,
+    ...defaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
-      { label: '待采集', value: CustomerStatus.ToBeCollected },
-      { label: '待分析', value: CustomerStatus.ToBeAnalyzed },
-      { label: '已完成', value: CustomerStatus.Completed },
+      { label: '待采集', value: FlowStatus.ToBeCollected },
+      { label: '待分析', value: FlowStatus.ToBeAnalyzed },
+      { label: '已完成', value: FlowStatus.Analyzed },
     ],
   },
   collection: {
-    ...defaultRegisterAndCollection,
+    ...defaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
-      { label: '待采集', value: CustomerStatus.ToBeCollected },
-      { label: '待分析', value: CustomerStatus.ToBeAnalyzed },
-      { label: '已完成', value: CustomerStatus.Completed },
+      { label: '待采集', value: FlowStatus.ToBeCollected },
+      { label: '待分析', value: FlowStatus.ToBeAnalyzed },
+      { label: '已完成', value: FlowStatus.Analyzed },
     ],
   },
   analyze: {
-    ...defaultRegisterAndCollection,
+    ...defaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
-      { label: '待分析', value: CustomerStatus.ToBeAnalyzed },
-      { label: '已完成', value: CustomerStatus.Completed },
+      { label: '待分析', value: FlowStatus.ToBeAnalyzed },
+      { label: '已完成', value: FlowStatus.Analyzed },
     ],
   },
   evaluate: {
-    ...defaultRegisterAndCollection,
+    ...defaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
-      { label: '待评价', value: CustomerStatus.ToBeEvaluated },
-      { label: '已评价', value: CustomerStatus.Evaluated },
+      { label: '待评价', value: FlowStatus.ToBeEvaluated },
+      { label: '已评价', value: FlowStatus.Evaluated },
     ],
   },
   currentFlow: defaultFlow,
 
-  customersArchive: { ...defaultRegisterAndCollection, allStatus: [] },
-  customersFollowUp: { ...defaultRegisterAndCollection },
+  customersArchive: { ...defaultFlowListData, allStatus: [] },
+  customersFollowUp: { ...defaultFlowListData },
   currentArchiveCustomer: DefaultRegisterCustomer,
 
   operators: [],
 
-  currentRegisterCustomer: DefaultRegisterCustomer,
+  currentFlow: DefaultRegisterCustomer,
 
   currentFlowCustomer: {
     operator: null,
@@ -130,7 +130,6 @@ const initialState = {
     birthday: '',
     nickname: '',
     phoneNumber: '',
-    status: CustomerStatus.Completed,
     allergy: '',
     updatedAt: '',
     tag: '',
@@ -152,7 +151,7 @@ const useFlowStore = create(
       const hasAuthority = useAuthStore.getState().hasAuthority;
 
       if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
-        await get().requestGetRegisterCustomers();
+        await get().requestGetRegisterFlows();
       }
       if (hasAuthority(RoleAuthority.FLOW_COLLECTION, 'R')) {
         await get().requestGetCollectionCustomers();
@@ -177,7 +176,8 @@ const useFlowStore = create(
         });
       });
     },
-    requestGetRegisterCustomers: async () => {
+
+    requestGetRegisterFlows: async () => {
       const {
         register: { status, searchKeywords, startDate, endDate },
       } = get();
@@ -196,205 +196,213 @@ const useFlowStore = create(
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/flows', { params }).then((res) => {
-        console.log(res);
-      });
-
-      request.get('/customers', { params }).then(({ data }) => {
-        const { docs, statusCount } = data;
+        const { docs, statusCount } = res.data;
+        
 
         set({
           register: {
             ...get().register,
-            customers: searchKeywords
-              ? fuzzySearch(docs, searchKeywords)
-              : docs,
-            statusCount,
+            flows: searchKeywords ? fuzzySearch(docs, searchKeywords) : docs,
           },
         });
       });
+
+      // request.get('/customers', { params }).then(({ data }) => {
+      //   const { docs, statusCount } = data;
+
+      //   set({
+      //     register: {
+      //       ...get().register,
+      //       customers: searchKeywords
+      //         ? fuzzySearch(docs, searchKeywords)
+      //         : docs,
+      //       statusCount,
+      //     },
+      //   });
+      // });
     },
 
-    requestCustomersArchive: async () => {
-      const {
-        customersArchive: {
-          status,
-          startDate,
-          endDate,
-          searchKeywords,
-          shopId,
-        },
-      } = get();
-      const params: any = {};
+    // requestCustomersArchive: async () => {
+    //   const {
+    //     customersArchive: {
+    //       status,
+    //       startDate,
+    //       endDate,
+    //       searchKeywords,
+    //       shopId,
+    //     },
+    //   } = get();
+    //   const params: any = {};
 
-      if (status !== -1) {
-        params.status = status;
-      }
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
+    //   if (status !== -1) {
+    //     params.status = status;
+    //   }
+    //   if (startDate) {
+    //     params.startDate = startDate;
+    //   }
+    //   if (endDate) {
+    //     params.endDate = endDate;
+    //   }
 
-      if (shopId) {
-        params.shopId = shopId;
-      }
+    //   if (shopId) {
+    //     params.shopId = shopId;
+    //   }
 
-      request.get('/customers/all', { params }).then(({ data }) => {
-        const { docs, statusCount } = data;
-        set({
-          customersArchive: {
-            ...get().customersArchive,
-            customers: searchKeywords
-              ? fuzzySearch(docs, searchKeywords)
-              : docs,
-            statusCount,
-          },
-        });
-      });
-    },
+    //   request.get('/customers/all', { params }).then(({ data }) => {
+    //     const { docs, statusCount } = data;
+    //     set({
+    //       customersArchive: {
+    //         ...get().customersArchive,
+    //         customers: searchKeywords
+    //           ? fuzzySearch(docs, searchKeywords)
+    //           : docs,
+    //         statusCount,
+    //       },
+    //     });
+    //   });
+    // },
 
-    async requestCustomerArchiveHistory(customerId) {
-      const { data } = await request.get(
-        `/flows/archive/history/${customerId}`,
-      );
-      return data;
-    },
+    // async requestCustomerArchiveHistory(customerId) {
+    //   const { data } = await request.get(
+    //     `/flows/archive/history/${customerId}`,
+    //   );
+    //   return data;
+    // },
 
-    async requestCustomerArchiveCourses(customerId) {
-      const { data } = await request.get(
-        `/flows/archive/courses/${customerId}`,
-      );
-      return data;
-    },
+    // async requestCustomerArchiveCourses(customerId) {
+    //   const { data } = await request.get(
+    //     `/flows/archive/courses/${customerId}`,
+    //   );
+    //   return data;
+    // },
 
-    requestGetCollectionCustomers: async () => {
-      const {
-        collection: { status, startDate, searchKeywords, endDate },
-      } = get();
-      const params: any = {};
-      if (status !== -1) {
-        params.status = status;
-      }
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
+    // requestGetCollectionCustomers: async () => {
+    //   const {
+    //     collection: { status, startDate, searchKeywords, endDate },
+    //   } = get();
+    //   const params: any = {};
+    //   if (status !== -1) {
+    //     params.status = status;
+    //   }
+    //   if (startDate) {
+    //     params.startDate = startDate;
+    //   }
+    //   if (endDate) {
+    //     params.endDate = endDate;
+    //   }
 
-      params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
+    //   params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
-      request.get('/customers', { params }).then(({ data }) => {
-        const { docs, statusCount } = data;
-        set({
-          collection: {
-            ...get().collection,
-            customers: searchKeywords
-              ? fuzzySearch(docs, searchKeywords)
-              : docs,
-            statusCount,
-          },
-        });
-      });
-    },
-    async requestCustomerGrowthCurve(customerId) {
-      const { data } = await request.get(
-        `/customers/growth-curve/statistics/${customerId}`,
-      );
-      return data;
-    },
-    requestPutCustomerGrowthCurve: async (
-      customerId: string,
-      { height, weight }: { height: number; weight: number },
-    ) => {
-      const { data } = await request.put(
-        `/customers/growth-curve/${customerId}`,
-        {
-          height,
-          weight,
-        },
-      );
-      return data;
-    },
-    requestPatchCustomerGrowthCurve: async (
-      customerId: string,
-      {
-        height,
-        weight,
-        date,
-      }: { height: number; weight: number; date: string },
-    ) => {
-      const { data } = await request.patch(
-        `/customers/growth-curve/${customerId}`,
-        {
-          height,
-          weight,
-          date,
-        },
-      );
-      return data;
-    },
+    //   request.get('/customers', { params }).then(({ data }) => {
+    //     const { docs, statusCount } = data;
+    //     set({
+    //       collection: {
+    //         ...get().collection,
+    //         customers: searchKeywords
+    //           ? fuzzySearch(docs, searchKeywords)
+    //           : docs,
+    //         statusCount,
+    //       },
+    //     });
+    //   });
+    // },
+    // async requestCustomerGrowthCurve(customerId) {
+    //   const { data } = await request.get(
+    //     `/customers/growth-curve/statistics/${customerId}`,
+    //   );
+    //   return data;
+    // },
+    // requestPutCustomerGrowthCurve: async (
+    //   customerId: string,
+    //   { height, weight }: { height: number; weight: number },
+    // ) => {
+    //   const { data } = await request.put(
+    //     `/customers/growth-curve/${customerId}`,
+    //     {
+    //       height,
+    //       weight,
+    //     },
+    //   );
+    //   return data;
+    // },
+    // requestPatchCustomerGrowthCurve: async (
+    //   customerId: string,
+    //   {
+    //     height,
+    //     weight,
+    //     date,
+    //   }: { height: number; weight: number; date: string },
+    // ) => {
+    //   const { data } = await request.patch(
+    //     `/customers/growth-curve/${customerId}`,
+    //     {
+    //       height,
+    //       weight,
+    //       date,
+    //     },
+    //   );
+    //   return data;
+    // },
 
-    requestGetAnalyzeCustomers: async () => {
-      const {
-        analyze: { status, startDate, endDate, searchKeywords },
-      } = get();
-      const params: any = {};
+    // requestGetAnalyzeCustomers: async () => {
+    //   const {
+    //     analyze: { status, startDate, endDate, searchKeywords },
+    //   } = get();
+    //   const params: any = {};
 
-      if (status !== -1) {
-        params.status = status;
-      }
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
+    //   if (status !== -1) {
+    //     params.status = status;
+    //   }
+    //   if (startDate) {
+    //     params.startDate = startDate;
+    //   }
+    //   if (endDate) {
+    //     params.endDate = endDate;
+    //   }
 
-      request.get('/customers/analyzes', { params }).then(({ data }) => {
-        const { docs, statusCount } = data;
-        set({
-          analyze: {
-            ...get().analyze,
-            customers: searchKeywords
-              ? fuzzySearch(docs, searchKeywords)
-              : docs,
-            statusCount,
-          },
-        });
-      });
-    },
+    //   request.get('/customers/analyzes', { params }).then(({ data }) => {
+    //     const { docs, statusCount } = data;
+    //     set({
+    //       analyze: {
+    //         ...get().analyze,
+    //         customers: searchKeywords
+    //           ? fuzzySearch(docs, searchKeywords)
+    //           : docs,
+    //         statusCount,
+    //       },
+    //     });
+    //   });
+    // },
 
-    requestGetEvaluateCustomers: async () => {
-      const {
-        evaluate: { status, startDate, searchKeywords, endDate },
-      } = get();
-      const params: any = {};
-      if (status !== -1) {
-        params.status = status;
-      }
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
+    // requestGetEvaluateCustomers: async () => {
+    //   const {
+    //     evaluate: { status, startDate, searchKeywords, endDate },
+    //   } = get();
+    //   const params: any = {};
+    //   if (status !== -1) {
+    //     params.status = status;
+    //   }
+    //   if (startDate) {
+    //     params.startDate = startDate;
+    //   }
+    //   if (endDate) {
+    //     params.endDate = endDate;
+    //   }
 
-      request.get('/customers/evaluates', { params }).then(({ data }) => {
-        const { docs, statusCount } = data;
+    //   request.get('/customers/evaluates', { params }).then(({ data }) => {
+    //     const { docs, statusCount } = data;
 
-        set({
-          evaluate: {
-            ...get().evaluate,
-            customers: searchKeywords
-              ? fuzzySearch(docs, searchKeywords)
-              : docs,
-            statusCount,
-          },
-        });
-      });
-    },
+    //     set({
+    //       evaluate: {
+    //         ...get().evaluate,
+    //         customers: searchKeywords
+    //           ? fuzzySearch(docs, searchKeywords)
+    //           : docs,
+    //         statusCount,
+    //       },
+    //     });
+    //   });
+    // },
 
     requestGetOperators: async () => {
       const params = {
@@ -416,12 +424,12 @@ const useFlowStore = create(
         });
     },
 
-    requestPostCustomerInfo: async () => {
+    requestPostRegisterInfo: async () => {
       // 发起登记
-      const customer = get().currentRegisterCustomer;
+      const customer = get().currentFlow;
 
       return request
-        .post('/customers/register', {
+        .post('/flows/register', {
           phoneNumber: customer.phoneNumber,
           name: customer.name,
           gender: customer.gender,
@@ -431,7 +439,7 @@ const useFlowStore = create(
           operatorId: customer.operator?.id,
         })
         .then(({ data }) => {
-          get().updateCurrentRegisterCustomer(data);
+          get().updateCurrentFlow(data);
           return data;
         });
     },
@@ -442,7 +450,7 @@ const useFlowStore = create(
 
     requestPatchCustomerInfo: async () => {
       // 修改登记信息
-      const customer = get().currentRegisterCustomer;
+      const customer = get().currentFlow;
 
       return request
         .patch(`/customers/${customer.id}`, {
@@ -455,7 +463,7 @@ const useFlowStore = create(
           operatorId: customer.operator?.id,
         })
         .then(({ data }) => {
-          get().updateCurrentRegisterCustomer({ status: data.status });
+          get().updateCurrentFlow({ status: data.status });
           return data;
         })
         .catch((err) => {
@@ -473,13 +481,13 @@ const useFlowStore = create(
         });
     },
 
-    requestPatchCustomerStatus: async ({ status, type }) => {
+    requestPatchFlowStatus: async ({ status, type }) => {
       // 修改登记信息
       let customer;
       if (type === 'flow') {
         customer = get().currentFlowCustomer;
       } else {
-        customer = get().currentRegisterCustomer;
+        customer = get().currentFlow;
       }
 
       return request
@@ -487,7 +495,7 @@ const useFlowStore = create(
           status,
         })
         .then(({ data }) => {
-          get().updateCurrentRegisterCustomer({ status: data.status });
+          get().updateCurrentFlow({ status: data.status });
           return data;
         });
     },
@@ -544,10 +552,10 @@ const useFlowStore = create(
         });
     },
 
-    updateCurrentRegisterCustomer: (data) => {
+    updateCurrentFlow: (data) => {
       return set((state) => {
-        state.currentRegisterCustomer = produce(
-          state.currentRegisterCustomer,
+        state.currentFlow = produce(
+          state.currentFlow,
           (draft) => {
             Object.assign(draft, data);
           },
@@ -812,7 +820,7 @@ const useFlowStore = create(
       });
     },
 
-    getFlowOperatorConfigByUser(type: CustomerStatus) {
+    getFlowOperatorConfigByUser(type: FlowStatus) {
       const FlowOperatorConfig: FlowOperatorConfigItem[] = [
         {
           text: '健康资料',
@@ -839,7 +847,7 @@ const useFlowStore = create(
           disabled: false,
         },
       ];
-      if (type === CustomerStatus.ToBeAnalyzed) {
+      if (type === FlowStatus.ToBeAnalyzed) {
         return {
           configs: FlowOperatorConfig.map((item) => {
             if (item.auth != RoleAuthority.FLOW_ANALYZE) {

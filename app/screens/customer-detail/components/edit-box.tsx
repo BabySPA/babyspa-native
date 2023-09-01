@@ -21,7 +21,7 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
-import { CustomerStatus } from '~/app/types';
+import { FlowStatus } from '~/app/types';
 import SelectOperator from '~/app/components/select-operator';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
@@ -30,7 +30,7 @@ import { RadioBox } from '~/app/components/radio';
 
 interface EditBoxParams {
   onEditFinish: () => void;
-  type: 'archive-edit' | 'archive-new' | 'edit';
+  type: 'archive-edit' | 'archive-new' | 'flow';
 }
 
 export default function EditBox(params: EditBoxParams) {
@@ -40,10 +40,10 @@ export default function EditBox(params: EditBoxParams) {
   const [loading, setLoading] = useState(false);
 
   const {
-    currentRegisterCustomer,
-    updateCurrentRegisterCustomer,
+    currentFlow,
+    updateCurrentFlow,
     operators,
-    requestPostCustomerInfo,
+    requestPostRegisterInfo,
     requestPatchCustomerInfo,
     requestGetInitializeData,
     requestPostCreateCustomer,
@@ -54,7 +54,7 @@ export default function EditBox(params: EditBoxParams) {
   } = useFlowStore();
 
   const [tempCustomer, setTempCustomer] = useState(
-    params.type === 'edit' ? currentRegisterCustomer : currentArchiveCustomer,
+    params.type === 'edit' ? currentFlow : currentArchiveCustomer,
   );
 
   const showDatePicker = () => {
@@ -233,7 +233,7 @@ export default function EditBox(params: EditBoxParams) {
                           color={'#333'}
                           fontSize={sp(16, { min: 12 })}
                           maxW={ls(240)}>
-                          {currentRegisterCustomer.allergy || '请选择或输入'}
+                          {currentFlow.allergy || '请选择或输入'}
                         </Text>
                         <Icon
                           as={<FontAwesome name='angle-down' />}
@@ -250,7 +250,7 @@ export default function EditBox(params: EditBoxParams) {
                           setIsOpenTemplatePicker(false);
                         }}
                         onConfirm={function (text): void {
-                          updateCurrentRegisterCustomer({ allergy: text });
+                          updateCurrentFlow({ allergy: text });
                           setIsOpenTemplatePicker(false);
                         }}
                       />
@@ -369,10 +369,10 @@ export default function EditBox(params: EditBoxParams) {
                   });
               }
             } else {
-              updateCurrentRegisterCustomer(tempCustomer);
+              updateCurrentFlow(tempCustomer);
 
               if (tempCustomer.status === CustomerStatus.Canceled) {
-                requestPostCustomerInfo()
+                requestPostRegisterInfo()
                   .then(async (res) => {
                     await requestGetInitializeData();
                     toastAlert(toast, 'success', '再次登记客户信息成功！');

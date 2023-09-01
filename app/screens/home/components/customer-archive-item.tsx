@@ -2,14 +2,14 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon } from 'native-base';
 import { Image } from 'react-native';
-import { Customer } from '~/app/stores/flow/type';
+import { Customer, FlowItemResponse } from '~/app/stores/flow/type';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
 export default function CustomerArchiveItem({
-  customer,
+  flowCustomer,
 }: {
-  customer: Customer;
+  flowCustomer: FlowItemResponse;
 }) {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;

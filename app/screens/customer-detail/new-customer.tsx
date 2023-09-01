@@ -1,5 +1,5 @@
 import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
-import { AppStackScreenProps, CustomerStatus } from '../../types';
+import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useEffect, useState } from 'react';

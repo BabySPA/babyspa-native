@@ -1,23 +1,43 @@
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
-import { CustomerStatus, Gender } from '~/app/types';
+import { FlowStatus, Gender } from '~/app/types';
+import { Shop } from '../manager/type';
 
-export interface Customer {
-  operator: OperatorInfo | null;
-  analyst: OperatorInfo | null;
-  shop: ShopInfo | null;
-  id: string;
-  name: string;
-  gender: Gender;
-  birthday: string;
-  nickname: string;
-  phoneNumber: string;
-  status: CustomerStatus;
-  allergy: string;
+export enum RegisterStatus {
+  NOT_SET = -1,
+  CANCEL = 0,
+  DONE = 1,
+}
+
+export enum CollectStatus {
+  NOT_SET = -1,
+  CANCEL = 0,
+  DONE = 1,
+}
+
+export enum AnalyzeStatus {
+  NOT_SET = -1,
+  CANCEL = 0,
+  DONE = 1,
+}
+
+export enum EvaluateStatus {
+  NOT_SET = -1,
+  CANCEL = 0,
+  DONE = 1,
+}
+
+export interface FlowItemResponse {
+  _id: string;
+  register: Register;
+  collect: Collect;
+  analyze: Analyze;
+  collectionOperator: OperatorInfo | null;
+  analyzeOperator: OperatorInfo | null;
+  evaluateOperator: OperatorInfo | null;
+  customer: Customer;
+  shop: Shop;
   updatedAt: string;
   tag: string;
-  flowId: string;
-  flowEvaluate: Evaluate | null;
-  flowFollowUp?: FollowUp | null;
 }
 
 export interface Operator {
@@ -39,14 +59,23 @@ export interface ShopInfo {
   name: string;
 }
 
-export type RegisterCustomerInfo = Partial<Customer>;
+export interface Customer {
+  _id: string;
+  name: string;
+  gender: Gender;
+  birthday: string;
+  nickname: string;
+  phoneNumber: string;
+}
 
-export interface RegisterAndCollection {
-  customers: Customer[];
+export type RegisterCustomerInfo = Partial<FlowItemResponse>;
+
+export interface QueryFlowList {
+  flows: FlowItemResponse[];
   searchKeywords: string;
   startDate: string;
   endDate: string;
-  status: CustomerStatus | -1;
+  status: FlowStatus | -1;
   statusCount?: any;
   shopId?: string;
   // 用于筛选
@@ -74,7 +103,7 @@ type Template = {
   children: string[];
 };
 
-type PatchCustomerStatusType = 'register' | 'flow';
+type PatchFlowStatusType = 'register' | 'flow';
 
 export interface GrowthCurveStatisticsResponse {
   date: string;
@@ -108,41 +137,36 @@ export enum GrowthCurveWeightComparison {
   Obesity = 'Obesity', // 肥胖
 }
 
-export interface FlowArchive extends Partial<Flow> {
-  shop: {
-    id: string;
-    name: string;
-  };
-}
+export type FlowArchive = Partial<FlowItemResponse>;
 export interface FlowState {
   clearCache: () => void;
 
   allCustomers: Customer[];
   operators: Operator[];
-  register: RegisterAndCollection;
-  collection: RegisterAndCollection;
-  analyze: RegisterAndCollection;
-  evaluate: RegisterAndCollection;
-  currentFlow: Flow;
+  register: QueryFlowList;
+  collection: QueryFlowList;
+  analyze: QueryFlowList;
+  evaluate: QueryFlowList;
+  currentFlow: FlowItemResponse;
 
-  customersArchive: RegisterAndCollection;
+  customersArchive: QueryFlowList;
 
-  customersFollowUp: RegisterAndCollection;
+  customersFollowUp: QueryFlowList;
 
-  currentRegisterCustomer: RegisterCustomerInfo;
+  currentFlow: RegisterCustomerInfo;
   currentFlowCustomer: Customer;
   currentArchiveCustomer: RegisterCustomerInfo;
 
   requestGetInitializeData: () => Promise<any>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
-  requestGetRegisterCustomers: () => Promise<any>;
-  requestGetCollectionCustomers: () => Promise<any>;
-  requestGetAnalyzeCustomers: () => Promise<any>;
-  requestGetEvaluateCustomers: () => Promise<any>;
+  requestGetRegisterFlows: () => Promise<any>;
+  requestGetCollectionFlows: () => Promise<any>;
+  requestGetAnalyzeFlows: () => Promise<any>;
+  requestGetEvaluateFlows: () => Promise<any>;
   requestGetOperators: () => Promise<any>;
   requestPostCreateCustomer: (customer: Partial<Customer>) => Promise<any>;
   requestDeleteCustomer: (customerId: string) => Promise<any>;
-  requestPostCustomerInfo: () => Promise<any>;
+  requestPostRegisterInfo: () => Promise<any>;
   requestPatchCustomerInfo: () => Promise<any>;
   requestPatchCustomerArchive: (customer: Partial<Customer>) => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
@@ -167,9 +191,9 @@ export interface FlowState {
     customerId: string,
     { height, weight, date }: { height: number; weight: number; date: string },
   ) => Promise<GrowthCurveStatisticsResponse>;
-  requestPatchCustomerStatus: (data: {
+  requestPatchFlowStatus: (data: {
     status: number;
-    type: PatchCustomerStatusType;
+    type: PatchFlowStatusType;
   }) => Promise<any>;
   requestGetFlow: (flowId: string) => Promise<any>;
 
@@ -177,17 +201,17 @@ export interface FlowState {
   requestGetFollowUps: () => Promise<any>;
   requestPatchFollowUp: (data: Partial<FollowUp>) => Promise<any>;
 
-  updateRegisterFilter: (data: Partial<RegisterAndCollection>) => void;
-  updateCollectionFilter: (data: Partial<RegisterAndCollection>) => void;
-  updateEvaluateFilter: (data: Partial<RegisterAndCollection>) => void;
-  updateCustomersArchiveFilter: (data: Partial<RegisterAndCollection>) => void;
-  updateCustomersFollowupFilter: (data: Partial<RegisterAndCollection>) => void;
+  updateRegisterFilter: (data: Partial<QueryFlowList>) => void;
+  updateCollectionFilter: (data: Partial<QueryFlowList>) => void;
+  updateEvaluateFilter: (data: Partial<QueryFlowList>) => void;
+  updateCustomersArchiveFilter: (data: Partial<QueryFlowList>) => void;
+  updateCustomersFollowupFilter: (data: Partial<QueryFlowList>) => void;
 
-  updateCurrentRegisterCustomer: (data: Partial<RegisterCustomerInfo>) => void;
+  updateCurrentFlow: (data: Partial<RegisterCustomerInfo>) => void;
   updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
   updateCurrentArchiveCustomer: (data: Partial<Customer>) => void;
   updateCollection: (data: Partial<Collect>) => void;
-  updateAnalyzeFilter: (data: Partial<RegisterAndCollection>) => void;
+  updateAnalyzeFilter: (data: Partial<QueryFlowList>) => void;
   updateAnalyze: (data: Partial<Analyze>) => void;
 
   addLingualImage: (updating: UpdatingImage) => void;
@@ -220,7 +244,7 @@ export interface FlowState {
   updateNextTime: (data: Partial<NextTime>) => void;
   updateEvaluate: (data: Pick<Evaluate, 'score' | 'remark'>) => void;
 
-  getFlowOperatorConfigByUser: (status: CustomerStatus) => {
+  getFlowOperatorConfigByUser: (status: FlowStatus) => {
     configs: FlowOperatorConfigItem[];
     selectIdx: number;
   };
@@ -254,15 +278,19 @@ export interface Application {
   acupoint: string;
 }
 
-export interface Collect {
-  healthInfo: HealthInfo;
-  guidance: string;
+export interface Register {
+  customerId: any;
+  status: RegisterStatus;
   operatorId: string;
   updatedAt: Date;
-  operator?: {
-    id: string;
-    name: string;
-  };
+}
+
+export interface Collect {
+  status: CollectStatus;
+  healthInfo: HealthInfo;
+  guidance: string;
+  operatorId?: any;
+  updatedAt?: Date;
 }
 
 /**
@@ -333,22 +361,78 @@ export interface NextTime {
   nextTime: string;
 }
 
+export interface Solution {
+  /**
+   * 贴敷
+   */
+  applications: Application[];
+  /**
+   * 推拿
+   */
+  massages: Massage[];
+}
+
+/**
+ * 贴敷
+ */
+export interface Application {
+  name: string; // 贴敷名称
+  count: number; // 贴敷数量
+  duration: number; // 贴敷时长
+  acupoint: string; // 贴敷穴位
+}
+
+/**
+ * 推拿
+ */
+export interface Massage {
+  name: string; // 推拿名称
+  count: number; // 推拿数量
+  remark: string; // 推拿备注
+}
+/**
+ * 复推
+ */
+export interface Next {
+  /**
+   * 是否复推
+   */
+  hasNext: boolean;
+  /**
+   * 复推时间
+   */
+  nextTime: string;
+}
+
 export interface Analyze {
+  status: AnalyzeStatus;
+
   conclusion: string;
-  solution: {
-    applications: Application[];
-    massages: Massage[];
-  };
+  /**
+   * 调理方案
+   */
+  solution: Solution;
+  /**
+   * 注意事项
+   */
   remark: string;
+  /**
+   * 随访
+   */
   followUp: FollowUp;
-  next: NextTime;
-  operator?: {
-    id: string;
-    name: string;
-  };
-  operatorId: string;
-  editable?: number | boolean;
-  updatedAt: Date;
+  /**
+   * 复推
+   */
+  next: Next;
+
+  /**
+   * 是否可编辑
+   */
+  editable?: number | false;
+
+  operatorId?: string;
+
+  updatedAt?: Date;
 }
 
 export type Score = 1 | 2 | 3 | 4 | 5;
@@ -373,14 +457,3 @@ export interface Evaluate {
    */
   updatedAt?: Date;
 }
-
-export type Flow = {
-  _id: string;
-  customerId: string;
-  collect: Collect;
-  analyze: Analyze;
-  evaluate: Evaluate | null;
-  updatedAt: string;
-  createdAt: string;
-  projectId?: string;
-};

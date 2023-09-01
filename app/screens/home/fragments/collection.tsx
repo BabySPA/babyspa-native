@@ -14,8 +14,8 @@ import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/customer-item';
-import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
+import CustomerItem from '../components/flow-customer-item';
+import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
@@ -25,7 +25,7 @@ export default function Collection() {
   const navigation = useNavigation();
   const {
     requestGetCollectionCustomers,
-    updateCurrentRegisterCustomer,
+    updateCurrentFlow,
     collection: { customers },
   } = useFlowStore();
 
@@ -36,7 +36,7 @@ export default function Collection() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      {/* <ScrollView margin={ss(10)}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -53,7 +53,7 @@ export default function Collection() {
                   ml={idx % 2 == 1 ? ss(20) : 0}
                   key={idx}
                   onPress={() => {
-                    updateCurrentRegisterCustomer(customer);
+                    updateCurrentFlow(customer);
                     navigation.navigate('CustomerDetail');
                   }}>
                   <CustomerItem
@@ -65,7 +65,7 @@ export default function Collection() {
             })}
           </Row>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </Flex>
   );
 }
@@ -83,7 +83,7 @@ function Filter() {
     collection,
     updateCollectionFilter,
     requestGetCollectionCustomers,
-    updateCurrentRegisterCustomer,
+    updateCurrentFlow,
   } = useFlowStore();
 
   return (
@@ -97,13 +97,13 @@ function Filter() {
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           待采集：
           <Text color='#F7BA2A'>
-            {collection.statusCount[CustomerStatus.ToBeCollected] || 0}
+            {collection.statusCount[FlowStatus.ToBeCollected] || 0}
           </Text>
         </Text>
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已采集：
           <Text color='#5EACA3'>
-            {collection.statusCount[CustomerStatus.ToBeAnalyzed] || 0}
+            {collection.statusCount[FlowStatus.ToBeAnalyzed] || 0}
           </Text>
         </Text>
         <Input
@@ -151,7 +151,7 @@ function Filter() {
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
-            updateCurrentRegisterCustomer(DefaultRegisterCustomer);
+            updateCurrentFlow(DefaultRegisterCustomer);
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.collection,
             });

@@ -15,7 +15,7 @@ import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AppStackList, CustomerStatus } from '~/app/types';
+import { AppStackList, FlowStatus } from '~/app/types';
 import { FollowUpResult, FollowUpStatus } from '~/app/stores/flow/type';
 import {
   FollowUpResultText,

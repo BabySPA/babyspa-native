@@ -14,31 +14,38 @@ import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/customer-item';
-import { CustomerScreenType, CustomerStatus, OperateType } from '~/app/types';
+import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import { debounce } from 'lodash';
 
 import dayjs from 'dayjs';
+import FlowCustomerItem from '../components/flow-customer-item';
+import {
+  AnalyzeStatus,
+  CollectStatus,
+  RegisterStatus,
+} from '~/app/stores/flow/type';
+import { getStatusTextConfig } from '~/app/constants';
 
 export default function Register() {
   const navigation = useNavigation();
+
   const {
-    requestGetRegisterCustomers,
-    updateCurrentRegisterCustomer,
-    register: { customers },
+    requestGetRegisterFlows,
+    updateCurrentFlow,
+    register: { flows },
   } = useFlowStore();
 
   useEffect(() => {
-    requestGetRegisterCustomers();
+    requestGetRegisterFlows();
   }, []);
 
   return (
     <Flex flex={1}>
       <Filter />
       <ScrollView margin={ss(10)}>
-        {customers.length == 0 ? (
+        {flows.length == 0 ? (
           <EmptyBox />
         ) : (
           <Row
@@ -47,16 +54,16 @@ export default function Register() {
             borderRadius={ss(10)}
             flexWrap={'wrap'}
             p={ss(40)}>
-            {customers.map((customer, idx) => (
+            {flows.map((flow, idx) => (
               <Pressable
                 hitSlop={ss(10)}
                 ml={idx % 2 == 1 ? ss(20) : 0}
                 key={idx}
                 onPress={() => {
-                  updateCurrentRegisterCustomer(customer);
-                  navigation.navigate('CustomerDetail');
+                  updateCurrentFlow(flow);
+                  navigation.navigate('CustomerDetail', { flow: flow });
                 }}>
-                <CustomerItem customer={customer} type={OperateType.Register} />
+                <FlowCustomerItem flow={flow} type={OperateType.Register} />
               </Pressable>
             ))}
           </Row>
@@ -78,9 +85,19 @@ function Filter() {
   const {
     register,
     updateRegisterFilter,
-    requestGetRegisterCustomers,
-    updateCurrentRegisterCustomer,
+    requestGetRegisterFlows,
+    updateCurrentFlow,
   } = useFlowStore();
+
+  const [registerCount, setRegisterCount] = useState(0);
+
+  useEffect(() => {
+    setRegisterCount(
+      register.flows.filter((item) => {
+        return item.register.status === RegisterStatus.DONE;
+      }).length,
+    );
+  }, [register.flows]);
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
@@ -92,9 +109,7 @@ function Filter() {
         />
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已登记：
-          <Text color='#5EACA3'>
-            {register.statusCount[CustomerStatus.ToBeCollected] || 0}
-          </Text>
+          <Text color='#5EACA3'>{registerCount}</Text>
         </Text>
         <Input
           ml={ls(30)}
@@ -110,7 +125,7 @@ function Filter() {
               searchKeywords: text,
             });
 
-            requestGetRegisterCustomers();
+            requestGetRegisterFlows();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -142,7 +157,7 @@ function Filter() {
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
-            updateCurrentRegisterCustomer(DefaultRegisterCustomer);
+            updateCurrentFlow(DefaultRegisterCustomer);
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.register,
             });
@@ -286,7 +301,7 @@ function Filter() {
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
-                requestGetRegisterCustomers();
+                requestGetRegisterFlows();
               }}
               borderRadius={ss(4)}
               borderWidth={1}

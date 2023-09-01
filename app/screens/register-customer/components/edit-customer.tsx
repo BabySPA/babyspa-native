@@ -39,7 +39,7 @@ export default function EditCustomer(params: EditCustomerParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const { currentRegisterCustomer, updateCurrentRegisterCustomer } =
+  const { currentFlow, updateCurrentFlow } =
     useFlowStore();
 
   const { style = {} } = params;
@@ -64,13 +64,13 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                defaultValue={currentRegisterCustomer.name}
+                defaultValue={currentFlow.name}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder='请输入'
                 onChangeText={(text) => {
-                  updateCurrentRegisterCustomer({ name: text });
+                  updateCurrentFlow({ name: text });
                 }}
               />
             }
@@ -85,10 +85,10 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                defaultValue={currentRegisterCustomer.nickname}
+                defaultValue={currentFlow.nickname}
                 placeholderTextColor={'#CCC'}
                 onChangeText={(text) => {
-                  updateCurrentRegisterCustomer({ nickname: text });
+                  updateCurrentFlow({ nickname: text });
                 }}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
@@ -106,9 +106,9 @@ export default function EditCustomer(params: EditCustomerParams) {
                   { label: '男', value: 1 },
                   { label: '女', value: 0 },
                 ]}
-                current={currentRegisterCustomer.gender}
+                current={currentFlow.gender}
                 onChange={({ label, value }) => {
-                  updateCurrentRegisterCustomer({ gender: +value });
+                  updateCurrentFlow({ gender: +value });
                 }}
               />
             }
@@ -134,7 +134,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     pl={ss(20)}
                     pr={ss(8)}>
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                      {currentRegisterCustomer.birthday}
+                      {currentFlow.birthday}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -154,12 +154,12 @@ export default function EditCustomer(params: EditCustomerParams) {
               <Input
                 autoCorrect={false}
                 w={'70%'}
-                defaultValue={currentRegisterCustomer.phoneNumber}
+                defaultValue={currentFlow.phoneNumber}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
                 onChangeText={(text) => {
-                  updateCurrentRegisterCustomer({ phoneNumber: text });
+                  updateCurrentFlow({ phoneNumber: text });
                 }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
@@ -191,7 +191,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                       color={'#333'}
                       fontSize={sp(16, { min: 12 })}
                       maxW={ls(240)}>
-                      {currentRegisterCustomer.allergy || '请选择或输入'}
+                      {currentFlow.allergy || '请选择或输入'}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -201,14 +201,14 @@ export default function EditCustomer(params: EditCustomerParams) {
                   </Row>
 
                   <TemplateModal
-                    defaultText={currentRegisterCustomer.allergy || ''}
+                    defaultText={currentFlow.allergy || ''}
                     template={getTemplateGroups(TemplateGroupKeys.allergy)}
                     isOpen={isOpenTemplatePicker}
                     onClose={function (): void {
                       setIsOpenTemplatePicker(false);
                     }}
                     onConfirm={function (text): void {
-                      updateCurrentRegisterCustomer({ allergy: text });
+                      updateCurrentFlow({ allergy: text });
                       setIsOpenTemplatePicker(false);
                     }}
                   />
@@ -225,7 +225,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <SelectOperator
                   operators={operators}
                   onSelect={(selectedItem, index) => {
-                    updateCurrentRegisterCustomer({
+                    updateCurrentFlow({
                       operator: {
                         id: selectedItem._id,
                         name: selectedItem.name,
@@ -234,7 +234,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     });
                   }}
                   defaultButtonText={
-                    currentRegisterCustomer?.operator?.name ?? '请选择理疗师'
+                    currentFlow?.operator?.name ?? '请选择理疗师'
                   }
                 />
               </Box>
@@ -248,12 +248,12 @@ export default function EditCustomer(params: EditCustomerParams) {
           setIsOpenBirthdayPicker(false);
         }}
         onSelectedChange={(date: string) => {
-          updateCurrentRegisterCustomer({
+          updateCurrentFlow({
             birthday: date,
           });
         }}
-        current={currentRegisterCustomer.birthday}
-        selected={currentRegisterCustomer.birthday}
+        current={currentFlow.birthday}
+        selected={currentFlow.birthday}
       />
     </ScrollView>
   );

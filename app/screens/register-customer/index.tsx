@@ -2,7 +2,7 @@ import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
 import {
   AppStackScreenProps,
   CustomerScreenType,
-  CustomerStatus,
+  FlowStatus,
 } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -22,7 +22,7 @@ export default function RegisterCustomerScreen({
 
   const {
     requestGetOperators,
-    requestPostCustomerInfo,
+    requestPostRegisterInfo,
     requestGetInitializeData,
     updateCurrentFlowCustomer,
   } = useFlowStore();
@@ -54,7 +54,7 @@ export default function RegisterCustomerScreen({
 
               setLoading(true);
 
-              requestPostCustomerInfo()
+              requestPostRegisterInfo()
                 .then((res) => {
                   toastAlert(
                     toast,
@@ -68,7 +68,7 @@ export default function RegisterCustomerScreen({
                     // 进入流程页面
                     updateCurrentFlowCustomer(res);
                     navigation.navigate('Flow', {
-                      type: CustomerStatus.ToBeCollected,
+                      type: FlowStatus.ToBeCollected,
                     });
                   }
                 })

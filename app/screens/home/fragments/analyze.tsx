@@ -15,29 +15,29 @@ import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/customer-item';
-import { CustomerStatus, OperateType } from '~/app/types';
+import { FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
+import FlowCustomerItem from '../components/flow-customer-item';
 
 export default function Analyze() {
   const navigation = useNavigation();
   const {
-    requestGetAnalyzeCustomers,
+    // requestGetAnalyzeCustomers,
     updateCurrentFlowCustomer,
     analyze: { customers },
   } = useFlowStore();
 
   useEffect(() => {
-    requestGetAnalyzeCustomers();
+    // requestGetAnalyzeCustomers();
   }, []);
 
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      {/* <ScrollView margin={ss(10)}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -54,16 +54,16 @@ export default function Analyze() {
                   key={idx}
                   onPress={() => {
                     if (
-                      customer.status === CustomerStatus.Completed ||
-                      customer.status === CustomerStatus.Canceled
+                      customer.status === FlowStatus.Completed ||
+                      customer.status === FlowStatus.Canceled
                     ) {
                       updateCurrentFlowCustomer(customer);
                       navigation.navigate('FlowInfo', { from: 'analyze' });
                     }
                   }}>
                   <Box ml={idx % 2 == 1 ? ss(20) : 0}>
-                    <CustomerItem
-                      customer={customer}
+                    <FlowCustomerItem
+                      flow={customer}
                       type={OperateType.Analyze}
                     />
                   </Box>
@@ -72,7 +72,7 @@ export default function Analyze() {
             })}
           </Row>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </Flex>
   );
 }
@@ -104,13 +104,13 @@ function Filter() {
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           待分析：
           <Text color='#F7BA2A'>
-            {analyze.statusCount[CustomerStatus.ToBeAnalyzed] || 0}
+            {analyze.statusCount[FlowStatus.ToBeAnalyzed] || 0}
           </Text>
         </Text>
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已分析：
           <Text color='#5EACA3'>
-            {analyze.statusCount[CustomerStatus.Completed] || 0}
+            {analyze.statusCount[FlowStatus.Completed] || 0}
           </Text>
         </Text>
         <Input

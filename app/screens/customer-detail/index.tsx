@@ -1,5 +1,5 @@
 import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
-import { AppStackScreenProps, CustomerStatus } from '../../types';
+import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useEffect, useState } from 'react';
@@ -8,14 +8,17 @@ import { toastAlert } from '~/app/utils/toast';
 import EditBox from './components/edit-box';
 import InfoBox from './components/info-box';
 import { DialogModal } from '~/app/components/modals';
+import Register from '../home/fragments/register';
+import { RegisterStatus } from '~/app/stores/flow/type';
 
 export default function CustomerDetail({
   navigation,
+  route: { params },
 }: AppStackScreenProps<'CustomerDetail'>) {
   const {
     requestGetOperators,
-    requestPatchCustomerStatus,
-    currentRegisterCustomer,
+    requestPatchFlowStatus,
+    currentFlow,
     requestGetInitializeData,
   } = useFlowStore();
 
@@ -38,8 +41,7 @@ export default function CustomerDetail({
           </Text>
         }
         rightElement={
-          !edit &&
-          currentRegisterCustomer.status !== CustomerStatus.Canceled ? (
+          !edit && flow.register.status === RegisterStatus.DONE ? (
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
@@ -68,7 +70,7 @@ export default function CustomerDetail({
             onEditFinish={function (): void {
               setEdit(false);
             }}
-            type={'edit'}
+            type={'flow'}
           />
         ) : (
           <InfoBox
@@ -91,22 +93,22 @@ export default function CustomerDetail({
           setShowModal(false);
           if (loading) return;
           setLoading(true);
-          requestPatchCustomerStatus({
-            status: CustomerStatus.Canceled,
-            type: 'register',
-          })
-            .then(async (res) => {
-              // 取消成功
-              toastAlert(toast, 'success', '取消成功！');
-              await requestGetInitializeData();
-            })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '取消失败！');
-            })
-            .finally(() => {
-              setLoading(false);
-            });
+          // requestPatchFlowStatus({
+          //   status: FlowStatus.Canceled,
+          //   type: 'register',
+          // })
+          //   .then(async (res) => {
+          //     // 取消成功
+          //     toastAlert(toast, 'success', '取消成功！');
+          //     await requestGetInitializeData();
+          //   })
+          //   .catch((err) => {
+          //     // 取消失败
+          //     toastAlert(toast, 'error', '取消失败！');
+          //   })
+          //   .finally(() => {
+          //     setLoading(false);
+          //   });
         }}
       />
     </Box>

@@ -9,9 +9,17 @@ import StatisticsVisit from '../screens/home/fragments/statistics-visit';
 import StatisticsShop from '../screens/home/fragments/statistics-shop';
 import StatisticsMassage from '../screens/home/fragments/statistics-massage';
 import { RW, RoleAuthority } from '../stores/auth/type';
-import { CustomerStatus } from '../types';
+import { FlowStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
-import { FollowUpResult, FollowUpStatus, Score } from '../stores/flow/type';
+import {
+  AnalyzeStatus,
+  CollectStatus,
+  FlowItemResponse,
+  FollowUpResult,
+  FollowUpStatus,
+  RegisterStatus,
+  Score,
+} from '../stores/flow/type';
 
 export const EvaluateTextConfig = {
   ['TODO']: {
@@ -56,26 +64,52 @@ export const getFollowUpStatusTextConfig = (
   return FollowUpStatusTextConfig[status];
 };
 
-export const getStatusTextConfig = (status: CustomerStatus) => {
-  if (status == CustomerStatus.ToBeCollected) {
+export const getFlowStatus = (flow: FlowItemResponse): FlowStatus => {
+  if (
+    flow.register.status == RegisterStatus.DONE &&
+    flow.collect.status === CollectStatus.NOT_SET
+  ) {
+    // 待采集
+    return FlowStatus.ToBeCollected;
+  } else if (
+    flow.collect.status === CollectStatus.DONE &&
+    flow.analyze.status === AnalyzeStatus.NOT_SET
+  ) {
+    // 待分析
+    return FlowStatus.ToBeAnalyzed;
+  } else if (flow.analyze.status === AnalyzeStatus.DONE) {
+    // 已完成
+    return FlowStatus.Analyzed;
+  }
+  return FlowStatus.NO_SET;
+};
+
+export const getStatusTextConfig = (status: FlowStatus) => {
+  if (status == FlowStatus.ToBeCollected) {
     return {
       text: '待采集',
       textColor: '#FE9505',
       bgColor: 'rgba(254, 149, 5, 0.2)',
     };
-  } else if (status == CustomerStatus.ToBeAnalyzed) {
+  } else if (status == FlowStatus.ToBeAnalyzed) {
     return {
       text: '待分析',
       textColor: '#2AA1F7',
       bgColor: 'rgba(42, 161, 247, 0.2)',
     };
-  } else if (status == CustomerStatus.Completed) {
+  } else if (status == FlowStatus.Analyzed) {
     return {
       text: '已完成',
       textColor: '#00B49E',
       bgColor: 'rgba(0, 180, 158, 0.2)',
     };
-  } else if (status == CustomerStatus.Canceled) {
+  } else if (
+    status == FlowStatus.RegisterCanceled ||
+    status == FlowStatus.CollectCanceled ||
+    status == FlowStatus.AnalyzeCanceled ||
+    status == FlowStatus.EvaluateCanceled ||
+    status == FlowStatus.FollowUpCanceled
+  ) {
     return {
       text: '已取消',
       textColor: '#777',

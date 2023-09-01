@@ -12,16 +12,16 @@ import {
   getStatusTextConfig,
 } from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
-import { Customer, FollowUpStatus } from '~/app/stores/flow/type';
-import { CustomerStatus, OperateType } from '~/app/types';
+import {
+  Customer,
+  FlowItemResponse,
+  FollowUpStatus,
+} from '~/app/stores/flow/type';
+import { FlowStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-export default function CustomerFollowUpItem({
-  customer,
-}: {
-  customer: Customer;
-}) {
+export default function CustomerFollowUpItem({ flow }: { flow: FlowItemResponse }) {
   const followup = customer.flowFollowUp;
 
   const hasNotFollowup =

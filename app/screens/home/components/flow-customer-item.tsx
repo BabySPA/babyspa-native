@@ -4,61 +4,78 @@ import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
-import { EvaluateTextConfig, getStatusTextConfig } from '~/app/constants';
+import {
+  EvaluateTextConfig,
+  getFlowStatus,
+  getStatusTextConfig,
+} from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
-import { Customer, FollowUpStatus } from '~/app/stores/flow/type';
-import { CustomerStatus, OperateType } from '~/app/types';
+import {
+  AnalyzeStatus,
+  CollectStatus,
+  Customer,
+  EvaluateStatus,
+  FlowItemResponse,
+  FollowUpStatus,
+  RegisterStatus,
+} from '~/app/stores/flow/type';
+import { FlowStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-export default function CustomerItem({
-  customer,
+export default function FlowCustomerItem({
+  flow,
   type,
 }: {
-  customer: Customer;
+  flow: FlowItemResponse;
   type: OperateType;
 }) {
+  const customer: Customer = flow.customer;
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
   const { updateCurrentFlowCustomer } = useFlowStore();
+
+  const flowStatus = getFlowStatus(flow);
+
   const OperatorStatusFlag = () => {
     if (type === OperateType.Evaluate) {
       return (
         <Box
           bgColor={
-            EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].bgColor
+            EvaluateTextConfig[flow.evaluateOperator ? 'DONE' : 'TODO'].bgColor
           }
           px={ls(12)}
           py={ss(6)}
           _text={{
             fontSize: sp(16),
             color:
-              EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO']
+              EvaluateTextConfig[flow.evaluateOperator ? 'DONE' : 'TODO']
                 .textColor,
           }}
           borderBottomLeftRadius={ss(8)}
           borderTopRightRadius={ss(8)}>
-          {EvaluateTextConfig[customer.flowEvaluate ? 'DONE' : 'TODO'].text}
+          {EvaluateTextConfig[flow.evaluateOperator ? 'DONE' : 'TODO'].text}
         </Box>
       );
     } else {
       return (
         <Box
-          bgColor={getStatusTextConfig(customer.status)?.bgColor}
+          bgColor={getStatusTextConfig(flowStatus)?.bgColor}
           px={ls(12)}
           py={ss(6)}
           _text={{
             fontSize: sp(16),
-            color: getStatusTextConfig(customer.status)?.textColor,
+            color: getStatusTextConfig(flowStatus)?.textColor,
           }}
           borderBottomLeftRadius={ss(8)}
           borderTopRightRadius={ss(8)}>
-          {getStatusTextConfig(customer.status)?.text}
+          {getStatusTextConfig(flowStatus)?.text}
         </Box>
       );
     }
   };
+
   return (
     <Row
       borderRadius={ss(8)}
@@ -80,7 +97,7 @@ export default function CustomerItem({
             }
           />
           <Text color='#F7BA2A' fontSize={sp(24)}>
-            {customer.tag}
+            {flow.tag}
           </Text>
         </Column>
 
@@ -115,19 +132,19 @@ export default function CustomerItem({
           </Row>
           <Row alignItems={'center'}>
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
-              理疗师：{customer.operator?.name}
+              理疗师：{flow.collectionOperator?.name}
             </Text>
             {(type == OperateType.Evaluate ||
               (type == OperateType.Analyze &&
-                customer.status === CustomerStatus.Completed)) && (
+                flow.analyze.status === AnalyzeStatus.DONE)) && (
               <Text mt={ss(10)} color={'#666'} fontSize={sp(18)} ml={ss(30)}>
-                分析师：{customer.analyst?.name}
+                分析师：{flow.analyzeOperator?.name}
               </Text>
             )}
           </Row>
           {(type == OperateType.Analyze || type == OperateType.Evaluate) && (
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
-              门店：{customer.shop?.name}
+              门店：{flow.shop?.name}
             </Text>
           )}
           <Row alignItems={'center'} mt={ss(10)}>
@@ -141,7 +158,7 @@ export default function CustomerItem({
               fontWeight={400}
               fontSize={sp(18)}
               ml={ls(10)}>
-              {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
+              {dayjs(flow.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
         </Flex>
@@ -150,32 +167,32 @@ export default function CustomerItem({
         <OperatorStatusFlag />
 
         {type === OperateType.Collection &&
-          customer.status == CustomerStatus.ToBeCollected && (
+          flow.collect.status == CollectStatus.NOT_SET && (
             <OperateButton
               text={'采集'}
               onPress={() => {
                 updateCurrentFlowCustomer(customer);
                 navigation.navigate('Flow', {
-                  type: CustomerStatus.ToBeCollected,
+                  type: FlowStatus.ToBeCollected,
                 });
               }}
             />
           )}
 
         {type === OperateType.Analyze &&
-          customer.status == CustomerStatus.ToBeAnalyzed && (
+          flow.analyze.status == AnalyzeStatus.NOT_SET && (
             <OperateButton
               text={'分析'}
               onPress={() => {
                 updateCurrentFlowCustomer(customer);
                 navigation.navigate('Flow', {
-                  type: CustomerStatus.ToBeAnalyzed,
+                  type: FlowStatus.ToBeAnalyzed,
                 });
               }}
             />
           )}
 
-        {type === OperateType.Evaluate && !customer.flowEvaluate && (
+        {type === OperateType.Evaluate && (
           <OperateButton
             text={'评价'}
             onPress={() => {

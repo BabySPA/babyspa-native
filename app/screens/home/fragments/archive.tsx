@@ -25,7 +25,7 @@ export default function Archive() {
   const navigation = useNavigation();
   const {
     requestCustomersArchive,
-    customersArchive: { customers },
+    customersArchive: { flows },
     updateCurrentArchiveCustomer,
   } = useFlowStore();
 
@@ -35,7 +35,7 @@ export default function Archive() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      {/* <ScrollView margin={ss(10)}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -59,7 +59,7 @@ export default function Archive() {
             ))}
           </Row>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </Flex>
   );
 }

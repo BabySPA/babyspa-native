@@ -7,7 +7,7 @@ import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AppStackList, CustomerStatus } from '~/app/types';
+import { AppStackList, FlowStatus } from '~/app/types';
 import { FollowUpStatus } from '~/app/stores/flow/type';
 
 interface AnalyzeCardParams {
@@ -40,7 +40,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               hitSlop={ss(10)}
               onPress={() => {
                 navigation.replace('Flow', {
-                  type: CustomerStatus.ToBeAnalyzed,
+                  type: FlowStatus.ToBeAnalyzed,
                 });
               }}>
               <Text fontSize={sp(14)} color='#03CBB2'>

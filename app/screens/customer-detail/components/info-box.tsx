@@ -4,9 +4,10 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import dayjs from 'dayjs';
-import { CustomerStatus, Gender } from '~/app/types';
+import { FlowStatus, Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
 import LabelBox from './label-box';
+import { FlowItemResponse, RegisterStatus } from '~/app/stores/flow/type';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
@@ -14,8 +15,7 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const { currentRegisterCustomer } = useFlowStore();
-  const age = getAge(currentRegisterCustomer.birthday ?? '');
+  const age = getAge(flow.customer.birthday ?? '');
   return (
     <Column
       flex={1}
@@ -27,53 +27,45 @@ export default function InfoBox(params: InfoBoxParams) {
         <BoxTitle title='客户信息' />
         <Box mt={ss(30)} px={ls(50)}>
           <Row alignItems={'center'}>
-            <LabelBox title='姓名' value={currentRegisterCustomer.name} />
-            <LabelBox title='乳名' value={currentRegisterCustomer.nickname} />
+            <LabelBox title='姓名' value={flow.customer.name} />
+            <LabelBox title='乳名' value={flow.customer.nickname} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='性别'
-              value={currentRegisterCustomer.gender == Gender.MAN ? '男' : '女'}
+              value={flow.customer.gender == Gender.MAN ? '男' : '女'}
             />
             <LabelBox
               title='生日'
-              value={dayjs(currentRegisterCustomer.birthday).format(
-                'YYYY年MM月DD日',
-              )}
+              value={dayjs(flow.customer.birthday).format('YYYY年MM月DD日')}
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox title='年龄' value={`${age?.year}岁${age?.month}月`} />
-            <LabelBox
-              title='电话'
-              value={currentRegisterCustomer.phoneNumber}
-            />
+            <LabelBox title='电话' value={flow.customer.phoneNumber} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='过敏原'
-              value={currentRegisterCustomer.allergy}
+              value={flow.collect.healthInfo.allergy}
               alignItems='flex-start'
             />
-            <LabelBox
-              title='调理师'
-              value={currentRegisterCustomer.operator?.name}
-            />
+            <LabelBox title='调理师' value={flow.collectionOperator?.name} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='登记时间'
-              value={dayjs(currentRegisterCustomer.updatedAt).format(
+              value={dayjs(flow.register.updatedAt).format(
                 'YYYY-MM-DD HH:mm:ss',
               )}
             />
-            <LabelBox title='登记号码' value={currentRegisterCustomer.tag} />
+            <LabelBox title='登记号码' value={flow.tag} />
           </Row>
         </Box>
       </Column>
       <Image
         source={
-          currentRegisterCustomer.status === CustomerStatus.Canceled
+          flow.register.status === RegisterStatus.CANCEL
             ? require('~/assets/images/register-cancel.png')
             : require('~/assets/images/register-success.png')
         }
@@ -117,7 +109,7 @@ hitSlop={ss(10)}
             borderWidth={1}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
-              {currentRegisterCustomer.status === CustomerStatus.Canceled
+              {flow.register.status === RegisterStatus.CANCEL
                 ? '再次登记'
                 : '修改'}
             </Text>

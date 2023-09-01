@@ -102,7 +102,7 @@ function CustomerItem({ customer }: { customer: Customer }) {
 }
 
 export default function SelectCustomer(params: SelectCustomerParams) {
-  const { requestAllCustomers, updateCurrentRegisterCustomer, allCustomers } =
+  const { requestAllCustomers, updateCurrentFlow, allCustomers } =
     useFlowStore();
 
   useEffect(() => {
@@ -153,7 +153,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
                 <Pressable
                   hitSlop={ss(10)}
                   onPress={() => {
-                    updateCurrentRegisterCustomer({
+                    updateCurrentFlow({
                       name: item.name,
                       nickname: item.nickname,
                       gender: item.gender,

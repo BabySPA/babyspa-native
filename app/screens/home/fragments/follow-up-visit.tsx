@@ -26,7 +26,7 @@ export default function FollowUpVisit() {
   const navigation = useNavigation();
   const {
     requestGetFollowUps,
-    customersFollowUp: { customers },
+    customersFollowUp: { flows },
     updateCurrentFlowCustomer,
   } = useFlowStore();
 
@@ -37,7 +37,7 @@ export default function FollowUpVisit() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      {/* <ScrollView margin={ss(10)}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -65,7 +65,7 @@ export default function FollowUpVisit() {
             })}
           </Row>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </Flex>
   );
 }
