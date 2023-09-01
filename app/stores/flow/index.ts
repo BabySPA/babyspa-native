@@ -21,7 +21,7 @@ const defaultRegisterAndCollection = {
   searchKeywords: '',
   status: -1,
   statusCount: {},
-  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+  startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
@@ -194,6 +194,10 @@ const useFlowStore = create(
       }
 
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
+
+      request.get('/flows', { params }).then((res) => {
+        console.log(res);
+      });
 
       request.get('/customers', { params }).then(({ data }) => {
         const { docs, statusCount } = data;

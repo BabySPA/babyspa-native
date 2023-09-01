@@ -1,4 +1,4 @@
-import Picker from 'react-native-picker';
+import Picker from 'react-native-patchpicker';
 import { createAreaData } from '.';
 import { sp } from './style';
 const area = createAreaData();
