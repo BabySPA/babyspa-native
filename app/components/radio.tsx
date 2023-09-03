@@ -20,7 +20,8 @@ export function RadioBox(params: {
             ml={idx == 0 ? 0 : params.margin}
             onPress={() => {
               params.onChange(item);
-            }}>
+            }}
+          >
             <Row mr={ls(10)} alignItems={'center'}>
               <Image
                 source={
@@ -33,7 +34,8 @@ export function RadioBox(params: {
               <Text
                 fontSize={sp(18)}
                 ml={ls(5)}
-                color={params.current == item.value ? '#333' : '#333'}>
+                color={params.current == item.value ? '#333' : '#333'}
+              >
                 {item.label}
               </Text>
             </Row>

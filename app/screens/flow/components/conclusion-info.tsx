@@ -22,11 +22,13 @@ export default function ConclusionInfo({
   const [analyzeHistory, setAnalyzeHistory] = useState<FlowArchive[]>([]);
 
   useEffect(() => {
-    if (currentFlow.customerId)
-      requestCustomerArchiveHistory(currentFlow.customerId).then((res) => {
-        setAnalyzeHistory(res);
-      });
-  }, [currentFlow.customerId]);
+    if (currentFlow.register.customerId)
+      requestCustomerArchiveHistory(currentFlow.register.customerId).then(
+        (res) => {
+          setAnalyzeHistory(res);
+        },
+      );
+  }, [currentFlow.register.customerId]);
   const { templates, getTemplateGroups } = useManagerStore();
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
@@ -100,7 +102,7 @@ export default function ConclusionInfo({
                       </Text>
                     </Column>
                     <Text color='#BCBCBC' fontSize={sp(18)}>
-                      {item.analyze?.operator?.name}
+                      {item.analyzeOperator?.name}
                     </Text>
                   </Row>
                 </Row>

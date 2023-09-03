@@ -1,13 +1,13 @@
 import { Box, Column, Row, Text, Pressable } from 'native-base';
 import { Image } from 'react-native';
-import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import dayjs from 'dayjs';
 import { FlowStatus, Gender } from '~/app/types';
 import { getAge } from '~/app/utils';
 import LabelBox from './label-box';
-import { FlowItemResponse, RegisterStatus } from '~/app/stores/flow/type';
+import useFlowStore from '~/app/stores/flow';
+import { RegisterStatus } from '~/app/stores/flow/type';
 
 interface InfoBoxParams {
   onPressEdit: () => void;
@@ -15,57 +15,65 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const age = getAge(flow.customer.birthday ?? '');
+  const { currentFlow } = useFlowStore();
+  const age = getAge(currentFlow.customer.birthday ?? '');
+
   return (
     <Column
       flex={1}
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Column>
         <BoxTitle title='客户信息' />
         <Box mt={ss(30)} px={ls(50)}>
           <Row alignItems={'center'}>
-            <LabelBox title='姓名' value={flow.customer.name} />
-            <LabelBox title='乳名' value={flow.customer.nickname} />
+            <LabelBox title='姓名' value={currentFlow.customer.name} />
+            <LabelBox title='乳名' value={currentFlow.customer.nickname} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='性别'
-              value={flow.customer.gender == Gender.MAN ? '男' : '女'}
+              value={currentFlow.customer.gender == Gender.MAN ? '男' : '女'}
             />
             <LabelBox
               title='生日'
-              value={dayjs(flow.customer.birthday).format('YYYY年MM月DD日')}
+              value={dayjs(currentFlow.customer.birthday).format(
+                'YYYY年MM月DD日',
+              )}
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox title='年龄' value={`${age?.year}岁${age?.month}月`} />
-            <LabelBox title='电话' value={flow.customer.phoneNumber} />
+            <LabelBox title='电话' value={currentFlow.customer.phoneNumber} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='过敏原'
-              value={flow.collect.healthInfo.allergy}
+              value={currentFlow.collect.healthInfo.allergy || '未设置'}
               alignItems='flex-start'
             />
-            <LabelBox title='调理师' value={flow.collectionOperator?.name} />
+            <LabelBox
+              title='调理师'
+              value={currentFlow.collectionOperator?.name}
+            />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='登记时间'
-              value={dayjs(flow.register.updatedAt).format(
+              value={dayjs(currentFlow.register.updatedAt).format(
                 'YYYY-MM-DD HH:mm:ss',
               )}
             />
-            <LabelBox title='登记号码' value={flow.tag} />
+            <LabelBox title='登记号码' value={currentFlow.tag} />
           </Row>
         </Box>
       </Column>
       <Image
         source={
-          flow.register.status === RegisterStatus.CANCEL
+          currentFlow.register.status === RegisterStatus.CANCEL
             ? require('~/assets/images/register-cancel.png')
             : require('~/assets/images/register-success.png')
         }
@@ -100,16 +108,18 @@ hitSlop={ss(10)}
           hitSlop={ss(10)}
           onPress={() => {
             params.onPressEdit();
-          }}>
+          }}
+        >
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
             borderWidth={1}
-            borderColor={'#00B49E'}>
+            borderColor={'#00B49E'}
+          >
             <Text color='#00B49E' fontSize={sp(16)}>
-              {flow.register.status === RegisterStatus.CANCEL
+              {currentFlow.register.status === RegisterStatus.CANCEL
                 ? '再次登记'
                 : '修改'}
             </Text>

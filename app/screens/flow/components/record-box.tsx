@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
+import { current } from 'immer';
+import _ from 'lodash';
 import { Box, Center, Modal, ScrollView, Text, useToast } from 'native-base';
 import { useRef, useState } from 'react';
 import { Image, PanResponder, Vibration } from 'react-native';
@@ -16,17 +18,10 @@ export default function RecordBox({ edit }: { edit: boolean }) {
   const toast = useToast();
   const [showRecordBox, setShowRecordBox] = useState(false);
   const [recorder, setRecorder] = useState<Audio.Recording>();
-  const {
-    currentFlowCustomer,
-    addAudioFile,
-    updateAudioFile,
-    removeAudioFile,
-    currentFlow: {
-      collect: {
-        healthInfo: { audioFiles },
-      },
-    },
-  } = useFlowStore();
+  const { addAudioFile, updateAudioFile, removeAudioFile, currentFlow } =
+    useFlowStore();
+
+  const audioFiles = _.get(currentFlow, 'collect.healthInfo.audioFiles', []);
   const { getOssConfig } = useOssStore();
   const [isTouchNow, setIsTouchNow] = useState(false);
 
@@ -134,9 +129,9 @@ export default function RecordBox({ edit }: { edit: boolean }) {
             return;
           }
           const recordType = uri.split('.').pop();
-          const name = `${currentFlowCustomer.tag}-${
-            currentFlowCustomer.flowId
-          }-${dayjs().format('YYYYMMDDHHmmss')}.${recordType}`;
+          const name = `${currentFlow.tag}-${currentFlow._id}-${dayjs().format(
+            'YYYYMMDDHHmmss',
+          )}.${recordType}`;
 
           addAudioFile({
             duration,
@@ -185,7 +180,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
           )}
         </ScrollView>
       </Center>
-      {edit && (
+      {edit && audioFiles.length < 3 && (
         <Center
           {...panResponder.panHandlers}
           borderRadius={ss(6)}

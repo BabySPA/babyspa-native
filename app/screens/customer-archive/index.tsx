@@ -58,9 +58,8 @@ export default function CustomerArchive({
     requestCustomerGrowthCurve,
     requestPutCustomerGrowthCurve,
     requestPatchCustomerGrowthCurve,
-    updateCurrentFlowCustomer,
     requestDeleteCustomer,
-    requestCustomersArchive,
+    requestArchiveCustomers,
     currentArchiveCustomer: customer,
   } = useFlowStore();
 
@@ -74,18 +73,18 @@ export default function CustomerArchive({
   >([]);
 
   useEffect(() => {
-    requestCustomerArchiveHistory(customer?.id || '').then((res) => {
+    requestCustomerArchiveHistory(customer?._id || '').then((res) => {
       setArchives(res);
     });
 
-    requestCustomerArchiveCourses(customer?.id || '').then((res) => {
+    requestCustomerArchiveCourses(customer?._id || '').then((res) => {
       setCourses(res);
     });
     getGrowthCurveDatas();
   }, []);
 
   const getGrowthCurveDatas = () => {
-    requestCustomerGrowthCurve(customer?.id || '').then((res) => {
+    requestCustomerGrowthCurve(customer?._id || '').then((res) => {
       setGrowthCurves(res);
     });
   };
@@ -121,14 +120,16 @@ export default function CustomerArchive({
         bgColor={'#F6F6FA'}
         flex={1}
         p={ss(10)}
-        safeAreaBottom>
+        safeAreaBottom
+      >
         <Row
           py={ss(20)}
           px={ss(40)}
           bgColor='white'
           borderRadius={ss(10)}
           justifyContent={'space-between'}
-          alignItems={'center'}>
+          alignItems={'center'}
+        >
           <Row alignItems={'center'}>
             <Image
               style={{ width: ss(60), height: ss(60) }}
@@ -168,7 +169,8 @@ export default function CustomerArchive({
               onPress={() => {
                 // 删除客户
                 setShowDeleteDialog(true);
-              }}>
+              }}
+            >
               <Row alignItems={'center'}>
                 <Icon
                   as={<AntDesign name='delete' />}
@@ -187,10 +189,10 @@ export default function CustomerArchive({
                 setShowDeleteDialog(false);
               }}
               onConfirm={function (): void {
-                requestDeleteCustomer(customer?.id || '')
+                requestDeleteCustomer(customer?._id || '')
                   .then(async (res) => {
                     toastAlert(toast, 'success', '删除成功！');
-                    await requestCustomersArchive();
+                    await requestArchiveCustomers();
                     navigation.goBack();
                   })
                   .catch((err) => {
@@ -206,7 +208,8 @@ export default function CustomerArchive({
               ml={ls(40)}
               onPress={() => {
                 navigation.navigate('AddNewCustomer');
-              }}>
+              }}
+            >
               <Row alignItems={'center'}>
                 <Icon
                   as={<FontAwesome name='edit' />}
@@ -226,14 +229,16 @@ export default function CustomerArchive({
           bgColor='white'
           borderRadius={ss(10)}
           flex={1}
-          p={ss(40)}>
+          p={ss(40)}
+        >
           <Row alignItems={'center'} justifyContent={'space-between'}>
             <Container>
               <Row
                 borderRadius={ss(4)}
                 borderColor={'#99A9BF'}
                 borderWidth={1}
-                borderStyle={'solid'}>
+                borderStyle={'solid'}
+              >
                 {configs.map((item, idx) => {
                   return (
                     <Pressable
@@ -241,7 +246,8 @@ export default function CustomerArchive({
                       key={item.key}
                       onPress={() => {
                         setSelectedFragment(idx);
-                      }}>
+                      }}
+                    >
                       <Box
                         minW={ss(120)}
                         px={ss(20)}
@@ -252,7 +258,8 @@ export default function CustomerArchive({
                             : '#fff'
                         }
                         borderRightWidth={idx == configs.length - 1 ? 0 : 1}
-                        borderRightColor={'#99A9BF'}>
+                        borderRightColor={'#99A9BF'}
+                      >
                         <Text
                           fontSize={sp(20)}
                           fontWeight={600}
@@ -260,7 +267,8 @@ export default function CustomerArchive({
                             configs[selectFragment].key == item.key
                               ? '#fff'
                               : '#333'
-                          }>
+                          }
+                        >
                           {item.text}
                         </Text>
                       </Box>
@@ -285,7 +293,8 @@ export default function CustomerArchive({
                 borderRadius={ss(4)}
                 borderWidth={1}
                 px={ls(16)}
-                py={ss(8)}>
+                py={ss(8)}
+              >
                 <Text color='#03CBB2' fontSize={sp(14)}>
                   新建
                 </Text>
@@ -298,10 +307,10 @@ export default function CustomerArchive({
               <ShopArchive
                 archives={archives}
                 onPressToFlowInfo={function (): void {
-                  updateCurrentFlowCustomer(customer);
-                  navigation.navigate('FlowInfo', {
-                    from: 'analyze',
-                  });
+                  // updateCurrentFlowCustomer(customer);
+                  // navigation.navigate('FlowInfo', {
+                  //   from: 'analyze',
+                  // });
                 }}
               />
             ) : (
@@ -312,10 +321,10 @@ export default function CustomerArchive({
               <HistoryArchive
                 courses={courses}
                 onPressToFlowInfo={function (): void {
-                  updateCurrentFlowCustomer(customer);
-                  navigation.navigate('FlowInfo', {
-                    from: 'analyze',
-                  });
+                  // updateCurrentFlowCustomer(customer);
+                  // navigation.navigate('FlowInfo', {
+                  //   from: 'analyze',
+                  // });
                 }}
               />
             ) : (
@@ -361,7 +370,7 @@ export default function CustomerArchive({
           weight: number;
         }): void {
           if (showEditGrowthCurve.date.length > 0) {
-            requestPatchCustomerGrowthCurve(customer?.id || '', {
+            requestPatchCustomerGrowthCurve(customer?._id || '', {
               height,
               weight,
               date: showEditGrowthCurve.date,
@@ -386,7 +395,7 @@ export default function CustomerArchive({
                 });
               });
           } else {
-            requestPutCustomerGrowthCurve(customer?.id || '', {
+            requestPutCustomerGrowthCurve(customer?._id || '', {
               height,
               weight,
             })

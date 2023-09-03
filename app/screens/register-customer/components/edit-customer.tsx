@@ -39,8 +39,7 @@ export default function EditCustomer(params: EditCustomerParams) {
     setIsOpenBirthdayPicker(true);
   };
 
-  const { currentFlow, updateCurrentFlow } =
-    useFlowStore();
+  const { currentFlow, updateCurrentFlow } = useFlowStore();
 
   const { style = {} } = params;
 
@@ -50,7 +49,8 @@ export default function EditCustomer(params: EditCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(4)}>
+      borderRadius={ss(4)}
+    >
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -64,13 +64,19 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                defaultValue={currentFlow.name}
+                defaultValue={currentFlow.customer.name}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
                 placeholder='请输入'
                 onChangeText={(text) => {
-                  updateCurrentFlow({ name: text });
+                  updateCurrentFlow({
+                    ...currentFlow,
+                    customer: {
+                      ...currentFlow.customer,
+                      name: text,
+                    },
+                  });
                 }}
               />
             }
@@ -85,10 +91,16 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
-                defaultValue={currentFlow.nickname}
+                defaultValue={currentFlow.customer.nickname}
                 placeholderTextColor={'#CCC'}
                 onChangeText={(text) => {
-                  updateCurrentFlow({ nickname: text });
+                  updateCurrentFlow({
+                    ...currentFlow,
+                    customer: {
+                      ...currentFlow.customer,
+                      nickname: text,
+                    },
+                  });
                 }}
                 color={'#333333'}
                 fontSize={sp(16, { min: 12 })}
@@ -106,9 +118,15 @@ export default function EditCustomer(params: EditCustomerParams) {
                   { label: '男', value: 1 },
                   { label: '女', value: 0 },
                 ]}
-                current={currentFlow.gender}
+                current={currentFlow.customer.gender}
                 onChange={({ label, value }) => {
-                  updateCurrentFlow({ gender: +value });
+                  updateCurrentFlow({
+                    ...currentFlow,
+                    customer: {
+                      ...currentFlow.customer,
+                      gender: +value,
+                    },
+                  });
                 }}
               />
             }
@@ -123,7 +141,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                   hitSlop={ss(10)}
                   onPress={() => {
                     showDatePicker();
-                  }}>
+                  }}
+                >
                   <Row
                     borderRadius={ss(4)}
                     justifyContent={'space-between'}
@@ -132,9 +151,10 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
-                    pr={ss(8)}>
+                    pr={ss(8)}
+                  >
                     <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                      {currentFlow.birthday}
+                      {currentFlow.customer.birthday || '请选择'}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -154,12 +174,18 @@ export default function EditCustomer(params: EditCustomerParams) {
               <Input
                 autoCorrect={false}
                 w={'70%'}
-                defaultValue={currentFlow.phoneNumber}
+                defaultValue={currentFlow.customer.phoneNumber}
                 h={ss(48, { min: 26 })}
                 py={ss(10)}
                 px={ls(20)}
                 onChangeText={(text) => {
-                  updateCurrentFlow({ phoneNumber: text });
+                  updateCurrentFlow({
+                    ...currentFlow,
+                    customer: {
+                      ...currentFlow.customer,
+                      phoneNumber: text,
+                    },
+                  });
                 }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
@@ -177,7 +203,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                   hitSlop={ss(10)}
                   onPress={() => {
                     setIsOpenTemplatePicker(true);
-                  }}>
+                  }}
+                >
                   <Row
                     borderRadius={ss(4)}
                     justifyContent={'space-between'}
@@ -186,12 +213,14 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
-                    pr={ss(8)}>
+                    pr={ss(8)}
+                  >
                     <Text
                       color={'#333'}
                       fontSize={sp(16, { min: 12 })}
-                      maxW={ls(240)}>
-                      {currentFlow.allergy || '请选择或输入'}
+                      maxW={ls(240)}
+                    >
+                      {currentFlow.collect.healthInfo.allergy || '请选择或输入'}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -201,14 +230,23 @@ export default function EditCustomer(params: EditCustomerParams) {
                   </Row>
 
                   <TemplateModal
-                    defaultText={currentFlow.allergy || ''}
+                    defaultText={currentFlow.collect.healthInfo.allergy || ''}
                     template={getTemplateGroups(TemplateGroupKeys.allergy)}
                     isOpen={isOpenTemplatePicker}
                     onClose={function (): void {
                       setIsOpenTemplatePicker(false);
                     }}
                     onConfirm={function (text): void {
-                      updateCurrentFlow({ allergy: text });
+                      updateCurrentFlow({
+                        ...currentFlow,
+                        collect: {
+                          ...currentFlow.collect,
+                          healthInfo: {
+                            ...currentFlow.collect.healthInfo,
+                            allergy: text,
+                          },
+                        },
+                      });
                       setIsOpenTemplatePicker(false);
                     }}
                   />
@@ -226,15 +264,16 @@ export default function EditCustomer(params: EditCustomerParams) {
                   operators={operators}
                   onSelect={(selectedItem, index) => {
                     updateCurrentFlow({
-                      operator: {
-                        id: selectedItem._id,
+                      ...currentFlow,
+                      collectionOperator: {
+                        ...currentFlow.collectionOperator,
+                        _id: selectedItem._id,
                         name: selectedItem.name,
-                        phoneNumber: selectedItem.phoneNumber,
                       },
                     });
                   }}
                   defaultButtonText={
-                    currentFlow?.operator?.name ?? '请选择理疗师'
+                    currentFlow?.collectionOperator?.name ?? '请选择理疗师'
                   }
                 />
               </Box>
@@ -249,11 +288,15 @@ export default function EditCustomer(params: EditCustomerParams) {
         }}
         onSelectedChange={(date: string) => {
           updateCurrentFlow({
-            birthday: date,
+            ...currentFlow,
+            customer: {
+              ...currentFlow.customer,
+              birthday: date,
+            },
           });
         }}
-        current={currentFlow.birthday}
-        selected={currentFlow.birthday}
+        current={currentFlow.customer.birthday}
+        selected={currentFlow.customer.birthday}
       />
     </ScrollView>
   );

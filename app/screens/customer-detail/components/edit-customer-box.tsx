@@ -21,43 +21,34 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
-import { FlowStatus } from '~/app/types';
-import SelectOperator from '~/app/components/select-operator';
-import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
-import { TemplateGroupKeys } from '~/app/constants';
 import { RadioBox } from '~/app/components/radio';
-import { RegisterStatus } from '~/app/stores/flow/type';
 
-interface EditBoxParams {
+interface EditCustomerBox {
   onEditFinish: () => void;
 }
 
-export default function EditBox(params: EditBoxParams) {
+export default function EditCustomerBox(params: EditCustomerBox) {
   const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
   const {
-    currentFlow,
-    updateCurrentFlow,
-    operators,
-    requestPostRegisterInfo,
-    requestPatchCustomerInfo,
-    requestGetInitializeData,
+    requestPostCustomerArchive,
+    requestArchiveCustomers,
+    requestPatchCustomerArchive,
+    currentArchiveCustomer,
+    updateCurrentArchiveCustomer,
   } = useFlowStore();
 
-  const [tempFlow, setTempFlow] = useState(currentFlow);
+  const [tempCustomer, setTempCustomer] = useState(currentArchiveCustomer);
 
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
   };
 
-  let currentSelectBirthday = tempFlow.customer.birthday;
-  const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
-
-  const { templates, getTemplateGroups } = useManagerStore();
+  let currentSelectBirthday = tempCustomer.birthday;
 
   return (
     <Column
@@ -65,8 +56,7 @@ export default function EditBox(params: EditBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Column>
         <BoxTitle title='客户信息' />
         <Box mt={ss(30)} px={ls(50)}>
@@ -82,18 +72,15 @@ export default function EditBox(params: EditBoxParams) {
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
-                  defaultValue={tempFlow.customer.name}
+                  defaultValue={tempCustomer.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16, { min: 12 })}
                   placeholder='请输入'
                   onChangeText={(text) => {
-                    setTempFlow({
-                      ...tempFlow,
-                      customer: {
-                        ...tempFlow.customer,
-                        name: text,
-                      },
+                    setTempCustomer({
+                      ...tempCustomer,
+                      name: text,
                     });
                   }}
                 />
@@ -109,18 +96,15 @@ export default function EditBox(params: EditBoxParams) {
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
-                  defaultValue={tempFlow.customer.nickname}
+                  defaultValue={tempCustomer.nickname}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16, { min: 12 })}
                   placeholder='请输入'
                   onChangeText={(text) => {
-                    setTempFlow({
-                      ...tempFlow,
-                      customer: {
-                        ...tempFlow.customer,
-                        nickname: text,
-                      },
+                    setTempCustomer({
+                      ...tempCustomer,
+                      nickname: text,
                     });
                   }}
                 />
@@ -139,14 +123,11 @@ export default function EditBox(params: EditBoxParams) {
                     { label: '男', value: 1 },
                     { label: '女', value: 0 },
                   ]}
-                  current={tempFlow.customer.gender}
+                  current={tempCustomer.gender}
                   onChange={({ label, value }) => {
-                    setTempFlow({
-                      ...tempFlow,
-                      customer: {
-                        ...tempFlow.customer,
-                        gender: +value,
-                      },
+                    setTempCustomer({
+                      ...tempCustomer,
+                      gender: +value,
                     });
                   }}
                 />
@@ -162,8 +143,7 @@ export default function EditBox(params: EditBoxParams) {
                     hitSlop={ss(10)}
                     onPress={() => {
                       showDatePicker();
-                    }}
-                  >
+                    }}>
                     <Row
                       borderRadius={ss(4)}
                       justifyContent={'space-between'}
@@ -172,10 +152,9 @@ export default function EditBox(params: EditBoxParams) {
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       pr={ss(10)}
-                      pl={ss(20)}
-                    >
+                      pl={ss(20)}>
                       <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
-                        {tempFlow.customer.birthday}
+                        {tempCustomer.birthday}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
@@ -197,17 +176,14 @@ export default function EditBox(params: EditBoxParams) {
                 <Input
                   autoCorrect={false}
                   w={ls(380)}
-                  defaultValue={tempFlow.customer.phoneNumber}
+                  defaultValue={tempCustomer.phoneNumber}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
                   onChangeText={(text) => {
-                    setTempFlow({
-                      ...tempFlow,
-                      customer: {
-                        ...tempFlow.customer,
-                        phoneNumber: text,
-                      },
+                    setTempCustomer({
+                      ...tempCustomer,
+                      phoneNumber: text,
                     });
                   }}
                   placeholderTextColor={'#CCC'}
@@ -215,94 +191,6 @@ export default function EditBox(params: EditBoxParams) {
                   fontSize={sp(16, { min: 12 })}
                   placeholder='请输入'
                 />
-              }
-            />
-
-            <FormBox
-              title='过敏原'
-              style={{ flex: 1 }}
-              form={
-                <Box w={'70%'}>
-                  <Pressable
-                    hitSlop={ss(10)}
-                    onPress={() => {
-                      setIsOpenTemplatePicker(true);
-                    }}
-                  >
-                    <Row
-                      borderRadius={ss(4)}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      borderWidth={1}
-                      borderColor={'#D8D8D8'}
-                      py={ss(10)}
-                      pl={ss(20)}
-                      pr={ss(8)}
-                    >
-                      <Text
-                        color={'#333'}
-                        fontSize={sp(16, { min: 12 })}
-                        maxW={ls(240)}
-                      >
-                        {tempFlow.collect.healthInfo.allergy || '请选择或输入'}
-                      </Text>
-                      <Icon
-                        as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
-                        color='#999'
-                      />
-                    </Row>
-
-                    <TemplateModal
-                      defaultText={tempFlow.collect.healthInfo.allergy || ''}
-                      template={getTemplateGroups(TemplateGroupKeys.allergy)}
-                      isOpen={isOpenTemplatePicker}
-                      onClose={function (): void {
-                        setIsOpenTemplatePicker(false);
-                      }}
-                      onConfirm={function (text): void {
-                        setTempFlow({
-                          ...tempFlow,
-                          collect: {
-                            ...tempFlow.collect,
-                            healthInfo: {
-                              ...tempFlow.collect.healthInfo,
-                              allergy: text,
-                            },
-                          },
-                        });
-                        setIsOpenTemplatePicker(false);
-                      }}
-                    />
-                  </Pressable>
-                </Box>
-              }
-            />
-          </Row>
-
-          <Row alignItems={'center'} mt={ss(40)}>
-            <FormBox
-              required
-              title='理疗师'
-              form={
-                <Box w={ls(380)}>
-                  <SelectOperator
-                    operators={operators}
-                    onSelect={(selectedItem, index) => {
-                      setTempFlow({
-                        ...tempFlow,
-                        collectionOperator: {
-                          ...tempFlow.collectionOperator,
-                          _id: selectedItem._id,
-                          name: selectedItem.name,
-                        },
-                      });
-                    }}
-                    defaultButtonText={
-                      tempFlow.collectionOperator?.name ?? '请选择理疗师'
-                    }
-                  />
-                </Box>
               }
             />
           </Row>
@@ -314,16 +202,14 @@ export default function EditBox(params: EditBoxParams) {
           hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
-          }}
-        >
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={ss(4)}
             borderWidth={1}
-            borderColor={'#D8D8D8'}
-          >
+            borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
             </Text>
@@ -338,61 +224,72 @@ export default function EditBox(params: EditBoxParams) {
 
             setLoading(true);
 
-            if (!tempFlow.customer.name) {
+            if (!tempCustomer.name) {
               toastAlert(toast, 'error', '请输入姓名！');
               setLoading(false);
               return;
             }
-            if (!tempFlow.customer.phoneNumber) {
+            if (!tempCustomer.phoneNumber) {
               toastAlert(toast, 'error', '请输入电话！');
               setLoading(false);
               return;
             }
-            if (!tempFlow.customer.birthday) {
+            if (!tempCustomer.birthday) {
               toastAlert(toast, 'error', '请选择生日！');
               setLoading(false);
               return;
             }
 
-            if (!tempFlow.collectionOperator?._id) {
-              toastAlert(toast, 'error', '请选择理疗师！');
-              setLoading(false);
-              return;
-            }
-
-            updateCurrentFlow(tempFlow);
-
-            if (tempFlow.register.status === RegisterStatus.CANCEL) {
-              requestPostRegisterInfo()
+            if (currentArchiveCustomer._id) {
+              // 编辑客户信息
+              requestPatchCustomerArchive({
+                _id: currentArchiveCustomer._id,
+                name: tempCustomer.name,
+                nickname: tempCustomer.nickname,
+                phoneNumber: tempCustomer.phoneNumber,
+                gender: tempCustomer.gender,
+                birthday: tempCustomer.birthday,
+              })
                 .then(async (res) => {
-                  await requestGetInitializeData();
-                  toastAlert(toast, 'success', '再次登记客户信息成功！');
+                  updateCurrentArchiveCustomer({
+                    name: tempCustomer.name,
+                    nickname: tempCustomer.nickname,
+                    phoneNumber: tempCustomer.phoneNumber,
+                    gender: tempCustomer.gender,
+                    birthday: tempCustomer.birthday,
+                  });
+                  await requestArchiveCustomers();
+                  toastAlert(toast, 'success', '修改客户成功！');
                   params.onEditFinish();
                 })
-                .catch((err) => {
-                  console.log(err);
-                  toastAlert(toast, 'error', '再次登记客户信息失败！');
+                .catch(() => {
+                  toastAlert(toast, 'error', '修改客户失败！');
                 })
                 .finally(() => {
                   setLoading(false);
                 });
             } else {
-              requestPatchCustomerInfo()
+              // 新增客户
+              requestPostCustomerArchive({
+                name: tempCustomer.name,
+                nickname: tempCustomer.nickname,
+                phoneNumber: tempCustomer.phoneNumber,
+                gender: tempCustomer.gender,
+                birthday: tempCustomer.birthday,
+              })
                 .then(async (res) => {
-                  await requestGetInitializeData();
-                  toastAlert(toast, 'success', '修改客户信息成功！');
+                  await requestArchiveCustomers();
+                  toastAlert(toast, 'success', '新增客户成功！');
                   params.onEditFinish();
                 })
                 .catch((err) => {
-                  console.log(err);
-                  toastAlert(toast, 'error', '修改客户信息失败！');
+                  toastAlert(toast, 'error', '新增客户失败！');
                 })
                 .finally(() => {
                   setLoading(false);
                 });
             }
-          }}
-        >
+          }}>
           <Row
             px={ls(34)}
             py={ss(12)}
@@ -400,8 +297,7 @@ export default function EditBox(params: EditBoxParams) {
             borderRadius={ss(4)}
             borderWidth={1}
             alignItems={'center'}
-            borderColor={'#00B49E'}
-          >
+            borderColor={'#00B49E'}>
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
@@ -414,8 +310,7 @@ export default function EditBox(params: EditBoxParams) {
         isOpen={isOpenBirthdayPicker}
         onClose={() => {
           setIsOpenBirthdayPicker(false);
-        }}
-      >
+        }}>
         <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
           <DatePicker
             options={{
@@ -425,31 +320,26 @@ export default function EditBox(params: EditBoxParams) {
             onSelectedChange={(date) => {
               currentSelectBirthday = date;
             }}
-            current={tempFlow.customer.birthday}
-            selected={tempFlow.customer.birthday}
+            current={tempCustomer.birthday}
+            selected={tempCustomer.birthday}
             mode='calendar'
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
-                setTempFlow({
-                  ...tempFlow,
-                  customer: {
-                    ...tempFlow.customer,
-                    birthday: currentSelectBirthday,
-                  },
+                setTempCustomer({
+                  ...tempCustomer,
+                  birthday: currentSelectBirthday,
                 });
                 setIsOpenBirthdayPicker(false);
-              }}
-            >
+              }}>
               <Box
                 bgColor={'#00B49E'}
                 px={ls(26)}
                 py={ss(12)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-              >
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
                 确定
               </Box>
             </Pressable>
@@ -457,16 +347,14 @@ export default function EditBox(params: EditBoxParams) {
               hitSlop={ss(10)}
               onPress={() => {
                 setIsOpenBirthdayPicker(false);
-              }}
-            >
+              }}>
               <Box
                 bgColor={'#D8D8D8'}
                 px={ls(26)}
                 py={ss(12)}
                 ml={ls(10)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-              >
+                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
                 取消
               </Box>
             </Pressable>

@@ -7,9 +7,9 @@ import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
 export default function CustomerArchiveItem({
-  flowCustomer,
+  customer,
 }: {
-  flowCustomer: FlowItemResponse;
+  customer: Customer;
 }) {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
@@ -23,7 +23,8 @@ export default function CustomerArchiveItem({
       w={ls(322)}
       minH={ss(128)}
       mb={ss(20)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Row p={ss(20)} maxW={'80%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
@@ -44,7 +45,8 @@ export default function CustomerArchiveItem({
               fontWeight={400}
               maxW={ls(150)}
               ellipsizeMode='tail'
-              numberOfLines={1}>
+              numberOfLines={1}
+            >
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -61,7 +63,8 @@ export default function CustomerArchiveItem({
           <Row
             alignItems={'center'}
             justifyContent={'space-between'}
-            mt={ss(5)}>
+            mt={ss(5)}
+          >
             <Text color={'#666'} fontWeight={400} fontSize={sp(18)} ml={ls(3)}>
               {ageText}
             </Text>
@@ -80,7 +83,8 @@ export default function CustomerArchiveItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(5)}>
+              ml={ls(5)}
+            >
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>

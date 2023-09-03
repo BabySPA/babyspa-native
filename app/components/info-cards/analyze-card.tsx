@@ -17,7 +17,7 @@ interface AnalyzeCardParams {
 
 export default function AnalyzeCard(params: AnalyzeCardParams) {
   const {
-    currentFlow: { analyze },
+    currentFlow: { analyze, analyzeOperator },
   } = useFlowStore();
   const { style = {}, edit } = params;
 
@@ -143,7 +143,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             注意事项：
           </Text>
-          <Text fontSize={sp(18)} color='#333'>
+          <Text fontSize={sp(18)} color='#333' maxW={ls(400)}>
             {analyze.remark || '未设置'}
           </Text>
         </Row>
@@ -153,7 +153,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             分析师：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
-            {analyze.operator?.name || '未分析'}
+            {analyzeOperator?.name || '未分析'}
           </Text>
         </Row>
 

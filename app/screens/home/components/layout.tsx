@@ -8,6 +8,8 @@ import {
   Row,
   Modal,
   Spinner,
+  useToast,
+  Alert,
 } from 'native-base';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
@@ -17,6 +19,8 @@ import SelectUser from '~/app/components/select-user';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { set } from 'lodash';
+import { toastAlert } from '~/app/utils/toast';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function Layout() {
   const {
@@ -46,8 +50,8 @@ export default function Layout() {
       : null;
   };
 
-  const [loading, setLoading] = useState(false);
-
+  const { openLoading, closeLoading } = useGlobalLoading();
+  const toast = useToast();
   return (
     <Flex
       safeAreaTop
@@ -157,25 +161,33 @@ export default function Layout() {
           <SelectUser
             style={{ marginTop: ss(4) }}
             onSelect={async function (selectedItem: any) {
-              setLoading(true);
+              openLoading();
               changeCurrentShopWithRole(selectedItem)
                 .then(() => {})
                 .finally(() => {
                   setTimeout(() => {
-                    setLoading(false);
-                  }, 1000);
+                    toast.show({
+                      placement: 'top',
+                      render: () => {
+                        return (
+                          <Alert w='100%' bgColor={'rgba(244,244,244,1)'}>
+                            <Box>
+                              <Text color={'#333'}>
+                                已切换至
+                                <Text color={'#00B49E'}>
+                                  {selectedItem.shop.name}
+                                </Text>
+                              </Text>
+                            </Box>
+                          </Alert>
+                        );
+                      },
+                    });
+                    closeLoading();
+                  }, 600);
                 });
             }}
           />
-          <Modal
-            isOpen={loading}
-            onClose={() => {
-              setLoading(false);
-            }}>
-            <Row alignItems={'center'}>
-              <Spinner size={sp(40)} color='#fff' />
-            </Row>
-          </Modal>
         </Center>
       </Box>
       <Flex direction='column' flex={1}>

@@ -21,25 +21,21 @@ import EvaluateCard, {
 } from '~/app/components/info-cards/evaluate-card';
 import FollowUpCard from '~/app/components/info-cards/follow-up-card';
 import { PrintButton } from '~/app/components/print-button';
+import { EvaluateStatus } from '~/app/stores/flow/type';
 
 export default function FlowInfo({
   navigation,
   route: { params },
 }: AppStackScreenProps<'FlowInfo'>) {
   const {
-    requestGetFlow,
-    currentFlowCustomer,
     currentFlow: {
       evaluate,
       analyze: { editable },
     },
   } = useFlowStore();
 
-  const { from } = params;
+  const [from, setFrom] = useState(params.from);
 
-  useEffect(() => {
-    requestGetFlow(currentFlowCustomer.flowId);
-  }, []);
   const [loading, setLoading] = useState(false);
 
   const [isEvaluateCardDialogShow, setIsEvaluateCardDialogShow] =
@@ -47,6 +43,10 @@ export default function FlowInfo({
 
   const ShowPrintButton = () => {
     return <>{editable !== false ? <PrintButton /> : null}</>;
+  };
+
+  const evalutedDone = () => {
+    setFrom('evaluate-detail');
   };
 
   return (
@@ -62,22 +62,26 @@ export default function FlowInfo({
           from == 'analyze' ? (
             <ShowPrintButton />
           ) : // 从评价详情进入，并且未评价
-          from == 'evaluate-detail' && !evaluate ? (
+          from == 'evaluate-detail' &&
+            evaluate.status == EvaluateStatus.NOT_SET ? (
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
                 setIsEvaluateCardDialogShow(true);
-              }}>
+              }}
+            >
               <Row
                 bgColor={'white'}
                 borderRadius={ss(4)}
                 px={ls(26)}
-                py={ss(10)}>
+                py={ss(10)}
+              >
                 {loading && <Spinner mr={ls(5)} color='emerald.500' />}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
-                  fontSize={sp(14, { min: 12 })}>
+                  fontSize={sp(14, { min: 12 })}
+                >
                   评价
                 </Text>
               </Row>
@@ -102,8 +106,15 @@ export default function FlowInfo({
             )}
             {/* (从评价按钮点进来)或者(从评价点击卡片并且已经评价完成) */}
             {(from == 'evaluate' ||
-              (from == 'evaluate-detail' && evaluate)) && (
-              <EvaluateCard type='card' canEdit={from == 'evaluate'} />
+              (from == 'evaluate-detail' &&
+                evaluate.status == EvaluateStatus.DONE)) && (
+              <EvaluateCard
+                type='card'
+                canEdit={from == 'evaluate'}
+                onEvaluated={() => {
+                  evalutedDone();
+                }}
+              />
             )}
             {/* 从随访点击卡片进来 */}
             {(from == 'follow-up' || from === 'follow-up-detail') && (
@@ -119,6 +130,9 @@ export default function FlowInfo({
         isOpen={isEvaluateCardDialogShow}
         onClose={function (): void {
           setIsEvaluateCardDialogShow(false);
+        }}
+        onEvaluated={() => {
+          evalutedDone();
         }}
       />
     </Box>

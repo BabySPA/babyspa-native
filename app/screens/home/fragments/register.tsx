@@ -10,7 +10,7 @@ import {
   Pressable,
 } from 'native-base';
 import { useEffect, useState } from 'react';
-import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
+import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -27,6 +27,7 @@ import {
   RegisterStatus,
 } from '~/app/stores/flow/type';
 import { getStatusTextConfig } from '~/app/constants';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -61,7 +62,7 @@ export default function Register() {
                 key={idx}
                 onPress={() => {
                   updateCurrentFlow(flow);
-                  navigation.navigate('CustomerDetail', { flow: flow });
+                  navigation.navigate('CustomerDetail');
                 }}>
                 <FlowCustomerItem flow={flow} type={OperateType.Register} />
               </Pressable>
@@ -98,6 +99,7 @@ function Filter() {
       }).length,
     );
   }, [register.flows]);
+  const { openLoading, closeLoading } = useGlobalLoading();
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
@@ -157,7 +159,7 @@ function Filter() {
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
-            updateCurrentFlow(DefaultRegisterCustomer);
+            updateCurrentFlow(DefaultFlow);
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.register,
             });
@@ -282,9 +284,10 @@ function Filter() {
               hitSlop={ss(10)}
               onPress={() => {
                 updateRegisterFilter({
-                  startDate: dayjs().format('YYYY-MM-DD'),
+                  searchKeywords: '',
+                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
-                  status: -1,
+                  status: FlowStatus.NO_SET,
                 });
               }}
               borderRadius={ss(4)}
@@ -300,8 +303,12 @@ function Filter() {
             </Pressable>
             <Pressable
               hitSlop={ss(10)}
-              onPress={() => {
-                requestGetRegisterFlows();
+              onPress={async () => {
+                openLoading();
+                await requestGetRegisterFlows();
+                setTimeout(() => {
+                  closeLoading();
+                }, 300);
               }}
               borderRadius={ss(4)}
               borderWidth={1}

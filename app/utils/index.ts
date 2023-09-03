@@ -1,4 +1,9 @@
-import { ConfigAuthTree, IConfigAuth, LayoutConfig } from '../constants';
+import {
+  ConfigAuthTree,
+  IConfigAuth,
+  LayoutConfig,
+  getFlowStatus,
+} from '../constants';
 import { AuthorityConfig, RoleAuthority } from '../stores/auth/type';
 import {
   Customer,
@@ -6,10 +11,17 @@ import {
   GrowthCurveHeightComparison,
   GrowthCurveWeightComparison,
 } from '../stores/flow/type';
-import { Role, RoleStatus } from '../stores/manager/type';
 import area from '~/app/constants/area.json';
+import { FlowStatus } from '../types';
+import dayjs from 'dayjs';
 
 export function getAge(birthday: string) {
+  if (dayjs(birthday).isAfter(dayjs()))
+    return {
+      year: 0,
+      month: 0,
+      day: 0,
+    };
   if (birthday) {
     const birthdays = birthday.split('-');
     // 新建日期对象
@@ -213,16 +225,40 @@ export function generateAuthorityConfig(
   return config;
 }
 
-export function fuzzySearch(data: FlowItemResponse[], searchTerm: string) {
-  searchTerm = searchTerm.toLowerCase(); // 将搜索条件转换为小写以进行不区分大小写的匹配
-  const regex = new RegExp(searchTerm, 'i'); // 创建不区分大小写的正则表达式
+export function fuzzySearch<T>(
+  data: T[],
+  searchTerm: string,
+  status?: FlowStatus,
+  getFlowStatusFunction?: (flow: FlowItemResponse) => FlowStatus,
+): T[] {
+  let searchCheck = (item: any) => true;
+  if (searchTerm && searchTerm.trim() !== '') {
+    searchCheck = (item: any) => {
+      searchTerm = searchTerm.trim().toLowerCase(); // 将搜索条件转换为小写以进行不区分大小写的匹配
+      const regex = new RegExp(searchTerm, 'i'); // 创建不区分大小写的正则表达式
+      if ((item as FlowItemResponse).customer) {
+        const name = (item as FlowItemResponse).customer.name.toLowerCase();
+        const phoneNumber = (item as FlowItemResponse).customer.phoneNumber;
+        return regex.test(name) || regex.test(phoneNumber);
+      } else {
+        const name = item.name.toLowerCase();
+        const phoneNumber = item.phoneNumber;
+        // 使用正则表达式测试是否匹配搜索条件
+        return regex.test(name) || regex.test(phoneNumber);
+      }
+    };
+  }
+
+  let statusCheck = (res: any) => true;
+
+  if (status !== undefined && status !== FlowStatus.NO_SET) {
+    const fn = getFlowStatusFunction || getFlowStatus;
+
+    statusCheck = (item: FlowItemResponse) => fn(item) === status;
+  }
 
   return data.filter((item) => {
-    const name = item.customer.name.toLowerCase();
-    const phoneNumber = item.customer.phoneNumber;
-
-    // 使用正则表达式测试是否匹配搜索条件
-    return regex.test(name) || regex.test(phoneNumber);
+    return searchCheck(item) && statusCheck(item);
   });
 }
 

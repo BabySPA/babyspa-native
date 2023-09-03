@@ -18,7 +18,7 @@ import useAuthStore from '~/app/stores/auth';
 import { decodePassword, maskString } from '~/app/utils';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { ChangePasswordModal } from '~/app/components/modals';
+import { ChangePasswordModal, DialogModal } from '~/app/components/modals';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 
@@ -31,6 +31,7 @@ export default function Personal({
 
   const { requestPatchUserPassword } = useManagerStore();
   const toast = useToast();
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <Box flex={1}>
       <NavigationBar
@@ -157,7 +158,7 @@ export default function Personal({
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
-                logout();
+                setShowDialog(true);
               }}>
               <Row
                 alignItems={'center'}
@@ -178,6 +179,16 @@ export default function Personal({
                 </Text>
               </Row>
             </Pressable>
+            <DialogModal
+              title='是否确认退出登录'
+              isOpen={showDialog}
+              onClose={function (): void {
+                setShowDialog(false);
+              }}
+              onConfirm={function (): void {
+                logout();
+              }}
+            />
           </Row>
         </Column>
       </Row>

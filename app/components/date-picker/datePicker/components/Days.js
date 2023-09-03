@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useCalendar } from '../DatePicker';
 import { ss } from '~/app/utils/style';
+import dayjs from 'dayjs';
 
 const Days = () => {
   const { options, state, utils, onDateChange } = useCalendar();
@@ -28,36 +29,42 @@ const Days = () => {
     <View
       style={[style.container, utils.flexDirection]}
       onLayout={changeItemHeight}>
-      {days.map((day, n) => (
-        <View
-          key={n}
-          style={{
-            width: itemSize,
-            height: itemSize,
-          }}>
-          {day && (
-            <TouchableOpacity
-              style={[
-                style.dayItem,
-                {
-                  borderRadius: itemSize / 2,
-                },
-                mainState.selectedDate === day.date && style.dayItemSelected,
-              ]}
-              onPress={() => !day.disabled && onSelectDay(day.date)}
-              activeOpacity={0.8}>
-              <Text
+      {days.map((day, n) => {
+        if (day && dayjs(day.date).isAfter(dayjs(), 'day')) {
+          day.disabled = true;
+        }
+        return (
+          <View
+            key={n}
+            style={{
+              width: itemSize,
+              height: itemSize,
+            }}>
+            {day && (
+              <TouchableOpacity
                 style={[
-                  style.dayText,
-                  mainState.selectedDate === day.date && style.dayTextSelected,
-                  day.disabled && style.dayTextDisabled,
-                ]}>
-                {day.dayString}
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      ))}
+                  style.dayItem,
+                  {
+                    borderRadius: itemSize / 2,
+                  },
+                  mainState.selectedDate === day.date && style.dayItemSelected,
+                ]}
+                onPress={() => !day.disabled && onSelectDay(day.date)}
+                activeOpacity={0.8}>
+                <Text
+                  style={[
+                    style.dayText,
+                    mainState.selectedDate === day.date &&
+                      style.dayTextSelected,
+                    day.disabled && style.dayTextDisabled,
+                  ]}>
+                  {day.dayString}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        );
+      })}
     </View>
   );
 };

@@ -22,7 +22,8 @@ export default function OperateButton({
             start: [0, 0],
             end: [1, 1],
           },
-        }}>
+        }}
+      >
         <Text color='white' fontSize={sp(16)}>
           {text}
         </Text>

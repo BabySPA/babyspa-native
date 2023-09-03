@@ -80,6 +80,10 @@ export const getFlowStatus = (flow: FlowItemResponse): FlowStatus => {
   } else if (flow.analyze.status === AnalyzeStatus.DONE) {
     // 已完成
     return FlowStatus.Analyzed;
+  } else if (flow.register.status === RegisterStatus.CANCEL) {
+    return FlowStatus.RegisterCanceled;
+  } else if (flow.collect.status === CollectStatus.CANCEL) {
+    return FlowStatus.CollectCanceled;
   }
   return FlowStatus.NO_SET;
 };

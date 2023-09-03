@@ -47,7 +47,7 @@ export default function SelectDay({
         return item.name;
       }}
       buttonStyle={{
-        width: ls(72),
+        maxWidth: ls(112),
         height: ss(48, { min: 26 }),
         backgroundColor: '#fff',
         borderRadius: ss(4),

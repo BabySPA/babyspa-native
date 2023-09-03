@@ -37,7 +37,10 @@ export default function InfoBox(params: InfoBoxParams) {
             <LabelBox title='详细地址' value={currentShop?.address} />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
-            <LabelBox title='门店介绍' value={currentShop?.description} />
+            <LabelBox
+              title='门店介绍'
+              value={currentShop?.description || '未设置'}
+            />
           </Row>
         </Box>
       </Column>

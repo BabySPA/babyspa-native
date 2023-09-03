@@ -21,7 +21,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
 import { DialogModal, NewTemplateModalModal } from '~/app/components/modals';
 import { toastAlert } from '~/app/utils/toast';
-import { debounce, set } from 'lodash';
+import { debounce } from 'lodash';
 import { TemplateItem } from '~/app/stores/manager/type';
 import { PanResponder } from 'react-native';
 
@@ -257,7 +257,7 @@ export default function ManagerTemplate({
               p={ss(20)}>
               <BoxTitle title='模版详情' />
 
-              <Row mt={ss(28)}>
+              <Row mt={ss(28)} flexWrap={'wrap'}>
                 {getCurrentSelectTemplateGroupItems().map(
                   (item: any, index: any) => {
                     return (
@@ -275,7 +275,7 @@ export default function ManagerTemplate({
                         px={ls(20)}
                         py={ss(7)}>
                         <Row alignItems={'center'}>
-                          <Text>{item}</Text>
+                          <Text maxWidth={ss(300)}>{item}</Text>
                           {canEdit && (
                             <Pressable
                               hitSlop={ss(10)}

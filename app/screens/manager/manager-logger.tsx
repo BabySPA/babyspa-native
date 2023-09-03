@@ -165,7 +165,7 @@ function Filter() {
       px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
-          w={ls(240)}
+          w={ls(300)}
           minH={ss(40, { max: 18 })}
           p={ss(8)}
           mr={ss(40)}
@@ -180,8 +180,13 @@ function Filter() {
               ml={ss(10)}
             />
           }
-          placeholder='请输入操作人员姓名搜索'
-          onChangeText={(text) => {}}
+          placeholder='请输入操作人员姓名或账号搜索'
+          onChangeText={(text) => {
+            setLogFilter({
+              searchKeywords: text,
+            });
+            requestGetLogs();
+          }}
         />
         <Pressable
           hitSlop={ss(10)}

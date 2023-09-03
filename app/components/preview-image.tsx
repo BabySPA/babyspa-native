@@ -17,7 +17,8 @@ export default function PreviewImage({
         hitSlop={ss(10)}
         onPress={() => {
           setShowImageModal(true);
-        }}>
+        }}
+      >
         <Image
           style={{
             width: ss(100),

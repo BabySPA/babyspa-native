@@ -1,4 +1,4 @@
-import { Box, Column, Row, Text, useToast } from 'native-base';
+import { Box, Column, Pressable, Row, Text, useToast } from 'native-base';
 import { ss, sp, ls } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import ImageBox from './image-box';
@@ -45,7 +45,7 @@ export default function HealthInfo({
           icon={require('~/assets/images/notice.png')}
           autoScroll={false}>
           <Box flex={1}>
-            <Text
+            <Pressable
               onPress={() => {
                 if (selectedConfig.disabled) {
                   return;
@@ -59,12 +59,19 @@ export default function HealthInfo({
                 height: ss(170),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
-                fontSize: sp(14),
-                color: '#999',
-                textAlignVertical: 'top',
               }}>
-              {collect.healthInfo.allergy || '请输入或选择过敏原'}
-            </Text>
+              <Text
+                fontSize={sp(14)}
+                color='#999'
+                style={{ textAlignVertical: 'top' }}>
+                {collect.healthInfo.allergy || '请输入或选择过敏原'}
+              </Text>
+              <Text
+                color={'#999'}
+                style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
+                {collect.healthInfo.allergy.length}/300
+              </Text>
+            </Pressable>
             <TemplateModal
               defaultText={collect.healthInfo.allergy || ''}
               template={getTemplateGroups(TemplateGroupKeys.allergy)}

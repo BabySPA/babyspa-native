@@ -25,18 +25,19 @@ interface EvaluateCardParams {
   type: 'dialog' | 'card';
   canEdit: boolean;
   onClose?: () => void;
+  onEvaluated?: () => void;
 }
 
 export default function EvaluateCard(params: EvaluateCardParams) {
   let {
     currentFlow: { evaluate },
     requestPutFlowToEvaluate,
-    requestGetEvaluateCustomers,
+    requestGetEvaluateFlows,
   } = useFlowStore();
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const { style = {}, type, canEdit, onClose } = params;
+  const { style = {}, type, canEdit, onClose, onEvaluated } = params;
 
   const [templateEvaluate, setTemplateEvaluate] = useState(evaluate);
 
@@ -46,7 +47,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         hitSlop={ss(10)}
         onPress={() => {
           onClose?.();
-        }}>
+        }}
+      >
         <Box
           bgColor={'#D8D8D8'}
           px={ls(26)}
@@ -54,7 +56,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderWidth={1}
           borderColor={'#CCCCCC'}
           borderRadius={ss(8)}
-          _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+          _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
+        >
           取消
         </Box>
       </Pressable>
@@ -63,7 +66,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         onPress={() => {
           evaluateNow();
           onClose?.();
-        }}>
+        }}
+      >
         <Row
           alignItems={'center'}
           bgColor={'rgba(0, 180, 158, 0.10)'}
@@ -72,7 +76,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           ml={ss(20)}
           borderRadius={ss(8)}
           borderWidth={1}
-          borderColor={'#00B49E'}>
+          borderColor={'#00B49E'}
+        >
           {loading && <Spinner mr={ls(5)} color='emerald.500' />}
           <Text fontSize={ss(16)} color={'#00B49E'}>
             确定
@@ -91,7 +96,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
       requestPutFlowToEvaluate(templateEvaluate)
         .then(async (res) => {
           toastAlert(toast, 'success', '评价成功！');
-          await requestGetEvaluateCustomers();
+          await requestGetEvaluateFlows();
+          onEvaluated?.();
         })
         .catch((e) => {
           toastAlert(toast, 'error', '评价失败！请稍后重试。');
@@ -107,7 +113,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         hitSlop={ss(10)}
         onPress={() => {
           evaluateNow();
-        }}>
+        }}
+      >
         <Row
           alignItems={'center'}
           opacity={templateEvaluate?.score && templateEvaluate.remark ? 1 : 0.6}
@@ -117,7 +124,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           ml={ss(20)}
           borderRadius={ss(8)}
           borderWidth={1}
-          borderColor={'#00B49E'}>
+          borderColor={'#00B49E'}
+        >
           {loading && <Spinner mr={ls(5)} color='emerald.500' />}
           <Text fontSize={ss(16)} color={'#00B49E'}>
             确定
@@ -149,11 +157,13 @@ export default function EvaluateCard(params: EvaluateCardParams) {
                 onPress={() => {
                   if (canEdit) {
                     setTemplateEvaluate({
+                      ...templateEvaluate,
                       remark: templateEvaluate?.remark || '',
                       score: item,
                     });
                   }
-                }}>
+                }}
+              >
                 <Image
                   source={
                     item <= (templateEvaluate?.score || 3)
@@ -169,7 +179,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         {templateEvaluate && (
           <Row mt={ss(6)}>
             <Text color='#FFBB2A' fontSize={sp(16)}>
-              {templateEvaluate?.score}分
+              {templateEvaluate?.score || 3}分
             </Text>
             <Text color='#000' ml={ss(13)} fontSize={sp(16)}>
               {EvaluateStoreConfig[templateEvaluate?.score || 3]}
@@ -200,6 +210,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
             value={templateEvaluate?.remark || ''}
             onChangeText={(text) => {
               setTemplateEvaluate({
+                ...templateEvaluate,
                 remark: text,
                 score: templateEvaluate?.score || 3,
               });
@@ -215,21 +226,25 @@ export default function EvaluateCard(params: EvaluateCardParams) {
 interface EvaluateCardDialogParams {
   isOpen: boolean;
   onClose: () => void;
+  onEvaluated?: () => void;
 }
 
 export function EvaluateCardDialog({
   isOpen,
   onClose,
+  onEvaluated,
 }: EvaluateCardDialogParams) {
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
         onClose();
-      }}>
+      }}
+    >
       <EvaluateCard
         type={'dialog'}
         canEdit={true}
+        onEvaluated={onEvaluated}
         style={{ width: ls(580) }}
         onClose={() => {
           onClose();

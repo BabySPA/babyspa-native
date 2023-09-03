@@ -59,8 +59,7 @@ export default function ImageBox({
   const toast = useToast();
   const navigation = useNavigation();
 
-  const { currentFlowCustomer, addLingualImage, updateLingualImage } =
-    useFlowStore();
+  const { currentFlow, addLingualImage, updateLingualImage } = useFlowStore();
   const { getOssConfig } = useOssStore();
 
   const openCamera = () => {
@@ -80,8 +79,8 @@ export default function ImageBox({
             throttle(async ({ photo, type }) => {
               const filename = getFileNameFromPath(photo.uri);
 
-              const name = `${currentFlowCustomer.tag}-${
-                currentFlowCustomer.flowId
+              const name = `${currentFlow.tag}-${
+                currentFlow._id
               }-${dayjs().format('YYYYMMDDHHmmss')}-${filename}`;
 
               takePhotoCallback(name, photo.uri);
@@ -127,8 +126,8 @@ export default function ImageBox({
                   selectImageFile.fileName ??
                   `${Date.now()}.${getBase64ImageFormat(selectImageFile.uri)}`;
 
-                const name = `${currentFlowCustomer.tag}-${
-                  currentFlowCustomer.flowId
+                const name = `${currentFlow.tag}-${
+                  currentFlow._id
                 }-${dayjs().format('YYYYMMDDHHmmss')}-${filename}`;
 
                 selectedCallback(name, selectImageFile.uri);
@@ -195,7 +194,7 @@ export default function ImageBox({
           </Center>
         );
       })}
-      {edit && (
+      {edit && images.length < 3 && (
         <Menu
           w={ls(280)}
           _text={{ fontSize: sp(18), color: '#000' }}

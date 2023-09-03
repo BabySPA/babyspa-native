@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Calendar, SelectMonth, SelectTime } from './components';
 import { utils } from '../utils';
 import { sp } from '~/app/utils/style';
+import dayjs from 'dayjs';
 
 const options = {
   backgroundColor: '#fff',
@@ -136,8 +137,8 @@ DatePicker.defaultProps = {
   selected: '',
   minimumDate: '',
   maximumDate: '',
-  selectorStartingYear: 0,
-  selectorEndingYear: 3000,
+  selectorStartingYear: 2000,
+  selectorEndingYear: dayjs().year(),
   disableDateChange: false,
   isGregorian: true,
   configs: {},

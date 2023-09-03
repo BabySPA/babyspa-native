@@ -5,11 +5,8 @@ import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
 import {
-  EvaluateTextConfig,
   FollowUpResultText,
-  FollowUpStatusTextConfig,
   getFollowUpStatusTextConfig,
-  getStatusTextConfig,
 } from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
 import {
@@ -17,20 +14,25 @@ import {
   FlowItemResponse,
   FollowUpStatus,
 } from '~/app/stores/flow/type';
-import { FlowStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-export default function CustomerFollowUpItem({ flow }: { flow: FlowItemResponse }) {
-  const followup = customer.flowFollowUp;
-
+export default function CustomerFollowUpItem({
+  flow,
+}: {
+  flow: FlowItemResponse;
+}) {
+  const followup = flow.analyze.followUp;
+  const customer = flow.customer;
   const hasNotFollowup =
     followup?.followUpStatus === FollowUpStatus.WAIT ||
     followup?.followUpStatus === FollowUpStatus.OVERDUE;
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
-  const { updateCurrentFlowCustomer } = useFlowStore();
+
+  const { updateCurrentFlow } = useFlowStore();
+
   const OperatorStatusFlag = () => {
     return (
       <Box
@@ -100,8 +102,8 @@ export default function CustomerFollowUpItem({ flow }: { flow: FlowItemResponse 
           <Row alignItems={'center'}>
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
               {hasNotFollowup
-                ? `调理师：${customer.operator?.name}`
-                : `随访人：${followup?.operator?.name}`}
+                ? `调理师：${flow.collectionOperator?.name}`
+                : `随访人：${flow.followUpOperator?.name}`}
             </Text>
           </Row>
           <Row alignItems={'center'} mt={ss(12)}>
@@ -131,7 +133,7 @@ export default function CustomerFollowUpItem({ flow }: { flow: FlowItemResponse 
             text={'随访'}
             onPress={function (): void {
               // goto followup
-              updateCurrentFlowCustomer(customer);
+              updateCurrentFlow(flow);
               navigation.navigate('FlowInfo', {
                 from: 'follow-up',
               });

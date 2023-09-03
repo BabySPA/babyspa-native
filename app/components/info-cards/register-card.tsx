@@ -12,8 +12,8 @@ interface RegisterCardParams {
 }
 
 export default function RegisterCard(params: RegisterCardParams) {
-  const { currentFlowCustomer } = useFlowStore();
-  const age = getAge(currentFlowCustomer.birthday);
+  const { currentFlow } = useFlowStore();
+  const age = getAge(currentFlow.customer.birthday);
   const { style = {} } = params;
 
   return (
@@ -24,7 +24,7 @@ export default function RegisterCard(params: RegisterCardParams) {
         <Image
           style={{ width: ss(72), height: ss(72) }}
           source={
-            currentFlowCustomer.gender == 1
+            currentFlow.customer.gender == 1
               ? require('~/assets/images/boy.png')
               : require('~/assets/images/girl.png')
           }
@@ -34,12 +34,12 @@ export default function RegisterCard(params: RegisterCardParams) {
             <Text
               fontSize={ss(22)}
               color={'#333'}
-              maxW={ls(160)}
+              maxW={ls(220)}
               ellipsizeMode='tail'
               numberOfLines={1}>
-              {currentFlowCustomer.name}
-              {currentFlowCustomer.nickname && (
-                <Text>({currentFlowCustomer.nickname})</Text>
+              {currentFlow.customer.name}
+              {currentFlow.customer.nickname && (
+                <Text>({currentFlow.customer.nickname})</Text>
               )}
             </Text>
             <Icon
@@ -47,28 +47,30 @@ export default function RegisterCard(params: RegisterCardParams) {
               as={
                 <MaterialCommunityIcons
                   name={
-                    currentFlowCustomer.gender == 1
+                    currentFlow.customer.gender == 1
                       ? 'gender-male'
                       : 'gender-female'
                   }
                 />
               }
               size={ss(26)}
-              color={currentFlowCustomer.gender == 1 ? '#648B62' : '#F3AF62'}
+              color={currentFlow.customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text fontSize={sp(20)} color={'#666'} ml={ss(12)}>
               {age?.year}岁{age?.month}月
             </Text>
-            <Text fontSize={sp(20)} color={'#03CBB2'} ml={ss(12)}>
-              {currentFlowCustomer.phoneNumber}
+          </Row>
+          <Row mt={ss(16)}>
+            <Text fontSize={sp(18)} color='#999'>
+              联系方式：
+              <Text color='#333'>{currentFlow.customer.phoneNumber}</Text>
             </Text>
           </Row>
-
           <Row alignItems={'center'} mt={ss(16)}>
             <Text fontSize={sp(18)} color='#999'>
               登记时间：
               <Text color='#333'>
-                {dayjs(currentFlowCustomer.updatedAt).format(
+                {dayjs(currentFlow.customer.updatedAt).format(
                   'YYYY-MM-DD HH:mm',
                 )}
               </Text>
@@ -76,16 +78,16 @@ export default function RegisterCard(params: RegisterCardParams) {
           </Row>
           <Text fontSize={sp(18)} color='#999' mt={ss(16)}>
             门店：
-            <Text color='#333'>{currentFlowCustomer.shop?.name}</Text>
+            <Text color='#333'>{currentFlow.shop?.name}</Text>
           </Text>
           <Row alignItems={'center'} mt={ss(16)}>
             <Text fontSize={sp(18)} color='#999'>
               登记号码：
-              <Text color='#333'>{currentFlowCustomer.tag}</Text>
+              <Text color='#333'>{currentFlow.tag}</Text>
             </Text>
             <Text fontSize={sp(18)} color='#999' ml={ls(40)}>
               预约调理师：
-              <Text color='#333'>{currentFlowCustomer?.operator?.name}</Text>
+              <Text color='#333'>{currentFlow.collectionOperator?.name}</Text>
             </Text>
           </Row>
         </Column>

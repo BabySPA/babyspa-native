@@ -4,7 +4,6 @@
  */
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Customer } from '../stores/flow/type';
 
 declare global {
   namespace ReactNavigation {
@@ -26,7 +25,7 @@ export interface OssConfig {
 }
 
 export enum FlowStatus {
-  NO_SET, // 无状态
+  NO_SET = -1, // 无状态
   Registered, // 已登记
   RegisterCanceled, // 登记取消
   ToBeCollected, // 待采集

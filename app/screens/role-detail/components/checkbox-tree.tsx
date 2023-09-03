@@ -22,7 +22,8 @@ const CheckboxTree = () => {
                   });
 
                   setConfigAuthTree([...configAuthTree]);
-                }}>
+                }}
+              >
                 <Row alignItems={'center'}>
                   <Image
                     source={
@@ -40,7 +41,8 @@ const CheckboxTree = () => {
                     onPress={() => {
                       configAuthTree[nodeIdx].isOpen = !node.isOpen;
                       setConfigAuthTree([...configAuthTree]);
-                    }}>
+                    }}
+                  >
                     <Icon
                       ml={ss(16)}
                       as={
@@ -65,7 +67,8 @@ const CheckboxTree = () => {
                           configAuthTree[nodeIdx].features[featureIdx].hasAuth =
                             !feature.hasAuth;
                           setConfigAuthTree([...configAuthTree]);
-                        }}>
+                        }}
+                      >
                         <Row ml={ls(20)} mt={ss(10)}>
                           <Image
                             source={

@@ -79,7 +79,7 @@ const initialState = {
   logs: [],
   logFilter: {
     searchKeywords: '',
-    startDate: dayjs().format('YYYY-MM-DD'),
+    startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
   },
 };
@@ -297,14 +297,19 @@ const useManagerStore = create(
     requestGetLogs: async () => {
       const params: any = {};
       const filter = get().logFilter;
-      params.search = filter.searchKeywords;
       params.startDate = filter.startDate;
       params.endDate = filter.endDate;
       const { data } = await request.get('/logs', { params });
-
+      const regex = new RegExp(filter.searchKeywords, 'i');
       const { docs } = data;
       set((state) => {
-        state.logs = docs;
+        state.logs = filter.searchKeywords
+          ? docs.filter((item: any) => {
+              const name = item.name.toLowerCase();
+              const phoneNumber = item.phoneNumber;
+              return regex.test(name) || regex.test(phoneNumber);
+            })
+          : docs;
       });
     },
 

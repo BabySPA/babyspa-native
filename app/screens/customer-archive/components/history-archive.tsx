@@ -1,14 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import {
-  Box,
-  Column,
-  Icon,
-  Pressable,
-  Row,
-  ScrollView,
-  Text,
-} from 'native-base';
+import { Box, Icon, Pressable, Row, ScrollView, Text } from 'native-base';
 import { useState } from 'react';
 import { FlowArchive } from '~/app/stores/flow/type';
 import { arabicToChineseNumber } from '~/app/utils';

@@ -249,7 +249,7 @@ const SelectDropdown = (
             ? buttonTextAfterSelection
               ? buttonTextAfterSelection(selectedItem, selectedIndex)
               : selectedItem.toString()
-            : defaultButtonText || 'Select an option.'}
+            : defaultButtonText || '请选择'}
         </Text>
       )}
     </TouchableOpacity>

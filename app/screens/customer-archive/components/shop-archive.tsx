@@ -1,10 +1,8 @@
 import dayjs from 'dayjs';
 import {
   Box,
-  Center,
   Circle,
   Column,
-  Image,
   Pressable,
   Row,
   ScrollView,

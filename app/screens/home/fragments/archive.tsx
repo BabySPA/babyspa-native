@@ -10,7 +10,7 @@ import {
   Pressable,
 } from 'native-base';
 import { useEffect, useState } from 'react';
-import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
+import useFlowStore, { DefaultCustomer, DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -19,23 +19,18 @@ import CustomerArchiveItem from '../components/customer-archive-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import { debounce } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
-import { ShopType } from '~/app/stores/manager/type';
 
 export default function Archive() {
   const navigation = useNavigation();
   const {
-    requestCustomersArchive,
-    customersArchive: { flows },
+    archiveCustomers: { customers },
     updateCurrentArchiveCustomer,
   } = useFlowStore();
 
-  useEffect(() => {
-    requestCustomersArchive();
-  }, []);
   return (
     <Flex flex={1}>
       <Filter />
-      {/* <ScrollView margin={ss(10)}>
+      <ScrollView margin={ss(10)}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -59,7 +54,7 @@ export default function Archive() {
             ))}
           </Row>
         )}
-      </ScrollView> */}
+      </ScrollView>
     </Flex>
   );
 }
@@ -67,10 +62,10 @@ export default function Archive() {
 function Filter() {
   const navigation = useNavigation();
   const {
-    customersArchive,
-    updateCustomersArchiveFilter,
+    archiveCustomers,
+    updateArchiveCustomersFilter,
     updateCurrentArchiveCustomer,
-    requestCustomersArchive,
+    requestArchiveCustomers,
   } = useFlowStore();
 
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
@@ -82,15 +77,23 @@ function Filter() {
 
   const [defaultSelectShop, selectShops] = useSelectShops(true);
 
+  useEffect(() => {
+    if (defaultSelectShop) {
+      updateArchiveCustomersFilter({
+        shopId: defaultSelectShop._id,
+      });
+      requestArchiveCustomers();
+    }
+  }, [defaultSelectShop]);
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
-            updateCustomersArchiveFilter({
+            updateArchiveCustomersFilter({
               shopId: selectedItem._id,
             });
-            requestCustomersArchive();
+            requestArchiveCustomers();
           }}
           buttonHeight={ss(40)}
           buttonWidth={ls(160)}
@@ -107,10 +110,10 @@ function Filter() {
           color={'#333333'}
           fontSize={ss(16)}
           onChangeText={debounce((text) => {
-            updateCustomersArchiveFilter({
+            updateArchiveCustomersFilter({
               searchKeywords: text,
             });
-            requestCustomersArchive();
+            requestArchiveCustomers();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -146,7 +149,7 @@ function Filter() {
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
-            {customersArchive.startDate}
+            {archiveCustomers.startDate}
           </Text>
         </Pressable>
         <Text mx={ls(10)} color='#333' fontSize={sp(16)}>
@@ -175,13 +178,13 @@ function Filter() {
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
-            {customersArchive.endDate}
+            {archiveCustomers.endDate}
           </Text>
         </Pressable>
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
-            updateCurrentArchiveCustomer(DefaultRegisterCustomer);
+            updateCurrentArchiveCustomer(DefaultCustomer);
             navigation.navigate('AddNewCustomer');
           }}>
           <Box
@@ -210,26 +213,26 @@ function Filter() {
           onSelectedChange={(date: string) => {
             if (!isOpenDatePicker.type) return;
             if (isOpenDatePicker.type == 'start') {
-              updateCustomersArchiveFilter({
+              updateArchiveCustomersFilter({
                 startDate: date,
               });
-              requestCustomersArchive();
+              requestArchiveCustomers();
             } else {
-              updateCustomersArchiveFilter({
+              updateArchiveCustomersFilter({
                 endDate: date,
               });
-              requestCustomersArchive();
+              requestArchiveCustomers();
             }
           }}
           current={
             isOpenDatePicker.type == 'start'
-              ? customersArchive.startDate
-              : customersArchive.endDate
+              ? archiveCustomers.startDate
+              : archiveCustomers.endDate
           }
           selected={
-            isOpenDatePicker.type == customersArchive.startDate
-              ? customersArchive.startDate
-              : customersArchive.endDate
+            isOpenDatePicker.type == archiveCustomers.startDate
+              ? archiveCustomers.startDate
+              : archiveCustomers.endDate
           }
         />
       </Row>

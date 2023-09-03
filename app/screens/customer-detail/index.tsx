@@ -17,7 +17,7 @@ export default function CustomerDetail({
 }: AppStackScreenProps<'CustomerDetail'>) {
   const {
     requestGetOperators,
-    requestPatchFlowStatus,
+    requestPatchRegisterStatus,
     currentFlow,
     requestGetInitializeData,
   } = useFlowStore();
@@ -41,22 +41,25 @@ export default function CustomerDetail({
           </Text>
         }
         rightElement={
-          !edit && flow.register.status === RegisterStatus.DONE ? (
+          !edit && currentFlow.register.status === RegisterStatus.DONE ? (
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
                 setShowModal(true);
-              }}>
+              }}
+            >
               <Row
                 bgColor={'white'}
                 borderRadius={ss(4)}
                 px={ls(26)}
-                py={ss(10)}>
+                py={ss(10)}
+              >
                 {loading && <Spinner mr={ls(5)} color='emerald.500' />}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
-                  fontSize={sp(14, { min: 12 })}>
+                  fontSize={sp(14, { min: 12 })}
+                >
                   取消登记
                 </Text>
               </Row>
@@ -70,7 +73,6 @@ export default function CustomerDetail({
             onEditFinish={function (): void {
               setEdit(false);
             }}
-            type={'flow'}
           />
         ) : (
           <InfoBox
@@ -93,22 +95,21 @@ export default function CustomerDetail({
           setShowModal(false);
           if (loading) return;
           setLoading(true);
-          // requestPatchFlowStatus({
-          //   status: FlowStatus.Canceled,
-          //   type: 'register',
-          // })
-          //   .then(async (res) => {
-          //     // 取消成功
-          //     toastAlert(toast, 'success', '取消成功！');
-          //     await requestGetInitializeData();
-          //   })
-          //   .catch((err) => {
-          //     // 取消失败
-          //     toastAlert(toast, 'error', '取消失败！');
-          //   })
-          //   .finally(() => {
-          //     setLoading(false);
-          //   });
+          requestPatchRegisterStatus({
+            status: RegisterStatus.CANCEL,
+          })
+            .then(async (res) => {
+              // 取消成功
+              toastAlert(toast, 'success', '取消成功！');
+              await requestGetInitializeData();
+            })
+            .catch((err) => {
+              // 取消失败
+              toastAlert(toast, 'error', '取消失败！');
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         }}
       />
     </Box>

@@ -17,13 +17,25 @@ import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
-import { Box } from 'native-base';
+import { Box, Modal, Row, Spinner } from 'native-base';
+import { sp } from '../utils/style';
+import useGlobalLoading from '../stores/loading';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
+  const { loading, closeLoading } = useGlobalLoading();
   return (
     <Box flex={1} bgColor='white'>
+      <Modal
+        isOpen={loading}
+        onClose={() => {
+          closeLoading();
+        }}>
+        <Row alignItems={'center'}>
+          <Spinner size={sp(40)} color='#fff' />
+        </Row>
+      </Modal>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />

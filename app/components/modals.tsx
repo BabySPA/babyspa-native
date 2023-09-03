@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import { sp, ss, ls } from '~/app/utils/style';
 import { Template } from '../stores/manager/type';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
 
@@ -107,6 +107,13 @@ export function TemplateModal({
   const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
   const [templateText, setTemplateText] = useState(defaultText);
 
+  useEffect(() => {
+    if (templateText.length > 300) {
+      setTemplateText(templateText.slice(0, 300));
+    }
+  }, [templateText]);
+
+  const inputRef = useRef(null);
   return (
     <Modal
       isOpen={isOpen}
@@ -135,23 +142,32 @@ export function TemplateModal({
           </Pressable>
         </Row>
         <Row>
-          <Input
-            multiline
-            placeholder='请输入或选择内容'
-            placeholderTextColor={'#ccc'}
-            fontSize={sp(16)}
-            color='#333'
-            borderColor={'#E4E4E4'}
-            textAlignVertical='top'
-            w={ls(340)}
-            h={ss(350)}
-            ml={ls(30)}
-            autoCorrect={false}
-            defaultValue={templateText}
-            onChangeText={(text) => {
-              setTemplateText(text);
-            }}
-          />
+          <Column h={ss(350)}>
+            <Input
+              ref={inputRef}
+              multiline
+              placeholder='请输入或选择内容'
+              placeholderTextColor={'#ccc'}
+              fontSize={sp(16)}
+              color='#333'
+              maxLength={300}
+              w={ls(340)}
+              h={'100%'}
+              borderColor={'#E4E4E4'}
+              textAlignVertical='top'
+              ml={ls(30)}
+              autoCorrect={false}
+              defaultValue={templateText}
+              onChangeText={(text) => {
+                setTemplateText(text);
+              }}
+            />
+            <Text
+              color={'#999'}
+              style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
+              {templateText.length}/300
+            </Text>
+          </Column>
           <Column w={ls(470)} h={ss(350)}>
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
               <ScrollView bgColor={'#EDF7F6'} maxW={ls(130)}>
@@ -184,36 +200,46 @@ export function TemplateModal({
                   );
                 })}
               </ScrollView>
-              <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-                {template?.groups[selectTemplateItemsIdx].children.map(
-                  (item, idx) => {
-                    return (
-                      <Pressable
-                        hitSlop={ss(10)}
-                        key={idx}
-                        onPress={() => {
-                          const text = templateText.trim();
-                          setTemplateText(
-                            text.length > 0 ? templateText + ',' + item : item,
-                          );
-                        }}>
-                        <Box
-                          px={ls(20)}
-                          py={ss(7)}
-                          mr={ls(10)}
-                          mb={ss(10)}
-                          borderRadius={ss(2)}
-                          borderColor={'#D8D8D8'}
-                          borderWidth={1}>
-                          <Text fontSize={sp(18)} color='#000'>
-                            {item}
-                          </Text>
-                        </Box>
-                      </Pressable>
-                    );
-                  },
-                )}
-              </Row>
+              <ScrollView>
+                <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+                  {template?.groups[selectTemplateItemsIdx].children.map(
+                    (item, idx) => {
+                      return (
+                        <Pressable
+                          hitSlop={ss(10)}
+                          key={idx}
+                          onPress={() => {
+                            const text = templateText.trim();
+
+                            // @ts-ignore
+                            inputRef.current.value =
+                              text.length > 0
+                                ? templateText + ',' + item
+                                : item;
+                            setTemplateText(
+                              text.length > 0
+                                ? templateText + ',' + item
+                                : item,
+                            );
+                          }}>
+                          <Box
+                            px={ls(20)}
+                            py={ss(7)}
+                            mr={ls(10)}
+                            mb={ss(10)}
+                            borderRadius={ss(2)}
+                            borderColor={'#D8D8D8'}
+                            borderWidth={1}>
+                            <Text fontSize={sp(18)} color='#000'>
+                              {item}
+                            </Text>
+                          </Box>
+                        </Pressable>
+                      );
+                    },
+                  )}
+                </Row>
+              </ScrollView>
             </Row>
           </Column>
         </Row>
@@ -520,7 +546,13 @@ export function NewTemplateModalModal({
   onConfirm,
 }: NewTemplateModalParams) {
   const [name, setName] = useState(defaultName);
-
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen) {
+      // @ts-ignore
+      inputRef.current?.clear?.();
+    }
+  }, [isOpen]);
   return (
     <Modal
       isOpen={isOpen}
@@ -537,6 +569,7 @@ export function NewTemplateModalModal({
                 {type == 'group' ? '模版组' : '模版项'}
               </Text>
               <Input
+                ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入'

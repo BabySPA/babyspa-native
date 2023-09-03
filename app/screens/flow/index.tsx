@@ -28,6 +28,7 @@ import { toastAlert } from '~/app/utils/toast';
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { RoleAuthority } from '~/app/stores/auth/type';
 import useManagerStore from '~/app/stores/manager';
+import { CollectStatus, AnalyzeStatus } from '~/app/stores/flow/type';
 
 interface ResultModal {
   type: 'success' | 'fail' | 'none';
@@ -42,19 +43,18 @@ export default function FlowScreen({
   const { type } = params;
   const toast = useToast();
   const {
-    requestGetFlow,
-    currentFlowCustomer,
     requestPatchFlowToCollection,
     getFlowOperatorConfigByUser,
-    requestPatchFlowStatus,
     requestGetInitializeData,
     requestPatchFlowToAnalyze,
-    currentFlow: { collect },
+    currentFlow: { collect, customer },
     updateCurrentArchiveCustomer,
+    requestPatchCollectionStatus,
+    requestPatchAnalyzeStatus,
   } = useFlowStore();
 
   const { requestGetTemplates } = useManagerStore();
-  const age = getAge(currentFlowCustomer.birthday);
+  const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
   const { configs, selectIdx } = getFlowOperatorConfigByUser(type);
@@ -71,7 +71,8 @@ export default function FlowScreen({
 
   const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
   const [showWarn, setShowWarn] = useState<boolean>(
-    selectedConfig.auth === RoleAuthority.FLOW_ANALYZE,
+    selectedConfig.auth === RoleAuthority.FLOW_ANALYZE &&
+      collect.healthInfo.allergy !== '',
   );
   const [closeLoading, setCloseLoading] = useState<boolean>(false);
   const [finishLoading, setFinishLoading] = useState<boolean>(false);
@@ -80,12 +81,6 @@ export default function FlowScreen({
     requestGetTemplates();
   }, []);
 
-  useEffect(() => {
-    if (currentFlowCustomer.flowId) {
-      requestGetFlow(currentFlowCustomer.flowId);
-    }
-  }, [currentFlowCustomer.flowId]);
-
   return (
     <Box flex={1}>
       <NavigationBar
@@ -93,16 +88,12 @@ export default function FlowScreen({
         leftElement={
           <Row alignItems={'center'}>
             <Text color='white' fontWeight={600} fontSize={sp(20)}>
-              {currentFlowCustomer.name}
+              {customer.name}
             </Text>
             <Icon
               as={
                 <MaterialCommunityIcons
-                  name={
-                    currentFlowCustomer.gender == 1
-                      ? 'gender-male'
-                      : 'gender-female'
-                  }
+                  name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
               size={ss(26)}
@@ -113,13 +104,13 @@ export default function FlowScreen({
               {ageText}
             </Text>
             <Text color={'#FFF'} fontWeight={400} fontSize={sp(20)} ml={ls(12)}>
-              {currentFlowCustomer.phoneNumber}
+              {customer.phoneNumber}
             </Text>
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {
                 // 跳转到历史记录
-                updateCurrentArchiveCustomer(currentFlowCustomer);
+                updateCurrentArchiveCustomer(customer);
                 navigation.navigate('CustomerArchive');
               }}>
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
@@ -159,7 +150,7 @@ export default function FlowScreen({
             </Center>
             <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
               过敏原：
-              {collect.healthInfo.allergy || currentFlowCustomer.allergy}
+              {collect.healthInfo.allergy}
             </Text>
           </Row>
           <Pressable
@@ -416,10 +407,18 @@ export default function FlowScreen({
         onConfirm={function (): void {
           if (closeLoading) return;
           setCloseLoading(true);
-          requestPatchFlowStatus({
-            status: FlowStatus.Canceled,
-            type: 'flow',
-          })
+
+          let promiseResult;
+          if (selectedConfig.auth == RoleAuthority.FLOW_ANALYZE) {
+            promiseResult = requestPatchAnalyzeStatus({
+              status: AnalyzeStatus.CANCEL,
+            });
+          } else {
+            promiseResult = requestPatchCollectionStatus({
+              status: CollectStatus.CANCEL,
+            });
+          }
+          promiseResult
             .then(async (res) => {
               // 取消成功
               toastAlert(toast, 'success', '取消成功！');

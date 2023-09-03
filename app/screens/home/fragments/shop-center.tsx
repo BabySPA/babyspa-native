@@ -10,7 +10,7 @@ import { RoleAuthority } from '~/app/stores/auth/type';
 
 export default function ShopCenter() {
   const navigation = useNavigation();
-  const { requestCustomersArchive } = useFlowStore();
+  const { requestArchiveCustomers } = useFlowStore();
 
   const { currentSelected, getLayoutConfig } = useLayoutConfigWithRole();
 
@@ -79,7 +79,7 @@ export default function ShopCenter() {
   };
 
   useEffect(() => {
-    requestCustomersArchive();
+    requestArchiveCustomers();
   }, []);
 
   return (

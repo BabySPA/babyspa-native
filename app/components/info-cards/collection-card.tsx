@@ -14,7 +14,7 @@ interface CollectionCardParams {
 
 export default function CollectionCard(params: CollectionCardParams) {
   const {
-    currentFlow: { collect },
+    currentFlow: { collect, collectionOperator },
   } = useFlowStore();
   const { style = {} } = params;
 
@@ -33,32 +33,50 @@ export default function CollectionCard(params: CollectionCardParams) {
             过敏原：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
-            {collect.healthInfo.allergy}
+            {collect.healthInfo.allergy || '未设置'}
           </Text>
         </Row>
         <Row mt={ss(20)}>
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             舌象：
           </Text>
-          {collect.healthInfo.lingualImage.map((item, idx) => {
-            return <PreviewImage source={item as string} key={idx} />;
-          })}
+          {collect.healthInfo.lingualImage.length > 0 ? (
+            collect.healthInfo.lingualImage.map((item, idx) => {
+              return <PreviewImage source={item as string} key={idx} />;
+            })
+          ) : (
+            <Text fontSize={sp(18)} color='#333'>
+              未设置
+            </Text>
+          )}
         </Row>
         <Row mt={ss(20)}>
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             左手手相：
           </Text>
-          {collect.healthInfo.leftHandImages.map((item, idx) => {
-            return <PreviewImage source={item as string} key={idx} />;
-          })}
+          {collect.healthInfo.leftHandImages.length > 0 ? (
+            collect.healthInfo.leftHandImages.map((item, idx) => {
+              return <PreviewImage source={item as string} key={idx} />;
+            })
+          ) : (
+            <Text fontSize={sp(18)} color='#333'>
+              未设置
+            </Text>
+          )}
         </Row>
         <Row mt={ss(20)}>
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             右手手相：
           </Text>
-          {collect.healthInfo.rightHandImages.map((item, idx) => {
-            return <PreviewImage source={item as string} key={idx} />;
-          })}
+          {collect.healthInfo.rightHandImages.length > 0 ? (
+            collect.healthInfo.rightHandImages.map((item, idx) => {
+              return <PreviewImage source={item as string} key={idx} />;
+            })
+          ) : (
+            <Text fontSize={sp(18)} color='#333'>
+              未设置
+            </Text>
+          )}
         </Row>
         <Row mt={ss(20)}>
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
@@ -80,7 +98,7 @@ export default function CollectionCard(params: CollectionCardParams) {
             调理导向：
           </Text>
           <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
-            {collect.guidance}
+            {collect.guidance || '未设置'}
           </Text>
         </Row>
 
@@ -89,7 +107,7 @@ export default function CollectionCard(params: CollectionCardParams) {
             调理师：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
-            {collect.operator?.name}
+            {collectionOperator?.name}
           </Text>
         </Row>
 

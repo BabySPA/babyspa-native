@@ -21,24 +21,27 @@ import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import FlowCustomerItem from '../components/flow-customer-item';
+import { AnalyzeStatus } from '~/app/stores/flow/type';
+import { getFlowStatus } from '~/app/constants';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function Analyze() {
   const navigation = useNavigation();
   const {
-    // requestGetAnalyzeCustomers,
-    updateCurrentFlowCustomer,
-    analyze: { customers },
+    requestGetAnalyzeFlows,
+    updateCurrentFlow,
+    analyze: { flows },
   } = useFlowStore();
 
   useEffect(() => {
-    // requestGetAnalyzeCustomers();
+    requestGetAnalyzeFlows();
   }, []);
 
   return (
     <Flex flex={1}>
       <Filter />
-      {/* <ScrollView margin={ss(10)}>
-        {customers.length == 0 ? (
+      <ScrollView margin={ss(10)}>
+        {flows.length == 0 ? (
           <EmptyBox />
         ) : (
           <Row
@@ -47,51 +50,65 @@ export default function Analyze() {
             borderRadius={ss(10)}
             flexWrap={'wrap'}
             p={ss(40)}>
-            {customers.map((customer, idx) => {
+            {flows.map((flow, idx) => {
               return (
                 <Pressable
                   hitSlop={ss(10)}
                   key={idx}
                   onPress={() => {
-                    if (
-                      customer.status === FlowStatus.Completed ||
-                      customer.status === FlowStatus.Canceled
-                    ) {
-                      updateCurrentFlowCustomer(customer);
+                    if (flow.analyze.status !== AnalyzeStatus.NOT_SET) {
+                      updateCurrentFlow(flow);
                       navigation.navigate('FlowInfo', { from: 'analyze' });
                     }
                   }}>
                   <Box ml={idx % 2 == 1 ? ss(20) : 0}>
-                    <FlowCustomerItem
-                      flow={customer}
-                      type={OperateType.Analyze}
-                    />
+                    <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
                   </Box>
                 </Pressable>
               );
             })}
           </Row>
         )}
-      </ScrollView> */}
+      </ScrollView>
     </Flex>
   );
 }
 
 function Filter() {
   const [showFilter, setShowFilter] = useState(false);
-  const navigation = useNavigation();
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
     type?: 'start' | 'end';
     isOpen: boolean;
   }>({
     isOpen: false,
   });
-  const {
-    analyze,
-    updateAnalyzeFilter,
-    requestGetAnalyzeCustomers,
-    updateCurrentFlowCustomer,
-  } = useFlowStore();
+  const { analyze, updateAnalyzeFilter, requestGetAnalyzeFlows } =
+    useFlowStore();
+
+  const [count, setCount] = useState({
+    done: 0,
+    todo: 0,
+  });
+
+  useEffect(() => {
+    let done = 0,
+      todo = 0;
+
+    analyze.flows.forEach((flow) => {
+      const flowStatus = getFlowStatus(flow);
+      if (flowStatus == FlowStatus.Analyzed) {
+        done++;
+      } else if (flowStatus == FlowStatus.ToBeAnalyzed) {
+        todo++;
+      }
+      setCount({
+        done,
+        todo,
+      });
+    });
+  }, [analyze.flows]);
+
+  const { openLoading, closeLoading } = useGlobalLoading();
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
@@ -103,15 +120,11 @@ function Filter() {
         />
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           待分析：
-          <Text color='#F7BA2A'>
-            {analyze.statusCount[FlowStatus.ToBeAnalyzed] || 0}
-          </Text>
+          <Text color='#F7BA2A'>{count.todo || 0}</Text>
         </Text>
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已分析：
-          <Text color='#5EACA3'>
-            {analyze.statusCount[FlowStatus.Completed] || 0}
-          </Text>
+          <Text color='#5EACA3'>{count.done || 0}</Text>
         </Text>
         <Input
           ml={ls(30)}
@@ -126,7 +139,7 @@ function Filter() {
             updateAnalyzeFilter({
               searchKeywords: text,
             });
-            requestGetAnalyzeCustomers();
+            requestGetAnalyzeFlows();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -260,9 +273,10 @@ function Filter() {
               hitSlop={ss(10)}
               onPress={() => {
                 updateAnalyzeFilter({
-                  startDate: dayjs().format('YYYY-MM-DD'),
+                  searchKeywords: '',
+                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
-                  status: -1,
+                  status: FlowStatus.NO_SET,
                 });
               }}
               borderRadius={ss(4)}
@@ -278,8 +292,12 @@ function Filter() {
             </Pressable>
             <Pressable
               hitSlop={ss(10)}
-              onPress={() => {
-                requestGetAnalyzeCustomers();
+              onPress={async () => {
+                openLoading();
+                await requestGetAnalyzeFlows();
+                setTimeout(() => {
+                  closeLoading();
+                }, 300);
               }}
               borderRadius={ss(4)}
               borderWidth={1}

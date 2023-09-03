@@ -10,24 +10,23 @@ import {
   Pressable,
 } from 'native-base';
 import { useEffect, useState } from 'react';
-import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
+import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
-import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import CustomerFollowUpItem from '../components/customer-followup-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
-import { ShopType } from '~/app/stores/manager/type';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function FollowUpVisit() {
   const navigation = useNavigation();
   const {
+    updateCurrentFlow,
     requestGetFollowUps,
     customersFollowUp: { flows },
-    updateCurrentFlowCustomer,
   } = useFlowStore();
 
   useEffect(() => {
@@ -37,8 +36,8 @@ export default function FollowUpVisit() {
   return (
     <Flex flex={1}>
       <Filter />
-      {/* <ScrollView margin={ss(10)}>
-        {customers.length == 0 ? (
+      <ScrollView margin={ss(10)}>
+        {flows.length == 0 ? (
           <EmptyBox />
         ) : (
           <Row
@@ -47,25 +46,25 @@ export default function FollowUpVisit() {
             borderRadius={ss(10)}
             flexWrap={'wrap'}
             p={ss(40)}>
-            {customers.map((customer, idx) => {
+            {flows.map((flow, idx) => {
               return (
                 <Pressable
                   hitSlop={ss(10)}
                   ml={idx % 2 == 1 ? ss(20) : 0}
                   key={idx}
                   onPress={() => {
-                    updateCurrentFlowCustomer(customer);
+                    updateCurrentFlow(flow);
                     navigation.navigate('FlowInfo', {
                       from: 'follow-up-detail',
                     });
                   }}>
-                  <CustomerFollowUpItem customer={customer} />
+                  <CustomerFollowUpItem flow={flow} />
                 </Pressable>
               );
             })}
           </Row>
         )}
-      </ScrollView> */}
+      </ScrollView>
     </Flex>
   );
 }
@@ -77,6 +76,7 @@ function Filter() {
     updateCustomersFollowupFilter,
     requestGetFollowUps,
   } = useFlowStore();
+  const { openLoading, closeLoading } = useGlobalLoading();
 
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
     type?: 'start' | 'end';

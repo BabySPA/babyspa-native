@@ -34,28 +34,35 @@ export default function FlowCustomerItem({
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
-  const { updateCurrentFlowCustomer } = useFlowStore();
+  const { updateCurrentFlow } = useFlowStore();
 
   const flowStatus = getFlowStatus(flow);
-
   const OperatorStatusFlag = () => {
     if (type === OperateType.Evaluate) {
       return (
         <Box
           bgColor={
-            EvaluateTextConfig[flow.evaluateOperator ? 'DONE' : 'TODO'].bgColor
+            EvaluateTextConfig[
+              flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
+            ].bgColor
           }
           px={ls(12)}
           py={ss(6)}
           _text={{
             fontSize: sp(16),
             color:
-              EvaluateTextConfig[flow.evaluateOperator ? 'DONE' : 'TODO']
-                .textColor,
+              EvaluateTextConfig[
+                flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
+              ].textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
-          {EvaluateTextConfig[flow.evaluateOperator ? 'DONE' : 'TODO'].text}
+          borderTopRightRadius={ss(8)}
+        >
+          {
+            EvaluateTextConfig[
+              flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
+            ].text
+          }
         </Box>
       );
     } else {
@@ -69,7 +76,8 @@ export default function FlowCustomerItem({
             color: getStatusTextConfig(flowStatus)?.textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
+          borderTopRightRadius={ss(8)}
+        >
           {getStatusTextConfig(flowStatus)?.text}
         </Box>
       );
@@ -85,7 +93,8 @@ export default function FlowCustomerItem({
       w={ls(467)}
       minH={ss(148)}
       mb={ss(20)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Row p={ss(20)} maxW={'70%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
@@ -109,7 +118,8 @@ export default function FlowCustomerItem({
               fontWeight={400}
               maxW={ls(180)}
               numberOfLines={1}
-              ellipsizeMode='tail'>
+              ellipsizeMode='tail'
+            >
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -126,7 +136,8 @@ export default function FlowCustomerItem({
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(3)}>
+              ml={ls(3)}
+            >
               {ageText}
             </Text>
           </Row>
@@ -157,7 +168,8 @@ export default function FlowCustomerItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(10)}>
+              ml={ls(10)}
+            >
               {dayjs(flow.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
@@ -167,11 +179,12 @@ export default function FlowCustomerItem({
         <OperatorStatusFlag />
 
         {type === OperateType.Collection &&
+          flow.register.status == RegisterStatus.DONE &&
           flow.collect.status == CollectStatus.NOT_SET && (
             <OperateButton
               text={'采集'}
               onPress={() => {
-                updateCurrentFlowCustomer(customer);
+                updateCurrentFlow(flow);
                 navigation.navigate('Flow', {
                   type: FlowStatus.ToBeCollected,
                 });
@@ -180,11 +193,13 @@ export default function FlowCustomerItem({
           )}
 
         {type === OperateType.Analyze &&
+          flow.register.status == RegisterStatus.DONE &&
+          flow.collect.status == CollectStatus.DONE &&
           flow.analyze.status == AnalyzeStatus.NOT_SET && (
             <OperateButton
               text={'分析'}
               onPress={() => {
-                updateCurrentFlowCustomer(customer);
+                updateCurrentFlow(flow);
                 navigation.navigate('Flow', {
                   type: FlowStatus.ToBeAnalyzed,
                 });
@@ -192,17 +207,18 @@ export default function FlowCustomerItem({
             />
           )}
 
-        {type === OperateType.Evaluate && (
-          <OperateButton
-            text={'评价'}
-            onPress={() => {
-              updateCurrentFlowCustomer(customer);
-              navigation.navigate('FlowInfo', {
-                from: 'evaluate',
-              });
-            }}
-          />
-        )}
+        {type === OperateType.Evaluate &&
+          flow.evaluate.status == EvaluateStatus.NOT_SET && (
+            <OperateButton
+              text={'评价'}
+              onPress={() => {
+                updateCurrentFlow(flow);
+                navigation.navigate('FlowInfo', {
+                  from: 'evaluate',
+                });
+              }}
+            />
+          )}
       </Flex>
     </Row>
   );

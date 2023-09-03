@@ -30,14 +30,17 @@ export interface FlowItemResponse {
   _id: string;
   register: Register;
   collect: Collect;
+  evaluate: Evaluate;
   analyze: Analyze;
   collectionOperator: OperatorInfo | null;
   analyzeOperator: OperatorInfo | null;
   evaluateOperator: OperatorInfo | null;
+  followUpOperator: OperatorInfo | null;
   customer: Customer;
-  shop: Shop;
+  shop: Partial<Shop>;
   updatedAt: string;
   tag: string;
+  projectId?: string;
 }
 
 export interface Operator {
@@ -49,13 +52,7 @@ export interface Operator {
 }
 
 export interface OperatorInfo {
-  id: string;
-  name: string;
-  phoneNumber: string;
-}
-
-export interface ShopInfo {
-  id: string;
+  _id: string;
   name: string;
 }
 
@@ -66,17 +63,29 @@ export interface Customer {
   birthday: string;
   nickname: string;
   phoneNumber: string;
+  updatedAt?: string;
 }
-
-export type RegisterCustomerInfo = Partial<FlowItemResponse>;
 
 export interface QueryFlowList {
   flows: FlowItemResponse[];
   searchKeywords: string;
   startDate: string;
   endDate: string;
+  status: FlowStatus;
+  shopId?: string;
+  // 用于筛选
+  allStatus?: {
+    value: number;
+    label: string;
+  }[];
+}
+
+export interface QueryCustomerList {
+  customers: Customer[];
+  searchKeywords: string;
+  startDate: string;
+  endDate: string;
   status: FlowStatus | -1;
-  statusCount?: any;
   shopId?: string;
   // 用于筛选
   allStatus?: {
@@ -149,13 +158,11 @@ export interface FlowState {
   evaluate: QueryFlowList;
   currentFlow: FlowItemResponse;
 
-  customersArchive: QueryFlowList;
+  archiveCustomers: QueryCustomerList;
 
   customersFollowUp: QueryFlowList;
 
-  currentFlow: RegisterCustomerInfo;
-  currentFlowCustomer: Customer;
-  currentArchiveCustomer: RegisterCustomerInfo;
+  currentArchiveCustomer: Customer;
 
   requestGetInitializeData: () => Promise<any>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
@@ -164,17 +171,17 @@ export interface FlowState {
   requestGetAnalyzeFlows: () => Promise<any>;
   requestGetEvaluateFlows: () => Promise<any>;
   requestGetOperators: () => Promise<any>;
-  requestPostCreateCustomer: (customer: Partial<Customer>) => Promise<any>;
   requestDeleteCustomer: (customerId: string) => Promise<any>;
   requestPostRegisterInfo: () => Promise<any>;
   requestPatchCustomerInfo: () => Promise<any>;
+  requestPostCustomerArchive: (customer: Partial<Customer>) => Promise<any>;
   requestPatchCustomerArchive: (customer: Partial<Customer>) => Promise<any>;
   requestPatchFlowToCollection: () => Promise<any>;
   requestPatchFlowToAnalyze: () => Promise<any>;
   requestPutFlowToEvaluate: (evaluate: Evaluate) => Promise<any>;
 
   // 客户档案
-  requestCustomersArchive: () => Promise<any>;
+  requestArchiveCustomers: () => Promise<any>;
   requestCustomerArchiveHistory: (customerId: string) => Promise<FlowArchive[]>;
   requestCustomerArchiveCourses: (
     customerId: string,
@@ -191,11 +198,14 @@ export interface FlowState {
     customerId: string,
     { height, weight, date }: { height: number; weight: number; date: string },
   ) => Promise<GrowthCurveStatisticsResponse>;
-  requestPatchFlowStatus: (data: {
-    status: number;
-    type: PatchFlowStatusType;
+  requestPatchRegisterStatus: (data: {
+    status: RegisterStatus;
   }) => Promise<any>;
-  requestGetFlow: (flowId: string) => Promise<any>;
+
+  requestPatchCollectionStatus: (data: {
+    status: CollectStatus;
+  }) => Promise<any>;
+  requestPatchAnalyzeStatus: (data: { status: AnalyzeStatus }) => Promise<any>;
 
   // 客户随访
   requestGetFollowUps: () => Promise<any>;
@@ -204,11 +214,10 @@ export interface FlowState {
   updateRegisterFilter: (data: Partial<QueryFlowList>) => void;
   updateCollectionFilter: (data: Partial<QueryFlowList>) => void;
   updateEvaluateFilter: (data: Partial<QueryFlowList>) => void;
-  updateCustomersArchiveFilter: (data: Partial<QueryFlowList>) => void;
+  updateArchiveCustomersFilter: (data: Partial<QueryFlowList>) => void;
   updateCustomersFollowupFilter: (data: Partial<QueryFlowList>) => void;
 
-  updateCurrentFlow: (data: Partial<RegisterCustomerInfo>) => void;
-  updateCurrentFlowCustomer: (data: Partial<Customer>) => void;
+  updateCurrentFlow: (data: Partial<FlowItemResponse>) => void;
   updateCurrentArchiveCustomer: (data: Partial<Customer>) => void;
   updateCollection: (data: Partial<Collect>) => void;
   updateAnalyzeFilter: (data: Partial<QueryFlowList>) => void;
@@ -282,15 +291,14 @@ export interface Register {
   customerId: any;
   status: RegisterStatus;
   operatorId: string;
-  updatedAt: Date;
+  updatedAt: string;
 }
 
 export interface Collect {
   status: CollectStatus;
   healthInfo: HealthInfo;
   guidance: string;
-  operatorId?: any;
-  updatedAt?: Date;
+  updatedAt?: string;
 }
 
 /**
@@ -430,22 +438,21 @@ export interface Analyze {
    */
   editable?: number | false;
 
-  operatorId?: string;
-
-  updatedAt?: Date;
+  updatedAt?: string;
 }
 
 export type Score = 1 | 2 | 3 | 4 | 5;
 
 export interface Evaluate {
+  status: EvaluateStatus;
   /**
    * 评分
    */
-  score: Score;
+  score?: Score;
   /**
    * 评价
    */
-  remark: string;
+  remark?: string;
 
   /**
    * 评价人
@@ -455,5 +462,5 @@ export interface Evaluate {
   /**
    * 评价时间
    */
-  updatedAt?: Date;
+  updatedAt?: string;
 }

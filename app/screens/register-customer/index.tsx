@@ -21,10 +21,11 @@ export default function RegisterCustomerScreen({
   const isRegister = type == CustomerScreenType.register;
 
   const {
+    currentFlow,
     requestGetOperators,
     requestPostRegisterInfo,
     requestGetInitializeData,
-    updateCurrentFlowCustomer,
+    updateCurrentFlow,
   } = useFlowStore();
 
   const { requestGetTemplates } = useManagerStore();
@@ -54,6 +55,27 @@ export default function RegisterCustomerScreen({
 
               setLoading(true);
 
+              if (!currentFlow.customer.name) {
+                toastAlert(toast, 'error', '请输入姓名！');
+                setLoading(false);
+                return;
+              }
+              if (!currentFlow.customer.phoneNumber) {
+                toastAlert(toast, 'error', '请输入电话！');
+                setLoading(false);
+                return;
+              }
+              if (!currentFlow.customer.birthday) {
+                toastAlert(toast, 'error', '请选择生日！');
+                setLoading(false);
+                return;
+              }
+
+              if (!currentFlow.collectionOperator?._id) {
+                toastAlert(toast, 'error', '请选择理疗师！');
+                setLoading(false);
+                return;
+              }
               requestPostRegisterInfo()
                 .then((res) => {
                   toastAlert(
@@ -66,8 +88,8 @@ export default function RegisterCustomerScreen({
                     navigation.goBack();
                   } else {
                     // 进入流程页面
-                    updateCurrentFlowCustomer(res);
-                    navigation.navigate('Flow', {
+                    updateCurrentFlow(res);
+                    navigation.replace('Flow', {
                       type: FlowStatus.ToBeCollected,
                     });
                   }
@@ -92,13 +114,15 @@ export default function RegisterCustomerScreen({
                 .finally(() => {
                   setLoading(false);
                 });
-            }}>
+            }}
+          >
             <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
               {loading && <Spinner mr={ls(5)} color='emerald.500' />}
               <Text
                 color={'#03CBB2'}
                 opacity={loading ? 0.6 : 1}
-                fontSize={sp(14, { min: 12 })}>
+                fontSize={sp(14, { min: 12 })}
+              >
                 确定
               </Text>
             </Row>

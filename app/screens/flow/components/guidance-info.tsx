@@ -27,7 +27,8 @@ export default function GuidanceInfo({
       <Column flex={1}>
         <BoxItem
           title={'调理导向'}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+        >
           <Box flex={1}>
             <TextInput
               autoCorrect={false}
@@ -66,7 +67,8 @@ export default function GuidanceInfo({
                     key={idx}
                     onPress={() => {
                       setSelectTemplateGroup(idx);
-                    }}>
+                    }}
+                  >
                     <Center
                       p={ss(10)}
                       w={ss(80)}
@@ -74,7 +76,8 @@ export default function GuidanceInfo({
                       borderTopLeftRadius={ss(10)}
                       bgColor={
                         selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                      }>
+                      }
+                    >
                       <Icon
                         as={<AntDesign name='appstore1' />}
                         size={ss(18, { min: 15 })}
@@ -87,7 +90,8 @@ export default function GuidanceInfo({
                         color={
                           selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                         }
-                        fontSize={sp(18)}>
+                        fontSize={sp(18)}
+                      >
                         {item.name}
                       </Text>
                     </Center>
@@ -113,7 +117,8 @@ export default function GuidanceInfo({
                             : item,
                       });
                     }
-                  }}>
+                  }}
+                >
                   <Box
                     px={ls(20)}
                     py={ss(7)}
@@ -121,7 +126,8 @@ export default function GuidanceInfo({
                     mb={ss(10)}
                     borderRadius={ss(2)}
                     borderColor={'#D8D8D8'}
-                    borderWidth={1}>
+                    borderWidth={1}
+                  >
                     <Text fontSize={sp(18)} color='#000'>
                       {item}
                     </Text>

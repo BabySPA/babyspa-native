@@ -5,7 +5,7 @@ import { sp, ss } from '~/app/utils/style';
 import { useState } from 'react';
 import InfoBox from './components/info-box';
 import useManagerStore from '~/app/stores/manager';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import EditBox from './components/edit-box';
 
 export default function UserDetail({

@@ -1,5 +1,5 @@
 import { Gender } from '~/app/types';
-import { Role, RoleStatus, Shop } from '../manager/type';
+import { Role, Shop } from '../manager/type';
 
 /**
  * Auth store type

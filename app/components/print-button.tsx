@@ -6,8 +6,8 @@ import { getAge } from '../utils';
 import dayjs from 'dayjs';
 
 export function PrintButton() {
-  const { currentFlow, currentFlowCustomer } = useFlowStore();
-  const age = getAge(currentFlowCustomer.birthday);
+  const { currentFlow } = useFlowStore();
+  const age = getAge(currentFlow.customer.birthday);
 
   let massageHtml = '';
   currentFlow.analyze.solution.massages.forEach((item) => {
@@ -129,12 +129,12 @@ export function PrintButton() {
       <table class="w-100">
         <tbody>
           <tr>
-            <td>姓名：${currentFlowCustomer.name}</td>
-            <td>性别：${currentFlowCustomer.gender ? '男' : '女'}</td>
+            <td>姓名：${currentFlow.customer.name}</td>
+            <td>性别：${currentFlow.customer.gender ? '男' : '女'}</td>
             <td>年龄：${age?.year}岁${age?.month}个月</td>
           </tr>
           <tr>
-            <td>电话：${currentFlowCustomer.phoneNumber}</td>
+            <td>电话：${currentFlow.customer.phoneNumber}</td>
             <td colspan="2">过敏原：${
               currentFlow.collect.healthInfo.allergy
             }</td>
@@ -216,7 +216,8 @@ export function PrintButton() {
       hitSlop={ss(10)}
       onPress={() => {
         print();
-      }}>
+      }}
+    >
       <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
         <Text color={'#03CBB2'} fontSize={sp(14, { min: 12 })}>
           打印

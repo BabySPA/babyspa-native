@@ -83,15 +83,20 @@ export function useSelectShops(filterCenter: boolean): [Shop | null, Shop[]] {
 
   const [defaultSelectShop, setDefaultSelectShop] = useState<Shop | null>();
   const [selectShops, setSelectShops] = useState<Shop[]>([]);
+
   useEffect(() => {
     if (shops.length > 0) {
       if (currentShopWithRole?.shop.type === ShopType.CENTER) {
-        setDefaultSelectShop(shops[0]);
-        setSelectShops(
-          filterCenter
-            ? shops.filter((item) => item.type === ShopType.CENTER)
-            : shops,
-        );
+        if (filterCenter) {
+          const filterShops = shops.filter(
+            (item) => item.type !== ShopType.CENTER,
+          );
+          setDefaultSelectShop(filterShops[0]);
+          setSelectShops(filterShops);
+        } else {
+          setDefaultSelectShop(currentShopWithRole?.shop);
+          setSelectShops(shops);
+        }
       } else {
         setDefaultSelectShop(currentShopWithRole?.shop);
         const selectShop = shops.filter(

@@ -3,7 +3,7 @@ import { Alert, Text, Toast, Column, Row } from 'native-base';
 export function toastAlert(
   toast: typeof Toast,
   type: 'info' | 'warning' | 'success' | 'error',
-  errorText: string,
+  text: string | JSX.Element,
 ) {
   toast.show({
     placement: 'top',
@@ -15,11 +15,10 @@ export function toastAlert(
               flexShrink={1}
               space={2}
               alignItems='center'
-              justifyContent='space-between'
-            >
+              justifyContent='space-between'>
               <Row space={2} flexShrink={1} alignItems='center'>
                 <Alert.Icon />
-                <Text>{errorText}</Text>
+                <Text>{text}</Text>
               </Row>
             </Row>
           </Column>

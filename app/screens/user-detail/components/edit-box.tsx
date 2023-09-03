@@ -182,17 +182,12 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Input
                   autoCorrect={false}
-                  defaultValue={tempUser.username}
+                  defaultValue={tempUser.phoneNumber}
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
-                  onChangeText={(text) => {
-                    setTempUser({
-                      ...tempUser,
-                      username: text,
-                    });
-                  }}
+                  isReadOnly
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16, { min: 12 })}
@@ -230,7 +225,6 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>
             <FormBox
-              required
               title='员工简介'
               style={{ alignItems: 'flex-start', flex: 1 }}
               form={

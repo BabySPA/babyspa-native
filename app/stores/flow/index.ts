@@ -1,46 +1,66 @@
 import { create } from 'zustand';
 import request from '~/app/api';
-import {
-  FlowOperatorConfigItem,
-  FlowOperatorKey,
-  SolutionDefault,
-} from '../../constants';
+import { FlowOperatorConfigItem, FlowOperatorKey } from '../../constants';
 import dayjs from 'dayjs';
 import { immer } from 'zustand/middleware/immer';
 import { produce } from 'immer';
-import { FlowStatus } from '../../types';
-import { FlowState, FollowUp, FollowUpStatus } from './type';
+import { FlowStatus, Gender } from '../../types';
+import {
+  AnalyzeStatus,
+  CollectStatus,
+  EvaluateStatus,
+  FlowState,
+  FollowUp,
+  FollowUpStatus,
+  RegisterStatus,
+} from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { fuzzySearch } from '~/app/utils';
 import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
 
-const defaultFlowListData = {
+const DefaultFlowListData = {
   flows: [],
   searchKeywords: '',
-  status: -1,
-  statusCount: {},
-  startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+  status: FlowStatus.NO_SET,
+  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
-export const DefaultRegisterCustomer = {
-  id: '',
-  name: '',
-  nickname: '',
-  gender: 1,
-  birthday: dayjs().format('YYYY-MM-DD'),
-  phoneNumber: '',
-  allergy: '',
-  operator: null,
-  status: FlowStatus.ToBeCollected,
+const DefaultCustomerListData = {
+  customers: [],
+  searchKeywords: '',
+  status: FlowStatus.NO_SET,
+  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+  endDate: dayjs().format('YYYY-MM-DD'),
 };
 
-const defaultFlow = {
+export const DefaultCustomer = {
   _id: '',
-  customerId: '',
+  name: '',
+  nickname: '',
+  birthday: '',
+  gender: Gender.MAN,
+  phoneNumber: '',
+};
+
+export const DefaultFlow = {
+  shopId: '',
+  customer: DefaultCustomer,
+  _id: '',
+  collectionOperator: null,
+  analyzeOperator: null,
+  evaluateOperator: null,
+  followUpOperator: null,
+  register: {
+    customerId: '',
+    status: RegisterStatus.DONE,
+    operatorId: '',
+    updatedAt: new Date().toString(),
+  },
   collect: {
+    status: CollectStatus.NOT_SET,
     healthInfo: {
       allergy: '',
       audioFiles: [],
@@ -50,16 +70,16 @@ const defaultFlow = {
       otherImages: [],
     },
     guidance: '',
-    operatorId: '',
-    updatedAt: new Date(),
   },
   analyze: {
+    status: AnalyzeStatus.NOT_SET,
     conclusion: '',
     solution: {
       applications: [],
       massages: [],
     },
     followUp: {
+      id: '',
       followUpStatus: FollowUpStatus.NOT_SET,
       followUpTime: '',
     },
@@ -68,18 +88,20 @@ const defaultFlow = {
       nextTime: '',
     },
     remark: '',
-    operatorId: '',
-    updatedAt: new Date(),
+    editable: 0,
   },
-  evaluate: null,
-  createdAt: '',
-  updatedAt: '',
+  evaluate: {
+    status: EvaluateStatus.NOT_SET,
+  },
+  shop: {},
+  updatedAt: new Date().toString(),
+  tag: '',
 };
 
 const initialState = {
   allCustomers: [],
   register: {
-    ...defaultFlowListData,
+    ...DefaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
       { label: '待采集', value: FlowStatus.ToBeCollected },
@@ -88,7 +110,7 @@ const initialState = {
     ],
   },
   collection: {
-    ...defaultFlowListData,
+    ...DefaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
       { label: '待采集', value: FlowStatus.ToBeCollected },
@@ -97,7 +119,7 @@ const initialState = {
     ],
   },
   analyze: {
-    ...defaultFlowListData,
+    ...DefaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
       { label: '待分析', value: FlowStatus.ToBeAnalyzed },
@@ -105,39 +127,20 @@ const initialState = {
     ],
   },
   evaluate: {
-    ...defaultFlowListData,
+    ...DefaultFlowListData,
     allStatus: [
       { label: '全部', value: -1 },
       { label: '待评价', value: FlowStatus.ToBeEvaluated },
       { label: '已评价', value: FlowStatus.Evaluated },
     ],
   },
-  currentFlow: defaultFlow,
+  currentFlow: DefaultFlow,
 
-  customersArchive: { ...defaultFlowListData, allStatus: [] },
-  customersFollowUp: { ...defaultFlowListData },
-  currentArchiveCustomer: DefaultRegisterCustomer,
+  archiveCustomers: { ...DefaultCustomerListData },
+  customersFollowUp: { ...DefaultFlowListData },
+  currentArchiveCustomer: DefaultCustomer,
 
   operators: [],
-
-  currentFlow: DefaultRegisterCustomer,
-
-  currentFlowCustomer: {
-    operator: null,
-    id: '',
-    name: '',
-    gender: 1,
-    birthday: '',
-    nickname: '',
-    phoneNumber: '',
-    allergy: '',
-    updatedAt: '',
-    tag: '',
-    flowId: '',
-    shop: null,
-    analyst: null,
-    flowEvaluate: null,
-  },
 };
 
 const useFlowStore = create(
@@ -154,13 +157,13 @@ const useFlowStore = create(
         await get().requestGetRegisterFlows();
       }
       if (hasAuthority(RoleAuthority.FLOW_COLLECTION, 'R')) {
-        await get().requestGetCollectionCustomers();
+        await get().requestGetCollectionFlows();
       }
       if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
-        await get().requestGetAnalyzeCustomers();
+        await get().requestGetAnalyzeFlows();
       }
       if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
-        await get().requestGetEvaluateCustomers();
+        await get().requestGetEvaluateFlows();
       }
 
       useManagerStore.getState().requestGetTemplates();
@@ -179,13 +182,10 @@ const useFlowStore = create(
 
     requestGetRegisterFlows: async () => {
       const {
-        register: { status, searchKeywords, startDate, endDate },
+        register: { searchKeywords, startDate, endDate, status },
       } = get();
       const params: any = {};
 
-      if (status !== -1) {
-        params.status = status;
-      }
       if (startDate) {
         params.startDate = startDate;
       }
@@ -196,213 +196,181 @@ const useFlowStore = create(
       params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
       request.get('/flows', { params }).then((res) => {
-        const { docs, statusCount } = res.data;
-        
+        const { docs } = res.data;
 
         set({
           register: {
             ...get().register,
-            flows: searchKeywords ? fuzzySearch(docs, searchKeywords) : docs,
+            flows: fuzzySearch(docs, searchKeywords, status),
           },
         });
       });
-
-      // request.get('/customers', { params }).then(({ data }) => {
-      //   const { docs, statusCount } = data;
-
-      //   set({
-      //     register: {
-      //       ...get().register,
-      //       customers: searchKeywords
-      //         ? fuzzySearch(docs, searchKeywords)
-      //         : docs,
-      //       statusCount,
-      //     },
-      //   });
-      // });
     },
 
-    // requestCustomersArchive: async () => {
-    //   const {
-    //     customersArchive: {
-    //       status,
-    //       startDate,
-    //       endDate,
-    //       searchKeywords,
-    //       shopId,
-    //     },
-    //   } = get();
-    //   const params: any = {};
+    requestArchiveCustomers: async () => {
+      const {
+        archiveCustomers: { startDate, endDate, searchKeywords, shopId },
+      } = get();
+      const params: any = {};
 
-    //   if (status !== -1) {
-    //     params.status = status;
-    //   }
-    //   if (startDate) {
-    //     params.startDate = startDate;
-    //   }
-    //   if (endDate) {
-    //     params.endDate = endDate;
-    //   }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
 
-    //   if (shopId) {
-    //     params.shopId = shopId;
-    //   }
+      if (shopId) {
+        params.shopId = shopId;
+      }
 
-    //   request.get('/customers/all', { params }).then(({ data }) => {
-    //     const { docs, statusCount } = data;
-    //     set({
-    //       customersArchive: {
-    //         ...get().customersArchive,
-    //         customers: searchKeywords
-    //           ? fuzzySearch(docs, searchKeywords)
-    //           : docs,
-    //         statusCount,
-    //       },
-    //     });
-    //   });
-    // },
+      request.get('/customers/all', { params }).then(({ data }) => {
+        const { docs } = data;
+        set({
+          archiveCustomers: {
+            ...get().archiveCustomers,
+            customers: fuzzySearch(docs, searchKeywords),
+          },
+        });
+      });
+    },
 
-    // async requestCustomerArchiveHistory(customerId) {
-    //   const { data } = await request.get(
-    //     `/flows/archive/history/${customerId}`,
-    //   );
-    //   return data;
-    // },
+    async requestCustomerArchiveHistory(customerId) {
+      const { data } = await request.get(
+        `/flows/archive/history/${customerId}`,
+      );
+      return data;
+    },
 
-    // async requestCustomerArchiveCourses(customerId) {
-    //   const { data } = await request.get(
-    //     `/flows/archive/courses/${customerId}`,
-    //   );
-    //   return data;
-    // },
+    async requestCustomerArchiveCourses(customerId) {
+      const { data } = await request.get(
+        `/flows/archive/courses/${customerId}`,
+      );
+      return data;
+    },
 
-    // requestGetCollectionCustomers: async () => {
-    //   const {
-    //     collection: { status, startDate, searchKeywords, endDate },
-    //   } = get();
-    //   const params: any = {};
-    //   if (status !== -1) {
-    //     params.status = status;
-    //   }
-    //   if (startDate) {
-    //     params.startDate = startDate;
-    //   }
-    //   if (endDate) {
-    //     params.endDate = endDate;
-    //   }
+    requestGetCollectionFlows: async () => {
+      const {
+        collection: { status, searchKeywords, startDate, endDate },
+      } = get();
+      const params: any = {};
 
-    //   params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
 
-    //   request.get('/customers', { params }).then(({ data }) => {
-    //     const { docs, statusCount } = data;
-    //     set({
-    //       collection: {
-    //         ...get().collection,
-    //         customers: searchKeywords
-    //           ? fuzzySearch(docs, searchKeywords)
-    //           : docs,
-    //         statusCount,
-    //       },
-    //     });
-    //   });
-    // },
-    // async requestCustomerGrowthCurve(customerId) {
-    //   const { data } = await request.get(
-    //     `/customers/growth-curve/statistics/${customerId}`,
-    //   );
-    //   return data;
-    // },
-    // requestPutCustomerGrowthCurve: async (
-    //   customerId: string,
-    //   { height, weight }: { height: number; weight: number },
-    // ) => {
-    //   const { data } = await request.put(
-    //     `/customers/growth-curve/${customerId}`,
-    //     {
-    //       height,
-    //       weight,
-    //     },
-    //   );
-    //   return data;
-    // },
-    // requestPatchCustomerGrowthCurve: async (
-    //   customerId: string,
-    //   {
-    //     height,
-    //     weight,
-    //     date,
-    //   }: { height: number; weight: number; date: string },
-    // ) => {
-    //   const { data } = await request.patch(
-    //     `/customers/growth-curve/${customerId}`,
-    //     {
-    //       height,
-    //       weight,
-    //       date,
-    //     },
-    //   );
-    //   return data;
-    // },
+      params.shopId = useAuthStore.getState().currentShopWithRole?.shop._id;
 
-    // requestGetAnalyzeCustomers: async () => {
-    //   const {
-    //     analyze: { status, startDate, endDate, searchKeywords },
-    //   } = get();
-    //   const params: any = {};
+      request.get('/flows', { params }).then((res) => {
+        const { docs } = res.data;
 
-    //   if (status !== -1) {
-    //     params.status = status;
-    //   }
-    //   if (startDate) {
-    //     params.startDate = startDate;
-    //   }
-    //   if (endDate) {
-    //     params.endDate = endDate;
-    //   }
+        set({
+          collection: {
+            ...get().collection,
+            flows: fuzzySearch(docs, searchKeywords, status),
+          },
+        });
+      });
+    },
+    async requestCustomerGrowthCurve(customerId) {
+      const { data } = await request.get(
+        `/customers/growth-curve/statistics/${customerId}`,
+      );
+      return data;
+    },
+    requestPutCustomerGrowthCurve: async (
+      customerId: string,
+      { height, weight }: { height: number; weight: number },
+    ) => {
+      const { data } = await request.put(
+        `/customers/growth-curve/${customerId}`,
+        {
+          height,
+          weight,
+        },
+      );
+      return data;
+    },
+    requestPatchCustomerGrowthCurve: async (
+      customerId: string,
+      {
+        height,
+        weight,
+        date,
+      }: { height: number; weight: number; date: string },
+    ) => {
+      const { data } = await request.patch(
+        `/customers/growth-curve/${customerId}`,
+        {
+          height,
+          weight,
+          date,
+        },
+      );
+      return data;
+    },
 
-    //   request.get('/customers/analyzes', { params }).then(({ data }) => {
-    //     const { docs, statusCount } = data;
-    //     set({
-    //       analyze: {
-    //         ...get().analyze,
-    //         customers: searchKeywords
-    //           ? fuzzySearch(docs, searchKeywords)
-    //           : docs,
-    //         statusCount,
-    //       },
-    //     });
-    //   });
-    // },
+    requestGetAnalyzeFlows: async () => {
+      const {
+        analyze: { status, searchKeywords, startDate, endDate },
+      } = get();
+      const params: any = {};
 
-    // requestGetEvaluateCustomers: async () => {
-    //   const {
-    //     evaluate: { status, startDate, searchKeywords, endDate },
-    //   } = get();
-    //   const params: any = {};
-    //   if (status !== -1) {
-    //     params.status = status;
-    //   }
-    //   if (startDate) {
-    //     params.startDate = startDate;
-    //   }
-    //   if (endDate) {
-    //     params.endDate = endDate;
-    //   }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
 
-    //   request.get('/customers/evaluates', { params }).then(({ data }) => {
-    //     const { docs, statusCount } = data;
+      request.get('/flows', { params }).then((res) => {
+        const { docs } = res.data;
 
-    //     set({
-    //       evaluate: {
-    //         ...get().evaluate,
-    //         customers: searchKeywords
-    //           ? fuzzySearch(docs, searchKeywords)
-    //           : docs,
-    //         statusCount,
-    //       },
-    //     });
-    //   });
-    // },
+        set({
+          analyze: {
+            ...get().analyze,
+            flows: fuzzySearch(docs, searchKeywords, status),
+          },
+        });
+      });
+    },
+
+    requestGetEvaluateFlows: async () => {
+      const {
+        evaluate: { status, startDate, searchKeywords, endDate },
+      } = get();
+      const params: any = {};
+
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
+
+      params.isDone = 1;
+
+      request.get('/flows', { params }).then(({ data }) => {
+        const { docs } = data;
+
+        set({
+          evaluate: {
+            ...get().evaluate,
+            flows: fuzzySearch(docs, searchKeywords, status, (flow) => {
+              if (flow.evaluate.status === EvaluateStatus.NOT_SET) {
+                return FlowStatus.ToBeEvaluated;
+              } else {
+                return FlowStatus.Evaluated;
+              }
+            }),
+          },
+        });
+      });
+      ``;
+    },
 
     requestGetOperators: async () => {
       const params = {
@@ -413,11 +381,11 @@ const useFlowStore = create(
       });
     },
 
-    requestPostCreateCustomer: async (customer) => {
+    requestPostCustomerArchive: async (customer) => {
       return request
         .post('/customers', {
           ...customer,
-          shopId: get().customersArchive.shopId,
+          shopId: get().archiveCustomers.shopId,
         })
         .then(({ data }) => {
           return data;
@@ -426,22 +394,23 @@ const useFlowStore = create(
 
     requestPostRegisterInfo: async () => {
       // 发起登记
-      const customer = get().currentFlow;
+      const flow = get().currentFlow;
 
-      return request
-        .post('/flows/register', {
-          phoneNumber: customer.phoneNumber,
-          name: customer.name,
-          gender: customer.gender,
-          birthday: customer.birthday,
-          allergy: customer.allergy,
-          nickname: customer.nickname,
-          operatorId: customer.operator?.id,
-        })
-        .then(({ data }) => {
-          get().updateCurrentFlow(data);
-          return data;
-        });
+      const params = {
+        phoneNumber: flow.customer.phoneNumber,
+        name: flow.customer.name,
+        gender: flow.customer.gender,
+        birthday: flow.customer.birthday,
+        nickname: flow.customer.nickname,
+        allergy: flow.collect.healthInfo.allergy,
+        operatorId: flow.collectionOperator?._id,
+      };
+
+      return request.post('/flows/register', params).then(({ data }) => {
+        console.log(data);
+        get().updateCurrentFlow(data);
+        return data;
+      });
     },
 
     requestDeleteCustomer: async (customerId) => {
@@ -450,20 +419,22 @@ const useFlowStore = create(
 
     requestPatchCustomerInfo: async () => {
       // 修改登记信息
-      const customer = get().currentFlow;
+      const flow = get().currentFlow;
+
+      const params = {
+        phoneNumber: flow.customer.phoneNumber,
+        name: flow.customer.name,
+        gender: flow.customer.gender,
+        birthday: flow.customer.birthday,
+        nickname: flow.customer.nickname,
+        allergy: flow.collect.healthInfo.allergy,
+        operatorId: flow.collectionOperator?._id,
+      };
 
       return request
-        .patch(`/customers/${customer.id}`, {
-          phoneNumber: customer.phoneNumber,
-          name: customer.name,
-          gender: customer.gender,
-          birthday: customer.birthday,
-          allergy: customer.allergy,
-          nickname: customer.nickname,
-          operatorId: customer.operator?.id,
-        })
+        .patch(`/flows/register/${flow._id}`, params)
         .then(({ data }) => {
-          get().updateCurrentFlow({ status: data.status });
+          get().updateCurrentFlow(data);
           return data;
         })
         .catch((err) => {
@@ -473,7 +444,7 @@ const useFlowStore = create(
 
     requestPatchCustomerArchive: async (customer) => {
       return request
-        .patch(`/customers/${customer.id}`, {
+        .patch(`/customers/${customer._id}`, {
           ...customer,
         })
         .then(({ data }) => {
@@ -481,39 +452,46 @@ const useFlowStore = create(
         });
     },
 
-    requestPatchFlowStatus: async ({ status, type }) => {
+    requestPatchRegisterStatus: async ({ status }) => {
       // 修改登记信息
-      let customer;
-      if (type === 'flow') {
-        customer = get().currentFlowCustomer;
-      } else {
-        customer = get().currentFlow;
-      }
+      let flow = get().currentFlow;
 
       return request
-        .patch(`/customers/status/${customer.id}`, {
+        .patch(`/flows/register/status/${flow._id}`, {
           status,
         })
         .then(({ data }) => {
-          get().updateCurrentFlow({ status: data.status });
+          get().updateCurrentFlow(data);
           return data;
         });
     },
 
-    requestGetFlow: async (flowId: string) => {
-      return request.get(`/flows/${flowId}`).then(({ data }) => {
-        const { applications, massages } = data.analyze.solution;
+    requestPatchCollectionStatus: async ({ status }) => {
+      // 修改登记信息
+      let flow = get().currentFlow;
 
-        if (applications.length === 0) {
-          applications.push(SolutionDefault.application);
-        }
+      return request
+        .patch(`/flows/collect/status/${flow._id}`, {
+          status,
+        })
+        .then(({ data }) => {
+          get().updateCurrentFlow(data);
+          return data;
+        });
+    },
 
-        if (massages.length === 0) {
-          massages.push(SolutionDefault.massage);
-        }
-        set({ currentFlow: data });
-        return data;
-      });
+    requestPatchAnalyzeStatus: async ({ status }) => {
+      // 修改登记信息
+      let flow = get().currentFlow;
+
+      return request
+        .patch(`/flows/analyze/status/${flow._id}`, {
+          status,
+        })
+        .then(({ data }) => {
+          get().updateCurrentFlow(data);
+          return data;
+        });
     },
 
     requestPatchFlowToCollection: async () => {
@@ -525,6 +503,7 @@ const useFlowStore = create(
           collect: currentFlow.collect,
         })
         .then(({ data }) => {
+          console.log(data);
           set({ currentFlow: data });
         });
     },
@@ -554,29 +533,15 @@ const useFlowStore = create(
 
     updateCurrentFlow: (data) => {
       return set((state) => {
-        state.currentFlow = produce(
-          state.currentFlow,
-          (draft) => {
-            Object.assign(draft, data);
-          },
-        );
+        state.currentFlow = produce(state.currentFlow, (draft) => {
+          Object.assign(draft, data);
+        });
       });
     },
     updateCurrentArchiveCustomer: (data) => {
       return set((state) => {
         state.currentArchiveCustomer = produce(
           state.currentArchiveCustomer,
-          (draft) => {
-            Object.assign(draft, data);
-          },
-        );
-      });
-    },
-
-    updateCurrentFlowCustomer: (data) => {
-      return set((state) => {
-        state.currentFlowCustomer = produce(
-          state.currentFlowCustomer,
           (draft) => {
             Object.assign(draft, data);
           },
@@ -891,9 +856,9 @@ const useFlowStore = create(
       });
     },
 
-    updateCustomersArchiveFilter(data) {
+    updateArchiveCustomersFilter(data) {
       return set((state) => {
-        state.customersArchive = { ...state.customersArchive, ...data };
+        state.archiveCustomers = { ...state.archiveCustomers, ...data };
       });
     },
 
@@ -910,9 +875,6 @@ const useFlowStore = create(
       } = get();
       const params: any = {};
 
-      if (status !== -1) {
-        params.status = status;
-      }
       if (startDate) {
         params.startDate = startDate;
       }
@@ -921,18 +883,17 @@ const useFlowStore = create(
       }
 
       const user = useAuthStore.getState().currentShopWithRole;
+
       if (user?.shop.type === ShopType.SHOP) {
         params.shopId = user?.shop._id;
       }
 
-      request.get('/customers/follow-ups', { params }).then(({ data }) => {
+      request.get('/flows', { params }).then(({ data }) => {
         const { docs } = data;
         set({
           customersFollowUp: {
             ...get().customersFollowUp,
-            customers: searchKeywords
-              ? fuzzySearch(docs, searchKeywords)
-              : docs,
+            flows: fuzzySearch(docs, searchKeywords),
           },
         });
       });

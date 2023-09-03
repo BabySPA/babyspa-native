@@ -10,7 +10,7 @@ import {
   Pressable,
 } from 'native-base';
 import { useEffect, useState } from 'react';
-import useFlowStore, { DefaultRegisterCustomer } from '~/app/stores/flow';
+import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -20,24 +20,27 @@ import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
+import { getFlowStatus } from '~/app/constants';
+import { CollectStatus, RegisterStatus } from '~/app/stores/flow/type';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function Collection() {
   const navigation = useNavigation();
   const {
-    requestGetCollectionCustomers,
+    requestGetCollectionFlows,
     updateCurrentFlow,
-    collection: { customers },
+    collection: { flows },
   } = useFlowStore();
 
   useEffect(() => {
-    requestGetCollectionCustomers();
+    requestGetCollectionFlows();
   }, []);
 
   return (
     <Flex flex={1}>
       <Filter />
-      {/* <ScrollView margin={ss(10)}>
-        {customers.length == 0 ? (
+      <ScrollView margin={ss(10)}>
+        {flows.length == 0 ? (
           <EmptyBox />
         ) : (
           <Row
@@ -46,26 +49,23 @@ export default function Collection() {
             borderRadius={ss(10)}
             flexWrap={'wrap'}
             p={ss(40)}>
-            {customers.map((customer, idx) => {
+            {flows.map((flow, idx) => {
               return (
                 <Pressable
                   hitSlop={ss(10)}
                   ml={idx % 2 == 1 ? ss(20) : 0}
                   key={idx}
                   onPress={() => {
-                    updateCurrentFlow(customer);
+                    updateCurrentFlow(flow);
                     navigation.navigate('CustomerDetail');
                   }}>
-                  <CustomerItem
-                    customer={customer}
-                    type={OperateType.Collection}
-                  />
+                  <CustomerItem flow={flow} type={OperateType.Collection} />
                 </Pressable>
               );
             })}
           </Row>
         )}
-      </ScrollView> */}
+      </ScrollView>
     </Flex>
   );
 }
@@ -82,9 +82,39 @@ function Filter() {
   const {
     collection,
     updateCollectionFilter,
-    requestGetCollectionCustomers,
+    requestGetCollectionFlows,
     updateCurrentFlow,
   } = useFlowStore();
+
+  const [count, setCount] = useState({
+    done: 0,
+    todo: 0,
+  });
+
+  useEffect(() => {
+    let done = 0,
+      todo = 0;
+
+    collection.flows.forEach((flow) => {
+      if (
+        flow.collect.status === CollectStatus.DONE &&
+        flow.register.status === RegisterStatus.DONE
+      ) {
+        done++;
+      } else if (
+        flow.register.status == RegisterStatus.DONE &&
+        flow.collect.status === CollectStatus.NOT_SET
+      ) {
+        todo++;
+      }
+      setCount({
+        done,
+        todo,
+      });
+    });
+  }, [collection.flows]);
+
+  const { openLoading, closeLoading } = useGlobalLoading();
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
@@ -96,15 +126,11 @@ function Filter() {
         />
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           待采集：
-          <Text color='#F7BA2A'>
-            {collection.statusCount[FlowStatus.ToBeCollected] || 0}
-          </Text>
+          <Text color='#F7BA2A'>{count.todo || 0}</Text>
         </Text>
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已采集：
-          <Text color='#5EACA3'>
-            {collection.statusCount[FlowStatus.ToBeAnalyzed] || 0}
-          </Text>
+          <Text color='#5EACA3'>{count.done || 0}</Text>
         </Text>
         <Input
           ml={ls(30)}
@@ -119,7 +145,7 @@ function Filter() {
             updateCollectionFilter({
               searchKeywords: text,
             });
-            requestGetCollectionCustomers();
+            requestGetCollectionFlows();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -151,7 +177,7 @@ function Filter() {
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
-            updateCurrentFlow(DefaultRegisterCustomer);
+            updateCurrentFlow(DefaultFlow);
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.collection,
             });
@@ -276,9 +302,10 @@ function Filter() {
               hitSlop={ss(10)}
               onPress={() => {
                 updateCollectionFilter({
-                  startDate: dayjs().format('YYYY-MM-DD'),
+                  searchKeywords: '',
+                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
-                  status: -1,
+                  status: FlowStatus.NO_SET,
                 });
               }}
               borderRadius={ss(4)}
@@ -294,8 +321,12 @@ function Filter() {
             </Pressable>
             <Pressable
               hitSlop={ss(10)}
-              onPress={() => {
-                requestGetCollectionCustomers();
+              onPress={async () => {
+                openLoading();
+                await requestGetCollectionFlows();
+                setTimeout(() => {
+                  closeLoading();
+                }, 300);
               }}
               borderRadius={ss(4)}
               borderWidth={1}

@@ -21,24 +21,26 @@ import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
+import { CollectStatus, EvaluateStatus } from '~/app/stores/flow/type';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function Evaluate() {
   const navigation = useNavigation();
   const {
-    // requestGetEvaluateCustomers,
-    updateCurrentFlowCustomer,
+    updateCurrentFlow,
+    requestGetEvaluateFlows,
     evaluate: { flows },
   } = useFlowStore();
 
   useEffect(() => {
-    // requestGetEvaluateCustomers();
+    requestGetEvaluateFlows();
   }, []);
 
   return (
     <Flex flex={1}>
       <Filter />
-      {/* <ScrollView margin={ss(10)}>
-        {customers.length == 0 ? (
+      <ScrollView margin={ss(10)}>
+        {flows.length == 0 ? (
           <EmptyBox />
         ) : (
           <Row
@@ -47,31 +49,26 @@ export default function Evaluate() {
             borderRadius={ss(10)}
             flexWrap={'wrap'}
             p={ss(40)}>
-            {customers.map((customer, idx) => {
+            {flows.map((flow, idx) => {
               return (
                 <Pressable
                   hitSlop={ss(10)}
                   key={idx}
                   onPress={() => {
-                    if (customer.status === FlowStatus.Completed) {
-                      updateCurrentFlowCustomer(customer);
-                      navigation.navigate('FlowInfo', {
-                        from: 'evaluate-detail',
-                      });
-                    }
+                    updateCurrentFlow(flow);
+                    navigation.navigate('FlowInfo', {
+                      from: 'evaluate-detail',
+                    });
                   }}>
                   <Box ml={idx % 2 == 1 ? ss(20) : 0}>
-                    <CustomerItem
-                      customer={customer}
-                      type={OperateType.Evaluate}
-                    />
+                    <CustomerItem flow={flow} type={OperateType.Evaluate} />
                   </Box>
                 </Pressable>
               );
             })}
           </Row>
         )}
-      </ScrollView> */}
+      </ScrollView>
     </Flex>
   );
 }
@@ -84,12 +81,32 @@ function Filter() {
   }>({
     isOpen: false,
   });
-  const {
-    evaluate,
-    updateEvaluateFilter,
-    requestGetEvaluateCustomers,
-    updateCurrentFlowCustomer,
-  } = useFlowStore();
+  const { evaluate, updateEvaluateFilter, requestGetEvaluateFlows } =
+    useFlowStore();
+
+  const [count, setCount] = useState({
+    done: 0,
+    todo: 0,
+  });
+
+  const { openLoading, closeLoading } = useGlobalLoading();
+
+  useEffect(() => {
+    let done = 0,
+      todo = 0;
+
+    evaluate.flows.forEach((flow) => {
+      if (flow.evaluate.status === EvaluateStatus.DONE) {
+        done++;
+      } else if (flow.evaluate.status == EvaluateStatus.NOT_SET) {
+        todo++;
+      }
+      setCount({
+        done,
+        todo,
+      });
+    });
+  }, [evaluate.flows]);
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
@@ -101,15 +118,11 @@ function Filter() {
         />
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           待评价：
-          <Text color='#F7BA2A'>
-            {evaluate.statusCount[FlowStatus.ToBeEvaluated] || 0}
-          </Text>
+          <Text color='#F7BA2A'>{count.todo || 0}</Text>
         </Text>
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
           已评价：
-          <Text color='#5EACA3'>
-            {evaluate.statusCount[FlowStatus.Evaluated] || 0}
-          </Text>
+          <Text color='#5EACA3'>{count.done || 0}</Text>
         </Text>
         <Input
           ml={ls(30)}
@@ -124,7 +137,7 @@ function Filter() {
             updateEvaluateFilter({
               searchKeywords: text,
             });
-            requestGetEvaluateCustomers();
+            requestGetEvaluateFlows();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -258,9 +271,10 @@ function Filter() {
               hitSlop={ss(10)}
               onPress={() => {
                 updateEvaluateFilter({
-                  startDate: dayjs().format('YYYY-MM-DD'),
+                  searchKeywords: '',
+                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
-                  status: -1,
+                  status: FlowStatus.NO_SET,
                 });
               }}
               borderRadius={ss(4)}
@@ -276,8 +290,12 @@ function Filter() {
             </Pressable>
             <Pressable
               hitSlop={ss(10)}
-              onPress={() => {
-                requestGetEvaluateCustomers();
+              onPress={async () => {
+                openLoading();
+                await requestGetEvaluateFlows();
+                setTimeout(() => {
+                  closeLoading();
+                }, 300);
               }}
               borderRadius={ss(4)}
               borderWidth={1}

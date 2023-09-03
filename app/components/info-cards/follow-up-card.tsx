@@ -316,7 +316,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 top: ss(20),
               }}
             />
-            <Column alignItems={'center'}>
+            <Column alignItems={'center'} paddingBottom={ss(60)}>
               <Image
                 source={require('~/assets/images/empty-box.png')}
                 style={{ width: ls(360), height: ss(283) }}

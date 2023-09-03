@@ -1,6 +1,8 @@
-import { Modal, Row, Flex, Pressable, Box } from 'native-base';
+import dayjs from 'dayjs';
+import { Modal, Row, Flex, Pressable, Box, useToast } from 'native-base';
 import DatePicker from '~/app/components/date-picker';
 import { ss, ls, sp } from '~/app/utils/style';
+import { toastAlert } from '../utils/toast';
 
 interface DatePickerModalParams {
   isOpen: boolean;
@@ -16,6 +18,7 @@ export default function DatePickerModal({
   current,
   selected,
 }: DatePickerModalParams) {
+  const toast = useToast();
   let currentSelectBirthday = current;
   return (
     <Modal
@@ -40,6 +43,10 @@ export default function DatePickerModal({
           <Pressable
             hitSlop={ss(10)}
             onPress={() => {
+              if (dayjs(currentSelectBirthday).isAfter(dayjs())) {
+                toastAlert(toast, 'error', '不能大于当前日期');
+                return;
+              }
               onSelectedChange(currentSelectBirthday ?? '');
               onClose();
             }}>
