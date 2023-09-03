@@ -9,14 +9,16 @@ import {
   AnalyzeStatus,
   CollectStatus,
   EvaluateStatus,
+  FlowItemResponse,
   FlowState,
   FollowUp,
   FollowUpStatus,
   RegisterStatus,
+  StatisticShop,
 } from './type';
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
-import { fuzzySearch } from '~/app/utils';
+import { fuzzySearch, generateFlowCounts } from '~/app/utils';
 import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
 
@@ -26,6 +28,22 @@ const DefaultFlowListData = {
   status: FlowStatus.NO_SET,
   startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
+};
+
+const DefaultStatisticShop = {
+  shop: {
+    _id: '',
+    name: '',
+  },
+  flows: [],
+  counts: {
+    register: 0,
+    collect: 0,
+    analyze: 0,
+    analyzeError: 0,
+    massage: 0,
+    application: 0,
+  },
 };
 
 const DefaultCustomerListData = {
@@ -141,6 +159,10 @@ const initialState = {
   currentArchiveCustomer: DefaultCustomer,
 
   operators: [],
+
+  statisticShops: [],
+  statisticShop: DefaultStatisticShop,
+  statisticFlowWithDate: [],
 };
 
 const useFlowStore = create(
@@ -407,7 +429,6 @@ const useFlowStore = create(
       };
 
       return request.post('/flows/register', params).then(({ data }) => {
-        console.log(data);
         get().updateCurrentFlow(data);
         return data;
       });
@@ -503,7 +524,6 @@ const useFlowStore = create(
           collect: currentFlow.collect,
         })
         .then(({ data }) => {
-          console.log(data);
           set({ currentFlow: data });
         });
     },
@@ -882,6 +902,7 @@ const useFlowStore = create(
         params.endDate = endDate;
       }
 
+      params.isDone = 1;
       const user = useAuthStore.getState().currentShopWithRole;
 
       if (user?.shop.type === ShopType.SHOP) {
@@ -910,7 +931,98 @@ const useFlowStore = create(
           set({ currentFlow: data });
         });
     },
+
+    async requestGetStatisticFlow({ startDate, endDate, shopId }) {
+      const params: any = {};
+
+      params.startDate = startDate;
+      params.endDate = endDate;
+      params.shopId = shopId;
+
+      request.get('/flows/statistics/flow', { params }).then(({ data }) => {
+        data.counts = generateFlowCounts(data.flows);
+
+        set({
+          statisticShop: data,
+        });
+        get().calculateStatisticFlowWithDate(data, startDate, endDate);
+      });
+    },
+
+    calculateStatisticFlowWithDate(data, startDate, endDate) {
+      const dateRange = generateDateRange(startDate, endDate);
+      for (let i = 0; i < data.flows.length; i++) {
+        const flow = data.flows[i];
+        const date = dayjs(flow.analyze.updatedAt).format('YYYY-MM-DD');
+        if (date) {
+          const massageCount = flow.analyze.solution.massages.reduce(
+            (sum: number, item: { count: number }) => {
+              return sum + item.count;
+            },
+            0,
+          );
+          dateRange[date].massage += massageCount;
+          const applicationsCount = flow.analyze.solution.applications.reduce(
+            (sum: number, item: { count: number }) => {
+              return sum + item.count;
+            },
+            0,
+          );
+          dateRange[date].application += applicationsCount;
+        }
+      }
+      let statisticCountWithDate = [];
+      for (let key in dateRange) {
+        statisticCountWithDate.push({ date: key, counts: dateRange[key] });
+      }
+
+      set({
+        statisticFlowWithDate: statisticCountWithDate,
+      });
+    },
+
+    async requestGetStatisticFlowWithShop({ startDate, endDate }) {
+      const params: any = {};
+
+      params.startDate = startDate;
+      params.endDate = endDate;
+
+      request
+        .get('/flows/statistics/flow-with-shop', { params })
+        .then(({ data }: { data: StatisticShop[] }) => {
+          const statistics = data;
+
+          for (let i = 0; i < statistics.length; i++) {
+            // 统计每个店铺的流程数量
+            statistics[i].counts = generateFlowCounts(statistics[i].flows);
+          }
+
+          set({
+            statisticShops: statistics.sort((a: any, b: any) => {
+              return b.counts.analyze - a.counts.analyze;
+            }),
+          });
+        });
+    },
   })),
 );
 
 export default useFlowStore;
+
+const generateDateRange = (startDate: string, endDate: string) => {
+  const dateRange: any = {};
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= new Date(endDate)) {
+    const formattedDate = currentDate.toISOString().split('T')[0]; // 格式化日期为 'YYYY-MM-DD'
+
+    dateRange[formattedDate] = {
+      massage: 0,
+      application: 0,
+    };
+
+    currentDate.setDate(currentDate.getDate() + 1); // 增加一天
+  }
+
+  return dateRange;
+};

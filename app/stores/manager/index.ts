@@ -211,6 +211,7 @@ const useManagerStore = create(
         status: role.status,
         description: role.description,
         authorities: authorities,
+        type: role.type,
       };
       return request.post('/roles', patchRole);
     },

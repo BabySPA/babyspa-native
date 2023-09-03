@@ -168,6 +168,7 @@ export default function Layout() {
                   setTimeout(() => {
                     toast.show({
                       placement: 'top',
+                      duration: 1000,
                       render: () => {
                         return (
                           <Alert w='100%' bgColor={'rgba(244,244,244,1)'}>

@@ -20,21 +20,25 @@ import Personal from '../screens/personal';
 import { Box, Modal, Row, Spinner } from 'native-base';
 import { sp } from '../utils/style';
 import useGlobalLoading from '../stores/loading';
+import Picker from 'react-native-patchpicker';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
-  const { loading, closeLoading } = useGlobalLoading();
+  const { loading, spinner, closeLoading } = useGlobalLoading();
   return (
     <Box flex={1} bgColor='white'>
       <Modal
         isOpen={loading}
         onClose={() => {
+          Picker.hide();
           closeLoading();
         }}>
-        <Row alignItems={'center'}>
-          <Spinner size={sp(40)} color='#fff' />
-        </Row>
+        {spinner && (
+          <Row alignItems={'center'}>
+            <Spinner size={sp(40)} color='#fff' />
+          </Row>
+        )}
       </Modal>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Home' component={HomeScreen} />

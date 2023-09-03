@@ -207,7 +207,6 @@ export default function EditBox(params: EditBoxParams) {
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
-                      // openLoading();
                       showTimePicker(tempShop.closingTime.split(':'), (val) => {
                         setTempShop({
                           ...tempShop,

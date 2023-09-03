@@ -8,6 +8,7 @@ import ShopCenter from '../screens/home/fragments/shop-center';
 import StatisticsVisit from '../screens/home/fragments/statistics-visit';
 import StatisticsShop from '../screens/home/fragments/statistics-shop';
 import StatisticsMassage from '../screens/home/fragments/statistics-massage';
+import StatisticsAnalyze from '../screens/home/fragments/statistics-analyze';
 import { RW, RoleAuthority } from '../stores/auth/type';
 import { FlowStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
@@ -35,6 +36,11 @@ export const EvaluateTextConfig = {
 };
 
 export const FollowUpStatusTextConfig = {
+  [FollowUpStatus.NOT_SET]: {
+    text: '待随访',
+    textColor: '#FE9505',
+    bgColor: 'rgba(254, 149, 5, 0.2)',
+  },
   [FollowUpStatus.WAIT]: {
     text: '待随访',
     textColor: '#FE9505',
@@ -333,7 +339,7 @@ export const LayoutConfig: ILayoutConfig[] = [
       },
       {
         text: '分析统计',
-        fragment: StatisticsVisit,
+        fragment: StatisticsAnalyze,
         auth: RoleAuthority.STATISTIC_ANALYZE,
       },
       {

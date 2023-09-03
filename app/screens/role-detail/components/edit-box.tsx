@@ -196,7 +196,6 @@ export default function EditBox(params: EditBoxParams) {
             setCurrentRole(tempRole);
 
             if (tempRole._id) {
-              // 修改门店信息
               requestPatchRole()
                 .then(async (res) => {
                   setCurrentRole(res.data);
@@ -211,7 +210,6 @@ export default function EditBox(params: EditBoxParams) {
                   setLoading(false);
                 });
             } else {
-              // 新增门店信息
               requestPostRole()
                 .then(async (res) => {
                   setCurrentRole(res.data);

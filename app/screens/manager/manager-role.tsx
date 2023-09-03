@@ -8,16 +8,19 @@ import {
   Row,
   Text,
   Image,
+  FlatList,
+  useSafeArea,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
-import { AppStackScreenProps, Gender } from '~/app/types';
+import { AppStackScreenProps } from '~/app/types';
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import useManagerStore, { DefaultRole } from '~/app/stores/manager';
 import { useNavigation } from '@react-navigation/native';
 import { Role, RoleStatus, ShopType } from '~/app/stores/manager/type';
 import { debounce } from 'lodash';
+import { SafeAreaView } from 'react-native';
 
 export default function ManagerRole({
   navigation,
@@ -42,6 +45,10 @@ export default function ManagerRole({
   }, [roles, nameFilter]);
 
   const List = () => {
+    const safeAreaProps = useSafeArea({
+      safeAreaBottom: true,
+      pt: 2,
+    });
     return (
       <Column>
         <Row
@@ -51,8 +58,7 @@ export default function ManagerRole({
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}
-        >
+          justifyContent={'space-around'}>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               角色名称
@@ -84,90 +90,92 @@ export default function ManagerRole({
             </Text>
           </Row>
         </Row>
-        {filterRoles.map((role, idx) => {
-          return (
-            <Row
-              key={idx}
-              px={ls(40)}
-              minH={ss(60)}
-              py={ss(10)}
-              alignItems={'center'}
-              borderTopRadius={ss(10)}
-              width={'100%'}
-              borderBottomWidth={1}
-              borderBottomColor={'#DFE1DE'}
-              borderBottomStyle={'solid'}
-              justifyContent={'space-around'}
-            >
-              <Row w={ls(100)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {role.name}
-                </Text>
-              </Row>
-              <Row w={ls(230)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {role.description}
-                </Text>
-              </Row>
-              <Row w={ls(80)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {role.status == RoleStatus.OPEN ? '启用' : '禁用'}
-                </Text>
-              </Row>
-              <Row w={ls(80)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {role.type == ShopType.CENTER ? '中心' : '门店'}
-                </Text>
-              </Row>
-              <Row w={ls(200)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {dayjs(role.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Row>
-                  <Pressable
-                    hitSlop={ss(10)}
-                    onPress={() => {
-                      setCurrentRole(role);
-                      navigation.navigate('RoleDetail', { type: 'detail' });
-                    }}
-                  >
-                    <Row alignItems={'center'}>
-                      <Image
-                        source={require('~/assets/images/list-detail.png')}
-                        size={ss(20)}
-                        alt=''
-                      />
-                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
-                        查看
-                      </Text>
-                    </Row>
-                  </Pressable>
-                  <Pressable
-                    hitSlop={ss(10)}
-                    ml={ls(24)}
-                    onPress={() => {
-                      setCurrentRole(role);
-                      navigation.navigate('RoleDetail', { type: 'edit' });
-                    }}
-                  >
-                    <Row alignItems={'center'}>
-                      <Image
-                        source={require('~/assets/images/list-edit.png')}
-                        size={ss(20)}
-                        alt=''
-                      />
-                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
-                        编辑
-                      </Text>
-                    </Row>
-                  </Pressable>
+        <FlatList
+          mb={safeAreaProps ? ss(64) : 0}
+          background={'#fff'}
+          data={filterRoles}
+          renderItem={({ item: role }) => {
+            return (
+              <Row
+                px={ls(40)}
+                minH={ss(60)}
+                py={ss(10)}
+                alignItems={'center'}
+                borderBottomRadius={ss(10)}
+                width={'100%'}
+                borderBottomWidth={1}
+                borderBottomColor={'#DFE1DE'}
+                borderBottomStyle={'solid'}
+                justifyContent={'space-around'}>
+                <Row w={ls(100)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {role.name}
+                  </Text>
+                </Row>
+                <Row w={ls(230)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {role.description}
+                  </Text>
+                </Row>
+                <Row w={ls(80)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {role.status == RoleStatus.OPEN ? '启用' : '禁用'}
+                  </Text>
+                </Row>
+                <Row w={ls(80)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {role.type == ShopType.CENTER ? '中心' : '门店'}
+                  </Text>
+                </Row>
+                <Row w={ls(200)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {dayjs(role.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
+                  </Text>
+                </Row>
+                <Row w={ls(150)}>
+                  <Row>
+                    <Pressable
+                      hitSlop={ss(10)}
+                      onPress={() => {
+                        setCurrentRole(role);
+                        navigation.navigate('RoleDetail', { type: 'detail' });
+                      }}>
+                      <Row alignItems={'center'}>
+                        <Image
+                          source={require('~/assets/images/list-detail.png')}
+                          size={ss(20)}
+                          alt=''
+                        />
+                        <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                          查看
+                        </Text>
+                      </Row>
+                    </Pressable>
+                    <Pressable
+                      hitSlop={ss(10)}
+                      ml={ls(24)}
+                      onPress={() => {
+                        setCurrentRole(role);
+                        navigation.navigate('RoleDetail', { type: 'edit' });
+                      }}>
+                      <Row alignItems={'center'}>
+                        <Image
+                          source={require('~/assets/images/list-edit.png')}
+                          size={ss(20)}
+                          alt=''
+                        />
+                        <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                          编辑
+                        </Text>
+                      </Row>
+                    </Pressable>
+                  </Row>
                 </Row>
               </Row>
-            </Row>
-          );
-        })}
+            );
+          }}
+          keyExtractor={(item) => item.roleKey}
+        />
       </Column>
     );
   };
@@ -192,14 +200,13 @@ export default function ManagerRole({
         bgColor={'#F6F6FA'}
         flex={1}
         p={ss(10)}
-        safeAreaBottom
-      >
+        safeAreaBottom>
         <Filter
           onSearchChangeText={(text) => {
             setNameFilter(text);
           }}
         />
-        <Box mt={ss(10)}>
+        <Box mt={ss(10)} flex={1}>
           <List />
         </Box>
       </Column>
@@ -221,8 +228,7 @@ function Filter({
       borderRadius={ss(10)}
       justifyContent={'space-between'}
       alignItems={'center'}
-      px={ls(40)}
-    >
+      px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
           w={ls(240)}
@@ -251,16 +257,14 @@ function Filter({
         onPress={() => {
           setCurrentRole(DefaultRole);
           navigation.navigate('RoleDetail', { type: 'edit' });
-        }}
-      >
+        }}>
         <Row
           bgColor={'#E1F6EF'}
           borderRadius={ss(4)}
           px={ls(26)}
           py={ss(10)}
           borderColor={'#15BD8F'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
             新增角色
           </Text>

@@ -1,6 +1,7 @@
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { FlowStatus, Gender } from '~/app/types';
 import { Shop } from '../manager/type';
+import { StatusBar } from 'expo-status-bar';
 
 export enum RegisterStatus {
   NOT_SET = -1,
@@ -146,6 +147,17 @@ export enum GrowthCurveWeightComparison {
   Obesity = 'Obesity', // 肥胖
 }
 
+export type StatisticFlowWithDate = {
+  date: string;
+  counts: {
+    register?: number;
+    collect?: number;
+    analyze?: number;
+    massage?: number; // 推拿数量
+    application?: number; // 贴敷数量
+  };
+};
+
 export type FlowArchive = Partial<FlowItemResponse>;
 export interface FlowState {
   clearCache: () => void;
@@ -163,6 +175,10 @@ export interface FlowState {
   customersFollowUp: QueryFlowList;
 
   currentArchiveCustomer: Customer;
+
+  statisticShops: StatisticShop[];
+  statisticShop: StatisticShop;
+  statisticFlowWithDate: StatisticFlowWithDate[];
 
   requestGetInitializeData: () => Promise<any>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
@@ -257,6 +273,23 @@ export interface FlowState {
     configs: FlowOperatorConfigItem[];
     selectIdx: number;
   };
+
+  requestGetStatisticFlow: (params: {
+    startDate: string;
+    endDate: string;
+    shopId: string;
+  }) => Promise<any>;
+
+  requestGetStatisticFlowWithShop: (params: {
+    startDate: string;
+    endDate: string;
+  }) => Promise<any>;
+
+  calculateStatisticFlowWithDate: (
+    data: any,
+    startDate: string,
+    endDate: string,
+  ) => void;
 }
 
 export interface HealthInfo {
@@ -464,3 +497,16 @@ export interface Evaluate {
    */
   updatedAt?: string;
 }
+
+export type StatisticShop = {
+  shop: Pick<Shop, '_id' | 'name'>;
+  counts: {
+    register: number;
+    collect: number;
+    analyze: number;
+    analyzeError: number;
+    massage: number; // 推拿数量
+    application: number; // 贴敷数量
+  };
+  flows: FlowItemResponse[];
+};

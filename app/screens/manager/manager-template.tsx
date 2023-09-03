@@ -379,7 +379,9 @@ export default function ManagerTemplate({
 
           if (showEditTemplateModal.type === 'group') {
             group.name = text;
-            group.children = getCurrentSelectTemplateGroupItems();
+            group.children = showEditTemplateModal.isEdit
+              ? getCurrentSelectTemplateGroupItems()
+              : [];
             if (showEditTemplateModal.isEdit) {
               group.originalName = showEditTemplateModal.defaultName;
             }

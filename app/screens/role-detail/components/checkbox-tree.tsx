@@ -16,14 +16,15 @@ const CheckboxTree = () => {
               <Pressable
                 hitSlop={ss(10)}
                 onPress={() => {
-                  configAuthTree[nodeIdx].hasAuth = !node.hasAuth;
-                  configAuthTree[nodeIdx].features.forEach((fi) => {
-                    fi.hasAuth = node.hasAuth;
+                  const COPY = JSON.parse(JSON.stringify(configAuthTree));
+                  COPY[nodeIdx].hasAuth = !node.hasAuth;
+
+                  COPY[nodeIdx].features.forEach((fi: any) => {
+                    fi.hasAuth = !node.hasAuth;
                   });
 
-                  setConfigAuthTree([...configAuthTree]);
-                }}
-              >
+                  setConfigAuthTree([...COPY]);
+                }}>
                 <Row alignItems={'center'}>
                   <Image
                     source={
@@ -39,10 +40,10 @@ const CheckboxTree = () => {
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
-                      configAuthTree[nodeIdx].isOpen = !node.isOpen;
-                      setConfigAuthTree([...configAuthTree]);
-                    }}
-                  >
+                      const COPY = JSON.parse(JSON.stringify(configAuthTree));
+                      COPY[nodeIdx].isOpen = !node.isOpen;
+                      setConfigAuthTree([...COPY]);
+                    }}>
                     <Icon
                       ml={ss(16)}
                       as={
@@ -64,11 +65,13 @@ const CheckboxTree = () => {
                         hitSlop={ss(10)}
                         key={feature.text}
                         onPress={() => {
-                          configAuthTree[nodeIdx].features[featureIdx].hasAuth =
+                          const COPY = JSON.parse(
+                            JSON.stringify(configAuthTree),
+                          );
+                          COPY[nodeIdx].features[featureIdx].hasAuth =
                             !feature.hasAuth;
-                          setConfigAuthTree([...configAuthTree]);
-                        }}
-                      >
+                          setConfigAuthTree([...COPY]);
+                        }}>
                         <Row ml={ls(20)} mt={ss(10)}>
                           <Image
                             source={
