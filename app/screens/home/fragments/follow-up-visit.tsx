@@ -20,18 +20,14 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 import CustomerFollowUpItem from '../components/customer-followup-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import useGlobalLoading from '~/app/stores/loading';
+import useLayoutConfigWithRole from '~/app/stores/layout';
 
 export default function FollowUpVisit() {
   const navigation = useNavigation();
   const {
     updateCurrentFlow,
-    requestGetFollowUps,
     customersFollowUp: { flows },
   } = useFlowStore();
-
-  useEffect(() => {
-    requestGetFollowUps();
-  }, []);
 
   return (
     <Flex flex={1}>
@@ -76,6 +72,8 @@ function Filter() {
     updateCustomersFollowupFilter,
     requestGetFollowUps,
   } = useFlowStore();
+
+  const { defaultFollowUpSelectShop } = useLayoutConfigWithRole();
   const { openLoading, closeLoading } = useGlobalLoading();
 
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
@@ -84,6 +82,13 @@ function Filter() {
   }>({
     isOpen: false,
   });
+
+  useEffect(() => {
+    updateCustomersFollowupFilter({
+      shopId: defaultFollowUpSelectShop._id,
+    });
+    requestGetFollowUps();
+  }, [defaultFollowUpSelectShop]);
 
   const [defaultSelectShop, selectShops] = useSelectShops(true);
 
@@ -97,7 +102,9 @@ function Filter() {
             });
             requestGetFollowUps();
           }}
-          defaultButtonText={defaultSelectShop?.name}
+          defaultButtonText={
+            defaultFollowUpSelectShop?.name || defaultSelectShop?.name
+          }
           buttonHeight={ss(40)}
           buttonWidth={ls(160)}
           shops={selectShops}

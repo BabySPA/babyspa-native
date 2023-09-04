@@ -37,7 +37,7 @@ export const EvaluateTextConfig = {
 
 export const FollowUpStatusTextConfig = {
   [FollowUpStatus.NOT_SET]: {
-    text: '待随访',
+    text: '未设置随访',
     textColor: '#FE9505',
     bgColor: 'rgba(254, 149, 5, 0.2)',
   },

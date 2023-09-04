@@ -102,7 +102,7 @@ export default function CustomerFollowUpItem({
           <Row alignItems={'center'}>
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
               {hasNotFollowup
-                ? `调理师：${flow.collectionOperator?.name}`
+                ? `理疗师：${flow.collectionOperator?.name}`
                 : `随访人：${flow.followUpOperator?.name}`}
             </Text>
           </Row>

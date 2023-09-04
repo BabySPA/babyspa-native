@@ -1,5 +1,6 @@
 import { ImageSourcePropType } from 'react-native';
 import { RoleAuthority } from '../auth/type';
+import { Shop } from '../manager/type';
 
 export interface ILayoutConfig {
   image: ImageSourcePropType;
@@ -18,8 +19,10 @@ export interface ILayoutConfig {
 export type LayoutConfigWithRole = {
   clearCache: () => void;
   layoutConfig: ILayoutConfig[];
+  defaultFollowUpSelectShop: Pick<Shop, 'name' | '_id'>;
   getLayoutConfig: () => ILayoutConfig[];
   currentSelected: number;
   changeCurrentSelected: (index: number) => void;
   changeFeatureSelected: (index: number) => void;
+  enterToFollowUp: (params?: Pick<Shop, 'name' | '_id'>) => void;
 };

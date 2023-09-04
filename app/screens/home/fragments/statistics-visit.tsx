@@ -4,49 +4,46 @@ import {
   Text,
   ScrollView,
   Icon,
-  Input,
   Row,
   Column,
   Pressable,
-  FlatList,
 } from 'native-base';
 import { useEffect, useRef, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import EmptyBox from '~/app/components/empty-box';
-import { debounce, set } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
-import CustomerFollowUpItem from '../components/customer-followup-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import dayjs from 'dayjs';
 import StatisticsCountBox from '../components/statistic-count-box';
-import { Gender } from '~/app/types';
-import { getAge } from '~/app/utils';
 import { Shop, ShopType } from '~/app/stores/manager/type';
-
-import * as echarts from 'echarts/core';
-import { BarChart } from 'echarts/charts';
-import {
-  GridComponent,
-  DataZoomComponent,
-  TooltipComponent,
-} from 'echarts/components';
-import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
-
-echarts.use([
-  SVGRenderer,
-  BarChart,
-  GridComponent,
-  DataZoomComponent,
-  TooltipComponent,
-]);
+import { FollowUpResultText, FollowUpStatusTextConfig } from '~/app/constants';
+import { FlowItemResponse, FollowUpResult } from '~/app/stores/flow/type';
+import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
+import useLayoutConfigWithRole from '~/app/stores/layout';
 
 const ShopStatisticBox = () => {
   const {
-    statisticShop: { counts, flows },
+    statisticShop: { flows },
   } = useFlowStore();
+
+  const [followUpData, setFollowUpData] = useState<{
+    flows: FlowItemResponse[];
+    counts: {
+      all: number;
+      done: number;
+      overdue: number;
+      cancel: number;
+      well: number;
+      bad: number;
+      worse: number;
+    };
+  }>();
+
+  useEffect(() => {
+    setFollowUpData(generateFollowUpFlows(flows));
+  }, [flows]);
+
   const List = () => {
     return (
       <Column>
@@ -65,48 +62,42 @@ const ShopStatisticBox = () => {
           </Row>
           <Row w={ls(60)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              性别
+              状态
             </Text>
           </Row>
           <Row w={ls(80)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              年龄
+              理疗时间
             </Text>
           </Row>
-          <Row w={ls(100)}>
+          <Row w={ls(110)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              电话
+              随访结果
             </Text>
           </Row>
           <Row w={ls(100)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
-              调理时间
+              随访内容
             </Text>
           </Row>
           <Row w={ls(80)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
-              调理师
+              随访人
+            </Text>
+          </Row>
+          <Row w={ls(180)} justifyContent={'center'}>
+            <Text fontSize={sp(18)} color={'#333'}>
+              计划随访时间
             </Text>
           </Row>
           <Row w={ls(80)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
-              调理导向
-            </Text>
-          </Row>
-          <Row w={ls(80)} justifyContent={'center'}>
-            <Text fontSize={sp(18)} color={'#333'}>
-              分析师
-            </Text>
-          </Row>
-          <Row w={ls(80)} justifyContent={'center'}>
-            <Text fontSize={sp(18)} color={'#333'}>
-              注意事项
+              实际随访时间
             </Text>
           </Row>
         </Row>
-        <Column>
-          {flows?.map((flow, idx) => {
-            const age = getAge(flow.customer.birthday);
+        <Column bgColor='white'>
+          {followUpData?.flows?.map((flow, idx) => {
             return (
               <Row
                 key={idx}
@@ -114,7 +105,7 @@ const ShopStatisticBox = () => {
                 minH={ss(60)}
                 py={ss(10)}
                 alignItems={'center'}
-                borderTopRadius={ss(10)}
+                borderBottomRadius={ss(10)}
                 width={'100%'}
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
@@ -127,85 +118,83 @@ const ShopStatisticBox = () => {
                 </Row>
                 <Row w={ls(60)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.customer.gender == Gender.MAN ? '男' : '女'}
+                    {
+                      FollowUpStatusTextConfig[
+                        flow.analyze.followUp.followUpStatus
+                      ].text
+                    }
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
-                    {`${age?.year}岁${age?.month}月`}
-                  </Text>
-                </Row>
-                <Row w={ls(100)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.customer.phoneNumber}
-                  </Text>
-                </Row>
-                <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(flow.analyze.updatedAt).format('YY-MM-DD')}
                   </Text>
                 </Row>
-                <Row w={ls(80)}>
+                <Row w={ls(110)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.collectionOperator?.name}
+                    {flow.analyze.followUp.followUpResult
+                      ? FollowUpResultText[flow.analyze.followUp.followUpResult]
+                      : '未设置'}
+                  </Text>
+                </Row>
+                <Row w={ls(100)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {flow.analyze.followUp.followUpContent || '未设置'}
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.collect.guidance || '未设置'}
+                    {flow.followUpOperator?.name || '未设置'}
+                  </Text>
+                </Row>
+                <Row w={ls(180)} justifyContent={'center'}>
+                  <Text
+                    fontSize={sp(18)}
+                    color={'#333'}
+                    numberOfLines={2}
+                    ellipsizeMode='tail'>
+                    {dayjs(flow.analyze.followUp.followUpTime).format(
+                      'YY-MM-DD',
+                    )}
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.analyzeOperator?.name}
-                  </Text>
-                </Row>
-                <Row w={ls(80)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.analyze.remark || '未设置'}
+                    {dayjs(flow.analyze.followUp.actualFollowUpTime).format(
+                      'YY-MM-DD',
+                    )}
                   </Text>
                 </Row>
               </Row>
             );
           })}
         </Column>
-        {/* <FlatList
-          bgColor={'#fff'}
-          data={flows}
-          maxH={ss(520)}
-          renderItem={({ item: flow }) =>}
-          keyExtractor={(item) => item._id}
-        /> */}
       </Column>
     );
   };
   return (
     <ScrollView margin={ss(10)}>
       <Row flex={1}>
-        <StatisticsCountBox title={'登记人数'} count={counts.register} />
         <StatisticsCountBox
-          title={'采集人数'}
-          count={counts.collect}
+          title={FollowUpResultText[FollowUpResult.GOOD]}
+          count={followUpData?.counts.well || 0}
+        />
+        <StatisticsCountBox
+          title={FollowUpResultText[FollowUpResult.BAD]}
+          count={followUpData?.counts.bad || 0}
           style={{ marginLeft: ss(10) }}
         />
         <StatisticsCountBox
-          title={'分析人数'}
-          count={counts.analyze}
+          title={FollowUpResultText[FollowUpResult.WORSE]}
+          count={followUpData?.counts.worse || 0}
           style={{ marginLeft: ss(10) }}
+        />
+        <StatisticsCountBox
+          style={{ marginLeft: ss(10) }}
+          title={'取消'}
+          count={followUpData?.counts.cancel || 0}
         />
       </Row>
-      <Row flex={1} mt={ss(10)}>
-        <StatisticsCountBox
-          title={'贴敷总量（贴）'}
-          count={counts.application}
-        />
-        <StatisticsCountBox
-          title={'推拿总量（次）'}
-          count={counts.massage}
-          style={{ marginLeft: ss(10) }}
-        />
-      </Row>
-
       <Box mt={ss(10)}>
         <List />
       </Box>
@@ -213,151 +202,77 @@ const ShopStatisticBox = () => {
   );
 };
 const CenterStatisticBox = () => {
-  const {
-    statisticShop: { counts, flows },
-    // statisticShops,
-  } = useFlowStore();
+  const { statisticShops } = useFlowStore();
 
-  const statisticShops = [
-    {
-      shop: {
-        _id: '64c6120c3c4c6d15c1432802',
-        name: '临沂1号店',
-        maintainer: '嘉伟老师',
-        phoneNumber: '18888880003',
-        region: '北京-北京-东城区',
-        address: '临沂市',
-        openingTime: '11:34',
-        closingTime: '15:34',
-        description: '临沂一号店红红火火',
-        createdAt: '2023-08-21T08:10:39.053Z',
-        updatedAt: '2023-08-31T13:54:31.615Z',
-        type: 1,
-      },
+  const [flowsWithShopData, setFlowsWithShopData] = useState<{
+    flowsWithShop: {
+      shop: Pick<Shop, 'name' | '_id'>;
       counts: {
-        register: 6,
-        collect: 0,
-        analyze: 10,
-        massage: 0,
-        application: 0,
-      },
+        all: number;
+        done: number;
+        overdue: number;
+        cancel: number;
+        well: number;
+        bad: number;
+        worse: number;
+      };
+    }[];
+    allCounts: {
+      all: number;
+      done: number;
+      overdue: number;
+      cancel: number;
+      well: number;
+      bad: number;
+      worse: number;
+    };
+  }>({
+    flowsWithShop: [],
+    allCounts: {
+      all: 0,
+      done: 0,
+      overdue: 0,
+      cancel: 0,
+      well: 0,
+      bad: 0,
+      worse: 0,
     },
-    {
-      shop: {
-        _id: '64c6120c3c4c6d15c1432802',
-        name: '临沂2号店',
-        maintainer: '嘉伟老师',
-        phoneNumber: '18888880003',
-        region: '北京-北京-东城区',
-        address: '临沂市',
-        openingTime: '11:34',
-        closingTime: '15:34',
-        description: '临沂一号店红红火火',
-        createdAt: '2023-08-21T08:10:39.053Z',
-        updatedAt: '2023-08-31T13:54:31.615Z',
-        type: 1,
-      },
-      counts: {
-        register: 5,
-        collect: 0,
-        analyze: 8,
-        massage: 0,
-        application: 0,
-      },
-    },
-    {
-      shop: {
-        _id: '64c6120c3c4c6d15c1432802',
-        name: '临沂3号店',
-        maintainer: '嘉伟老师',
-        phoneNumber: '18888880003',
-        region: '北京-北京-东城区',
-        address: '临沂市',
-        openingTime: '11:34',
-        closingTime: '15:34',
-        description: '临沂一号店红红火火',
-        createdAt: '2023-08-21T08:10:39.053Z',
-        updatedAt: '2023-08-31T13:54:31.615Z',
-        type: 1,
-      },
-      counts: {
-        register: 3,
-        collect: 0,
-        analyze: 5,
-        massage: 0,
-        application: 0,
-      },
-    },
-    {
-      shop: {
-        _id: '64c6120c3c4c6d15c1432802',
-        name: '临沂4号店',
-        maintainer: '嘉伟老师',
-        phoneNumber: '18888880003',
-        region: '北京-北京-东城区',
-        address: '临沂市',
-        openingTime: '11:34',
-        closingTime: '15:34',
-        description: '临沂一号店红红火火',
-        createdAt: '2023-08-21T08:10:39.053Z',
-        updatedAt: '2023-08-31T13:54:31.615Z',
-        type: 1,
-      },
-      counts: {
-        register: 4,
-        collect: 0,
-        analyze: 4,
-        massage: 0,
-        application: 0,
-      },
-    },
-    {
-      shop: {
-        _id: '64c6120c3c4c6d15c1432802',
-        name: '临沂5号店',
-        maintainer: '嘉伟老师',
-        phoneNumber: '18888880003',
-        region: '北京-北京-东城区',
-        address: '临沂市',
-        openingTime: '11:34',
-        closingTime: '15:34',
-        description: '临沂一号店红红火火',
-        createdAt: '2023-08-21T08:10:39.053Z',
-        updatedAt: '2023-08-31T13:54:31.615Z',
-        type: 1,
-      },
-      counts: {
-        register: 3,
-        collect: 0,
-        analyze: 4,
-        massage: 0,
-        application: 0,
-      },
-    },
-    {
-      shop: {
-        _id: '64c6120c3c4c6d15c1432802',
-        name: '临沂6号店',
-        maintainer: '嘉伟老师',
-        phoneNumber: '18888880003',
-        region: '北京-北京-东城区',
-        address: '临沂市',
-        openingTime: '11:34',
-        closingTime: '15:34',
-        description: '临沂一号店红红火火',
-        createdAt: '2023-08-21T08:10:39.053Z',
-        updatedAt: '2023-08-31T13:54:31.615Z',
-        type: 1,
-      },
-      counts: {
-        register: 2,
-        collect: 0,
-        analyze: 3,
-        massage: 0,
-        application: 0,
-      },
-    },
-  ];
+  });
+
+  useEffect(() => {
+    const tempFlowsWithShopData = [];
+    const allCounts = {
+      all: 0,
+      done: 0,
+      overdue: 0,
+      cancel: 0,
+      well: 0,
+      bad: 0,
+      worse: 0,
+    };
+    for (let index = 0; index < statisticShops.length; index++) {
+      const flows = statisticShops[index].flows;
+      const followUpData = generateFollowUpFlows(flows);
+      allCounts.all += followUpData.counts.all;
+      allCounts.done += followUpData.counts.done;
+      allCounts.overdue += followUpData.counts.overdue;
+      allCounts.cancel += followUpData.counts.cancel;
+      allCounts.well += followUpData.counts.well;
+      allCounts.bad += followUpData.counts.bad;
+      allCounts.worse += followUpData.counts.worse;
+      tempFlowsWithShopData.push({
+        shop: statisticShops[index].shop,
+        counts: followUpData.counts,
+      });
+    }
+
+    setFlowsWithShopData({
+      flowsWithShop: tempFlowsWithShopData,
+      allCounts,
+    });
+  }, [statisticShops]);
+
+  const { enterToFollowUp } = useLayoutConfigWithRole();
 
   const List = () => {
     return (
@@ -372,37 +287,52 @@ const CenterStatisticBox = () => {
           justifyContent={'space-around'}>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              门店名称
+              门店
             </Text>
           </Row>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              调理数
+              随访数
             </Text>
           </Row>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              登记数
+              随访率
             </Text>
           </Row>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
-              转化率
+              {FollowUpResultText[FollowUpResult.GOOD]}
             </Text>
           </Row>
           <Row w={ls(100)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
-              贴敷量
+              {FollowUpResultText[FollowUpResult.BAD]}
+            </Text>
+          </Row>
+          <Row w={ls(120)} justifyContent={'center'}>
+            <Text fontSize={sp(18)} color={'#333'}>
+              {FollowUpResultText[FollowUpResult.WORSE]}
             </Text>
           </Row>
           <Row w={ls(100)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
-              推拿量
+              取消
+            </Text>
+          </Row>
+          <Row w={ls(100)} justifyContent={'center'}>
+            <Text fontSize={sp(18)} color={'#333'}>
+              逾期
+            </Text>
+          </Row>
+          <Row w={ls(100)} justifyContent={'center'}>
+            <Text fontSize={sp(18)} color={'#333'}>
+              操作
             </Text>
           </Row>
         </Row>
         <Column bgColor={'#fff'} borderBottomRadius={ss(10)}>
-          {statisticShops.map((item, idx) => {
+          {flowsWithShopData?.flowsWithShop.map((item, idx) => {
             return (
               <Row
                 key={idx}
@@ -422,31 +352,50 @@ const CenterStatisticBox = () => {
                 </Row>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {item.counts.analyze}
+                    {item.counts.done}
                   </Text>
                 </Row>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {item.counts.register}
+                    {Math.floor((item.counts.done / item.counts.all) * 100)}%
                   </Text>
                 </Row>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {Math.floor(
-                      (item.counts.analyze / item.counts.register) * 100,
-                    )}
-                    %
+                    {item.counts.well}
                   </Text>
                 </Row>
                 <Row w={ls(100)} justifyContent={'center'}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {item.counts.application}
+                    {item.counts.bad}
+                  </Text>
+                </Row>
+                <Row w={ls(120)} justifyContent={'center'}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {item.counts.worse}
                   </Text>
                 </Row>
                 <Row w={ls(100)} justifyContent={'center'}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {item.counts.massage}
+                    {item.counts.cancel}
                   </Text>
+                </Row>
+                <Row w={ls(100)} justifyContent={'center'}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {item.counts.overdue}
+                  </Text>
+                </Row>
+                <Row w={ls(100)} justifyContent={'center'}>
+                  <Pressable
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      // 跳转
+                      enterToFollowUp(item.shop);
+                    }}>
+                    <Text fontSize={sp(18)} color={'#03CBB2'}>
+                      查看
+                    </Text>
+                  </Pressable>
                 </Row>
               </Row>
             );
@@ -456,139 +405,37 @@ const CenterStatisticBox = () => {
     );
   };
 
-  const options = {
-    grid: {
-      top: ss(20),
-      left: ls(50),
-      right: 0,
-    },
-    textStyle: {
-      fontFamily: 'PingFang SC', // 指定字体类型
-    },
-    tooltip: {
-      fontFamily: 'PingFang SC', // 指定字体类型
-      trigger: 'axis',
-      position: function (pt: any) {
-        return [pt[0], '10%'];
-      },
-    },
-    xAxis: {
-      type: 'category',
-      data: statisticShops.map((item) => {
-        return item.shop.name;
-      }),
-      axisLabel: {
-        align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-        rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
-        interval: 0, // 强制显示所有刻度标签
-        fontSize: sp(12),
-        color: '#8C8C8C',
-      },
-    },
-    dataZoom: [
-      {
-        type: 'inside', // 滑动条型数据缩放器
-        start: 0, // 默认显示数据的起始位置
-        end: statisticShops.length > 6 ? 60 : 100, // 默认显示数据的结束位置，可以通过滑动来调整
-      },
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        splitLine: {
-          show: true, // 显示网格线
-          lineStyle: {
-            type: 'dashed', // 将网格线显示为虚线
-          },
-        },
-      },
-    ],
-    series: [
-      {
-        name: '登记人数',
-        type: 'bar',
-        data: statisticShops.map((item) => item.counts.register),
-        barWidth: ls(22), // 设置柱子的宽度
-        itemStyle: {
-          color: '#75BFF0', // 设置柱子颜色为绿色
-        },
-      },
-      {
-        name: '调理人数',
-        type: 'bar',
-        data: statisticShops.map((item) => item.counts.analyze),
-        barWidth: ls(22), // 设置柱子的宽度
-        itemStyle: {
-          color: '#82DF9E', // 设置柱子颜色为绿色
-        },
-      },
-    ],
-  };
-  const svgRef = useRef<any>(null);
-
-  useEffect(() => {
-    let chart: any;
-    if (svgRef.current) {
-      chart = echarts.init(svgRef.current, 'light', {
-        renderer: 'svg',
-        height: ss(306),
-        width: ls(1046),
-      });
-      chart.setOption(options);
-    }
-    return () => chart?.dispose();
-  }, [statisticShops]);
   return (
     <ScrollView margin={ss(10)}>
-      <ScrollView horizontal>
-        <Row>
-          {statisticShops.map((item, idx) => {
-            return (
-              <StatisticsCountBox
-                key={idx}
-                title={item.shop.name}
-                count={counts.analyze}
-                style={idx == 0 ? {} : { marginLeft: ss(10) }}
-              />
-            );
-          })}
-        </Row>
-      </ScrollView>
+      <Row flex={1}>
+        <StatisticsCountBox
+          title={FollowUpResultText[FollowUpResult.GOOD]}
+          count={flowsWithShopData?.allCounts.well || 0}
+        />
+        <StatisticsCountBox
+          title={FollowUpResultText[FollowUpResult.BAD]}
+          count={flowsWithShopData?.allCounts.bad || 0}
+          style={{ marginLeft: ss(10) }}
+        />
+        <StatisticsCountBox
+          title={FollowUpResultText[FollowUpResult.WORSE]}
+          count={flowsWithShopData?.allCounts.worse || 0}
+          style={{ marginLeft: ss(10) }}
+        />
+        <StatisticsCountBox
+          style={{ marginLeft: ss(10) }}
+          title={'取消'}
+          count={flowsWithShopData?.allCounts.cancel || 0}
+        />
+      </Row>
 
-      <Box mt={ss(10)} bgColor={'#fff'} borderRadius={ss(8)}>
-        <Text color={'#141414'} fontSize={sp(16)} margin={sp(20)}>
-          业绩排行
-        </Text>
-        <Row alignItems={'center'} justifyContent={'center'}>
-          <Box
-            w={ss(12)}
-            height={ss(12)}
-            borderRadius={2}
-            bgColor={'#75BFF0'}
-          />
-          <Text fontSize={sp(14)} color='rgba(0,0,0,0.45)' ml={ls(8)}>
-            登记人数
-          </Text>
-          <Box
-            w={ss(12)}
-            height={ss(12)}
-            borderRadius={2}
-            bgColor={'#82DF9E'}
-            ml={ls(24)}
-          />
-          <Text fontSize={sp(14)} color='rgba(0,0,0,0.45)' ml={ls(8)}>
-            调理人数
-          </Text>
-        </Row>
-        <SvgChart ref={svgRef} />
-      </Box>
       <Box mt={ss(10)}>
         <List />
       </Box>
     </ScrollView>
   );
 };
-export default function StatisticsShop() {
+export default function StatisticsVisit() {
   const [selectShop, setSelectShop] = useState<Shop>();
 
   return (

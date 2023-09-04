@@ -21,6 +21,7 @@ import { RoleAuthority } from '../auth/type';
 import { fuzzySearch, generateFlowCounts } from '~/app/utils';
 import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
+import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
 
 const DefaultFlowListData = {
   flows: [],
@@ -891,7 +892,7 @@ const useFlowStore = create(
     // 客户随访
     async requestGetFollowUps() {
       const {
-        customersFollowUp: { status, startDate, endDate, searchKeywords },
+        customersFollowUp: { shopId, startDate, endDate, searchKeywords },
       } = get();
       const params: any = {};
 
@@ -902,12 +903,11 @@ const useFlowStore = create(
         params.endDate = endDate;
       }
 
-      params.isDone = 1;
-      const user = useAuthStore.getState().currentShopWithRole;
-
-      if (user?.shop.type === ShopType.SHOP) {
-        params.shopId = user?.shop._id;
+      if (shopId) {
+        params.shopId = shopId;
       }
+
+      params.isDone = 1;
 
       request.get('/flows', { params }).then(({ data }) => {
         const { docs } = data;
@@ -916,11 +916,7 @@ const useFlowStore = create(
           customersFollowUp: {
             ...get().customersFollowUp,
             flows: fuzzySearch(
-              docs.filter(
-                (item: any) =>
-                  item.analyze.followUp.followUpStatus !==
-                  FollowUpStatus.NOT_SET,
-              ),
+              generateFollowUpFlows(docs).flows,
               searchKeywords,
             ),
           },

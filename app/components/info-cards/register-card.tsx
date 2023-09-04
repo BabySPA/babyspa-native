@@ -86,7 +86,7 @@ export default function RegisterCard(params: RegisterCardParams) {
               <Text color='#333'>{currentFlow.tag}</Text>
             </Text>
             <Text fontSize={sp(18)} color='#999' ml={ls(40)}>
-              预约调理师：
+              预约理疗师：
               <Text color='#333'>{currentFlow.collectionOperator?.name}</Text>
             </Text>
           </Row>

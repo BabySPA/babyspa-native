@@ -84,7 +84,7 @@ const ShopStatisticBox = () => {
           </Row>
           <Row w={ls(80)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
-              调理师
+              理疗师
             </Text>
           </Row>
           <Row w={ls(180)} justifyContent={'center'}>

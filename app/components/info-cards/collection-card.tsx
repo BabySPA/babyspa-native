@@ -32,7 +32,7 @@ export default function CollectionCard(params: CollectionCardParams) {
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
             过敏原：
           </Text>
-          <Text fontSize={sp(18)} color='#333'>
+          <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
             {collect.healthInfo.allergy || '未设置'}
           </Text>
         </Row>
@@ -104,7 +104,7 @@ export default function CollectionCard(params: CollectionCardParams) {
 
         <Row mt={ss(20)}>
           <Text fontSize={sp(18)} color='#999' w={ls(100)} textAlign={'right'}>
-            调理师：
+            理疗师：
           </Text>
           <Text fontSize={sp(18)} color='#333'>
             {collectionOperator?.name}
