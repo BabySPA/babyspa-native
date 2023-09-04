@@ -911,10 +911,18 @@ const useFlowStore = create(
 
       request.get('/flows', { params }).then(({ data }) => {
         const { docs } = data;
+
         set({
           customersFollowUp: {
             ...get().customersFollowUp,
-            flows: fuzzySearch(docs, searchKeywords),
+            flows: fuzzySearch(
+              docs.filter(
+                (item: any) =>
+                  item.analyze.followUp.followUpStatus !==
+                  FollowUpStatus.NOT_SET,
+              ),
+              searchKeywords,
+            ),
           },
         });
       });

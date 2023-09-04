@@ -376,7 +376,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                     : dayjs(followUp.followUpTime).format('YYYY-MM-DD')}
                 </Text>
               </Row>
-              {followUp.followUpResult && (
+              {followUp.followUpResult !== undefined && (
                 <Row mt={ss(20)}>
                   <Text
                     fontSize={sp(18)}
