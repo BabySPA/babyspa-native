@@ -20,7 +20,7 @@ export default function LoginScreen({
   navigation,
 }: AuthStackScreenProps<'Login'>) {
   const { login } = useAuthStore();
-  const [username, setUsername] = useState('13333330000');
+  const [username, setUsername] = useState('13333330001');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectAgreement, setSelectAgreement] = useState(true);
@@ -56,8 +56,7 @@ export default function LoginScreen({
   return (
     <ImageBackground
       source={require('~/assets/images/login-bg.png')}
-      style={{ width: '100%', height: '100%' }}
-    >
+      style={{ width: '100%', height: '100%' }}>
       <Center safeArea flex={1}>
         <Row w={ls(956)} h={ss(584)} borderRadius={ss(20)} bgColor={'#fff'}>
           <Center w={ls(478)} bgColor={'#B6ECF0'} borderRadius={ss(20)}>
@@ -122,8 +121,7 @@ export default function LoginScreen({
                   mr={ls(20)}
                   onPress={() => {
                     setShowPassword(!showPassword);
-                  }}
-                >
+                  }}>
                   <Icon
                     as={
                       <Ionicons
@@ -140,8 +138,7 @@ export default function LoginScreen({
               hitSlop={ss(10)}
               onPress={() => {
                 onClickLogin();
-              }}
-            >
+              }}>
               <Row
                 alignItems={'center'}
                 justifyContent={'center'}
@@ -156,8 +153,7 @@ export default function LoginScreen({
                     start: [0, 0],
                     end: [1, 1],
                   },
-                }}
-              >
+                }}>
                 {loading && (
                   <Spinner color='#00B49E' mr={ls(8)} size={ss(22)} />
                 )}
@@ -172,8 +168,7 @@ export default function LoginScreen({
                 hitSlop={ss(10)}
                 onPress={() => {
                   setSelectAgreement(!selectAgreement);
-                }}
-              >
+                }}>
                 <Row alignItems={'center'}>
                   <Icon
                     as={
@@ -200,7 +195,7 @@ export default function LoginScreen({
                 、
               </Text>
               <Text color='#28F' fontSize={sp(14)}>
-                《用户协议》
+                《隐私政策》
               </Text>
             </Row>
           </Center>

@@ -126,6 +126,7 @@ const initialState = {
       { label: '待采集', value: FlowStatus.ToBeCollected },
       { label: '待分析', value: FlowStatus.ToBeAnalyzed },
       { label: '已完成', value: FlowStatus.Analyzed },
+      { label: '已取消', value: FlowStatus.RegisterCanceled },
     ],
   },
   collection: {
@@ -135,6 +136,7 @@ const initialState = {
       { label: '待采集', value: FlowStatus.ToBeCollected },
       { label: '待分析', value: FlowStatus.ToBeAnalyzed },
       { label: '已完成', value: FlowStatus.Analyzed },
+      { label: '已取消', value: FlowStatus.CollectCanceled },
     ],
   },
   analyze: {
@@ -143,6 +145,7 @@ const initialState = {
       { label: '全部', value: -1 },
       { label: '待分析', value: FlowStatus.ToBeAnalyzed },
       { label: '已完成', value: FlowStatus.Analyzed },
+      { label: '已取消', value: FlowStatus.AnalyzeCanceled },
     ],
   },
   evaluate: {

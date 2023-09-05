@@ -65,6 +65,13 @@ export default function RegisterCustomerScreen({
                 setLoading(false);
                 return;
               }
+
+              if (currentFlow.customer.phoneNumber.length !== 11) {
+                toastAlert(toast, 'error', '电话格式输入有误请检查！');
+                setLoading(false);
+                return;
+              }
+
               if (!currentFlow.customer.birthday) {
                 toastAlert(toast, 'error', '请选择生日！');
                 setLoading(false);
@@ -114,15 +121,13 @@ export default function RegisterCustomerScreen({
                 .finally(() => {
                   setLoading(false);
                 });
-            }}
-          >
+            }}>
             <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
               {loading && <Spinner mr={ls(5)} color='emerald.500' />}
               <Text
                 color={'#03CBB2'}
                 opacity={loading ? 0.6 : 1}
-                fontSize={sp(14, { min: 12 })}
-              >
+                fontSize={sp(14, { min: 12 })}>
                 确定
               </Text>
             </Row>

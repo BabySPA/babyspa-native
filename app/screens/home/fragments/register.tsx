@@ -12,7 +12,12 @@ import {
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {
+  Feather,
+  FontAwesome,
+  Ionicons,
+  MaterialIcons,
+} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
@@ -103,59 +108,65 @@ function Filter() {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
-        <Icon
-          as={<Ionicons name={'people'} />}
-          size={ss(40)}
-          color={'#5EACA3'}
-        />
-        <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
-          已登记：
-          <Text color='#5EACA3'>{registerCount}</Text>
-        </Text>
-        <Input
-          ml={ls(30)}
-          w={ls(240)}
-          minH={ss(40, { max: 18 })}
-          p={ss(8)}
-          defaultValue={register.searchKeywords}
-          placeholderTextColor={'#6E6F73'}
-          color={'#333333'}
-          fontSize={ss(16)}
-          onChangeText={debounce((text) => {
-            updateRegisterFilter({
-              searchKeywords: text,
-            });
+      <Row
+        py={ss(20)}
+        px={ls(40)}
+        alignItems={'center'}
+        justifyContent={'space-between'}>
+        <Row alignItems={'center'}>
+          <Icon
+            as={<Ionicons name={'people'} />}
+            size={ss(35)}
+            color={'#5EACA3'}
+          />
+          <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
+            已登记：
+            <Text color='#5EACA3'>{registerCount}</Text>
+          </Text>
+          <Input
+            ml={ls(30)}
+            w={ls(240)}
+            minH={ss(40, { max: 18 })}
+            p={ss(8)}
+            defaultValue={register.searchKeywords}
+            placeholderTextColor={'#6E6F73'}
+            color={'#333333'}
+            fontSize={ss(16)}
+            onChangeText={debounce((text) => {
+              updateRegisterFilter({
+                searchKeywords: text,
+              });
 
-            requestGetRegisterFlows();
-          }, 1000)}
-          InputLeftElement={
-            <Icon
-              as={<MaterialIcons name='search' />}
-              size={ss(25)}
-              color='#AFB0B4'
-              ml={ss(10)}
-            />
-          }
-          placeholder='请输入客户姓名、手机号'
-        />
-        <Pressable
-          hitSlop={ss(10)}
-          onPress={() => {
-            setShowFilter(!showFilter);
-          }}>
-          <Row alignItems={'center'}>
-            <Icon
-              as={<FontAwesome name='filter' />}
-              size={ss(16)}
-              color='#00B49E'
-              ml={ls(16)}
-            />
-            <Text color='#00B49E' fontSize={sp(18)} ml={ls(4)}>
-              筛选
-            </Text>
-          </Row>
-        </Pressable>
+              requestGetRegisterFlows();
+            }, 1000)}
+            InputLeftElement={
+              <Icon
+                as={<MaterialIcons name='search' />}
+                size={ss(25)}
+                color='#AFB0B4'
+                ml={ss(10)}
+              />
+            }
+            placeholder='请输入客户姓名、手机号'
+          />
+          <Pressable
+            hitSlop={ss(10)}
+            onPress={() => {
+              setShowFilter(!showFilter);
+            }}>
+            <Row alignItems={'center'}>
+              <Icon
+                as={<Feather name='filter' />}
+                size={ss(16)}
+                color='#00B49E'
+                ml={ls(27)}
+              />
+              <Text color='#00B49E' fontSize={sp(18)} ml={ls(4)}>
+                筛选
+              </Text>
+            </Row>
+          </Pressable>
+        </Row>
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
@@ -175,6 +186,7 @@ function Filter() {
             }}
             px={ls(26)}
             py={ss(10)}
+            borderRadius={ss(4)}
             _text={{ fontSize: ss(14), color: 'white' }}>
             登记
           </Box>

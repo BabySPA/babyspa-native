@@ -42,6 +42,38 @@ export default function EditBox(params: EditBoxParams) {
 
   const [defaultSelect, selectShops] = useSelectShops(false);
 
+  const checkUser = () => {
+    if (tempUser.name.trim() === '') {
+      toastAlert(toast, 'error', '请输入员工姓名！');
+      return false;
+    }
+    if (tempUser.phoneNumber.trim() === '') {
+      toastAlert(toast, 'error', '请输入联系电话！');
+      return false;
+    }
+    if (tempUser.phoneNumber.trim().length !== 11) {
+      toastAlert(toast, 'error', '请输入正确的手机号！');
+      return false;
+    }
+    if (tempUser.idCardNumber.trim() === '') {
+      toastAlert(toast, 'error', '请输入身份证号！');
+      return false;
+    }
+    if (tempUser.idCardNumber.trim().length !== 18) {
+      toastAlert(toast, 'error', '请输入正确的身份证号！');
+      return false;
+    }
+    if (!tempUser.role?.roleKey) {
+      toastAlert(toast, 'error', '请选择角色！');
+      return false;
+    }
+    if (!tempUser.shop?.shopId) {
+      toastAlert(toast, 'error', '请选择所属门店！');
+      return false;
+    }
+    return true;
+  };
+
   return (
     <Column
       flex={1}
@@ -166,6 +198,7 @@ export default function EditBox(params: EditBoxParams) {
                     setTempUser({
                       ...tempUser,
                       phoneNumber: text,
+                      username: text,
                     });
                   }}
                   placeholderTextColor={'#CCC'}
@@ -182,7 +215,7 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Input
                   autoCorrect={false}
-                  defaultValue={tempUser.phoneNumber}
+                  defaultValue={tempUser.username}
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
@@ -277,6 +310,8 @@ export default function EditBox(params: EditBoxParams) {
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
+
+            if (!checkUser()) return;
 
             setLoading(true);
 

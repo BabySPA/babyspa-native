@@ -13,7 +13,12 @@ import {
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {
+  Feather,
+  FontAwesome,
+  Ionicons,
+  MaterialIcons,
+} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
@@ -115,7 +120,7 @@ function Filter() {
       <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
         <Icon
           as={<Ionicons name={'people'} />}
-          size={ss(40)}
+          size={ss(35)}
           color={'#5EACA3'}
         />
         <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
@@ -129,7 +134,7 @@ function Filter() {
         <Input
           ml={ls(30)}
           w={ls(240)}
-          minH={ss(40, { max: 18 })}
+          h={ss(40)}
           p={ss(8)}
           defaultValue={analyze.searchKeywords}
           placeholderTextColor={'#6E6F73'}
@@ -144,7 +149,7 @@ function Filter() {
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={ss(20)}
               color='#AFB0B4'
               ml={ss(10)}
             />
@@ -158,10 +163,10 @@ function Filter() {
           }}>
           <Row alignItems={'center'}>
             <Icon
-              as={<FontAwesome name='filter' />}
+              as={<Feather name='filter' />}
               size={ss(16)}
               color='#00B49E'
-              ml={ls(16)}
+              ml={ls(27)}
             />
             <Text color='#00B49E' fontSize={sp(18)} ml={ls(4)}>
               筛选

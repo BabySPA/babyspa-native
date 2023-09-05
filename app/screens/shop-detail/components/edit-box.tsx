@@ -39,6 +39,39 @@ export default function EditBox(params: EditBoxParams) {
 
   const [tempShop, setTempShop] = useState(currentShop);
 
+  const checkShop = () => {
+    if (tempShop.name.trim() === '') {
+      toastAlert(toast, 'error', '请输入门店名称！');
+      return false;
+    }
+
+    if (!tempShop.maintainer.trim()) {
+      toastAlert(toast, 'error', '请输入负责人！');
+      return false;
+    }
+    if (!tempShop.phoneNumber.trim()) {
+      toastAlert(toast, 'error', '请输入联系电话！');
+      return false;
+    }
+    if (!/^1[3456789]\d{9}$/.test(tempShop.phoneNumber.trim())) {
+      toastAlert(toast, 'error', '请输入正确的联系电话！');
+      return false;
+    }
+    if (!tempShop.region.trim()) {
+      toastAlert(toast, 'error', '请选择所属区域！');
+      return false;
+    }
+    if (!tempShop.address.trim()) {
+      toastAlert(toast, 'error', '请输入详细地址！');
+      return false;
+    }
+    if (!tempShop.openingTime.trim() || !tempShop.closingTime.trim()) {
+      toastAlert(toast, 'error', '请选择营业时间！');
+      return false;
+    }
+    return true;
+  };
+
   const { openLoading, closeLoading } = useGlobalLoading();
   return (
     <Column
@@ -316,10 +349,10 @@ export default function EditBox(params: EditBoxParams) {
           onPress={() => {
             if (loading) return;
 
+            if (!checkShop()) return;
             setLoading(true);
 
             setCurrentShop(tempShop);
-
             if (tempShop._id) {
               // 修改门店信息
               requestPatchShop()

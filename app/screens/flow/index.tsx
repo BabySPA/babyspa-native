@@ -47,7 +47,7 @@ export default function FlowScreen({
     getFlowOperatorConfigByUser,
     requestGetInitializeData,
     requestPatchFlowToAnalyze,
-    currentFlow: { collect, customer },
+    currentFlow: { collect, analyze, customer },
     updateCurrentArchiveCustomer,
     requestPatchCollectionStatus,
     requestPatchAnalyzeStatus,
@@ -81,6 +81,48 @@ export default function FlowScreen({
     requestGetTemplates();
   }, []);
 
+  const checkCollection = () => {
+    if (
+      !collect.guidance &&
+      collect.healthInfo.audioFiles.length == 0 &&
+      collect.healthInfo.leftHandImages.length == 0 &&
+      collect.healthInfo.rightHandImages.length == 0 &&
+      collect.healthInfo.lingualImage.length == 0 &&
+      collect.healthInfo.otherImages.length == 0
+    ) {
+      toastAlert(toast, 'error', '尚未输入任何有效采集信息！');
+      return false;
+    }
+
+    return true;
+  };
+
+  const checkAnlyze = () => {
+    if (!analyze.conclusion) {
+      toastAlert(toast, 'error', '分析结论尚未输入!');
+      return false;
+    }
+    if (analyze.solution.applications.length > 0) {
+      if (
+        analyze.solution.applications.some(
+          (item) =>
+            item.count == 0 || item.duration == 0 || item.acupoint == '',
+        )
+      ) {
+        toastAlert(toast, 'error', '请检查贴敷方案是否填写完整!');
+        return false;
+      }
+    }
+
+    if (analyze.solution.massages.length > 0) {
+      if (analyze.solution.massages.some((item) => item.count == 0)) {
+        toastAlert(toast, 'error', '请检查理疗方案信息是否正确!');
+        return false;
+      }
+    }
+
+    return true;
+  };
   return (
     <Box flex={1}>
       <NavigationBar
@@ -239,6 +281,9 @@ export default function FlowScreen({
                 <Pressable
                   hitSlop={ss(10)}
                   onPress={() => {
+                    if (!checkCollection()) {
+                      return;
+                    }
                     requestPatchFlowToCollection()
                       .then((res) => {
                         setShowResultModal({
@@ -312,8 +357,11 @@ export default function FlowScreen({
                 onPress={() => {
                   if (finishLoading) return;
 
-                  setFinishLoading(true);
+                  if (!checkAnlyze()) {
+                    return;
+                  }
 
+                  setFinishLoading(true);
                   requestPatchFlowToAnalyze()
                     .then((res) => {
                       setShowResultModal({

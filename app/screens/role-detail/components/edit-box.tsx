@@ -43,6 +43,25 @@ export default function EditBox(params: EditBoxParams) {
 
   const [tempRole, setTempRole] = useState(currentRole);
 
+  const checkRole = () => {
+    if (!tempRole.name) {
+      toastAlert(toast, 'error', '请输入角色名称！');
+      return false;
+    }
+
+    if (!tempRole.description) {
+      toastAlert(toast, 'error', '请输入角色说明！');
+      return false;
+    }
+
+    if (!tempRole.authorities || tempRole.authorities.length === 0) {
+      toastAlert(toast, 'error', '请选择功能权限！');
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <Column
       flex={1}
@@ -56,7 +75,7 @@ export default function EditBox(params: EditBoxParams) {
           <Box mt={ss(30)} px={ls(20)}>
             <Row alignItems={'center'}>
               <FormBox
-                title='角色姓名'
+                title='角色名称'
                 style={{ flex: 1 }}
                 required
                 form={
@@ -190,7 +209,7 @@ export default function EditBox(params: EditBoxParams) {
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
-
+            if (!checkRole()) return;
             setLoading(true);
 
             setCurrentRole(tempRole);

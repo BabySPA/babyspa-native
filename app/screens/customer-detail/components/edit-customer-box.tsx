@@ -234,6 +234,11 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               setLoading(false);
               return;
             }
+            if (tempCustomer.phoneNumber.length !== 11) {
+              toastAlert(toast, 'error', '电话格式输入有误请检查！');
+              setLoading(false);
+              return;
+            }
             if (!tempCustomer.birthday) {
               toastAlert(toast, 'error', '请选择生日！');
               setLoading(false);
