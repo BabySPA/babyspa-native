@@ -48,7 +48,7 @@ export default function SelectDay({
       }}
       buttonStyle={{
         maxWidth: ls(112),
-        height: ss(48, { min: 26 }),
+        height: ss(48),
         backgroundColor: '#fff',
         borderRadius: ss(4),
         borderWidth: 1,
@@ -57,13 +57,13 @@ export default function SelectDay({
       buttonTextStyle={{
         color: '#333333',
         textAlign: 'left',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(16),
       }}
       renderDropdownIcon={(isOpened) => {
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18, { min: 15 })}
+            size={ss(18)}
             color='#999'
           />
         );
@@ -80,7 +80,7 @@ export default function SelectDay({
       rowTextStyle={{
         color: '#333',
         textAlign: 'center',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(16),
       }}
       selectedRowStyle={{
         backgroundColor: '#CBEDE2',

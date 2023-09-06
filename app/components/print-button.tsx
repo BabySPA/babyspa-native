@@ -131,7 +131,7 @@ export function PrintButton() {
           <tr>
             <td>姓名：${currentFlow.customer.name}</td>
             <td>性别：${currentFlow.customer.gender ? '男' : '女'}</td>
-            <td>年龄：${age?.year}岁${age?.month}个月</td>
+            <td>年龄：${age?.year}岁${age?.month}月</td>
           </tr>
           <tr>
             <td>电话：${currentFlow.customer.phoneNumber}</td>
@@ -216,9 +216,8 @@ export function PrintButton() {
       hitSlop={ss(10)}
       onPress={() => {
         print();
-      }}
-    >
-      <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
+      }}>
+      <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
         <Text color={'#03CBB2'} fontSize={sp(14, { min: 12 })}>
           打印
         </Text>

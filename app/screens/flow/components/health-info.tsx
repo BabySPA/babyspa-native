@@ -67,6 +67,7 @@ export default function HealthInfo({
                 {collect.healthInfo.allergy || '请输入或选择过敏原'}
               </Text>
               <Text
+                fontSize={sp(14)}
                 color={'#999'}
                 style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
                 {collect.healthInfo.allergy.length}/300

@@ -6,6 +6,7 @@ import { AuthState, RW, RoleAuthority } from './type';
 import useLayoutStore from '../layout';
 import useFlowStore from '../flow';
 import useManagerStore from '../manager';
+import { RoleStatus } from '../manager/type';
 
 const initialState = {
   accessToken: null,
@@ -27,6 +28,19 @@ const useAuthStore = create(
             .then((res) => {
               const { accessToken, ...rest } = res.data;
               const user = { ...rest };
+
+              if (
+                user.currentShopWithRole.role.authorities.length == 0 &&
+                user.currentShopWithRole.role.status === RoleStatus.CLOSE
+              ) {
+                // 当前登录用户没有任何权限
+                reject({
+                  code: 403,
+                  message: '当前登录用户所有角色没有配置任何权限',
+                });
+                return;
+              }
+
               set({
                 accessToken: accessToken,
                 user: { ...rest },

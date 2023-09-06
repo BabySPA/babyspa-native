@@ -35,7 +35,7 @@ export default function SelectShop({
         return item.name;
       }}
       buttonStyle={{
-        width: buttonWidth ?? ss(200),
+        width: buttonWidth ?? ss(140),
         height: buttonHeight ?? ss(48),
         backgroundColor: '#fff',
         borderRadius: ss(4),
@@ -45,13 +45,13 @@ export default function SelectShop({
       buttonTextStyle={{
         color: '#333333',
         textAlign: 'left',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(16),
       }}
       renderDropdownIcon={(isOpened) => {
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18, { min: 15 })}
+            size={ss(18)}
             color='#999'
           />
         );
@@ -68,7 +68,7 @@ export default function SelectShop({
       rowTextStyle={{
         color: '#333',
         textAlign: 'center',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(16),
       }}
       selectedRowStyle={{
         backgroundColor: '#CBEDE2',

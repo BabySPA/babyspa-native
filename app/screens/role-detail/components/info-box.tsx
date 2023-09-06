@@ -37,8 +37,7 @@ export default function InfoBox(params: InfoBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Column>
         <BoxTitle
           title='角色信息'
@@ -49,12 +48,11 @@ export default function InfoBox(params: InfoBoxParams) {
                 setIsDeleteDialogOpen(true);
               }}
               bgColor={'rgba(243, 96, 30, 0.20)'}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               borderColor={'#f3601E'}
               px={ls(26)}
-              py={ss(10)}
-            >
+              py={ss(10)}>
               <Row>
                 {deleteLoading && <Spinner mr={ls(5)} color='#999' />}
                 <Text color='#F3601E' fontSize={sp(14)}>
@@ -92,16 +90,14 @@ export default function InfoBox(params: InfoBoxParams) {
           hitSlop={ss(10)}
           onPress={() => {
             params.onPressCancel();
-          }}
-        >
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
-            borderColor={'#D8D8D8'}
-          >
+            borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
             </Text>
@@ -112,16 +108,14 @@ export default function InfoBox(params: InfoBoxParams) {
           ml={ls(74)}
           onPress={() => {
             params.onPressEdit();
-          }}
-        >
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
-            borderColor={'#00B49E'}
-          >
+            borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               编辑
             </Text>

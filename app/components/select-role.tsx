@@ -4,7 +4,7 @@ import { Icon } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import useManagerStore from '../stores/manager';
 import { useEffect, useState } from 'react';
-import { ShopType } from '../stores/manager/type';
+import { RoleStatus, ShopType } from '../stores/manager/type';
 
 export default function SelectRole({
   onSelect,
@@ -29,7 +29,11 @@ export default function SelectRole({
   }, []);
 
   useEffect(() => {
-    setFilterRoles(roles.filter((role) => role.type === type));
+    setFilterRoles(
+      roles.filter(
+        (role) => role.type === type && role.status === RoleStatus.OPEN,
+      ),
+    );
   }, [type]);
 
   useEffect(() => {
@@ -69,13 +73,13 @@ export default function SelectRole({
       buttonTextStyle={{
         color: '#333333',
         textAlign: 'left',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(16),
       }}
       renderDropdownIcon={(isOpened) => {
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18, { min: 15 })}
+            size={ss(18)}
             color='#999'
           />
         );
@@ -92,7 +96,7 @@ export default function SelectRole({
       rowTextStyle={{
         color: '#333',
         textAlign: 'center',
-        fontSize: sp(16, { min: 12 }),
+        fontSize: sp(16),
       }}
       selectedRowStyle={{
         backgroundColor: '#CBEDE2',

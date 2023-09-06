@@ -86,8 +86,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}
-        >
+          justifyContent={'space-around'}>
           <Row w={ls(120)}>
             <Text fontSize={sp(14)} color={'#8C8C8C'}>
               日期
@@ -143,8 +142,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               borderBottomWidth={1}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
-              justifyContent={'space-around'}
-            >
+              justifyContent={'space-around'}>
               <Row w={ls(120)}>
                 <Text fontSize={sp(14)} color={'#333'}>
                   {dayjs(growthCurve.date).format('YYYY-MM-DD')}
@@ -190,8 +188,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
                   hitSlop={ss(10)}
                   onPress={() => {
                     onEditClick(growthCurve);
-                  }}
-                >
+                  }}>
                   <Text fontSize={sp(14)} color={'#03CBB2'}>
                     编辑
                   </Text>
@@ -390,20 +387,18 @@ export function GrowthCurve(params: GrowthCurveParams) {
     <ScrollView>
       <Column
         borderWidth={1}
-        borderRadius={ss(4)}
+        borderRadius={4}
         alignItems={'center'}
         borderColor={'#F0F0F0'}
         h={ss(386)}
         w={'100%'}
-        mt={ss(30)}
-      >
+        mt={ss(30)}>
         <Row
           w={'100%'}
           alignItems={'center'}
           justifyContent={'space-between'}
           px={ls(40)}
-          py={ss(20)}
-        >
+          py={ss(20)}>
           <Text color='#141414' fontSize={sp(16)}>
             身高曲线
           </Text>
@@ -412,8 +407,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               hitSlop={ss(10)}
               onPress={() => {
                 seSelectOption('height');
-              }}
-            >
+              }}>
               <Box
                 w={ss(80)}
                 h={ss(40)}
@@ -423,12 +417,10 @@ export function GrowthCurve(params: GrowthCurveParams) {
                 borderWidth={1}
                 borderColor={selectOption === 'height' ? '#03CBB2' : '#D9D9D9'}
                 alignItems={'center'}
-                justifyContent={'center'}
-              >
+                justifyContent={'center'}>
                 <Text
                   fontSize={sp(14)}
-                  color={selectOption === 'height' ? '#03CBB2' : '#333'}
-                >
+                  color={selectOption === 'height' ? '#03CBB2' : '#333'}>
                   身高
                 </Text>
               </Box>
@@ -437,8 +429,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               hitSlop={ss(10)}
               onPress={() => {
                 seSelectOption('weight');
-              }}
-            >
+              }}>
               <Box
                 w={ss(80)}
                 h={ss(40)}
@@ -448,12 +439,10 @@ export function GrowthCurve(params: GrowthCurveParams) {
                 borderWidth={1}
                 borderColor={selectOption === 'weight' ? '#03CBB2' : '#D9D9D9'}
                 alignItems={'center'}
-                justifyContent={'center'}
-              >
+                justifyContent={'center'}>
                 <Text
                   fontSize={sp(14)}
-                  color={selectOption === 'weight' ? '#03CBB2' : '#333'}
-                >
+                  color={selectOption === 'weight' ? '#03CBB2' : '#333'}>
                   体重
                 </Text>
               </Box>

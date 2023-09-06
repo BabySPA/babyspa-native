@@ -8,16 +8,13 @@ import {
   Row,
   Column,
   Pressable,
+  Center,
+  Image,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import {
-  Feather,
-  FontAwesome,
-  Ionicons,
-  MaterialIcons,
-} from '@expo/vector-icons';
+import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
@@ -56,22 +53,28 @@ export default function Register() {
         ) : (
           <Row
             flex={1}
+            p={ss(40)}
+            pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            flexWrap={'wrap'}
-            p={ss(40)}>
-            {flows.map((flow, idx) => (
-              <Pressable
-                hitSlop={ss(10)}
-                ml={idx % 2 == 1 ? ss(20) : 0}
-                key={idx}
-                onPress={() => {
-                  updateCurrentFlow(flow);
-                  navigation.navigate('CustomerDetail');
-                }}>
-                <FlowCustomerItem flow={flow} type={OperateType.Register} />
-              </Pressable>
-            ))}
+            minH={'100%'}>
+            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
+              {flows.map((flow, idx) => (
+                <Center width={'50%'} key={idx}>
+                  <Pressable
+                    ml={idx % 2 == 1 ? ss(20) : 0}
+                    mr={idx % 2 == 0 ? ss(20) : 0}
+                    mb={ss(40)}
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      updateCurrentFlow(flow);
+                      navigation.navigate('CustomerDetail');
+                    }}>
+                    <FlowCustomerItem flow={flow} type={OperateType.Register} />
+                  </Pressable>
+                </Center>
+              ))}
+            </Row>
           </Row>
         )}
       </ScrollView>
@@ -126,11 +129,12 @@ function Filter() {
           <Input
             ml={ls(30)}
             w={ls(240)}
-            minH={ss(40, { max: 18 })}
-            p={ss(8)}
+            minH={ss(40)}
+            p={ss(9)}
             defaultValue={register.searchKeywords}
             placeholderTextColor={'#6E6F73'}
             color={'#333333'}
+            borderRadius={4}
             fontSize={ss(16)}
             onChangeText={debounce((text) => {
               updateRegisterFilter({
@@ -186,7 +190,7 @@ function Filter() {
             }}
             px={ls(26)}
             py={ss(10)}
-            borderRadius={ss(4)}
+            borderRadius={4}
             _text={{ fontSize: ss(14), color: 'white' }}>
             登记
           </Box>
@@ -213,7 +217,7 @@ function Filter() {
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -242,7 +246,7 @@ function Filter() {
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -272,7 +276,7 @@ function Filter() {
                     key={idx}
                     w={ls(90)}
                     h={ss(40)}
-                    borderRadius={ss(4)}
+                    borderRadius={4}
                     borderWidth={1}
                     alignItems={'center'}
                     justifyContent={'center'}
@@ -281,11 +285,23 @@ function Filter() {
                       register.status === status.value ? '#00B49E' : '#D8D8D8'
                     }>
                     <Text
+                      fontSize={sp(18)}
                       color={
                         register.status === status.value ? '#00B49E' : '#666'
                       }>
                       {status.label}
                     </Text>
+                    {register.status === status.value && (
+                      <Image
+                        position={'absolute'}
+                        bottom={0}
+                        right={0}
+                        alt=''
+                        source={require('~/assets/images/border-select.png')}
+                        w={ss(20)}
+                        h={ss(20)}
+                      />
+                    )}
                   </Pressable>
                 );
               })}
@@ -302,7 +318,7 @@ function Filter() {
                   status: FlowStatus.NO_SET,
                 });
               }}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               w={ls(80)}
               h={ss(40)}
@@ -322,7 +338,7 @@ function Filter() {
                   closeLoading();
                 }, 300);
               }}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               borderColor='#00B49E'
               w={ls(80)}

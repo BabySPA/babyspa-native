@@ -29,7 +29,7 @@ export default function DatePickerModal({
       <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
         <DatePicker
           options={{
-            textHeaderFontSize: sp(16, { min: 12 }),
+            textHeaderFontSize: sp(16),
             mainColor: '#00B49E',
           }}
           onSelectedChange={(date) => {
@@ -70,7 +70,7 @@ export default function DatePickerModal({
               py={ss(12)}
               ml={ls(10)}
               borderRadius={ss(8)}
-              _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
+              _text={{ fontSize: ss(16), color: 'white' }}>
               取消
             </Box>
           </Pressable>

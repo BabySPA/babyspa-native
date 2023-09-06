@@ -75,7 +75,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                   defaultValue={tempCustomer.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempCustomer({
@@ -99,7 +99,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                   defaultValue={tempCustomer.nickname}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempCustomer({
@@ -145,7 +145,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                       showDatePicker();
                     }}>
                     <Row
-                      borderRadius={ss(4)}
+                      borderRadius={4}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
@@ -153,12 +153,12 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                       py={ss(10)}
                       pr={ss(10)}
                       pl={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      <Text color={'#333'} fontSize={sp(16)}>
                         {tempCustomer.birthday}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color='#999'
                       />
                     </Row>
@@ -188,7 +188,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                   }}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -207,7 +207,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
@@ -299,7 +299,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             alignItems={'center'}
             borderColor={'#00B49E'}>
@@ -319,7 +319,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
         <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
           <DatePicker
             options={{
-              textHeaderFontSize: sp(16, { min: 12 }),
+              textHeaderFontSize: sp(16),
               mainColor: '#00B49E',
             }}
             onSelectedChange={(date) => {

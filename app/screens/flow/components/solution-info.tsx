@@ -75,7 +75,7 @@ export default function SolutionInfo({
                 <Box
                   key={idx}
                   borderWidth={1}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderColor={'#7AB6AF'}
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
@@ -198,7 +198,7 @@ export default function SolutionInfo({
                 <Center
                   mt={ss(20)}
                   bgColor={'#fff'}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#5EACA3'}
                   w={ls(120)}
@@ -264,7 +264,7 @@ export default function SolutionInfo({
                 <Box
                   key={idx}
                   borderWidth={1}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderColor={'#7AB6AF'}
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
@@ -362,7 +362,7 @@ export default function SolutionInfo({
                 <Center
                   mt={ss(20)}
                   bgColor={'#fff'}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#5EACA3'}
                   w={ls(120)}

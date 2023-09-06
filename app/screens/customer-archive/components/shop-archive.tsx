@@ -44,7 +44,7 @@ export function ShopArchive(params: ShopArchiveParams) {
                 p={ss(20)}
                 w={ls(262)}
                 h={ss(404)}
-                borderRadius={ss(4)}
+                borderRadius={4}
                 borderWidth={1}
                 borderColor={'#5EACA3'}>
                 <Text color='#C87939' fontSize={sp(16)}>

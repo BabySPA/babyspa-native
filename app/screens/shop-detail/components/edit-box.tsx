@@ -98,7 +98,7 @@ export default function EditBox(params: EditBoxParams) {
                   defaultValue={tempShop.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempShop({
@@ -123,7 +123,7 @@ export default function EditBox(params: EditBoxParams) {
                   defaultValue={tempShop.maintainer}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempShop({
@@ -150,7 +150,7 @@ export default function EditBox(params: EditBoxParams) {
                   defaultValue={tempShop.phoneNumber}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempShop({
@@ -178,19 +178,19 @@ export default function EditBox(params: EditBoxParams) {
                       });
                     }}>
                     <Row
-                      borderRadius={ss(4)}
+                      borderRadius={4}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       px={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      <Text color={'#333'} fontSize={sp(16)}>
                         {tempShop.region || '请选择'}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color='#999'
                       />
                     </Row>
@@ -217,19 +217,19 @@ export default function EditBox(params: EditBoxParams) {
                       });
                     }}>
                     <Row
-                      borderRadius={ss(4)}
+                      borderRadius={4}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       px={ss(10)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      <Text color={'#333'} fontSize={sp(16)}>
                         {tempShop.openingTime || '请选择'}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color='#999'
                       />
                     </Row>
@@ -248,19 +248,19 @@ export default function EditBox(params: EditBoxParams) {
                       });
                     }}>
                     <Row
-                      borderRadius={ss(4)}
+                      borderRadius={4}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       px={ss(10)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      <Text color={'#333'} fontSize={sp(16)}>
                         {tempShop.closingTime || '请选择'}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color='#999'
                       />
                     </Row>
@@ -288,7 +288,7 @@ export default function EditBox(params: EditBoxParams) {
                   }}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -315,7 +315,7 @@ export default function EditBox(params: EditBoxParams) {
                   multiline
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -334,7 +334,7 @@ export default function EditBox(params: EditBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
@@ -387,7 +387,7 @@ export default function EditBox(params: EditBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             alignItems={'center'}
             borderColor={'#00B49E'}>

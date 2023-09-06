@@ -8,6 +8,8 @@ import {
   Row,
   Column,
   Pressable,
+  Center,
+  Image,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
@@ -50,24 +52,30 @@ export default function Collection() {
         ) : (
           <Row
             flex={1}
+            p={ss(40)}
+            pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            flexWrap={'wrap'}
-            p={ss(40)}>
-            {flows.map((flow, idx) => {
-              return (
-                <Pressable
-                  hitSlop={ss(10)}
-                  ml={idx % 2 == 1 ? ss(20) : 0}
-                  key={idx}
-                  onPress={() => {
-                    updateCurrentFlow(flow);
-                    navigation.navigate('CustomerDetail');
-                  }}>
-                  <CustomerItem flow={flow} type={OperateType.Collection} />
-                </Pressable>
-              );
-            })}
+            minH={'100%'}>
+            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
+              {flows.map((flow, idx) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(10)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('CustomerDetail');
+                      }}>
+                      <CustomerItem flow={flow} type={OperateType.Collection} />
+                    </Pressable>
+                  </Center>
+                );
+              })}
+            </Row>
           </Row>
         )}
       </ScrollView>
@@ -147,6 +155,7 @@ function Filter() {
             w={ls(240)}
             minH={ss(40, { max: 18 })}
             p={ss(8)}
+            borderRadius={4}
             defaultValue={collection.searchKeywords}
             placeholderTextColor={'#6E6F73'}
             color={'#333333'}
@@ -198,7 +207,7 @@ function Filter() {
             bgColor={'#E1F6EF'}
             borderWidth={1}
             borderColor={'#15BD8F'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             px={ls(12)}
             py={ss(10)}
             _text={{ fontSize: ss(14), color: '#0C1B16' }}>
@@ -227,7 +236,7 @@ function Filter() {
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -256,7 +265,7 @@ function Filter() {
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -286,7 +295,7 @@ function Filter() {
                     key={status.value}
                     w={ls(90)}
                     h={ss(40)}
-                    borderRadius={ss(4)}
+                    borderRadius={4}
                     borderWidth={1}
                     alignItems={'center'}
                     justifyContent={'center'}
@@ -295,11 +304,23 @@ function Filter() {
                       collection.status === status.value ? '#00B49E' : '#D8D8D8'
                     }>
                     <Text
+                      fontSize={sp(18)}
                       color={
                         collection.status === status.value ? '#00B49E' : '#666'
                       }>
                       {status.label}
                     </Text>
+                    {collection.status === status.value && (
+                      <Image
+                        position={'absolute'}
+                        bottom={0}
+                        right={0}
+                        alt=''
+                        source={require('~/assets/images/border-select.png')}
+                        w={ss(20)}
+                        h={ss(20)}
+                      />
+                    )}
                   </Pressable>
                 );
               })}
@@ -316,7 +337,7 @@ function Filter() {
                   status: FlowStatus.NO_SET,
                 });
               }}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               w={ls(80)}
               h={ss(40)}
@@ -336,7 +357,7 @@ function Filter() {
                   closeLoading();
                 }, 300);
               }}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               borderColor='#00B49E'
               w={ls(80)}

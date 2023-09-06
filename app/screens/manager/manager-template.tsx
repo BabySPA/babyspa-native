@@ -127,7 +127,7 @@ export default function ManagerTemplate({
                       }}>
                       <Row
                         bgColor={'#E1F6EF'}
-                        borderRadius={ss(4)}
+                        borderRadius={4}
                         px={ls(12)}
                         py={ss(10)}
                         borderColor={'#15BD8F'}

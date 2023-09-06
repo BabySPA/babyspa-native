@@ -96,7 +96,7 @@ function Filter() {
             requestArchiveCustomers();
           }}
           buttonHeight={ss(40)}
-          buttonWidth={ls(160)}
+          buttonWidth={ls(140)}
           shops={selectShops}
           defaultButtonText={defaultSelectShop?.name}
         />
@@ -106,6 +106,7 @@ function Filter() {
           ml={ls(20)}
           minH={ss(40, { max: 18 })}
           p={ss(8)}
+          borderRadius={4}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={ss(16)}
@@ -140,7 +141,7 @@ function Filter() {
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
-          borderRadius={ss(4)}
+          borderRadius={4}
           borderColor={'#D8D8D8'}
           borderWidth={1}>
           <Icon
@@ -169,7 +170,7 @@ function Filter() {
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
-          borderRadius={ss(4)}
+          borderRadius={4}
           borderColor={'#D8D8D8'}
           borderWidth={1}>
           <Icon

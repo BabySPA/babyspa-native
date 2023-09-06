@@ -193,6 +193,8 @@ const useFlowStore = create(
       }
 
       useManagerStore.getState().requestGetTemplates();
+      useManagerStore.getState().requestGetRoles();
+      useManagerStore.getState().requestGetShops();
     },
     requestAllCustomers: async (searchKeywords: string) => {
       const params: any = {
@@ -224,10 +226,16 @@ const useFlowStore = create(
       request.get('/flows', { params }).then((res) => {
         const { docs } = res.data;
 
+        const filterDocs = docs.filter(
+          (item: FlowItemResponse) =>
+            item.analyze.status !== AnalyzeStatus.CANCEL &&
+            item.collect.status !== CollectStatus.CANCEL,
+        );
+
         set({
           register: {
             ...get().register,
-            flows: fuzzySearch(docs, searchKeywords, status),
+            flows: fuzzySearch(filterDocs, searchKeywords, status),
           },
         });
       });
@@ -292,11 +300,15 @@ const useFlowStore = create(
 
       request.get('/flows', { params }).then((res) => {
         const { docs } = res.data;
-
+        const filterDocs = docs.filter(
+          (item: FlowItemResponse) =>
+            item.analyze.status !== AnalyzeStatus.CANCEL &&
+            item.register.status !== RegisterStatus.CANCEL,
+        );
         set({
           collection: {
             ...get().collection,
-            flows: fuzzySearch(docs, searchKeywords, status),
+            flows: fuzzySearch(filterDocs, searchKeywords, status),
           },
         });
       });
@@ -355,10 +367,15 @@ const useFlowStore = create(
       request.get('/flows', { params }).then((res) => {
         const { docs } = res.data;
 
+        const filterDocs = docs.filter(
+          (item: FlowItemResponse) =>
+            item.collect.status !== CollectStatus.CANCEL &&
+            item.register.status !== RegisterStatus.CANCEL,
+        );
         set({
           analyze: {
             ...get().analyze,
-            flows: fuzzySearch(docs, searchKeywords, status),
+            flows: fuzzySearch(filterDocs, searchKeywords, status),
           },
         });
       });

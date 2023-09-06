@@ -120,16 +120,14 @@ export default function CustomerArchive({
         bgColor={'#F6F6FA'}
         flex={1}
         p={ss(10)}
-        safeAreaBottom
-      >
+        safeAreaBottom>
         <Row
           py={ss(20)}
           px={ss(40)}
           bgColor='white'
           borderRadius={ss(10)}
           justifyContent={'space-between'}
-          alignItems={'center'}
-        >
+          alignItems={'center'}>
           <Row alignItems={'center'}>
             <Image
               style={{ width: ss(60), height: ss(60) }}
@@ -169,8 +167,7 @@ export default function CustomerArchive({
               onPress={() => {
                 // 删除客户
                 setShowDeleteDialog(true);
-              }}
-            >
+              }}>
               <Row alignItems={'center'}>
                 <Icon
                   as={<AntDesign name='delete' />}
@@ -208,8 +205,7 @@ export default function CustomerArchive({
               ml={ls(40)}
               onPress={() => {
                 navigation.navigate('AddNewCustomer');
-              }}
-            >
+              }}>
               <Row alignItems={'center'}>
                 <Icon
                   as={<FontAwesome name='edit' />}
@@ -229,16 +225,14 @@ export default function CustomerArchive({
           bgColor='white'
           borderRadius={ss(10)}
           flex={1}
-          p={ss(40)}
-        >
+          p={ss(40)}>
           <Row alignItems={'center'} justifyContent={'space-between'}>
             <Container>
               <Row
-                borderRadius={ss(4)}
+                borderRadius={4}
                 borderColor={'#99A9BF'}
                 borderWidth={1}
-                borderStyle={'solid'}
-              >
+                borderStyle={'solid'}>
                 {configs.map((item, idx) => {
                   return (
                     <Pressable
@@ -246,8 +240,7 @@ export default function CustomerArchive({
                       key={item.key}
                       onPress={() => {
                         setSelectedFragment(idx);
-                      }}
-                    >
+                      }}>
                       <Box
                         minW={ss(120)}
                         px={ss(20)}
@@ -258,8 +251,7 @@ export default function CustomerArchive({
                             : '#fff'
                         }
                         borderRightWidth={idx == configs.length - 1 ? 0 : 1}
-                        borderRightColor={'#99A9BF'}
-                      >
+                        borderRightColor={'#99A9BF'}>
                         <Text
                           fontSize={sp(20)}
                           fontWeight={600}
@@ -267,8 +259,7 @@ export default function CustomerArchive({
                             configs[selectFragment].key == item.key
                               ? '#fff'
                               : '#333'
-                          }
-                        >
+                          }>
                           {item.text}
                         </Text>
                       </Box>
@@ -290,11 +281,10 @@ export default function CustomerArchive({
                 }}
                 bgColor={'rgba(0, 180, 158, 0.10)'}
                 borderColor={'#00B49E'}
-                borderRadius={ss(4)}
+                borderRadius={4}
                 borderWidth={1}
                 px={ls(16)}
-                py={ss(8)}
-              >
+                py={ss(8)}>
                 <Text color='#03CBB2' fontSize={sp(14)}>
                   新建
                 </Text>

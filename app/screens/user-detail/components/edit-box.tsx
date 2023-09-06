@@ -18,7 +18,6 @@ import useManagerStore from '~/app/stores/manager';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import { Shop, ShopType } from '~/app/stores/manager/type';
 import SelectRole from '~/app/components/select-role';
-import useAuthStore from '~/app/stores/auth';
 import { RadioBox } from '~/app/components/radio';
 
 interface EditBoxParams {
@@ -35,7 +34,6 @@ export default function EditBox(params: EditBoxParams) {
     requestGetUsers,
     requestPatchUser,
     setCurrentUser,
-    shops,
   } = useManagerStore();
 
   const [tempUser, setTempUser] = useState(currentUser);
@@ -99,7 +97,7 @@ export default function EditBox(params: EditBoxParams) {
                   defaultValue={tempUser.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempUser({
@@ -203,7 +201,7 @@ export default function EditBox(params: EditBoxParams) {
                   }}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -223,7 +221,7 @@ export default function EditBox(params: EditBoxParams) {
                   isReadOnly
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -250,7 +248,7 @@ export default function EditBox(params: EditBoxParams) {
                   }}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -277,7 +275,7 @@ export default function EditBox(params: EditBoxParams) {
                   multiline
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
@@ -296,7 +294,7 @@ export default function EditBox(params: EditBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
@@ -353,7 +351,7 @@ export default function EditBox(params: EditBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             alignItems={'center'}
             borderColor={'#00B49E'}>

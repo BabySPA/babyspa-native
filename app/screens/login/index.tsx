@@ -41,13 +41,23 @@ export default function LoginScreen({
         })
         .catch((error) => {
           console.log(error);
-          toast.show({
-            variant: 'left-accent',
-            placement: 'top',
-            title: '登录失败',
-            description: '请查看用户名/密码是否正确',
-            bg: 'danger.500',
-          });
+          if (error.code == 403) {
+            toast.show({
+              variant: 'left-accent',
+              placement: 'top',
+              title: '登录失败',
+              description: error.message,
+              bg: 'danger.500',
+            });
+          } else {
+            toast.show({
+              variant: 'left-accent',
+              placement: 'top',
+              title: '登录失败',
+              description: '请查看用户名/密码是否正确',
+              bg: 'danger.500',
+            });
+          }
         })
         .finally(() => setLoading(false));
     }

@@ -61,7 +61,7 @@ export function DialogModal({
                   onClose();
                 }}>
                 <Center
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -78,7 +78,7 @@ export function DialogModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -164,6 +164,7 @@ export function TemplateModal({
             />
             <Text
               color={'#999'}
+              fontSize={sp(14)}
               style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
               {templateText.length}/300
             </Text>
@@ -227,7 +228,7 @@ export function TemplateModal({
                             py={ss(7)}
                             mr={ls(10)}
                             mb={ss(10)}
-                            borderRadius={ss(2)}
+                            borderRadius={2}
                             borderColor={'#D8D8D8'}
                             borderWidth={1}>
                             <Text fontSize={sp(18)} color='#000'>
@@ -250,7 +251,7 @@ export function TemplateModal({
             onPress={() => {
               onClose();
             }}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             w={ls(100)}
             h={ss(46)}
@@ -266,7 +267,7 @@ export function TemplateModal({
             onPress={() => {
               onConfirm(templateText);
             }}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor='#00B49E'
             w={ls(100)}
@@ -355,7 +356,7 @@ export function GrowthCurveModal({
                   onClose();
                 }}>
                 <Center
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -375,7 +376,7 @@ export function GrowthCurveModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -481,7 +482,7 @@ export function ChangePasswordModal({
                   onClose();
                 }}>
                 <Center
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -510,7 +511,7 @@ export function ChangePasswordModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -594,7 +595,7 @@ export function NewTemplateModalModal({
                   onClose();
                 }}>
                 <Center
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -611,7 +612,7 @@ export function NewTemplateModalModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={ss(4)}
+                  borderRadius={4}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}

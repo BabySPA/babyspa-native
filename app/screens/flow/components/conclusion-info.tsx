@@ -133,7 +133,7 @@ export default function ConclusionInfo({
                       }>
                       <Icon
                         as={<AntDesign name='appstore1' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color={
                           selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                         }
@@ -173,7 +173,7 @@ export default function ConclusionInfo({
                     py={ss(7)}
                     mr={ls(10)}
                     mb={ss(10)}
-                    borderRadius={ss(2)}
+                    borderRadius={2}
                     borderColor={'#D8D8D8'}
                     borderWidth={1}>
                     <Text fontSize={sp(18)} color='#000'>

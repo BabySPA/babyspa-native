@@ -237,6 +237,7 @@ function Filter({
           mr={ss(40)}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
+          borderRadius={4}
           fontSize={ss(16)}
           InputLeftElement={
             <Icon
@@ -260,7 +261,7 @@ function Filter({
         }}>
         <Row
           bgColor={'#E1F6EF'}
-          borderRadius={ss(4)}
+          borderRadius={4}
           px={ls(26)}
           py={ss(10)}
           borderColor={'#15BD8F'}

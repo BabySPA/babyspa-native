@@ -68,20 +68,13 @@ export default function FlowInfo({
               hitSlop={ss(10)}
               onPress={() => {
                 setIsEvaluateCardDialogShow(true);
-              }}
-            >
-              <Row
-                bgColor={'white'}
-                borderRadius={ss(4)}
-                px={ls(26)}
-                py={ss(10)}
-              >
+              }}>
+              <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
                 {loading && <Spinner mr={ls(5)} color='emerald.500' />}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
-                  fontSize={sp(14, { min: 12 })}
-                >
+                  fontSize={sp(14, { min: 12 })}>
                   评价
                 </Text>
               </Row>

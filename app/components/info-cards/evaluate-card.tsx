@@ -47,8 +47,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         hitSlop={ss(10)}
         onPress={() => {
           onClose?.();
-        }}
-      >
+        }}>
         <Box
           bgColor={'#D8D8D8'}
           px={ls(26)}
@@ -56,8 +55,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderWidth={1}
           borderColor={'#CCCCCC'}
           borderRadius={ss(8)}
-          _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-        >
+          _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}>
           取消
         </Box>
       </Pressable>
@@ -66,8 +64,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         onPress={() => {
           evaluateNow();
           onClose?.();
-        }}
-      >
+        }}>
         <Row
           alignItems={'center'}
           bgColor={'rgba(0, 180, 158, 0.10)'}
@@ -76,8 +73,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           ml={ss(20)}
           borderRadius={ss(8)}
           borderWidth={1}
-          borderColor={'#00B49E'}
-        >
+          borderColor={'#00B49E'}>
           {loading && <Spinner mr={ls(5)} color='emerald.500' />}
           <Text fontSize={ss(16)} color={'#00B49E'}>
             确定
@@ -113,8 +109,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         hitSlop={ss(10)}
         onPress={() => {
           evaluateNow();
-        }}
-      >
+        }}>
         <Row
           alignItems={'center'}
           opacity={templateEvaluate?.score && templateEvaluate.remark ? 1 : 0.6}
@@ -124,8 +119,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           ml={ss(20)}
           borderRadius={ss(8)}
           borderWidth={1}
-          borderColor={'#00B49E'}
-        >
+          borderColor={'#00B49E'}>
           {loading && <Spinner mr={ls(5)} color='emerald.500' />}
           <Text fontSize={ss(16)} color={'#00B49E'}>
             确定
@@ -140,7 +134,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
       <BoxTitle title='评价反馈' />
       <Divider color={'#DFE1DE'} my={ss(14)} />
       {canEdit && (
-        <Box bgColor={'#FEFAEF'} borderRadius={ss(4)} px={ss(16)} py={ss(10)}>
+        <Box bgColor={'#FEFAEF'} borderRadius={4} px={ss(16)} py={ss(10)}>
           <Text fontSize={sp(18)} color='#A39384'>
             您可以对本次信息处理进行评价哦
           </Text>
@@ -162,8 +156,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
                       score: item,
                     });
                   }
-                }}
-              >
+                }}>
                 <Image
                   source={
                     item <= (templateEvaluate?.score || 3)
@@ -239,8 +232,7 @@ export function EvaluateCardDialog({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-      }}
-    >
+      }}>
       <EvaluateCard
         type={'dialog'}
         canEdit={true}

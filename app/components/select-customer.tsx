@@ -28,19 +28,18 @@ interface SelectCustomerParams {
   style?: StyleProp<ViewStyle>;
 }
 
-function CustomerItem({ customer }: { customer: Customer }) {
+function SelectCustomerItem({ customer }: { customer: Customer }) {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   return (
     <Row
-      borderRadius={ss(4)}
-      borderWidth={1}
+      borderRadius={4}
+      borderWidth={ss(1)}
       borderColor={'#15BD8F'}
       w={'100%'}
       mb={ss(30)}
       p={ss(20)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Row>
         <Image
           style={{ width: ss(60), height: ss(60) }}
@@ -53,7 +52,13 @@ function CustomerItem({ customer }: { customer: Customer }) {
 
         <Flex ml={ls(20)}>
           <Row alignItems={'center'}>
-            <Text color='#333' fontSize={sp(14)} fontWeight={400}>
+            <Text
+              color='#333'
+              fontSize={sp(14)}
+              fontWeight={400}
+              maxW={ls(140)}
+              numberOfLines={1}
+              ellipsizeMode='tail'>
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -71,31 +76,25 @@ function CustomerItem({ customer }: { customer: Customer }) {
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(6)}
-            >
+              ml={ls(6)}>
               {ageText}
             </Text>
             <Text
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(20)}
-            >
+              ml={ls(20)}>
               {customer.phoneNumber}
             </Text>
           </Row>
           <Row alignItems={'center'} mt={ss(6)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}
-              size={ss(12)}
-              color={'#C87939'}
+              size={ss(14)}
+              color={'#F7BA2A'}
+              mt={0.5}
             />
-            <Text
-              color={'#C87939'}
-              fontWeight={400}
-              fontSize={sp(12)}
-              ml={ls(5)}
-            >
+            <Text color={'#F7BA2A'} fontWeight={400} fontSize={sp(12)}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>
@@ -120,15 +119,16 @@ export default function SelectCustomer(params: SelectCustomerParams) {
       flex={1}
       bgColor={'#fff'}
       style={style}
-      p={ss(20)}
-      borderRadius={ss(10)}
-    >
-      <Flex>
+      py={ss(20)}
+      borderRadius={ss(10)}>
+      <Box mx={ls(20)}>
         <BoxTitle title='选择客户' />
+      </Box>
 
+      <Flex mx={ls(40)}>
         <Input
           autoCorrect={false}
-          mt={ss(30)}
+          mt={ss(20)}
           w={'100%'}
           h={ss(50)}
           p={ss(10)}
@@ -163,9 +163,8 @@ export default function SelectCustomer(params: SelectCustomerParams) {
                       ...currentFlow,
                       customer: item,
                     });
-                  }}
-                >
-                  <CustomerItem customer={item} />
+                  }}>
+                  <SelectCustomerItem customer={item} />
                 </Pressable>
               );
             }}

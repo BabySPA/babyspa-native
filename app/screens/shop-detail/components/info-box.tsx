@@ -54,7 +54,7 @@ export default function InfoBox(params: InfoBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
@@ -72,7 +72,7 @@ export default function InfoBox(params: InfoBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>

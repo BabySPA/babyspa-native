@@ -379,7 +379,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           defaultButtonText={defaultSelectShop?.name}
           buttonHeight={ss(40)}
-          buttonWidth={ls(160)}
+          buttonWidth={ls(140)}
           shops={selectShops}
         />
         <Pressable
@@ -397,7 +397,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
-          borderRadius={ss(4)}
+          borderRadius={4}
           borderColor={'#D8D8D8'}
           borderWidth={1}>
           <Icon
@@ -426,7 +426,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
-          borderRadius={ss(4)}
+          borderRadius={4}
           borderColor={'#D8D8D8'}
           borderWidth={1}>
           <Icon

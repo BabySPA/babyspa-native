@@ -3,7 +3,7 @@ import { I18nManager, Dimensions } from 'react-native';
 import { calculateDropdownHeight } from '../helpers/calculateDropdownHeight';
 import { useKeyboardRemainingScreenHeight } from './useKeyboardRemainingScreenHeight';
 const { height } = Dimensions.get('window');
-
+import { ss } from '../../../utils/style';
 export const useLayoutDropdown = (data, dropdownStyle, rowStyle, search) => {
   const [isVisible, setIsVisible] = useState(false); // dropdown visible ?
   const [buttonLayout, setButtonLayout] = useState(null);
@@ -20,7 +20,7 @@ export const useLayoutDropdown = (data, dropdownStyle, rowStyle, search) => {
   const [dropdownWIDTH, setDropdownWIDTH] = useState(0); // dropdown width
   const remainigHeightAvoidKeyboard = useKeyboardRemainingScreenHeight();
   const safeDropdownViewUnderKeyboard =
-    rowStyle && rowStyle.height ? rowStyle.height * 3 : 50 * 3;
+    rowStyle && rowStyle.height ? rowStyle.height * 3 : ss(50) * 3;
 
   useEffect(() => {
     setDropdownHEIGHT(

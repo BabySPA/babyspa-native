@@ -12,6 +12,7 @@ import {
   useToast,
   Spinner,
   ScrollView,
+  Center,
 } from 'native-base';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
@@ -28,6 +29,7 @@ import useManagerStore from '~/app/stores/manager';
 import { TemplateGroupKeys } from '~/app/constants';
 import { RadioBox } from '~/app/components/radio';
 import { RegisterStatus } from '~/app/stores/flow/type';
+import { getAge } from '~/app/utils';
 
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -58,7 +60,7 @@ export default function EditBox(params: EditBoxParams) {
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
 
   const { templates, getTemplateGroups } = useManagerStore();
-
+  const age = getAge(tempFlow.customer.birthday);
   return (
     <Column
       flex={1}
@@ -68,7 +70,7 @@ export default function EditBox(params: EditBoxParams) {
       justifyContent={'space-between'}>
       <Column>
         <BoxTitle title='客户信息' />
-        <Box mt={ss(30)} px={ls(50)}>
+        <Box mt={ss(20)} px={ls(50)}>
           <Row alignItems={'center'}>
             <FormBox
               title='姓名'
@@ -77,14 +79,14 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Input
                   autoCorrect={false}
-                  w={ls(380)}
+                  w={ls(360)}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
                   defaultValue={tempFlow.customer.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempFlow({
@@ -104,14 +106,14 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Input
                   autoCorrect={false}
-                  w={ls(380)}
+                  w={ls(360)}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
                   defaultValue={tempFlow.customer.nickname}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                   onChangeText={(text) => {
                     setTempFlow({
@@ -126,7 +128,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
               required
               title='性别'
@@ -156,14 +158,14 @@ export default function EditBox(params: EditBoxParams) {
               style={{ flex: 1 }}
               required
               form={
-                <Box w={ls(380)}>
+                <Box w={ls(360)}>
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
                       showDatePicker();
                     }}>
                     <Row
-                      borderRadius={ss(4)}
+                      borderRadius={4}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
@@ -171,12 +173,12 @@ export default function EditBox(params: EditBoxParams) {
                       py={ss(10)}
                       pr={ss(10)}
                       pl={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                      <Text color={'#333'} fontSize={sp(16)}>
                         {tempFlow.customer.birthday}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color='#999'
                       />
                     </Row>
@@ -185,7 +187,42 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(20)}>
+            <FormBox
+              title='年龄'
+              style={{ flex: 1 }}
+              form={
+                <Row alignItems={'center'}>
+                  <Center
+                    borderRadius={4}
+                    borderWidth={1}
+                    h={ss(48)}
+                    w={ls(72)}
+                    borderColor={'#D8D8D8'}>
+                    <Text fontSize={sp(20)} color={'#333'}>
+                      {age?.year}
+                    </Text>
+                  </Center>
+                  <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                    岁
+                  </Text>
+                  <Center
+                    ml={ls(20)}
+                    borderRadius={4}
+                    borderWidth={1}
+                    h={ss(48)}
+                    w={ls(72)}
+                    borderColor={'#D8D8D8'}>
+                    <Text fontSize={sp(20)} color={'#333'}>
+                      {age?.month}
+                    </Text>
+                  </Center>
+                  <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                    月
+                  </Text>
+                </Row>
+              }
+            />
             <FormBox
               required
               title='电话'
@@ -193,7 +230,7 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Input
                   autoCorrect={false}
-                  w={ls(380)}
+                  w={ls(360)}
                   defaultValue={tempFlow.customer.phoneNumber}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
@@ -209,24 +246,28 @@ export default function EditBox(params: EditBoxParams) {
                   }}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
-                  fontSize={sp(16, { min: 12 })}
+                  fontSize={sp(16)}
                   placeholder='请输入'
                 />
               }
             />
+          </Row>
 
+          <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              required
               title='过敏原'
               style={{ flex: 1 }}
               form={
-                <Box w={'70%'}>
+                <Box>
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
                       setIsOpenTemplatePicker(true);
                     }}>
                     <Row
-                      borderRadius={ss(4)}
+                      w={ls(360)}
+                      borderRadius={4}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
@@ -235,14 +276,15 @@ export default function EditBox(params: EditBoxParams) {
                       pl={ss(20)}
                       pr={ss(8)}>
                       <Text
+                        numberOfLines={1}
+                        ellipsizeMode='tail'
                         color={'#333'}
-                        fontSize={sp(16, { min: 12 })}
-                        maxW={ls(240)}>
+                        fontSize={sp(16)}>
                         {tempFlow.collect.healthInfo.allergy || '请选择或输入'}
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18, { min: 15 })}
+                        size={ss(18)}
                         color='#999'
                       />
                     </Row>
@@ -272,14 +314,12 @@ export default function EditBox(params: EditBoxParams) {
                 </Box>
               }
             />
-          </Row>
-
-          <Row alignItems={'center'} mt={ss(40)}>
             <FormBox
               required
               title='理疗师'
+              style={{ flex: 1 }}
               form={
-                <Box w={ls(380)}>
+                <Box w={ls(360)}>
                   <SelectOperator
                     operators={operators}
                     onSelect={(selectedItem, index) => {
@@ -303,7 +343,7 @@ export default function EditBox(params: EditBoxParams) {
         </Box>
       </Column>
 
-      <Row justifyContent={'center'} mb={ss(40)}>
+      <Row justifyContent={'center'} mb={ss(20)}>
         <Pressable
           hitSlop={ss(10)}
           onPress={() => {
@@ -313,7 +353,7 @@ export default function EditBox(params: EditBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
@@ -349,6 +389,12 @@ export default function EditBox(params: EditBoxParams) {
 
             if (!tempFlow.customer.birthday) {
               toastAlert(toast, 'error', '请选择生日！');
+              setLoading(false);
+              return;
+            }
+
+            if (!tempFlow.collect.healthInfo.allergy) {
+              toastAlert(toast, 'error', '请选择或输入过敏原');
               setLoading(false);
               return;
             }
@@ -395,7 +441,7 @@ export default function EditBox(params: EditBoxParams) {
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={ss(4)}
+            borderRadius={4}
             borderWidth={1}
             alignItems={'center'}
             borderColor={'#00B49E'}>
@@ -415,7 +461,7 @@ export default function EditBox(params: EditBoxParams) {
         <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
           <DatePicker
             options={{
-              textHeaderFontSize: sp(16, { min: 12 }),
+              textHeaderFontSize: sp(16),
               mainColor: '#00B49E',
             }}
             onSelectedChange={(date) => {

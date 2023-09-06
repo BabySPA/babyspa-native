@@ -9,6 +9,8 @@ import {
   Column,
   Pressable,
   Switch,
+  Center,
+  Image,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
@@ -51,27 +53,30 @@ export default function Analyze() {
         ) : (
           <Row
             flex={1}
+            p={ss(40)}
+            pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            flexWrap={'wrap'}
-            p={ss(40)}>
-            {flows.map((flow, idx) => {
-              return (
-                <Pressable
-                  hitSlop={ss(10)}
-                  key={idx}
-                  onPress={() => {
-                    if (flow.analyze.status !== AnalyzeStatus.NOT_SET) {
-                      updateCurrentFlow(flow);
-                      navigation.navigate('FlowInfo', { from: 'analyze' });
-                    }
-                  }}>
-                  <Box ml={idx % 2 == 1 ? ss(20) : 0}>
+            minH={'100%'}>
+            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
+              {flows.map((flow, idx) => (
+                <Center width={'50%'} key={idx}>
+                  <Pressable
+                    ml={idx % 2 == 1 ? ss(20) : 0}
+                    mr={idx % 2 == 0 ? ss(20) : 0}
+                    mb={ss(40)}
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      if (flow.analyze.status !== AnalyzeStatus.NOT_SET) {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('FlowInfo', { from: 'analyze' });
+                      }
+                    }}>
                     <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
-                  </Box>
-                </Pressable>
-              );
-            })}
+                  </Pressable>
+                </Center>
+              ))}
+            </Row>
           </Row>
         )}
       </ScrollView>
@@ -140,6 +145,7 @@ function Filter() {
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={ss(16)}
+          borderRadius={4}
           onChangeText={debounce((text) => {
             updateAnalyzeFilter({
               searchKeywords: text,
@@ -195,7 +201,7 @@ function Filter() {
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -224,7 +230,7 @@ function Filter() {
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -254,7 +260,7 @@ function Filter() {
                     key={status.value}
                     w={ls(90)}
                     h={ss(40)}
-                    borderRadius={ss(4)}
+                    borderRadius={4}
                     borderWidth={1}
                     alignItems={'center'}
                     justifyContent={'center'}
@@ -263,11 +269,23 @@ function Filter() {
                       analyze.status === status.value ? '#00B49E' : '#D8D8D8'
                     }>
                     <Text
+                      fontSize={sp(18)}
                       color={
                         analyze.status === status.value ? '#00B49E' : '#666'
                       }>
                       {status.label}
                     </Text>
+                    {analyze.status === status.value && (
+                      <Image
+                        position={'absolute'}
+                        bottom={0}
+                        right={0}
+                        alt=''
+                        source={require('~/assets/images/border-select.png')}
+                        w={ss(20)}
+                        h={ss(20)}
+                      />
+                    )}
                   </Pressable>
                 );
               })}
@@ -284,7 +302,7 @@ function Filter() {
                   status: FlowStatus.NO_SET,
                 });
               }}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               w={ls(80)}
               h={ss(40)}
@@ -304,7 +322,7 @@ function Filter() {
                   closeLoading();
                 }, 300);
               }}
-              borderRadius={ss(4)}
+              borderRadius={4}
               borderWidth={1}
               borderColor='#00B49E'
               w={ls(80)}

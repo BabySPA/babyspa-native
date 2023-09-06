@@ -14,7 +14,11 @@ export function FormBox(props: FormBoxParams) {
   const { required, form, title, style } = props;
   return (
     <Row style={style} minH={ls(48)} alignItems={'center'}>
-      <Row alignItems={'center'} mr={ls(30)} justifyItems={'flex-end'}>
+      <Row
+        alignItems={'center'}
+        mr={ls(30)}
+        justifyItems={'flex-end'}
+        w={ls(80)}>
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>

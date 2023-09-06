@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
-
+import { ss, ls, sp } from '../../utils/style';
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
@@ -13,16 +13,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#EFEFEF',
     width: width / 2,
-    height: 50,
-    paddingHorizontal: 8,
+    height: ss(50),
+    paddingHorizontal: ls(8),
     overflow: 'hidden',
   },
   dropdownButtonText: {
     flex: 1,
-    fontSize: 18,
+    fontSize: sp(18),
     color: '#000000',
     textAlign: 'center',
-    marginHorizontal: 8,
+    marginHorizontal: ls(8),
   },
   dropdownCustomizedButtonParent: {
     flex: 1,
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   //////////////////////////////////////
   dropdownRow: {
     flex: 1,
-    height: 50,
+    height: ss(50),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,10 +40,10 @@ const styles = StyleSheet.create({
   },
   dropdownRowText: {
     flex: 1,
-    fontSize: 18,
+    fontSize: sp(18),
     color: '#000000',
     textAlign: 'center',
-    marginHorizontal: 8,
+    marginHorizontal: ls(8),
   },
   dropdownCustomizedRowParent: {
     flex: 1,

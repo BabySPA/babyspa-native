@@ -156,9 +156,12 @@ export default function FlowScreen({
                 navigation.navigate('CustomerArchive');
               }}>
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
-                <Text color='#03CBB2'>历史记录</Text>
+                <Text color='#03CBB2' fontSize={sp(12)}>
+                  历史记录
+                </Text>
                 <Icon
-                  as={<AntDesign name='doubleright' size={ss(20)} />}
+                  size={ss(12)}
+                  as={<AntDesign name='doubleright' />}
                   color={'#03CBB2'}
                 />
               </Row>
@@ -216,16 +219,14 @@ export default function FlowScreen({
           alignItems={'center'}
           justifyContent={'space-between'}>
           <Container>
-            <Row
-              borderRadius={ss(4)}
-              borderColor={'#99A9BF'}
-              borderWidth={1}
-              borderRightWidth={1}>
+            <Row borderRadius={4} borderColor={'#99A9BF'} borderWidth={ss(1)}>
               {configs.map((item, idx) => {
                 return (
                   <Pressable
                     hitSlop={ss(10)}
                     key={item.key}
+                    borderRightWidth={idx == configs.length - 1 ? 0 : 1}
+                    borderRightColor={'#99A9BF'}
                     onPress={() => {
                       setSelectedConfig(item);
                     }}>
@@ -239,14 +240,16 @@ export default function FlowScreen({
                           : item.disabled
                           ? '#F1F1F1'
                           : 'transparent'
-                      }
-                      borderRightWidth={idx == configs.length - 1 ? 1 : 0}
-                      borderRightColor={'#99A9BF'}>
+                      }>
                       <Text
                         fontSize={sp(20)}
                         fontWeight={600}
                         color={
-                          selectedConfig.key == item.key ? '#fff' : '#333'
+                          selectedConfig.key == item.key
+                            ? '#fff'
+                            : item.disabled
+                            ? '#999'
+                            : '#333'
                         }>
                         {item.text}
                       </Text>
@@ -271,7 +274,7 @@ export default function FlowScreen({
                     borderWidth={1}
                     borderColor={'#F3601E'}
                     alignItems={'center'}
-                    borderRadius={ss(4)}>
+                    borderRadius={4}>
                     {closeLoading && <Spinner mr={ls(5)} color='emerald.500' />}
                     <Text color='#F3601E' fontSize={sp(14)}>
                       结束
@@ -323,7 +326,7 @@ export default function FlowScreen({
                     bgColor={'rgba(3, 203, 178, 0.20)'}
                     borderWidth={1}
                     borderColor={'#03CBB2'}
-                    borderRadius={ss(4)}>
+                    borderRadius={4}>
                     <Text color='#0C1B16' fontSize={sp(14)}>
                       提交分析
                     </Text>
@@ -345,7 +348,7 @@ export default function FlowScreen({
                   borderWidth={1}
                   borderColor={'#F3601E'}
                   alignItems={'center'}
-                  borderRadius={ss(4)}>
+                  borderRadius={4}>
                   {closeLoading && <Spinner mr={ls(5)} color='#F3601E' />}
                   <Text color='#F3601E' fontSize={sp(14)}>
                     结束
@@ -395,7 +398,7 @@ export default function FlowScreen({
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
-                  borderRadius={ss(4)}>
+                  borderRadius={4}>
                   {finishLoading && <Spinner mr={ls(5)} color='emerald.500' />}
                   <Text color='#0C1B16' fontSize={sp(14)}>
                     完成

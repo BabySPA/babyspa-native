@@ -21,7 +21,6 @@ export default function NavigationBar(props: NavigationBarParams) {
   const navigation = useNavigation();
   return (
     <Row
-      safeAreaTop
       safeAreaLeft
       safeAreaRight
       bg={{
@@ -34,15 +33,13 @@ export default function NavigationBar(props: NavigationBarParams) {
       alignItems={'center'}
       justifyContent={'space-between'}
       px={ss(20)}
-      py={ss(20)}
-    >
+      py={ss(20)}>
       <Pressable
         hitSlop={ss(10)}
         onPress={() => {
           if (onBackIntercept()) return;
           navigation.goBack();
-        }}
-      >
+        }}>
         <Row alignItems={'center'}>
           {hasLeftIcon && (
             <Icon

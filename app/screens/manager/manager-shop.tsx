@@ -37,8 +37,7 @@ export default function ManagerShop({
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}
-        >
+          justifyContent={'space-around'}>
           <Row w={ls(150)}>
             <Text fontSize={sp(18)} color={'#333'}>
               门店名称
@@ -87,8 +86,7 @@ export default function ManagerShop({
               borderBottomWidth={1}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
-              justifyContent={'space-around'}
-            >
+              justifyContent={'space-around'}>
               <Row w={ls(150)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {shop.name}
@@ -126,8 +124,7 @@ export default function ManagerShop({
                     onPress={() => {
                       setCurrentShop(shop);
                       navigation.navigate('ShopDetail', { type: 'detail' });
-                    }}
-                  >
+                    }}>
                     <Row alignItems={'center'}>
                       <Image
                         source={require('~/assets/images/list-detail.png')}
@@ -145,8 +142,7 @@ export default function ManagerShop({
                     onPress={() => {
                       setCurrentShop(shop);
                       navigation.navigate('ShopDetail', { type: 'edit' });
-                    }}
-                  >
+                    }}>
                     <Row alignItems={'center'}>
                       <Image
                         source={require('~/assets/images/list-edit.png')}
@@ -186,8 +182,7 @@ export default function ManagerShop({
         bgColor={'#F6F6FA'}
         flex={1}
         p={ss(10)}
-        safeAreaBottom
-      >
+        safeAreaBottom>
         <Filter />
         <Box mt={ss(10)}>
           <List />
@@ -206,8 +201,7 @@ function Filter() {
       borderRadius={ss(10)}
       justifyContent={'space-between'}
       alignItems={'center'}
-      px={ls(40)}
-    >
+      px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
           autoCorrect={false}
@@ -217,6 +211,7 @@ function Filter() {
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={ss(16)}
+          borderRadius={4}
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
@@ -236,16 +231,14 @@ function Filter() {
         onPress={() => {
           setCurrentShop(DefaultShop);
           navigation.navigate('ShopDetail', { type: 'edit' });
-        }}
-      >
+        }}>
         <Row
           bgColor={'#E1F6EF'}
-          borderRadius={ss(4)}
+          borderRadius={4}
           px={ls(26)}
           py={ss(10)}
           borderColor={'#15BD8F'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
             新增门店
           </Text>

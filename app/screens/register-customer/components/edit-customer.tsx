@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Column,
   Flex,
   Icon,
@@ -22,6 +23,7 @@ import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
 import { TemplateGroupKeys } from '~/app/constants';
 import { RadioBox } from '~/app/components/radio';
+import { getAge } from '~/app/utils';
 
 interface EditCustomerParams {
   style?: StyleProp<ViewStyle>;
@@ -43,14 +45,14 @@ export default function EditCustomer(params: EditCustomerParams) {
 
   const { style = {} } = params;
 
+  const age = getAge(currentFlow.customer.birthday);
   return (
     <ScrollView
       flex={1}
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={ss(4)}
-    >
+      borderRadius={4}>
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -67,7 +69,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 defaultValue={currentFlow.customer.name}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
-                fontSize={sp(16, { min: 12 })}
+                fontSize={sp(16)}
                 placeholder='请输入'
                 onChangeText={(text) => {
                   updateCurrentFlow({
@@ -103,12 +105,13 @@ export default function EditCustomer(params: EditCustomerParams) {
                   });
                 }}
                 color={'#333333'}
-                fontSize={sp(16, { min: 12 })}
+                fontSize={sp(16)}
                 placeholder='请输入'
               />
             }
           />
           <FormBox
+            required
             title='性别'
             style={{ marginTop: ss(20) }}
             form={
@@ -141,29 +144,62 @@ export default function EditCustomer(params: EditCustomerParams) {
                   hitSlop={ss(10)}
                   onPress={() => {
                     showDatePicker();
-                  }}
-                >
+                  }}>
                   <Row
-                    borderRadius={ss(4)}
+                    borderRadius={4}
                     justifyContent={'space-between'}
                     alignItems={'center'}
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
-                    pr={ss(8)}
-                  >
-                    <Text color={'#333'} fontSize={sp(16, { min: 12 })}>
+                    pr={ss(8)}>
+                    <Text color={'#333'} fontSize={sp(16)}>
                       {currentFlow.customer.birthday || '请选择'}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
-                      size={ss(18, { min: 15 })}
+                      size={ss(18)}
                       color='#999'
                     />
                   </Row>
                 </Pressable>
               </Box>
+            }
+          />
+          <FormBox
+            title='年龄'
+            style={{ marginTop: ss(20) }}
+            form={
+              <Row w={'70%'} alignItems={'center'}>
+                <Center
+                  borderRadius={4}
+                  borderWidth={1}
+                  h={ss(48)}
+                  w={ls(72)}
+                  borderColor={'#D8D8D8'}>
+                  <Text fontSize={sp(20)} color={'#333'}>
+                    {age?.year}
+                  </Text>
+                </Center>
+                <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                  岁
+                </Text>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={4}
+                  borderWidth={1}
+                  h={ss(48)}
+                  w={ls(72)}
+                  borderColor={'#D8D8D8'}>
+                  <Text fontSize={sp(20)} color={'#333'}>
+                    {age?.month}
+                  </Text>
+                </Center>
+                <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                  月
+                </Text>
+              </Row>
             }
           />
           <FormBox
@@ -189,42 +225,42 @@ export default function EditCustomer(params: EditCustomerParams) {
                 }}
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
-                fontSize={sp(16, { min: 12 })}
+                fontSize={sp(16)}
                 placeholder='请输入'
               />
             }
           />
           <FormBox
+            required
             title='过敏原'
-            style={{ marginTop: ss(20), alignItems: 'flex-start' }}
+            style={{ marginTop: ss(20), alignItems: 'center' }}
             form={
               <Box w={'70%'}>
                 <Pressable
                   hitSlop={ss(10)}
                   onPress={() => {
                     setIsOpenTemplatePicker(true);
-                  }}
-                >
+                  }}>
                   <Row
-                    borderRadius={ss(4)}
+                    borderRadius={4}
                     justifyContent={'space-between'}
                     alignItems={'center'}
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
-                    pr={ss(8)}
-                  >
+                    pr={ss(8)}>
                     <Text
                       color={'#333'}
-                      fontSize={sp(16, { min: 12 })}
-                      maxW={ls(240)}
-                    >
+                      fontSize={sp(16)}
+                      numberOfLines={1}
+                      ellipsizeMode='tail'
+                      maxW={ls(240)}>
                       {currentFlow.collect.healthInfo.allergy || '请选择或输入'}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
-                      size={ss(18, { min: 15 })}
+                      size={ss(18)}
                       color='#999'
                     />
                   </Row>

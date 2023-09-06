@@ -17,9 +17,6 @@ import useLayoutConfigWithRole from '~/app/stores/layout';
 import useAuthStore from '~/app/stores/auth';
 import SelectUser from '~/app/components/select-user';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { set } from 'lodash';
-import { toastAlert } from '~/app/utils/toast';
 import useGlobalLoading from '~/app/stores/loading';
 
 export default function Layout() {
@@ -54,7 +51,6 @@ export default function Layout() {
   const toast = useToast();
   return (
     <Flex
-      safeAreaTop
       bg={{
         linearGradient: {
           colors: ['#22D59C', '#1AB7BE'],
@@ -67,15 +63,15 @@ export default function Layout() {
       <Box>
         <Center
           pt={ss(30)}
-          px={ss(10)}
+          px={ss(20)}
           minW={ss(120)}
           minH={ss(120)}
           safeAreaLeft>
           <Image
             source={require('~/assets/images/logo.png')}
             style={{
-              width: ss(60, { min: 45 }),
-              height: ss(60, { min: 45 }),
+              width: ss(63),
+              height: ss(63),
             }}
           />
           <Text
@@ -87,7 +83,7 @@ export default function Layout() {
             掌阅未来
           </Text>
         </Center>
-        <Box mt={ss(10)}>
+        <Box mt={ss(30)}>
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
@@ -101,7 +97,6 @@ export default function Layout() {
                   background={
                     idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
-                  px={ls(10)}
                   py={ss(16)}>
                   <Image
                     source={
@@ -127,7 +122,7 @@ export default function Layout() {
           maxW={ls(130)}
           w={'100%'}
           position={'absolute'}
-          bottom={ss(80)}>
+          bottom={ss(60)}>
           <Pressable
             hitSlop={ss(10)}
             alignItems={'center'}
@@ -195,7 +190,7 @@ export default function Layout() {
         <Flex
           direction='row'
           justifyContent={'center'}
-          h={ss(70)}
+          py={ss(22)}
           alignItems={'center'}>
           {!currentSelectedModule?.noTab &&
             currentSelectedModule?.features.map((item, idx) => {
@@ -211,9 +206,16 @@ export default function Layout() {
                     <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
                       {item.text}
                     </Text>
-                    {currentSelectedModule.featureSelected == idx && (
-                      <Box w={ss(40)} h={ss(4)} bgColor={'white'} mt={ss(5)} />
-                    )}
+
+                    <Box
+                      w={ss(40)}
+                      h={ss(4)}
+                      bgColor={'white'}
+                      mt={ss(5)}
+                      opacity={
+                        currentSelectedModule.featureSelected == idx ? 1 : 0
+                      }
+                    />
                   </Center>
                 </Pressable>
               );

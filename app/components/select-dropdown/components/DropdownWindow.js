@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { ss, ls, sp } from '../../../utils/style';
 
 const DropdownWindow = ({ layoutStyle, children }) => {
   return (
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: ss(10),
+    elevation: ss(10),
   },
 });

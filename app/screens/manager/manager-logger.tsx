@@ -180,6 +180,7 @@ function Filter() {
               ml={ss(10)}
             />
           }
+          defaultValue={logFilter.searchKeywords}
           placeholder='请输入操作人员姓名或账号搜索'
           onChangeText={(text) => {
             setLogFilter({
@@ -203,7 +204,7 @@ function Filter() {
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
-          borderRadius={ss(4)}
+          borderRadius={4}
           borderColor={'#D8D8D8'}
           borderWidth={1}>
           <Icon
@@ -232,7 +233,7 @@ function Filter() {
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
-          borderRadius={ss(4)}
+          borderRadius={4}
           borderColor={'#D8D8D8'}
           borderWidth={1}>
           <Icon

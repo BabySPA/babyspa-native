@@ -12,7 +12,7 @@ import { useSelectDropdown } from './hooks/useSelectDropdown';
 import { useLayoutDropdown } from './hooks/useLayoutDropdown';
 import { useRefs } from './hooks/useRefs';
 import { findIndexInArr } from './helpers/findIndexInArr';
-
+import { ss } from '../../utils/style';
 const SelectDropdown = (
   {
     data /* array */,
@@ -122,7 +122,7 @@ const SelectDropdown = (
         offset:
           rowStyle && rowStyle.height
             ? rowStyle.height * selectedIndex
-            : 50 * selectedIndex,
+            : ss(50) * selectedIndex,
         animated: true,
       });
     }
