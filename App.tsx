@@ -6,6 +6,7 @@ import useCachedResources from './app/hooks/use-cached-resources';
 import useColorScheme from './app/hooks/use-color-scheme';
 import Navigation from './app/navigation/root-navigator';
 import { LogBox } from 'react-native';
+import KeyboardAvoider from '~/app/components/keyboard-avoid';
 
 LogBox.ignoreLogs([
   'Require cycle',
@@ -51,8 +52,10 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <NativeBaseProvider config={config} theme={theme}>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
+          <KeyboardAvoider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </KeyboardAvoider>
         </NativeBaseProvider>
       </SafeAreaProvider>
     );

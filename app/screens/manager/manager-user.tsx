@@ -275,7 +275,7 @@ function Filter({
             });
           }, 1000)}
           defaultButtonText={userFilter.shop.name}
-          buttonHeight={ss(40)}
+          buttonHeight={ss(44)}
           buttonWidth={ls(140)}
           shops={selectShops}
         />

@@ -504,7 +504,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             setSelectShop(selectedItem);
           }}
           defaultButtonText={defaultSelectShop?.name}
-          buttonHeight={ss(40)}
+          buttonHeight={ss(44)}
           buttonWidth={ls(140)}
           shops={selectShops}
         />

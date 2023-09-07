@@ -56,9 +56,8 @@ export default function CustomerFollowUpItem({
       borderStyle={'dashed'}
       borderWidth={1}
       borderColor={'#15BD8F'}
-      w={ls(467)}
+      w={'100%'}
       minH={ss(148)}
-      mb={ss(40)}
       justifyContent={'space-between'}>
       <Row p={ss(20)} maxW={'80%'} alignItems={'center'}>
         <Image

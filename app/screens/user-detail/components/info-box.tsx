@@ -113,7 +113,11 @@ export default function InfoBox(params: InfoBoxParams) {
                       <Icon
                         as={
                           <Ionicons
-                            name={showPassword ? 'md-eye' : 'md-eye-off-sharp'}
+                            name={
+                              showPassword
+                                ? 'md-eye-outline'
+                                : 'md-eye-off-outline'
+                            }
                           />
                         }
                         size={ss(22)}
@@ -159,23 +163,6 @@ export default function InfoBox(params: InfoBoxParams) {
         </Box>
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
-        <Pressable
-          hitSlop={ss(10)}
-          onPress={() => {
-            params.onPressCancel();
-          }}>
-          <Box
-            px={ls(34)}
-            py={ss(12)}
-            bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={4}
-            borderWidth={1}
-            borderColor={'#D8D8D8'}>
-            <Text color='#333' fontSize={sp(16)}>
-              取消
-            </Text>
-          </Box>
-        </Pressable>
         <Pressable
           hitSlop={ss(10)}
           ml={ls(74)}

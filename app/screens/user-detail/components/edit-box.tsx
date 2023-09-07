@@ -89,6 +89,7 @@ export default function EditBox(params: EditBoxParams) {
               required
               form={
                 <Input
+                  maxW={ls(380)}
                   autoCorrect={false}
                   flex={1}
                   h={ss(48, { min: 26 })}
@@ -130,7 +131,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
               required
               title='所属门店'
@@ -149,7 +150,7 @@ export default function EditBox(params: EditBoxParams) {
                     });
                   }}
                   defaultButtonText={tempUser.shop?.name}
-                  buttonHeight={ss(40)}
+                  buttonHeight={ss(44)}
                   buttonWidth={ls(380)}
                   shops={selectShops}
                 />
@@ -173,13 +174,13 @@ export default function EditBox(params: EditBoxParams) {
                     });
                   }}
                   defaultButtonText={currentUser.role?.name}
-                  buttonHeight={ss(40)}
+                  buttonHeight={ss(44)}
                   buttonWidth={ls(380)}
                 />
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
               required
               title='联系电话'
@@ -227,7 +228,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
               required
               title='身份证号'
@@ -254,7 +255,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
               title='员工简介'
               style={{ alignItems: 'flex-start', flex: 1 }}

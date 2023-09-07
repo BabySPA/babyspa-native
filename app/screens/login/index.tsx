@@ -13,14 +13,19 @@ import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { ImageBackground, Image } from 'react-native';
+import {
+  ImageBackground,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { ls, ss, sp } from '~/app/utils/style';
 
 export default function LoginScreen({
   navigation,
 }: AuthStackScreenProps<'Login'>) {
   const { login } = useAuthStore();
-  const [username, setUsername] = useState('13333330001');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectAgreement, setSelectAgreement] = useState(true);
@@ -86,64 +91,76 @@ export default function LoginScreen({
             <Text color='#000' fontSize={sp(32)} fontWeight={500}>
               欢迎登录掌阅未来
             </Text>
-            <Input
-              value={username}
-              onChangeText={setUsername}
-              borderRadius={ss(40)}
-              w={ls(360)}
-              h={ss(60)}
-              mt={ss(60)}
-              placeholder='请输入用户名'
-              fontSize={sp(20)}
-              color={'#999'}
-              InputLeftElement={
-                <Icon
-                  as={<MaterialIcons name='person' />}
-                  size={ss(22)}
-                  ml={ls(20)}
-                  color={'#999999'}
-                />
-              }
-            />
-            <Input
-              autoCorrect={false}
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChangeText={setPassword}
-              borderRadius={ss(40)}
-              w={ls(360)}
-              h={ss(60)}
-              mt={ss(30)}
-              placeholder='请输入密码'
-              fontSize={sp(20)}
-              color={'#999'}
-              InputLeftElement={
-                <Icon
-                  as={<MaterialIcons name='lock' />}
-                  size={ss(22)}
-                  ml={ls(20)}
-                  color={'#999999'}
-                />
-              }
-              InputRightElement={
-                <Pressable
-                  hitSlop={ss(10)}
-                  mr={ls(20)}
-                  onPress={() => {
-                    setShowPassword(!showPassword);
-                  }}>
+            <KeyboardAvoidingView
+              style={{ height: ss(200), justifyContent: 'space-between' }}
+              enabled
+              behavior={Platform.select({
+                ios: 'padding',
+                default: undefined,
+              })}>
+              <Input
+                value={username}
+                onChangeText={setUsername}
+                borderRadius={ss(40)}
+                w={ls(360)}
+                h={ss(60)}
+                mt={ss(60)}
+                placeholder='请输入用户名'
+                fontSize={sp(20)}
+                color={'#999'}
+                InputLeftElement={
                   <Icon
-                    as={
-                      <Ionicons
-                        name={showPassword ? 'md-eye' : 'md-eye-off-sharp'}
-                      />
-                    }
+                    as={<MaterialIcons name='person' />}
                     size={ss(22)}
+                    ml={ls(20)}
                     color={'#999999'}
                   />
-                </Pressable>
-              }
-            />
+                }
+              />
+              <Input
+                autoCorrect={false}
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChangeText={setPassword}
+                borderRadius={ss(40)}
+                w={ls(360)}
+                h={ss(60)}
+                mt={ss(30)}
+                placeholder='请输入密码'
+                fontSize={sp(20)}
+                color={'#999'}
+                InputLeftElement={
+                  <Icon
+                    as={<MaterialIcons name='lock' />}
+                    size={ss(22)}
+                    ml={ls(20)}
+                    color={'#999999'}
+                  />
+                }
+                InputRightElement={
+                  <Pressable
+                    hitSlop={ss(10)}
+                    mr={ls(20)}
+                    onPress={() => {
+                      setShowPassword(!showPassword);
+                    }}>
+                    <Icon
+                      as={
+                        <Ionicons
+                          name={
+                            showPassword
+                              ? 'md-eye-outline'
+                              : 'md-eye-off-outline'
+                          }
+                        />
+                      }
+                      size={ss(22)}
+                      color={'#999999'}
+                    />
+                  </Pressable>
+                }
+              />
+            </KeyboardAvoidingView>
             <Pressable
               hitSlop={ss(10)}
               onPress={() => {

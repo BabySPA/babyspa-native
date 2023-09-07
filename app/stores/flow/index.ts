@@ -51,7 +51,7 @@ const DefaultCustomerListData = {
   customers: [],
   searchKeywords: '',
   status: FlowStatus.NO_SET,
-  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+  startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
@@ -159,7 +159,11 @@ const initialState = {
   currentFlow: DefaultFlow,
 
   archiveCustomers: { ...DefaultCustomerListData },
-  customersFollowUp: { ...DefaultFlowListData },
+  customersFollowUp: {
+    ...DefaultFlowListData,
+    startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD'),
+  },
   currentArchiveCustomer: DefaultCustomer,
 
   operators: [],
@@ -176,6 +180,9 @@ const useFlowStore = create(
       set({ ...initialState });
     },
     requestGetInitializeData: async () => {
+      useManagerStore.getState().requestGetTemplates();
+      useManagerStore.getState().requestGetRoles();
+      useManagerStore.getState().requestGetShops();
       // 获取当前用户的信息
       const hasAuthority = useAuthStore.getState().hasAuthority;
 
@@ -191,10 +198,6 @@ const useFlowStore = create(
       if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
         await get().requestGetEvaluateFlows();
       }
-
-      useManagerStore.getState().requestGetTemplates();
-      useManagerStore.getState().requestGetRoles();
-      useManagerStore.getState().requestGetShops();
     },
     requestAllCustomers: async (searchKeywords: string) => {
       const params: any = {

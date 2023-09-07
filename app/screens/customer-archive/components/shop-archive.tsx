@@ -47,10 +47,26 @@ export function ShopArchive(params: ShopArchiveParams) {
                 borderRadius={4}
                 borderWidth={1}
                 borderColor={'#5EACA3'}>
+                <Box
+                  bgColor={'#03CBB2'}
+                  position={'absolute'}
+                  right={0}
+                  px={ls(12)}
+                  borderTopRightRadius={4}
+                  borderBottomLeftRadius={4}
+                  py={ss(6)}>
+                  <Text fontSize={sp(16)} color={'#fff'}>
+                    {archive.shop?.name}
+                  </Text>
+                </Box>
                 <Text color='#C87939' fontSize={sp(16)}>
                   调理导向:
                 </Text>
-                <Text height={ss(74)} color='#000' fontSize={sp(16)}>
+                <Text
+                  height={ss(74)}
+                  color='#000'
+                  fontSize={sp(16)}
+                  mt={ss(10)}>
                   {archive.collect?.guidance}
                 </Text>
                 <Box bgColor={'#F6FBFA'} px={ls(10)} py={ss(20)} flex={1}>

@@ -410,7 +410,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               }}>
               <Box
                 w={ss(80)}
-                h={ss(40)}
+                h={ss(44)}
                 bgColor={'#FFF'}
                 borderLeftRadius={2}
                 borderRightRadius={0}
@@ -432,7 +432,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               }}>
               <Box
                 w={ss(80)}
-                h={ss(40)}
+                h={ss(44)}
                 bgColor={'#FFF'}
                 borderRightRadius={2}
                 borderLeftRadius={0}

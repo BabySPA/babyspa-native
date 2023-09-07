@@ -29,6 +29,7 @@ import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import { getFlowStatus } from '~/app/constants';
 import { CollectStatus, RegisterStatus } from '~/app/stores/flow/type';
+import { Image as NativeImage } from 'react-native';
 import useGlobalLoading from '~/app/stores/loading';
 
 export default function Collection() {
@@ -182,11 +183,17 @@ function Filter() {
               setShowFilter(!showFilter);
             }}>
             <Row alignItems={'center'}>
-              <Icon
-                as={<Feather name='filter' />}
-                size={ss(16)}
-                color='#00B49E'
-                ml={ls(27)}
+              <NativeImage
+                source={
+                  showFilter
+                    ? require('~/assets/images/filter-on.png')
+                    : require('~/assets/images/filter-off.png')
+                }
+                style={{
+                  width: ss(16),
+                  height: ss(16),
+                  marginLeft: ls(27),
+                }}
               />
               <Text color='#00B49E' fontSize={sp(18)} ml={ls(4)}>
                 筛选
@@ -294,7 +301,7 @@ function Filter() {
                     }}
                     key={status.value}
                     w={ls(90)}
-                    h={ss(40)}
+                    h={ss(44)}
                     borderRadius={4}
                     borderWidth={1}
                     alignItems={'center'}
@@ -340,7 +347,7 @@ function Filter() {
               borderRadius={4}
               borderWidth={1}
               w={ls(80)}
-              h={ss(40)}
+              h={ss(44)}
               justifyContent={'center'}
               alignItems={'center'}
               borderColor='#D8D8D8'>
@@ -361,7 +368,7 @@ function Filter() {
               borderWidth={1}
               borderColor='#00B49E'
               w={ls(80)}
-              h={ss(40)}
+              h={ss(44)}
               justifyContent={'center'}
               alignItems={'center'}
               ml={ls(20)}

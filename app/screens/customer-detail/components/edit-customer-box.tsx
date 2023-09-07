@@ -12,6 +12,7 @@ import {
   useToast,
   Spinner,
   ScrollView,
+  Center,
 } from 'native-base';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
@@ -23,6 +24,7 @@ import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import { RadioBox } from '~/app/components/radio';
+import { getAge } from '~/app/utils';
 
 interface EditCustomerBox {
   onEditFinish: () => void;
@@ -50,6 +52,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
 
   let currentSelectBirthday = tempCustomer.birthday;
 
+  const age = getAge(tempCustomer.birthday);
   return (
     <Column
       flex={1}
@@ -111,7 +114,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
               required
               title='性别'
@@ -167,7 +170,42 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(20)}>
+            <FormBox
+              title='年龄'
+              style={{ flex: 1 }}
+              form={
+                <Row alignItems={'center'}>
+                  <Center
+                    borderRadius={4}
+                    borderWidth={1}
+                    h={ss(48)}
+                    w={ls(72)}
+                    borderColor={'#D8D8D8'}>
+                    <Text fontSize={sp(20)} color={'#333'}>
+                      {age?.year}
+                    </Text>
+                  </Center>
+                  <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                    岁
+                  </Text>
+                  <Center
+                    ml={ls(20)}
+                    borderRadius={4}
+                    borderWidth={1}
+                    h={ss(48)}
+                    w={ls(72)}
+                    borderColor={'#D8D8D8'}>
+                    <Text fontSize={sp(20)} color={'#333'}>
+                      {age?.month}
+                    </Text>
+                  </Center>
+                  <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                    月
+                  </Text>
+                </Row>
+              }
+            />
             <FormBox
               required
               title='电话'

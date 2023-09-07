@@ -424,7 +424,7 @@ export function ChangePasswordModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
                 原密码
               </Text>
               <Input
@@ -442,7 +442,7 @@ export function ChangePasswordModal({
               />
             </Row>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
                 新密码
               </Text>
               <Input
@@ -459,7 +459,7 @@ export function ChangePasswordModal({
               />
             </Row>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
                 确认新密码
               </Text>
               <Input

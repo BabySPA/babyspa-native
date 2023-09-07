@@ -97,7 +97,9 @@ export default function Personal({
                           as={
                             <Ionicons
                               name={
-                                showPassword ? 'md-eye' : 'md-eye-off-sharp'
+                                showPassword
+                                  ? 'md-eye-outline'
+                                  : 'md-eye-off-outline'
                               }
                             />
                           }
@@ -107,6 +109,7 @@ export default function Personal({
                       </Pressable>
                       <Pressable
                         hitSlop={ss(10)}
+                        ml={ls(38)}
                         onPress={() => {
                           setIsResetPassDialogOpen(true);
                         }}>
@@ -114,7 +117,7 @@ export default function Personal({
                           <Image
                             alt=''
                             source={require('~/assets/images/reset-pass.png')}
-                            size={ss(16)}
+                            size={ss(24)}
                           />
                           <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
                             修改密码

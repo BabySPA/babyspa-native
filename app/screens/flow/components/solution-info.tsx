@@ -202,7 +202,7 @@ export default function SolutionInfo({
                   borderWidth={1}
                   borderColor={'#5EACA3'}
                   w={ls(120)}
-                  h={ss(40)}
+                  h={ss(44)}
                   _text={{
                     color: '#5EACA3',
                     fontSize: sp(18),
@@ -366,7 +366,7 @@ export default function SolutionInfo({
                   borderWidth={1}
                   borderColor={'#5EACA3'}
                   w={ls(120)}
-                  h={ss(40)}
+                  h={ss(44)}
                   _text={{
                     color: '#5EACA3',
                     fontSize: sp(18),

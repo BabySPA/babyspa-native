@@ -8,6 +8,7 @@ import {
   Row,
   Column,
   Pressable,
+  Center,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultCustomer, DefaultFlow } from '~/app/stores/flow';
@@ -36,22 +37,27 @@ export default function Archive() {
         ) : (
           <Row
             flex={1}
+            p={ss(40)}
+            pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            flexWrap={'wrap'}
-            p={ss(20)}>
-            {customers.map((customer, idx) => (
-              <Pressable
-                hitSlop={ss(10)}
-                ml={idx % 3 == 0 ? 0 : ss(10)}
-                key={idx}
-                onPress={() => {
-                  updateCurrentArchiveCustomer(customer);
-                  navigation.navigate('CustomerArchive');
-                }}>
-                <CustomerArchiveItem customer={customer} />
-              </Pressable>
-            ))}
+            minH={'100%'}>
+            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
+              {customers.map((customer, idx) => (
+                <Center width={'33%'} key={idx}>
+                  <Pressable
+                    hitSlop={ss(10)}
+                    ml={idx % 3 == 0 ? 0 : ls(10)}
+                    key={idx}
+                    onPress={() => {
+                      updateCurrentArchiveCustomer(customer);
+                      navigation.navigate('CustomerArchive');
+                    }}>
+                    <CustomerArchiveItem customer={customer} />
+                  </Pressable>
+                </Center>
+              ))}
+            </Row>
           </Row>
         )}
       </ScrollView>
@@ -86,8 +92,15 @@ function Filter() {
     }
   }, [defaultSelectShop]);
   return (
-    <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+    <Row
+      mx={ss(10)}
+      mt={ss(10)}
+      bgColor='white'
+      borderRadius={ss(10)}
+      px={ls(40)}
+      justifyContent={'space-between'}
+      alignItems={'center'}>
+      <Row py={ss(20)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             updateArchiveCustomersFilter({
@@ -95,7 +108,7 @@ function Filter() {
             });
             requestArchiveCustomers();
           }}
-          buttonHeight={ss(40)}
+          buttonHeight={ss(44)}
           buttonWidth={ls(140)}
           shops={selectShops}
           defaultButtonText={defaultSelectShop?.name}
@@ -104,7 +117,7 @@ function Filter() {
           autoCorrect={false}
           w={ls(240)}
           ml={ls(20)}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           p={ss(8)}
           borderRadius={4}
           placeholderTextColor={'#6E6F73'}
@@ -136,7 +149,7 @@ function Filter() {
           }}
           flexDirection={'row'}
           ml={ls(20)}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           alignItems={'center'}
           py={ss(8)}
           pl={ls(12)}
@@ -165,7 +178,7 @@ function Filter() {
             });
           }}
           flexDirection={'row'}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
@@ -181,27 +194,6 @@ function Filter() {
           <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
             {archiveCustomers.endDate}
           </Text>
-        </Pressable>
-        <Pressable
-          hitSlop={ss(10)}
-          onPress={() => {
-            updateCurrentArchiveCustomer(DefaultCustomer);
-            navigation.navigate('AddNewCustomer');
-          }}>
-          <Box
-            ml={ls(20)}
-            bg={{
-              linearGradient: {
-                colors: ['#22D59C', '#1AB7BE'],
-                start: [0, 0],
-                end: [1, 1],
-              },
-            }}
-            px={ls(26)}
-            py={ss(10)}
-            _text={{ fontSize: ss(14), color: 'white' }}>
-            新增客户
-          </Box>
         </Pressable>
 
         <DatePickerModal
@@ -237,6 +229,23 @@ function Filter() {
           }
         />
       </Row>
-    </Column>
+      <Pressable
+        hitSlop={ss(10)}
+        onPress={() => {
+          updateCurrentArchiveCustomer(DefaultCustomer);
+          navigation.navigate('AddNewCustomer');
+        }}>
+        <Box
+          borderRadius={4}
+          borderWidth={1}
+          borderColor={'#03CBB2'}
+          bgColor={'rgba(3, 203, 178, 0.20)'}
+          px={ls(13)}
+          py={ss(10)}
+          _text={{ fontSize: ss(14), color: '#0C1B16' }}>
+          新增客户
+        </Box>
+      </Pressable>
+    </Row>
   );
 }

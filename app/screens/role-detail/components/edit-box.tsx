@@ -17,7 +17,10 @@ import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import CT from './checkbox-tree';
-import { generateAuthorityTreeConfig } from '~/app/utils';
+import {
+  generateAuthorityConfig,
+  generateAuthorityTreeConfig,
+} from '~/app/utils';
 import { RadioBox } from '~/app/components/radio';
 
 interface EditBoxParams {
@@ -34,6 +37,7 @@ export default function EditBox(params: EditBoxParams) {
     requestGetRoles,
     requestPatchRole,
     setCurrentRole,
+    configAuthTree,
     setConfigAuthTree,
   } = useManagerStore();
 
@@ -54,7 +58,9 @@ export default function EditBox(params: EditBoxParams) {
       return false;
     }
 
-    if (!tempRole.authorities || tempRole.authorities.length === 0) {
+    const authorities = generateAuthorityConfig(configAuthTree);
+
+    if (!authorities.length) {
       toastAlert(toast, 'error', '请选择功能权限！');
       return false;
     }
@@ -75,32 +81,28 @@ export default function EditBox(params: EditBoxParams) {
           <Box mt={ss(30)} px={ls(20)}>
             <Row alignItems={'center'}>
               <FormBox
-                title='角色名称'
-                style={{ flex: 1 }}
+                title='角色类型'
                 required
+                style={{ flex: 1 }}
                 form={
-                  <Input
-                    autoCorrect={false}
-                    flex={1}
-                    h={ss(48, { min: 26 })}
-                    py={ss(10)}
-                    px={ls(20)}
-                    defaultValue={tempRole.name}
-                    placeholderTextColor={'#CCC'}
-                    color={'#333333'}
-                    fontSize={sp(16)}
-                    placeholder='请输入'
-                    onChangeText={(text) => {
-                      setTempRole({
-                        ...(tempRole || {}),
-                        name: text,
-                      });
-                    }}
-                  />
+                  <Box ml={ls(20)}>
+                    <RadioBox
+                      margin={ss(20)}
+                      config={[
+                        { label: '门店角色', value: 1 },
+                        { label: '中心角色', value: 0 },
+                      ]}
+                      current={tempRole.type}
+                      onChange={({ label, value }) => {
+                        setTempRole({
+                          ...(tempRole || {}),
+                          type: +value,
+                        });
+                      }}
+                    />
+                  </Box>
                 }
               />
-            </Row>
-            <Row mt={ss(40)}>
               <FormBox
                 title='状态'
                 required
@@ -122,63 +124,90 @@ export default function EditBox(params: EditBoxParams) {
                   />
                 }
               />
-              <FormBox
-                title='类型'
-                required
-                style={{ flex: 1, marginLeft: ls(20) }}
-                form={
-                  <RadioBox
-                    margin={ss(20)}
-                    config={[
-                      { label: '门店角色', value: 1 },
-                      { label: '中心角色', value: 0 },
-                    ]}
-                    current={tempRole.type}
-                    onChange={({ label, value }) => {
-                      setTempRole({
-                        ...(tempRole || {}),
-                        type: +value,
-                      });
-                    }}
-                  />
-                }
-              />
             </Row>
-            <Row alignItems={'center'} mt={ss(40)}>
+            <Row mt={ss(30)}>
               <FormBox
+                titleWidth={ss(180)}
+                title='角色名称'
+                style={{ flex: 1 }}
                 required
-                title='角色说明'
-                style={{ flex: 1, alignItems: 'flex-start' }}
                 form={
                   <Input
+                    ml={ls(20)}
                     autoCorrect={false}
-                    defaultValue={tempRole.description}
                     flex={1}
-                    multiline
-                    w={ls(380)}
-                    h={ss(107)}
+                    h={ss(48, { min: 26 })}
                     py={ss(10)}
                     px={ls(20)}
-                    onChangeText={(text) => {
-                      setTempRole({
-                        ...tempRole,
-                        description: text,
-                      });
-                    }}
+                    defaultValue={tempRole.name}
                     placeholderTextColor={'#CCC'}
                     color={'#333333'}
                     fontSize={sp(16)}
                     placeholder='请输入'
+                    onChangeText={(text) => {
+                      setTempRole({
+                        ...(tempRole || {}),
+                        name: text,
+                      });
+                    }}
                   />
                 }
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(40)}>
+            <Row alignItems={'center'} mt={ss(30)}>
               <FormBox
                 required
+                title='角色说明'
+                titleWidth={ss(180)}
+                style={{ flex: 1, alignItems: 'flex-start' }}
+                form={
+                  <>
+                    <Input
+                      ml={ls(20)}
+                      autoCorrect={false}
+                      defaultValue={tempRole.description}
+                      flex={1}
+                      multiline
+                      w={ls(380)}
+                      h={ss(107)}
+                      py={ss(10)}
+                      px={ls(20)}
+                      onChangeText={(text) => {
+                        setTempRole({
+                          ...tempRole,
+                          description: text,
+                        });
+                      }}
+                      placeholderTextColor={'#CCC'}
+                      color={'#333333'}
+                      fontSize={sp(16)}
+                      placeholder='请输入'
+                    />
+                    <Text
+                      color={'#999'}
+                      fontSize={sp(14)}
+                      style={{
+                        position: 'absolute',
+                        right: ss(10),
+                        bottom: ss(10),
+                      }}>
+                      {tempRole.description.length}/300
+                    </Text>
+                  </>
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)}>
+              <FormBox
+                required
+                titleWidth={ss(180)}
                 title='功能权限'
                 style={{ alignItems: 'flex-start', flex: 1 }}
-                form={<CT />}
+                form={
+                  <Box ml={ls(20)}>
+                    <CT />
+                  </Box>
+                }
               />
             </Row>
           </Box>

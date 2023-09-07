@@ -1,6 +1,6 @@
 import { Box, Center, Column, Icon, Row, Text } from 'native-base';
 import BoxItem from './box-item';
-import { Pressable, TextInput } from 'react-native';
+import { Pressable, Image, TextInput } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useEffect, useState } from 'react';
@@ -67,47 +67,60 @@ export default function ConclusionInfo({
           title={'分析记录'}
           icon={require('~/assets/images/guidance.png')}>
           <Box flex={1} pt={ss(10)}>
-            {analyzeHistory.map((item, idx) => {
-              return (
-                <Row key={idx} alignItems={'flex-start'}>
-                  <Column alignItems={'center'}>
-                    <Box
-                      w={ss(10)}
-                      h={ss(10)}
-                      borderRadius={ss(5)}
-                      bgColor={'#5EACA3'}
-                    />
-                    {analyzeHistory.length - 1 !== idx && (
-                      <DashedLine
-                        axis='vertical'
-                        dashLength={ss(2)}
-                        dashGap={ss(2)}
-                        dashColor='#5EACA3'
-                        style={{ height: ss(70) }}
+            {analyzeHistory.length > 0 ? (
+              analyzeHistory.map((item, idx) => {
+                return (
+                  <Row key={idx} alignItems={'flex-start'}>
+                    <Column alignItems={'center'}>
+                      <Box
+                        w={ss(10)}
+                        h={ss(10)}
+                        borderRadius={ss(5)}
+                        bgColor={'#5EACA3'}
                       />
-                    )}
-                  </Column>
-                  <Row
-                    w='90%'
-                    justifyContent={'space-between'}
-                    mb={ss(20)}
-                    ml={ss(10)}
-                    mt={-ss(7)}>
-                    <Column>
-                      <Text color='#BCBCBC' fontSize={sp(18)}>
-                        {dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm')}
-                      </Text>
-                      <Text color='#333' fontSize={sp(18)} mt={ss(7)}>
-                        {item.analyze?.conclusion}
-                      </Text>
+                      {analyzeHistory.length - 1 !== idx && (
+                        <DashedLine
+                          axis='vertical'
+                          dashLength={ss(2)}
+                          dashGap={ss(2)}
+                          dashColor='#5EACA3'
+                          style={{ height: ss(70) }}
+                        />
+                      )}
                     </Column>
-                    <Text color='#BCBCBC' fontSize={sp(18)}>
-                      {item.analyzeOperator?.name}
-                    </Text>
+                    <Row
+                      w='90%'
+                      justifyContent={'space-between'}
+                      mb={ss(20)}
+                      ml={ss(10)}
+                      mt={-ss(7)}>
+                      <Column>
+                        <Text color='#BCBCBC' fontSize={sp(18)}>
+                          {dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                        </Text>
+                        <Text color='#333' fontSize={sp(18)} mt={ss(7)}>
+                          {item.analyze?.conclusion}
+                        </Text>
+                      </Column>
+                      <Text color='#BCBCBC' fontSize={sp(18)}>
+                        {item.analyzeOperator?.name}
+                      </Text>
+                    </Row>
                   </Row>
-                </Row>
-              );
-            })}
+                );
+              })
+            ) : (
+              <Column pt={ss(-10)} alignItems={'center'}>
+                <Image
+                  source={require('~/assets/images/empty-box.png')}
+                  style={{ height: ss(150) }}
+                  resizeMode='contain'
+                />
+                <Text color='#909499' fontSize={sp(14)}>
+                  暂无分析记录
+                </Text>
+              </Column>
+            )}
           </Box>
         </BoxItem>
       </Column>

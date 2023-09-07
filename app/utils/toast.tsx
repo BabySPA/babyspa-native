@@ -9,7 +9,11 @@ export function toastAlert(
     placement: 'top',
     render: () => {
       return (
-        <Alert w='100%' variant={'subtle'} colorScheme={type} status={type}>
+        <Alert
+          w='100%'
+          variant={'subtle'}
+          bgColor={'rgba(216, 216, 216, 0.5)'}
+          status={type}>
           <Column space={2} flexShrink={1} w='100%'>
             <Row
               flexShrink={1}

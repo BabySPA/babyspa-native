@@ -8,6 +8,7 @@ import {
   Row,
   Column,
   Pressable,
+  Center,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
@@ -38,26 +39,30 @@ export default function FollowUpVisit() {
         ) : (
           <Row
             flex={1}
+            p={ss(40)}
+            pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            flexWrap={'wrap'}
-            p={ss(40)}>
-            {flows.map((flow, idx) => {
-              return (
-                <Pressable
-                  hitSlop={ss(10)}
-                  ml={idx % 2 == 1 ? ss(20) : 0}
-                  key={idx}
-                  onPress={() => {
-                    updateCurrentFlow(flow);
-                    navigation.navigate('FlowInfo', {
-                      from: 'follow-up-detail',
-                    });
-                  }}>
-                  <CustomerFollowUpItem flow={flow} />
-                </Pressable>
-              );
-            })}
+            minH={'100%'}>
+            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
+              {flows.map((flow, idx) => (
+                <Center width={'50%'} key={idx}>
+                  <Pressable
+                    ml={idx % 2 == 1 ? ss(20) : 0}
+                    mr={idx % 2 == 0 ? ss(20) : 0}
+                    mb={ss(40)}
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      updateCurrentFlow(flow);
+                      navigation.navigate('FlowInfo', {
+                        from: 'follow-up-detail',
+                      });
+                    }}>
+                    <CustomerFollowUpItem flow={flow} />
+                  </Pressable>
+                </Center>
+              ))}
+            </Row>
           </Row>
         )}
       </ScrollView>
@@ -105,7 +110,7 @@ function Filter() {
           defaultButtonText={
             defaultFollowUpSelectShop?.name || defaultSelectShop?.name
           }
-          buttonHeight={ss(40)}
+          buttonHeight={ss(44)}
           buttonWidth={ls(140)}
           shops={selectShops}
         />

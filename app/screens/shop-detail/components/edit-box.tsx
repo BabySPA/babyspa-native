@@ -86,12 +86,14 @@ export default function EditBox(params: EditBoxParams) {
           <Row alignItems={'center'}>
             <FormBox
               title='门店名称'
+              titleWidth={ls(180)}
               style={{ flex: 1, marginLeft: ls(20) }}
               required
               form={
                 <Input
                   autoCorrect={false}
                   flex={1}
+                  ml={ls(20)}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
@@ -112,6 +114,7 @@ export default function EditBox(params: EditBoxParams) {
             <FormBox
               title='负责人'
               required
+              titleWidth={ls(180)}
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <Input
@@ -119,6 +122,7 @@ export default function EditBox(params: EditBoxParams) {
                   flex={1}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
+                  ml={ls(20)}
                   px={ls(20)}
                   defaultValue={tempShop.maintainer}
                   placeholderTextColor={'#CCC'}
@@ -135,15 +139,17 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
               required
               title='联系电话'
+              titleWidth={ls(180)}
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <Input
                   autoCorrect={false}
                   flex={1}
+                  ml={ls(20)}
                   h={ss(48, { min: 26 })}
                   py={ss(10)}
                   px={ls(20)}
@@ -163,10 +169,11 @@ export default function EditBox(params: EditBoxParams) {
             />
             <FormBox
               title='所属区域'
+              titleWidth={ls(180)}
               style={{ flex: 1, marginLeft: ls(20) }}
               required
               form={
-                <Box flex={1}>
+                <Box flex={1} ml={ls(20)}>
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
@@ -190,7 +197,7 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={ss(18, { min: 15 })}
                         color='#999'
                       />
                     </Row>
@@ -199,13 +206,14 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
               required
               title='营业时间'
+              titleWidth={ls(180)}
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
-                <Row flex={1} alignItems={'center'}>
+                <Row flex={1} alignItems={'center'} ml={ls(20)}>
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
@@ -229,7 +237,7 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={ss(18, { min: 15 })}
                         color='#999'
                       />
                     </Row>
@@ -260,7 +268,7 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={ss(18, { min: 15 })}
                         color='#999'
                       />
                     </Row>
@@ -271,9 +279,11 @@ export default function EditBox(params: EditBoxParams) {
             <FormBox
               required
               title='详细地址'
+              titleWidth={ls(180)}
               style={{ flex: 1, marginLeft: ls(20) }}
               form={
                 <Input
+                  ml={ls(20)}
                   autoCorrect={false}
                   defaultValue={tempShop.address}
                   flex={1}
@@ -294,9 +304,10 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
           </Row>
-          <Row alignItems={'center'} mt={ss(40)}>
+          <Row alignItems={'center'} mt={ss(30)} ml={ls(20)}>
             <FormBox
               title='门店介绍'
+              titleWidth={ls(180)}
               style={{ alignItems: 'flex-start', flex: 1 }}
               form={
                 <Input
@@ -304,6 +315,7 @@ export default function EditBox(params: EditBoxParams) {
                   defaultValue={tempShop.description}
                   flex={1}
                   h={ss(128)}
+                  ml={ls(20)}
                   py={ss(10)}
                   px={ls(20)}
                   onChangeText={(text) => {

@@ -20,13 +20,14 @@ export default function CustomerArchiveItem({
       borderStyle={'dashed'}
       borderWidth={1}
       borderColor={'#15BD8F'}
-      w={ls(322)}
+      w={ls(312)}
       minH={ss(128)}
       mb={ss(20)}
+      p={ss(20)}
       justifyContent={'space-between'}
-    >
-      <Row p={ss(20)} maxW={'80%'}>
-        <Column justifyContent={'flex-start'} alignItems={'center'}>
+      alignItems={'center'}>
+      <Row>
+        <Column height={'100%'} alignItems={'center'}>
           <Image
             style={{ width: ss(80), height: ss(80) }}
             source={
@@ -45,8 +46,7 @@ export default function CustomerArchiveItem({
               fontWeight={400}
               maxW={ls(150)}
               ellipsizeMode='tail'
-              numberOfLines={1}
-            >
+              numberOfLines={1}>
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -63,8 +63,8 @@ export default function CustomerArchiveItem({
           <Row
             alignItems={'center'}
             justifyContent={'space-between'}
-            mt={ss(5)}
-          >
+            w={ls(190)}
+            mt={ss(5)}>
             <Text color={'#666'} fontWeight={400} fontSize={sp(18)} ml={ls(3)}>
               {ageText}
             </Text>
@@ -83,8 +83,7 @@ export default function CustomerArchiveItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(5)}
-            >
+              ml={ls(5)}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>

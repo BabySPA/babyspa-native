@@ -268,7 +268,7 @@ export default function FlowScreen({
                     setShowFinishModal(true);
                   }}>
                   <Row
-                    h={ss(40)}
+                    h={ss(44)}
                     px={ls(26)}
                     bgColor={'rgba(243, 96, 30, 0.20)'}
                     borderWidth={1}
@@ -321,7 +321,7 @@ export default function FlowScreen({
                   }}>
                   <Center
                     w={ls(80)}
-                    h={ss(40)}
+                    h={ss(44)}
                     ml={ls(20)}
                     bgColor={'rgba(3, 203, 178, 0.20)'}
                     borderWidth={1}
@@ -342,7 +342,7 @@ export default function FlowScreen({
                   setShowFinishModal(true);
                 }}>
                 <Row
-                  h={ss(40)}
+                  h={ss(44)}
                   px={ls(26)}
                   bgColor={'rgba(243, 96, 30, 0.20)'}
                   borderWidth={1}
@@ -392,7 +392,7 @@ export default function FlowScreen({
                 }}>
                 <Row
                   alignItems={'center'}
-                  h={ss(40)}
+                  h={ss(44)}
                   px={ls(26)}
                   ml={ls(20)}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
