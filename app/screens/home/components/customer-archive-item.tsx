@@ -20,13 +20,13 @@ export default function CustomerArchiveItem({
       borderStyle={'dashed'}
       borderWidth={1}
       borderColor={'#15BD8F'}
-      w={ls(312)}
+      w={'100%'}
       minH={ss(128)}
       mb={ss(20)}
       p={ss(20)}
       justifyContent={'space-between'}
       alignItems={'center'}>
-      <Row>
+      <Row w={'100%'}>
         <Column height={'100%'} alignItems={'center'}>
           <Image
             style={{ width: ss(80), height: ss(80) }}
@@ -64,7 +64,9 @@ export default function CustomerArchiveItem({
             alignItems={'center'}
             justifyContent={'space-between'}
             w={ls(190)}
-            mt={ss(5)}>
+            mt={ss(5)}
+            pr={ls(5)}
+            >
             <Text color={'#666'} fontWeight={400} fontSize={sp(18)} ml={ls(3)}>
               {ageText}
             </Text>

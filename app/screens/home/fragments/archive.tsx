@@ -37,18 +37,20 @@ export default function Archive() {
         ) : (
           <Row
             flex={1}
-            p={ss(40)}
+            py={ss(40)}
+            pl={ss(40)}
+            pr={ss(20)}
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {customers.map((customer, idx) => (
-                <Center width={'33%'} key={idx}>
+                <Center w={'33.33%'} key={idx}>
                   <Pressable
                     hitSlop={ss(10)}
-                    ml={idx % 3 == 0 ? 0 : ls(10)}
                     key={idx}
+                    pr={ls(20)}
                     onPress={() => {
                       updateCurrentArchiveCustomer(customer);
                       navigation.navigate('CustomerArchive');

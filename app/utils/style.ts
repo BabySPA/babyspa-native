@@ -7,16 +7,6 @@ interface M {
 
 const { width, height } = Dimensions.get('window');
 
-const aspectRatio = height / width;
-
-if (aspectRatio > 1.6) {
-  // Code for Iphone
-  console.log('Iphone', width, height, Platform.isPad);
-} else {
-  // Code for Ipad
-  console.log('Ipad', width, height, Platform.isPad);
-}
-
 const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
 
@@ -43,15 +33,13 @@ const setSpText = (size: number, minAndMax?: M) => {
 };
 
 export const longScale = (size: number, minAndMax?: M) => {
-  const r = (longDimension / guidelineLong) * size;
+  const r = (shortDimension / guidelineShort) * size;
 
   if (minAndMax === undefined) {
     return r;
   }
   const { min = r, max = r } = minAndMax;
   return r <= min ? min : r >= max ? max : r;
-
-  return size;
 };
 
 export const shortScale = (size: number, minAndMax?: M) => {
@@ -62,8 +50,6 @@ export const shortScale = (size: number, minAndMax?: M) => {
   }
   const { min = r, max = r } = minAndMax;
   return r <= min ? min : r >= max ? max : r;
-
-  return size;
 };
 
 export const sp = setSpText;
