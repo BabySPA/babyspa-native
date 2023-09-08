@@ -21,6 +21,7 @@ import {
   RegisterStatus,
   Score,
 } from '../stores/flow/type';
+import { ShopType } from '../stores/manager/type';
 
 export const EvaluateTextConfig = {
   ['TODO']: {
@@ -155,12 +156,12 @@ export const ConfigAuthTree: IConfigAuth[] = [
         auth: RoleAuthority.FLOW_COLLECTION,
       },
       {
-        text: '信息分析',
+        text: '信息分析（中心）',
         hasAuth: true,
         auth: RoleAuthority.FLOW_ANALYZE,
       },
       {
-        text: '评价反馈',
+        text: '评价反馈（中心）',
         hasAuth: true,
         auth: RoleAuthority.FLOW_EVALUATE,
       },
@@ -189,7 +190,7 @@ export const ConfigAuthTree: IConfigAuth[] = [
     isOpen: true,
     features: [
       {
-        text: '门店管理',
+        text: '门店管理（中心）',
         auth: RoleAuthority.MANAGER_SHOP,
         hasAuth: true,
       },
@@ -231,7 +232,7 @@ export const ConfigAuthTree: IConfigAuth[] = [
         hasAuth: true,
       },
       {
-        text: '分析统计',
+        text: '分析统计（中心）',
         auth: RoleAuthority.STATISTIC_ANALYZE,
         hasAuth: true,
       },
@@ -406,6 +407,6 @@ export const FollowUpResultText = {
   [FollowUpResult.GOOD]: '恢复良好',
   // 恢复欠佳
   [FollowUpResult.BAD]: '恢复欠佳',
-  // 未恢复已加重
-  [FollowUpResult.WORSE]: '未恢复已加重',
+  // 未改善加重了
+  [FollowUpResult.WORSE]: '未改善加重了',
 };

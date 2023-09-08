@@ -63,10 +63,8 @@ export default function Analyze() {
                     mb={ss(40)}
                     hitSlop={ss(10)}
                     onPress={() => {
-                      if (flow.analyze.status !== AnalyzeStatus.NOT_SET) {
-                        updateCurrentFlow(flow);
-                        navigation.navigate('FlowInfo', { from: 'analyze' });
-                      }
+                      updateCurrentFlow(flow);
+                      navigation.navigate('FlowInfo', { from: 'analyze' });
                     }}>
                     <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
                   </Pressable>

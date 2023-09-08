@@ -82,7 +82,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
@@ -102,7 +102,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
@@ -123,7 +123,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
@@ -144,7 +144,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
@@ -224,7 +224,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   // 取消随访
                   setShowCancelDialog(true);
                 }}
-                borderRadius={4}
+                borderRadius={ss(4)}
                 borderWidth={1}
                 borderColor={'#F3AF62'}
                 bgColor={'rgba(243, 175, 98, 0.20)'}
@@ -245,7 +245,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   setShowConfirmDialog(true);
                 }}
                 ml={ls(20)}
-                borderRadius={4}
+                borderRadius={ss(4)}
                 borderWidth={1}
                 borderColor={'#03CBB2'}
                 bgColor={'rgba(3, 203, 178, 0.20)'}

@@ -21,18 +21,16 @@ import EvaluateCard, {
 } from '~/app/components/info-cards/evaluate-card';
 import FollowUpCard from '~/app/components/info-cards/follow-up-card';
 import { PrintButton } from '~/app/components/print-button';
-import { EvaluateStatus } from '~/app/stores/flow/type';
+import { AnalyzeStatus, EvaluateStatus } from '~/app/stores/flow/type';
+import { getFlowStatus } from '~/app/constants';
 
 export default function FlowInfo({
   navigation,
   route: { params },
 }: AppStackScreenProps<'FlowInfo'>) {
-  const {
-    currentFlow: {
-      evaluate,
-      analyze: { editable },
-    },
-  } = useFlowStore();
+  const { currentFlow } = useFlowStore();
+
+  const { evaluate } = currentFlow;
 
   const [from, setFrom] = useState(params.from);
 
@@ -42,7 +40,9 @@ export default function FlowInfo({
     useState(false);
 
   const ShowPrintButton = () => {
-    return <>{editable !== false ? <PrintButton /> : null}</>;
+    return getFlowStatus(currentFlow) == FlowStatus.Analyzed ? (
+      <PrintButton />
+    ) : null;
   };
 
   const evalutedDone = () => {
@@ -95,7 +95,12 @@ export default function FlowInfo({
         <Column flex={1} ml={ls(10)}>
           <ScrollView>
             {from !== 'evaluate' && from !== 'follow-up' && (
-              <AnalyzeCard edit={from == 'analyze'} />
+              <AnalyzeCard
+                edit={Boolean(
+                  currentFlow.analyze.status == AnalyzeStatus.DONE &&
+                    currentFlow.analyze.editable,
+                )}
+              />
             )}
             {/* (从评价按钮点进来)或者(从评价点击卡片并且已经评价完成) */}
             {(from == 'evaluate' ||

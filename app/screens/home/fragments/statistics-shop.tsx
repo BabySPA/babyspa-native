@@ -182,27 +182,35 @@ const ShopStatisticBox = () => {
   return (
     <ScrollView margin={ss(10)}>
       <Row flex={1}>
-        <StatisticsCountBox title={'登记人数'} count={counts.register} />
+        <StatisticsCountBox
+          title={'登记人数'}
+          count={counts.register}
+          image={require('~/assets/images/statistic-register.png')}
+        />
         <StatisticsCountBox
           title={'采集人数'}
           count={counts.collect}
           style={{ marginLeft: ss(10) }}
+          image={require('~/assets/images/statistic-collect.png')}
         />
         <StatisticsCountBox
           title={'分析人数'}
           count={counts.analyze}
           style={{ marginLeft: ss(10) }}
+          image={require('~/assets/images/statistic-analyze.png')}
         />
       </Row>
       <Row flex={1} mt={ss(10)}>
         <StatisticsCountBox
           title={'贴敷总量（贴）'}
           count={counts.application}
+          image={require('~/assets/images/statistic-application.png')}
         />
         <StatisticsCountBox
           title={'推拿总量（次）'}
           count={counts.massage}
           style={{ marginLeft: ss(10) }}
+          image={require('~/assets/images/statistic-massage.png')}
         />
       </Row>
 
@@ -288,9 +296,11 @@ const CenterStatisticBox = () => {
                 </Row>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {Math.floor(
-                      (item.counts.analyze / item.counts.register) * 100,
-                    )}
+                    {item.counts.analyze != 0
+                      ? Math.floor(
+                          (item.counts.analyze / item.counts.register) * 100,
+                        )
+                      : 0}
                     %
                   </Text>
                 </Row>
@@ -401,6 +411,7 @@ const CenterStatisticBox = () => {
           {statisticShops.map((item, idx) => {
             return (
               <StatisticsCountBox
+                image={require('~/assets/images/statistic-shop.png')}
                 key={idx}
                 title={item.shop.name}
                 count={item.counts.analyze}

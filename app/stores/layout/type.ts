@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from 'react-native';
 import { RoleAuthority } from '../auth/type';
-import { Shop } from '../manager/type';
+import { Shop, ShopType } from '../manager/type';
 
 export interface ILayoutConfig {
   image: ImageSourcePropType;

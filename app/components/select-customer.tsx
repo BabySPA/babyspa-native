@@ -114,6 +114,8 @@ export default function SelectCustomer(params: SelectCustomerParams) {
 
   const { style = {} } = params;
 
+  const [currentIdx, setCurrentIdx] = useState<number>(-1);
+
   return (
     <Column
       flex={1}
@@ -154,7 +156,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
           <FlatList
             data={allCustomers}
             maxH={ss(520)}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
               return (
                 <Pressable
                   hitSlop={ss(10)}
@@ -165,6 +167,18 @@ export default function SelectCustomer(params: SelectCustomerParams) {
                     });
                   }}>
                   <SelectCustomerItem customer={item} />
+                  {currentFlow.customer._id === item._id && (
+                    <Image
+                      style={{
+                        position: 'absolute',
+                        bottom: ss(31),
+                        right: 0,
+                        width: ss(20),
+                        height: ss(20),
+                      }}
+                      source={require('~/assets/images/border-select.png')}
+                    />
+                  )}
                 </Pressable>
               );
             }}

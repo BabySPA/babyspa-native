@@ -69,7 +69,7 @@ export default function Collection() {
                       hitSlop={ss(10)}
                       onPress={() => {
                         updateCurrentFlow(flow);
-                        navigation.navigate('CustomerDetail');
+                        navigation.navigate('FlowInfo', { from: 'analyze' });
                       }}>
                       <CustomerItem flow={flow} type={OperateType.Collection} />
                     </Pressable>

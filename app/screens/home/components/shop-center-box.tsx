@@ -18,14 +18,12 @@ export default function ShopCenterBox({
       <Row
         bgColor={'#fff'}
         minH={ss(128)}
-        w={ls(330)}
         borderRadius={ss(8)}
         mr={ls(10)}
         mb={ss(10)}
         px={ss(30)}
         py={ss(24)}
-        justifyContent={'space-between'}
-      >
+        justifyContent={'space-between'}>
         <Column>
           <Text fontSize={sp(24)} color='#333'>
             {title}

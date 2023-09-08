@@ -181,11 +181,16 @@ const CenterStatisticBox = () => {
   return (
     <ScrollView margin={ss(10)}>
       <Row flex={1}>
-        <StatisticsCountBox title={'分析完成'} count={counts.analyze} />
+        <StatisticsCountBox
+          title={'分析完成'}
+          count={counts.analyze}
+          image={require('~/assets/images/statistic-analyze-done.png')}
+        />
         <StatisticsCountBox
           title={'分析纠错'}
           count={counts.analyzeError}
           style={{ marginLeft: ss(10) }}
+          image={require('~/assets/images/statistic-analyze-error.png')}
         />
       </Row>
 

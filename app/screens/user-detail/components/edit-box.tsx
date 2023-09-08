@@ -85,10 +85,12 @@ export default function EditBox(params: EditBoxParams) {
           <Row alignItems={'center'}>
             <FormBox
               title='员工姓名'
+              titleWidth={ls(180)}
               style={{ flex: 1 }}
               required
               form={
                 <Input
+                  ml={ss(20)}
                   maxW={ls(380)}
                   autoCorrect={false}
                   flex={1}
@@ -110,6 +112,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ls(180)}
               title='性别'
               required
               style={{ flex: 1, marginLeft: ls(20) }}
@@ -133,30 +136,37 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
+              titleWidth={ls(180)}
               required
               title='所属门店'
               style={{ flex: 1 }}
               form={
-                <SelectShop
-                  onSelect={function (selectedItem: Shop, index: number): void {
-                    setTempUser({
-                      ...(tempUser || {}),
-                      shop: {
-                        originalShopId: tempUser.shop?.shopId,
-                        shopId: selectedItem._id as string,
-                        name: selectedItem.name,
-                        type: selectedItem.type,
-                      },
-                    });
-                  }}
-                  defaultButtonText={tempUser.shop?.name}
-                  buttonHeight={ss(44)}
-                  buttonWidth={ls(380)}
-                  shops={selectShops}
-                />
+                <Box ml={ls(20)}>
+                  <SelectShop
+                    onSelect={function (
+                      selectedItem: Shop,
+                      index: number,
+                    ): void {
+                      setTempUser({
+                        ...(tempUser || {}),
+                        shop: {
+                          originalShopId: tempUser.shop?.shopId,
+                          shopId: selectedItem._id as string,
+                          name: selectedItem.name,
+                          type: selectedItem.type,
+                        },
+                      });
+                    }}
+                    defaultButtonText={tempUser.shop?.name}
+                    buttonHeight={ss(44)}
+                    buttonWidth={ls(380)}
+                    shops={selectShops}
+                  />
+                </Box>
               }
             />
             <FormBox
+              titleWidth={ls(180)}
               required
               title={'角色'}
               style={{ flex: 1, marginLeft: ls(20) }}
@@ -182,11 +192,13 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
+              titleWidth={ls(180)}
               required
               title='联系电话'
               style={{ flex: 1 }}
               form={
                 <Input
+                  ml={ss(20)}
                   autoCorrect={false}
                   defaultValue={tempUser.phoneNumber}
                   flex={1}
@@ -208,6 +220,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ls(180)}
               required
               title='账号'
               style={{ flex: 1, marginLeft: ls(20) }}
@@ -230,11 +243,13 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
+              titleWidth={ls(180)}
               required
               title='身份证号'
               style={{ flex: 1 }}
               form={
                 <Input
+                  ml={ss(20)}
                   autoCorrect={false}
                   defaultValue={tempUser.idCardNumber}
                   w={ls(380)}
@@ -257,28 +272,42 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(30)}>
             <FormBox
+              titleWidth={ls(180)}
               title='员工简介'
               style={{ alignItems: 'flex-start', flex: 1 }}
               form={
-                <Input
-                  autoCorrect={false}
-                  defaultValue={tempUser.description}
-                  flex={1}
-                  h={ss(128)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  onChangeText={(text) => {
-                    setTempUser({
-                      ...tempUser,
-                      description: text,
-                    });
-                  }}
-                  multiline
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                />
+                <>
+                  <Input
+                    ml={ss(20)}
+                    autoCorrect={false}
+                    defaultValue={tempUser.description}
+                    flex={1}
+                    h={ss(128)}
+                    py={ss(10)}
+                    px={ls(20)}
+                    onChangeText={(text) => {
+                      setTempUser({
+                        ...tempUser,
+                        description: text,
+                      });
+                    }}
+                    multiline
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    placeholder='请输入'
+                  />
+                  <Text
+                    color={'#999'}
+                    fontSize={sp(14)}
+                    style={{
+                      position: 'absolute',
+                      right: ss(10),
+                      bottom: ss(10),
+                    }}>
+                    {tempUser.description.length}/300
+                  </Text>
+                </>
               }
             />
           </Row>
@@ -341,7 +370,7 @@ export default function EditBox(params: EditBoxParams) {
                   params.onEditFinish();
                 })
                 .catch((err) => {
-                  toastAlert(toast, 'error', '新增员工失败！');
+                  toastAlert(toast, 'error', err.message);
                 })
                 .finally(() => {
                   setLoading(false);

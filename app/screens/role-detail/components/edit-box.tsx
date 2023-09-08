@@ -43,7 +43,7 @@ export default function EditBox(params: EditBoxParams) {
 
   useEffect(() => {
     setConfigAuthTree(generateAuthorityTreeConfig(currentRole.authorities));
-  }, []);
+  }, [currentRole.authorities]);
 
   const [tempRole, setTempRole] = useState(currentRole);
 
@@ -83,6 +83,7 @@ export default function EditBox(params: EditBoxParams) {
               <FormBox
                 title='角色类型'
                 required
+                titleWidth={ls(180)}
                 style={{ flex: 1 }}
                 form={
                   <Box ml={ls(20)}>

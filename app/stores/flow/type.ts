@@ -393,7 +393,7 @@ export enum FollowUpResult {
   GOOD = 0,
   // 恢复欠佳
   BAD,
-  // 未恢复已加重
+  // 未改善加重了
   WORSE,
 }
 

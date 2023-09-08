@@ -373,7 +373,8 @@ const useFlowStore = create(
         const filterDocs = docs.filter(
           (item: FlowItemResponse) =>
             item.collect.status !== CollectStatus.CANCEL &&
-            item.register.status !== RegisterStatus.CANCEL,
+            item.register.status !== RegisterStatus.CANCEL &&
+            item.collect.status !== CollectStatus.NOT_SET,
         );
         set({
           analyze: {

@@ -83,7 +83,6 @@ export default function FlowScreen({
 
   const checkCollection = () => {
     if (
-      !collect.guidance &&
       collect.healthInfo.audioFiles.length == 0 &&
       collect.healthInfo.leftHandImages.length == 0 &&
       collect.healthInfo.rightHandImages.length == 0 &&
@@ -91,6 +90,11 @@ export default function FlowScreen({
       collect.healthInfo.otherImages.length == 0
     ) {
       toastAlert(toast, 'error', '尚未输入任何有效采集信息！');
+      return false;
+    }
+
+    if (!collect.guidance.trim()) {
+      toastAlert(toast, 'error', '调理导向不能为空！');
       return false;
     }
 

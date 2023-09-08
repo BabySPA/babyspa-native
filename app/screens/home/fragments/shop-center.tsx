@@ -84,21 +84,21 @@ export default function ShopCenter() {
 
   return (
     <Flex flex={1}>
-      <Column margin={ss(10)}>
+      <Column m={ss(10)}>
         <ShopCenterHeader />
-        <Row flexWrap={'wrap'} mt={ss(10)}>
-          {currentSelectedModule.features.map((feature) => {
-            return (
-              <Box key={feature.auth}>
-                {
-                  // @ts-ignore
-                  ShopCenterBoxes(feature.auth)()
-                }
-              </Box>
-            );
-          })}
-        </Row>
       </Column>
+      <Row flexWrap={'wrap'} ml={ss(10)} mb={ss(10)}>
+        {currentSelectedModule.features.map((feature) => {
+          return (
+            <Box key={feature.auth} w={'33.33%'}>
+              {
+                // @ts-ignore
+                ShopCenterBoxes(feature.auth)()
+              }
+            </Box>
+          );
+        })}
+      </Row>
     </Flex>
   );
 }

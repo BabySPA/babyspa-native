@@ -176,20 +176,24 @@ const ShopStatisticBox = () => {
     <ScrollView margin={ss(10)}>
       <Row flex={1}>
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-good.png')}
           title={FollowUpResultText[FollowUpResult.GOOD]}
           count={followUpData?.counts.well || 0}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-bad.png')}
           title={FollowUpResultText[FollowUpResult.BAD]}
           count={followUpData?.counts.bad || 0}
           style={{ marginLeft: ss(10) }}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-worse.png')}
           title={FollowUpResultText[FollowUpResult.WORSE]}
           count={followUpData?.counts.worse || 0}
           style={{ marginLeft: ss(10) }}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-cancel.png')}
           style={{ marginLeft: ss(10) }}
           title={'取消'}
           count={followUpData?.counts.cancel || 0}
@@ -357,7 +361,10 @@ const CenterStatisticBox = () => {
                 </Row>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {Math.floor((item.counts.done / item.counts.all) * 100)}%
+                    {item.counts.done
+                      ? Math.floor((item.counts.done / item.counts.all) * 100)
+                      : 0}
+                    %
                   </Text>
                 </Row>
                 <Row w={ls(100)}>
@@ -409,20 +416,24 @@ const CenterStatisticBox = () => {
     <ScrollView margin={ss(10)}>
       <Row flex={1}>
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-good.png')}
           title={FollowUpResultText[FollowUpResult.GOOD]}
           count={flowsWithShopData?.allCounts.well || 0}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-bad.png')}
           title={FollowUpResultText[FollowUpResult.BAD]}
           count={flowsWithShopData?.allCounts.bad || 0}
           style={{ marginLeft: ss(10) }}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-worse.png')}
           title={FollowUpResultText[FollowUpResult.WORSE]}
           count={flowsWithShopData?.allCounts.worse || 0}
           style={{ marginLeft: ss(10) }}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-followup-cancel.png')}
           style={{ marginLeft: ss(10) }}
           title={'取消'}
           count={flowsWithShopData?.allCounts.cancel || 0}

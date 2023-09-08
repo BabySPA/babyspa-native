@@ -124,10 +124,12 @@ const ShopStatisticBox = () => {
     <ScrollView margin={ss(10)}>
       <Row flex={1}>
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-application.png')}
           title={'贴敷总量（贴）'}
           count={statisticShop.counts.application}
         />
         <StatisticsCountBox
+          image={require('~/assets/images/statistic-massage.png')}
           title={'推拿总量（次）'}
           count={statisticShop.counts.massage}
           style={{ marginLeft: ss(10) }}
@@ -265,19 +267,19 @@ const CenterStatisticBox = () => {
 
   return (
     <ScrollView margin={ss(10)}>
-      <ScrollView horizontal>
-        <Row flex={1}>
-          <StatisticsCountBox
-            title={'贴敷总量（贴）'}
-            count={counts.application}
-          />
-          <StatisticsCountBox
-            title={'推拿总量（次）'}
-            count={counts.massage}
-            style={{ marginLeft: ss(10) }}
-          />
-        </Row>
-      </ScrollView>
+      <Row flex={1}>
+        <StatisticsCountBox
+          image={require('~/assets/images/statistic-application.png')}
+          title={'贴敷总量（贴）'}
+          count={counts.application}
+        />
+        <StatisticsCountBox
+          image={require('~/assets/images/statistic-massage.png')}
+          title={'推拿总量（次）'}
+          count={counts.massage}
+          style={{ marginLeft: ss(10) }}
+        />
+      </Row>
 
       <Box mt={ss(10)} bgColor={'#fff'} borderRadius={ss(8)}>
         <Text color={'#141414'} fontSize={sp(16)} margin={sp(20)}>
