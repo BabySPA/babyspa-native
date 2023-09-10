@@ -29,6 +29,7 @@ import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { RoleAuthority } from '~/app/stores/auth/type';
 import useManagerStore from '~/app/stores/manager';
 import { CollectStatus, AnalyzeStatus } from '~/app/stores/flow/type';
+import useAuthStore from '~/app/stores/auth';
 
 interface ResultModal {
   type: 'success' | 'fail' | 'none';
@@ -51,7 +52,36 @@ export default function FlowScreen({
     updateCurrentArchiveCustomer,
     requestPatchCollectionStatus,
     requestPatchAnalyzeStatus,
+    requestStartAnalyze,
   } = useFlowStore();
+
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (
+      analyze.status !== AnalyzeStatus.DONE &&
+      analyze.status !== AnalyzeStatus.CANCEL
+    ) {
+      // 开始分析
+      requestStartAnalyze()
+        .then((flow) => {
+          if (
+            flow.analyze.status === AnalyzeStatus.IN_PROGRESS &&
+            flow.analyzeOperator?._id !== user?.id
+          ) {
+            setOpenLockModal({
+              isOpen: true,
+              name: flow.analyzeOperator?.name || '',
+            });
+          }
+        })
+        .catch(async (err) => {
+          toastAlert(toast, 'error', err.message);
+          await requestGetInitializeData();
+          navigation.goBack();
+        });
+    }
+  }, []);
 
   const { requestGetTemplates } = useManagerStore();
   const age = getAge(customer.birthday);
@@ -77,6 +107,13 @@ export default function FlowScreen({
   const [closeLoading, setCloseLoading] = useState<boolean>(false);
   const [finishLoading, setFinishLoading] = useState<boolean>(false);
 
+  const [openLockModal, setOpenLockModal] = useState<{
+    isOpen: boolean;
+    name: string;
+  }>({
+    isOpen: false,
+    name: '',
+  });
   useEffect(() => {
     requestGetTemplates();
   }, []);
@@ -101,7 +138,7 @@ export default function FlowScreen({
     return true;
   };
 
-  const checkAnlyze = () => {
+  const checkAnalyze = () => {
     if (!analyze.conclusion) {
       toastAlert(toast, 'error', '分析结论尚未输入!');
       return false;
@@ -364,7 +401,7 @@ export default function FlowScreen({
                 onPress={() => {
                   if (finishLoading) return;
 
-                  if (!checkAnlyze()) {
+                  if (!checkAnalyze()) {
                     return;
                   }
 
@@ -490,6 +527,44 @@ export default function FlowScreen({
             });
         }}
       />
+
+      <Modal isOpen={openLockModal.isOpen} onClose={() => {}}>
+        <Modal.Content>
+          <Modal.Header>{'温馨提示'}</Modal.Header>
+          <Modal.Body>
+            <Center>
+              <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
+                当前订单
+                <Text fontSize={sp(20)} color='#F7BA2A' fontWeight={600}>
+                  {openLockModal.name}
+                </Text>
+                正在分析，请确认避免重复分析。
+              </Text>
+              <Row mt={ss(50)} mb={ss(20)}>
+                <Pressable
+                  hitSlop={ss(10)}
+                  onPress={() => {
+                    setOpenLockModal({
+                      isOpen: false,
+                      name: '',
+                    });
+                  }}>
+                  <Center
+                    borderRadius={4}
+                    borderWidth={1}
+                    borderColor={'#03CBB2'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#0C1B16' fontSize={sp(14)}>
+                      我知道了
+                    </Text>
+                  </Center>
+                </Pressable>
+              </Row>
+            </Center>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </Box>
   );
 }

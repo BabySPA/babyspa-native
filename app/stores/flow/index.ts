@@ -576,6 +576,15 @@ const useFlowStore = create(
         });
     },
 
+    requestStartAnalyze: async () => {
+      const currentFlow = get().currentFlow;
+      return request
+        .patch(`/flows/analyze/${currentFlow._id}/start`)
+        .then(({ data }) => {
+          return data;
+        });
+    },
+
     updateCurrentFlow: (data) => {
       return set((state) => {
         state.currentFlow = produce(state.currentFlow, (draft) => {

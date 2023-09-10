@@ -21,9 +21,11 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 import CustomerFollowUpItem from '../components/customer-followup-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import useGlobalLoading from '~/app/stores/loading';
-import useLayoutConfigWithRole from '~/app/stores/layout';
+import { Shop } from '../../../stores/manager/type';
 
-export default function FollowUpVisit() {
+export default function FollowUpVisit(params: {
+  shop?: Pick<Shop, 'name' | '_id'>;
+}) {
   const navigation = useNavigation();
   const {
     updateCurrentFlow,
@@ -32,7 +34,7 @@ export default function FollowUpVisit() {
 
   return (
     <Flex flex={1}>
-      <Filter />
+      <Filter shop={params?.shop} />
       <ScrollView margin={ss(10)}>
         {flows.length == 0 ? (
           <EmptyBox />
@@ -70,7 +72,7 @@ export default function FollowUpVisit() {
   );
 }
 
-function Filter() {
+function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
   const navigation = useNavigation();
   const {
     customersFollowUp,
@@ -78,7 +80,6 @@ function Filter() {
     requestGetFollowUps,
   } = useFlowStore();
 
-  const { defaultFollowUpSelectShop } = useLayoutConfigWithRole();
   const { openLoading, closeLoading } = useGlobalLoading();
 
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
@@ -90,10 +91,10 @@ function Filter() {
 
   useEffect(() => {
     updateCustomersFollowupFilter({
-      shopId: defaultFollowUpSelectShop._id,
+      shopId: shop?._id,
     });
     requestGetFollowUps();
-  }, [defaultFollowUpSelectShop]);
+  }, [shop]);
 
   const [defaultSelectShop, selectShops] = useSelectShops(true);
 
@@ -107,9 +108,7 @@ function Filter() {
             });
             requestGetFollowUps();
           }}
-          defaultButtonText={
-            defaultFollowUpSelectShop?.name || defaultSelectShop?.name
-          }
+          defaultButtonText={shop?.name || defaultSelectShop?.name}
           buttonHeight={ss(44)}
           buttonWidth={ls(140)}
           shops={selectShops}

@@ -20,7 +20,6 @@ const getFilteredLayoutConfig = (authorityConfig: AuthorityConfig[]) => {
 };
 
 const initialState = {
-  defaultFollowUpSelectShop: { name: '', _id: '' },
   layoutConfig: [],
   currentSelected: 0,
 };
@@ -62,29 +61,6 @@ export default create(
       return set((state) => {
         state.layoutConfig[state.currentSelected].featureSelected = index;
       });
-    },
-
-    enterToFollowUp: (shop) => {
-      if (shop) {
-        set({ defaultFollowUpSelectShop: shop });
-      }
-
-      const layoutConfig = get().getLayoutConfig();
-      const whereCustomerIdx = layoutConfig.findIndex(
-        (item) => item.text === '客户',
-      );
-      if (whereCustomerIdx === -1) {
-        return;
-      }
-      const whereFollowUpIdx = layoutConfig[
-        whereCustomerIdx
-      ].features.findIndex((item) => item.text === '客户随访');
-      if (whereFollowUpIdx === -1) {
-        return;
-      }
-
-      get().changeCurrentSelected(whereCustomerIdx);
-      get().changeFeatureSelected(whereFollowUpIdx);
     },
   })),
 );

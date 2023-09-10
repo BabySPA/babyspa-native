@@ -11,7 +11,7 @@ export interface ILayoutConfig {
   fragment?: () => JSX.Element; // 若非tab layout，则需要传入fragment
   features: {
     text: string;
-    fragment?: () => JSX.Element;
+    fragment?: (params?: any) => JSX.Element;
     auth: RoleAuthority;
   }[];
 }
@@ -19,10 +19,8 @@ export interface ILayoutConfig {
 export type LayoutConfigWithRole = {
   clearCache: () => void;
   layoutConfig: ILayoutConfig[];
-  defaultFollowUpSelectShop: Pick<Shop, 'name' | '_id'>;
   getLayoutConfig: () => ILayoutConfig[];
   currentSelected: number;
   changeCurrentSelected: (index: number) => void;
   changeFeatureSelected: (index: number) => void;
-  enterToFollowUp: (params?: Pick<Shop, 'name' | '_id'>) => void;
 };

@@ -19,6 +19,7 @@ export enum AnalyzeStatus {
   NOT_SET = -1,
   CANCEL = 0,
   DONE = 1,
+  IN_PROGRESS = 2,
 }
 
 export enum EvaluateStatus {
@@ -195,6 +196,8 @@ export interface FlowState {
   requestPatchFlowToCollection: () => Promise<any>;
   requestPatchFlowToAnalyze: () => Promise<any>;
   requestPutFlowToEvaluate: (evaluate: Evaluate) => Promise<any>;
+
+  requestStartAnalyze: () => Promise<FlowItemResponse>;
 
   // 客户档案
   requestArchiveCustomers: () => Promise<any>;

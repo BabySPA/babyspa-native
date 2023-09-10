@@ -4,6 +4,7 @@
  */
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Shop } from '../stores/manager/type';
 
 declare global {
   namespace ReactNavigation {
@@ -97,6 +98,9 @@ export type RootStackParamList = {
   RoleDetail: {
     type: 'edit' | 'detail';
   };
+  FollowUp: {
+    currentShop: Pick<Shop, 'name' | '_id'>;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -133,6 +137,9 @@ export type AppStackList = {
   };
   RoleDetail: {
     type: 'edit' | 'detail';
+  };
+  FollowUp: {
+    currentShop: Pick<Shop, 'name' | '_id'>;
   };
 };
 

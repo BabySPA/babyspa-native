@@ -6,7 +6,6 @@ import { AuthState, RW, RoleAuthority } from './type';
 import useLayoutStore from '../layout';
 import useFlowStore from '../flow';
 import useManagerStore from '../manager';
-import { RoleStatus } from '../manager/type';
 
 const initialState = {
   accessToken: null,
@@ -21,6 +20,13 @@ const useAuthStore = create(
       clearCache: () => {
         set({ ...initialState });
       },
+      selectLoginShop: ({ accessToken, user, currentShopWithRole }) => {
+        set({
+          accessToken,
+          user,
+          currentShopWithRole,
+        });
+      },
       login: async (username: string, password: string) => {
         return new Promise((resolve, reject) => {
           request
@@ -29,26 +35,31 @@ const useAuthStore = create(
               const { accessToken, ...rest } = res.data;
               const user = { ...rest };
 
-              if (
-                user.currentShopWithRole.role.authorities.length == 0 &&
-                user.currentShopWithRole.role.status === RoleStatus.CLOSE
-              ) {
-                // 当前登录用户没有任何权限
+              if (user.shopsWithRole.length == 0) {
                 reject({
                   code: 403,
                   message: '当前登录用户所有角色没有配置任何权限',
                 });
-                return;
+              } else if (user.shopsWithRole.length == 1) {
+                // 直接登录
+                set({
+                  accessToken: accessToken,
+                  user: { ...rest },
+                  currentShopWithRole: user.shopsWithRole[0],
+                });
+                resolve({
+                  accessToken: accessToken,
+                  user: { ...rest },
+                  shouldChooseShops: false,
+                });
+              } else {
+                // 选择店铺
+                resolve({
+                  accessToken: accessToken,
+                  user: { ...rest },
+                  shouldChooseShops: true,
+                });
               }
-
-              set({
-                accessToken: accessToken,
-                user: { ...rest },
-
-                currentShopWithRole: user.currentShopWithRole,
-              });
-
-              resolve({ accessToken, user });
             })
             .catch((err) => {
               reject(err);

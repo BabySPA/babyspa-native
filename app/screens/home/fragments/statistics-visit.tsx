@@ -21,6 +21,7 @@ import { FollowUpResultText, FollowUpStatusTextConfig } from '~/app/constants';
 import { FlowItemResponse, FollowUpResult } from '~/app/stores/flow/type';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
 import useLayoutConfigWithRole from '~/app/stores/layout';
+import { useNavigation } from '@react-navigation/native';
 
 const ShopStatisticBox = () => {
   const {
@@ -206,6 +207,7 @@ const ShopStatisticBox = () => {
   );
 };
 const CenterStatisticBox = () => {
+  const navigation = useNavigation();
   const { statisticShops } = useFlowStore();
 
   const [flowsWithShopData, setFlowsWithShopData] = useState<{
@@ -275,8 +277,6 @@ const CenterStatisticBox = () => {
       allCounts,
     });
   }, [statisticShops]);
-
-  const { enterToFollowUp } = useLayoutConfigWithRole();
 
   const List = () => {
     return (
@@ -396,8 +396,10 @@ const CenterStatisticBox = () => {
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
-                      // 跳转
-                      enterToFollowUp(item.shop);
+                      //
+                      navigation.navigate('FollowUp', {
+                        currentShop: item.shop,
+                      });
                     }}>
                     <Text fontSize={sp(18)} color={'#03CBB2'}>
                       查看

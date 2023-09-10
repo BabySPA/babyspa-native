@@ -10,6 +10,7 @@ import {
   Pressable,
   Switch,
   Center,
+  Circle,
   Image,
 } from 'native-base';
 import { useEffect, useState } from 'react';
@@ -27,6 +28,7 @@ import { AnalyzeStatus } from '~/app/stores/flow/type';
 import { getFlowStatus } from '~/app/constants';
 import useGlobalLoading from '~/app/stores/loading';
 import { Image as NativeImage } from 'react-native';
+import Dot from '~/app/components/dot';
 
 export default function Analyze() {
   const navigation = useNavigation();
@@ -67,6 +69,15 @@ export default function Analyze() {
                       navigation.navigate('FlowInfo', { from: 'analyze' });
                     }}>
                     <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
+                    {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
+                      <Circle
+                        size={ss(18)}
+                        bgColor={'#FC554F'}
+                        position={'absolute'}
+                        right={-ss(9)}
+                        top={-ss(9)}
+                      />
+                    )}
                   </Pressable>
                 </Center>
               ))}

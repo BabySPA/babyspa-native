@@ -80,7 +80,8 @@ export const getFlowStatus = (flow: FlowItemResponse): FlowStatus => {
     return FlowStatus.ToBeCollected;
   } else if (
     flow.collect.status === CollectStatus.DONE &&
-    flow.analyze.status === AnalyzeStatus.NOT_SET
+    (flow.analyze.status === AnalyzeStatus.NOT_SET ||
+      flow.analyze.status === AnalyzeStatus.IN_PROGRESS)
   ) {
     // 待分析
     return FlowStatus.ToBeAnalyzed;

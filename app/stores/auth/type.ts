@@ -49,6 +49,11 @@ export interface AuthState {
   currentShopWithRole: ShopsWithRole | null;
   changeCurrentShopWithRole: (shopWithRole: ShopsWithRole) => Promise<void>;
   login: (username: string, password: string) => Promise<any>;
+  selectLoginShop: (login: {
+    accessToken: string;
+    user: any;
+    currentShopWithRole: ShopsWithRole | null;
+  }) => void;
   logout: () => Promise<any>;
   hasAuthority: (authorityKey: RoleAuthority, rw: RW) => boolean;
   clearCache: () => void;

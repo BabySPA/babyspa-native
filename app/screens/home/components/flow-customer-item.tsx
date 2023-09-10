@@ -188,7 +188,8 @@ export default function FlowCustomerItem({
         {type === OperateType.Analyze &&
           flow.register.status == RegisterStatus.DONE &&
           flow.collect.status == CollectStatus.DONE &&
-          flow.analyze.status == AnalyzeStatus.NOT_SET && (
+          (flow.analyze.status == AnalyzeStatus.NOT_SET ||
+            flow.analyze.status === AnalyzeStatus.IN_PROGRESS) && (
             <OperateButton
               text={'分析'}
               onPress={() => {

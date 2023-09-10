@@ -87,7 +87,6 @@ export default function RecordBox({ edit }: { edit: boolean }) {
             if (permission.status === 'granted') {
               await startRecording();
             } else {
-              console.log('permission ==>', permission);
               // @ts-ignore
               clearTimeout(longPressTimer.current);
               setShowRecordBox(false);
