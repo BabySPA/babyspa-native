@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
-import { FlowArchive } from '~/app/stores/flow/type';
 import DashedLine from 'react-native-dashed-line';
 import dayjs from 'dayjs';
+import { FlowItemResponse } from '~/app/stores/flow/type';
 
 export default function ConclusionInfo({
   selectedConfig,
@@ -19,7 +19,7 @@ export default function ConclusionInfo({
   const { currentFlow, updateAnalyze, requestCustomerArchiveHistory } =
     useFlowStore();
 
-  const [analyzeHistory, setAnalyzeHistory] = useState<FlowArchive[]>([]);
+  const [analyzeHistory, setAnalyzeHistory] = useState<FlowItemResponse[]>([]);
 
   useEffect(() => {
     if (currentFlow.register.customerId)

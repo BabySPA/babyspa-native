@@ -18,7 +18,6 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
-import CT from './checkbox-tree';
 import {
   generateAuthorityConfig,
   generateAuthorityTreeConfig,

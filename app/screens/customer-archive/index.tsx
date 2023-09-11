@@ -26,7 +26,7 @@ import { HistoryArchive } from './components/history-archive';
 import { GrowthCurve } from './components/growth-curve';
 import useFlowStore from '~/app/stores/flow';
 import {
-  FlowArchive,
+  FlowItemResponse,
   GrowthCurveStatisticsResponse,
 } from '~/app/stores/flow/type';
 import { DialogModal, GrowthCurveModal } from '~/app/components/modals';
@@ -61,13 +61,14 @@ export default function CustomerArchive({
     requestDeleteCustomer,
     requestArchiveCustomers,
     currentArchiveCustomer: customer,
+    updateCurrentFlow,
   } = useFlowStore();
 
   const age = getAge(customer?.birthday || dayjs().format('YYYY-MM-DD'));
   const toast = useToast();
 
-  const [archives, setArchives] = useState<FlowArchive[]>([]);
-  const [courses, setCourses] = useState<FlowArchive[][]>([]);
+  const [archives, setArchives] = useState<FlowItemResponse[]>([]);
+  const [courses, setCourses] = useState<FlowItemResponse[][]>([]);
   const [growthCurves, setGrowthCurves] = useState<
     GrowthCurveStatisticsResponse[]
   >([]);
@@ -296,11 +297,9 @@ export default function CustomerArchive({
             (archives.length > 0 ? (
               <ShopArchive
                 archives={archives}
-                onPressToFlowInfo={function (): void {
-                  // updateCurrentFlowCustomer(customer);
-                  // navigation.navigate('FlowInfo', {
-                  //   from: 'analyze',
-                  // });
+                onPressToFlowInfo={function (archive): void {
+                  updateCurrentFlow(archive);
+                  navigation.navigate('FlowInfo', { from: 'analyze' });
                 }}
               />
             ) : (
@@ -310,11 +309,9 @@ export default function CustomerArchive({
             (courses.length > 0 ? (
               <HistoryArchive
                 courses={courses}
-                onPressToFlowInfo={function (): void {
-                  // updateCurrentFlowCustomer(customer);
-                  // navigation.navigate('FlowInfo', {
-                  //   from: 'analyze',
-                  // });
+                onPressToFlowInfo={function (archive): void {
+                  updateCurrentFlow(archive);
+                  navigation.navigate('FlowInfo', { from: 'analyze' });
                 }}
               />
             ) : (

@@ -256,7 +256,9 @@ export default function EditCustomer(params: EditCustomerParams) {
                       numberOfLines={1}
                       ellipsizeMode='tail'
                       maxW={ls(240)}>
-                      {currentFlow.collect.healthInfo.allergy || '请选择或输入'}
+                      {currentFlow.customer.allergy ||
+                        currentFlow.collect.healthInfo.allergy ||
+                        '请选择或输入'}
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
@@ -266,7 +268,11 @@ export default function EditCustomer(params: EditCustomerParams) {
                   </Row>
 
                   <TemplateModal
-                    defaultText={currentFlow.collect.healthInfo.allergy || ''}
+                    defaultText={
+                      currentFlow.customer.allergy ||
+                      currentFlow.collect.healthInfo.allergy ||
+                      ''
+                    }
                     template={getTemplateGroups(TemplateGroupKeys.allergy)}
                     isOpen={isOpenTemplatePicker}
                     onClose={function (): void {
@@ -275,6 +281,10 @@ export default function EditCustomer(params: EditCustomerParams) {
                     onConfirm={function (text): void {
                       updateCurrentFlow({
                         ...currentFlow,
+                        customer: {
+                          ...currentFlow.customer,
+                          allergy: text,
+                        },
                         collect: {
                           ...currentFlow.collect,
                           healthInfo: {
@@ -291,7 +301,6 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
-            required
             title='理疗师'
             style={{ marginTop: ss(20) }}
             form={

@@ -21,6 +21,7 @@ const useAuthStore = create(
         set({ ...initialState });
       },
       selectLoginShop: ({ accessToken, user, currentShopWithRole }) => {
+        useFlowStore.getState().requestGetInitializeData();
         set({
           accessToken,
           user,
@@ -47,6 +48,9 @@ const useAuthStore = create(
                   user: { ...rest },
                   currentShopWithRole: user.shopsWithRole[0],
                 });
+
+                useFlowStore.getState().requestGetInitializeData();
+
                 resolve({
                   accessToken: accessToken,
                   user: { ...rest },

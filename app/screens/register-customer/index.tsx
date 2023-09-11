@@ -84,11 +84,6 @@ export default function RegisterCustomerScreen({
                 return;
               }
 
-              if (!currentFlow.collectionOperator?._id) {
-                toastAlert(toast, 'error', '请选择理疗师！');
-                setLoading(false);
-                return;
-              }
               requestPostRegisterInfo()
                 .then((res) => {
                   toastAlert(

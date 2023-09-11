@@ -309,13 +309,13 @@ export default function SolutionInfo({
                           setShowMassageRemarkModal(true);
                         }}>
                         <Text color='#E36C36' fontSize={sp(16)}>
-                          {item.remark}
+                          {item.remark || '未设置'}
                         </Text>
                         <TemplateModal
                           template={getTemplateGroups(
                             TemplateGroupKeys['massage-remark'],
                           )}
-                          defaultText={remark}
+                          defaultText={item.remark}
                           isOpen={showMassageRemarkModal}
                           onClose={function (): void {
                             setShowMassageRemarkModal(false);

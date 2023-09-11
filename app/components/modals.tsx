@@ -17,6 +17,7 @@ import { Template } from '../stores/manager/type';
 import { useEffect, useRef, useState } from 'react';
 import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
+import useManagerStore from '../stores/manager';
 
 interface DialogParams {
   isOpen: boolean;
@@ -106,6 +107,15 @@ export function TemplateModal({
 }: TemplateModalParams) {
   const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
   const [templateText, setTemplateText] = useState(defaultText);
+  const { requestGetTemplates, templates } = useManagerStore();
+
+  console.log(defaultText);
+  useEffect(() => {
+    if (isOpen && templates.length === 0) {
+      // 打开模版弹窗时，如果没有模版数据，则请求模版数据
+      requestGetTemplates();
+    }
+  }, [isOpen, templates]);
 
   useEffect(() => {
     if (templateText.length > 300) {

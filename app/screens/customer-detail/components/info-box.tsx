@@ -56,7 +56,7 @@ export default function InfoBox(params: InfoBoxParams) {
             />
             <LabelBox
               title='理疗师'
-              value={currentFlow.collectionOperator?.name}
+              value={currentFlow.collectionOperator?.name || '未设置'}
             />
           </Row>
           <Row alignItems={'center'} mt={ss(40)}>

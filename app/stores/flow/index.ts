@@ -61,6 +61,7 @@ export const DefaultCustomer = {
   nickname: '',
   birthday: '',
   gender: Gender.MAN,
+  allergy: '',
   phoneNumber: '',
 };
 
@@ -180,6 +181,7 @@ const useFlowStore = create(
       set({ ...initialState });
     },
     requestGetInitializeData: async () => {
+      console.log('requestGetInitializeData');
       useManagerStore.getState().requestGetTemplates();
       useManagerStore.getState().requestGetRoles();
       useManagerStore.getState().requestGetShops();

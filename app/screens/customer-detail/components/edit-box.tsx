@@ -315,7 +315,6 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
-              required
               title='理疗师'
               style={{ flex: 1 }}
               form={
@@ -395,12 +394,6 @@ export default function EditBox(params: EditBoxParams) {
 
             if (!tempFlow.collect.healthInfo.allergy) {
               toastAlert(toast, 'error', '请选择或输入过敏原');
-              setLoading(false);
-              return;
-            }
-
-            if (!tempFlow.collectionOperator?._id) {
-              toastAlert(toast, 'error', '请选择理疗师！');
               setLoading(false);
               return;
             }

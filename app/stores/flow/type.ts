@@ -65,6 +65,7 @@ export interface Customer {
   birthday: string;
   nickname: string;
   phoneNumber: string;
+  allergy?: string;
   updatedAt?: string;
 }
 
@@ -159,7 +160,6 @@ export type StatisticFlowWithDate = {
   };
 };
 
-export type FlowArchive = Partial<FlowItemResponse>;
 export interface FlowState {
   clearCache: () => void;
 
@@ -201,10 +201,12 @@ export interface FlowState {
 
   // 客户档案
   requestArchiveCustomers: () => Promise<any>;
-  requestCustomerArchiveHistory: (customerId: string) => Promise<FlowArchive[]>;
+  requestCustomerArchiveHistory: (
+    customerId: string,
+  ) => Promise<FlowItemResponse[]>;
   requestCustomerArchiveCourses: (
     customerId: string,
-  ) => Promise<FlowArchive[][]>;
+  ) => Promise<FlowItemResponse[][]>;
   requestCustomerGrowthCurve: (
     customerId: string,
   ) => Promise<GrowthCurveStatisticsResponse[]>;

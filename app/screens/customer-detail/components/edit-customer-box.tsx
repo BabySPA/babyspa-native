@@ -25,6 +25,8 @@ import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import { RadioBox } from '~/app/components/radio';
 import { getAge } from '~/app/utils';
+import { TemplateModal } from '~/app/components/modals';
+import { TemplateGroupKeys } from '~/app/constants';
 
 interface EditCustomerBox {
   onEditFinish: () => void;
@@ -43,6 +45,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
     currentArchiveCustomer,
     updateCurrentArchiveCustomer,
   } = useFlowStore();
+  const { getTemplateGroups } = useManagerStore();
 
   const [tempCustomer, setTempCustomer] = useState(currentArchiveCustomer);
 
@@ -51,6 +54,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
   };
 
   let currentSelectBirthday = tempCustomer.birthday;
+  const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
 
   const age = getAge(tempCustomer.birthday);
   return (
@@ -232,6 +236,62 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               }
             />
           </Row>
+          <Row alignItems={'center'} mt={ss(20)}>
+            <FormBox
+              required
+              title='过敏原'
+              style={{ flex: 1 }}
+              form={
+                <Box>
+                  <Pressable
+                    hitSlop={ss(10)}
+                    onPress={() => {
+                      setIsOpenTemplatePicker(true);
+                    }}>
+                    <Row
+                      w={ls(380)}
+                      borderRadius={4}
+                      justifyContent={'space-between'}
+                      alignItems={'center'}
+                      borderWidth={1}
+                      borderColor={'#D8D8D8'}
+                      py={ss(10)}
+                      pl={ss(20)}
+                      pr={ss(8)}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode='tail'
+                        color={'#333'}
+                        fontSize={sp(16)}>
+                        {tempCustomer.allergy || '请选择或输入'}
+                      </Text>
+                      <Icon
+                        as={<FontAwesome name='angle-down' />}
+                        size={ss(18)}
+                        color='#999'
+                      />
+                    </Row>
+
+                    <TemplateModal
+                      defaultText={tempCustomer.allergy || ''}
+                      template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                      isOpen={isOpenTemplatePicker}
+                      onClose={function (): void {
+                        setIsOpenTemplatePicker(false);
+                      }}
+                      onConfirm={function (text): void {
+                        setTempCustomer({
+                          ...tempCustomer,
+                          allergy: text,
+                        });
+                        setIsOpenTemplatePicker(false);
+                      }}
+                    />
+                  </Pressable>
+                </Box>
+              }
+            />
+          </Row>
         </Box>
       </Column>
 
@@ -291,6 +351,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 nickname: tempCustomer.nickname,
                 phoneNumber: tempCustomer.phoneNumber,
                 gender: tempCustomer.gender,
+                allergy: tempCustomer.allergy,
                 birthday: tempCustomer.birthday,
               })
                 .then(async (res) => {
@@ -299,6 +360,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                     nickname: tempCustomer.nickname,
                     phoneNumber: tempCustomer.phoneNumber,
                     gender: tempCustomer.gender,
+                    allergy: tempCustomer.allergy,
                     birthday: tempCustomer.birthday,
                   });
                   await requestArchiveCustomers();
@@ -318,6 +380,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 nickname: tempCustomer.nickname,
                 phoneNumber: tempCustomer.phoneNumber,
                 gender: tempCustomer.gender,
+                allergy: tempCustomer.allergy,
                 birthday: tempCustomer.birthday,
               })
                 .then(async (res) => {

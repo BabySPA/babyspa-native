@@ -8,12 +8,12 @@ import {
   ScrollView,
   Text,
 } from 'native-base';
-import { FlowArchive } from '~/app/stores/flow/type';
+import { FlowItemResponse } from '~/app/stores/flow/type';
 import { ls, sp, ss } from '~/app/utils/style';
 
 interface ShopArchiveParams {
-  archives: FlowArchive[];
-  onPressToFlowInfo: () => void;
+  archives: FlowItemResponse[];
+  onPressToFlowInfo: (archive: FlowItemResponse) => void;
 }
 export function ShopArchive(params: ShopArchiveParams) {
   return (
@@ -26,7 +26,7 @@ export function ShopArchive(params: ShopArchiveParams) {
               key={archive._id}
               w={ls(302)}
               onPress={() => {
-                params.onPressToFlowInfo();
+                params.onPressToFlowInfo(archive);
               }}>
               <Row alignItems={'center'}>
                 <Circle size={ss(20)} borderRadius={ss(18)} bgColor={'#DCEEED'}>

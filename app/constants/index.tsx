@@ -370,14 +370,14 @@ export enum FlowOperatorKey {
 export const SolutionDefault = {
   application: {
     name: '消肿止痛贴（0.4g/2ml）',
-    count: 0,
+    count: 1,
     duration: 0,
     acupoint: '',
   },
   massage: {
     name: '小儿推拿',
-    count: 0,
-    remark: '暂无',
+    count: 1,
+    remark: '',
   },
 };
 export const EvaluateStores: Score[] = [1, 2, 3, 4, 5];

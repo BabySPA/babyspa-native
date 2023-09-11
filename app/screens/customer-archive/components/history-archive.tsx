@@ -2,13 +2,13 @@ import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Box, Icon, Pressable, Row, ScrollView, Text } from 'native-base';
 import { useState } from 'react';
-import { FlowArchive } from '~/app/stores/flow/type';
+import { FlowItemResponse } from '~/app/stores/flow/type';
 import { arabicToChineseNumber } from '~/app/utils';
 import { ls, ss, sp } from '~/app/utils/style';
 
 interface HistoryArchiveParams {
-  courses: FlowArchive[][];
-  onPressToFlowInfo: () => void;
+  courses: FlowItemResponse[][];
+  onPressToFlowInfo: (archive: FlowItemResponse) => void;
 }
 export function HistoryArchive(params: HistoryArchiveParams) {
   const [selectIdx, setSelectIdx] = useState(0);
@@ -53,7 +53,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                 <Pressable
                   hitSlop={ss(10)}
                   onPress={() => {
-                    params.onPressToFlowInfo();
+                    params.onPressToFlowInfo(course);
                   }}
                   key={idx}
                   w={ls(370)}
