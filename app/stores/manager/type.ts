@@ -103,7 +103,6 @@ export interface UserState {
 interface RoleState {
   roles: Role[];
   currentRole: Role;
-  configAuthTree: IConfigAuth[];
   // request
   requestGetRoles: () => Promise<any>;
   requestPostRole: () => Promise<any>;
@@ -112,7 +111,6 @@ interface RoleState {
 
   // action
   setCurrentRole: (role: Role) => void;
-  setConfigAuthTree: (authorities: IConfigAuth[]) => void;
 }
 
 export interface TemplateItem {
