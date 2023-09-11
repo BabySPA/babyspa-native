@@ -3,7 +3,6 @@ import request from '~/app/api';
 import { immer } from 'zustand/middleware/immer';
 import { ManangerState, RoleStatus, ShopType } from './type';
 import { ConfigAuthTree } from '~/app/constants';
-import { generateAuthorityConfig } from '~/app/utils';
 import { produce } from 'immer';
 import dayjs from 'dayjs';
 export const DefaultTemplate = [];
@@ -204,26 +203,24 @@ const useManagerStore = create(
     },
     requestPostRole: () => {
       const role = get().currentRole;
-      const authorities = generateAuthorityConfig(get().configAuthTree);
 
       const patchRole = {
         name: role.name,
         status: role.status,
         description: role.description,
-        authorities: authorities,
+        authorities: role.authorities,
         type: role.type,
       };
       return request.post('/roles', patchRole);
     },
     requestPatchRole: async () => {
       const role = get().currentRole;
-      const authorities = generateAuthorityConfig(get().configAuthTree);
 
       const patchRole = {
         name: role.name,
         status: role.status,
         description: role.description,
-        authorities: authorities,
+        authorities: role.authorities,
         type: role.type,
       };
       return request.patch(`/roles/${role._id}`, patchRole);
@@ -237,12 +234,6 @@ const useManagerStore = create(
     setCurrentRole: (role) => {
       set((state) => {
         state.currentRole = role;
-      });
-    },
-
-    setConfigAuthTree: (authorities) => {
-      set((state) => {
-        state.configAuthTree = authorities;
       });
     },
 
