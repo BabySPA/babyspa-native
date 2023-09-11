@@ -411,3 +411,30 @@ export const generateFlowCounts = (
     application,
   };
 };
+
+export function haveSameAuthorities(arr1: AuthorityConfig[], arr2: AuthorityConfig[]) {
+  if (arr1.length !== arr2.length) {
+    return false; // 如果数组长度不同，直接返回 false
+  }
+
+  // 创建一个包含所有 authority 值的 Set
+  const authoritySet1 = new Set(arr1.map((item) => item.authority));
+  const authoritySet2 = new Set(arr2.map((item) => item.authority));
+
+  // 检查两个集合是否相等
+  return areSetsEqual(authoritySet1, authoritySet2);
+}
+
+function areSetsEqual(set1: Set<any>, set2: Set<any>) {
+  if (set1.size !== set2.size) {
+    return false;
+  }
+
+  for (const item of set1) {
+    if (!set2.has(item)) {
+      return false;
+    }
+  }
+
+  return true;
+}

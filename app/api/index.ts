@@ -3,6 +3,7 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Environment from '../config/environment';
 import useAuthStore from '../stores/auth';
+import { haveSameAuthorities } from '../utils';
 
 type Result<T> = {
   code: number;
@@ -61,6 +62,26 @@ class Request {
         if (code != 0) {
           return Promise.reject(res.data);
         }
+
+        // 获取当前权限与请求获得的权限
+        const currentShopWithRole = useAuthStore.getState().currentShopWithRole;
+        const responseAuthorities = res.headers['c-authorities'];
+
+        // 如果当前权限与请求获得的权限不一致，更新权限
+
+        const savedAuthorities = currentShopWithRole?.role.authorities;
+
+        if (savedAuthorities && responseAuthorities) {
+          const responseAuthoritiesArray = JSON.parse(responseAuthorities);
+          if (
+            !haveSameAuthorities(savedAuthorities, responseAuthoritiesArray)
+          ) {
+            // 权限有变化需要重新登录
+            const { logout } = useAuthStore.getState();
+            logout();
+          }
+        }
+
         return res.data;
       },
       ({ response }: { response: AxiosResponse<Error> }) => {
