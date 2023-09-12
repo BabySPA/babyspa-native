@@ -63,7 +63,21 @@ export default function CollectionCard(params: CollectionCardParams) {
             </Text>
             {collect.healthInfo.lingualImage.length > 0 ? (
               collect.healthInfo.lingualImage.map((item, idx) => {
-                return <PreviewImage source={item as string} key={idx} />;
+                return (
+                  <PreviewImage
+                    source={item as string}
+                    key={idx}
+                    current={idx}
+                    images={[
+                      ...collect.healthInfo.lingualImage,
+                      ...collect.healthInfo.leftHandImages,
+                      ...collect.healthInfo.rightHandImages,
+                      ...collect.healthInfo.otherImages,
+                    ].map((item) => ({
+                      url: typeof item === 'string' ? item : item.uri,
+                    }))}
+                  />
+                );
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
@@ -81,7 +95,21 @@ export default function CollectionCard(params: CollectionCardParams) {
             </Text>
             {collect.healthInfo.leftHandImages.length > 0 ? (
               collect.healthInfo.leftHandImages.map((item, idx) => {
-                return <PreviewImage source={item as string} key={idx} />;
+                return (
+                  <PreviewImage
+                    source={item as string}
+                    key={idx}
+                    current={idx}
+                    images={[
+                      ...collect.healthInfo.leftHandImages,
+                      ...collect.healthInfo.rightHandImages,
+                      ...collect.healthInfo.lingualImage,
+                      ...collect.healthInfo.otherImages,
+                    ].map((item) => ({
+                      url: typeof item === 'string' ? item : item.uri,
+                    }))}
+                  />
+                );
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
@@ -99,7 +127,21 @@ export default function CollectionCard(params: CollectionCardParams) {
             </Text>
             {collect.healthInfo.rightHandImages.length > 0 ? (
               collect.healthInfo.rightHandImages.map((item, idx) => {
-                return <PreviewImage source={item as string} key={idx} />;
+                return (
+                  <PreviewImage
+                    source={item as string}
+                    key={idx}
+                    current={idx}
+                    images={[
+                      ...collect.healthInfo.rightHandImages,
+                      ...collect.healthInfo.leftHandImages,
+                      ...collect.healthInfo.lingualImage,
+                      ...collect.healthInfo.otherImages,
+                    ].map((item) => ({
+                      url: typeof item === 'string' ? item : item.uri,
+                    }))}
+                  />
+                );
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
@@ -123,6 +165,38 @@ export default function CollectionCard(params: CollectionCardParams) {
             ) : (
               <Text fontSize={sp(18)} color='#333'>
                 暂无录音
+              </Text>
+            )}
+          </Row>
+          <Row mt={ss(20)}>
+            <Text
+              fontSize={sp(18)}
+              color='#999'
+              w={ls(100)}
+              textAlign={'right'}>
+              其他：
+            </Text>
+            {collect.healthInfo.otherImages.length > 0 ? (
+              collect.healthInfo.otherImages.map((item, idx) => {
+                return (
+                  <PreviewImage
+                    source={item as string}
+                    key={idx}
+                    current={idx}
+                    images={[
+                      ...collect.healthInfo.otherImages,
+                      ...collect.healthInfo.lingualImage,
+                      ...collect.healthInfo.leftHandImages,
+                      ...collect.healthInfo.rightHandImages,
+                    ].map((item) => ({
+                      url: typeof item === 'string' ? item : item.uri,
+                    }))}
+                  />
+                );
+              })
+            ) : (
+              <Text fontSize={sp(18)} color='#333'>
+                未设置
               </Text>
             )}
           </Row>

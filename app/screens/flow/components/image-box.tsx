@@ -160,7 +160,13 @@ export default function ImageBox({
       {images.map((item, index) => {
         return (
           <Center key={index} w={ss(100)} h={ss(100)} mr={ss(10)} mb={ss(10)}>
-            <PreviewImage source={typeof item === 'string' ? item : item.uri} />
+            <PreviewImage
+              current={index}
+              source={typeof item === 'string' ? item : item.uri}
+              images={images.map((item) => ({
+                url: typeof item === 'string' ? item : item.uri,
+              }))}
+            />
             {typeof item !== 'string' && (
               <Center
                 w={'100%'}
