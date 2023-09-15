@@ -3,15 +3,21 @@ import { create } from 'zustand';
 interface LoadingState {
   loading: boolean;
   spinner: boolean;
-  openLoading: (spinner?: boolean) => void;
+  loadingText: string;
+  openLoading: (spinner?: boolean, loadingText?: string) => void;
   closeLoading: () => void;
 }
 
 const useGlobalLoading = create<LoadingState>((set, get) => ({
   loading: false,
   spinner: true,
-  openLoading: (spinner?: boolean) => {
-    set({ loading: true, spinner: spinner ?? true });
+  loadingText: '',
+  openLoading: (spinner?: boolean, loadingText?: string) => {
+    set({
+      loading: true,
+      spinner: spinner ?? true,
+      loadingText: loadingText ?? '',
+    });
   },
 
   closeLoading: () => {

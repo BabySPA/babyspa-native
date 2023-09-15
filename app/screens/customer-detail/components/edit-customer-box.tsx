@@ -238,7 +238,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
           </Row>
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
-              required
               title='过敏原'
               style={{ flex: 1 }}
               form={

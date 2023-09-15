@@ -231,7 +231,6 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
-            required
             title='过敏原'
             style={{ marginTop: ss(20), alignItems: 'center' }}
             form={

@@ -255,7 +255,6 @@ export default function EditBox(params: EditBoxParams) {
 
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
-              required
               title='过敏原'
               style={{ flex: 1 }}
               form={
@@ -299,6 +298,10 @@ export default function EditBox(params: EditBoxParams) {
                       onConfirm={function (text): void {
                         setTempFlow({
                           ...tempFlow,
+                          customer: {
+                            ...tempFlow.customer,
+                            allergy: text,
+                          },
                           collect: {
                             ...tempFlow.collect,
                             healthInfo: {
@@ -388,12 +391,6 @@ export default function EditBox(params: EditBoxParams) {
 
             if (!tempFlow.customer.birthday) {
               toastAlert(toast, 'error', '请选择生日！');
-              setLoading(false);
-              return;
-            }
-
-            if (!tempFlow.collect.healthInfo.allergy) {
-              toastAlert(toast, 'error', '请选择或输入过敏原');
               setLoading(false);
               return;
             }

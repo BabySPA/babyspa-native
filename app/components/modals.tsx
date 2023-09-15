@@ -106,10 +106,12 @@ export function TemplateModal({
   onConfirm,
 }: TemplateModalParams) {
   const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
-  const [templateText, setTemplateText] = useState(defaultText);
+  const [templateText, setTemplateText] = useState('');
   const { requestGetTemplates, templates } = useManagerStore();
 
-  console.log(defaultText);
+  useEffect(() => {
+    setTemplateText(defaultText);
+  }, [defaultText]);
   useEffect(() => {
     if (isOpen && templates.length === 0) {
       // 打开模版弹窗时，如果没有模版数据，则请求模版数据

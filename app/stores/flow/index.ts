@@ -451,7 +451,7 @@ const useFlowStore = create(
         gender: flow.customer.gender,
         birthday: flow.customer.birthday,
         nickname: flow.customer.nickname,
-        allergy: flow.collect.healthInfo.allergy,
+        allergy: flow.customer.allergy || flow.collect.healthInfo.allergy,
         operatorId: flow.collectionOperator?._id,
       };
 
@@ -475,7 +475,7 @@ const useFlowStore = create(
         gender: flow.customer.gender,
         birthday: flow.customer.birthday,
         nickname: flow.customer.nickname,
-        allergy: flow.collect.healthInfo.allergy,
+        allergy: flow.customer.allergy || flow.collect.healthInfo.allergy,
         operatorId: flow.collectionOperator?._id,
       };
 

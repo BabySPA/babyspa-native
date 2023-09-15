@@ -4,6 +4,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Environment from '../config/environment';
 import useAuthStore from '../stores/auth';
 import { haveSameAuthorities } from '../utils';
+import useGlobalLoading from '../stores/loading';
 
 type Result<T> = {
   code: number;
@@ -78,7 +79,12 @@ class Request {
           ) {
             // 权限有变化需要重新登录
             const { logout } = useAuthStore.getState();
-            logout();
+            const { openLoading, closeLoading } = useGlobalLoading();
+            openLoading(true, '当前登录角色权限有变化，请重新登陆...');
+            setTimeout(() => {
+              logout();
+              closeLoading();
+            }, 500);
           }
         }
 
@@ -92,7 +98,7 @@ class Request {
           const { logout } = useAuthStore.getState();
           logout();
         }
-        
+
         return Promise.reject(response.data);
       },
     );

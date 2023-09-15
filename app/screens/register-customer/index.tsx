@@ -78,12 +78,6 @@ export default function RegisterCustomerScreen({
                 return;
               }
 
-              if (!currentFlow.collect.healthInfo.allergy) {
-                toastAlert(toast, 'error', '请选择或输入过敏原');
-                setLoading(false);
-                return;
-              }
-
               requestPostRegisterInfo()
                 .then((res) => {
                   toastAlert(
