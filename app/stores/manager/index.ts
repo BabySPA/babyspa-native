@@ -72,7 +72,6 @@ const initialState = {
   // template
   templates: DefaultTemplate,
   currentSelectTemplateIdx: 0,
-  currentSelectTemplateGroupIdx: 0,
 
   // logs
   logs: [],
@@ -241,21 +240,7 @@ const useManagerStore = create(
     setCurrentSelectTemplateIdx: (idx) => {
       set((state) => {
         state.currentSelectTemplateIdx = idx;
-        state.currentSelectTemplateGroupIdx = 0;
       });
-    },
-
-    setCurrentSelectTemplateGroupIdx: (idx) => {
-      set((state) => {
-        state.currentSelectTemplateGroupIdx = idx;
-      });
-    },
-
-    getCurrentSelectTemplateGroupItems: () => {
-      const idx = get().currentSelectTemplateIdx;
-      const itemIdx = get().currentSelectTemplateGroupIdx;
-
-      return get().templates[idx]?.groups?.[itemIdx]?.children || [];
     },
 
     getTemplateGroups: (groupKey) => {
@@ -269,19 +254,20 @@ const useManagerStore = create(
       });
     },
 
-    requestPatchTemplateGroup: async (group) => {
+    requestPatchTemplateGroup: async (group, extra) => {
       const idx = get().currentSelectTemplateIdx;
       const template = get().templates[idx];
 
       return request.patch(`/templates/${template._id}/group`, { ...group });
     },
 
-    requestDeleteTemplateGroup: async (groupName) => {
+    requestDeleteTemplateGroup: async (groupName, extra) => {
       const idx = get().currentSelectTemplateIdx;
       const template = get().templates[idx];
 
       return request.delete(`/templates/${template._id}/group`, {
         name: groupName,
+        ...extra,
       });
     },
 

@@ -12,6 +12,7 @@ LogBox.ignoreLogs([
   'Require cycle',
   'Constants.platform',
   'No native splash',
+  'Sending `onAnimatedValueUpdate` with no listeners registered',
   'Cannot update a component',
 ]);
 

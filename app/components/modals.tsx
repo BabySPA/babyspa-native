@@ -1,4 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import {
   Center,
   Modal,
@@ -18,6 +18,8 @@ import { useEffect, useRef, useState } from 'react';
 import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
 import useManagerStore from '../stores/manager';
+import SelectRole from './select-role';
+import SelectDropdown from './select-dropdown';
 
 interface DialogParams {
   isOpen: boolean;
@@ -67,7 +69,7 @@ export function DialogModal({
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
                     否
                   </Text>
                 </Center>
@@ -85,7 +87,7 @@ export function DialogModal({
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
                     是
                   </Text>
                 </Center>
@@ -373,7 +375,7 @@ export function GrowthCurveModal({
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
                     取消
                   </Text>
                 </Center>
@@ -394,8 +396,8 @@ export function GrowthCurveModal({
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
-                    确定
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    确认
                   </Text>
                 </Center>
               </Pressable>
@@ -499,7 +501,7 @@ export function ChangePasswordModal({
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
                     取消
                   </Text>
                 </Center>
@@ -529,7 +531,7 @@ export function ChangePasswordModal({
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
                     保存
                   </Text>
                 </Center>
@@ -612,7 +614,105 @@ export function NewTemplateModalModal({
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    取消
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable
+                opacity={name.length > 0 ? 1 : 0.5}
+                hitSlop={ss(10)}
+                onPress={() => {
+                  if (name) onConfirm(name);
+                }}>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={4}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    确认
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          </Center>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal>
+  );
+}
+
+interface NewTemplateGroupModalParams {
+  isOpen: boolean;
+  defaultName: string;
+  title: string;
+  onClose: () => void;
+  onConfirm: (text: string) => void;
+}
+export function NewTemplateGroupModal({
+  isOpen,
+  defaultName,
+  title,
+  onClose,
+  onConfirm,
+}: NewTemplateGroupModalParams) {
+  const [name, setName] = useState(defaultName);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen) {
+      // @ts-ignore
+      inputRef.current?.clear?.();
+    }
+  }, [isOpen]);
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Modal.Content>
+        <Modal.CloseButton />
+        <Modal.Header>{title}</Modal.Header>
+        <Modal.Body>
+          <Center>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                分组名称
+              </Text>
+              <Input
+                ref={inputRef}
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                w={ls(240)}
+                defaultValue={defaultName}
+                inputMode='text'
+                onChangeText={(text) => {
+                  setName(text);
+                }}
+              />
+            </Row>
+
+            <Row mt={ss(80)} mb={ss(20)}>
+              <Pressable
+                hitSlop={ss(10)}
+                onPress={() => {
+                  onClose();
+                }}>
+                <Center
+                  borderRadius={4}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
                     取消
                   </Text>
                 </Center>
@@ -630,8 +730,309 @@ export function NewTemplateModalModal({
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
                   py={ss(10)}>
-                  <Text color='#0C1B16' fontSize={sp(14)}>
-                    确定
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    确认
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          </Center>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal>
+  );
+}
+
+interface NewLevel3TemplateGroupModalParams {
+  isOpen: boolean;
+  defaultName: string;
+  defaultGroup: string;
+  groups: string[];
+  title: string;
+  onClose: () => void;
+  onConfirm: (param: { group: string; name: string }) => void;
+}
+export function NewLevel3TemplateGroupModal({
+  isOpen,
+  defaultGroup,
+  defaultName,
+  groups,
+  title,
+  onClose,
+  onConfirm,
+}: NewLevel3TemplateGroupModalParams) {
+  const [name, setName] = useState(defaultName);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen) {
+      // @ts-ignore
+      inputRef.current?.clear?.();
+    }
+  }, [isOpen]);
+
+  const [selectGroup, setSelectGroup] = useState(defaultGroup);
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Modal.Content>
+        <Modal.CloseButton />
+        <Modal.Header>{title}</Modal.Header>
+        <Modal.Body>
+          <Center>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                模版名称
+              </Text>
+              <Input
+                ref={inputRef}
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                w={ls(240)}
+                defaultValue={defaultName}
+                inputMode='text'
+                onChangeText={(text) => {
+                  setName(text);
+                }}
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
+                所属分组
+              </Text>
+              <SelectDropdown
+                data={groups}
+                onSelect={(selectedItem, index) => {
+                  setSelectGroup(selectedItem);
+                }}
+                defaultValue={defaultGroup}
+                defaultButtonText={defaultGroup || '请选择分组'}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  return item;
+                }}
+                buttonStyle={{
+                  width: ss(240),
+                  height: ss(48),
+                  backgroundColor: '#fff',
+                  borderRadius: ss(4),
+                  borderWidth: 1,
+                  borderColor: '#D8D8D8',
+                }}
+                buttonTextStyle={{
+                  color: '#333333',
+                  textAlign: 'left',
+                  fontSize: sp(16),
+                }}
+                renderDropdownIcon={(isOpened) => {
+                  return (
+                    <Icon
+                      as={
+                        <FontAwesome
+                          name={isOpened ? 'angle-up' : 'angle-down'}
+                        />
+                      }
+                      size={ss(18)}
+                      color='#999'
+                    />
+                  );
+                }}
+                dropdownIconPosition={'right'}
+                dropdownStyle={{
+                  backgroundColor: '#fff',
+                  borderRadius: ss(8),
+                }}
+                rowStyle={{
+                  backgroundColor: '#fff',
+                  borderBottomColor: '#D8D8D8',
+                }}
+                rowTextStyle={{
+                  color: '#333',
+                  textAlign: 'center',
+                  fontSize: sp(16),
+                }}
+                selectedRowStyle={{
+                  backgroundColor: '#CBEDE2',
+                }}
+              />
+            </Row>
+
+            <Row mt={ss(80)} mb={ss(20)}>
+              <Pressable
+                hitSlop={ss(10)}
+                onPress={() => {
+                  onClose();
+                }}>
+                <Center
+                  borderRadius={4}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    取消
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable
+                opacity={name.length > 0 && selectGroup.length > 0 ? 1 : 0.5}
+                hitSlop={ss(10)}
+                onPress={() => {
+                  onConfirm({
+                    group: selectGroup,
+                    name: name,
+                  });
+                }}>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={4}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    确认
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          </Center>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal>
+  );
+}
+
+interface NewTemplateExtraModalParams {
+  isOpen: boolean;
+  defaultName: string;
+  defaultContent: string;
+  title: string;
+  des1: string;
+  des2: string;
+  onClose: () => void;
+  onConfirm: (params: { title: string; content: string }) => void;
+}
+export function NewTemplateExtraModal({
+  isOpen,
+  defaultName,
+  defaultContent,
+  title,
+  des1,
+  des2,
+  onClose,
+  onConfirm,
+}: NewTemplateExtraModalParams) {
+  const [name, setName] = useState(defaultName);
+  const [content, setContent] = useState(defaultContent);
+  const inputRef1 = useRef(null);
+  const inputRef2 = useRef(null);
+  useEffect(() => {
+    if (!isOpen) {
+      // @ts-ignore
+      inputRef1.current?.clear?.();
+      // @ts-ignore
+      inputRef2.current?.clear?.();
+    }
+  }, [isOpen]);
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Modal.Content>
+        <Modal.CloseButton />
+        <Modal.Header>{title}</Modal.Header>
+        <Modal.Body>
+          <Center>
+            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                {des1}
+              </Text>
+              <Input
+                ref={inputRef1}
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入'
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                w={ls(240)}
+                defaultValue={defaultName}
+                inputMode='text'
+                onChangeText={(text) => {
+                  setName(text);
+                }}
+              />
+            </Row>
+            <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
+              <Text fontSize={sp(20)} color='#333'>
+                {des2}
+              </Text>
+              <Input
+                ref={inputRef2}
+                px={ls(20)}
+                py={ss(10)}
+                placeholder='请输入'
+                multiline
+                fontSize={sp(18)}
+                color='#333'
+                ml={ls(20)}
+                w={ls(240)}
+                h={ss(145)}
+                defaultValue={defaultContent}
+                inputMode='text'
+                onChangeText={(text) => {
+                  setContent(text);
+                }}
+              />
+            </Row>
+
+            <Row mt={ss(80)} mb={ss(20)}>
+              <Pressable
+                hitSlop={ss(10)}
+                onPress={() => {
+                  onClose();
+                }}>
+                <Center
+                  borderRadius={4}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    取消
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable
+                hitSlop={ss(10)}
+                onPress={() => {
+                  onConfirm({
+                    title: name || defaultName,
+                    content: content || defaultContent,
+                  });
+                }}>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={4}
+                  borderWidth={1}
+                  borderColor={'#03CBB2'}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    确认
                   </Text>
                 </Center>
               </Pressable>

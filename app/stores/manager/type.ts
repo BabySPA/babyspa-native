@@ -113,9 +113,14 @@ interface RoleState {
   setCurrentRole: (role: Role) => void;
 }
 
+export interface ExtraItem {
+  title: string;
+  [key: string]: string;
+}
+
 export interface TemplateItem {
   name: string;
-  children: string[];
+  children: string[] | ExtraItem[] | TemplateItem[];
 }
 
 export interface Template {
@@ -146,22 +151,25 @@ interface TemplateState {
   templates: Template[];
 
   currentSelectTemplateIdx: number;
-  currentSelectTemplateGroupIdx: number;
 
   requestGetTemplates: () => Promise<any>;
   requestPatchTemplateGroup: (
-    group: TemplateItem & { originalName?: string },
+    group: TemplateItem & {
+      originalName?: string;
+      groupName?: string;
+      originalGroupName?: string;
+    },
+    extra?: { isGroup: boolean },
   ) => Promise<any>;
 
-  requestDeleteTemplateGroup: (groupName: string) => Promise<any>;
+  requestDeleteTemplateGroup: (
+    groupName: string,
+    extra?: { isGroup: boolean; groupName: string },
+  ) => Promise<any>;
 
   setCurrentSelectTemplateIdx: (idx: number) => void;
 
-  setCurrentSelectTemplateGroupIdx: (idx: number) => void;
-
   getTemplateGroups: (groupKey: string) => Template | undefined;
-
-  getCurrentSelectTemplateGroupItems: () => string[];
 }
 
 export interface ManangerState
