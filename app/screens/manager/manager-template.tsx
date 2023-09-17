@@ -184,11 +184,11 @@ export default function ManagerTemplate({
   const getGroupLevel = () => {
     if (!groups) return 2;
 
-    return groups.every((item) =>
-      item.children.every((c) => typeof c == 'string'),
-    )
-      ? 2
-      : 3;
+    return templates[currentSelectTemplateIdx]?.key === 'application' ||
+      templates[currentSelectTemplateIdx]?.key === 'massage' ||
+      templates[currentSelectTemplateIdx]?.key === 'guidance'
+      ? 3
+      : 2;
   };
 
   const TextChild = ({ item, level }: { item: any; level: number }) => {
@@ -262,18 +262,15 @@ export default function ManagerTemplate({
                   isOpen: true,
                   isEdit: true,
                   title:
-                    templates[currentSelectTemplateIdx].key ==
-                    'application-acupoint'
+                    templates[currentSelectTemplateIdx].key == 'application'
                       ? '编辑贴敷模板详情'
                       : '编辑推拿模板详情',
                   des1:
-                    templates[currentSelectTemplateIdx].key ==
-                    'application-acupoint'
+                    templates[currentSelectTemplateIdx].key == 'application'
                       ? '贴敷名称'
                       : '推拿名称',
                   des2:
-                    templates[currentSelectTemplateIdx].key ==
-                    'application-acupoint'
+                    templates[currentSelectTemplateIdx].key == 'application'
                       ? '穴位'
                       : '备注',
                   defaultName: extra.title,
@@ -311,7 +308,6 @@ export default function ManagerTemplate({
               {templates[currentSelectTemplateIdx].key == 'application-acupoint'
                 ? '穴位：'
                 : '备注：'}
-              ：
             </Text>
             <Text fontSize={sp(16)} color={'#333'} maxW={'90%'}>
               {extra.content}
@@ -601,165 +597,168 @@ export default function ManagerTemplate({
                 </Text>
               </Row>
             </Pressable>
-            {groups.map((group, groupIdx) => {
-              return (
-                <Box key={groupIdx}>
-                  <Pressable
-                    onLongPress={() => {
-                      // toggle
-                      setCurrentLevel3SelectFolderIdx({
-                        folder: groupIdx,
-                        item:
-                          currentLevel3SelectFolderIdx.folder === groupIdx
-                            ? currentLevel3SelectFolderIdx.item
-                            : 0,
-                      });
-                      setShowEditTemplateGroupModal({
-                        isOpen: true,
-                        isEdit: true,
-                        title: '编辑分组',
-                        defaultName: group.name,
-                      });
-                    }}
-                    hitSlop={ss(10)}
-                    onPress={() => {
-                      // toggle
-                      setCurrentLevel3SelectFolderIdx({
-                        folder:
-                          currentLevel3SelectFolderIdx.folder === groupIdx
-                            ? -1
-                            : groupIdx,
-                        item: 0,
-                      });
-                    }}
-                    alignItems='center'
-                    justifyContent={'space-between'}
-                    bg={
-                      currentLevel3SelectFolderIdx.folder === groupIdx
-                        ? '#F8FBFA'
-                        : '#fff'
-                    }
-                    borderBottomColor='trueGray.200'
-                    borderBottomWidth={1}
-                    flexDirection={'row'}
-                    px={ls(20)}
-                    py={ss(16)}>
-                    <Row alignItems={'center'}>
-                      <Icon
-                        ml={ls(10)}
-                        as={<AntDesign name='folder1' />}
-                        size={ss(24)}
-                        color='#B4B4B4'
-                      />
-                      <Text fontSize={sp(20)} ml={ls(10)} color={'#333'}>
-                        {group.name}
-                      </Text>
-                    </Row>
-
-                    <Icon
-                      as={
-                        <SimpleLineIcons
-                          name={
+            <ScrollView>
+              {groups.map((group, groupIdx) => {
+                return (
+                  <Box key={groupIdx}>
+                    <Pressable
+                      onLongPress={() => {
+                        // toggle
+                        setCurrentLevel3SelectFolderIdx({
+                          folder: groupIdx,
+                          item:
                             currentLevel3SelectFolderIdx.folder === groupIdx
-                              ? 'arrow-down'
-                              : 'arrow-right'
-                          }
-                        />
+                              ? currentLevel3SelectFolderIdx.item
+                              : 0,
+                        });
+                        setShowEditTemplateGroupModal({
+                          isOpen: true,
+                          isEdit: true,
+                          title: '编辑分组',
+                          defaultName: group.name,
+                        });
+                      }}
+                      hitSlop={ss(10)}
+                      onPress={() => {
+                        // toggle
+                        setCurrentLevel3SelectFolderIdx({
+                          folder:
+                            currentLevel3SelectFolderIdx.folder === groupIdx
+                              ? -1
+                              : groupIdx,
+                          item: 0,
+                        });
+                      }}
+                      alignItems='center'
+                      justifyContent={'space-between'}
+                      bg={
+                        currentLevel3SelectFolderIdx.folder === groupIdx
+                          ? '#F8FBFA'
+                          : '#fff'
                       }
-                      size={ss(16)}
-                      color={'#BCBCBC'}
-                    />
-                  </Pressable>
-                  {currentLevel3SelectFolderIdx.folder == groupIdx && (
-                    <SwipeListView
-                      ref={swiperlistRef}
-                      data={group.children as TemplateItem[]}
-                      keyExtractor={(groupItem, index) => groupItem.name}
-                      renderItem={({ item: groupItem, index: groupIdx }) => {
-                        return (
-                          <Box>
+                      borderBottomColor='trueGray.200'
+                      borderBottomWidth={1}
+                      flexDirection={'row'}
+                      px={ls(20)}
+                      py={ss(16)}>
+                      <Row alignItems={'center'}>
+                        <Icon
+                          ml={ls(10)}
+                          as={<AntDesign name='folder1' />}
+                          size={ss(24)}
+                          color='#B4B4B4'
+                        />
+                        <Text fontSize={sp(20)} ml={ls(10)} color={'#333'}>
+                          {group.name}
+                        </Text>
+                      </Row>
+
+                      <Icon
+                        as={
+                          <SimpleLineIcons
+                            name={
+                              currentLevel3SelectFolderIdx.folder === groupIdx
+                                ? 'arrow-down'
+                                : 'arrow-right'
+                            }
+                          />
+                        }
+                        size={ss(16)}
+                        color={'#BCBCBC'}
+                      />
+                    </Pressable>
+                    {currentLevel3SelectFolderIdx.folder == groupIdx && (
+                      <SwipeListView
+                        ref={swiperlistRef}
+                        data={group.children as TemplateItem[]}
+                        keyExtractor={(groupItem, index) => groupItem.name}
+                        renderItem={({ item: groupItem, index: groupIdx }) => {
+                          return (
+                            <Box>
+                              <Pressable
+                                hitSlop={ss(10)}
+                                onPress={() => {
+                                  setCurrentLevel3SelectFolderIdx({
+                                    folder: currentLevel3SelectFolderIdx.folder,
+                                    item: groupIdx,
+                                  });
+                                }}
+                                onLongPress={() => {
+                                  setCurrentLevel3SelectFolderIdx({
+                                    folder: currentLevel3SelectFolderIdx.folder,
+                                    item: groupIdx,
+                                  });
+                                  setShowLevel3EditTemplateModal({
+                                    isOpen: true,
+                                    isEdit: true,
+                                    title: '编辑模版',
+                                    groups:
+                                      templates[
+                                        currentSelectTemplateIdx
+                                      ]?.groups.map((item) => item.name) || [],
+                                    defaultGroup: group.name,
+                                    defaultName: groupItem.name,
+                                  });
+                                }}
+                                alignItems='flex-start'
+                                bg={
+                                  currentLevel3SelectFolderIdx.item === groupIdx
+                                    ? '#1AB7BE'
+                                    : '#fff'
+                                }
+                                justifyContent='center'
+                                borderBottomColor='trueGray.200'
+                                borderBottomWidth={1}
+                                px={ls(20)}
+                                py={ss(16)}>
+                                <Text
+                                  ml={ls(46)}
+                                  fontSize={sp(20)}
+                                  color={
+                                    currentLevel3SelectFolderIdx.item ===
+                                    groupIdx
+                                      ? '#fff'
+                                      : '#333'
+                                  }>
+                                  {groupItem.name}
+                                </Text>
+                              </Pressable>
+                            </Box>
+                          );
+                        }}
+                        renderHiddenItem={(rowData, rowMap) => (
+                          <Row flex={1}>
+                            <Box flex={1} />
                             <Pressable
                               hitSlop={ss(10)}
-                              onPress={() => {
-                                setCurrentLevel3SelectFolderIdx({
-                                  folder: currentLevel3SelectFolderIdx.folder,
-                                  item: groupIdx,
-                                });
-                              }}
-                              onLongPress={() => {
-                                setCurrentLevel3SelectFolderIdx({
-                                  folder: currentLevel3SelectFolderIdx.folder,
-                                  item: groupIdx,
-                                });
-                                setShowLevel3EditTemplateModal({
-                                  isOpen: true,
-                                  isEdit: true,
-                                  title: '编辑模版',
-                                  groups:
-                                    templates[
-                                      currentSelectTemplateIdx
-                                    ]?.groups.map((item) => item.name) || [],
-                                  defaultGroup: group.name,
-                                  defaultName: groupItem.name,
-                                });
-                              }}
-                              alignItems='flex-start'
-                              bg={
-                                currentLevel3SelectFolderIdx.item === groupIdx
-                                  ? '#1AB7BE'
-                                  : '#fff'
-                              }
+                              w={ls(72)}
+                              bg='red.500'
                               justifyContent='center'
-                              borderBottomColor='trueGray.200'
-                              borderBottomWidth={1}
-                              px={ls(20)}
-                              py={ss(16)}>
-                              <Text
-                                ml={ls(46)}
-                                fontSize={sp(20)}
-                                color={
-                                  currentLevel3SelectFolderIdx.item === groupIdx
-                                    ? '#fff'
-                                    : '#333'
-                                }>
-                                {groupItem.name}
+                              onPress={() => {
+                                setShowDeleteTemplateModal({
+                                  isOpen: true,
+                                  groupName: rowData.item.name,
+                                });
+                              }}
+                              alignItems='center'
+                              _pressed={{
+                                opacity: 0.5,
+                              }}>
+                              <Text fontSize={sp(14)} color={'#fff'}>
+                                删除
                               </Text>
                             </Pressable>
-                          </Box>
-                        );
-                      }}
-                      renderHiddenItem={(rowData, rowMap) => (
-                        <Row flex={1}>
-                          <Box flex={1} />
-                          <Pressable
-                            hitSlop={ss(10)}
-                            w={ls(72)}
-                            bg='red.500'
-                            justifyContent='center'
-                            onPress={() => {
-                              setShowDeleteTemplateModal({
-                                isOpen: true,
-                                groupName: rowData.item.name,
-                              });
-                            }}
-                            alignItems='center'
-                            _pressed={{
-                              opacity: 0.5,
-                            }}>
-                            <Text fontSize={sp(14)} color={'#fff'}>
-                              删除
-                            </Text>
-                          </Pressable>
-                        </Row>
-                      )}
-                      rightOpenValue={-ls(72)}
-                      previewOpenValue={-40}
-                      previewOpenDelay={3000}
-                    />
-                  )}
-                </Box>
-              );
-            })}
+                          </Row>
+                        )}
+                        rightOpenValue={-ls(72)}
+                        previewOpenValue={-40}
+                        previewOpenDelay={3000}
+                      />
+                    )}
+                  </Box>
+                );
+              })}
+            </ScrollView>
           </Box>
 
           <Row bgColor={'#fff'} pb={ss(20)} justifyContent='center'>
@@ -779,10 +778,8 @@ export default function ManagerTemplate({
             title='模版详情'
             rightElement={
               <>
-                {(templates[currentSelectTemplateIdx].key ==
-                  'application-acupoint' ||
-                  templates[currentSelectTemplateIdx].key ==
-                    'massage-remark') && (
+                {(templates[currentSelectTemplateIdx].key == 'application' ||
+                  templates[currentSelectTemplateIdx].key == 'massage') && (
                   <Pressable
                     hitSlop={ss(10)}
                     onPress={() => {
@@ -791,17 +788,17 @@ export default function ManagerTemplate({
                         isEdit: false,
                         title:
                           templates[currentSelectTemplateIdx].key ==
-                          'application-acupoint'
+                          'application'
                             ? '新增贴敷模板详情'
                             : '新增推拿模板详情',
                         des1:
                           templates[currentSelectTemplateIdx].key ==
-                          'application-acupoint'
+                          'application'
                             ? '贴敷名称'
                             : '推拿名称',
                         des2:
                           templates[currentSelectTemplateIdx].key ==
-                          'application-acupoint'
+                          'application'
                             ? '穴位'
                             : '备注',
                         defaultName: '',
@@ -834,9 +831,8 @@ export default function ManagerTemplate({
                 <ExtraChild key={index} item={item} index={index + 1} />
               );
             })}
-            {templates[currentSelectTemplateIdx].key !==
-              'application-acupoint' &&
-              templates[currentSelectTemplateIdx].key !== 'massage-remark' && (
+            {templates[currentSelectTemplateIdx].key !== 'application' &&
+              templates[currentSelectTemplateIdx].key !== 'massage' && (
                 <Pressable
                   hitSlop={ss(10)}
                   onPress={() => {
@@ -947,9 +943,6 @@ export default function ManagerTemplate({
               : currentLevel3SelectFolderIdx.folder;
 
           let itemIdx = currentLevel3SelectFolderIdx.item;
-
-          const item = templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
-            ?.children[itemIdx] as TemplateItem;
 
           group.name =
             templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;

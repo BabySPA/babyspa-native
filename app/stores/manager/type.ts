@@ -114,8 +114,7 @@ interface RoleState {
 }
 
 export interface ExtraItem {
-  title: string;
-  [key: string]: string;
+  extra: { title: string; content: string };
 }
 
 export interface TemplateItem {

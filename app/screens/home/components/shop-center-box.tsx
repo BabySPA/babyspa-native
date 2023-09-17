@@ -23,7 +23,8 @@ export default function ShopCenterBox({
         mb={ss(10)}
         px={ss(30)}
         py={ss(24)}
-        justifyContent={'space-between'}>
+        justifyContent={'space-between'}
+      >
         <Column>
           <Text fontSize={sp(24)} color='#333'>
             {title}

@@ -43,7 +43,8 @@ export default function Archive() {
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            minH={'100%'}>
+            minH={'100%'}
+          >
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {customers.map((customer, idx) => (
                 <Center w={'33.33%'} key={idx}>
@@ -54,7 +55,8 @@ export default function Archive() {
                     onPress={() => {
                       updateCurrentArchiveCustomer(customer);
                       navigation.navigate('CustomerArchive');
-                    }}>
+                    }}
+                  >
                     <CustomerArchiveItem customer={customer} />
                   </Pressable>
                 </Center>
@@ -101,7 +103,8 @@ function Filter() {
       borderRadius={ss(10)}
       px={ls(40)}
       justifyContent={'space-between'}
-      alignItems={'center'}>
+      alignItems={'center'}
+    >
       <Row py={ss(20)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
@@ -158,7 +161,8 @@ function Filter() {
           pr={ls(25)}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -187,7 +191,8 @@ function Filter() {
           alignItems={'center'}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -236,7 +241,8 @@ function Filter() {
         onPress={() => {
           updateCurrentArchiveCustomer(DefaultCustomer);
           navigation.navigate('AddNewCustomer');
-        }}>
+        }}
+      >
         <Box
           borderRadius={4}
           borderWidth={1}
@@ -244,7 +250,8 @@ function Filter() {
           bgColor={'rgba(3, 203, 178, 0.20)'}
           px={ls(13)}
           py={ss(10)}
-          _text={{ fontSize: ss(14), color: '#0C1B16' }}>
+          _text={{ fontSize: ss(14), color: '#0C1B16' }}
+        >
           新增客户
         </Box>
       </Pressable>

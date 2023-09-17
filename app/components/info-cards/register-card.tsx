@@ -36,7 +36,8 @@ export default function RegisterCard(params: RegisterCardParams) {
               color={'#333'}
               maxW={ls(220)}
               ellipsizeMode='tail'
-              numberOfLines={1}>
+              numberOfLines={1}
+            >
               {currentFlow.customer.name}
               {currentFlow.customer.nickname && (
                 <Text>({currentFlow.customer.nickname})</Text>

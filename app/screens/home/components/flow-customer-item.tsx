@@ -56,7 +56,8 @@ export default function FlowCustomerItem({
               ].textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
+          borderTopRightRadius={ss(8)}
+        >
           {
             EvaluateTextConfig[
               flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
@@ -75,7 +76,8 @@ export default function FlowCustomerItem({
             color: getStatusTextConfig(flowStatus)?.textColor,
           }}
           borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
+          borderTopRightRadius={ss(8)}
+        >
           {getStatusTextConfig(flowStatus)?.text}
         </Box>
       );
@@ -90,7 +92,8 @@ export default function FlowCustomerItem({
       borderColor={'#15BD8F'}
       w={'100%'}
       minH={ss(148)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Row p={ss(20)} maxW={'70%'}>
         <Column justifyContent={'flex-start'} alignItems={'center'}>
           <Image
@@ -114,7 +117,8 @@ export default function FlowCustomerItem({
               fontWeight={400}
               maxW={ls(180)}
               numberOfLines={1}
-              ellipsizeMode='tail'>
+              ellipsizeMode='tail'
+            >
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -131,7 +135,8 @@ export default function FlowCustomerItem({
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(3)}>
+              ml={ls(3)}
+            >
               {ageText}
             </Text>
           </Row>
@@ -162,7 +167,8 @@ export default function FlowCustomerItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(10)}>
+              ml={ls(10)}
+            >
               {dayjs(flow.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>

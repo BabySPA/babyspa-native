@@ -55,7 +55,8 @@ const ShopStatisticBox = () => {
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}>
+          justifyContent={'space-around'}
+        >
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               客户姓名
@@ -111,7 +112,8 @@ const ShopStatisticBox = () => {
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
-                justifyContent={'space-around'}>
+                justifyContent={'space-around'}
+              >
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {flow.customer.name}
@@ -153,7 +155,8 @@ const ShopStatisticBox = () => {
                     fontSize={sp(18)}
                     color={'#333'}
                     numberOfLines={2}
-                    ellipsizeMode='tail'>
+                    ellipsizeMode='tail'
+                  >
                     {dayjs(flow.analyze.followUp.followUpTime).format(
                       'YY-MM-DD',
                     )}
@@ -288,7 +291,8 @@ const CenterStatisticBox = () => {
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}>
+          justifyContent={'space-around'}
+        >
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               门店
@@ -348,7 +352,8 @@ const CenterStatisticBox = () => {
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
-                justifyContent={'space-around'}>
+                justifyContent={'space-around'}
+              >
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {item.shop.name}
@@ -400,7 +405,8 @@ const CenterStatisticBox = () => {
                       navigation.navigate('FollowUp', {
                         currentShop: item.shop,
                       });
-                    }}>
+                    }}
+                  >
                     <Text fontSize={sp(18)} color={'#03CBB2'}>
                       查看
                     </Text>
@@ -538,7 +544,8 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           pr={ls(25)}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -567,7 +574,8 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           alignItems={'center'}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

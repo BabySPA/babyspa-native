@@ -116,13 +116,15 @@ export default function RegisterCustomerScreen({
                 .finally(() => {
                   setLoading(false);
                 });
-            }}>
+            }}
+          >
             <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
               {loading && <Spinner mr={ls(5)} color='emerald.500' />}
               <Text
                 color={'#03CBB2'}
                 opacity={loading ? 0.6 : 1}
-                fontSize={sp(14, { min: 10 })}>
+                fontSize={sp(14, { min: 10 })}
+              >
                 确定
               </Text>
             </Row>

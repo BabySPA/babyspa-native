@@ -25,7 +25,8 @@ export default function CollectionCard(params: CollectionCardParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      style={style}>
+      style={style}
+    >
       <BoxTitle title='采集信息' />
       <Divider color={'#DFE1DE'} my={ss(14)} />
       {collect.status === CollectStatus.NOT_SET ? (
@@ -46,7 +47,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               过敏原：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
@@ -58,7 +60,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               舌象：
             </Text>
             {collect.healthInfo.lingualImage.length > 0 ? (
@@ -90,7 +93,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               左手手相：
             </Text>
             {collect.healthInfo.leftHandImages.length > 0 ? (
@@ -122,7 +126,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               右手手相：
             </Text>
             {collect.healthInfo.rightHandImages.length > 0 ? (
@@ -154,7 +159,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               录音：
             </Text>
             {collect.healthInfo.audioFiles.length > 0 ? (
@@ -173,7 +179,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               其他：
             </Text>
             {collect.healthInfo.otherImages.length > 0 ? (
@@ -205,7 +212,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               调理导向：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
@@ -218,7 +226,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               理疗师：
             </Text>
             <Text fontSize={sp(18)} color='#333'>
@@ -231,7 +240,8 @@ export default function CollectionCard(params: CollectionCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               采集时间：
             </Text>
             <Text fontSize={sp(18)} color='#333'>

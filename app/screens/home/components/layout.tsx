@@ -59,14 +59,16 @@ export default function Layout() {
         },
       }}
       flex={1}
-      direction='row'>
+      direction='row'
+    >
       <Box>
         <Center
           pt={ss(30)}
           px={ss(20)}
           minW={ss(120)}
           minH={ss(120)}
-          safeAreaLeft>
+          safeAreaLeft
+        >
           <Image
             source={require('~/assets/images/logo.png')}
             style={{
@@ -79,7 +81,8 @@ export default function Layout() {
             color={'white'}
             mt={ss(5)}
             fontWeight={600}
-            textAlign={'center'}>
+            textAlign={'center'}
+          >
             掌阅未来
           </Text>
         </Center>
@@ -91,13 +94,15 @@ export default function Layout() {
                 key={idx}
                 onPress={() => {
                   changeCurrentSelected(idx);
-                }}>
+                }}
+              >
                 <Center
                   safeAreaLeft
                   background={
                     idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
-                  py={ss(16)}>
+                  py={ss(16)}
+                >
                   <Image
                     source={
                       idx == currentSelected ? item.selectedImage : item.image
@@ -108,7 +113,8 @@ export default function Layout() {
                   />
                   <Text
                     fontSize={ls(18)}
-                    color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}>
+                    color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}
+                  >
                     {item.text}
                   </Text>
                 </Center>
@@ -122,21 +128,24 @@ export default function Layout() {
           maxW={ls(130)}
           w={'100%'}
           position={'absolute'}
-          bottom={ss(60)}>
+          bottom={ss(60)}
+        >
           <Pressable
             hitSlop={ss(10)}
             alignItems={'center'}
             onPress={() => {
               // 跳转到个人中心
               navigation.navigate('Personal');
-            }}>
+            }}
+          >
             <Center
               borderRadius={ss(23)}
               borderWidth={ss(3)}
               borderColor={'#fff'}
               w={ss(46)}
               h={ss(46)}
-              bgColor={'#F7CE51'}>
+              bgColor={'#F7CE51'}
+            >
               <Text fontSize={sp(16)} color='#fff'>
                 {user?.name?.[0]}
               </Text>
@@ -191,7 +200,8 @@ export default function Layout() {
           direction='row'
           justifyContent={'center'}
           py={ss(22)}
-          alignItems={'center'}>
+          alignItems={'center'}
+        >
           {!currentSelectedModule?.noTab &&
             currentSelectedModule?.features.map((item, idx) => {
               return (
@@ -201,7 +211,8 @@ export default function Layout() {
                   paddingRight={'8%'}
                   onPress={() => {
                     changeFeatureSelected(idx);
-                  }}>
+                  }}
+                >
                   <Center>
                     <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
                       {item.text}

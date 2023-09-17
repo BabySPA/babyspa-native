@@ -10,6 +10,7 @@ import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 import DashedLine from 'react-native-dashed-line';
 import dayjs from 'dayjs';
 import { FlowItemResponse } from '~/app/stores/flow/type';
+import { TemplateItem } from '~/app/stores/manager/type';
 
 export default function ConclusionInfo({
   selectedConfig,
@@ -166,9 +167,13 @@ export default function ConclusionInfo({
             )}
           </Column>
           <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-            {getTemplateGroups(TemplateGroupKeys.conclusion)?.groups[
-              selectTemplateGroup
-            ].children.map((item, idx) => {
+            {(
+              (
+                getTemplateGroups(TemplateGroupKeys.conclusion)?.groups[
+                  selectTemplateGroup
+                ] as TemplateItem
+              ).children as string[]
+            ).map((item, idx) => {
               return (
                 <Pressable
                   hitSlop={ss(10)}

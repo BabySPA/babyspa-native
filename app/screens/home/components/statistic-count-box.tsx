@@ -16,7 +16,8 @@ export default function StatisticsCountBox(params: {
       flex={1}
       bgColor={'#fff'}
       borderRadius={ss(8)}
-      style={params.style}>
+      style={params.style}
+    >
       <Image size={ss(66)} borderRadius={ss(5)} alt='' source={params.image} />
       <Column ml={ls(24)}>
         <Text color='#666' fontSize={sp(18)}>

@@ -1679,9 +1679,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/cli@npm:0.7.3":
-  version: 0.7.3
-  resolution: "@expo/cli@npm:0.7.3"
+"@expo/cli@npm:0.7.2":
+  version: 0.7.2
+  resolution: "@expo/cli@npm:0.7.2"
   dependencies:
     "@babel/runtime": ^7.20.0
     "@expo/code-signing-certificates": 0.0.5
@@ -1746,7 +1746,7 @@ __metadata:
     ws: ^8.12.1
   bin:
     expo-internal: build/bin/cli
-  checksum: f1b03efbec0dc534ccf96bfee5c63f2f16e039730a6e07ea25f74222fef70bb169f57b0fb25c5fb2640a04c3f755cdeca280cbe1058d6723d46af01cd180a00b
+  checksum: bb67163e60e0a99c3f089495f549fda984ef4b33222dc8c62dc8c51b5dff12b51ccb1f38e12664b6cf47dfe323f80422b0878c958ddc9b5ef395a8a6286d3227
   languageName: node
   linkType: hard
 
@@ -1790,7 +1790,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config@npm:8.0.5, @expo/config@npm:~8.0.0":
+"@expo/config@npm:8.0.2":
+  version: 8.0.2
+  resolution: "@expo/config@npm:8.0.2"
+  dependencies:
+    "@babel/code-frame": ~7.10.4
+    "@expo/config-plugins": ~6.0.0
+    "@expo/config-types": ^48.0.0
+    "@expo/json-file": ^8.2.37
+    getenv: ^1.0.0
+    glob: 7.1.6
+    require-from-string: ^2.0.2
+    resolve-from: ^5.0.0
+    semver: 7.3.2
+    slugify: ^1.3.4
+    sucrase: ^3.20.0
+  checksum: 8474359125f8c93bfb5bd0f1fd62729041a6bc1077fb8095412126f8f75a67541052280fcc33ad48518c25ee666694691bfe8d64e32982e57f8a9703ab80efdf
+  languageName: node
+  linkType: hard
+
+"@expo/config@npm:~8.0.0":
   version: 8.0.5
   resolution: "@expo/config@npm:8.0.5"
   dependencies:
@@ -2018,7 +2037,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/vector-icons@npm:^13.0.0":
+"@expo/vector-icons@npm:13.0.0, @expo/vector-icons@npm:^13.0.0":
   version: 13.0.0
   resolution: "@expo/vector-icons@npm:13.0.0"
   checksum: a1df3b08e5cf0d5e662a05a66e702d18862ceabc69cf71703eb35a512939bdb8c07541bce1a380d296409e75f456de40926d0be78ee713d84709387117d63fa0
@@ -3359,7 +3378,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/core@npm:^6.4.9":
+"@react-navigation/core@npm:^6.0.1":
   version: 6.4.9
   resolution: "@react-navigation/core@npm:6.4.9"
   dependencies:
@@ -3387,7 +3406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native-stack@npm:^6.9.13":
+"@react-navigation/native-stack@npm:6.9.13":
   version: 6.9.13
   resolution: "@react-navigation/native-stack@npm:6.9.13"
   dependencies:
@@ -3403,18 +3422,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native@npm:^6.0.2":
-  version: 6.1.7
-  resolution: "@react-navigation/native@npm:6.1.7"
+"@react-navigation/native@npm:6.0.2":
+  version: 6.0.2
+  resolution: "@react-navigation/native@npm:6.0.2"
   dependencies:
-    "@react-navigation/core": ^6.4.9
+    "@react-navigation/core": ^6.0.1
     escape-string-regexp: ^4.0.0
-    fast-deep-equal: ^3.1.3
     nanoid: ^3.1.23
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 917be90290b2de6aa6d32f0798369757d5577814fa1cf3b6b7fb62efdc6341f0db2c85a1826f1f83ccd563ffd7c2ce3c98ff7560e80f868641a66f162650a992
+  checksum: 3c58ce2a2513f6af284fdad1c8223bf6131972aadae04212b5596a34a0d56bb7e5c85beb25195c8a3dbda58e20a07eaa82c47650266657f229fa280c53a10b38
   languageName: node
   linkType: hard
 
@@ -4888,18 +4906,18 @@ __metadata:
   resolution: "babyspa@workspace:."
   dependencies:
     "@babel/core": ^7.20.0
-    "@expo/vector-icons": ^13.0.0
+    "@expo/vector-icons": 13.0.0
     "@react-native-async-storage/async-storage": 1.17.11
     "@react-native-community/datetimepicker": 6.7.3
-    "@react-navigation/native": ^6.0.2
-    "@react-navigation/native-stack": ^6.9.13
+    "@react-navigation/native": 6.0.2
+    "@react-navigation/native-stack": 6.9.13
     "@types/lodash": ^4.14.197
     "@types/react": ~18.0.14
     "@wuba/react-native-echarts": all
     axios: ^1.4.0
     dayjs: ^1.11.9
     echarts: ^5.4.3
-    expo: ~48.0.18
+    expo: 48.0.18
     expo-av: ~13.2.1
     expo-camera: ~13.2.1
     expo-constants: ~14.2.1
@@ -4923,7 +4941,7 @@ __metadata:
     jest: ^29.2.1
     jest-expo: ~48.0.0
     lodash: ^4.17.21
-    native-base: ^3.4.28
+    native-base: 3.4.28
     patch-package: ^7.0.0
     prettier: ^3.0.0
     react: 18.2.0
@@ -6879,13 +6897,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~48.0.18":
-  version: 48.0.20
-  resolution: "expo@npm:48.0.20"
+"expo@npm:48.0.18":
+  version: 48.0.18
+  resolution: "expo@npm:48.0.18"
   dependencies:
     "@babel/runtime": ^7.20.0
-    "@expo/cli": 0.7.3
-    "@expo/config": 8.0.5
+    "@expo/cli": 0.7.2
+    "@expo/config": 8.0.2
     "@expo/config-plugins": 6.0.2
     "@expo/vector-icons": ^13.0.0
     babel-preset-expo: ~9.3.2
@@ -6907,7 +6925,7 @@ __metadata:
     uuid: ^3.4.0
   bin:
     expo: bin/cli.js
-  checksum: 32bd8366a7eaae4af91e01ed4ec56d8e44efc96d69679f3c8b15bc818044ad01a545873753a7e6fed401248d71242a7ea98a04fec6f7e445b126b493c1dc37fc
+  checksum: 0506bccb60bc09901e75375d35ea14ea79da0719798fe556f622c43d8ef43d8561e00f814bc7005e3e0913f3f87988bcbad895c502b12f1afbb0d2bcb3f7cde0
   languageName: node
   linkType: hard
 
@@ -6950,13 +6968,6 @@ __metadata:
     snapdragon: ^0.8.1
     to-regex: ^3.0.1
   checksum: a41531b8934735b684cef5e8c5a01d0f298d7d384500ceca38793a9ce098125aab04ee73e2d75d5b2901bc5dddd2b64e1b5e3bf19139ea48bac52af4a92f1d00
-  languageName: node
-  linkType: hard
-
-"fast-deep-equal@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "fast-deep-equal@npm:3.1.3"
-  checksum: e21a9d8d84f53493b6aa15efc9cfd53dd5b714a1f23f67fb5dc8f574af80df889b3bce25dc081887c6d25457cce704e636395333abad896ccdec03abaf1f3f9d
   languageName: node
   linkType: hard
 
@@ -10316,7 +10327,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"native-base@npm:^3.4.28":
+"native-base@npm:3.4.28":
   version: 3.4.28
   resolution: "native-base@npm:3.4.28"
   dependencies:

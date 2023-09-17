@@ -19,7 +19,8 @@ export function FormBox(props: FormBoxParams) {
         alignItems={'center'}
         mr={ls(30)}
         justifyItems={'flex-end'}
-        w={ls(80)}>
+        w={ls(80)}
+      >
         <Box opacity={required ? 1 : 0}>
           <Dot />
         </Box>

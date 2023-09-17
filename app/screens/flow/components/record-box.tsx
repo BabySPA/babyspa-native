@@ -193,7 +193,8 @@ export default function RecordBox({ edit }: { edit: boolean }) {
               end: [1, 1],
             },
           }}
-          opacity={isTouchNow ? 0.5 : 1}>
+          opacity={isTouchNow ? 0.5 : 1}
+        >
           <Text color='white' fontSize={sp(12)}>
             按住录音
           </Text>
@@ -203,7 +204,8 @@ export default function RecordBox({ edit }: { edit: boolean }) {
         isOpen={showRecordBox}
         onClose={() => {
           setShowRecordBox(false);
-        }}>
+        }}
+      >
         <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
           <ArrowBox />
           <Text color={'white'} mt={ss(30)}>
@@ -230,7 +232,8 @@ const ArrowBox = () => {
           }}
           borderRadius={8}
           py={ss(27)}
-          px={ls(38)}>
+          px={ls(38)}
+        >
           <Image
             source={require('~/assets/images/record-loading.png')}
             style={{ height: ss(18), width: ls(72) }}

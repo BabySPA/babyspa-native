@@ -79,7 +79,8 @@ export default function EditBox(params: EditBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Column>
         <BoxTitle title={'门店信息'} />
         <Box mt={ss(30)} px={ls(20)}>
@@ -183,7 +184,8 @@ export default function EditBox(params: EditBoxParams) {
                           region: val.join('-'),
                         });
                       });
-                    }}>
+                    }}
+                  >
                     <Row
                       borderRadius={4}
                       justifyContent={'space-between'}
@@ -191,7 +193,8 @@ export default function EditBox(params: EditBoxParams) {
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
-                      px={ss(20)}>
+                      px={ss(20)}
+                    >
                       <Text color={'#333'} fontSize={sp(16)}>
                         {tempShop.region || '请选择'}
                       </Text>
@@ -223,7 +226,8 @@ export default function EditBox(params: EditBoxParams) {
                           openingTime: val.join(':'),
                         });
                       });
-                    }}>
+                    }}
+                  >
                     <Row
                       borderRadius={4}
                       justifyContent={'space-between'}
@@ -231,7 +235,8 @@ export default function EditBox(params: EditBoxParams) {
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
-                      px={ss(10)}>
+                      px={ss(10)}
+                    >
                       <Text color={'#333'} fontSize={sp(16)}>
                         {tempShop.openingTime || '请选择'}
                       </Text>
@@ -254,7 +259,8 @@ export default function EditBox(params: EditBoxParams) {
                           closingTime: val.join(':'),
                         });
                       });
-                    }}>
+                    }}
+                  >
                     <Row
                       borderRadius={4}
                       justifyContent={'space-between'}
@@ -262,7 +268,8 @@ export default function EditBox(params: EditBoxParams) {
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
-                      px={ss(10)}>
+                      px={ss(10)}
+                    >
                       <Text color={'#333'} fontSize={sp(16)}>
                         {tempShop.closingTime || '请选择'}
                       </Text>
@@ -341,14 +348,16 @@ export default function EditBox(params: EditBoxParams) {
           hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
-          }}>
+          }}
+        >
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={4}
             borderWidth={1}
-            borderColor={'#D8D8D8'}>
+            borderColor={'#D8D8D8'}
+          >
             <Text color='#333' fontSize={sp(16)}>
               取消
             </Text>
@@ -394,7 +403,8 @@ export default function EditBox(params: EditBoxParams) {
                   setLoading(false);
                 });
             }
-          }}>
+          }}
+        >
           <Row
             px={ls(34)}
             py={ss(12)}
@@ -402,7 +412,8 @@ export default function EditBox(params: EditBoxParams) {
             borderRadius={4}
             borderWidth={1}
             alignItems={'center'}
-            borderColor={'#00B49E'}>
+            borderColor={'#00B49E'}
+          >
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存

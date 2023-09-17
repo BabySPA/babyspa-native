@@ -30,9 +30,6 @@ export function PrintButton() {
           <span class="ct flex1 text-left">贴数：${item.acupoint}贴</span>
         </div>
         <div class="column px-10 py-10">
-          <span class="ct flex1 text-left">贴敷时长：${
-            dayjs(item.duration).minute() + '分钟'
-          }</span>
           <span class="ct flex1 text-left mt-10">
             穴位：${item.acupoint || '未设置'}
           </span>
@@ -216,7 +213,8 @@ export function PrintButton() {
       hitSlop={ss(10)}
       onPress={() => {
         print();
-      }}>
+      }}
+    >
       <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
         <Text color={'#03CBB2'} fontSize={sp(14, { min: 12 })}>
           打印

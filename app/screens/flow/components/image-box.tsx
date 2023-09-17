@@ -172,7 +172,8 @@ export default function ImageBox({
                 w={'100%'}
                 h={'100%'}
                 position={'absolute'}
-                bgColor={'rgba(0,0,0,0.3)'}>
+                bgColor={'rgba(0,0,0,0.3)'}
+              >
                 <Spinner color='emerald.500' />
               </Center>
             )}
@@ -189,7 +190,8 @@ export default function ImageBox({
                 alignItems={'center'}
                 bgColor={'rgba(0,0,0,0.5)'}
                 top={0}
-                right={0}>
+                right={0}
+              >
                 <Icon
                   as={<AntDesign name={'close'} />}
                   color='#fff'
@@ -213,7 +215,8 @@ export default function ImageBox({
                   borderStyle={'dashed'}
                   bgColor={'#FFF'}
                   w={ss(100)}
-                  h={ss(100)}>
+                  h={ss(100)}
+                >
                   <Icon
                     as={<AntDesign name='plus' size={ss(40)} />}
                     color={'#ACACAC'}
@@ -221,7 +224,8 @@ export default function ImageBox({
                 </Center>
               </Pressable>
             );
-          }}>
+          }}
+        >
           <Box alignItems={'center'} py={ss(16)}>
             <Text fontWeight={600} justifyContent={'center'}>
               请选择上传方式
@@ -235,7 +239,8 @@ export default function ImageBox({
             onPress={() => {
               openCamera();
             }}
-            py={ss(16)}>
+            py={ss(16)}
+          >
             <Text textAlign={'center'}>立即拍摄</Text>
           </Menu.Item>
           <Menu.Item
@@ -253,7 +258,8 @@ export default function ImageBox({
                 },
               );
             }}
-            py={ss(16)}>
+            py={ss(16)}
+          >
             <Text textAlign={'center'}>从相册选择</Text>
           </Menu.Item>
         </Menu>

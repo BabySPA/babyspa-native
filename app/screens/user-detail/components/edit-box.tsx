@@ -78,7 +78,8 @@ export default function EditBox(params: EditBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Column>
         <BoxTitle title={'员工信息'} />
         <Box mt={ss(30)} px={ls(20)}>
@@ -304,7 +305,8 @@ export default function EditBox(params: EditBoxParams) {
                       position: 'absolute',
                       right: ss(10),
                       bottom: ss(10),
-                    }}>
+                    }}
+                  >
                     {tempUser.description.length}/300
                   </Text>
                 </>
@@ -319,14 +321,16 @@ export default function EditBox(params: EditBoxParams) {
           hitSlop={ss(10)}
           onPress={() => {
             params.onEditFinish();
-          }}>
+          }}
+        >
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={4}
             borderWidth={1}
-            borderColor={'#D8D8D8'}>
+            borderColor={'#D8D8D8'}
+          >
             <Text color='#333' fontSize={sp(16)}>
               取消
             </Text>
@@ -376,7 +380,8 @@ export default function EditBox(params: EditBoxParams) {
                   setLoading(false);
                 });
             }
-          }}>
+          }}
+        >
           <Row
             px={ls(34)}
             py={ss(12)}
@@ -384,7 +389,8 @@ export default function EditBox(params: EditBoxParams) {
             borderRadius={4}
             borderWidth={1}
             alignItems={'center'}
-            borderColor={'#00B49E'}>
+            borderColor={'#00B49E'}
+          >
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存

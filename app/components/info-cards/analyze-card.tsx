@@ -30,7 +30,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      style={style}>
+      style={style}
+    >
       <BoxTitle
         title='分析信息'
         rightElement={
@@ -42,7 +43,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                 navigation.replace('Flow', {
                   type: FlowStatus.ToBeAnalyzed,
                 });
-              }}>
+              }}
+            >
               <Text fontSize={sp(14)} color='#03CBB2'>
                 修改
               </Text>
@@ -76,10 +78,12 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     borderStyle={'dashed'}
                     borderWidth={1}
                     borderColor={'#7AB6AF'}
-                    p={ss(20)}>
+                    p={ss(20)}
+                  >
                     <Row
                       alignItems={'flex-start'}
-                      justifyContent={'space-between'}>
+                      justifyContent={'space-between'}
+                    >
                       <Text fontSize={sp(20)} color='#666'>
                         {item.name}
                       </Text>
@@ -90,18 +94,9 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     <Row
                       alignItems={'flex-start'}
                       justifyContent={'space-between'}
-                      mt={ss(20)}>
-                      <Text fontSize={sp(18)} color='#999'>
-                        贴敷时长：
-                        <Text fontSize={sp(16)} color='#333'>
-                          {dayjs(item.duration).minute() + '分钟'}
-                        </Text>
-                      </Text>
-                      <Text
-                        fontSize={sp(18)}
-                        color='#999'
-                        noOfLines={4}
-                        maxW={'60%'}>
+                      mt={ss(20)}
+                    >
+                      <Text fontSize={sp(18)} color='#999' maxW={'60%'}>
                         穴位：
                         <Text fontSize={sp(16)} color='#333'>
                           {item.acupoint || '未设置'}
@@ -124,10 +119,12 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     borderStyle={'dashed'}
                     borderWidth={1}
                     borderColor={'#7AB6AF'}
-                    p={ss(20)}>
+                    p={ss(20)}
+                  >
                     <Row
                       alignItems={'flex-start'}
-                      justifyContent={'space-between'}>
+                      justifyContent={'space-between'}
+                    >
                       <Text fontSize={sp(20)} color='#666'>
                         {item.name}
                       </Text>
@@ -138,9 +135,9 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     <Text
                       fontSize={sp(18)}
                       color='#999'
-                      noOfLines={4}
                       maxW={'100%'}
-                      mt={ss(20)}>
+                      mt={ss(20)}
+                    >
                       备注：
                       <Text fontSize={sp(16)} color='#333'>
                         {item.remark || '未设置'}
@@ -157,7 +154,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               注意事项：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={ls(400)}>
@@ -170,7 +168,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               分析师：
             </Text>
             <Text fontSize={sp(18)} color='#333'>
@@ -183,7 +182,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               分析时间：
             </Text>
             <Text fontSize={sp(18)} color='#333'>
@@ -196,7 +196,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               随访时间：
             </Text>
             <Text fontSize={sp(18)} color='#333'>
@@ -213,7 +214,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               fontSize={sp(18)}
               color='#999'
               w={ls(100)}
-              textAlign={'right'}>
+              textAlign={'right'}
+            >
               复推时间：
             </Text>
             <Text fontSize={sp(18)} color='#333'>

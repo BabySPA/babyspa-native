@@ -45,7 +45,8 @@ export default function FollowUpVisit(params: {
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            minH={'100%'}>
+            minH={'100%'}
+          >
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {flows.map((flow, idx) => (
                 <Center width={'50%'} key={idx}>
@@ -59,7 +60,8 @@ export default function FollowUpVisit(params: {
                       navigation.navigate('FlowInfo', {
                         from: 'follow-up-detail',
                       });
-                    }}>
+                    }}
+                  >
                     <CustomerFollowUpItem flow={flow} />
                   </Pressable>
                 </Center>
@@ -156,7 +158,8 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           pr={ls(25)}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -185,7 +188,8 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           alignItems={'center'}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

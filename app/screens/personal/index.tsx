@@ -53,7 +53,8 @@ export default function Personal({
           bgColor={'#fff'}
           p={ss(20)}
           borderRadius={ss(10)}
-          justifyContent={'space-between'}>
+          justifyContent={'space-between'}
+        >
           <Column>
             <BoxTitle title='员工信息' rightElement={null} />
             <Box mt={ss(30)} px={ls(20)}>
@@ -92,7 +93,8 @@ export default function Personal({
                         hitSlop={ss(10)}
                         onPress={() => {
                           setShowPassword(!showPassword);
-                        }}>
+                        }}
+                      >
                         <Icon
                           as={
                             <Ionicons
@@ -112,7 +114,8 @@ export default function Personal({
                         ml={ls(38)}
                         onPress={() => {
                           setIsResetPassDialogOpen(true);
-                        }}>
+                        }}
+                      >
                         <Row alignItems={'center'}>
                           <Image
                             alt=''
@@ -162,7 +165,8 @@ export default function Personal({
               hitSlop={ss(10)}
               onPress={() => {
                 setShowDialog(true);
-              }}>
+              }}
+            >
               <Row
                 alignItems={'center'}
                 justifyContent={'center'}
@@ -176,7 +180,8 @@ export default function Personal({
                     start: [0, 0],
                     end: [1, 1],
                   },
-                }}>
+                }}
+              >
                 <Text color='#fff' fontSize={sp(18)}>
                   退出登录
                 </Text>

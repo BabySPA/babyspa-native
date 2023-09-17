@@ -25,7 +25,8 @@ export default function CustomerArchiveItem({
       mb={ss(20)}
       p={ss(20)}
       justifyContent={'space-between'}
-      alignItems={'center'}>
+      alignItems={'center'}
+    >
       <Row w={'100%'}>
         <Column height={'100%'} alignItems={'center'}>
           <Image
@@ -46,7 +47,8 @@ export default function CustomerArchiveItem({
               fontWeight={400}
               maxW={ls(150)}
               ellipsizeMode='tail'
-              numberOfLines={1}>
+              numberOfLines={1}
+            >
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -66,7 +68,7 @@ export default function CustomerArchiveItem({
             w={ls(190)}
             mt={ss(5)}
             pr={ls(5)}
-            >
+          >
             <Text color={'#666'} fontWeight={400} fontSize={sp(18)} ml={ls(3)}>
               {ageText}
             </Text>
@@ -85,7 +87,8 @@ export default function CustomerArchiveItem({
               color={'#C87939'}
               fontWeight={400}
               fontSize={sp(18)}
-              ml={ls(5)}>
+              ml={ls(5)}
+            >
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
           </Row>

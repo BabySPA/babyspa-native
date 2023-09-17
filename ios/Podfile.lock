@@ -23,7 +23,7 @@ PODS:
   - EXJSONUtils (0.5.1)
   - EXManifests (0.5.2):
     - EXJSONUtils
-  - Expo (48.0.20):
+  - Expo (48.0.18):
     - ExpoModulesCore
   - ExpoImage (1.0.1):
     - ExpoModulesCore
@@ -707,7 +707,7 @@ SPEC CHECKSUMS:
   EXImageLoader: fd053169a8ee932dd83bf1fe5487a50c26d27c2b
   EXJSONUtils: 48b1e764ac35160e6f54d21ab60d7d9501f3e473
   EXManifests: 500666d48e8dd7ca5a482c9e729e4a7a6c34081b
-  Expo: b7d2843b0a0027d0ce76121a63085764355a16ed
+  Expo: 3ad7b6c4f91a8d4e661831666952e72294493e80
   ExpoImage: 55b537a1f50df2f6fc3c2d82552e6d1df397a73d
   ExpoImageManipulator: 85ab87e9641b9d83108f8d603e0418c12fc19e2d
   ExpoImagePicker: 270dea232b3a072d981dd564e2cafc63a864edb1

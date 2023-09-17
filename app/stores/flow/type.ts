@@ -312,19 +312,6 @@ export interface Conclusion {
   operator: OperatorInfo;
 }
 
-export interface Massage {
-  name: string;
-  count: number;
-  remark: string;
-}
-
-export interface Application {
-  name: string;
-  count: number;
-  duration: number;
-  acupoint: string;
-}
-
 export interface Register {
   customerId: any;
   status: RegisterStatus;
@@ -424,7 +411,6 @@ export interface Solution {
 export interface Application {
   name: string; // 贴敷名称
   count: number; // 贴敷数量
-  duration: number; // 贴敷时长
   acupoint: string; // 贴敷穴位
 }
 

@@ -39,7 +39,8 @@ export default function ManagerLogger({
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}>
+          justifyContent={'space-around'}
+        >
           <Row w={ls(150)}>
             <Text fontSize={sp(18)} color={'#333'}>
               账号
@@ -82,7 +83,8 @@ export default function ManagerLogger({
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
-                justifyContent={'space-around'}>
+                justifyContent={'space-around'}
+              >
                 <Row w={ls(150)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {log.username}
@@ -137,7 +139,8 @@ export default function ManagerLogger({
         bgColor={'#F6F6FA'}
         flex={1}
         p={ss(10)}
-        safeAreaBottom>
+        safeAreaBottom
+      >
         <Filter />
         <Box mt={ss(10)}>
           <List />
@@ -162,7 +165,8 @@ function Filter() {
       borderRadius={ss(10)}
       justifyContent={'space-between'}
       alignItems={'center'}
-      px={ls(40)}>
+      px={ls(40)}
+    >
       <Row py={ss(20)} alignItems={'center'}>
         <Input
           w={ls(300)}
@@ -206,7 +210,8 @@ function Filter() {
           pr={ls(25)}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -235,7 +240,8 @@ function Filter() {
           alignItems={'center'}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

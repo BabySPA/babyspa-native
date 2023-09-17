@@ -111,7 +111,8 @@ const KeyboardAvoider = ({ yOffset = 10, children }: Props) => {
   return (
     <Animated.View
       ref={ref.trueRef}
-      style={[styles.container, { transform: [{ translateY: kbOffsetAnim }] }]}>
+      style={[styles.container, { transform: [{ translateY: kbOffsetAnim }] }]}
+    >
       {children}
     </Animated.View>
   );

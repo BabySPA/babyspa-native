@@ -22,6 +22,7 @@ import { sp } from '../utils/style';
 import useGlobalLoading from '../stores/loading';
 import Picker from 'react-native-patchpicker';
 import FollowUp from '../screens/follow-up';
+import AnalyzeInfo from '../screens/analyze-info';
 
 const Stack = createNativeStackNavigator<AppStackList>();
 
@@ -34,7 +35,8 @@ export default function AppNavigator() {
         onClose={() => {
           Picker.hide();
           closeLoading();
-        }}>
+        }}
+      >
         {spinner && (
           <Row alignItems={'center'}>
             <Text color={'#f0f0f0'} fontSize={sp(16)}>
@@ -63,6 +65,7 @@ export default function AppNavigator() {
         <Stack.Screen name='CustomerArchive' component={CustomerArchive} />
         <Stack.Screen name='Personal' component={Personal} />
         <Stack.Screen name='FollowUp' component={FollowUp} />
+        <Stack.Screen name='AnalyzeInfo' component={AnalyzeInfo} />
       </Stack.Navigator>
     </Box>
   );

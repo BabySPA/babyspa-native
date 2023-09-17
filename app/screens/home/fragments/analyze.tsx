@@ -55,7 +55,8 @@ export default function Analyze() {
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            minH={'100%'}>
+            minH={'100%'}
+          >
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {flows.map((flow, idx) => (
                 <Center width={'50%'} key={idx}>
@@ -67,7 +68,8 @@ export default function Analyze() {
                     onPress={() => {
                       updateCurrentFlow(flow);
                       navigation.navigate('FlowInfo', { from: 'analyze' });
-                    }}>
+                    }}
+                  >
                     <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
                     {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
                       <Circle
@@ -171,7 +173,8 @@ function Filter() {
           hitSlop={ss(10)}
           onPress={() => {
             setShowFilter(!showFilter);
-          }}>
+          }}
+        >
           <Row alignItems={'center'}>
             <NativeImage
               source={
@@ -214,7 +217,8 @@ function Filter() {
               pr={ls(25)}
               borderRadius={4}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={1}
+            >
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -243,7 +247,8 @@ function Filter() {
               alignItems={'center'}
               borderRadius={4}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={1}
+            >
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -278,12 +283,14 @@ function Filter() {
                     mr={ls(20)}
                     borderColor={
                       analyze.status === status.value ? '#00B49E' : '#D8D8D8'
-                    }>
+                    }
+                  >
                     <Text
                       fontSize={sp(18)}
                       color={
                         analyze.status === status.value ? '#00B49E' : '#666'
-                      }>
+                      }
+                    >
                       {status.label}
                     </Text>
                     {analyze.status === status.value && (
@@ -319,7 +326,8 @@ function Filter() {
               h={ss(44)}
               justifyContent={'center'}
               alignItems={'center'}
-              borderColor='#D8D8D8'>
+              borderColor='#D8D8D8'
+            >
               <Text color='#333' fontSize={sp(14)}>
                 重置
               </Text>
@@ -341,7 +349,8 @@ function Filter() {
               justifyContent={'center'}
               alignItems={'center'}
               ml={ls(20)}
-              bgColor={'rgba(0, 180, 158, 0.10)'}>
+              bgColor={'rgba(0, 180, 158, 0.10)'}
+            >
               <Text color='#00B49E' fontSize={sp(14)}>
                 确定
               </Text>

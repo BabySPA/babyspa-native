@@ -48,7 +48,8 @@ export default function ManagerUser({
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}>
+          justifyContent={'space-around'}
+        >
           <Row w={ls(150)}>
             <Text fontSize={sp(18)} color={'#333'}>
               员工姓名
@@ -97,7 +98,8 @@ export default function ManagerUser({
               borderBottomWidth={1}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
-              justifyContent={'space-around'}>
+              justifyContent={'space-around'}
+            >
               <Row w={ls(150)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {user.name}
@@ -135,7 +137,8 @@ export default function ManagerUser({
                     onPress={() => {
                       setCurrentUser(user);
                       navigation.navigate('UserDetail', { type: 'detail' });
-                    }}>
+                    }}
+                  >
                     <Row alignItems={'center'}>
                       <Image
                         source={require('~/assets/images/list-detail.png')}
@@ -153,7 +156,8 @@ export default function ManagerUser({
                     onPress={() => {
                       setCurrentUser(user);
                       navigation.navigate('UserDetail', { type: 'edit' });
-                    }}>
+                    }}
+                  >
                     <Row alignItems={'center'}>
                       <Image
                         source={require('~/assets/images/list-edit.png')}
@@ -194,7 +198,8 @@ export default function ManagerUser({
         bgColor={'#F6F6FA'}
         flex={1}
         p={ss(10)}
-        safeAreaBottom>
+        safeAreaBottom
+      >
         <Filter
           onSearchChangeText={(text) => {
             setNameFilter(text);
@@ -237,7 +242,8 @@ function Filter({
       borderRadius={ss(10)}
       justifyContent={'space-between'}
       alignItems={'center'}
-      px={ls(40)}>
+      px={ls(40)}
+    >
       <Row py={ss(20)} alignItems={'center'}>
         <Input
           autoCorrect={false}
@@ -285,14 +291,16 @@ function Filter({
         onPress={() => {
           setCurrentUser(DefaultUser);
           navigation.navigate('UserDetail', { type: 'edit' });
-        }}>
+        }}
+      >
         <Row
           bgColor={'#E1F6EF'}
           borderRadius={4}
           px={ls(26)}
           py={ss(10)}
           borderColor={'#15BD8F'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
             新增员工
           </Text>

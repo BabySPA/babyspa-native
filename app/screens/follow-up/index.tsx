@@ -2,8 +2,6 @@ import { Box, Text, Row } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss } from '~/app/utils/style';
-import { useState } from 'react';
-import useManagerStore from '~/app/stores/manager';
 import dayjs from 'dayjs';
 import FollowUpVisit from '../home/fragments/follow-up-visit';
 
@@ -11,8 +9,6 @@ export default function FollowUp({
   navigation,
   route: { params },
 }: AppStackScreenProps<'FollowUp'>) {
-  const { currentRole } = useManagerStore();
-
   const currentShop = params.currentShop;
 
   return (

@@ -398,8 +398,8 @@ export const TemplateGroupKeys = {
   allergy: 'allergy',
   guidance: 'guidance',
   conclusion: 'conclusion',
-  ['application-acupoint']: 'application-acupoint',
-  ['massage-remark']: 'massage-remark',
+  application: 'application',
+  massage: 'massage',
   ['flow-remark']: 'flow-remark',
 };
 

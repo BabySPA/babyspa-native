@@ -1,4 +1,13 @@
-import { Box, Center, Column, Container, Icon, Row, Text } from 'native-base';
+import {
+  Box,
+  Center,
+  Column,
+  Container,
+  Icon,
+  Row,
+  ScrollView,
+  Text,
+} from 'native-base';
 import BoxItem from './box-item';
 import { Pressable, TextInput } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
@@ -7,6 +16,8 @@ import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
+import { TemplateItem } from '~/app/stores/manager/type';
+import EmptyBox from '~/app/components/empty-box';
 
 export default function GuidanceInfo({
   selectedConfig,
@@ -19,6 +30,7 @@ export default function GuidanceInfo({
   } = useFlowStore();
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
+  const [selectTemplateLevel2Group, setSelectTemplateLevel2Group] = useState(0);
 
   const { getTemplateGroups } = useManagerStore();
 
@@ -27,7 +39,8 @@ export default function GuidanceInfo({
       <Column flex={1}>
         <BoxItem
           title={'调理导向'}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+        >
           <Box flex={1}>
             <TextInput
               autoCorrect={false}
@@ -66,7 +79,8 @@ export default function GuidanceInfo({
                     key={idx}
                     onPress={() => {
                       setSelectTemplateGroup(idx);
-                    }}>
+                    }}
+                  >
                     <Center
                       p={ss(10)}
                       w={ss(80)}
@@ -74,7 +88,8 @@ export default function GuidanceInfo({
                       borderTopLeftRadius={ss(10)}
                       bgColor={
                         selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                      }>
+                      }
+                    >
                       <Icon
                         as={<AntDesign name='appstore1' />}
                         size={ss(18)}
@@ -87,7 +102,8 @@ export default function GuidanceInfo({
                         color={
                           selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                         }
-                        fontSize={sp(18)}>
+                        fontSize={sp(18)}
+                      >
                         {item.name}
                       </Text>
                     </Center>
@@ -96,40 +112,98 @@ export default function GuidanceInfo({
               },
             )}
           </Column>
-          <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-            {getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
+          {(
+            getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
               selectTemplateGroup
-            ].children.map((item, idx) => {
-              return (
-                <Pressable
-                  hitSlop={ss(10)}
-                  key={idx}
-                  onPress={() => {
-                    if (!selectedConfig.disabled) {
-                      updateCollection({
-                        guidance:
-                          collect.guidance.trim().length > 0
-                            ? collect.guidance + ',' + item
-                            : item,
-                      });
-                    }
-                  }}>
-                  <Box
-                    px={ls(20)}
-                    py={ss(7)}
-                    mr={ls(10)}
-                    mb={ss(10)}
-                    borderRadius={2}
-                    borderColor={'#D8D8D8'}
-                    borderWidth={1}>
-                    <Text fontSize={sp(18)} color='#000'>
-                      {item}
-                    </Text>
-                  </Box>
-                </Pressable>
-              );
-            })}
-          </Row>
+            ] as TemplateItem
+          )?.children.length > 0 ? (
+            <Column flex={1}>
+              <ScrollView horizontal maxH={ss(60)}>
+                <Row flex={1} px={ls(20)}>
+                  {getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
+                    selectTemplateGroup
+                  ]?.children.map((item: any, idx) => {
+                    return (
+                      <Pressable
+                        hitSlop={ss(10)}
+                        key={idx}
+                        onPress={() => {
+                          setSelectTemplateLevel2Group(idx);
+                        }}
+                      >
+                        <Box
+                          px={ls(20)}
+                          py={ss(7)}
+                          mr={ls(10)}
+                          mb={ss(10)}
+                          borderRadius={2}
+                          borderColor={
+                            selectTemplateLevel2Group === idx
+                              ? '#5EACA3'
+                              : '#D8D8D8'
+                          }
+                          borderWidth={1}
+                        >
+                          <Text
+                            fontSize={sp(18)}
+                            color={
+                              selectTemplateLevel2Group === idx
+                                ? '#3AAEA3'
+                                : '#000'
+                            }
+                          >
+                            {item.name}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    );
+                  })}
+                </Row>
+              </ScrollView>
+              <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+                {(
+                  (
+                    getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
+                      selectTemplateGroup
+                    ]?.children[selectTemplateLevel2Group] as TemplateItem
+                  )?.children as string[]
+                ).map((item, idx) => {
+                  return (
+                    <Pressable
+                      hitSlop={ss(10)}
+                      key={idx}
+                      onPress={() => {
+                        if (!selectedConfig.disabled) {
+                          updateCollection({
+                            guidance:
+                              collect.guidance.trim().length > 0
+                                ? collect.guidance + ',' + item
+                                : item,
+                          });
+                        }
+                      }}
+                    >
+                      <Box
+                        px={ls(20)}
+                        py={ss(7)}
+                        mr={ls(10)}
+                        mb={ss(10)}
+                        borderRadius={2}
+                        borderColor={'#D8D8D8'}
+                        borderWidth={1}
+                      >
+                        <Text fontSize={sp(18)} color='#000'>
+                          {item}
+                        </Text>
+                      </Box>
+                    </Pressable>
+                  );
+                })}
+              </Row>
+            </Column>
+          ) : (
+            <EmptyBox title='暂未配置模版' />
+          )}
         </Row>
       </Column>
     </Row>

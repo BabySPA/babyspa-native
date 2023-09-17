@@ -9,6 +9,7 @@ import {
   Modal,
   useToast,
   Spinner,
+  Circle,
 } from 'native-base';
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
@@ -146,8 +147,7 @@ export default function FlowScreen({
     if (analyze.solution.applications.length > 0) {
       if (
         analyze.solution.applications.some(
-          (item) =>
-            item.count == 0 || item.duration == 0 || item.acupoint == '',
+          (item) => item.count == 0 || item.acupoint == '',
         )
       ) {
         toastAlert(toast, 'error', '请检查贴敷方案是否填写完整!');
@@ -195,7 +195,8 @@ export default function FlowScreen({
                 // 跳转到历史记录
                 updateCurrentArchiveCustomer(customer);
                 navigation.navigate('CustomerArchive');
-              }}>
+              }}
+            >
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
                 <Text color='#03CBB2' fontSize={sp(12)}>
                   历史记录
@@ -221,19 +222,12 @@ export default function FlowScreen({
           px={ls(20)}
           bgColor={'#F9EDA5'}
           alignItems={'center'}
-          justifyContent={'space-between'}>
-          <Row>
-            <Center
-              w={ss(20)}
-              h={ss(20)}
-              borderRadius={ss(10)}
-              bgColor={'#F56121'}
-              _text={{
-                color: '#fff',
-                fontSize: sp(14),
-              }}>
-              !
-            </Center>
+          justifyContent={'space-between'}
+        >
+          <Row alignItems={'center'}>
+            <Circle bgColor={'#F56121'} size={ss(20)}>
+              <Text color='#fff'>!</Text>
+            </Circle>
             <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
               过敏原：
               {collect.healthInfo.allergy}
@@ -243,7 +237,8 @@ export default function FlowScreen({
             hitSlop={ss(10)}
             onPress={() => {
               setShowWarn(false);
-            }}>
+            }}
+          >
             <Icon
               as={<AntDesign name='closecircleo' size={ss(30)} />}
               color={'#99A9BF'}
@@ -258,7 +253,8 @@ export default function FlowScreen({
           py={ss(16)}
           px={ls(20)}
           alignItems={'center'}
-          justifyContent={'space-between'}>
+          justifyContent={'space-between'}
+        >
           <Container>
             <Row borderRadius={4} borderColor={'#99A9BF'} borderWidth={ss(1)}>
               {configs.map((item, idx) => {
@@ -270,7 +266,8 @@ export default function FlowScreen({
                     borderRightColor={'#99A9BF'}
                     onPress={() => {
                       setSelectedConfig(item);
-                    }}>
+                    }}
+                  >
                     <Box
                       minW={ss(120)}
                       px={ss(20)}
@@ -281,7 +278,8 @@ export default function FlowScreen({
                           : item.disabled
                           ? '#F1F1F1'
                           : 'transparent'
-                      }>
+                      }
+                    >
                       <Text
                         fontSize={sp(20)}
                         fontWeight={600}
@@ -291,7 +289,8 @@ export default function FlowScreen({
                             : item.disabled
                             ? '#999'
                             : '#333'
-                        }>
+                        }
+                      >
                         {item.text}
                       </Text>
                     </Box>
@@ -307,7 +306,8 @@ export default function FlowScreen({
                   hitSlop={ss(10)}
                   onPress={() => {
                     setShowFinishModal(true);
-                  }}>
+                  }}
+                >
                   <Row
                     h={ss(44)}
                     px={ls(26)}
@@ -315,7 +315,8 @@ export default function FlowScreen({
                     borderWidth={1}
                     borderColor={'#F3601E'}
                     alignItems={'center'}
-                    borderRadius={4}>
+                    borderRadius={4}
+                  >
                     {closeLoading && <Spinner mr={ls(5)} color='emerald.500' />}
                     <Text color='#F3601E' fontSize={sp(14)}>
                       结束
@@ -359,7 +360,8 @@ export default function FlowScreen({
                           });
                         }, 2000);
                       });
-                  }}>
+                  }}
+                >
                   <Center
                     w={ls(80)}
                     h={ss(44)}
@@ -367,7 +369,8 @@ export default function FlowScreen({
                     bgColor={'rgba(3, 203, 178, 0.20)'}
                     borderWidth={1}
                     borderColor={'#03CBB2'}
-                    borderRadius={4}>
+                    borderRadius={4}
+                  >
                     <Text color='#0C1B16' fontSize={sp(14)}>
                       提交分析
                     </Text>
@@ -381,7 +384,8 @@ export default function FlowScreen({
                 hitSlop={ss(10)}
                 onPress={() => {
                   setShowFinishModal(true);
-                }}>
+                }}
+              >
                 <Row
                   h={ss(44)}
                   px={ls(26)}
@@ -389,7 +393,8 @@ export default function FlowScreen({
                   borderWidth={1}
                   borderColor={'#F3601E'}
                   alignItems={'center'}
-                  borderRadius={4}>
+                  borderRadius={4}
+                >
                   {closeLoading && <Spinner mr={ls(5)} color='#F3601E' />}
                   <Text color='#F3601E' fontSize={sp(14)}>
                     结束
@@ -430,7 +435,8 @@ export default function FlowScreen({
                     .finally(() => {
                       setFinishLoading(false);
                     });
-                }}>
+                }}
+              >
                 <Row
                   alignItems={'center'}
                   h={ss(44)}
@@ -439,7 +445,8 @@ export default function FlowScreen({
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
-                  borderRadius={4}>
+                  borderRadius={4}
+                >
                   {finishLoading && <Spinner mr={ls(5)} color='emerald.500' />}
                   <Text color='#0C1B16' fontSize={sp(14)}>
                     完成
@@ -468,7 +475,8 @@ export default function FlowScreen({
         isOpen={showResultModal.type !== 'none'}
         onClose={() =>
           setShowResultModal({ type: 'none', message: '', tip: '' })
-        }>
+        }
+      >
         <Modal.Content>
           {showResultModal.type !== 'none' && (
             <Center py={ss(60)}>
@@ -548,13 +556,15 @@ export default function FlowScreen({
                       isOpen: false,
                       name: '',
                     });
-                  }}>
+                  }}
+                >
                   <Center
                     borderRadius={4}
                     borderWidth={1}
                     borderColor={'#03CBB2'}
                     px={ls(30)}
-                    py={ss(10)}>
+                    py={ss(10)}
+                  >
                     <Text color='#0C1B16' fontSize={sp(14)}>
                       我知道了
                     </Text>

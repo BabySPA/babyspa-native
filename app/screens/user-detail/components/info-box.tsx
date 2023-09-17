@@ -46,7 +46,8 @@ export default function InfoBox(params: InfoBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+    >
       <Column>
         <BoxTitle
           title='员工信息'
@@ -61,7 +62,8 @@ export default function InfoBox(params: InfoBoxParams) {
               borderWidth={1}
               borderColor={'#f3601E'}
               px={ls(26)}
-              py={ss(10)}>
+              py={ss(10)}
+            >
               <Row>
                 {deleteLoading && <Spinner mr={ls(5)} color='#999' />}
                 <Text color='#F3601E' fontSize={sp(14)}>
@@ -102,14 +104,16 @@ export default function InfoBox(params: InfoBoxParams) {
                   hitSlop={ss(10)}
                   onPress={() => {
                     setIsResetPassDialogOpen(true);
-                  }}>
+                  }}
+                >
                   <Row alignItems={'center'} ml={ls(40)}>
                     <Pressable
                       hitSlop={ss(10)}
                       mr={ls(20)}
                       onPress={() => {
                         setShowPassword(!showPassword);
-                      }}>
+                      }}
+                    >
                       <Icon
                         as={
                           <Ionicons
@@ -168,14 +172,16 @@ export default function InfoBox(params: InfoBoxParams) {
           ml={ls(74)}
           onPress={() => {
             params.onPressEdit();
-          }}>
+          }}
+        >
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={4}
             borderWidth={1}
-            borderColor={'#00B49E'}>
+            borderColor={'#00B49E'}
+          >
             <Text color='#00B49E' fontSize={sp(16)}>
               编辑
             </Text>

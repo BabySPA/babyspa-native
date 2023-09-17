@@ -412,7 +412,10 @@ export const generateFlowCounts = (
   };
 };
 
-export function haveSameAuthorities(arr1: AuthorityConfig[], arr2: AuthorityConfig[]) {
+export function haveSameAuthorities(
+  arr1: AuthorityConfig[],
+  arr2: AuthorityConfig[],
+) {
   if (arr1.length !== arr2.length) {
     return false; // 如果数组长度不同，直接返回 false
   }

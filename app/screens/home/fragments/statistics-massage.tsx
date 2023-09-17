@@ -401,7 +401,8 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           pr={ls(25)}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -430,7 +431,8 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           alignItems={'center'}
           borderRadius={4}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={1}
+        >
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

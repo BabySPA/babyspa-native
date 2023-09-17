@@ -11,9 +11,11 @@ import {
   Box,
   ScrollView,
   useToast,
+  Image,
+  Circle,
 } from 'native-base';
 import { sp, ss, ls } from '~/app/utils/style';
-import { Template } from '../stores/manager/type';
+import { ExtraItem, Template, TemplateItem } from '../stores/manager/type';
 import { useEffect, useRef, useState } from 'react';
 import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
@@ -217,42 +219,39 @@ export function TemplateModal({
               </ScrollView>
               <ScrollView>
                 <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-                  {template?.groups[selectTemplateItemsIdx].children.map(
-                    (item, idx) => {
-                      return (
-                        <Pressable
-                          hitSlop={ss(10)}
-                          key={idx}
-                          onPress={() => {
-                            const text = templateText.trim();
+                  {(
+                    template?.groups[selectTemplateItemsIdx]
+                      .children as string[]
+                  ).map((item, idx) => {
+                    return (
+                      <Pressable
+                        hitSlop={ss(10)}
+                        key={idx}
+                        onPress={() => {
+                          const text = templateText.trim();
 
-                            // @ts-ignore
-                            inputRef.current.value =
-                              text.length > 0
-                                ? templateText + ',' + item
-                                : item;
-                            setTemplateText(
-                              text.length > 0
-                                ? templateText + ',' + item
-                                : item,
-                            );
-                          }}>
-                          <Box
-                            px={ls(20)}
-                            py={ss(7)}
-                            mr={ls(10)}
-                            mb={ss(10)}
-                            borderRadius={2}
-                            borderColor={'#D8D8D8'}
-                            borderWidth={1}>
-                            <Text fontSize={sp(18)} color='#000'>
-                              {item}
-                            </Text>
-                          </Box>
-                        </Pressable>
-                      );
-                    },
-                  )}
+                          // @ts-ignore
+                          inputRef.current.value =
+                            text.length > 0 ? templateText + ',' + item : item;
+                          setTemplateText(
+                            text.length > 0 ? templateText + ',' + item : item,
+                          );
+                        }}>
+                        <Box
+                          px={ls(20)}
+                          py={ss(7)}
+                          mr={ls(10)}
+                          mb={ss(10)}
+                          borderRadius={2}
+                          borderColor={'#D8D8D8'}
+                          borderWidth={1}>
+                          <Text fontSize={sp(18)} color='#000'>
+                            {item}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    );
+                  })}
                 </Row>
               </ScrollView>
             </Row>
@@ -956,7 +955,7 @@ export function NewTemplateExtraModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' width={ls(85)}>
                 {des1}
               </Text>
               <Input
@@ -976,7 +975,7 @@ export function NewTemplateExtraModal({
               />
             </Row>
             <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' width={ls(85)}>
                 {des2}
               </Text>
               <Input
@@ -1018,10 +1017,14 @@ export function NewTemplateExtraModal({
               <Pressable
                 hitSlop={ss(10)}
                 onPress={() => {
-                  onConfirm({
-                    title: name || defaultName,
-                    content: content || defaultContent,
-                  });
+                  const n = name || defaultName;
+                  const c = content || defaultContent;
+                  if (n.length > 0 && c.length > 0) {
+                    onConfirm({
+                      title: n,
+                      content: c,
+                    });
+                  }
                 }}>
                 <Center
                   ml={ls(20)}
@@ -1030,7 +1033,13 @@ export function NewTemplateExtraModal({
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
-                  py={ss(10)}>
+                  py={ss(10)}
+                  opacity={
+                    (name || defaultName).length > 0 &&
+                    (content || defaultContent).length > 0
+                      ? 1
+                      : 0.5
+                  }>
                   <Text color='#00B49E' fontSize={sp(14)}>
                     确认
                   </Text>
@@ -1040,6 +1049,290 @@ export function NewTemplateExtraModal({
           </Center>
         </Modal.Body>
       </Modal.Content>
+    </Modal>
+  );
+}
+
+interface TemplateExtraModalParams {
+  template: Template | undefined;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (params: { title: string; content: string }) => void;
+}
+
+export function TemplateExtraModal({
+  template,
+  isOpen,
+  onClose,
+  onConfirm,
+}: TemplateExtraModalParams) {
+  const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
+  const [selectTemplateItemsLevel3Idx, setSelectTemplateItemsLevel3Idx] =
+    useState(0);
+  const [selectTemplateContentItemIdx, setSelectTemplateContentItemIdx] =
+    useState(0);
+  const { requestGetTemplates, templates } = useManagerStore();
+
+  useEffect(() => {
+    if (isOpen && templates.length === 0) {
+      // 打开模版弹窗时，如果没有模版数据，则请求模版数据
+      requestGetTemplates();
+    }
+  }, [isOpen, templates]);
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Column bgColor={'white'} borderRadius={ss(10)}>
+        <Row
+          px={ls(30)}
+          py={ss(20)}
+          alignItems={'center'}
+          justifyContent={'space-between'}>
+          <Text fontSize={sp(20)} color={'#000'}>
+            {template?.name}
+          </Text>
+          <Pressable
+            hitSlop={ss(10)}
+            onPress={() => {
+              onClose();
+            }}>
+            <Icon
+              as={<AntDesign name={'close'} />}
+              size={ss(24)}
+              color='#999'
+            />
+          </Pressable>
+        </Row>
+        <Row>
+          <Column h={ss(350)}>
+            <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
+              <ScrollView bgColor={'#EDF7F6'} maxW={ls(130)}>
+                {template?.groups.map((item, idx) => {
+                  return (
+                    <Pressable
+                      hitSlop={ss(10)}
+                      key={idx}
+                      onPress={() => {
+                        setSelectTemplateItemsIdx(idx);
+                      }}>
+                      <Center
+                        p={ss(10)}
+                        h={ss(80)}
+                        bgColor={
+                          selectTemplateItemsIdx === idx ? '#ffffff' : '#EDF7F6'
+                        }>
+                        <Text
+                          mt={ss(3)}
+                          color={
+                            selectTemplateItemsIdx === idx
+                              ? '#5EACA3'
+                              : '#99A9BF'
+                          }
+                          fontSize={sp(18)}>
+                          {item.name}
+                        </Text>
+                      </Center>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+              {(
+                template?.groups[selectTemplateItemsIdx]
+                  .children as TemplateItem[]
+              )?.length > 0 ? (
+                <Column w={ls(720)} h={'100%'}>
+                  <ScrollView horizontal maxH={ss(60)}>
+                    <Row flex={1} px={ls(20)}>
+                      {template?.groups[selectTemplateItemsIdx].children.map(
+                        (item: any, idx) => {
+                          return (
+                            <Pressable
+                              hitSlop={ss(10)}
+                              key={idx}
+                              onPress={() => {
+                                setSelectTemplateItemsLevel3Idx(idx);
+                                setSelectTemplateContentItemIdx(0);
+                              }}>
+                              <Box
+                                px={ls(20)}
+                                py={ss(7)}
+                                mr={ls(10)}
+                                mb={ss(10)}
+                                borderRadius={2}
+                                borderColor={
+                                  selectTemplateItemsLevel3Idx == idx
+                                    ? '#3AAEA3'
+                                    : '#D8D8D8'
+                                }
+                                borderWidth={1}>
+                                <Text
+                                  fontSize={sp(18)}
+                                  color={
+                                    selectTemplateItemsLevel3Idx == idx
+                                      ? '#3AAEA3'
+                                      : '#000'
+                                  }>
+                                  {item.name}
+                                </Text>
+                              </Box>
+                            </Pressable>
+                          );
+                        },
+                      )}
+                    </Row>
+                  </ScrollView>
+                  <ScrollView>
+                    {(
+                      (
+                        template?.groups[selectTemplateItemsIdx].children[
+                          selectTemplateItemsLevel3Idx
+                        ] as TemplateItem
+                      ).children as ExtraItem[]
+                    ).map((item, index) => {
+                      return (
+                        <Pressable
+                          key={index}
+                          onPress={() => {
+                            setSelectTemplateContentItemIdx(index);
+                          }}>
+                          <Column
+                            key={index}
+                            mx={ls(20)}
+                            mb={ss(8)}
+                            p={ss(20)}
+                            borderRadius={ss(4)}
+                            borderStyle={'dashed'}
+                            borderColor={'#7AB6AF'}
+                            borderWidth={ss(1)}
+                            bgColor={'#FAFAFA'}>
+                            <Row
+                              alignItems={'center'}
+                              justifyContent={'space-between'}>
+                              <Row alignItems={'center'}>
+                                <Circle size={ss(30)} bgColor={'#5EACA3'}>
+                                  <Text fontSize={sp(18)} color='#fff'>
+                                    {index + 1}
+                                  </Text>
+                                </Circle>
+                                <Text
+                                  color='#3CAEA4'
+                                  fontSize={sp(20)}
+                                  ml={ls(10)}>
+                                  {item.extra.title}
+                                </Text>
+                              </Row>
+                            </Row>
+                            <Row mt={ss(20)}>
+                              <Row>
+                                <Text fontSize={sp(16)} color={'#999'}>
+                                  {template?.key == 'application'
+                                    ? '穴位：'
+                                    : '备注：'}
+                                </Text>
+                                <Text
+                                  fontSize={sp(16)}
+                                  color={'#333'}
+                                  maxW={'90%'}>
+                                  {item.extra.content}
+                                </Text>
+                              </Row>
+                            </Row>
+                            {selectTemplateContentItemIdx == index && (
+                              <Image
+                                position={'absolute'}
+                                bottom={0}
+                                right={0}
+                                alt=''
+                                source={require('~/assets/images/border-select.png')}
+                                w={ss(20)}
+                                h={ss(20)}
+                              />
+                            )}
+                          </Column>
+                        </Pressable>
+                      );
+                    })}
+                  </ScrollView>
+                </Column>
+              ) : (
+                <Center w={ls(720)}>
+                  <Image
+                    style={{ width: ls(360), height: ss(211) }}
+                    source={require('~/assets/images/no-data.png')}
+                    resizeMode='contain'
+                    alt=''
+                  />
+                  <Text
+                    fontSize={sp(20)}
+                    color='#1E262F'
+                    mt={ss(46)}
+                    opacity={0.4}>
+                    {'暂未配置模版'}
+                  </Text>
+                </Center>
+              )}
+            </Row>
+          </Column>
+        </Row>
+
+        <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
+          <Pressable
+            hitSlop={ss(10)}
+            onPress={() => {
+              onClose();
+            }}
+            borderRadius={4}
+            borderWidth={1}
+            w={ls(100)}
+            h={ss(46)}
+            justifyContent={'center'}
+            alignItems={'center'}
+            borderColor='#D8D8D8'>
+            <Text color='#333' fontSize={sp(16)}>
+              取消
+            </Text>
+          </Pressable>
+          <Pressable
+            hitSlop={ss(10)}
+            onPress={() => {
+              const result = (
+                template?.groups[selectTemplateItemsIdx].children?.[
+                  selectTemplateItemsLevel3Idx
+                ] as TemplateItem
+              )?.children[selectTemplateContentItemIdx] as ExtraItem;
+
+              if (result) {
+                onConfirm(result.extra);
+              }
+            }}
+            borderRadius={4}
+            borderWidth={1}
+            borderColor='#00B49E'
+            w={ls(100)}
+            h={ss(46)}
+            opacity={
+              ((
+                template?.groups[selectTemplateItemsIdx].children?.[
+                  selectTemplateItemsLevel3Idx
+                ] as TemplateItem
+              )?.children[selectTemplateContentItemIdx] as ExtraItem)
+                ? 1
+                : 0.5
+            }
+            justifyContent={'center'}
+            alignItems={'center'}
+            ml={ls(40)}
+            bgColor={'rgba(0, 180, 158, 0.10)'}>
+            <Text color='#00B49E' fontSize={sp(16)}>
+              引用
+            </Text>
+          </Pressable>
+        </Row>
+      </Column>
     </Modal>
   );
 }
