@@ -3,6 +3,7 @@ import {
   Center,
   Column,
   Container,
+  Divider,
   Icon,
   Row,
   ScrollView,
@@ -39,8 +40,7 @@ export default function GuidanceInfo({
       <Column flex={1}>
         <BoxItem
           title={'调理导向'}
-          icon={require('~/assets/images/guidance.png')}
-        >
+          icon={require('~/assets/images/guidance.png')}>
           <Box flex={1}>
             <TextInput
               autoCorrect={false}
@@ -79,17 +79,15 @@ export default function GuidanceInfo({
                     key={idx}
                     onPress={() => {
                       setSelectTemplateGroup(idx);
-                    }}
-                  >
+                    }}>
                     <Center
                       p={ss(10)}
-                      w={ss(80)}
+                      minW={ss(80)}
                       h={ss(80)}
                       borderTopLeftRadius={ss(10)}
                       bgColor={
                         selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                      }
-                    >
+                      }>
                       <Icon
                         as={<AntDesign name='appstore1' />}
                         size={ss(18)}
@@ -102,8 +100,7 @@ export default function GuidanceInfo({
                         color={
                           selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                         }
-                        fontSize={sp(18)}
-                      >
+                        fontSize={sp(18)}>
                         {item.name}
                       </Text>
                     </Center>
@@ -119,7 +116,7 @@ export default function GuidanceInfo({
           )?.children.length > 0 ? (
             <Column flex={1}>
               <ScrollView horizontal maxH={ss(60)}>
-                <Row flex={1} px={ls(20)}>
+                <Row flex={1} px={ls(20)} mt={ss(10)}>
                   {getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
                     selectTemplateGroup
                   ]?.children.map((item: any, idx) => {
@@ -129,8 +126,7 @@ export default function GuidanceInfo({
                         key={idx}
                         onPress={() => {
                           setSelectTemplateLevel2Group(idx);
-                        }}
-                      >
+                        }}>
                         <Box
                           px={ls(20)}
                           py={ss(7)}
@@ -142,16 +138,14 @@ export default function GuidanceInfo({
                               ? '#5EACA3'
                               : '#D8D8D8'
                           }
-                          borderWidth={1}
-                        >
+                          borderWidth={1}>
                           <Text
                             fontSize={sp(18)}
                             color={
                               selectTemplateLevel2Group === idx
                                 ? '#3AAEA3'
                                 : '#000'
-                            }
-                          >
+                            }>
                             {item.name}
                           </Text>
                         </Box>
@@ -160,6 +154,7 @@ export default function GuidanceInfo({
                   })}
                 </Row>
               </ScrollView>
+              <Divider my={ss(5)} color={'#DFE1DE'} h={ss(0.5)} />
               <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
                 {(
                   (
@@ -181,8 +176,7 @@ export default function GuidanceInfo({
                                 : item,
                           });
                         }
-                      }}
-                    >
+                      }}>
                       <Box
                         px={ls(20)}
                         py={ss(7)}
@@ -190,8 +184,7 @@ export default function GuidanceInfo({
                         mb={ss(10)}
                         borderRadius={2}
                         borderColor={'#D8D8D8'}
-                        borderWidth={1}
-                      >
+                        borderWidth={1}>
                         <Text fontSize={sp(18)} color='#000'>
                           {item}
                         </Text>

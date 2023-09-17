@@ -222,7 +222,7 @@ export function TemplateModal({
                   {(
                     template?.groups[selectTemplateItemsIdx]
                       .children as string[]
-                  ).map((item, idx) => {
+                  )?.map((item, idx) => {
                     return (
                       <Pressable
                         hitSlop={ss(10)}
@@ -1147,7 +1147,7 @@ export function TemplateExtraModal({
                 <Column w={ls(720)} h={'100%'}>
                   <ScrollView horizontal maxH={ss(60)}>
                     <Row flex={1} px={ls(20)}>
-                      {template?.groups[selectTemplateItemsIdx].children.map(
+                      {template?.groups[selectTemplateItemsIdx].children?.map(
                         (item: any, idx) => {
                           return (
                             <Pressable
@@ -1192,7 +1192,7 @@ export function TemplateExtraModal({
                           selectTemplateItemsLevel3Idx
                         ] as TemplateItem
                       ).children as ExtraItem[]
-                    ).map((item, index) => {
+                    )?.map((item, index) => {
                       return (
                         <Pressable
                           key={index}

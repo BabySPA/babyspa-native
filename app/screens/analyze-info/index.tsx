@@ -552,7 +552,7 @@ export default function AnalyzeInfo({
                   理疗师：
                 </Text>
                 <Text fontSize={sp(18)} color='#333'>
-                  {collectionOperator?.name}
+                  {collectionOperator?.name || '未设置'}
                 </Text>
               </Row>
 

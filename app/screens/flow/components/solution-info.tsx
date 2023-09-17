@@ -1,12 +1,10 @@
 import {
   Box,
   Center,
-  CheckIcon,
   Column,
-  Container,
   Icon,
+  Input,
   Pressable,
-  Radio,
   Row,
   Text,
 } from 'native-base';
@@ -16,16 +14,11 @@ import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import {
-  FlowOperatorConfigItem,
-  SolutionDefault,
-  TemplateGroupKeys,
-} from '~/app/constants';
+import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 import SelectDay, { getDay } from '~/app/components/select-day';
 import AddCountSelector from '~/app/components/add-count-selector';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';
-import SelectTimeLength from '~/app/components/select-time-length';
 import { FollowUpStatus } from '~/app/stores/flow/type';
 import { RadioBox } from '~/app/components/radio';
 import { TemplateExtraModal } from '../../../components/modals';
@@ -60,6 +53,8 @@ export default function SolutionInfo({
   } = currentFlow;
 
   const [showRemarkModal, setShowRemarkModal] = useState(false);
+  const [editAcupoint, setEditAcupoint] = useState(false);
+  const [editMassageRemark, setEditMassageRemark] = useState(false);
   const [showExtraModal, setShowExtraModal] = useState<{
     isOpen: boolean;
     type: 'application' | 'massage';
@@ -74,8 +69,7 @@ export default function SolutionInfo({
         <BoxItem
           flex={2}
           title={'贴敷'}
-          icon={require('~/assets/images/tiefu.png')}
-        >
+          icon={require('~/assets/images/tiefu.png')}>
           <Box>
             {applications.map((item, idx) => {
               return (
@@ -87,16 +81,14 @@ export default function SolutionInfo({
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
                   mt={idx === 0 ? 0 : ss(10)}
-                  p={ss(20)}
-                >
+                  p={ss(20)}>
                   <Row justifyContent={'space-between'}>
                     <Row alignItems={'center'}>
                       <Center
                         w={ss(30)}
                         h={ss(30)}
                         bgColor={'#5EACA3'}
-                        borderRadius={ss(15)}
-                      >
+                        borderRadius={ss(15)}>
                         <Text color={'#fff'}>{idx + 1}</Text>
                       </Center>
                       <Text ml={ls(10)} color='#666' fontSize={sp(20)}>
@@ -107,8 +99,7 @@ export default function SolutionInfo({
                       hitSlop={ss(10)}
                       onPress={() => {
                         removeSolutionApplication(idx);
-                      }}
-                    >
+                      }}>
                       <Icon
                         as={<AntDesign name='delete' />}
                         size={ss(20, { min: 16 })}
@@ -119,10 +110,9 @@ export default function SolutionInfo({
                   <Row
                     alignItems={'center'}
                     mt={ss(25)}
-                    justifyContent={'space-between'}
-                  >
+                    justifyContent={'space-between'}>
                     <Row alignItems={'flex-start'}>
-                      <Row alignItems={'flex-start'}>
+                      <Row alignItems={'center'}>
                         <Text color='#666' fontSize={sp(16)}>
                           穴位：
                         </Text>
@@ -130,16 +120,33 @@ export default function SolutionInfo({
                         <Pressable
                           hitSlop={ss(10)}
                           onPress={() => {
-                            // setShowAcupointModal(true);
-                          }}
-                        >
-                          <Text
-                            color='#E36C36'
-                            fontSize={sp(16)}
-                            maxW={ls(130)}
-                          >
-                            {item.acupoint}
-                          </Text>
+                            setEditAcupoint(true);
+                          }}>
+                          {editAcupoint ? (
+                            <Input
+                              autoFocus
+                              onChangeText={(text) => {
+                                updateSolutionApplication(
+                                  { ...item, acupoint: text },
+                                  idx,
+                                );
+                              }}
+                              defaultValue={item.acupoint}
+                              w={ls(130)}
+                              height={ss(48)}
+                              fontSize={sp(16)}
+                              onBlur={() => {
+                                setEditAcupoint(false);
+                              }}
+                            />
+                          ) : (
+                            <Text
+                              color='#E36C36'
+                              fontSize={sp(16)}
+                              maxW={ls(130)}>
+                              {item.acupoint}
+                            </Text>
+                          )}
                         </Pressable>
                       </Row>
                     </Row>
@@ -172,8 +179,7 @@ export default function SolutionInfo({
                     isOpen: true,
                     type: 'application',
                   });
-                }}
-              >
+                }}>
                 <Center
                   mt={ss(20)}
                   bgColor={'#fff'}
@@ -185,8 +191,7 @@ export default function SolutionInfo({
                   _text={{
                     color: '#5EACA3',
                     fontSize: sp(18),
-                  }}
-                >
+                  }}>
                   新增贴敷
                 </Center>
               </Pressable>
@@ -197,16 +202,14 @@ export default function SolutionInfo({
           mt={ss(10)}
           title={'注意事项'}
           autoScroll={false}
-          icon={require('~/assets/images/guidance.png')}
-        >
+          icon={require('~/assets/images/guidance.png')}>
           <Pressable
             hitSlop={ss(10)}
             flex={1}
             pt={ss(10)}
             onPress={() => {
               setShowRemarkModal(true);
-            }}
-          >
+            }}>
             <Text
               style={{
                 borderRadius: ss(4),
@@ -217,8 +220,7 @@ export default function SolutionInfo({
                 padding: ss(10),
                 fontSize: sp(18),
                 color: '#999',
-              }}
-            >
+              }}>
               {remark || '您可输入，或从模板选择'}
             </Text>
             <TemplateModal
@@ -240,8 +242,7 @@ export default function SolutionInfo({
         <BoxItem
           flex={2}
           title={'理疗'}
-          icon={require('~/assets/images/massages.png')}
-        >
+          icon={require('~/assets/images/massages.png')}>
           <Box>
             {massages.map((item, idx) => {
               return (
@@ -253,16 +254,14 @@ export default function SolutionInfo({
                   borderStyle={'dashed'}
                   bgColor={'#F2F9F8'}
                   mt={idx === 0 ? 0 : ss(10)}
-                  p={ss(20)}
-                >
+                  p={ss(20)}>
                   <Row justifyContent={'space-between'}>
                     <Row alignItems={'center'}>
                       <Center
                         w={ss(30)}
                         h={ss(30)}
                         bgColor={'#5EACA3'}
-                        borderRadius={ss(15)}
-                      >
+                        borderRadius={ss(15)}>
                         <Text color={'#fff'}>{idx + 1}</Text>
                       </Center>
                       <Text ml={ls(10)} color='#666' fontSize={sp(20)}>
@@ -273,8 +272,7 @@ export default function SolutionInfo({
                       hitSlop={ss(10)}
                       onPress={() => {
                         removeSolutionMassage(idx);
-                      }}
-                    >
+                      }}>
                       <Icon
                         as={<AntDesign name='delete' />}
                         size={ss(20, { min: 16 })}
@@ -285,16 +283,39 @@ export default function SolutionInfo({
                   <Row
                     alignItems={'center'}
                     mt={ss(25)}
-                    justifyContent={'space-between'}
-                  >
+                    justifyContent={'space-between'}>
                     <Row alignItems={'flex-start'} maxW={'65%'}>
                       <Text ml={ls(10)} color='#666' fontSize={sp(16)}>
                         备注：
                       </Text>
-                      <Pressable hitSlop={ss(10)} onPress={() => {}}>
-                        <Text color='#E36C36' fontSize={sp(16)}>
-                          {item.remark || '未设置'}
-                        </Text>
+
+                      <Pressable
+                        hitSlop={ss(10)}
+                        onPress={() => {
+                          setEditMassageRemark(true);
+                        }}>
+                        {editMassageRemark ? (
+                          <Input
+                            autoFocus
+                            onChangeText={(text) => {
+                              updateSolutionMassage(
+                                { ...item, remark: text },
+                                idx,
+                              );
+                            }}
+                            multiline
+                            defaultValue={item.remark}
+                            w={ls(300)}
+                            fontSize={sp(16)}
+                            onBlur={() => {
+                              setEditMassageRemark(false);
+                            }}
+                          />
+                        ) : (
+                          <Text color='#E36C36' fontSize={sp(16)}>
+                            {item.remark || '未设置'}
+                          </Text>
+                        )}
                       </Pressable>
                     </Row>
 
@@ -327,8 +348,7 @@ export default function SolutionInfo({
                     isOpen: true,
                     type: 'massage',
                   });
-                }}
-              >
+                }}>
                 <Center
                   mt={ss(20)}
                   bgColor={'#fff'}
@@ -340,8 +360,7 @@ export default function SolutionInfo({
                   _text={{
                     color: '#5EACA3',
                     fontSize: sp(18),
-                  }}
-                >
+                  }}>
                   新增理疗
                 </Center>
               </Pressable>
@@ -352,8 +371,7 @@ export default function SolutionInfo({
           mt={ss(10)}
           title={'随访'}
           autoScroll={false}
-          icon={require('~/assets/images/guidance.png')}
-        >
+          icon={require('~/assets/images/guidance.png')}>
           <Row alignItems={'center'}>
             <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
               是否随访
