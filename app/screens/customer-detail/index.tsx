@@ -36,25 +36,27 @@ export default function CustomerDetail({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             客户详情
           </Text>
         }
         rightElement={
           !edit && currentFlow.register.status === RegisterStatus.DONE ? (
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setShowModal(true);
-              }}
-            >
-              <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
+              }}>
+              <Row
+                bgColor={'white'}
+                borderRadius={ss(4)}
+                px={ls(26)}
+                py={ss(10)}>
                 {loading && <Spinner mr={ls(5)} color='emerald.500' />}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
-                  fontSize={sp(14, { min: 12 })}
-                >
+                  fontSize={sp(14)}>
                   取消登记
                 </Text>
               </Row>

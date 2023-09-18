@@ -33,6 +33,7 @@ import {
   TooltipComponent,
 } from 'echarts/components';
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
+import { Dimensions } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -56,8 +57,7 @@ const ShopStatisticBox = () => {
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}
-        >
+          justifyContent={'space-around'}>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               客户姓名
@@ -119,8 +119,7 @@ const ShopStatisticBox = () => {
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
-                justifyContent={'space-around'}
-              >
+                justifyContent={'space-around'}>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {flow.customer.name}
@@ -156,8 +155,7 @@ const ShopStatisticBox = () => {
                     fontSize={sp(18)}
                     color={'#333'}
                     numberOfLines={2}
-                    ellipsizeMode='tail'
-                  >
+                    ellipsizeMode='tail'>
                     {flow.collect.guidance || '未设置'}
                   </Text>
                 </Row>
@@ -171,8 +169,7 @@ const ShopStatisticBox = () => {
                     fontSize={sp(18)}
                     color={'#333'}
                     numberOfLines={2}
-                    ellipsizeMode='tail'
-                  >
+                    ellipsizeMode='tail'>
                     {flow.analyze.remark || '未设置'}
                   </Text>
                 </Row>
@@ -237,8 +234,7 @@ const CenterStatisticBox = () => {
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}
-        >
+          justifyContent={'space-around'}>
           <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               门店名称
@@ -283,8 +279,7 @@ const CenterStatisticBox = () => {
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
-                justifyContent={'space-around'}
-              >
+                justifyContent={'space-around'}>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {item.shop.name}
@@ -404,7 +399,7 @@ const CenterStatisticBox = () => {
       chart = echarts.init(svgRef.current, 'light', {
         renderer: 'svg',
         height: ss(306),
-        width: ls(1046),
+        width: Dimensions.get('window').width * 0.85,
       });
       chart.setOption(options);
     }
@@ -535,7 +530,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           shops={selectShops}
         />
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -544,15 +539,14 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           flexDirection={'row'}
           ml={ls(20)}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           alignItems={'center'}
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -566,7 +560,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           至
         </Text>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -574,15 +568,14 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             });
           }}
           flexDirection={'row'}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

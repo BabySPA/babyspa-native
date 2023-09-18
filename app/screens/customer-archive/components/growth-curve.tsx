@@ -20,6 +20,7 @@ import {
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
+import { Dimensions } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -86,8 +87,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
           alignItems={'center'}
           borderTopRadius={ss(10)}
           width={'100%'}
-          justifyContent={'space-around'}
-        >
+          justifyContent={'space-around'}>
           <Row w={ls(120)}>
             <Text fontSize={sp(14)} color={'#8C8C8C'}>
               日期
@@ -143,8 +143,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               borderBottomWidth={1}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
-              justifyContent={'space-around'}
-            >
+              justifyContent={'space-around'}>
               <Row w={ls(120)}>
                 <Text fontSize={sp(14)} color={'#333'}>
                   {dayjs(growthCurve.date).format('YYYY-MM-DD')}
@@ -187,11 +186,10 @@ export function GrowthCurve(params: GrowthCurveParams) {
 
               <Row w={ls(120)}>
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     onEditClick(growthCurve);
-                  }}
-                >
+                  }}>
                   <Text fontSize={sp(14)} color={'#03CBB2'}>
                     编辑
                   </Text>
@@ -212,7 +210,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
     height: {
       grid: {
         top: ss(20),
-        left: ls(50),
+        left: ls(90),
         right: 0,
       },
       textStyle: {
@@ -294,7 +292,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
     weight: {
       grid: {
         top: ss(20),
-        left: ls(50),
+        left: ls(90),
         right: 0,
       },
       textStyle: {
@@ -380,7 +378,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
       chart = echarts.init(svgRef.current, 'light', {
         renderer: 'svg',
         height: ss(306),
-        width: ls(1046),
+        width: Dimensions.get('window').width * 0.85,
       });
       chart.setOption(options[selectOption]);
     }
@@ -390,30 +388,27 @@ export function GrowthCurve(params: GrowthCurveParams) {
     <ScrollView>
       <Column
         borderWidth={1}
-        borderRadius={4}
+        borderRadius={ss(4)}
         alignItems={'center'}
         borderColor={'#F0F0F0'}
         h={ss(386)}
         w={'100%'}
-        mt={ss(30)}
-      >
+        mt={ss(30)}>
         <Row
           w={'100%'}
           alignItems={'center'}
           justifyContent={'space-between'}
           px={ls(40)}
-          py={ss(20)}
-        >
+          py={ss(20)}>
           <Text color='#141414' fontSize={sp(16)}>
             身高曲线
           </Text>
           <Row>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 seSelectOption('height');
-              }}
-            >
+              }}>
               <Box
                 w={ss(80)}
                 h={ss(44)}
@@ -423,22 +418,19 @@ export function GrowthCurve(params: GrowthCurveParams) {
                 borderWidth={1}
                 borderColor={selectOption === 'height' ? '#03CBB2' : '#D9D9D9'}
                 alignItems={'center'}
-                justifyContent={'center'}
-              >
+                justifyContent={'center'}>
                 <Text
                   fontSize={sp(14)}
-                  color={selectOption === 'height' ? '#03CBB2' : '#333'}
-                >
+                  color={selectOption === 'height' ? '#03CBB2' : '#333'}>
                   身高
                 </Text>
               </Box>
             </Pressable>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 seSelectOption('weight');
-              }}
-            >
+              }}>
               <Box
                 w={ss(80)}
                 h={ss(44)}
@@ -448,12 +440,10 @@ export function GrowthCurve(params: GrowthCurveParams) {
                 borderWidth={1}
                 borderColor={selectOption === 'weight' ? '#03CBB2' : '#D9D9D9'}
                 alignItems={'center'}
-                justifyContent={'center'}
-              >
+                justifyContent={'center'}>
                 <Text
                   fontSize={sp(14)}
-                  color={selectOption === 'weight' ? '#03CBB2' : '#333'}
-                >
+                  color={selectOption === 'weight' ? '#03CBB2' : '#333'}>
                   体重
                 </Text>
               </Box>

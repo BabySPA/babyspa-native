@@ -33,22 +33,20 @@ export default function SoundList({
       {audioFiles.map((audioFile, idx) => {
         return (
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             key={idx}
             mt={idx === 0 ? 0 : ss(10)}
             onPress={() => {
               playSound(audioFile.uri);
-            }}
-          >
+            }}>
             <Row
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderColor={'#A4D4D6'}
               borderWidth={1}
               alignItems={'center'}
               justifyContent={'space-between'}
               w={ls(253)}
-              p={ss(10)}
-            >
+              p={ss(10)}>
               <Row alignItems={'center'}>
                 <Image
                   source={require('~/assets/images/signal.png')}
@@ -63,11 +61,10 @@ export default function SoundList({
               </Row>
               {edit && (
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     removedCallback(idx);
-                  }}
-                >
+                  }}>
                   <Icon
                     as={<AntDesign name={'delete'} />}
                     size={ss(20)}

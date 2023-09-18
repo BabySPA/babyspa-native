@@ -75,7 +75,7 @@ export default function GuidanceInfo({
               (item, idx) => {
                 return (
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     key={idx}
                     onPress={() => {
                       setSelectTemplateGroup(idx);
@@ -122,7 +122,7 @@ export default function GuidanceInfo({
                   ]?.children.map((item: any, idx) => {
                     return (
                       <Pressable
-                        hitSlop={ss(10)}
+                        hitSlop={ss(20)}
                         key={idx}
                         onPress={() => {
                           setSelectTemplateLevel2Group(idx);
@@ -165,7 +165,7 @@ export default function GuidanceInfo({
                 ).map((item, idx) => {
                   return (
                     <Pressable
-                      hitSlop={ss(10)}
+                      hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
                         if (!selectedConfig.disabled) {

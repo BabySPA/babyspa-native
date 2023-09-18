@@ -61,12 +61,12 @@ export function DialogModal({
             </Text>
             <Row mt={ss(50)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -77,13 +77,13 @@ export function DialogModal({
                 </Center>
               </Pressable>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm();
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -146,7 +146,7 @@ export function TemplateModal({
             {template?.name}
           </Text>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}>
@@ -191,7 +191,7 @@ export function TemplateModal({
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
-                      hitSlop={ss(10)}
+                      hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
                         setSelectTemplateItemsIdx(idx);
@@ -225,7 +225,7 @@ export function TemplateModal({
                   )?.map((item, idx) => {
                     return (
                       <Pressable
-                        hitSlop={ss(10)}
+                        hitSlop={ss(20)}
                         key={idx}
                         onPress={() => {
                           const text = templateText.trim();
@@ -260,11 +260,11 @@ export function TemplateModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
             w={ls(100)}
             h={ss(46)}
@@ -276,11 +276,11 @@ export function TemplateModal({
             </Text>
           </Pressable>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               onConfirm(templateText);
             }}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
             borderColor='#00B49E'
             w={ls(100)}
@@ -364,12 +364,12 @@ export function GrowthCurveModal({
             </Row>
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -380,7 +380,7 @@ export function GrowthCurveModal({
                 </Center>
               </Pressable>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm({
                     height: height,
@@ -389,7 +389,7 @@ export function GrowthCurveModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -490,12 +490,12 @@ export function ChangePasswordModal({
             </Row>
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -506,7 +506,7 @@ export function ChangePasswordModal({
                 </Center>
               </Pressable>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   if (decodePassword(password) !== originalPassword) {
                     toastAlert(toast, 'error', '原密码错误');
@@ -524,7 +524,7 @@ export function ChangePasswordModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -603,12 +603,12 @@ export function NewTemplateModalModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -620,13 +620,13 @@ export function NewTemplateModalModal({
               </Pressable>
               <Pressable
                 opacity={name.length > 0 ? 1 : 0.5}
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   if (name) onConfirm(name);
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -701,12 +701,12 @@ export function NewTemplateGroupModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -717,13 +717,13 @@ export function NewTemplateGroupModal({
                 </Center>
               </Pressable>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm(name);
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -866,12 +866,12 @@ export function NewLevel3TemplateGroupModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -883,7 +883,7 @@ export function NewLevel3TemplateGroupModal({
               </Pressable>
               <Pressable
                 opacity={name.length > 0 && selectGroup.length > 0 ? 1 : 0.5}
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm({
                     group: selectGroup,
@@ -892,7 +892,7 @@ export function NewLevel3TemplateGroupModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -999,12 +999,12 @@ export function NewTemplateExtraModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
@@ -1015,7 +1015,7 @@ export function NewTemplateExtraModal({
                 </Center>
               </Pressable>
               <Pressable
-                hitSlop={ss(10)}
+                hitSlop={ss(20)}
                 onPress={() => {
                   const n = name || defaultName;
                   const c = content || defaultContent;
@@ -1028,7 +1028,7 @@ export function NewTemplateExtraModal({
                 }}>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
@@ -1096,7 +1096,7 @@ export function TemplateExtraModal({
             {template?.name}
           </Text>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}>
@@ -1114,7 +1114,7 @@ export function TemplateExtraModal({
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
-                      hitSlop={ss(10)}
+                      hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
                         setSelectTemplateItemsIdx(idx);
@@ -1151,7 +1151,7 @@ export function TemplateExtraModal({
                         (item: any, idx) => {
                           return (
                             <Pressable
-                              hitSlop={ss(10)}
+                              hitSlop={ss(20)}
                               key={idx}
                               onPress={() => {
                                 setSelectTemplateItemsLevel3Idx(idx);
@@ -1281,11 +1281,11 @@ export function TemplateExtraModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
             w={ls(100)}
             h={ss(46)}
@@ -1297,7 +1297,7 @@ export function TemplateExtraModal({
             </Text>
           </Pressable>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               const result = (
                 template?.groups[selectTemplateItemsIdx].children?.[
@@ -1309,7 +1309,7 @@ export function TemplateExtraModal({
                 onConfirm(result.extra);
               }
             }}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
             borderColor='#00B49E'
             w={ls(100)}

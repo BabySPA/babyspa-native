@@ -67,8 +67,7 @@ export default function EditBox(params: EditBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Column>
         <BoxTitle title='客户信息' />
         <Box mt={ss(20)} px={ls(50)}>
@@ -81,7 +80,7 @@ export default function EditBox(params: EditBoxParams) {
                 <Input
                   autoCorrect={false}
                   w={ls(360)}
-                  h={ss(48, { min: 26 })}
+                  h={ss(48)}
                   py={ss(10)}
                   px={ls(20)}
                   defaultValue={tempFlow.customer.name}
@@ -108,7 +107,7 @@ export default function EditBox(params: EditBoxParams) {
                 <Input
                   autoCorrect={false}
                   w={ls(360)}
-                  h={ss(48, { min: 26 })}
+                  h={ss(48)}
                   py={ss(10)}
                   px={ls(20)}
                   defaultValue={tempFlow.customer.nickname}
@@ -161,21 +160,19 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box w={ls(360)}>
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       showDatePicker();
-                    }}
-                  >
+                    }}>
                     <Row
-                      borderRadius={4}
+                      borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       pr={ss(10)}
-                      pl={ss(20)}
-                    >
+                      pl={ss(20)}>
                       <Text color={'#333'} fontSize={sp(16)}>
                         {tempFlow.customer.birthday}
                       </Text>
@@ -197,12 +194,11 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Row alignItems={'center'}>
                   <Center
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     borderWidth={1}
                     h={ss(48)}
                     w={ls(72)}
-                    borderColor={'#D8D8D8'}
-                  >
+                    borderColor={'#D8D8D8'}>
                     <Text fontSize={sp(20)} color={'#333'}>
                       {age?.year}
                     </Text>
@@ -212,12 +208,11 @@ export default function EditBox(params: EditBoxParams) {
                   </Text>
                   <Center
                     ml={ls(20)}
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     borderWidth={1}
                     h={ss(48)}
                     w={ls(72)}
-                    borderColor={'#D8D8D8'}
-                  >
+                    borderColor={'#D8D8D8'}>
                     <Text fontSize={sp(20)} color={'#333'}>
                       {age?.month}
                     </Text>
@@ -237,7 +232,7 @@ export default function EditBox(params: EditBoxParams) {
                   autoCorrect={false}
                   w={ls(360)}
                   defaultValue={tempFlow.customer.phoneNumber}
-                  h={ss(48, { min: 26 })}
+                  h={ss(48)}
                   py={ss(10)}
                   px={ls(20)}
                   onChangeText={(text) => {
@@ -265,28 +260,25 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box>
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       setIsOpenTemplatePicker(true);
-                    }}
-                  >
+                    }}>
                     <Row
                       w={ls(360)}
-                      borderRadius={4}
+                      borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
                       borderWidth={1}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       pl={ss(20)}
-                      pr={ss(8)}
-                    >
+                      pr={ss(8)}>
                       <Text
                         numberOfLines={1}
                         ellipsizeMode='tail'
                         color={'#333'}
-                        fontSize={sp(16)}
-                      >
+                        fontSize={sp(16)}>
                         {tempFlow.collect.healthInfo.allergy || '请选择或输入'}
                       </Text>
                       <Icon
@@ -355,19 +347,17 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(20)}>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
-          }}
-        >
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
-            borderColor={'#D8D8D8'}
-          >
+            borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
             </Text>
@@ -375,7 +365,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
@@ -436,17 +426,15 @@ export default function EditBox(params: EditBoxParams) {
                   setLoading(false);
                 });
             }
-          }}
-        >
+          }}>
           <Row
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
             alignItems={'center'}
-            borderColor={'#00B49E'}
-          >
+            borderColor={'#00B49E'}>
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
@@ -459,8 +447,7 @@ export default function EditBox(params: EditBoxParams) {
         isOpen={isOpenBirthdayPicker}
         onClose={() => {
           setIsOpenBirthdayPicker(false);
-        }}
-      >
+        }}>
         <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
           <DatePicker
             options={{
@@ -476,7 +463,7 @@ export default function EditBox(params: EditBoxParams) {
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setTempFlow({
                   ...tempFlow,
@@ -486,32 +473,28 @@ export default function EditBox(params: EditBoxParams) {
                   },
                 });
                 setIsOpenBirthdayPicker(false);
-              }}
-            >
+              }}>
               <Box
                 bgColor={'#00B49E'}
                 px={ls(26)}
                 py={ss(12)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-              >
+                _text={{ fontSize: ss(16), color: 'white' }}>
                 确定
               </Box>
             </Pressable>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenBirthdayPicker(false);
-              }}
-            >
+              }}>
               <Box
                 bgColor={'#D8D8D8'}
                 px={ls(26)}
                 py={ss(12)}
                 ml={ls(10)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16, { min: 12 }), color: 'white' }}
-              >
+                _text={{ fontSize: ss(16), color: 'white' }}>
                 取消
               </Box>
             </Pressable>

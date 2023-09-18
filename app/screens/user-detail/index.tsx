@@ -21,7 +21,7 @@ export default function UserDetail({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             {currentUser._id ? '员工详情' : '新增员工'}
           </Text>
         }

@@ -78,7 +78,7 @@ export default function CameraScreen({
       const manipResult = await manipulateAsync(
         photo.uri,
         [], // 空的resize选项，不调整宽高
-        { compress: 0.1 }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
+        { compress: 0.4 }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
       );
       if (flag) {
         flag = false;
@@ -96,8 +96,7 @@ export default function CameraScreen({
       <Camera
         style={{ flex: 1 }}
         type={CameraType.back}
-        ref={(ref) => (cameraRef = ref)}
-      >
+        ref={(ref) => (cameraRef = ref)}>
         {config[type] && (
           <Center height={'80%'}>
             <Text color={'#fff'} fontSize={sp(16)}>
@@ -113,13 +112,12 @@ export default function CameraScreen({
           </Center>
         )}
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={takePhoto}
           alignItems={'center'}
           flex={1}
           mb={ss(60)}
-          justifyContent={'flex-end'}
-        >
+          justifyContent={'flex-end'}>
           <Circle bgColor={'#fff'} size={ss(60)} opacity={0.8}>
             <Circle
               size={ss(50)}

@@ -205,7 +205,7 @@ const styles = (theme) =>
     },
     header: {
       alignItems: 'center',
-      paddingHorizontal: ss(15, { min: 10 }),
+      paddingHorizontal: ss(15),
       justifyContent: 'space-between',
       width: '80%',
       flexDirection: 'row',
@@ -215,13 +215,13 @@ const styles = (theme) =>
     },
     monthList: {
       flexWrap: 'wrap',
-      margin: ss(25, { min: 16 }),
+      margin: ss(25),
     },
     item: {
       width: '30%',
       marginHorizontal: '1.5%',
-      paddingVertical: ss(8, { min: 5 }),
-      marginVertical: ss(7, { min: 5 }),
+      paddingVertical: ss(8),
+      marginVertical: ss(7),
       alignItems: 'center',
     },
     selectedItem: {
@@ -249,8 +249,8 @@ const styles = (theme) =>
       opacity: 0,
     },
     arrow: {
-      width: ss(18, { min: 12 }),
-      height: ss(18, { min: 12 }),
+      width: ss(18),
+      height: ss(18),
       opacity: 0.9,
       tintColor: theme.mainColor,
       margin: ss(2),

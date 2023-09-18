@@ -17,12 +17,12 @@ export function HistoryArchive(params: HistoryArchiveParams) {
     <Box>
       {params.courses && (
         <Row>
-          <ScrollView py={ss(10)} maxW={ls(290)}>
+          <ScrollView py={ss(10)} maxW={ls(290)} maxH={ss(530)}>
             {params.courses.map((course, idx) => {
               const latestCourse = course[0];
               return (
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     setSelectIdx(idx);
                   }}
@@ -30,11 +30,10 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                   mt={ss(20)}
                   w={ls(262)}
                   minH={ss(94)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   p={ss(20)}
-                  borderColor={selectIdx === idx ? '#03CBB2' : '#60ADA4'}
-                >
+                  borderColor={selectIdx === idx ? '#03CBB2' : '#60ADA4'}>
                   <Text fontSize={sp(20)} color={'#333'}>
                     <Text>{latestCourse.analyze?.conclusion}</Text>
                     {course.length}次
@@ -52,26 +51,24 @@ export function HistoryArchive(params: HistoryArchiveParams) {
             {params.courses[selectIdx].map((course, idx) => {
               return (
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     params.onPressToFlowInfo(course);
                   }}
                   key={idx}
                   w={ls(370)}
                   maxH={ss(280)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   mr={ls(40)}
                   pb={ss(20)}
-                  borderColor={'#B1DAD5'}
-                >
+                  borderColor={'#B1DAD5'}>
                   <Text
                     fontSize={sp(16)}
                     color={'#C87939'}
                     m={ss(20)}
                     numberOfLines={2}
-                    ellipsizeMode='tail'
-                  >
+                    ellipsizeMode='tail'>
                     调理导向：
                     <Text color='#999'>{course.collect?.guidance}</Text>
                   </Text>
@@ -81,8 +78,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                       fontSize={sp(16)}
                       color={'#5FADA4'}
                       numberOfLines={4}
-                      ellipsizeMode='tail'
-                    >
+                      ellipsizeMode='tail'>
                       {course.analyze?.remark}
                     </Text>
                   </Box>
@@ -90,17 +86,15 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                     justifyContent={'space-between'}
                     alignItems={'center'}
                     px={ls(10)}
-                    mt={ss(20)}
-                  >
+                    mt={ss(20)}>
                     <Text
                       fontSize={sp(14)}
                       color={'#60ADA4'}
-                      borderRadius={4}
+                      borderRadius={ss(4)}
                       borderWidth={1}
                       px={ls(10)}
                       py={ss(2)}
-                      borderColor={'#60ADA4'}
-                    >
+                      borderColor={'#60ADA4'}>
                       {idx === 0
                         ? '首次'
                         : `第${arabicToChineseNumber(idx + 1)}次`}

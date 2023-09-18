@@ -7,7 +7,7 @@ export default function Dot(props: { color?: string; w?: number; h?: number }) {
       <Box
         w={ss(8)}
         h={ss(8)}
-        borderRadius={4}
+        borderRadius={ss(4)}
         bgColor={props.color ?? '#000'}
       />
     </Center>

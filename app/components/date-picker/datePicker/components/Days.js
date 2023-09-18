@@ -80,7 +80,7 @@ const styles = (theme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      margin: ss(3, { min: 2 }),
+      margin: ss(3),
     },
     dayItemSelected: {
       backgroundColor: theme.mainColor,

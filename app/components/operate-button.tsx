@@ -10,7 +10,7 @@ export default function OperateButton({
 }) {
   if (!text) return null;
   return (
-    <Pressable hitSlop={ss(10)} onPress={onPress}>
+    <Pressable hitSlop={ss(20)} onPress={onPress}>
       <Box
         m={ss(10)}
         borderRadius={ss(6)}
@@ -22,8 +22,7 @@ export default function OperateButton({
             start: [0, 0],
             end: [1, 1],
           },
-        }}
-      >
+        }}>
         <Text color='white' fontSize={sp(16)}>
           {text}
         </Text>

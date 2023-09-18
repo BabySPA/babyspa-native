@@ -45,8 +45,7 @@ export default function FollowUpVisit(params: {
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            minH={'100%'}
-          >
+            minH={'100%'}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {flows.map((flow, idx) => (
                 <Center width={'50%'} key={idx}>
@@ -54,14 +53,13 @@ export default function FollowUpVisit(params: {
                     ml={idx % 2 == 1 ? ss(20) : 0}
                     mr={idx % 2 == 0 ? ss(20) : 0}
                     mb={ss(40)}
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       updateCurrentFlow(flow);
                       navigation.navigate('FlowInfo', {
                         from: 'follow-up-detail',
                       });
-                    }}
-                  >
+                    }}>
                     <CustomerFollowUpItem flow={flow} />
                   </Pressable>
                 </Center>
@@ -119,9 +117,9 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           autoCorrect={false}
           w={ls(240)}
           ml={ls(20)}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           p={ss(8)}
-          borderRadius={4}
+          borderRadius={ss(4)}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={ss(16)}
@@ -142,7 +140,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -151,15 +149,14 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           }}
           flexDirection={'row'}
           ml={ls(20)}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           alignItems={'center'}
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -173,7 +170,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           至
         </Text>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -181,15 +178,14 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
             });
           }}
           flexDirection={'row'}
-          minH={ss(40, { max: 18 })}
+          h={ss(44)}
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

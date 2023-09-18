@@ -17,8 +17,8 @@ const options = {
   borderColor: 'rgba(122, 146, 165, 0.1)',
   defaultFont: 'System',
   headerFont: 'System',
-  textFontSize: sp(15, { min: 12 }),
-  textHeaderFontSize: sp(17, { min: 14 }),
+  textFontSize: sp(15),
+  textHeaderFontSize: sp(17),
   headerAnimationDistance: 100,
   daysAnimationDistance: 200,
 };

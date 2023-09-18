@@ -24,7 +24,7 @@ export default function AddNewCustomer({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             {currentArchiveCustomer._id ? '编辑客户信息' : '新增客户'}
           </Text>
         }

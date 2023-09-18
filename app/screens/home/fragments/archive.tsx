@@ -43,20 +43,18 @@ export default function Archive() {
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            minH={'100%'}
-          >
+            minH={'100%'}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {customers.map((customer, idx) => (
                 <Center w={'33.33%'} key={idx}>
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     key={idx}
                     pr={ls(20)}
                     onPress={() => {
                       updateCurrentArchiveCustomer(customer);
                       navigation.navigate('CustomerArchive');
-                    }}
-                  >
+                    }}>
                     <CustomerArchiveItem customer={customer} />
                   </Pressable>
                 </Center>
@@ -103,8 +101,7 @@ function Filter() {
       borderRadius={ss(10)}
       px={ls(40)}
       justifyContent={'space-between'}
-      alignItems={'center'}
-    >
+      alignItems={'center'}>
       <Row py={ss(20)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
@@ -124,7 +121,7 @@ function Filter() {
           ml={ls(20)}
           h={ss(44)}
           p={ss(8)}
-          borderRadius={4}
+          borderRadius={ss(4)}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={ss(16)}
@@ -145,7 +142,7 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -159,10 +156,9 @@ function Filter() {
           py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -176,7 +172,7 @@ function Filter() {
           至
         </Text>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
               isOpen: true,
@@ -189,10 +185,9 @@ function Filter() {
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}
-        >
+          borderWidth={1}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -237,21 +232,19 @@ function Filter() {
         />
       </Row>
       <Pressable
-        hitSlop={ss(10)}
+        hitSlop={ss(20)}
         onPress={() => {
           updateCurrentArchiveCustomer(DefaultCustomer);
           navigation.navigate('AddNewCustomer');
-        }}
-      >
+        }}>
         <Box
-          borderRadius={4}
+          borderRadius={ss(4)}
           borderWidth={1}
           borderColor={'#03CBB2'}
           bgColor={'rgba(3, 203, 178, 0.20)'}
           px={ls(13)}
           py={ss(10)}
-          _text={{ fontSize: ss(14), color: '#0C1B16' }}
-        >
+          _text={{ fontSize: ss(14), color: '#0C1B16' }}>
           新增客户
         </Box>
       </Pressable>

@@ -21,7 +21,7 @@ export default function RoleDetail({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             {currentRole._id ? '角色详情' : '新增角色'}
           </Text>
         }

@@ -33,14 +33,13 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
   const ageText = `${age?.year}岁${age?.month}月`;
   return (
     <Row
-      borderRadius={4}
+      borderRadius={ss(4)}
       borderWidth={ss(1)}
       borderColor={'#15BD8F'}
       w={'100%'}
       mb={ss(30)}
       p={ss(20)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Row>
         <Image
           style={{ width: ss(60), height: ss(60) }}
@@ -59,8 +58,7 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
               fontWeight={400}
               maxW={ls(140)}
               numberOfLines={1}
-              ellipsizeMode='tail'
-            >
+              ellipsizeMode='tail'>
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
@@ -78,16 +76,14 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(6)}
-            >
+              ml={ls(6)}>
               {ageText}
             </Text>
             <Text
               color={'#99A9BF'}
               fontWeight={400}
               fontSize={sp(12)}
-              ml={ls(20)}
-            >
+              ml={ls(20)}>
               {customer.phoneNumber}
             </Text>
           </Row>
@@ -126,8 +122,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
       bgColor={'#fff'}
       style={style}
       py={ss(20)}
-      borderRadius={ss(10)}
-    >
+      borderRadius={ss(10)}>
       <Box mx={ls(20)}>
         <BoxTitle title='选择客户' />
       </Box>
@@ -164,14 +159,13 @@ export default function SelectCustomer(params: SelectCustomerParams) {
             renderItem={({ item, index }) => {
               return (
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     updateCurrentFlow({
                       ...currentFlow,
                       customer: item,
                     });
-                  }}
-                >
+                  }}>
                   <SelectCustomerItem customer={item} />
                   {currentFlow.customer._id === item._id && (
                     <Image

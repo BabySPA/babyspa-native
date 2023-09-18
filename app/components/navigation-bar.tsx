@@ -33,15 +33,13 @@ export default function NavigationBar(props: NavigationBarParams) {
       alignItems={'center'}
       justifyContent={'space-between'}
       px={ss(20)}
-      py={ss(20)}
-    >
+      py={ss(20)}>
       <Pressable
-        hitSlop={ss(10)}
+        hitSlop={ss(20)}
         onPress={() => {
           if (onBackIntercept()) return;
           navigation.goBack();
-        }}
-      >
+        }}>
         <Row alignItems={'center'}>
           {hasLeftIcon && (
             <Icon

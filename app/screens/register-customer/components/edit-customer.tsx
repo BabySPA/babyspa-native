@@ -52,8 +52,7 @@ export default function EditCustomer(params: EditCustomerParams) {
       bgColor={'#fff'}
       style={style}
       p={ss(20)}
-      borderRadius={4}
-    >
+      borderRadius={ss(4)}>
       <Flex>
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
@@ -64,7 +63,7 @@ export default function EditCustomer(params: EditCustomerParams) {
               <Input
                 autoCorrect={false}
                 w={'70%'}
-                h={ss(48, { min: 26 })}
+                h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
                 defaultValue={currentFlow.customer.name}
@@ -91,7 +90,7 @@ export default function EditCustomer(params: EditCustomerParams) {
               <Input
                 autoCorrect={false}
                 w={'70%'}
-                h={ss(48, { min: 26 })}
+                h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
                 defaultValue={currentFlow.customer.nickname}
@@ -142,21 +141,19 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Box w={'70%'}>
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     showDatePicker();
-                  }}
-                >
+                  }}>
                   <Row
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
-                    pr={ss(8)}
-                  >
+                    pr={ss(8)}>
                     <Text color={'#333'} fontSize={sp(16)}>
                       {currentFlow.customer.birthday || '请选择'}
                     </Text>
@@ -176,12 +173,11 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Row w={'70%'} alignItems={'center'}>
                 <Center
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   h={ss(48)}
                   w={ls(72)}
-                  borderColor={'#D8D8D8'}
-                >
+                  borderColor={'#D8D8D8'}>
                   <Text fontSize={sp(20)} color={'#333'}>
                     {age?.year}
                   </Text>
@@ -191,12 +187,11 @@ export default function EditCustomer(params: EditCustomerParams) {
                 </Text>
                 <Center
                   ml={ls(20)}
-                  borderRadius={4}
+                  borderRadius={ss(4)}
                   borderWidth={1}
                   h={ss(48)}
                   w={ls(72)}
-                  borderColor={'#D8D8D8'}
-                >
+                  borderColor={'#D8D8D8'}>
                   <Text fontSize={sp(20)} color={'#333'}>
                     {age?.month}
                   </Text>
@@ -216,7 +211,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 autoCorrect={false}
                 w={'70%'}
                 defaultValue={currentFlow.customer.phoneNumber}
-                h={ss(48, { min: 26 })}
+                h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
                 onChangeText={(text) => {
@@ -241,28 +236,25 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Box w={'70%'}>
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     setIsOpenTemplatePicker(true);
-                  }}
-                >
+                  }}>
                   <Row
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
                     borderWidth={1}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
-                    pr={ss(8)}
-                  >
+                    pr={ss(8)}>
                     <Text
                       color={'#333'}
                       fontSize={sp(16)}
                       numberOfLines={1}
                       ellipsizeMode='tail'
-                      maxW={ls(240)}
-                    >
+                      maxW={ls(240)}>
                       {currentFlow.customer.allergy ||
                         currentFlow.collect.healthInfo.allergy ||
                         '请选择或输入'}

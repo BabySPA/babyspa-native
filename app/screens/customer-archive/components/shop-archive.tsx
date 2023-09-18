@@ -22,13 +22,12 @@ export function ShopArchive(params: ShopArchiveParams) {
         {params.archives.map((archive, idx) => {
           return (
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               key={archive._id}
               w={ls(302)}
               onPress={() => {
                 params.onPressToFlowInfo(archive);
-              }}
-            >
+              }}>
               <Row alignItems={'center'}>
                 <Circle size={ss(20)} borderRadius={ss(18)} bgColor={'#DCEEED'}>
                   <Circle size={ss(12)} bgColor={'#5EACA3'} />
@@ -45,19 +44,17 @@ export function ShopArchive(params: ShopArchiveParams) {
                 p={ss(20)}
                 w={ls(262)}
                 h={ss(404)}
-                borderRadius={4}
+                borderRadius={ss(4)}
                 borderWidth={1}
-                borderColor={'#5EACA3'}
-              >
+                borderColor={'#5EACA3'}>
                 <Box
                   bgColor={'#03CBB2'}
                   position={'absolute'}
                   right={0}
                   px={ls(12)}
-                  borderTopRightRadius={4}
-                  borderBottomLeftRadius={4}
-                  py={ss(6)}
-                >
+                  borderTopRightRadius={ss(4)}
+                  borderBottomLeftRadius={ss(4)}
+                  py={ss(6)}>
                   <Text fontSize={sp(16)} color={'#fff'}>
                     {archive.shop?.name}
                   </Text>
@@ -69,8 +66,7 @@ export function ShopArchive(params: ShopArchiveParams) {
                   height={ss(74)}
                   color='#000'
                   fontSize={sp(16)}
-                  mt={ss(10)}
-                >
+                  mt={ss(10)}>
                   {archive.collect?.guidance}
                 </Text>
                 <Box bgColor={'#F6FBFA'} px={ls(10)} py={ss(20)} flex={1}>

@@ -24,8 +24,7 @@ export default function InfoBox(params: InfoBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <Column>
         <BoxTitle title='客户信息' />
         <Box mt={ss(30)} px={ls(50)}>
@@ -87,19 +86,17 @@ export default function InfoBox(params: InfoBoxParams) {
       />
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             params.onPressEdit();
-          }}
-        >
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
-            borderColor={'#00B49E'}
-          >
+            borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               {currentFlow.register.status === RegisterStatus.CANCEL
                 ? '再次登记'

@@ -14,7 +14,7 @@ export default function ShopCenterBox({
   onPress: () => void;
 }) {
   return (
-    <Pressable hitSlop={ss(10)} onPress={onPress}>
+    <Pressable hitSlop={ss(20)} onPress={onPress}>
       <Row
         bgColor={'#fff'}
         minH={ss(128)}
@@ -23,8 +23,7 @@ export default function ShopCenterBox({
         mb={ss(10)}
         px={ss(30)}
         py={ss(24)}
-        justifyContent={'space-between'}
-      >
+        justifyContent={'space-between'}>
         <Column>
           <Text fontSize={sp(24)} color='#333'>
             {title}

@@ -19,11 +19,10 @@ export default function PreviewImage({
   return (
     <>
       <Pressable
-        hitSlop={ss(10)}
+        hitSlop={ss(20)}
         onPress={() => {
           setShowImageModal(true);
-        }}
-      >
+        }}>
         <Image
           style={{
             width: ss(100),

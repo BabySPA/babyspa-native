@@ -16,7 +16,7 @@ export default function FollowUp({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             客户随访
           </Text>
         }

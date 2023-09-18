@@ -21,7 +21,7 @@ export default function ShopDetail({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             {currentShop._id ? '门店详情' : '新增门店'}
           </Text>
         }

@@ -42,26 +42,26 @@ export default function AnalyzeInfo({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             分析详情
           </Text>
         }
         rightElement={
           <Row>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setShowCollection(true);
               }}>
               <Row
                 bgColor={'transparent'}
-                borderRadius={4}
+                borderRadius={ss(4)}
                 px={ls(12)}
                 py={ss(10)}
                 borderWidth={ss(1)}
                 borderColor={'#FFF'}
                 mr={ls(40)}>
-                <Text color={'#FFF'} fontSize={sp(14, { min: 12 })}>
+                <Text color={'#FFF'} fontSize={sp(14)}>
                   采集信息
                 </Text>
               </Row>
@@ -79,8 +79,10 @@ export default function AnalyzeInfo({
           alignItems={'center'}
           justifyContent={'space-between'}>
           <Row alignItems={'center'}>
-            <Circle bgColor={'#F56121'} size={ss(20)}>
-              <Text color='#fff'>!</Text>
+            <Circle bgColor={'#F56121'} size={ss(24)}>
+              <Text color='#fff' fontSize={sp(14)}>
+                !
+              </Text>
             </Circle>
             <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
               过敏原：
@@ -88,7 +90,7 @@ export default function AnalyzeInfo({
             </Text>
           </Row>
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               setShowWarn(false);
             }}>
@@ -114,44 +116,69 @@ export default function AnalyzeInfo({
               {analyze.status === AnalyzeStatus.DONE ||
               analyze.status === AnalyzeStatus.CANCEL ? (
                 <Column>
-                  {analyze.solution.applications.map((item, idx) => {
-                    return (
-                      <Column key={idx}>
-                        {item.count ? (
-                          <Column
-                            mt={idx === 0 ? 0 : ss(20)}
-                            bgColor={'#F2F9F8'}
-                            borderRadius={1}
-                            borderStyle={'dashed'}
-                            borderWidth={1}
-                            borderColor={'#7AB6AF'}
-                            p={ss(20)}>
-                            <Row
-                              alignItems={'flex-start'}
-                              justifyContent={'space-between'}>
-                              <Text fontSize={sp(20)} color='#666'>
-                                {item.name}
-                              </Text>
-                              <Text fontSize={sp(18)} color='#999'>
-                                贴数： {item.count}贴
-                              </Text>
-                            </Row>
-                            <Row
-                              alignItems={'flex-start'}
-                              justifyContent={'space-between'}
-                              mt={ss(20)}>
-                              <Text fontSize={sp(18)} color='#999' maxW={'60%'}>
-                                穴位：
-                                <Text fontSize={sp(16)} color='#333'>
-                                  {item.acupoint || '未设置'}
+                  {analyze.solution.applications.length > 0 ? (
+                    analyze.solution.applications.map((item, idx) => {
+                      return (
+                        <Column key={idx}>
+                          {item.count ? (
+                            <Column
+                              mt={idx === 0 ? 0 : ss(20)}
+                              bgColor={'#F2F9F8'}
+                              borderRadius={1}
+                              borderStyle={'dashed'}
+                              borderWidth={1}
+                              borderColor={'#7AB6AF'}
+                              p={ss(20)}>
+                              <Row
+                                alignItems={'flex-start'}
+                                justifyContent={'space-between'}>
+                                <Text fontSize={sp(20)} color='#666'>
+                                  {item.name}
                                 </Text>
-                              </Text>
-                            </Row>
-                          </Column>
-                        ) : null}
-                      </Column>
-                    );
-                  })}
+                                <Text fontSize={sp(18)} color='#999'>
+                                  贴数： {item.count}贴
+                                </Text>
+                              </Row>
+                              <Row
+                                alignItems={'flex-start'}
+                                justifyContent={'space-between'}
+                                mt={ss(20)}>
+                                <Text
+                                  fontSize={sp(18)}
+                                  color='#999'
+                                  maxW={'60%'}>
+                                  穴位：
+                                  <Text fontSize={sp(16)} color='#333'>
+                                    {item.acupoint || '未设置'}
+                                  </Text>
+                                </Text>
+                              </Row>
+                            </Column>
+                          ) : null}
+                        </Column>
+                      );
+                    })
+                  ) : (
+                    <Center
+                      flex={1}
+                      bgColor='white'
+                      borderRadius={ss(10)}
+                      py={ss(20)}>
+                      <Image
+                        style={{ height: ss(180) }}
+                        source={require('~/assets/images/no-data.png')}
+                        resizeMode='contain'
+                        alt=''
+                      />
+                      <Text
+                        fontSize={sp(16)}
+                        color='#1E262F'
+                        opacity={0.4}
+                        mt={ss(10)}>
+                        贴敷未设置
+                      </Text>
+                    </Center>
+                  )}
                 </Column>
               ) : (
                 <Center
@@ -357,7 +384,7 @@ export default function AnalyzeInfo({
               </Text>
             </Row>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setShowCollection(false);
               }}>
@@ -369,7 +396,7 @@ export default function AnalyzeInfo({
             </Pressable>
           </Row>
           <Divider color={'#DFE1DE'} mb={ss(20)} />
-          <ScrollView>
+          <ScrollView maxH={ss(550)}>
             <Column px={ls(20)}>
               <Row>
                 <Text

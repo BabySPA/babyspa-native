@@ -66,7 +66,7 @@ export default function Collection() {
                       ml={idx % 2 == 1 ? ss(20) : 0}
                       mr={idx % 2 == 0 ? ss(20) : 0}
                       mb={ss(40)}
-                      hitSlop={ss(10)}
+                      hitSlop={ss(20)}
                       onPress={() => {
                         updateCurrentFlow(flow);
                         navigation.navigate('AnalyzeInfo');
@@ -154,9 +154,9 @@ function Filter() {
           <Input
             ml={ls(30)}
             w={ls(240)}
-            minH={ss(40, { max: 18 })}
+            h={ss(44)}
             p={ss(8)}
-            borderRadius={4}
+            borderRadius={ss(4)}
             defaultValue={collection.searchKeywords}
             placeholderTextColor={'#6E6F73'}
             color={'#333333'}
@@ -178,7 +178,7 @@ function Filter() {
             placeholder='请输入客户姓名、手机号'
           />
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               setShowFilter(!showFilter);
             }}>
@@ -202,7 +202,7 @@ function Filter() {
           </Pressable>
         </Row>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             updateCurrentFlow(DefaultFlow);
             navigation.navigate('RegisterCustomer', {
@@ -214,7 +214,7 @@ function Filter() {
             bgColor={'#E1F6EF'}
             borderWidth={1}
             borderColor={'#15BD8F'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             px={ls(12)}
             py={ss(10)}
             _text={{ fontSize: ss(14), color: '#0C1B16' }}>
@@ -229,7 +229,7 @@ function Filter() {
               时间选择
             </Text>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -238,12 +238,12 @@ function Filter() {
               }}
               flexDirection={'row'}
               ml={ls(20)}
-              minH={ss(40, { max: 18 })}
+              h={ss(44)}
               alignItems={'center'}
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -259,7 +259,7 @@ function Filter() {
               至
             </Text>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -267,12 +267,12 @@ function Filter() {
                 });
               }}
               flexDirection={'row'}
-              minH={ss(40, { max: 18 })}
+              h={ss(44)}
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
               borderWidth={1}>
               <Icon
@@ -293,7 +293,7 @@ function Filter() {
               {collection.allStatus?.map((status) => {
                 return (
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       updateCollectionFilter({
                         status: status.value,
@@ -302,7 +302,7 @@ function Filter() {
                     key={status.value}
                     w={ls(90)}
                     h={ss(44)}
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     borderWidth={1}
                     alignItems={'center'}
                     justifyContent={'center'}
@@ -335,7 +335,7 @@ function Filter() {
           </Row>
           <Row alignItems={'center'} mt={ss(20)} justifyContent={'flex-end'}>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 updateCollectionFilter({
                   searchKeywords: '',
@@ -344,7 +344,7 @@ function Filter() {
                   status: FlowStatus.NO_SET,
                 });
               }}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderWidth={1}
               w={ls(80)}
               h={ss(44)}
@@ -356,7 +356,7 @@ function Filter() {
               </Text>
             </Pressable>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={async () => {
                 openLoading();
                 await requestGetCollectionFlows();
@@ -364,7 +364,7 @@ function Filter() {
                   closeLoading();
                 }, 300);
               }}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderWidth={1}
               borderColor='#00B49E'
               w={ls(80)}

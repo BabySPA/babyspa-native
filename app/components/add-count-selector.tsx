@@ -14,12 +14,11 @@ export default function AddCountSelector({
   return (
     <>
       <Pressable
-        hitSlop={ss(10)}
+        hitSlop={ss(20)}
         onPress={() => {
           if (count === 0) return;
           onSubtraction();
-        }}
-      >
+        }}>
         <Icon
           as={<AntDesign name='minuscircle' />}
           size={ss(20)}
@@ -31,11 +30,10 @@ export default function AddCountSelector({
         {count}
       </Text>
       <Pressable
-        hitSlop={ss(10)}
+        hitSlop={ss(20)}
         onPress={() => {
           onAddition();
-        }}
-      >
+        }}>
         <Icon
           as={<AntDesign name='pluscircle' />}
           size={ss(20)}

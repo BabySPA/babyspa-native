@@ -74,8 +74,7 @@ export default function EditBox(params: EditBoxParams) {
       bgColor={'#fff'}
       p={ss(20)}
       borderRadius={ss(10)}
-      justifyContent={'space-between'}
-    >
+      justifyContent={'space-between'}>
       <ScrollView>
         <Column>
           <BoxTitle title={'角色信息'} />
@@ -138,7 +137,7 @@ export default function EditBox(params: EditBoxParams) {
                     ml={ls(20)}
                     autoCorrect={false}
                     flex={1}
-                    h={ss(48, { min: 26 })}
+                    h={ss(48)}
                     py={ss(10)}
                     px={ls(20)}
                     defaultValue={tempRole.name}
@@ -192,8 +191,7 @@ export default function EditBox(params: EditBoxParams) {
                         position: 'absolute',
                         right: ss(10),
                         bottom: ss(10),
-                      }}
-                    >
+                      }}>
                       {tempRole.description.length}/300
                     </Text>
                   </>
@@ -213,7 +211,7 @@ export default function EditBox(params: EditBoxParams) {
                         return (
                           <Box key={node.text} mb={ss(10)}>
                             <Pressable
-                              hitSlop={ss(10)}
+                              hitSlop={ss(20)}
                               onPress={() => {
                                 configAuthTree[nodeIdx].hasAuth = !node.hasAuth;
 
@@ -226,8 +224,7 @@ export default function EditBox(params: EditBoxParams) {
                                 setConfigAuthTree(
                                   JSON.parse(JSON.stringify(configAuthTree)),
                                 );
-                              }}
-                            >
+                              }}>
                               <Row alignItems={'center'}>
                                 <Image
                                   source={
@@ -240,12 +237,11 @@ export default function EditBox(params: EditBoxParams) {
                                 <Text
                                   color='#333'
                                   fontSize={sp(20)}
-                                  ml={ls(10)}
-                                >
+                                  ml={ls(10)}>
                                   {node.text}
                                 </Text>
                                 <Pressable
-                                  hitSlop={ss(10)}
+                                  hitSlop={ss(20)}
                                   onPress={() => {
                                     configAuthTree[nodeIdx].isOpen =
                                       !node.isOpen;
@@ -254,8 +250,7 @@ export default function EditBox(params: EditBoxParams) {
                                         JSON.stringify(configAuthTree),
                                       ),
                                     );
-                                  }}
-                                >
+                                  }}>
                                   <Icon
                                     ml={ss(16)}
                                     as={
@@ -278,7 +273,7 @@ export default function EditBox(params: EditBoxParams) {
                                 {node.features.map((feature, featureIdx) => {
                                   return (
                                     <Pressable
-                                      hitSlop={ss(10)}
+                                      hitSlop={ss(20)}
                                       key={feature.text}
                                       onPress={() => {
                                         configAuthTree[nodeIdx].features[
@@ -289,8 +284,7 @@ export default function EditBox(params: EditBoxParams) {
                                             JSON.stringify(configAuthTree),
                                           ),
                                         );
-                                      }}
-                                    >
+                                      }}>
                                       <Row ml={ls(20)} mt={ss(10)}>
                                         <Image
                                           source={
@@ -306,8 +300,7 @@ export default function EditBox(params: EditBoxParams) {
                                         <Text
                                           color='#333'
                                           fontSize={sp(20)}
-                                          ml={ls(10)}
-                                        >
+                                          ml={ls(10)}>
                                           {feature.text}
                                         </Text>
                                       </Row>
@@ -329,19 +322,17 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
-          }}
-        >
+          }}>
           <Box
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
-            borderColor={'#D8D8D8'}
-          >
+            borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
             </Text>
@@ -349,7 +340,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
@@ -391,17 +382,15 @@ export default function EditBox(params: EditBoxParams) {
                   setLoading(false);
                 });
             }
-          }}
-        >
+          }}>
           <Row
             px={ls(34)}
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             borderWidth={1}
             alignItems={'center'}
-            borderColor={'#00B49E'}
-          >
+            borderColor={'#00B49E'}>
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存

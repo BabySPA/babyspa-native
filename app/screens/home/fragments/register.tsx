@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
@@ -23,12 +23,7 @@ import { debounce } from 'lodash';
 import { Image as NativeImage } from 'react-native';
 import dayjs from 'dayjs';
 import FlowCustomerItem from '../components/flow-customer-item';
-import {
-  AnalyzeStatus,
-  CollectStatus,
-  RegisterStatus,
-} from '~/app/stores/flow/type';
-import { getStatusTextConfig } from '~/app/constants';
+import { RegisterStatus } from '~/app/stores/flow/type';
 import useGlobalLoading from '~/app/stores/loading';
 
 export default function Register() {
@@ -57,8 +52,7 @@ export default function Register() {
             pb={0}
             bgColor='white'
             borderRadius={ss(10)}
-            minH={'100%'}
-          >
+            minH={'100%'}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {flows.map((flow, idx) => (
                 <Center width={'50%'} key={idx}>
@@ -66,12 +60,11 @@ export default function Register() {
                     ml={idx % 2 == 1 ? ss(20) : 0}
                     mr={idx % 2 == 0 ? ss(20) : 0}
                     mb={ss(40)}
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       updateCurrentFlow(flow);
                       navigation.navigate('CustomerDetail');
-                    }}
-                  >
+                    }}>
                     <FlowCustomerItem flow={flow} type={OperateType.Register} />
                   </Pressable>
                 </Center>
@@ -117,8 +110,7 @@ function Filter() {
         py={ss(20)}
         px={ls(40)}
         alignItems={'center'}
-        justifyContent={'space-between'}
-      >
+        justifyContent={'space-between'}>
         <Row alignItems={'center'}>
           <Icon
             as={<Ionicons name={'people'} />}
@@ -132,12 +124,12 @@ function Filter() {
           <Input
             ml={ls(30)}
             w={ls(240)}
-            minH={ss(44)}
+            h={ss(44)}
             p={ss(9)}
             defaultValue={register.searchKeywords}
             placeholderTextColor={'#6E6F73'}
             color={'#333333'}
-            borderRadius={4}
+            borderRadius={ss(4)}
             fontSize={ss(16)}
             onChangeText={debounce((text) => {
               updateRegisterFilter({
@@ -157,11 +149,10 @@ function Filter() {
             placeholder='请输入客户姓名、手机号'
           />
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               setShowFilter(!showFilter);
-            }}
-          >
+            }}>
             <Row alignItems={'center'}>
               <NativeImage
                 source={
@@ -182,14 +173,13 @@ function Filter() {
           </Pressable>
         </Row>
         <Pressable
-          hitSlop={ss(10)}
+          hitSlop={ss(20)}
           onPress={() => {
             updateCurrentFlow(DefaultFlow);
             navigation.navigate('RegisterCustomer', {
               type: CustomerScreenType.register,
             });
-          }}
-        >
+          }}>
           <Box
             ml={ls(20)}
             bg={{
@@ -201,9 +191,8 @@ function Filter() {
             }}
             px={ls(26)}
             py={ss(10)}
-            borderRadius={4}
-            _text={{ fontSize: ss(14), color: 'white' }}
-          >
+            borderRadius={ss(4)}
+            _text={{ fontSize: ss(14), color: 'white' }}>
             登记
           </Box>
         </Pressable>
@@ -215,7 +204,7 @@ function Filter() {
               时间选择
             </Text>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -224,15 +213,14 @@ function Filter() {
               }}
               flexDirection={'row'}
               ml={ls(20)}
-              minH={ss(40, { max: 18 })}
+              h={ss(44)}
               alignItems={'center'}
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}
-            >
+              borderWidth={1}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -246,7 +234,7 @@ function Filter() {
               至
             </Text>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
                   isOpen: true,
@@ -254,15 +242,14 @@ function Filter() {
                 });
               }}
               flexDirection={'row'}
-              minH={ss(40, { max: 18 })}
+              h={ss(44)}
               py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}
-            >
+              borderWidth={1}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -281,7 +268,7 @@ function Filter() {
               {register.allStatus?.map((status, idx) => {
                 return (
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       updateRegisterFilter({
                         status: status.value,
@@ -290,21 +277,19 @@ function Filter() {
                     key={idx}
                     w={ls(90)}
                     h={ss(44)}
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     borderWidth={1}
                     alignItems={'center'}
                     justifyContent={'center'}
                     mr={ls(20)}
                     borderColor={
                       register.status === status.value ? '#00B49E' : '#D8D8D8'
-                    }
-                  >
+                    }>
                     <Text
                       fontSize={sp(18)}
                       color={
                         register.status === status.value ? '#00B49E' : '#666'
-                      }
-                    >
+                      }>
                       {status.label}
                     </Text>
                     {register.status === status.value && (
@@ -325,7 +310,7 @@ function Filter() {
           </Row>
           <Row alignItems={'center'} mt={ss(20)} justifyContent={'flex-end'}>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 updateRegisterFilter({
                   searchKeywords: '',
@@ -334,20 +319,19 @@ function Filter() {
                   status: FlowStatus.NO_SET,
                 });
               }}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderWidth={1}
               w={ls(80)}
               h={ss(44)}
               justifyContent={'center'}
               alignItems={'center'}
-              borderColor='#D8D8D8'
-            >
+              borderColor='#D8D8D8'>
               <Text color='#333' fontSize={sp(14)}>
                 重置
               </Text>
             </Pressable>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={async () => {
                 openLoading();
                 await requestGetRegisterFlows();
@@ -355,7 +339,7 @@ function Filter() {
                   closeLoading();
                 }, 300);
               }}
-              borderRadius={4}
+              borderRadius={ss(4)}
               borderWidth={1}
               borderColor='#00B49E'
               w={ls(80)}
@@ -363,8 +347,7 @@ function Filter() {
               justifyContent={'center'}
               alignItems={'center'}
               ml={ls(20)}
-              bgColor={'rgba(0, 180, 158, 0.10)'}
-            >
+              bgColor={'rgba(0, 180, 158, 0.10)'}>
               <Text color='#00B49E' fontSize={sp(14)}>
                 确定
               </Text>

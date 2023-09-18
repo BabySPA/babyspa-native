@@ -194,7 +194,7 @@ export default function ManagerTemplate({
   const TextChild = ({ item, level }: { item: any; level: number }) => {
     return (
       <Pressable
-        hitSlop={ss(10)}
+        hitSlop={ss(20)}
         onLongPress={() => {
           setCanEdit(true);
         }}
@@ -209,7 +209,7 @@ export default function ManagerTemplate({
           <Text maxWidth={ss(300)}>{item}</Text>
           {canEdit && (
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 // 删除
                 setShowDeleteItemModal({
@@ -256,7 +256,7 @@ export default function ManagerTemplate({
           </Row>
           <Row>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setShowExtraModal({
                   isOpen: true,
@@ -285,7 +285,7 @@ export default function ManagerTemplate({
               />
             </Pressable>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               ml={ss(20)}
               onPress={() => {
                 setShowDeleteTemplateExtraModal({
@@ -327,7 +327,7 @@ export default function ManagerTemplate({
               title='模版列表'
               rightElement={
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     setShowEditTemplateModal({
                       isOpen: true,
@@ -340,12 +340,12 @@ export default function ManagerTemplate({
                   }}>
                   <Row
                     bgColor={'#E1F6EF'}
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     px={ls(12)}
                     py={ss(10)}
                     borderColor={'#15BD8F'}
                     borderWidth={1}>
-                    <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
+                    <Text color={'#0C1B16'} fontSize={sp(14)}>
                       新增模版
                     </Text>
                   </Row>
@@ -386,7 +386,7 @@ export default function ManagerTemplate({
                 return (
                   <Box>
                     <Pressable
-                      hitSlop={ss(10)}
+                      hitSlop={ss(20)}
                       onPress={() => {
                         setCurrentLevel2SelectTemplateGroupIndex(index);
                       }}
@@ -429,7 +429,7 @@ export default function ManagerTemplate({
                 <Row flex={1}>
                   <Box flex={1} />
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     w={ls(72)}
                     bg='red.500'
                     justifyContent='center'
@@ -477,7 +477,7 @@ export default function ManagerTemplate({
               },
             )}
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setShowEditTemplateModal({
                   isOpen: true,
@@ -512,7 +512,7 @@ export default function ManagerTemplate({
               title='模版列表'
               rightElement={
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     setShowLevel3EditTemplateModal({
                       isOpen: true,
@@ -528,12 +528,12 @@ export default function ManagerTemplate({
                   }}>
                   <Row
                     bgColor={'#E1F6EF'}
-                    borderRadius={4}
+                    borderRadius={ss(4)}
                     px={ls(12)}
                     py={ss(10)}
                     borderColor={'#15BD8F'}
                     borderWidth={1}>
-                    <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
+                    <Text color={'#0C1B16'} fontSize={sp(14)}>
                       新增模版
                     </Text>
                   </Row>
@@ -567,7 +567,7 @@ export default function ManagerTemplate({
 
           <Box bg='white' flex={1} mt={ss(20)}>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 // toggle
                 setShowEditTemplateGroupModal({
@@ -618,7 +618,7 @@ export default function ManagerTemplate({
                           defaultName: group.name,
                         });
                       }}
-                      hitSlop={ss(10)}
+                      hitSlop={ss(20)}
                       onPress={() => {
                         // toggle
                         setCurrentLevel3SelectFolderIdx({
@@ -676,7 +676,7 @@ export default function ManagerTemplate({
                           return (
                             <Box>
                               <Pressable
-                                hitSlop={ss(10)}
+                                hitSlop={ss(20)}
                                 onPress={() => {
                                   setCurrentLevel3SelectFolderIdx({
                                     folder: currentLevel3SelectFolderIdx.folder,
@@ -730,7 +730,7 @@ export default function ManagerTemplate({
                           <Row flex={1}>
                             <Box flex={1} />
                             <Pressable
-                              hitSlop={ss(10)}
+                              hitSlop={ss(20)}
                               w={ls(72)}
                               bg='red.500'
                               justifyContent='center'
@@ -781,7 +781,7 @@ export default function ManagerTemplate({
                 {(templates[currentSelectTemplateIdx].key == 'application' ||
                   templates[currentSelectTemplateIdx].key == 'massage') && (
                   <Pressable
-                    hitSlop={ss(10)}
+                    hitSlop={ss(20)}
                     onPress={() => {
                       setShowExtraModal({
                         isOpen: true,
@@ -808,12 +808,12 @@ export default function ManagerTemplate({
                     }}>
                     <Row
                       bgColor={'#E1F6EF'}
-                      borderRadius={4}
+                      borderRadius={ss(4)}
                       px={ls(12)}
                       py={ss(10)}
                       borderColor={'#15BD8F'}
                       borderWidth={1}>
-                      <Text color={'#0C1B16'} fontSize={sp(14, { min: 12 })}>
+                      <Text color={'#0C1B16'} fontSize={sp(14)}>
                         添加详情
                       </Text>
                     </Row>
@@ -834,7 +834,7 @@ export default function ManagerTemplate({
             {templates[currentSelectTemplateIdx].key !== 'application' &&
               templates[currentSelectTemplateIdx].key !== 'massage' && (
                 <Pressable
-                  hitSlop={ss(10)}
+                  hitSlop={ss(20)}
                   onPress={() => {
                     setShowEditTemplateModal({
                       isOpen: true,
@@ -866,7 +866,7 @@ export default function ManagerTemplate({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             模板管理
           </Text>
         }
@@ -1402,7 +1402,7 @@ function Tabs() {
         {templates.map((item, index) => {
           return (
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               key={index}
               onPress={() => {
                 setCurrentSelectTemplateIdx(index);

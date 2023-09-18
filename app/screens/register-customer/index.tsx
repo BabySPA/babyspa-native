@@ -43,13 +43,13 @@ export default function RegisterCustomerScreen({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             {isRegister ? '登记' : '快速采集'}
           </Text>
         }
         rightElement={
           <Pressable
-            hitSlop={ss(10)}
+            hitSlop={ss(20)}
             onPress={() => {
               if (loading) return;
 
@@ -116,15 +116,13 @@ export default function RegisterCustomerScreen({
                 .finally(() => {
                   setLoading(false);
                 });
-            }}
-          >
-            <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
+            }}>
+            <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
               {loading && <Spinner mr={ls(5)} color='emerald.500' />}
               <Text
                 color={'#03CBB2'}
                 opacity={loading ? 0.6 : 1}
-                fontSize={sp(14, { min: 10 })}
-              >
+                fontSize={sp(14)}>
                 确定
               </Text>
             </Row>

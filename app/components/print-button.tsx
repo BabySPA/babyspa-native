@@ -210,13 +210,12 @@ export function PrintButton() {
 
   return (
     <Pressable
-      hitSlop={ss(10)}
+      hitSlop={ss(20)}
       onPress={() => {
         print();
-      }}
-    >
-      <Row bgColor={'white'} borderRadius={4} px={ls(26)} py={ss(10)}>
-        <Text color={'#03CBB2'} fontSize={sp(14, { min: 12 })}>
+      }}>
+      <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
+        <Text color={'#03CBB2'} fontSize={sp(14)}>
           打印
         </Text>
       </Row>

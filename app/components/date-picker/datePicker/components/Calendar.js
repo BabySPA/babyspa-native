@@ -21,12 +21,7 @@ const Calendar = () => {
   return (
     <View style={style.container}>
       <Header changeMonth={changeMonthAnimation} />
-      <View
-        style={[
-          style.daysName,
-          utils.flexDirection,
-          { marginTop: ss(5, { min: 3 }) },
-        ]}>
+      <View style={[style.daysName, utils.flexDirection, { marginTop: ss(5) }]}>
         {utils.config.dayNamesShort.map((item) => (
           <Text key={item} style={style.daysNameText}>
             {item}
@@ -49,13 +44,13 @@ const styles = (theme) =>
       flex: 1,
     },
     daysName: {
-      paddingBottom: ss(10, { min: 7 }),
+      paddingBottom: ss(10),
       marginBottom: 0,
       alignItems: 'center',
       justifyContent: 'space-around',
       borderBottomColor: theme.borderColor,
       borderBottomWidth: 1,
-      marginHorizontal: ss(15, { min: 10 }),
+      marginHorizontal: ss(15),
     },
     daysNameText: {
       fontFamily: theme.defaultFont,
@@ -66,8 +61,8 @@ const styles = (theme) =>
       flex: 1,
       position: 'relative',
       overflow: 'hidden',
-      margin: ss(15, { min: 10 }),
-      marginTop: ss(5, { min: 3 }),
+      margin: ss(15),
+      marginTop: ss(5),
       marginBottom: 0,
     },
     days: {

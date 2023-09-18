@@ -37,7 +37,7 @@ export default function Personal({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20, { min: 14 })}>
+          <Text color='white' fontWeight={600} fontSize={sp(20)}>
             个人中心
           </Text>
         }
@@ -53,8 +53,7 @@ export default function Personal({
           bgColor={'#fff'}
           p={ss(20)}
           borderRadius={ss(10)}
-          justifyContent={'space-between'}
-        >
+          justifyContent={'space-between'}>
           <Column>
             <BoxTitle title='员工信息' rightElement={null} />
             <Box mt={ss(30)} px={ls(20)}>
@@ -90,11 +89,10 @@ export default function Personal({
                   rightElement={
                     <Row alignItems={'center'} ml={ls(18)}>
                       <Pressable
-                        hitSlop={ss(10)}
+                        hitSlop={ss(20)}
                         onPress={() => {
                           setShowPassword(!showPassword);
-                        }}
-                      >
+                        }}>
                         <Icon
                           as={
                             <Ionicons
@@ -110,12 +108,11 @@ export default function Personal({
                         />
                       </Pressable>
                       <Pressable
-                        hitSlop={ss(10)}
+                        hitSlop={ss(20)}
                         ml={ls(38)}
                         onPress={() => {
                           setIsResetPassDialogOpen(true);
-                        }}
-                      >
+                        }}>
                         <Row alignItems={'center'}>
                           <Image
                             alt=''
@@ -162,11 +159,10 @@ export default function Personal({
           </Column>
           <Row justifyContent={'center'} mb={ss(60)}>
             <Pressable
-              hitSlop={ss(10)}
+              hitSlop={ss(20)}
               onPress={() => {
                 setShowDialog(true);
-              }}
-            >
+              }}>
               <Row
                 alignItems={'center'}
                 justifyContent={'center'}
@@ -180,8 +176,7 @@ export default function Personal({
                     start: [0, 0],
                     end: [1, 1],
                   },
-                }}
-              >
+                }}>
                 <Text color='#fff' fontSize={sp(18)}>
                   退出登录
                 </Text>

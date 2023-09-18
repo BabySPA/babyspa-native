@@ -163,14 +163,14 @@ const styles = (theme) =>
       flexDirection: 'row',
     },
     arrowWrapper: {
-      padding: ss(20, { min: 12 }),
+      padding: ss(20),
       position: 'relative',
       zIndex: 1,
       opacity: 1,
     },
     arrow: {
-      width: ss(18, { min: 12 }),
-      height: ss(18, { min: 12 }),
+      width: ss(18),
+      height: ss(18),
       opacity: 0.9,
       tintColor: theme.mainColor,
       margin: ss(2),
