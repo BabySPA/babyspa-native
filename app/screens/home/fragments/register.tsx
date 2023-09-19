@@ -55,10 +55,9 @@ export default function Register() {
             minH={'100%'}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {flows.map((flow, idx) => (
-                <Center width={'50%'} key={idx}>
+                <Center key={idx}>
                   <Pressable
-                    ml={idx % 2 == 1 ? ss(20) : 0}
-                    mr={idx % 2 == 0 ? ss(20) : 0}
+                    mr={ss(20)}
                     mb={ss(40)}
                     hitSlop={ss(20)}
                     onPress={() => {

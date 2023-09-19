@@ -46,7 +46,7 @@ export default function Archive() {
             minH={'100%'}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
               {customers.map((customer, idx) => (
-                <Center w={'33.33%'} key={idx}>
+                <Center key={idx}>
                   <Pressable
                     hitSlop={ss(20)}
                     key={idx}

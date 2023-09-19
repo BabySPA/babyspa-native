@@ -90,7 +90,7 @@ export default function FlowCustomerItem({
       borderStyle={'dashed'}
       borderWidth={1}
       borderColor={'#15BD8F'}
-      w={'100%'}
+      w={ls(450)}
       minH={ss(148)}
       justifyContent={'space-between'}>
       <Row p={ss(20)} maxW={'70%'}>
@@ -163,30 +163,25 @@ export default function FlowCustomerItem({
               )}
           </Row>
 
-          <Row
-            alignItems={'center'}
-            mt={ss(10)}
-            opacity={
-              type == OperateType.Evaluate &&
-              flow.evaluate.status == EvaluateStatus.DONE
-                ? 1
-                : 0
-            }>
-            <Text color={'#666'} fontSize={sp(18)} ml={ss(30)}>
-              评星：
-            </Text>
-            {new Array(Number(flow.evaluate.score || 0))
-              .fill(1)
-              .map((item, idx) => {
-                return (
-                  <Image
-                    key={idx}
-                    source={require('~/assets/images/star.png')}
-                    style={{ width: ss(20), height: ss(20) }}
-                  />
-                );
-              })}
-          </Row>
+          {type == OperateType.Evaluate &&
+            flow.evaluate.status == EvaluateStatus.DONE && (
+              <Row alignItems={'center'} mt={ss(10)}>
+                <Text color={'#666'} fontSize={sp(18)} ml={ss(30)}>
+                  评星：
+                </Text>
+                {new Array(Number(flow.evaluate.score || 0))
+                  .fill(1)
+                  .map((item, idx) => {
+                    return (
+                      <Image
+                        key={idx}
+                        source={require('~/assets/images/star.png')}
+                        style={{ width: ss(20), height: ss(20) }}
+                      />
+                    );
+                  })}
+              </Row>
+            )}
 
           <Row alignItems={'center'} mt={ss(10)}>
             <Icon

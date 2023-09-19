@@ -7,7 +7,7 @@ import { haveSameAuthorities } from '../utils';
 import useGlobalLoading from '../stores/loading';
 
 type Result<T> = {
-  code: number;
+  code: number
   message: string;
   data: T;
 };
