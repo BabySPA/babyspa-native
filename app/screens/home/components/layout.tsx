@@ -87,6 +87,9 @@ export default function Layout() {
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 key={idx}
                 onPress={() => {
@@ -124,6 +127,9 @@ export default function Layout() {
           position={'absolute'}
           bottom={ss(60)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             alignItems={'center'}
             onPress={() => {
@@ -196,6 +202,9 @@ export default function Layout() {
             currentSelectedModule?.features.map((item, idx) => {
               return (
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   key={idx}
                   paddingRight={'8%'}

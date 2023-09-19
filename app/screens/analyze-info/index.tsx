@@ -49,6 +49,9 @@ export default function AnalyzeInfo({
         rightElement={
           <Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowCollection(true);
@@ -90,6 +93,9 @@ export default function AnalyzeInfo({
             </Text>
           </Row>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               setShowWarn(false);
@@ -384,6 +390,9 @@ export default function AnalyzeInfo({
               </Text>
             </Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowCollection(false);

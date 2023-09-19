@@ -178,6 +178,9 @@ export default function ImageBox({
             )}
             {edit && (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   removedCallback(index);
@@ -206,7 +209,12 @@ export default function ImageBox({
           _text={{ fontSize: sp(18), color: '#000' }}
           trigger={(triggerProps) => {
             return (
-              <Pressable hitSlop={ss(20)} {...triggerProps}>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                {...triggerProps}>
                 <Center
                   borderColor={'#ACACAC'}
                   borderWidth={1}

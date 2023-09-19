@@ -15,6 +15,9 @@ export function RadioBox(params: {
       {params.config.map((item, idx) => {
         return (
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             key={item.value}
             ml={idx == 0 ? 0 : params.margin}

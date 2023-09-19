@@ -194,6 +194,9 @@ export default function ManagerTemplate({
   const TextChild = ({ item, level }: { item: any; level: number }) => {
     return (
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onLongPress={() => {
           setCanEdit(true);
@@ -209,6 +212,9 @@ export default function ManagerTemplate({
           <Text maxWidth={ss(300)}>{item}</Text>
           {canEdit && (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // 删除
@@ -256,6 +262,9 @@ export default function ManagerTemplate({
           </Row>
           <Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowExtraModal({
@@ -285,6 +294,9 @@ export default function ManagerTemplate({
               />
             </Pressable>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               ml={ss(20)}
               onPress={() => {
@@ -327,6 +339,9 @@ export default function ManagerTemplate({
               title='模版列表'
               rightElement={
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowEditTemplateModal({
@@ -386,6 +401,9 @@ export default function ManagerTemplate({
                 return (
                   <Box>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       onPress={() => {
                         setCurrentLevel2SelectTemplateGroupIndex(index);
@@ -429,6 +447,9 @@ export default function ManagerTemplate({
                 <Row flex={1}>
                   <Box flex={1} />
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     w={ls(72)}
                     bg='red.500'
@@ -477,6 +498,9 @@ export default function ManagerTemplate({
               },
             )}
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowEditTemplateModal({
@@ -512,6 +536,9 @@ export default function ManagerTemplate({
               title='模版列表'
               rightElement={
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowLevel3EditTemplateModal({
@@ -567,6 +594,9 @@ export default function ManagerTemplate({
 
           <Box bg='white' flex={1} mt={ss(20)}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // toggle
@@ -602,6 +632,9 @@ export default function ManagerTemplate({
                 return (
                   <Box key={groupIdx}>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       onLongPress={() => {
                         // toggle
                         setCurrentLevel3SelectFolderIdx({
@@ -676,6 +709,9 @@ export default function ManagerTemplate({
                           return (
                             <Box>
                               <Pressable
+                                _pressed={{
+                                  opacity: 0.6,
+                                }}
                                 hitSlop={ss(20)}
                                 onPress={() => {
                                   setCurrentLevel3SelectFolderIdx({
@@ -730,6 +766,9 @@ export default function ManagerTemplate({
                           <Row flex={1}>
                             <Box flex={1} />
                             <Pressable
+                              _pressed={{
+                                opacity: 0.6,
+                              }}
                               hitSlop={ss(20)}
                               w={ls(72)}
                               bg='red.500'
@@ -781,6 +820,9 @@ export default function ManagerTemplate({
                 {(templates[currentSelectTemplateIdx].key == 'application' ||
                   templates[currentSelectTemplateIdx].key == 'massage') && (
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setShowExtraModal({
@@ -834,6 +876,9 @@ export default function ManagerTemplate({
             {templates[currentSelectTemplateIdx].key !== 'application' &&
               templates[currentSelectTemplateIdx].key !== 'massage' && (
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowEditTemplateModal({
@@ -1402,6 +1447,9 @@ function Tabs() {
         {templates.map((item, index) => {
           return (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               key={index}
               onPress={() => {

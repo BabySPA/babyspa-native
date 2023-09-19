@@ -100,6 +100,9 @@ export default function SolutionInfo({
                         </Text>
                       </Row>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         onPress={() => {
                           removeSolutionApplication(idx);
@@ -122,6 +125,9 @@ export default function SolutionInfo({
                           </Text>
 
                           <Pressable
+                            _pressed={{
+                              opacity: 0.6,
+                            }}
                             hitSlop={ss(20)}
                             onPress={() => {
                               setEditAcupoint(true);
@@ -177,6 +183,9 @@ export default function SolutionInfo({
               })}
               <Row justifyContent={'flex-end'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowExtraModal({
@@ -208,6 +217,9 @@ export default function SolutionInfo({
             autoScroll={false}
             icon={require('~/assets/images/guidance.png')}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               flex={1}
               pt={ss(10)}
@@ -273,6 +285,9 @@ export default function SolutionInfo({
                         </Text>
                       </Row>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         onPress={() => {
                           removeSolutionMassage(idx);
@@ -294,6 +309,9 @@ export default function SolutionInfo({
                         </Text>
 
                         <Pressable
+                          _pressed={{
+                            opacity: 0.6,
+                          }}
                           hitSlop={ss(20)}
                           onPress={() => {
                             setEditMassageRemark(true);
@@ -347,6 +365,9 @@ export default function SolutionInfo({
               })}
               <Row justifyContent={'flex-end'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowExtraModal({

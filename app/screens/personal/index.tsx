@@ -89,6 +89,9 @@ export default function Personal({
                   rightElement={
                     <Row alignItems={'center'} ml={ls(18)}>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         onPress={() => {
                           setShowPassword(!showPassword);
@@ -108,6 +111,9 @@ export default function Personal({
                         />
                       </Pressable>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         ml={ls(38)}
                         onPress={() => {
@@ -159,6 +165,9 @@ export default function Personal({
           </Column>
           <Row justifyContent={'center'} mb={ss(60)}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowDialog(true);

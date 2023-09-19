@@ -61,6 +61,9 @@ export function DialogModal({
             </Text>
             <Row mt={ss(50)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -77,6 +80,9 @@ export function DialogModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm();
@@ -146,6 +152,9 @@ export function TemplateModal({
             {template?.name}
           </Text>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
@@ -191,6 +200,9 @@ export function TemplateModal({
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
@@ -225,6 +237,9 @@ export function TemplateModal({
                   )?.map((item, idx) => {
                     return (
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         key={idx}
                         onPress={() => {
@@ -260,6 +275,9 @@ export function TemplateModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
@@ -276,6 +294,9 @@ export function TemplateModal({
             </Text>
           </Pressable>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onConfirm(templateText);
@@ -364,6 +385,9 @@ export function GrowthCurveModal({
             </Row>
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -380,6 +404,9 @@ export function GrowthCurveModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm({
@@ -490,6 +517,9 @@ export function ChangePasswordModal({
             </Row>
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -506,6 +536,9 @@ export function ChangePasswordModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   if (decodePassword(password) !== originalPassword) {
@@ -604,6 +637,9 @@ export function NewTemplateModalModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -620,6 +656,9 @@ export function NewTemplateModalModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 opacity={name.length > 0 ? 1 : 0.5}
                 hitSlop={ss(20)}
                 onPress={() => {
@@ -702,6 +741,9 @@ export function NewTemplateGroupModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -718,6 +760,9 @@ export function NewTemplateGroupModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm(name);
@@ -867,6 +912,9 @@ export function NewLevel3TemplateGroupModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -883,6 +931,9 @@ export function NewLevel3TemplateGroupModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 opacity={name.length > 0 && selectGroup.length > 0 ? 1 : 0.5}
                 hitSlop={ss(20)}
                 onPress={() => {
@@ -1001,6 +1052,9 @@ export function NewTemplateExtraModal({
 
             <Row mt={ss(80)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
@@ -1017,6 +1071,9 @@ export function NewTemplateExtraModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   const n = name || defaultName;
@@ -1098,6 +1155,9 @@ export function TemplateExtraModal({
             {template?.name}
           </Text>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
@@ -1116,6 +1176,9 @@ export function TemplateExtraModal({
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
@@ -1153,6 +1216,9 @@ export function TemplateExtraModal({
                         (item: any, idx) => {
                           return (
                             <Pressable
+                              _pressed={{
+                                opacity: 0.6,
+                              }}
                               hitSlop={ss(20)}
                               key={idx}
                               onPress={() => {
@@ -1197,6 +1263,9 @@ export function TemplateExtraModal({
                     )?.map((item, index) => {
                       return (
                         <Pressable
+                          _pressed={{
+                            opacity: 0.6,
+                          }}
                           key={index}
                           onPress={() => {
                             setSelectTemplateContentItemIdx(index);
@@ -1283,6 +1352,9 @@ export function TemplateExtraModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
@@ -1299,6 +1371,9 @@ export function TemplateExtraModal({
             </Text>
           </Pressable>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               const result = (

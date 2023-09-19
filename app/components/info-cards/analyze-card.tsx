@@ -37,6 +37,9 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
           edit &&
           analyze.editable !== false && (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 navigation.replace('Flow', {

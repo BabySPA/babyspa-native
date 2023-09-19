@@ -112,6 +112,9 @@ export default function CameraScreen({
           </Center>
         )}
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={takePhoto}
           alignItems={'center'}

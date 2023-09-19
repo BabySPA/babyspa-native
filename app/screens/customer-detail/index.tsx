@@ -43,6 +43,9 @@ export default function CustomerDetail({
         rightElement={
           !edit && currentFlow.register.status === RegisterStatus.DONE ? (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowModal(true);

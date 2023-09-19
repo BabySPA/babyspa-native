@@ -386,6 +386,9 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           shops={selectShops}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -415,6 +418,9 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({

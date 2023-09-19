@@ -114,8 +114,6 @@ export default function SelectCustomer(params: SelectCustomerParams) {
 
   const { style = {} } = params;
 
-  const [currentIdx, setCurrentIdx] = useState<number>(-1);
-
   return (
     <Column
       flex={1}
@@ -155,10 +153,12 @@ export default function SelectCustomer(params: SelectCustomerParams) {
         <Box mt={ss(30)}>
           <FlatList
             data={allCustomers}
-            maxH={ss(520)}
             renderItem={({ item, index }) => {
               return (
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     updateCurrentFlow({

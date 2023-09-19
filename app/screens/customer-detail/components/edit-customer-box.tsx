@@ -147,6 +147,9 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               form={
                 <Box w={ls(380)}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       showDatePicker();
@@ -244,6 +247,9 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               form={
                 <Box>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setIsOpenTemplatePicker(true);
@@ -297,6 +303,9 @@ export default function EditCustomerBox(params: EditCustomerBox) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
@@ -315,6 +324,9 @@ export default function EditCustomerBox(params: EditCustomerBox) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -432,6 +444,9 @@ export default function EditCustomerBox(params: EditCustomerBox) {
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setTempCustomer({
@@ -450,6 +465,9 @@ export default function EditCustomerBox(params: EditCustomerBox) {
               </Box>
             </Pressable>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenBirthdayPicker(false);

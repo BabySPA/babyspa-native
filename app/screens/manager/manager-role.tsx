@@ -94,16 +94,15 @@ export default function ManagerRole({
           mb={safeAreaProps ? ss(64) : 0}
           background={'#fff'}
           data={filterRoles}
-          renderItem={({ item: role }) => {
+          renderItem={({ item: role, index }) => {
             return (
               <Row
                 px={ls(40)}
                 minH={ss(60)}
                 py={ss(10)}
                 alignItems={'center'}
-                borderBottomRadius={ss(10)}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={index === filterRoles.length - 1 ? 0 : 1}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -135,6 +134,9 @@ export default function ManagerRole({
                 <Row w={ls(150)}>
                   <Row>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       onPress={() => {
                         setCurrentRole(role);
@@ -152,6 +154,9 @@ export default function ManagerRole({
                       </Row>
                     </Pressable>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       ml={ls(24)}
                       onPress={() => {
@@ -254,6 +259,9 @@ function Filter({
         />
       </Row>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           setCurrentRole(DefaultRole);

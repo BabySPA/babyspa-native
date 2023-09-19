@@ -141,6 +141,9 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Box w={'70%'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     showDatePicker();
@@ -237,6 +240,9 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Box w={'70%'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setIsOpenTemplatePicker(true);

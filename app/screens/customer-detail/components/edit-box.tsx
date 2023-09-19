@@ -160,6 +160,9 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box w={ls(360)}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       showDatePicker();
@@ -261,6 +264,9 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setIsOpenTemplatePicker(true);
@@ -348,6 +354,9 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(20)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
@@ -366,6 +375,9 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -464,6 +476,9 @@ export default function EditBox(params: EditBoxParams) {
           />
           <Row justifyContent={'flex-end'} mt={ss(12)}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setTempFlow({
@@ -485,6 +500,9 @@ export default function EditBox(params: EditBoxParams) {
               </Box>
             </Pressable>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenBirthdayPicker(false);

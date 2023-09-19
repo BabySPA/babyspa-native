@@ -77,13 +77,13 @@ export default function ManagerShop({
         {shops.map((shop, idx) => {
           return (
             <Row
+              background={'#fff'}
               key={idx}
               px={ls(40)}
               h={ss(60)}
               alignItems={'center'}
-              borderTopRadius={ss(10)}
               width={'100%'}
-              borderBottomWidth={1}
+              borderBottomWidth={idx === shops.length - 1 ? 0 : 1}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
               justifyContent={'space-around'}>
@@ -120,6 +120,9 @@ export default function ManagerShop({
               <Row w={ls(150)}>
                 <Row>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setCurrentShop(shop);
@@ -137,6 +140,9 @@ export default function ManagerShop({
                     </Row>
                   </Pressable>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     ml={ls(24)}
                     onPress={() => {
@@ -227,6 +233,9 @@ function Filter() {
         />
       </Row>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           setCurrentShop(DefaultShop);

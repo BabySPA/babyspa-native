@@ -50,6 +50,9 @@ export default function FollowUpVisit(params: {
               {flows.map((flow, idx) => (
                 <Center width={'50%'} key={idx}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     ml={idx % 2 == 1 ? ss(20) : 0}
                     mr={idx % 2 == 0 ? ss(20) : 0}
                     mb={ss(40)}
@@ -140,6 +143,9 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -169,6 +175,9 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({

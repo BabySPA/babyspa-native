@@ -212,6 +212,9 @@ export default function EditBox(params: EditBoxParams) {
                         return (
                           <Box key={node.text} mb={ss(10)}>
                             <Pressable
+                              _pressed={{
+                                opacity: 0.6,
+                              }}
                               hitSlop={ss(5)}
                               onPress={() => {
                                 configAuthTree[nodeIdx].hasAuth = !node.hasAuth;
@@ -242,6 +245,9 @@ export default function EditBox(params: EditBoxParams) {
                                   {node.text}
                                 </Text>
                                 <Pressable
+                                  _pressed={{
+                                    opacity: 0.6,
+                                  }}
                                   hitSlop={ss(5)}
                                   onPress={() => {
                                     configAuthTree[nodeIdx].isOpen =
@@ -274,6 +280,9 @@ export default function EditBox(params: EditBoxParams) {
                                 {node.features.map((feature, featureIdx) => {
                                   return (
                                     <Pressable
+                                      _pressed={{
+                                        opacity: 0.6,
+                                      }}
                                       hitSlop={ss(5)}
                                       key={feature.text}
                                       onPress={() => {
@@ -323,6 +332,9 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(5)}
           onPress={() => {
             params.onEditFinish();
@@ -341,6 +353,9 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(5)}
           ml={ls(74)}
           onPress={() => {

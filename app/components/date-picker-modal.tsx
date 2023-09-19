@@ -41,6 +41,9 @@ export default function DatePickerModal({
         />
         <Row justifyContent={'flex-end'} mt={ss(12)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               if (dayjs(currentSelectBirthday).isAfter(dayjs())) {
@@ -60,6 +63,9 @@ export default function DatePickerModal({
             </Box>
           </Pressable>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();

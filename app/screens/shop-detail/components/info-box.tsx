@@ -46,6 +46,9 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {

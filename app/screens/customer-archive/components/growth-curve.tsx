@@ -186,6 +186,9 @@ export function GrowthCurve(params: GrowthCurveParams) {
 
               <Row w={ls(120)}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     onEditClick(growthCurve);
@@ -405,6 +408,9 @@ export function GrowthCurve(params: GrowthCurveParams) {
           </Text>
           <Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 seSelectOption('height');
@@ -427,6 +433,9 @@ export function GrowthCurve(params: GrowthCurveParams) {
               </Box>
             </Pressable>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 seSelectOption('weight');

@@ -318,6 +318,9 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
@@ -336,6 +339,9 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {

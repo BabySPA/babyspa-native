@@ -14,6 +14,9 @@ export default function AddCountSelector({
   return (
     <>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           if (count === 0) return;
@@ -30,6 +33,9 @@ export default function AddCountSelector({
         {count}
       </Text>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           onAddition();

@@ -65,6 +65,9 @@ export default function FlowInfo({
           from == 'evaluate-detail' &&
             evaluate.status == EvaluateStatus.NOT_SET ? (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsEvaluateCardDialogShow(true);

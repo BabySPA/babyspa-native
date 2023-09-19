@@ -176,6 +176,9 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Box flex={1} ml={ls(20)}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       showAreaPicker(tempShop.region.split('-'), (val) => {
@@ -216,6 +219,9 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Row flex={1} alignItems={'center'} ml={ls(20)}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       showTimePicker(tempShop.openingTime.split(':'), (val) => {
@@ -247,6 +253,9 @@ export default function EditBox(params: EditBoxParams) {
                     至
                   </Text>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       showTimePicker(tempShop.closingTime.split(':'), (val) => {
@@ -340,6 +349,9 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
@@ -358,6 +370,9 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {

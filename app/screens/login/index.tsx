@@ -110,6 +110,9 @@ export default function LoginScreen({
           renderItem={({ item, index }) => {
             return (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 onPress={() => {
                   setSelectShopIdx(index);
                 }}
@@ -143,6 +146,9 @@ export default function LoginScreen({
           }}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             selectShop();
@@ -241,6 +247,9 @@ export default function LoginScreen({
                 }
                 InputRightElement={
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     mr={ls(20)}
                     onPress={() => {
@@ -263,6 +272,9 @@ export default function LoginScreen({
                 }
               />
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClickLogin();
@@ -293,6 +305,9 @@ export default function LoginScreen({
 
               <Row mt={ss(20)} alignItems={'center'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setSelectAgreement(!selectAgreement);

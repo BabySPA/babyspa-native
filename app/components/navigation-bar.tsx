@@ -35,6 +35,9 @@ export default function NavigationBar(props: NavigationBarParams) {
       px={ss(20)}
       py={ss(20)}>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           if (onBackIntercept()) return;

@@ -52,6 +52,9 @@ export default function InfoBox(params: InfoBoxParams) {
           title='员工信息'
           rightElement={
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsDeleteDialogOpen(true);
@@ -99,12 +102,18 @@ export default function InfoBox(params: InfoBoxParams) {
               }
               rightElement={
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setIsResetPassDialogOpen(true);
                   }}>
                   <Row alignItems={'center'} ml={ls(40)}>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       mr={ls(20)}
                       onPress={() => {
@@ -164,6 +173,9 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {

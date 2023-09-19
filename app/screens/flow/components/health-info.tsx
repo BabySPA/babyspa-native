@@ -43,10 +43,12 @@ export default function HealthInfo({
         <BoxItem
           title={'过敏原'}
           icon={require('~/assets/images/notice.png')}
-          autoScroll={false}
-        >
+          autoScroll={false}>
           <Box flex={1}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               onPress={() => {
                 if (selectedConfig.disabled) {
                   return;
@@ -60,20 +62,17 @@ export default function HealthInfo({
                 height: ss(170),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
-              }}
-            >
+              }}>
               <Text
                 fontSize={sp(14)}
                 color='#999'
-                style={{ textAlignVertical: 'top' }}
-              >
+                style={{ textAlignVertical: 'top' }}>
                 {collect.healthInfo.allergy || '请输入或选择过敏原'}
               </Text>
               <Text
                 fontSize={sp(14)}
                 color={'#999'}
-                style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}
-              >
+                style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
                 {collect.healthInfo.allergy.length}/300
               </Text>
             </Pressable>
@@ -100,8 +99,7 @@ export default function HealthInfo({
           title={'备注'}
           icon={require('~/assets/images/notice.png')}
           mt={ss(10)}
-          autoScroll={false}
-        >
+          autoScroll={false}>
           <Row flex={1}>
             <Box flex={1}>
               <RecordBox edit={selectedConfig.disabled ? false : true} />
@@ -156,8 +154,7 @@ export default function HealthInfo({
       <Column flex={1} ml={ss(10)}>
         <BoxItem
           title={'舌部图片'}
-          icon={require('~/assets/images/tongue.png')}
-        >
+          icon={require('~/assets/images/tongue.png')}>
           <ImageBox
             edit={selectedConfig.disabled ? false : true}
             images={collect.healthInfo.lingualImage}
@@ -188,8 +185,7 @@ export default function HealthInfo({
         <BoxItem
           title={'手部图片'}
           icon={require('~/assets/images/hand.png')}
-          mt={ss(10)}
-        >
+          mt={ss(10)}>
           <Row>
             <Box flex={1}>
               <Text mr={ls(10)} fontSize={sp(12)} fontWeight={600} color='#333'>

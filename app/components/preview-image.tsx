@@ -19,6 +19,9 @@ export default function PreviewImage({
   return (
     <>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           setShowImageModal(true);

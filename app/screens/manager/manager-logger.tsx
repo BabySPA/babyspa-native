@@ -69,7 +69,6 @@ export default function ManagerLogger({
         </Row>
         <FlatList
           data={logs}
-          maxH={ss(520)}
           renderItem={({ item: log }) => {
             return (
               <Row
@@ -77,7 +76,7 @@ export default function ManagerLogger({
                 minH={ss(60)}
                 py={ss(10)}
                 alignItems={'center'}
-                borderTopRadius={ss(10)}
+                bgColor={'#fff'}
                 width={'100%'}
                 borderBottomWidth={1}
                 borderBottomColor={'#DFE1DE'}
@@ -190,6 +189,9 @@ function Filter() {
           }}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -219,6 +221,9 @@ function Filter() {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({

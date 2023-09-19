@@ -164,6 +164,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Row>
                   {Object.keys(FollowUpResultText).map((key) => (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={key}
                       onPress={() => {
@@ -219,6 +222,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
             </Column>
             <Row mt={ss(100)} justifyContent={'flex-end'} pr={ss(30)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   // 取消随访
@@ -239,6 +245,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 </Text>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   // 随访

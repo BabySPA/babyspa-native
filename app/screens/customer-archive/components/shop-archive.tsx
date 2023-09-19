@@ -22,6 +22,9 @@ export function ShopArchive(params: ShopArchiveParams) {
         {params.archives.map((archive, idx) => {
           return (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               key={archive._id}
               w={ls(302)}

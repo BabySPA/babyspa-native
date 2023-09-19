@@ -190,6 +190,9 @@ export default function FlowScreen({
               {customer.phoneNumber}
             </Text>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // 跳转到历史记录
@@ -234,6 +237,9 @@ export default function FlowScreen({
             </Text>
           </Row>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               setShowWarn(false);
@@ -261,6 +267,9 @@ export default function FlowScreen({
               {configs.map((item, idx) => {
                 return (
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     key={item.key}
                     borderRightWidth={idx == configs.length - 1 ? 0 : 1}
@@ -301,6 +310,9 @@ export default function FlowScreen({
             !selectedConfig.disabled && (
               <Row>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowFinishModal(true);
@@ -320,6 +332,9 @@ export default function FlowScreen({
                   </Row>
                 </Pressable>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     if (!checkCollection()) {
@@ -375,6 +390,9 @@ export default function FlowScreen({
           {selectedConfig.auth == RoleAuthority.FLOW_ANALYZE && (
             <Row>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   setShowFinishModal(true);
@@ -394,6 +412,9 @@ export default function FlowScreen({
                 </Row>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   if (finishLoading) return;
@@ -539,6 +560,9 @@ export default function FlowScreen({
               </Text>
               <Row mt={ss(50)} mb={ss(20)}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setOpenLockModal({

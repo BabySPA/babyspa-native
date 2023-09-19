@@ -43,6 +43,9 @@ export default function InfoBox(params: InfoBoxParams) {
           title='角色信息'
           rightElement={
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsDeleteDialogOpen(true);
@@ -87,6 +90,9 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {

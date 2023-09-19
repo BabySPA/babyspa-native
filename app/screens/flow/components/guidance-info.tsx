@@ -76,6 +76,9 @@ export default function GuidanceInfo({
               (item, idx) => {
                 return (
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     key={idx}
                     onPress={() => {
@@ -123,6 +126,9 @@ export default function GuidanceInfo({
                   ]?.children.map((item: any, idx) => {
                     return (
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         key={idx}
                         onPress={() => {
@@ -166,6 +172,9 @@ export default function GuidanceInfo({
                 ).map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {

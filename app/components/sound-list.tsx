@@ -33,6 +33,9 @@ export default function SoundList({
       {audioFiles.map((audioFile, idx) => {
         return (
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             key={idx}
             mt={idx === 0 ? 0 : ss(10)}
@@ -61,6 +64,9 @@ export default function SoundList({
               </Row>
               {edit && (
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     removedCallback(idx);

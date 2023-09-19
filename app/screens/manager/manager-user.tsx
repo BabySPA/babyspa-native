@@ -92,9 +92,9 @@ export default function ManagerUser({
               px={ls(40)}
               h={ss(60)}
               alignItems={'center'}
-              borderTopRadius={ss(10)}
+              bgColor={'#fff'}
               width={'100%'}
-              borderBottomWidth={1}
+              borderBottomWidth={idx == filterUsers.length - 1 ? 0 : 1}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
               justifyContent={'space-around'}>
@@ -131,6 +131,9 @@ export default function ManagerUser({
               <Row w={ls(150)}>
                 <Row>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setCurrentUser(user);
@@ -148,6 +151,9 @@ export default function ManagerUser({
                     </Row>
                   </Pressable>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     ml={ls(24)}
                     onPress={() => {
@@ -281,6 +287,9 @@ function Filter({
         />
       </Row>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           setCurrentUser(DefaultUser);

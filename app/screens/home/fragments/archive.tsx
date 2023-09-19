@@ -48,6 +48,9 @@ export default function Archive() {
               {customers.map((customer, idx) => (
                 <Center w={'33.33%'} key={idx}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     key={idx}
                     pr={ls(20)}
@@ -142,6 +145,9 @@ function Filter() {
           placeholder='请输入客户姓名、手机号'
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -171,6 +177,9 @@ function Filter() {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -230,6 +239,9 @@ function Filter() {
         />
       </Row>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           updateCurrentArchiveCustomer(DefaultCustomer);

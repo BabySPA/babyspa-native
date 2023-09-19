@@ -164,6 +164,9 @@ export default function CustomerArchive({
 
           <Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // 删除客户
@@ -202,6 +205,9 @@ export default function CustomerArchive({
               }}
             />
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               ml={ls(40)}
               onPress={() => {
@@ -237,6 +243,9 @@ export default function CustomerArchive({
                 {configs.map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={item.key}
                       borderRightWidth={idx == configs.length - 1 ? 0 : 1}
@@ -271,6 +280,9 @@ export default function CustomerArchive({
             </Container>
             {configs[selectFragment].key == 'growth-curve' && (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   setShowEditGrowthCurve({

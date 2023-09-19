@@ -63,6 +63,9 @@ export default function Collection() {
                 return (
                   <Center width={'50%'} key={idx}>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       ml={idx % 2 == 1 ? ss(20) : 0}
                       mr={idx % 2 == 0 ? ss(20) : 0}
                       mb={ss(40)}
@@ -178,6 +181,9 @@ function Filter() {
             placeholder='请输入客户姓名、手机号'
           />
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               setShowFilter(!showFilter);
@@ -202,6 +208,9 @@ function Filter() {
           </Pressable>
         </Row>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             updateCurrentFlow(DefaultFlow);
@@ -229,6 +238,9 @@ function Filter() {
               时间选择
             </Text>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
@@ -258,6 +270,9 @@ function Filter() {
               至
             </Text>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
@@ -291,6 +306,9 @@ function Filter() {
               {collection.allStatus?.map((status) => {
                 return (
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       updateCollectionFilter({
@@ -333,6 +351,9 @@ function Filter() {
           </Row>
           <Row alignItems={'center'} mt={ss(20)} justifyContent={'flex-end'}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 updateCollectionFilter({
@@ -354,6 +375,9 @@ function Filter() {
               </Text>
             </Pressable>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={async () => {
                 openLoading();
