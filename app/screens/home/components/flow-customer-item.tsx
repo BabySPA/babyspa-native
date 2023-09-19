@@ -162,32 +162,28 @@ export default function FlowCustomerItem({
                 </Text>
               )}
           </Row>
-
-          <Row
-            alignItems={'center'}
-            mt={ss(10)}
-            opacity={
-              type == OperateType.Evaluate &&
-              flow.evaluate.status == EvaluateStatus.DONE
-                ? 1
-                : 0
-            }>
-            <Text color={'#666'} fontSize={sp(18)} ml={ss(30)}>
-              评星：
-            </Text>
-            {new Array(Number(flow.evaluate.score || 0))
-              .fill(1)
-              .map((item, idx) => {
-                return (
-                  <Image
-                    key={idx}
-                    source={require('~/assets/images/star.png')}
-                    style={{ width: ss(20), height: ss(20) }}
-                  />
-                );
-              })}
-          </Row>
-
+          {type == OperateType.Evaluate && (
+            <Row alignItems={'center'} mt={ss(10)}>
+              <Text color={'#666'} fontSize={sp(18)}>
+                评星：
+              </Text>
+              {flow.evaluate.score ? (
+                new Array(flow.evaluate.score).fill(1).map((item, idx) => {
+                  return (
+                    <Image
+                      key={idx}
+                      source={require('~/assets/images/star.png')}
+                      style={{ width: ss(20), height: ss(20) }}
+                    />
+                  );
+                })
+              ) : (
+                <Text color={'#999'} fontSize={sp(16)}>
+                  暂未评价
+                </Text>
+              )}
+            </Row>
+          )}
           <Row alignItems={'center'} mt={ss(10)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}

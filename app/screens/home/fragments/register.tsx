@@ -215,7 +215,6 @@ function Filter() {
               ml={ls(20)}
               h={ss(44)}
               alignItems={'center'}
-              py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
               borderRadius={ss(4)}
@@ -243,7 +242,6 @@ function Filter() {
               }}
               flexDirection={'row'}
               h={ss(44)}
-              py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
