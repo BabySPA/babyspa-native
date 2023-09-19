@@ -188,6 +188,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
             isReadOnly={!canEdit}
             autoCorrect={false}
             multiline={true}
+            textAlignVertical='top'
             placeholder='您可以从分析速度、调理方案准确性、以及客户满意度等方面进行评价'
             style={{
               textAlignVertical: 'top',

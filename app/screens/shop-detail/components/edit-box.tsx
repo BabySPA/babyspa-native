@@ -149,6 +149,7 @@ export default function EditBox(params: EditBoxParams) {
                 <Input
                   autoCorrect={false}
                   flex={1}
+                  inputMode='numeric'
                   ml={ls(20)}
                   h={ss(48)}
                   py={ss(10)}
@@ -324,6 +325,7 @@ export default function EditBox(params: EditBoxParams) {
                       description: text,
                     });
                   }}
+                  textAlignVertical={'top'}
                   multiline
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}

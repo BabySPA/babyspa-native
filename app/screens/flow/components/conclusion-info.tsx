@@ -53,6 +53,7 @@ export default function ConclusionInfo({
               <TextInput
                 autoCorrect={false}
                 multiline={true}
+                textAlignVertical='top'
                 placeholder='您可输入，或从右侧分类中选择'
                 style={{
                   textAlignVertical: 'top',

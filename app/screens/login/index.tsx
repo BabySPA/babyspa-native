@@ -206,6 +206,7 @@ export default function LoginScreen({
                 h={ss(60)}
                 mt={ss(60)}
                 placeholder='请输入用户名'
+                inputMode='decimal'
                 fontSize={sp(20)}
                 color={'#999'}
                 InputLeftElement={
@@ -227,6 +228,7 @@ export default function LoginScreen({
                 h={ss(60)}
                 mt={ss(30)}
                 placeholder='请输入密码'
+                inputMode='decimal'
                 fontSize={sp(20)}
                 color={'#999'}
                 InputLeftElement={

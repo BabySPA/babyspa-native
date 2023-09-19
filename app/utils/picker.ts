@@ -33,14 +33,14 @@ export const showTimePicker = (
   let hours = [],
     minutes = [];
 
-  for (let i = 1; i <= 23; i++) {
+  for (let i = 0; i <= 24; i++) {
     if (i < 10) {
       hours.push(`0${i}`);
     } else {
       hours.push(`${i}`);
     }
   }
-  for (let i = 1; i <= 59; i++) {
+  for (let i = 0; i < 60; i++) {
     if (i < 10) {
       minutes.push(`0${i}`);
     } else {
@@ -49,11 +49,16 @@ export const showTimePicker = (
   }
   let pickerData = [hours, minutes];
   let date = new Date();
-  let selectedValue = [date.getHours(), date.getMinutes()];
+  let selectedValue = [
+    time[0] || date.getHours() < 10 ? `0${date.getHours()}` : date.getHours(),
+    time[1] || date.getMinutes() < 10
+      ? `0${date.getMinutes()}`
+      : date.getMinutes(),
+  ];
 
   Picker.init({
     pickerData,
-    selectedValue,
+    selectedValue: time.length === 2 ? time : selectedValue,
     pickerTitleText: '选择时间',
     pickerConfirmBtnText: '确定',
     pickerCancelBtnText: '取消',

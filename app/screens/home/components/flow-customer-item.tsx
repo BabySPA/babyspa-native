@@ -168,14 +168,17 @@ export default function FlowCustomerItem({
                 <Text color={'#666'} fontSize={sp(18)} ml={ss(30)}>
                   评星：
                 </Text>
-                {new Array(Number(flow.evaluate.score)).fill(1).map(() => {
-                  return (
-                    <Image
-                      source={require('~/assets/images/star.png')}
-                      style={{ width: ss(20), height: ss(20) }}
-                    />
-                  );
-                })}
+                {new Array(Number(flow.evaluate.score))
+                  .fill(1)
+                  .map((item, idx) => {
+                    return (
+                      <Image
+                        key={idx}
+                        source={require('~/assets/images/star.png')}
+                        style={{ width: ss(20), height: ss(20) }}
+                      />
+                    );
+                  })}
               </Row>
             )}
           <Row alignItems={'center'} mt={ss(10)}>

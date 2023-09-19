@@ -448,7 +448,7 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
+                inputMode='decimal'
                 onChangeText={(text) => {
                   setOriginalPassword(text);
                 }}
@@ -465,7 +465,7 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
+                inputMode='decimal'
                 onChangeText={(text) => {
                   setNewPassword(text);
                 }}
@@ -482,7 +482,7 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
+                inputMode='decimal'
                 onChangeText={(text) => {
                   setConfirmPassword(text);
                 }}
@@ -591,6 +591,7 @@ export function NewTemplateModalModal({
                 color='#333'
                 ml={ls(20)}
                 multiline
+                textAlignVertical='top'
                 w={ls(240)}
                 height={ss(110)}
                 defaultValue={defaultName}
@@ -984,6 +985,7 @@ export function NewTemplateExtraModal({
                 py={ss(10)}
                 placeholder='请输入'
                 multiline
+                textAlignVertical='top'
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}

@@ -308,6 +308,7 @@ export default function SolutionInfo({
                                 );
                               }}
                               multiline
+                              textAlignVertical='top'
                               defaultValue={item.remark}
                               w={ls(300)}
                               fontSize={sp(16)}

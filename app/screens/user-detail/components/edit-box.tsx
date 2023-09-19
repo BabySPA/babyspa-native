@@ -199,9 +199,10 @@ export default function EditBox(params: EditBoxParams) {
               form={
                 <Input
                   ml={ss(20)}
+                  inputMode='numeric'
                   autoCorrect={false}
                   defaultValue={tempUser.phoneNumber}
-                  flex={1}
+                  w={ls(380)}
                   h={ss(48)}
                   py={ss(10)}
                   px={ls(20)}
@@ -228,7 +229,7 @@ export default function EditBox(params: EditBoxParams) {
                 <Input
                   autoCorrect={false}
                   defaultValue={tempUser.username}
-                  flex={1}
+                  w={ls(380)}
                   h={ss(48)}
                   py={ss(10)}
                   px={ls(20)}
@@ -292,6 +293,7 @@ export default function EditBox(params: EditBoxParams) {
                       });
                     }}
                     multiline
+                    textAlignVertical='top'
                     placeholderTextColor={'#CCC'}
                     color={'#333333'}
                     fontSize={sp(16)}

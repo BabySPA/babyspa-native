@@ -169,6 +169,7 @@ export default function EditBox(params: EditBoxParams) {
                       defaultValue={tempRole.description}
                       flex={1}
                       multiline
+                      textAlignVertical='top'
                       w={ls(380)}
                       h={ss(107)}
                       py={ss(10)}
@@ -211,7 +212,7 @@ export default function EditBox(params: EditBoxParams) {
                         return (
                           <Box key={node.text} mb={ss(10)}>
                             <Pressable
-                              hitSlop={ss(20)}
+                              hitSlop={ss(5)}
                               onPress={() => {
                                 configAuthTree[nodeIdx].hasAuth = !node.hasAuth;
 
@@ -241,7 +242,7 @@ export default function EditBox(params: EditBoxParams) {
                                   {node.text}
                                 </Text>
                                 <Pressable
-                                  hitSlop={ss(20)}
+                                  hitSlop={ss(5)}
                                   onPress={() => {
                                     configAuthTree[nodeIdx].isOpen =
                                       !node.isOpen;
@@ -273,7 +274,7 @@ export default function EditBox(params: EditBoxParams) {
                                 {node.features.map((feature, featureIdx) => {
                                   return (
                                     <Pressable
-                                      hitSlop={ss(20)}
+                                      hitSlop={ss(5)}
                                       key={feature.text}
                                       onPress={() => {
                                         configAuthTree[nodeIdx].features[
@@ -322,7 +323,7 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
-          hitSlop={ss(20)}
+          hitSlop={ss(5)}
           onPress={() => {
             params.onEditFinish();
           }}>
@@ -340,7 +341,7 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
-          hitSlop={ss(20)}
+          hitSlop={ss(5)}
           ml={ls(74)}
           onPress={() => {
             if (loading) return;
