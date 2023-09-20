@@ -20,7 +20,7 @@ import {
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -140,7 +140,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
               alignItems={'center'}
               borderTopRadius={ss(10)}
               width={'100%'}
-              borderBottomWidth={1}
+              borderBottomWidth={ss(1)}
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
               justifyContent={'space-around'}>
@@ -215,6 +215,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
         top: ss(20),
         left: ls(90),
         right: 0,
+        bottom: ss(90),
       },
       textStyle: {
         fontFamily: 'PingFang SC', // 指定字体类型
@@ -239,7 +240,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
         },
         axisLabel: {
           align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-          rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+          rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
           interval: 0, // 强制显示所有刻度标签
           fontSize: sp(12),
           color: '#8C8C8C',
@@ -297,6 +298,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
         top: ss(20),
         left: ls(90),
         right: 0,
+        bottom: ss(90),
       },
       textStyle: {
         fontFamily: 'PingFang SC', // 指定字体类型
@@ -321,7 +323,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
         },
         axisLabel: {
           align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-          rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+          rotate: Platform.OS === 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
           interval: 0, // 强制显示所有刻度标签
           fontSize: sp(12),
           color: '#8C8C8C',
@@ -390,7 +392,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
   return (
     <ScrollView>
       <Column
-        borderWidth={1}
+        borderWidth={ss(1)}
         borderRadius={ss(4)}
         alignItems={'center'}
         borderColor={'#F0F0F0'}
@@ -421,7 +423,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
                 bgColor={'#FFF'}
                 borderLeftRadius={2}
                 borderRightRadius={0}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={selectOption === 'height' ? '#03CBB2' : '#D9D9D9'}
                 alignItems={'center'}
                 justifyContent={'center'}>
@@ -446,7 +448,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
                 bgColor={'#FFF'}
                 borderRightRadius={2}
                 borderLeftRadius={0}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={selectOption === 'weight' ? '#03CBB2' : '#D9D9D9'}
                 alignItems={'center'}
                 justifyContent={'center'}>

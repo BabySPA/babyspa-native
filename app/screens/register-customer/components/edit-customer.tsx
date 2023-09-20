@@ -9,8 +9,9 @@ import {
   Row,
   ScrollView,
   Text,
+  Pressable,
 } from 'native-base';
-import { Pressable, StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import useFlowStore from '~/app/stores/flow';
@@ -70,6 +71,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 placeholder='请输入'
                 onChangeText={(text) => {
                   updateCurrentFlow({
@@ -93,6 +96,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 defaultValue={currentFlow.customer.nickname}
                 placeholderTextColor={'#CCC'}
                 onChangeText={(text) => {
@@ -152,7 +157,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
@@ -177,7 +182,7 @@ export default function EditCustomer(params: EditCustomerParams) {
               <Row w={'70%'} alignItems={'center'}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   h={ss(48)}
                   w={ls(72)}
                   borderColor={'#D8D8D8'}>
@@ -191,7 +196,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   h={ss(48)}
                   w={ls(72)}
                   borderColor={'#D8D8D8'}>
@@ -212,11 +217,14 @@ export default function EditCustomer(params: EditCustomerParams) {
             form={
               <Input
                 autoCorrect={false}
+                borderRadius={ss(4)}
                 w={'70%'}
                 defaultValue={currentFlow.customer.phoneNumber}
                 h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 onChangeText={(text) => {
                   updateCurrentFlow({
                     ...currentFlow,
@@ -251,7 +259,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}

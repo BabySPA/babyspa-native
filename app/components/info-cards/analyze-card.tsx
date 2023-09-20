@@ -77,7 +77,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     bgColor={'#F2F9F8'}
                     borderRadius={1}
                     borderStyle={'dashed'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#7AB6AF'}
                     p={ss(20)}>
                     <Row
@@ -115,7 +115,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     bgColor={'#F2F9F8'}
                     borderRadius={1}
                     borderStyle={'dashed'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#7AB6AF'}
                     p={ss(20)}>
                     <Row

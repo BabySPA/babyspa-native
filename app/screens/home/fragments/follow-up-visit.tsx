@@ -122,6 +122,8 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           ml={ls(20)}
           h={ss(44)}
           p={ss(8)}
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           borderRadius={ss(4)}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
@@ -161,7 +163,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -192,7 +194,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

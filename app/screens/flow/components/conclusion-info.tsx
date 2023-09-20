@@ -1,12 +1,6 @@
-import { Box, Center, Column, Icon, Row, Text } from 'native-base';
+import { Box, Center, Column, Icon, Row, Text, Pressable } from 'native-base';
 import BoxItem from './box-item';
-import {
-  Pressable,
-  Image,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useEffect, useState } from 'react';
@@ -59,7 +53,7 @@ export default function ConclusionInfo({
                   textAlignVertical: 'top',
                   borderRadius: ss(4),
                   borderColor: '#DFE1DE',
-                  borderWidth: 1,
+                  borderWidth: ss(1),
                   height: ss(170),
                   backgroundColor: '#F8F8F8',
                   padding: ss(10),
@@ -210,7 +204,7 @@ export default function ConclusionInfo({
                       mb={ss(10)}
                       borderRadius={2}
                       borderColor={'#D8D8D8'}
-                      borderWidth={1}>
+                      borderWidth={ss(1)}>
                       <Text fontSize={sp(18)} color='#000'>
                         {item}
                       </Text>

@@ -26,7 +26,7 @@ import {
   TooltipComponent,
 } from 'echarts/components';
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -43,6 +43,7 @@ const ShopStatisticBox = () => {
       top: ss(20),
       left: ls(50),
       right: 0,
+      bottom: ss(50),
     },
     textStyle: {
       fontFamily: 'PingFang SC', // 指定字体类型
@@ -61,7 +62,7 @@ const ShopStatisticBox = () => {
       }),
       axisLabel: {
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-        rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+        rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
         fontSize: sp(12),
         color: '#8C8C8C',
@@ -89,7 +90,9 @@ const ShopStatisticBox = () => {
       {
         name: '贴敷数',
         type: 'bar',
-        data: statisticFlowWithDate.map((item) => item.counts.application),
+        data: statisticFlowWithDate.map(
+          (item) => item.counts?.application || 0,
+        ),
         barWidth: ls(22), // 设置柱子的宽度
         itemStyle: {
           color: '#75BFF0', // 设置柱子颜色为绿色
@@ -98,7 +101,7 @@ const ShopStatisticBox = () => {
       {
         name: '推拿数',
         type: 'bar',
-        data: statisticFlowWithDate.map((item) => item.counts.massage),
+        data: statisticFlowWithDate.map((item) => item.counts?.massage || 0),
         barWidth: ls(22), // 设置柱子的宽度
         itemStyle: {
           color: '#82DF9E', // 设置柱子颜色为绿色
@@ -127,12 +130,12 @@ const ShopStatisticBox = () => {
         <StatisticsCountBox
           image={require('~/assets/images/statistic-application.png')}
           title={'贴敷总量（贴）'}
-          count={statisticShop.counts.application}
+          count={statisticShop.counts?.application || 0}
         />
         <StatisticsCountBox
           image={require('~/assets/images/statistic-massage.png')}
           title={'推拿总量（次）'}
-          count={statisticShop.counts.massage}
+          count={statisticShop.counts?.massage || 0}
           style={{ marginLeft: ss(10) }}
         />
       </Row>
@@ -174,6 +177,7 @@ const CenterStatisticBox = () => {
       top: ss(20),
       left: ls(50),
       right: 0,
+      bottom: ss(50),
     },
     textStyle: {
       fontFamily: 'PingFang SC', // 指定字体类型
@@ -192,7 +196,7 @@ const CenterStatisticBox = () => {
       }),
       axisLabel: {
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-        rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+        rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
         fontSize: sp(12),
         color: '#8C8C8C',
@@ -220,7 +224,7 @@ const CenterStatisticBox = () => {
       {
         name: '贴敷数',
         type: 'bar',
-        data: statisticShops.map((item) => item.counts.application),
+        data: statisticShops.map((item) => item.counts?.application || 0),
         barWidth: ls(22), // 设置柱子的宽度
         itemStyle: {
           color: '#75BFF0', // 设置柱子颜色为绿色
@@ -229,7 +233,7 @@ const CenterStatisticBox = () => {
       {
         name: '推拿数',
         type: 'bar',
-        data: statisticShops.map((item) => item.counts.massage),
+        data: statisticShops.map((item) => item.counts?.massage || 0),
         barWidth: ls(22), // 设置柱子的宽度
         itemStyle: {
           color: '#82DF9E', // 设置柱子颜色为绿色
@@ -256,10 +260,10 @@ const CenterStatisticBox = () => {
 
     setCounts({
       application: statisticShops.reduce((prev, cur) => {
-        return prev + cur.counts.application;
+        return prev + cur.counts?.application || 0;
       }, 0),
       massage: statisticShops.reduce((prev, cur) => {
-        return prev + cur.counts.massage;
+        return prev + cur.counts?.massage || 0;
       }, 0),
     });
 
@@ -272,12 +276,12 @@ const CenterStatisticBox = () => {
         <StatisticsCountBox
           image={require('~/assets/images/statistic-application.png')}
           title={'贴敷总量（贴）'}
-          count={counts.application}
+          count={counts.application || 0}
         />
         <StatisticsCountBox
           image={require('~/assets/images/statistic-massage.png')}
           title={'推拿总量（次）'}
-          count={counts.massage}
+          count={counts.massage || 0}
           style={{ marginLeft: ss(10) }}
         />
       </Row>
@@ -404,7 +408,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -435,7 +439,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

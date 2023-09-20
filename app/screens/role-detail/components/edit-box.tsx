@@ -140,6 +140,8 @@ export default function EditBox(params: EditBoxParams) {
                     h={ss(48)}
                     py={ss(10)}
                     px={ls(20)}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
                     defaultValue={tempRole.name}
                     placeholderTextColor={'#CCC'}
                     color={'#333333'}
@@ -173,6 +175,8 @@ export default function EditBox(params: EditBoxParams) {
                       w={ls(380)}
                       h={ss(107)}
                       py={ss(10)}
+                      borderWidth={ss(1)}
+                      borderColor={'#D8D8D8'}
                       px={ls(20)}
                       onChangeText={(text) => {
                         setTempRole({
@@ -330,7 +334,7 @@ export default function EditBox(params: EditBoxParams) {
         </Column>
       </ScrollView>
 
-      <Row justifyContent={'center'} mb={ss(40)}>
+      <Row justifyContent={'center'} mb={ss(40)} mt={ss(20)}>
         <Pressable
           _pressed={{
             opacity: 0.8,
@@ -344,7 +348,7 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
@@ -404,7 +408,7 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             alignItems={'center'}
             borderColor={'#00B49E'}>
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}

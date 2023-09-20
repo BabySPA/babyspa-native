@@ -221,7 +221,7 @@ const styles = (theme) =>
       paddingHorizontal: ss(8),
       alignItems: 'center',
       borderRadius: ss(5),
-      borderWidth: 1,
+      borderWidth: ss(1),
     },
     time: {
       marginRight: ss(5),

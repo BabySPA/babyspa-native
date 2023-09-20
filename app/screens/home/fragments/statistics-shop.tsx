@@ -33,7 +33,7 @@ import {
   TooltipComponent,
 } from 'echarts/components';
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -116,7 +116,7 @@ const ShopStatisticBox = () => {
                 alignItems={'center'}
                 borderBottomRadius={ss(10)}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -276,7 +276,7 @@ const CenterStatisticBox = () => {
                 py={ss(10)}
                 alignItems={'center'}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -328,13 +328,16 @@ const CenterStatisticBox = () => {
       top: ss(20),
       left: ls(50),
       right: 0,
+      bottom: ss(50),
     },
     textStyle: {
       fontFamily: 'PingFang SC', // 指定字体类型
+      fontSize: sp(16),
     },
     tooltip: {
       fontFamily: 'PingFang SC', // 指定字体类型
       trigger: 'axis',
+      fontSize: sp(16),
       position: function (pt: any) {
         return [pt[0], '10%'];
       },
@@ -346,7 +349,7 @@ const CenterStatisticBox = () => {
       }),
       axisLabel: {
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-        rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+        rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
         fontSize: sp(12),
         color: '#8C8C8C',
@@ -548,7 +551,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -579,7 +582,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

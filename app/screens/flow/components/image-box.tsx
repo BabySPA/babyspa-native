@@ -217,7 +217,7 @@ export default function ImageBox({
                 {...triggerProps}>
                 <Center
                   borderColor={'#ACACAC'}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderStyle={'dashed'}
                   bgColor={'#FFF'}
                   w={ss(100)}
@@ -237,7 +237,7 @@ export default function ImageBox({
           </Box>
           <Menu.Item
             borderTopColor={'#DFE1DE'}
-            borderTopWidth={1}
+            borderTopWidth={ss(1)}
             justifyContent={'center'}
             alignItems={'center'}
             onPress={() => {
@@ -248,7 +248,7 @@ export default function ImageBox({
           </Menu.Item>
           <Menu.Item
             borderTopColor={'#DFE1DE'}
-            borderTopWidth={1}
+            borderTopWidth={ss(1)}
             justifyContent={'center'}
             alignItems={'center'}
             onPress={() => {

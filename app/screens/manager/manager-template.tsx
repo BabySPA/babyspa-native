@@ -203,13 +203,15 @@ export default function ManagerTemplate({
         }}
         mr={ls(10)}
         mb={ss(10)}
-        borderWidth={1}
+        borderWidth={ss(1)}
         borderRadius={2}
         borderColor={'#D8D8D8'}
         px={ls(20)}
         py={ss(7)}>
         <Row alignItems={'center'}>
-          <Text maxWidth={ss(300)}>{item}</Text>
+          <Text maxWidth={ss(300)} fontSize={sp(18)}>
+            {item}
+          </Text>
           {canEdit && (
             <Pressable
               _pressed={{
@@ -359,7 +361,7 @@ export default function ManagerTemplate({
                     px={ls(12)}
                     py={ss(10)}
                     borderColor={'#15BD8F'}
-                    borderWidth={1}>
+                    borderWidth={ss(1)}>
                     <Text color={'#0C1B16'} fontSize={sp(14)}>
                       新增模版
                     </Text>
@@ -374,10 +376,11 @@ export default function ManagerTemplate({
             h={ss(50)}
             p={ss(10)}
             mx={ls(20)}
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             placeholderTextColor={'#C0CCDA'}
             color={'#333333'}
             fontSize={ss(16)}
-            borderColor={'#C0CCDA'}
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
@@ -427,7 +430,7 @@ export default function ManagerTemplate({
                       }
                       justifyContent='center'
                       borderBottomColor='trueGray.200'
-                      borderBottomWidth={1}
+                      borderBottomWidth={ss(1)}
                       px={ls(20)}
                       py={ss(16)}>
                       <Text
@@ -460,10 +463,7 @@ export default function ManagerTemplate({
                         groupName: rowData.item.name,
                       });
                     }}
-                    alignItems='center'
-                    _pressed={{
-                      opacity: 0.5,
-                    }}>
+                    alignItems='center'>
                     <Text fontSize={sp(14)} color={'#fff'}>
                       删除
                     </Text>
@@ -514,12 +514,14 @@ export default function ManagerTemplate({
               }}
               mr={ls(10)}
               mb={ss(10)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderRadius={2}
               borderColor={'#D8D8D8'}
               px={ls(20)}
               py={ss(7)}>
-              <Text color='#BCBCBC'>+ 自定义添加</Text>
+              <Text color='#BCBCBC' fontSize={sp(18)}>
+                + 自定义添加
+              </Text>
             </Pressable>
           </Row>
         </Column>
@@ -559,7 +561,7 @@ export default function ManagerTemplate({
                     px={ls(12)}
                     py={ss(10)}
                     borderColor={'#15BD8F'}
-                    borderWidth={1}>
+                    borderWidth={ss(1)}>
                     <Text color={'#0C1B16'} fontSize={sp(14)}>
                       新增模版
                     </Text>
@@ -575,9 +577,10 @@ export default function ManagerTemplate({
             p={ss(10)}
             mx={ls(20)}
             placeholderTextColor={'#C0CCDA'}
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             color={'#333333'}
             fontSize={ss(16)}
-            borderColor={'#C0CCDA'}
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
@@ -611,7 +614,7 @@ export default function ManagerTemplate({
               justifyContent={'space-between'}
               bg={'#FFF'}
               borderBottomColor='trueGray.200'
-              borderBottomWidth={1}
+              borderBottomWidth={ss(1)}
               flexDirection={'row'}
               px={ls(20)}
               py={ss(16)}>
@@ -670,7 +673,7 @@ export default function ManagerTemplate({
                           : '#fff'
                       }
                       borderBottomColor='trueGray.200'
-                      borderBottomWidth={1}
+                      borderBottomWidth={ss(1)}
                       flexDirection={'row'}
                       px={ls(20)}
                       py={ss(16)}>
@@ -744,7 +747,7 @@ export default function ManagerTemplate({
                                 }
                                 justifyContent='center'
                                 borderBottomColor='trueGray.200'
-                                borderBottomWidth={1}
+                                borderBottomWidth={ss(1)}
                                 px={ls(20)}
                                 py={ss(16)}>
                                 <Text
@@ -779,10 +782,7 @@ export default function ManagerTemplate({
                                   groupName: rowData.item.name,
                                 });
                               }}
-                              alignItems='center'
-                              _pressed={{
-                                opacity: 0.5,
-                              }}>
+                              alignItems='center'>
                               <Text fontSize={sp(14)} color={'#fff'}>
                                 删除
                               </Text>
@@ -854,7 +854,7 @@ export default function ManagerTemplate({
                       px={ls(12)}
                       py={ss(10)}
                       borderColor={'#15BD8F'}
-                      borderWidth={1}>
+                      borderWidth={ss(1)}>
                       <Text color={'#0C1B16'} fontSize={sp(14)}>
                         添加详情
                       </Text>
@@ -892,12 +892,14 @@ export default function ManagerTemplate({
                   }}
                   mr={ls(10)}
                   mb={ss(10)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderRadius={2}
                   borderColor={'#D8D8D8'}
                   px={ls(20)}
                   py={ss(7)}>
-                  <Text color='#BCBCBC'>+ 自定义添加</Text>
+                  <Text color='#BCBCBC' fontSize={sp(18)}>
+                    + 自定义添加
+                  </Text>
                 </Pressable>
               )}
           </Row>

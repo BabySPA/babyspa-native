@@ -78,7 +78,7 @@ export default function ManagerLogger({
                 alignItems={'center'}
                 bgColor={'#fff'}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -168,6 +168,8 @@ function Filter() {
           h={ss(44)}
           p={ss(8)}
           mr={ss(40)}
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={ss(16)}
@@ -207,7 +209,7 @@ function Filter() {
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -238,7 +240,7 @@ function Filter() {
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

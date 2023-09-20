@@ -34,7 +34,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                   w={ls(262)}
                   minH={ss(94)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   p={ss(20)}
                   borderColor={selectIdx === idx ? '#03CBB2' : '#60ADA4'}>
                   <Text fontSize={sp(20)} color={'#333'}>
@@ -65,7 +65,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                   w={ls(370)}
                   maxH={ss(280)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   mr={ls(40)}
                   pb={ss(20)}
                   borderColor={'#B1DAD5'}>
@@ -97,7 +97,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                       fontSize={sp(14)}
                       color={'#60ADA4'}
                       borderRadius={ss(4)}
-                      borderWidth={1}
+                      borderWidth={ss(1)}
                       px={ls(10)}
                       py={ss(2)}
                       borderColor={'#60ADA4'}>

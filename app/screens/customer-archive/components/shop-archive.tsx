@@ -48,7 +48,7 @@ export function ShopArchive(params: ShopArchiveParams) {
                 w={ls(262)}
                 h={ss(404)}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={'#5EACA3'}>
                 <Box
                   bgColor={'#03CBB2'}

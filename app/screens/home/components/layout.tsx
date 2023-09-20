@@ -4,10 +4,7 @@ import {
   Flex,
   Text,
   Pressable,
-  Icon,
   Row,
-  Modal,
-  Spinner,
   useToast,
   Alert,
 } from 'native-base';
@@ -28,7 +25,7 @@ export default function Layout() {
   } = useLayoutConfigWithRole();
 
   const navigation = useNavigation();
-  const { logout, user, currentShopWithRole, changeCurrentShopWithRole } =
+  const { user, currentShopWithRole, changeCurrentShopWithRole } =
     useAuthStore();
 
   const currentSelectedModule = getLayoutConfig()[currentSelected];
@@ -61,12 +58,7 @@ export default function Layout() {
       flex={1}
       direction='row'>
       <Box>
-        <Center
-          pt={ss(30)}
-          px={ss(20)}
-          minW={ss(120)}
-          minH={ss(120)}
-          safeAreaLeft>
+        <Center pt={ss(30)} px={ss(20)} minH={ss(120)} safeAreaLeft>
           <Image
             source={require('~/assets/images/logo.png')}
             style={{
@@ -97,10 +89,11 @@ export default function Layout() {
                 }}>
                 <Center
                   safeAreaLeft
+                  px={ss(20)}
                   background={
                     idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
-                  py={ss(16)}>
+                  py={ss(16, 12)}>
                   <Image
                     source={
                       idx == currentSelected ? item.selectedImage : item.image
@@ -121,11 +114,11 @@ export default function Layout() {
         </Box>
 
         <Center
+          safeAreaLeft
           px={ls(6)}
-          maxW={ls(130)}
           w={'100%'}
           position={'absolute'}
-          bottom={ss(60)}>
+          bottom={ss(60, 20)}>
           <Pressable
             _pressed={{
               opacity: 0.6,
@@ -140,10 +133,11 @@ export default function Layout() {
               borderRadius={ss(23)}
               borderWidth={ss(3)}
               borderColor={'#fff'}
-              w={ss(46)}
-              h={ss(46)}
+              w={ss(46, 40)}
+              h={ss(46, 40)}
+              maxW={ls(130)}
               bgColor={'#F7CE51'}>
-              <Text fontSize={sp(16)} color='#fff'>
+              <Text fontSize={sp(16, 14)} color='#fff'>
                 {user?.name?.[0]}
               </Text>
             </Center>
@@ -160,7 +154,6 @@ export default function Layout() {
             </Row>
           </Pressable>
           <SelectUser
-            style={{ marginTop: ss(4) }}
             onSelect={async function (selectedItem: any) {
               openLoading();
               changeCurrentShopWithRole(selectedItem)
@@ -192,11 +185,11 @@ export default function Layout() {
           />
         </Center>
       </Box>
-      <Flex direction='column' flex={1}>
+      <Flex direction='column' flex={1} safeAreaTop>
         <Flex
           direction='row'
           justifyContent={'center'}
-          py={ss(22)}
+          py={ss(22, 18)}
           alignItems={'center'}>
           {!currentSelectedModule?.noTab &&
             currentSelectedModule?.features.map((item, idx) => {
@@ -215,7 +208,6 @@ export default function Layout() {
                     <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
                       {item.text}
                     </Text>
-
                     <Box
                       w={ss(40)}
                       h={ss(4)}

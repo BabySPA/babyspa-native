@@ -192,7 +192,7 @@ export default function Personal({
               </Row>
             </Pressable>
             <DialogModal
-              title='是否确认退出登录'
+              title='是否确认退出登录？'
               isOpen={showDialog}
               onClose={function (): void {
                 setShowDialog(false);

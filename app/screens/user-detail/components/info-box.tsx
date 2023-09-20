@@ -61,7 +61,7 @@ export default function InfoBox(params: InfoBoxParams) {
               }}
               bgColor={'rgba(243, 96, 30, 0.20)'}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderColor={'#f3601E'}
               px={ls(26)}
               py={ss(10)}>
@@ -186,7 +186,7 @@ export default function InfoBox(params: InfoBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               编辑

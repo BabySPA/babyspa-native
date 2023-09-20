@@ -53,7 +53,10 @@ export function DialogModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{headerText || '温馨提示'}</Modal.Header>
+
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{headerText || '温馨提示'}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
@@ -70,7 +73,7 @@ export function DialogModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -90,7 +93,7 @@ export function DialogModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -169,6 +172,8 @@ export function TemplateModal({
         <Row>
           <Column h={ss(350)}>
             <Input
+              borderWidth={ss(1)}
+              borderColor={'#D8D8D8'}
               ref={inputRef}
               multiline
               placeholder='请输入或选择内容'
@@ -178,7 +183,6 @@ export function TemplateModal({
               maxLength={300}
               w={ls(340)}
               h={'100%'}
-              borderColor={'#E4E4E4'}
               textAlignVertical='top'
               ml={ls(30)}
               autoCorrect={false}
@@ -259,7 +263,7 @@ export function TemplateModal({
                           mb={ss(10)}
                           borderRadius={2}
                           borderColor={'#D8D8D8'}
-                          borderWidth={1}>
+                          borderWidth={ss(1)}>
                           <Text fontSize={sp(18)} color='#000'>
                             {item}
                           </Text>
@@ -283,7 +287,7 @@ export function TemplateModal({
               onClose();
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             w={ls(100)}
             h={ss(46)}
             justifyContent={'center'}
@@ -302,7 +306,7 @@ export function TemplateModal({
               onConfirm(templateText);
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor='#00B49E'
             w={ls(100)}
             h={ss(46)}
@@ -344,7 +348,7 @@ export function GrowthCurveModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{'生长记录'}</Modal.Header>
+        <Modal.Header fontSize={sp(20)}>{'生长记录'}</Modal.Header>
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
@@ -352,6 +356,8 @@ export function GrowthCurveModal({
                 身高(CM)
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入'
@@ -370,6 +376,8 @@ export function GrowthCurveModal({
                 体重(KG)
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入'
@@ -394,7 +402,7 @@ export function GrowthCurveModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -417,7 +425,7 @@ export function GrowthCurveModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -460,7 +468,9 @@ export function ChangePasswordModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{'修改密码'}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>修改密码</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
@@ -468,6 +478,8 @@ export function ChangePasswordModal({
                 原密码
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入原密码'
@@ -486,6 +498,8 @@ export function ChangePasswordModal({
                 新密码
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='密码由超过6位数字和字母组成'
@@ -503,6 +517,8 @@ export function ChangePasswordModal({
                 确认新密码
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请再次输入新密码确认'
@@ -526,7 +542,7 @@ export function ChangePasswordModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -558,7 +574,7 @@ export function ChangePasswordModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -608,7 +624,9 @@ export function NewTemplateModalModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
@@ -616,6 +634,8 @@ export function NewTemplateModalModal({
                 {type == 'group' ? '模版组' : '模版项'}
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
@@ -646,7 +666,7 @@ export function NewTemplateModalModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -667,7 +687,7 @@ export function NewTemplateModalModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -715,7 +735,9 @@ export function NewTemplateGroupModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
@@ -723,6 +745,8 @@ export function NewTemplateGroupModal({
                 分组名称
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
@@ -750,7 +774,7 @@ export function NewTemplateGroupModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -770,7 +794,7 @@ export function NewTemplateGroupModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -824,7 +848,9 @@ export function NewLevel3TemplateGroupModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
@@ -832,6 +858,8 @@ export function NewLevel3TemplateGroupModal({
                 模版名称
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
@@ -869,7 +897,7 @@ export function NewLevel3TemplateGroupModal({
                   height: ss(48),
                   backgroundColor: '#fff',
                   borderRadius: ss(4),
-                  borderWidth: 1,
+                  borderWidth: ss(1),
                   borderColor: '#D8D8D8',
                 }}
                 buttonTextStyle={{
@@ -921,7 +949,7 @@ export function NewLevel3TemplateGroupModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -945,7 +973,7 @@ export function NewLevel3TemplateGroupModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -1003,7 +1031,9 @@ export function NewTemplateExtraModal({
       }}>
       <Modal.Content>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
@@ -1011,6 +1041,8 @@ export function NewTemplateExtraModal({
                 {des1}
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef1}
                 px={ls(20)}
                 py={ss(10)}
@@ -1031,6 +1063,8 @@ export function NewTemplateExtraModal({
                 {des2}
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef2}
                 px={ls(20)}
                 py={ss(10)}
@@ -1061,7 +1095,7 @@ export function NewTemplateExtraModal({
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -1088,7 +1122,7 @@ export function NewTemplateExtraModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -1236,7 +1270,7 @@ export function TemplateExtraModal({
                                     ? '#3AAEA3'
                                     : '#D8D8D8'
                                 }
-                                borderWidth={1}>
+                                borderWidth={ss(1)}>
                                 <Text
                                   fontSize={sp(18)}
                                   color={
@@ -1360,7 +1394,7 @@ export function TemplateExtraModal({
               onClose();
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             w={ls(100)}
             h={ss(46)}
             justifyContent={'center'}
@@ -1387,7 +1421,7 @@ export function TemplateExtraModal({
               }
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor='#00B49E'
             w={ls(100)}
             h={ss(46)}

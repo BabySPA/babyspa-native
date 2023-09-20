@@ -58,7 +58,7 @@ export default function HealthInfo({
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
-                borderWidth: 1,
+                borderWidth: ss(1),
                 height: ss(170),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),

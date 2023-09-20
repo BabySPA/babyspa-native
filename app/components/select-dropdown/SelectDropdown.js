@@ -138,6 +138,8 @@ const SelectDropdown = (
     return (
       search && (
         <Input
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           searchViewWidth={buttonLayout.w}
           value={searchTxt}
           valueColor={searchInputTxtColor}

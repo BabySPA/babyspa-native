@@ -14,12 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
-import {
-  Feather,
-  FontAwesome,
-  Ionicons,
-  MaterialIcons,
-} from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerItem from '../components/flow-customer-item';
 import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
@@ -27,7 +22,6 @@ import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
-import { getFlowStatus } from '~/app/constants';
 import { CollectStatus, RegisterStatus } from '~/app/stores/flow/type';
 import { Image as NativeImage } from 'react-native';
 import useGlobalLoading from '~/app/stores/loading';
@@ -136,7 +130,7 @@ function Filter() {
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row
-        py={ss(20)}
+        py={ss(20, 18)}
         px={ls(40)}
         alignItems={'center'}
         justifyContent={'space-between'}>
@@ -159,6 +153,8 @@ function Filter() {
             w={ls(240)}
             h={ss(44)}
             p={ss(8)}
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             borderRadius={ss(4)}
             defaultValue={collection.searchKeywords}
             placeholderTextColor={'#6E6F73'}
@@ -221,7 +217,7 @@ function Filter() {
           <Box
             ml={ls(20)}
             bgColor={'#E1F6EF'}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#15BD8F'}
             borderRadius={ss(4)}
             px={ls(12)}
@@ -256,7 +252,7 @@ function Filter() {
               pr={ls(25)}
               borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -287,7 +283,7 @@ function Filter() {
               alignItems={'center'}
               borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -319,7 +315,7 @@ function Filter() {
                     w={ls(90)}
                     h={ss(44)}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     alignItems={'center'}
                     justifyContent={'center'}
                     mr={ls(20)}
@@ -364,7 +360,7 @@ function Filter() {
                 });
               }}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               w={ls(80)}
               h={ss(44)}
               justifyContent={'center'}
@@ -387,7 +383,7 @@ function Filter() {
                 }, 300);
               }}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderColor='#00B49E'
               w={ls(80)}
               h={ss(44)}

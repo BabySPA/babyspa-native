@@ -321,7 +321,7 @@ export default function FlowScreen({
                     h={ss(44)}
                     px={ls(26)}
                     bgColor={'rgba(243, 96, 30, 0.20)'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#F3601E'}
                     alignItems={'center'}
                     borderRadius={ss(4)}>
@@ -377,7 +377,7 @@ export default function FlowScreen({
                     h={ss(44)}
                     ml={ls(20)}
                     bgColor={'rgba(3, 203, 178, 0.20)'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#03CBB2'}
                     borderRadius={ss(4)}>
                     <Text color='#0C1B16' fontSize={sp(14)}>
@@ -401,7 +401,7 @@ export default function FlowScreen({
                   h={ss(44)}
                   px={ls(26)}
                   bgColor={'rgba(243, 96, 30, 0.20)'}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#F3601E'}
                   alignItems={'center'}
                   borderRadius={ss(4)}>
@@ -455,7 +455,7 @@ export default function FlowScreen({
                   px={ls(26)}
                   ml={ls(20)}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   borderRadius={ss(4)}>
                   {finishLoading && <Spinner mr={ls(5)} color='emerald.500' />}
@@ -548,7 +548,9 @@ export default function FlowScreen({
 
       <Modal isOpen={openLockModal.isOpen} onClose={() => {}}>
         <Modal.Content>
-          <Modal.Header>{'温馨提示'}</Modal.Header>
+          <Modal.Header>
+            <Text fontSize={sp(20)}>温馨提示</Text>
+          </Modal.Header>
           <Modal.Body>
             <Center>
               <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
@@ -572,7 +574,7 @@ export default function FlowScreen({
                   }}>
                   <Center
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#03CBB2'}
                     px={ls(30)}
                     py={ss(10)}>

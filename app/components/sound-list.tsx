@@ -45,7 +45,7 @@ export default function SoundList({
             <Row
               borderRadius={ss(4)}
               borderColor={'#A4D4D6'}
-              borderWidth={1}
+              borderWidth={ss(1)}
               alignItems={'center'}
               justifyContent={'space-between'}
               w={ls(253)}

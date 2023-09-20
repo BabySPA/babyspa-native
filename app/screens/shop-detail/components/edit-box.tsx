@@ -192,7 +192,7 @@ export default function EditBox(params: EditBoxParams) {
                       borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
-                      borderWidth={1}
+                      borderWidth={ss(1)}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       px={ss(20)}>
@@ -235,7 +235,7 @@ export default function EditBox(params: EditBoxParams) {
                       borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
-                      borderWidth={1}
+                      borderWidth={ss(1)}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       px={ss(10)}>
@@ -269,7 +269,7 @@ export default function EditBox(params: EditBoxParams) {
                       borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
-                      borderWidth={1}
+                      borderWidth={ss(1)}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       px={ss(10)}>
@@ -361,7 +361,7 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
@@ -417,7 +417,7 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             alignItems={'center'}
             borderColor={'#00B49E'}>
             {loading && <Spinner mr={ls(5)} color='emerald.500' />}

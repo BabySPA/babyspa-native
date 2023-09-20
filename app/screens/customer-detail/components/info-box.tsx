@@ -98,7 +98,7 @@ export default function InfoBox(params: InfoBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               {currentFlow.register.status === RegisterStatus.CANCEL

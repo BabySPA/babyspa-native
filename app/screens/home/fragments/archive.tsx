@@ -119,6 +119,8 @@ function Filter() {
           defaultButtonText={defaultSelectShop?.name}
         />
         <Input
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           autoCorrect={false}
           w={ls(240)}
           ml={ls(20)}
@@ -163,7 +165,7 @@ function Filter() {
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -194,7 +196,7 @@ function Filter() {
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -249,7 +251,7 @@ function Filter() {
         }}>
         <Box
           borderRadius={ss(4)}
-          borderWidth={1}
+          borderWidth={ss(1)}
           borderColor={'#03CBB2'}
           bgColor={'rgba(3, 203, 178, 0.20)'}
           px={ls(13)}

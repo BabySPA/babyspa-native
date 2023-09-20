@@ -209,12 +209,15 @@ export default function LoginScreen({
                 onChangeText={setUsername}
                 borderRadius={ss(40)}
                 w={ls(360)}
+                py={0}
                 h={ss(60)}
                 mt={ss(60)}
                 placeholder='请输入用户名'
                 inputMode='decimal'
                 fontSize={sp(20)}
                 color={'#999'}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 InputLeftElement={
                   <Icon
                     as={<MaterialIcons name='person' />}
@@ -233,6 +236,8 @@ export default function LoginScreen({
                 w={ls(360)}
                 h={ss(60)}
                 mt={ss(30)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 placeholder='请输入密码'
                 inputMode='decimal'
                 fontSize={sp(20)}

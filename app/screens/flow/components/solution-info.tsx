@@ -79,7 +79,7 @@ export default function SolutionInfo({
                 return (
                   <Box
                     key={idx}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderRadius={ss(4)}
                     borderColor={'#7AB6AF'}
                     borderStyle={'dashed'}
@@ -134,6 +134,8 @@ export default function SolutionInfo({
                             }}>
                             {editAcupoint ? (
                               <Input
+                                borderWidth={ss(1)}
+                                borderColor={'#D8D8D8'}
                                 autoFocus
                                 onChangeText={(text) => {
                                   updateSolutionApplication(
@@ -197,7 +199,7 @@ export default function SolutionInfo({
                     mt={ss(20)}
                     bgColor={'#fff'}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#5EACA3'}
                     w={ls(120)}
                     h={ss(44)}
@@ -230,7 +232,7 @@ export default function SolutionInfo({
                 style={{
                   borderRadius: ss(4),
                   borderColor: '#DFE1DE',
-                  borderWidth: 1,
+                  borderWidth: ss(1),
                   height: ss(107),
                   backgroundColor: '#fff',
                   padding: ss(10),
@@ -264,7 +266,7 @@ export default function SolutionInfo({
                 return (
                   <Box
                     key={idx}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderRadius={ss(4)}
                     borderColor={'#7AB6AF'}
                     borderStyle={'dashed'}
@@ -318,6 +320,8 @@ export default function SolutionInfo({
                           }}>
                           {editMassageRemark ? (
                             <Input
+                              borderWidth={ss(1)}
+                              borderColor={'#D8D8D8'}
                               autoFocus
                               onChangeText={(text) => {
                                 updateSolutionMassage(
@@ -379,7 +383,7 @@ export default function SolutionInfo({
                     mt={ss(20)}
                     bgColor={'#fff'}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#5EACA3'}
                     w={ls(120)}
                     h={ss(44)}

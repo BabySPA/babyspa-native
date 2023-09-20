@@ -108,7 +108,7 @@ const ShopStatisticBox = () => {
                 alignItems={'center'}
                 borderBottomRadius={ss(10)}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -345,7 +345,7 @@ const CenterStatisticBox = () => {
                 py={ss(10)}
                 alignItems={'center'}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -543,7 +543,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}
@@ -574,7 +574,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
             size={ss(20)}

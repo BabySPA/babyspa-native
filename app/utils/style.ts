@@ -7,6 +7,8 @@ interface M {
 
 const { width, height } = Dimensions.get('window');
 
+export const isPhone = height < 500;
+
 const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
 
@@ -22,34 +24,37 @@ const S = Math.min(
   shortDimension / guidelineShort,
 );
 
-const setSpText = (size: number, minAndMax?: M) => {
+const setSpText = (size: number, phoneSize?: number) => {
   const num = Math.round(((size * S + 0.5) * PR) / FS);
   const r = num / PR;
 
-  if (minAndMax === undefined) return r;
-  const { min = r, max = r } = minAndMax;
+  let pr = 0;
+  if (phoneSize) {
+    const pnum = Math.round(((phoneSize * S + 0.5) * PR) / FS);
+    pr = pnum / PR;
+  }
 
-  return r <= min ? min : r >= max ? max : r;
+  return isPhone ? pr || r * 1.2 : r;
 };
 
-export const longScale = (size: number, minAndMax?: M) => {
+export const longScale = (size: number, phoneSize?: number) => {
   const r = (shortDimension / guidelineShort) * size;
-
-  if (minAndMax === undefined) {
-    return r;
+  let pr = 0;
+  if (phoneSize) {
+    const pnum = Math.round(((phoneSize * S + 0.5) * PR) / FS);
+    pr = pnum / PR;
   }
-  const { min = r, max = r } = minAndMax;
-  return r <= min ? min : r >= max ? max : r;
+  return isPhone ? pr || r * 1.2 : r;
 };
 
-export const shortScale = (size: number, minAndMax?: M) => {
+export const shortScale = (size: number, phoneSize?: number) => {
   const r = (shortDimension / guidelineShort) * size;
-
-  if (minAndMax === undefined) {
-    return r;
+  let pr = 0;
+  if (phoneSize) {
+    const pnum = Math.round(((phoneSize * S + 0.5) * PR) / FS);
+    pr = pnum / PR;
   }
-  const { min = r, max = r } = minAndMax;
-  return r <= min ? min : r >= max ? max : r;
+  return isPhone ? pr || r * 1.2 : r;
 };
 
 export const sp = setSpText;

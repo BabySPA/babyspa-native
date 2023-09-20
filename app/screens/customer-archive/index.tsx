@@ -238,7 +238,7 @@ export default function CustomerArchive({
               <Row
                 borderRadius={ss(4)}
                 borderColor={'#99A9BF'}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderStyle={'solid'}>
                 {configs.map((item, idx) => {
                   return (
@@ -295,7 +295,7 @@ export default function CustomerArchive({
                 bgColor={'rgba(0, 180, 158, 0.10)'}
                 borderColor={'#00B49E'}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 px={ls(16)}
                 py={ss(8)}>
                 <Text color='#03CBB2' fontSize={sp(14)}>

@@ -83,7 +83,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -103,7 +103,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -124,7 +124,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -145,7 +145,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -204,6 +204,8 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   随访内容：
                 </Text>
                 <Input
+                  borderWidth={ss(1)}
+                  borderColor={'#D8D8D8'}
                   w={ls(362)}
                   h={ss(120)}
                   p={ss(8)}
@@ -231,7 +233,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   setShowCancelDialog(true);
                 }}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={'#F3AF62'}
                 bgColor={'rgba(243, 175, 98, 0.20)'}
                 width={ls(100)}
@@ -255,7 +257,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 }}
                 ml={ls(20)}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={'#03CBB2'}
                 bgColor={'rgba(3, 203, 178, 0.20)'}
                 width={ls(100)}

@@ -135,7 +135,8 @@ export default function SelectCustomer(params: SelectCustomerParams) {
           placeholderTextColor={'#C0CCDA'}
           color={'#333333'}
           fontSize={ss(16)}
-          borderColor={'#C0CCDA'}
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}

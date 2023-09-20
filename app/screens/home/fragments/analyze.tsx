@@ -143,6 +143,8 @@ function Filter() {
           <Text color='#5EACA3'>{count.done || 0}</Text>
         </Text>
         <Input
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           ml={ls(30)}
           w={ls(240)}
           h={ss(44)}
@@ -220,7 +222,7 @@ function Filter() {
               pr={ls(25)}
               borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -251,7 +253,7 @@ function Filter() {
               alignItems={'center'}
               borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
                 size={ss(20)}
@@ -283,7 +285,7 @@ function Filter() {
                     w={ls(90)}
                     h={ss(44)}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     alignItems={'center'}
                     justifyContent={'center'}
                     mr={ls(20)}
@@ -328,7 +330,7 @@ function Filter() {
                 });
               }}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               w={ls(80)}
               h={ss(44)}
               justifyContent={'center'}
@@ -351,7 +353,7 @@ function Filter() {
                 }, 300);
               }}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderColor='#00B49E'
               w={ls(80)}
               h={ss(44)}

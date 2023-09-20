@@ -88,7 +88,7 @@ export default function FlowCustomerItem({
     <Row
       borderRadius={ss(8)}
       borderStyle={'dashed'}
-      borderWidth={1}
+      borderWidth={ss(1)}
       borderColor={'#15BD8F'}
       w={'100%'}
       minH={ss(148)}
