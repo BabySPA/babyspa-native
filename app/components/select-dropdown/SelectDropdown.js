@@ -196,10 +196,7 @@ const SelectDropdown = (
   const renderDropdown = () => {
     return (
       isVisible && (
-        <DropdownModal
-          statusBarTranslucent={statusBarTranslucent}
-          visible={isVisible}
-          onRequestClose={onRequestClose}>
+        <DropdownModal visible={isVisible} onRequestClose={onRequestClose}>
           <DropdownOverlay
             onPress={closeDropdown}
             backgroundColor={dropdownOverlayColor}

@@ -1,7 +1,6 @@
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { FlowStatus, Gender } from '~/app/types';
 import { Shop } from '../manager/type';
-import { StatusBar } from 'expo-status-bar';
 
 export enum RegisterStatus {
   NOT_SET = -1,

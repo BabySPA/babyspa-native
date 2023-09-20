@@ -55,7 +55,7 @@ export default function App() {
         <NativeBaseProvider config={config} theme={theme}>
           <KeyboardAvoider>
             <Navigation colorScheme={colorScheme} />
-            <StatusBar />
+            <StatusBar hidden={true} />
           </KeyboardAvoider>
         </NativeBaseProvider>
       </SafeAreaProvider>

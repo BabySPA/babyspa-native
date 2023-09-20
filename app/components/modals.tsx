@@ -20,8 +20,8 @@ import { useEffect, useRef, useState } from 'react';
 import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
 import useManagerStore from '../stores/manager';
-import SelectRole from './select-role';
 import SelectDropdown from './select-dropdown';
+import { StatusBar } from 'expo-status-bar';
 
 interface DialogParams {
   isOpen: boolean;

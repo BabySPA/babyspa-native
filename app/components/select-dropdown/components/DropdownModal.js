@@ -1,22 +1,13 @@
-import React from 'react';
 import { Modal } from 'react-native';
 
-const DropdownModal = ({
-  visible,
-  statusBarTranslucent,
-  onRequestClose,
-  children,
-}) => {
-  const defaults = {
-    statusBarTranslucent: statusBarTranslucent || false,
-  };
+const DropdownModal = ({ visible, onRequestClose, children }) => {
   return (
     <Modal
+      statusBarTranslucent={true}
       onRequestClose={onRequestClose}
-      supportedOrientations={['portrait', 'landscape']}
+      supportedOrientations={['landscape']}
       animationType='none'
       transparent={true}
-      statusBarTranslucent={defaults.statusBarTranslucent}
       visible={visible}>
       {children}
     </Modal>

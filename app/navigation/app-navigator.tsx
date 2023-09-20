@@ -17,7 +17,7 @@ import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
-import { Box, Modal, Row, Spinner, Text } from 'native-base';
+import { Box, Modal, Row, Spinner, StatusBar, Text } from 'native-base';
 import { sp } from '../utils/style';
 import useGlobalLoading from '../stores/loading';
 import Picker from 'react-native-patchpicker';
@@ -35,8 +35,7 @@ export default function AppNavigator() {
         onClose={() => {
           Picker.hide();
           closeLoading();
-        }}
-      >
+        }}>
         {spinner && (
           <Row alignItems={'center'}>
             <Text color={'#f0f0f0'} fontSize={sp(16)}>
