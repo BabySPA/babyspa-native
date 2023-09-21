@@ -366,6 +366,7 @@ export function GrowthCurveModal({
                 ml={ls(20)}
                 defaultValue={`${defaultHeight}`}
                 inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(h) => {
                   setHeight(+h);
                 }}
@@ -386,6 +387,7 @@ export function GrowthCurveModal({
                 ml={ls(20)}
                 defaultValue={`${defaultWeight}`}
                 inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(w) => {
                   setWeight(+w);
                 }}
@@ -474,7 +476,7 @@ export function ChangePasswordModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
+              <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 原密码
               </Text>
               <Input
@@ -487,14 +489,15 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(text) => {
                   setOriginalPassword(text);
                 }}
               />
             </Row>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
+              <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 新密码
               </Text>
               <Input
@@ -506,14 +509,15 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(text) => {
                   setNewPassword(text);
                 }}
               />
             </Row>
             <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
+              <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 确认新密码
               </Text>
               <Input
@@ -525,68 +529,69 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(text) => {
                   setConfirmPassword(text);
                 }}
               />
             </Row>
-            <Row mt={ss(80)} mb={ss(20)}>
-              <Pressable
-                _pressed={{
-                  opacity: 0.6,
-                }}
-                hitSlop={ss(20)}
-                onPress={() => {
-                  onClose();
-                }}>
-                <Center
-                  borderRadius={ss(4)}
-                  borderWidth={ss(1)}
-                  borderColor={'#03CBB2'}
-                  px={ls(30)}
-                  py={ss(10)}>
-                  <Text color='#00B49E' fontSize={sp(14)}>
-                    取消
-                  </Text>
-                </Center>
-              </Pressable>
-              <Pressable
-                _pressed={{
-                  opacity: 0.6,
-                }}
-                hitSlop={ss(20)}
-                onPress={() => {
-                  if (decodePassword(password) !== originalPassword) {
-                    toastAlert(toast, 'error', '原密码错误');
-                    return;
-                  }
-                  if (newPassword !== confirmPassword) {
-                    toastAlert(toast, 'error', '两次密码不一致');
-                    return;
-                  }
-                  if (newPassword.length < 6) {
-                    toastAlert(toast, 'error', '新密码长度不能小于6位');
-                    return;
-                  }
-                  onConfirm(newPassword);
-                }}>
-                <Center
-                  ml={ls(20)}
-                  borderRadius={ss(4)}
-                  borderWidth={ss(1)}
-                  borderColor={'#03CBB2'}
-                  bgColor={'rgba(3, 203, 178, 0.20)'}
-                  px={ls(30)}
-                  py={ss(10)}>
-                  <Text color='#00B49E' fontSize={sp(14)}>
-                    保存
-                  </Text>
-                </Center>
-              </Pressable>
-            </Row>
           </Center>
         </Modal.Body>
+        <Row mt={ss(20)} mb={ss(20)} justifyContent={'center'}>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              onClose();
+            }}>
+            <Center
+              borderRadius={ss(4)}
+              borderWidth={ss(1)}
+              borderColor={'#03CBB2'}
+              px={ls(30)}
+              py={ss(10)}>
+              <Text color='#00B49E' fontSize={sp(14)}>
+                取消
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              if (decodePassword(password) !== originalPassword) {
+                toastAlert(toast, 'error', '原密码错误');
+                return;
+              }
+              if (newPassword !== confirmPassword) {
+                toastAlert(toast, 'error', '两次密码不一致');
+                return;
+              }
+              if (newPassword.length < 6) {
+                toastAlert(toast, 'error', '新密码长度不能小于6位');
+                return;
+              }
+              onConfirm(newPassword);
+            }}>
+            <Center
+              ml={ls(20)}
+              borderRadius={ss(4)}
+              borderWidth={ss(1)}
+              borderColor={'#03CBB2'}
+              bgColor={'rgba(3, 203, 178, 0.20)'}
+              px={ls(30)}
+              py={ss(10)}>
+              <Text color='#00B49E' fontSize={sp(14)}>
+                保存
+              </Text>
+            </Center>
+          </Pressable>
+        </Row>
       </Modal.Content>
     </Modal>
   );

@@ -134,7 +134,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
           p={ss(10)}
           placeholderTextColor={'#C0CCDA'}
           color={'#333333'}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           InputLeftElement={

@@ -252,6 +252,7 @@ export default function EditBox(params: EditBoxParams) {
                     });
                   }}
                   inputMode='numeric'
+                  returnKeyType='done'
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16)}
@@ -452,7 +453,9 @@ export default function EditBox(params: EditBoxParams) {
             borderWidth={ss(1)}
             alignItems={'center'}
             borderColor={'#00B49E'}>
-            {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+            {loading && (
+              <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+            )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
             </Text>

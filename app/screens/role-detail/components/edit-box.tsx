@@ -411,7 +411,9 @@ export default function EditBox(params: EditBoxParams) {
             borderWidth={ss(1)}
             alignItems={'center'}
             borderColor={'#00B49E'}>
-            {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+            {loading && (
+              <Spinner mr={ls(5)} color='emerald.500' size={ss(20)} />
+            )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
             </Text>

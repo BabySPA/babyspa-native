@@ -55,7 +55,9 @@ export default function CustomerDetail({
                 borderRadius={ss(4)}
                 px={ls(26)}
                 py={ss(10)}>
-                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+                {loading && (
+                  <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+                )}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}

@@ -16,7 +16,7 @@ export default function LabelBox({
 }) {
   return (
     <Row alignItems={alignItems || 'flex-start'} flex={flex || 1}>
-      <Text fontSize={sp(20)} color='#999' w={ls(120)} textAlign={'right'}>
+      <Text fontSize={sp(20)} color='#999' minW={ls(120)} textAlign={'right'}>
         {title}：
       </Text>
       <Text fontSize={sp(20)} color='#333' maxW={'80%'}>

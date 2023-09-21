@@ -118,16 +118,16 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
         />
         <Input
           autoCorrect={false}
-          w={ls(240)}
+          minW={ls(240, 340)}
           ml={ls(20)}
           h={ss(44)}
-          p={ss(8)}
+          p={ss(9)}
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           borderRadius={ss(4)}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           onChangeText={debounce((text) => {
             updateCustomersFollowupFilter({
               searchKeywords: text,
@@ -169,7 +169,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
             size={ss(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {customersFollowUp.startDate}
           </Text>
         </Pressable>
@@ -200,7 +200,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
             size={ss(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {customersFollowUp.endDate}
           </Text>
         </Pressable>

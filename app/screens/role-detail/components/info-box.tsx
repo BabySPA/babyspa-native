@@ -57,7 +57,9 @@ export default function InfoBox(params: InfoBoxParams) {
               px={ls(26)}
               py={ss(10)}>
               <Row>
-                {deleteLoading && <Spinner mr={ls(5)} color='#999' />}
+                {deleteLoading && (
+                  <Spinner mr={ls(5)} color='#999' size={ss(20)} />
+                )}
                 <Text color='#F3601E' fontSize={sp(14)}>
                   删除
                 </Text>

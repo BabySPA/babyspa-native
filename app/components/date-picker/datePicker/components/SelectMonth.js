@@ -135,12 +135,12 @@ const SelectMonth = () => {
         </TouchableOpacity>
         <TextInput
           style={style.yearInput}
-          keyboardType='numeric'
+          inputMode='numeric'
+          returnKeyType='done'
           maxLength={4}
           value={year}
           onBlur={() => onSelectYear(0)}
           underlineColorAndroid={'rgba(0,0,0,0)'}
-          returnKeyType='done'
           autoCorrect={false}
           blurOnSubmit
           selectionColor={options.mainColor}

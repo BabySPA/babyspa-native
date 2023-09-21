@@ -135,16 +135,16 @@ function Filter() {
         </Text>
         <Input
           ml={ls(30)}
-          w={ls(240)}
+          minW={ls(240, 340)}
           h={ss(44)}
-          p={ss(8)}
+          p={ss(9)}
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           borderRadius={ss(4)}
           defaultValue={evaluate.searchKeywords}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           onChangeText={debounce((text) => {
             updateEvaluateFilter({
               searchKeywords: text,
@@ -219,7 +219,7 @@ function Filter() {
                 size={ss(20)}
                 color='rgba(0,0,0,0.2)'
               />
-              <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+              <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
                 {evaluate.startDate}
               </Text>
             </Pressable>
@@ -250,7 +250,7 @@ function Filter() {
                 size={ss(20)}
                 color='rgba(0,0,0,0.2)'
               />
-              <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+              <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
                 {evaluate.endDate}
               </Text>
             </Pressable>

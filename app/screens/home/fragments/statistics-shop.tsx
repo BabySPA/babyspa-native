@@ -557,7 +557,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             size={ss(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {startDate}
           </Text>
         </Pressable>
@@ -588,7 +588,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             size={ss(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {endDate}
           </Text>
         </Pressable>

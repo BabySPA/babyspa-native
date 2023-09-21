@@ -126,8 +126,8 @@ function Filter() {
           </Text>
           <Input
             ml={ls(30)}
-            w={ls(240)}
-            h={ss(44)}
+            minW={ls(240, 340)}
+            py={ss(9)}
             p={ss(9)}
             borderWidth={ss(1)}
             borderColor={'#D8D8D8'}
@@ -135,7 +135,7 @@ function Filter() {
             placeholderTextColor={'#6E6F73'}
             color={'#333333'}
             borderRadius={ss(4)}
-            fontSize={ss(16)}
+            fontSize={sp(16)}
             onChangeText={debounce((text) => {
               updateRegisterFilter({
                 searchKeywords: text,
@@ -239,7 +239,7 @@ function Filter() {
                 size={ss(20)}
                 color='rgba(0,0,0,0.2)'
               />
-              <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+              <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
                 {register.startDate}
               </Text>
             </Pressable>
@@ -270,7 +270,7 @@ function Filter() {
                 size={ss(20)}
                 color='rgba(0,0,0,0.2)'
               />
-              <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+              <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
                 {register.endDate}
               </Text>
             </Pressable>

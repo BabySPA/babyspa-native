@@ -325,7 +325,9 @@ export default function FlowScreen({
                     borderColor={'#F3601E'}
                     alignItems={'center'}
                     borderRadius={ss(4)}>
-                    {closeLoading && <Spinner mr={ls(5)} color='emerald.500' />}
+                    {closeLoading && (
+                      <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+                    )}
                     <Text color='#F3601E' fontSize={sp(14)}>
                       结束
                     </Text>
@@ -405,7 +407,9 @@ export default function FlowScreen({
                   borderColor={'#F3601E'}
                   alignItems={'center'}
                   borderRadius={ss(4)}>
-                  {closeLoading && <Spinner mr={ls(5)} color='#F3601E' />}
+                  {closeLoading && (
+                    <Spinner mr={ls(5)} size={ss(20)} color='#F3601E' />
+                  )}
                   <Text color='#F3601E' fontSize={sp(14)}>
                     结束
                   </Text>
@@ -458,7 +462,9 @@ export default function FlowScreen({
                   borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   borderRadius={ss(4)}>
-                  {finishLoading && <Spinner mr={ls(5)} color='emerald.500' />}
+                  {finishLoading && (
+                    <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+                  )}
                   <Text color='#0C1B16' fontSize={sp(14)}>
                     完成
                   </Text>

@@ -214,7 +214,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   defaultValue={followupContent}
                   placeholderTextColor={'#999'}
                   color={'#333333'}
-                  fontSize={ss(16)}
+                  fontSize={sp(16)}
                   onChangeText={(text) => {
                     setFollowupContent(text);
                   }}
@@ -241,7 +241,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 flexDirection={'row'}
                 justifyContent={'center'}
                 alignItems={'center'}>
-                {cancelLoading && <Spinner mr={ls(5)} color='#F3AF62' />}
+                {cancelLoading && (
+                  <Spinner mr={ls(5)} size={ss(20)} color='#F3AF62' />
+                )}
                 <Text fontSize={sp(14)} color='#F3AF62'>
                   结束随访
                 </Text>
@@ -265,7 +267,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 flexDirection={'row'}
                 justifyContent={'center'}
                 alignItems={'center'}>
-                {confirmLoading && <Spinner mr={ls(5)} color='#03CBB2' />}
+                {confirmLoading && (
+                  <Spinner mr={ls(5)} size={ss(20)} color='#03CBB2' />
+                )}
                 <Text fontSize={sp(14)} color='#03CBB2'>
                   完成随访
                 </Text>

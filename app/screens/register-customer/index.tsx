@@ -121,7 +121,9 @@ export default function RegisterCustomerScreen({
                 });
             }}>
             <Row bgColor={'white'} borderRadius={ss(4)} px={ls(26)} py={ss(10)}>
-              {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+              {loading && (
+                <Spinner mr={ls(5)} color='emerald.500' size={ss(20)} />
+              )}
               <Text
                 color={'#03CBB2'}
                 opacity={loading ? 0.6 : 1}

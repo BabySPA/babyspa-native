@@ -213,12 +213,12 @@ function Filter() {
           autoCorrect={false}
           w={ls(240)}
           h={ss(44)}
-          p={ss(8)}
+          p={ss(9)}
           placeholderTextColor={'#6E6F73'}
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           color={'#333333'}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           borderRadius={ss(4)}
           InputLeftElement={
             <Icon

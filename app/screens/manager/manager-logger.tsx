@@ -166,13 +166,13 @@ function Filter() {
         <Input
           w={ls(300)}
           h={ss(44)}
-          p={ss(8)}
+          p={ss(9)}
           mr={ss(40)}
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
@@ -215,7 +215,7 @@ function Filter() {
             size={ss(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {logFilter.startDate}
           </Text>
         </Pressable>
@@ -246,7 +246,7 @@ function Filter() {
             size={ss(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {logFilter.endDate}
           </Text>
         </Pressable>

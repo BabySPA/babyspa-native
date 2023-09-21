@@ -13,8 +13,9 @@ const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
 
 //Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineLong = 1194;
-const guidelineShort = 835;
+
+let guidelineLong = 1194;
+let guidelineShort = 835;
 
 const PR = PixelRatio.get();
 const FS = PixelRatio.getFontScale();
@@ -34,27 +35,25 @@ const setSpText = (size: number, phoneSize?: number) => {
     pr = pnum / PR;
   }
 
-  return isPhone ? pr || r * 1.2 : r;
+  return isPhone ? pr || r * 1.3 + 1 : r;
 };
 
 export const longScale = (size: number, phoneSize?: number) => {
   const r = (shortDimension / guidelineShort) * size;
   let pr = 0;
   if (phoneSize) {
-    const pnum = Math.round(((phoneSize * S + 0.5) * PR) / FS);
-    pr = pnum / PR;
+    pr = (shortDimension / guidelineShort) * phoneSize;
   }
-  return isPhone ? pr || r * 1.2 : r;
+  return isPhone ? pr || r * 1.25 : r;
 };
 
 export const shortScale = (size: number, phoneSize?: number) => {
   const r = (shortDimension / guidelineShort) * size;
   let pr = 0;
   if (phoneSize) {
-    const pnum = Math.round(((phoneSize * S + 0.5) * PR) / FS);
-    pr = pnum / PR;
+    pr = (shortDimension / guidelineShort) * phoneSize;
   }
-  return isPhone ? pr || r * 1.2 : r;
+  return isPhone ? pr || r * 1.25 : r;
 };
 
 export const sp = setSpText;

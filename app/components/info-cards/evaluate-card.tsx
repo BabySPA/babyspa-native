@@ -79,8 +79,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderRadius={ss(8)}
           borderWidth={ss(1)}
           borderColor={'#00B49E'}>
-          {loading && <Spinner mr={ls(5)} color='emerald.500' />}
-          <Text fontSize={ss(16)} color={'#00B49E'}>
+          {loading && <Spinner size={ss(20)} mr={ls(5)} color='emerald.500' />}
+          <Text fontSize={sp(16)} color={'#00B49E'}>
             确定
           </Text>
         </Row>
@@ -128,8 +128,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderRadius={ss(8)}
           borderWidth={ss(1)}
           borderColor={'#00B49E'}>
-          {loading && <Spinner mr={ls(5)} color='emerald.500' />}
-          <Text fontSize={ss(16)} color={'#00B49E'}>
+          {loading && <Spinner size={ss(20)} mr={ls(5)} color='emerald.500' />}
+          <Text fontSize={sp(16)} color={'#00B49E'}>
             确定
           </Text>
         </Row>

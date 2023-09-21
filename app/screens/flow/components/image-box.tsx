@@ -173,7 +173,7 @@ export default function ImageBox({
                 h={'100%'}
                 position={'absolute'}
                 bgColor={'rgba(0,0,0,0.3)'}>
-                <Spinner color='emerald.500' />
+                <Spinner color='emerald.500' size={ss(20)} />
               </Center>
             )}
             {edit && (

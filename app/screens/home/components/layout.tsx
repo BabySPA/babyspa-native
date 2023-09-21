@@ -93,7 +93,7 @@ export default function Layout() {
                   background={
                     idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
-                  py={ss(16, 12)}>
+                  py={ss(16, 10)}>
                   <Image
                     source={
                       idx == currentSelected ? item.selectedImage : item.image
@@ -135,7 +135,6 @@ export default function Layout() {
               borderColor={'#fff'}
               w={ss(46, 40)}
               h={ss(46, 40)}
-              maxW={ls(130)}
               bgColor={'#F7CE51'}>
               <Text fontSize={sp(16, 14)} color='#fff'>
                 {user?.name?.[0]}

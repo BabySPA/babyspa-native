@@ -380,7 +380,7 @@ export default function ManagerTemplate({
             borderColor={'#D8D8D8'}
             placeholderTextColor={'#C0CCDA'}
             color={'#333333'}
-            fontSize={ss(16)}
+            fontSize={sp(16)}
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
@@ -580,7 +580,7 @@ export default function ManagerTemplate({
             borderWidth={ss(1)}
             borderColor={'#D8D8D8'}
             color={'#333333'}
-            fontSize={ss(16)}
+            fontSize={sp(16)}
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}

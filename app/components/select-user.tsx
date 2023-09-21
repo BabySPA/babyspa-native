@@ -32,9 +32,9 @@ export default function SelectUser({
       rowTextForSelection={(item, index) => {
         return item.shop.name;
       }}
-      numberOfLines={2}
+      numberOfLines={1}
       buttonStyle={{
-        width: ls(120),
+        width: ls(130),
         height: buttonHeight || ss(40),
         backgroundColor: 'transparent',
         ...style,

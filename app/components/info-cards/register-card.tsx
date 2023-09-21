@@ -32,7 +32,7 @@ export default function RegisterCard(params: RegisterCardParams) {
         <Column ml={ss(20)}>
           <Row alignItems={'center'}>
             <Text
-              fontSize={ss(22)}
+              fontSize={sp(22)}
               color={'#333'}
               maxW={ls(220)}
               ellipsizeMode='tail'
