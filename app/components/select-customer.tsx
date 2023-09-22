@@ -68,7 +68,7 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(12)}
+              size={sp(12)}
               ml={ls(16)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
@@ -90,7 +90,7 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
           <Row alignItems={'center'} mt={ss(6)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}
-              size={ss(14)}
+              size={sp(14)}
               color={'#F7BA2A'}
               mt={0.5}
             />
@@ -140,7 +140,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={sp(25)}
               color='#C0CCDA'
               ml={ss(10)}
             />

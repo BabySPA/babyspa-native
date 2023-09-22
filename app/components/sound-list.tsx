@@ -73,7 +73,7 @@ export default function SoundList({
                   }}>
                   <Icon
                     as={<AntDesign name={'delete'} />}
-                    size={ss(20)}
+                    size={sp(20)}
                     color='#99A9BF'
                   />
                 </Pressable>

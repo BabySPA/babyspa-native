@@ -164,7 +164,7 @@ export function TemplateModal({
             }}>
             <Icon
               as={<AntDesign name={'close'} />}
-              size={ss(24)}
+              size={sp(24)}
               color='#999'
             />
           </Pressable>
@@ -918,7 +918,7 @@ export function NewLevel3TemplateGroupModal({
                           name={isOpened ? 'angle-up' : 'angle-down'}
                         />
                       }
-                      size={ss(18)}
+                      size={sp(18)}
                       color='#999'
                     />
                   );
@@ -1203,7 +1203,7 @@ export function TemplateExtraModal({
             }}>
             <Icon
               as={<AntDesign name={'close'} />}
-              size={ss(24)}
+              size={sp(24)}
               color='#999'
             />
           </Pressable>
@@ -1323,7 +1323,7 @@ export function TemplateExtraModal({
                               alignItems={'center'}
                               justifyContent={'space-between'}>
                               <Row alignItems={'center'}>
-                                <Circle size={ss(30)} bgColor={'#5EACA3'}>
+                                <Circle size={sp(30)} bgColor={'#5EACA3'}>
                                   <Text fontSize={sp(18)} color='#fff'>
                                     {index + 1}
                                   </Text>

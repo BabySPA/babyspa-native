@@ -89,6 +89,7 @@ export default function ConclusionInfo({
                             axis='vertical'
                             dashLength={ss(2)}
                             dashGap={ss(2)}
+                            dashThickness={ss(1.5)}
                             dashColor='#5EACA3'
                             style={{ height: ss(70) }}
                           />
@@ -155,7 +156,7 @@ export default function ConclusionInfo({
                         }>
                         <Icon
                           as={<AntDesign name='appstore1' />}
-                          size={ss(18)}
+                          size={sp(18)}
                           color={
                             selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                           }

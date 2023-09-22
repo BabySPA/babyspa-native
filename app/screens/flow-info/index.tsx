@@ -78,7 +78,7 @@ export default function FlowInfo({
                 px={ls(26)}
                 py={ss(10)}>
                 {loading && (
-                  <Spinner mr={ls(5)} color='emerald.500' size={ss(20)} />
+                  <Spinner mr={ls(5)} color='emerald.500' size={sp(20)} />
                 )}
                 <Text
                   color={'#03CBB2'}

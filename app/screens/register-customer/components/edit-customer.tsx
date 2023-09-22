@@ -58,6 +58,7 @@ export default function EditCustomer(params: EditCustomerParams) {
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
           <FormBox
+            titleWidth={ss(75)}
             title='姓名'
             required
             form={
@@ -87,6 +88,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='乳名'
             style={{ marginTop: ss(20) }}
             form={
@@ -116,6 +118,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             required
             title='性别'
             style={{ marginTop: ss(20) }}
@@ -140,6 +143,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='生日'
             required
             style={{ marginTop: ss(20) }}
@@ -167,7 +171,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
-                      size={ss(18)}
+                      size={sp(18)}
                       color='#999'
                     />
                   </Row>
@@ -176,6 +180,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='年龄'
             style={{ marginTop: ss(20) }}
             form={
@@ -211,6 +216,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             required
             title='电话'
             style={{ marginTop: ss(20) }}
@@ -244,6 +250,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='过敏原'
             style={{ marginTop: ss(20), alignItems: 'center' }}
             form={
@@ -277,7 +284,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
-                      size={ss(18)}
+                      size={sp(18)}
                       color='#999'
                     />
                   </Row>
@@ -316,6 +323,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='理疗师'
             style={{ marginTop: ss(20) }}
             form={

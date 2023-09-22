@@ -229,7 +229,7 @@ export default function ManagerTemplate({
               <Icon
                 ml={ls(10)}
                 as={<Ionicons name='ios-close-circle-outline' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='#FB6459'
               />
             </Pressable>
@@ -253,7 +253,7 @@ export default function ManagerTemplate({
         bgColor={'#FAFAFA'}>
         <Row alignItems={'center'} justifyContent={'space-between'}>
           <Row alignItems={'center'}>
-            <Circle size={ss(30)} bgColor={'#5EACA3'}>
+            <Circle size={sp(30)} bgColor={'#5EACA3'}>
               <Text fontSize={sp(18)} color='#fff'>
                 {index}
               </Text>
@@ -291,7 +291,7 @@ export default function ManagerTemplate({
               }}>
               <Icon
                 as={<FontAwesome name='edit' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='#99A9BF'
               />
             </Pressable>
@@ -310,7 +310,7 @@ export default function ManagerTemplate({
               }}>
               <Icon
                 as={<AntDesign name='delete' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='#99A9BF'
               />
             </Pressable>
@@ -384,7 +384,7 @@ export default function ManagerTemplate({
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
-                size={ss(25)}
+                size={sp(25)}
                 color='#C0CCDA'
                 ml={ss(10)}
               />
@@ -404,9 +404,6 @@ export default function ManagerTemplate({
                 return (
                   <Box>
                     <Pressable
-                      _pressed={{
-                        opacity: 0.6,
-                      }}
                       hitSlop={ss(20)}
                       onPress={() => {
                         setCurrentLevel2SelectTemplateGroupIndex(index);
@@ -584,7 +581,7 @@ export default function ManagerTemplate({
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
-                size={ss(25)}
+                size={sp(25)}
                 color='#C0CCDA'
                 ml={ss(10)}
               />
@@ -622,7 +619,7 @@ export default function ManagerTemplate({
                 <Icon
                   ml={ls(10)}
                   as={<AntDesign name='addfolder' />}
-                  size={ss(24)}
+                  size={sp(24)}
                   color='#E36C36'
                 />
                 <Text fontSize={sp(20)} ml={ls(10)} color={'#E36C36'}>
@@ -681,7 +678,7 @@ export default function ManagerTemplate({
                         <Icon
                           ml={ls(10)}
                           as={<AntDesign name='folder1' />}
-                          size={ss(24)}
+                          size={sp(24)}
                           color='#B4B4B4'
                         />
                         <Text fontSize={sp(20)} ml={ls(10)} color={'#333'}>
@@ -699,7 +696,7 @@ export default function ManagerTemplate({
                             }
                           />
                         }
-                        size={ss(16)}
+                        size={sp(16)}
                         color={'#BCBCBC'}
                       />
                     </Pressable>

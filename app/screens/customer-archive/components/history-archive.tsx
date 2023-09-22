@@ -108,7 +108,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                     <Row>
                       <Icon
                         as={<AntDesign name='clockcircleo' />}
-                        size={ss(16)}
+                        size={sp(16)}
                         color={'#99A9BF'}
                       />
                       <Text fontSize={sp(14)} color={'#999'} ml={ls(16)}>

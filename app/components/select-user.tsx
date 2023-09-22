@@ -35,7 +35,7 @@ export default function SelectUser({
       numberOfLines={1}
       buttonStyle={{
         width: ls(130),
-        height: buttonHeight || ss(40),
+        height: buttonHeight || ss(40, 36),
         backgroundColor: 'transparent',
         ...style,
       }}
@@ -47,7 +47,7 @@ export default function SelectUser({
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(15)}
+            size={sp(15)}
             color='#fff'
           />
         );

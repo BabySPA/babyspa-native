@@ -137,7 +137,7 @@ function Filter() {
         <Row alignItems={'center'}>
           <Icon
             as={<Ionicons name={'people'} />}
-            size={ss(35)}
+            size={sp(35)}
             color={'#5EACA3'}
           />
           <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
@@ -150,7 +150,7 @@ function Filter() {
           </Text>
           <Input
             ml={ls(30)}
-            minW={ls(240, 340)}
+            minW={ls(240, 360)}
             h={ss(44)}
             p={ss(9)}
             borderWidth={ss(1)}
@@ -169,7 +169,7 @@ function Filter() {
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
-                size={ss(25)}
+                size={sp(25)}
                 color='#AFB0B4'
                 ml={ss(10)}
               />
@@ -192,8 +192,8 @@ function Filter() {
                     : require('~/assets/images/filter-off.png')
                 }
                 style={{
-                  width: ss(16),
-                  height: ss(16),
+                  width: sp(16),
+                  height: sp(16),
                   marginLeft: ls(27),
                 }}
               />
@@ -222,7 +222,7 @@ function Filter() {
             borderRadius={ss(4)}
             px={ls(12)}
             py={ss(10)}
-            _text={{ fontSize: ss(14), color: '#0C1B16' }}>
+            _text={{ fontSize: sp(14), color: '#0C1B16' }}>
             快速采集
           </Box>
         </Pressable>
@@ -255,7 +255,7 @@ function Filter() {
               borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='rgba(0,0,0,0.2)'
               />
               <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
@@ -286,7 +286,7 @@ function Filter() {
               borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='rgba(0,0,0,0.2)'
               />
               <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>

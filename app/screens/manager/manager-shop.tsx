@@ -43,7 +43,7 @@ export default function ManagerShop({
               门店名称
             </Text>
           </Row>
-          <Row w={ls(90)}>
+          <Row w={ls(80)}>
             <Text fontSize={sp(18)} color={'#333'}>
               负责人
             </Text>
@@ -58,7 +58,7 @@ export default function ManagerShop({
               详细地址
             </Text>
           </Row>
-          <Row w={ls(140)}>
+          <Row w={ls(150)}>
             <Text fontSize={sp(18)} color={'#333'}>
               联系电话
             </Text>
@@ -92,7 +92,7 @@ export default function ManagerShop({
                   {shop.name}
                 </Text>
               </Row>
-              <Row w={ls(90)}>
+              <Row w={ls(80)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {shop.maintainer}
                 </Text>
@@ -107,7 +107,7 @@ export default function ManagerShop({
                   {shop.address}
                 </Text>
               </Row>
-              <Row w={ls(140)}>
+              <Row w={ls(150)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {shop.phoneNumber}
                 </Text>
@@ -131,7 +131,7 @@ export default function ManagerShop({
                     <Row alignItems={'center'}>
                       <Image
                         source={require('~/assets/images/list-detail.png')}
-                        size={ss(20)}
+                        size={sp(20)}
                         alt=''
                       />
                       <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
@@ -152,7 +152,7 @@ export default function ManagerShop({
                     <Row alignItems={'center'}>
                       <Image
                         source={require('~/assets/images/list-edit.png')}
-                        size={ss(20)}
+                        size={sp(20)}
                         alt=''
                       />
                       <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
@@ -223,7 +223,7 @@ function Filter() {
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={sp(25)}
               color='#AFB0B4'
               ml={ss(10)}
             />

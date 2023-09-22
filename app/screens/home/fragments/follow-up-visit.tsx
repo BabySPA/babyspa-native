@@ -118,7 +118,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
         />
         <Input
           autoCorrect={false}
-          minW={ls(240, 340)}
+          minW={ls(240, 360)}
           ml={ls(20)}
           h={ss(44)}
           p={ss(9)}
@@ -137,7 +137,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={sp(25)}
               color='#AFB0B4'
               ml={ss(10)}
             />
@@ -166,7 +166,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
@@ -197,7 +197,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>

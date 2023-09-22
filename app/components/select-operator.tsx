@@ -43,7 +43,7 @@ export default function SelectOperator({
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18)}
+            size={sp(18)}
             color='#999'
           />
         );

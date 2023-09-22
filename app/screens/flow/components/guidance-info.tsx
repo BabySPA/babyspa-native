@@ -95,7 +95,7 @@ export default function GuidanceInfo({
                       }>
                       <Icon
                         as={<AntDesign name='appstore1' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color={
                           selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
                         }
@@ -120,7 +120,7 @@ export default function GuidanceInfo({
             ] as TemplateItem
           )?.children.length > 0 ? (
             <Column flex={1}>
-              <ScrollView horizontal maxH={ss(60)}>
+              <ScrollView horizontal maxH={ss(60, 85)}>
                 <Row flex={1} px={ls(20)} mt={ss(10)}>
                   {getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
                     selectTemplateGroup
@@ -163,47 +163,49 @@ export default function GuidanceInfo({
                 </Row>
               </ScrollView>
               <Divider my={ss(5)} color={'#DFE1DE'} h={ss(0.5)} />
-              <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-                {(
-                  (
-                    getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
-                      selectTemplateGroup
-                    ]?.children[selectTemplateLevel2Group] as TemplateItem
-                  )?.children as string[]
-                ).map((item, idx) => {
-                  return (
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.6,
-                      }}
-                      hitSlop={ss(20)}
-                      key={idx}
-                      onPress={() => {
-                        if (!selectedConfig.disabled) {
-                          updateCollection({
-                            guidance:
-                              collect.guidance.trim().length > 0
-                                ? collect.guidance + ',' + item
-                                : item,
-                          });
-                        }
-                      }}>
-                      <Box
-                        px={ls(20)}
-                        py={ss(7)}
-                        mr={ls(10)}
-                        mb={ss(10)}
-                        borderRadius={2}
-                        borderColor={'#D8D8D8'}
-                        borderWidth={ss(1)}>
-                        <Text fontSize={sp(18)} color='#000'>
-                          {item}
-                        </Text>
-                      </Box>
-                    </Pressable>
-                  );
-                })}
-              </Row>
+              <ScrollView>
+                <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+                  {(
+                    (
+                      getTemplateGroups(TemplateGroupKeys.guidance)?.groups[
+                        selectTemplateGroup
+                      ]?.children[selectTemplateLevel2Group] as TemplateItem
+                    )?.children as string[]
+                  ).map((item, idx) => {
+                    return (
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
+                        hitSlop={ss(20)}
+                        key={idx}
+                        onPress={() => {
+                          if (!selectedConfig.disabled) {
+                            updateCollection({
+                              guidance:
+                                collect.guidance.trim().length > 0
+                                  ? collect.guidance + ',' + item
+                                  : item,
+                            });
+                          }
+                        }}>
+                        <Box
+                          px={ls(20)}
+                          py={ss(7)}
+                          mr={ls(10)}
+                          mb={ss(10)}
+                          borderRadius={2}
+                          borderColor={'#D8D8D8'}
+                          borderWidth={ss(1)}>
+                          <Text fontSize={sp(18)} color='#000'>
+                            {item}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    );
+                  })}
+                </Row>
+              </ScrollView>
             </Column>
           ) : (
             <EmptyBox title='暂未配置模版' />

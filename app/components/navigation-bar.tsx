@@ -48,7 +48,7 @@ export default function NavigationBar(props: NavigationBarParams) {
           {hasLeftIcon && (
             <Icon
               as={<SimpleLineIcons name='arrow-left' />}
-              size={ss(20)}
+              size={sp(20)}
               color={'#FFF'}
               mr={ls(10)}
             />

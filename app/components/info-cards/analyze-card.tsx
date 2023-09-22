@@ -148,7 +148,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               注意事项：
             </Text>
@@ -161,7 +161,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               分析师：
             </Text>
@@ -174,7 +174,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               分析时间：
             </Text>
@@ -187,7 +187,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               随访时间：
             </Text>
@@ -204,7 +204,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               复推时间：
             </Text>

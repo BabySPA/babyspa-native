@@ -75,7 +75,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访编号：
                 </Text>
@@ -95,7 +95,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访状态：
                 </Text>
@@ -115,7 +115,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}
                   pr={ls(20)}>
                   计划随访日期：
@@ -136,7 +136,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}
                   pr={ls(20)}>
                   实际随访日期：
@@ -199,7 +199,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访内容：
                 </Text>
@@ -242,7 +242,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 justifyContent={'center'}
                 alignItems={'center'}>
                 {cancelLoading && (
-                  <Spinner mr={ls(5)} size={ss(20)} color='#F3AF62' />
+                  <Spinner mr={ls(5)} size={sp(20)} color='#F3AF62' />
                 )}
                 <Text fontSize={sp(14)} color='#F3AF62'>
                   结束随访
@@ -268,7 +268,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 justifyContent={'center'}
                 alignItems={'center'}>
                 {confirmLoading && (
-                  <Spinner mr={ls(5)} size={ss(20)} color='#03CBB2' />
+                  <Spinner mr={ls(5)} size={sp(20)} color='#03CBB2' />
                 )}
                 <Text fontSize={sp(14)} color='#03CBB2'>
                   完成随访
@@ -355,7 +355,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访编号：
                 </Text>
@@ -367,7 +367,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访状态：
                 </Text>
@@ -379,7 +379,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访时间：
                 </Text>
@@ -396,7 +396,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   <Text
                     fontSize={sp(18)}
                     color='#999'
-                    w={ls(100)}
+                    w={ls(100, 140)}
                     textAlign={'right'}>
                     随访结果：
                   </Text>
@@ -410,7 +410,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   <Text
                     fontSize={sp(18)}
                     color='#999'
-                    w={ls(100)}
+                    w={ls(100, 140)}
                     textAlign={'right'}>
                     随访内容：
                   </Text>
@@ -424,7 +424,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   <Text
                     fontSize={sp(18)}
                     color='#999'
-                    w={ls(100)}
+                    w={ls(100, 140)}
                     textAlign={'right'}>
                     随访人：
                   </Text>

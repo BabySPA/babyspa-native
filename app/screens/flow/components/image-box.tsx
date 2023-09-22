@@ -173,7 +173,7 @@ export default function ImageBox({
                 h={'100%'}
                 position={'absolute'}
                 bgColor={'rgba(0,0,0,0.3)'}>
-                <Spinner color='emerald.500' size={ss(20)} />
+                <Spinner color='emerald.500' size={sp(20)} />
               </Center>
             )}
             {edit && (
@@ -196,7 +196,7 @@ export default function ImageBox({
                 <Icon
                   as={<AntDesign name={'close'} />}
                   color='#fff'
-                  size={ss(12)}
+                  size={sp(12)}
                 />
               </Pressable>
             )}
@@ -223,7 +223,7 @@ export default function ImageBox({
                   w={ss(100)}
                   h={ss(100)}>
                   <Icon
-                    as={<AntDesign name='plus' size={ss(40)} />}
+                    as={<AntDesign name='plus' size={sp(40)} />}
                     color={'#ACACAC'}
                   />
                 </Center>

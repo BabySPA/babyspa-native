@@ -121,9 +121,9 @@ export default function CameraScreen({
           flex={1}
           mb={ss(60)}
           justifyContent={'flex-end'}>
-          <Circle bgColor={'#fff'} size={ss(60)} opacity={0.8}>
+          <Circle bgColor={'#fff'} size={sp(60)} opacity={0.8}>
             <Circle
-              size={ss(50)}
+              size={sp(50)}
               bgColor={'#fff'}
               borderWidth={ss(3)}
               borderColor={'#333'}

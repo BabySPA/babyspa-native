@@ -35,7 +35,7 @@ const setSpText = (size: number, phoneSize?: number) => {
     pr = pnum / PR;
   }
 
-  return isPhone ? pr || r * 1.3 + 1 : r;
+  return (isPhone ? pr || r * 1.3 + 1 : r) + 0.01;
 };
 
 export const longScale = (size: number, phoneSize?: number) => {
@@ -44,7 +44,7 @@ export const longScale = (size: number, phoneSize?: number) => {
   if (phoneSize) {
     pr = (shortDimension / guidelineShort) * phoneSize;
   }
-  return isPhone ? pr || r * 1.25 : r;
+  return (isPhone ? pr || r * 1.25 : r) + 0.01;
 };
 
 export const shortScale = (size: number, phoneSize?: number) => {
@@ -53,7 +53,7 @@ export const shortScale = (size: number, phoneSize?: number) => {
   if (phoneSize) {
     pr = (shortDimension / guidelineShort) * phoneSize;
   }
-  return isPhone ? pr || r * 1.25 : r;
+  return (isPhone ? pr || r * 1.25 : r) + 0.01;
 };
 
 export const sp = setSpText;

@@ -87,12 +87,11 @@ export default function EditBox(params: EditBoxParams) {
             <Row alignItems={'center'}>
               <FormBox
                 title='员工姓名'
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 style={{ flex: 1 }}
                 required
                 form={
                   <Input
-                    ml={ss(20)}
                     maxW={ls(380)}
                     autoCorrect={false}
                     flex={1}
@@ -116,10 +115,10 @@ export default function EditBox(params: EditBoxParams) {
                 }
               />
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 title='性别'
                 required
-                style={{ flex: 1, marginLeft: ls(20) }}
+                style={{ flex: 1 }}
                 form={
                   <RadioBox
                     margin={ss(20)}
@@ -140,40 +139,38 @@ export default function EditBox(params: EditBoxParams) {
             </Row>
             <Row alignItems={'center'} mt={ss(30)}>
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 required
                 title='所属门店'
                 style={{ flex: 1 }}
                 form={
-                  <Box ml={ls(20)}>
-                    <SelectShop
-                      onSelect={function (
-                        selectedItem: Shop,
-                        index: number,
-                      ): void {
-                        setTempUser({
-                          ...(tempUser || {}),
-                          shop: {
-                            originalShopId: tempUser.shop?.shopId,
-                            shopId: selectedItem._id as string,
-                            name: selectedItem.name,
-                            type: selectedItem.type,
-                          },
-                        });
-                      }}
-                      defaultButtonText={tempUser.shop?.name}
-                      buttonHeight={ss(44)}
-                      buttonWidth={ls(380)}
-                      shops={selectShops}
-                    />
-                  </Box>
+                  <SelectShop
+                    onSelect={function (
+                      selectedItem: Shop,
+                      index: number,
+                    ): void {
+                      setTempUser({
+                        ...(tempUser || {}),
+                        shop: {
+                          originalShopId: tempUser.shop?.shopId,
+                          shopId: selectedItem._id as string,
+                          name: selectedItem.name,
+                          type: selectedItem.type,
+                        },
+                      });
+                    }}
+                    defaultButtonText={tempUser.shop?.name}
+                    buttonHeight={ss(44)}
+                    buttonWidth={ls(380)}
+                    shops={selectShops}
+                  />
                 }
               />
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 required
                 title={'角色'}
-                style={{ flex: 1, marginLeft: ls(20) }}
+                style={{ flex: 1 }}
                 form={
                   <SelectRole
                     type={tempUser.shop?.type as ShopType}
@@ -196,13 +193,12 @@ export default function EditBox(params: EditBoxParams) {
             </Row>
             <Row alignItems={'center'} mt={ss(30)}>
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 required
                 title='联系电话'
                 style={{ flex: 1 }}
                 form={
                   <Input
-                    ml={ss(20)}
                     inputMode='numeric'
                     returnKeyType='done'
                     autoCorrect={false}
@@ -228,10 +224,10 @@ export default function EditBox(params: EditBoxParams) {
                 }
               />
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 required
                 title='账号'
-                style={{ flex: 1, marginLeft: ls(20) }}
+                style={{ flex: 1 }}
                 form={
                   <Input
                     autoCorrect={false}
@@ -253,13 +249,12 @@ export default function EditBox(params: EditBoxParams) {
             </Row>
             <Row alignItems={'center'} mt={ss(30)}>
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 required
                 title='身份证号'
                 style={{ flex: 1 }}
                 form={
                   <Input
-                    ml={ss(20)}
                     autoCorrect={false}
                     defaultValue={tempUser.idCardNumber}
                     w={ls(380)}
@@ -284,13 +279,12 @@ export default function EditBox(params: EditBoxParams) {
             </Row>
             <Row alignItems={'center'} mt={ss(30)}>
               <FormBox
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 title='员工简介'
                 style={{ alignItems: 'flex-start', flex: 1 }}
                 form={
                   <>
                     <Input
-                      ml={ss(20)}
                       autoCorrect={false}
                       defaultValue={tempUser.description}
                       flex={1}
@@ -407,7 +401,7 @@ export default function EditBox(params: EditBoxParams) {
             alignItems={'center'}
             borderColor={'#00B49E'}>
             {loading && (
-              <Spinner mr={ls(5)} color='emerald.500' size={ss(20)} />
+              <Spinner mr={ls(5)} color='emerald.500' size={sp(20)} />
             )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存

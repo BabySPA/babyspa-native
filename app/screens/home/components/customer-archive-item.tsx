@@ -56,7 +56,7 @@ export default function CustomerArchiveItem({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
           </Row>
@@ -77,7 +77,7 @@ export default function CustomerArchiveItem({
           <Row alignItems={'center'} mt={ss(5)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}
-              size={ss(17)}
+              size={sp(17)}
               color={'#C87939'}
             />
             <Text

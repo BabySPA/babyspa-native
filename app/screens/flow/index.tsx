@@ -179,7 +179,7 @@ export default function FlowScreen({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={'#FFF'}
               ml={ls(12)}
             />
@@ -204,7 +204,7 @@ export default function FlowScreen({
                   历史记录
                 </Text>
                 <Icon
-                  size={ss(12)}
+                  size={sp(12)}
                   as={<AntDesign name='doubleright' />}
                   color={'#03CBB2'}
                 />
@@ -226,7 +226,7 @@ export default function FlowScreen({
           alignItems={'center'}
           justifyContent={'space-between'}>
           <Row alignItems={'center'}>
-            <Circle bgColor={'#F56121'} size={ss(24)}>
+            <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
@@ -245,7 +245,7 @@ export default function FlowScreen({
               setShowWarn(false);
             }}>
             <Icon
-              as={<AntDesign name='closecircleo' size={ss(30)} />}
+              as={<AntDesign name='closecircleo' size={sp(30)} />}
               color={'#99A9BF'}
             />
           </Pressable>
@@ -326,7 +326,7 @@ export default function FlowScreen({
                     alignItems={'center'}
                     borderRadius={ss(4)}>
                     {closeLoading && (
-                      <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+                      <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
                     )}
                     <Text color='#F3601E' fontSize={sp(14)}>
                       结束
@@ -375,8 +375,8 @@ export default function FlowScreen({
                       });
                   }}>
                   <Center
-                    w={ls(80)}
                     h={ss(44)}
+                    px={ls(12)}
                     ml={ls(20)}
                     bgColor={'rgba(3, 203, 178, 0.20)'}
                     borderWidth={ss(1)}
@@ -408,7 +408,7 @@ export default function FlowScreen({
                   alignItems={'center'}
                   borderRadius={ss(4)}>
                   {closeLoading && (
-                    <Spinner mr={ls(5)} size={ss(20)} color='#F3601E' />
+                    <Spinner mr={ls(5)} size={sp(20)} color='#F3601E' />
                   )}
                   <Text color='#F3601E' fontSize={sp(14)}>
                     结束
@@ -463,7 +463,7 @@ export default function FlowScreen({
                   borderColor={'#03CBB2'}
                   borderRadius={ss(4)}>
                   {finishLoading && (
-                    <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+                    <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
                   )}
                   <Text color='#0C1B16' fontSize={sp(14)}>
                     完成

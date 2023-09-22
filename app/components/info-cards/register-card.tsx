@@ -53,7 +53,7 @@ export default function RegisterCard(params: RegisterCardParams) {
                   }
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={currentFlow.customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text fontSize={sp(20)} color={'#666'} ml={ss(12)}>

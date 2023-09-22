@@ -106,7 +106,7 @@ export default function Personal({
                               }
                             />
                           }
-                          size={ss(22)}
+                          size={sp(22)}
                           color={'#00B49E'}
                         />
                       </Pressable>
@@ -123,7 +123,7 @@ export default function Personal({
                           <Image
                             alt=''
                             source={require('~/assets/images/reset-pass.png')}
-                            size={ss(24)}
+                            size={sp(24)}
                           />
                           <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
                             修改密码

@@ -67,7 +67,7 @@ export default function InfoBox(params: InfoBoxParams) {
               py={ss(10)}>
               <Row>
                 {deleteLoading && (
-                  <Spinner mr={ls(5)} color='#999' size={ss(20)} />
+                  <Spinner mr={ls(5)} color='#999' size={sp(20)} />
                 )}
                 <Text color='#F3601E' fontSize={sp(14)}>
                   删除
@@ -131,7 +131,7 @@ export default function InfoBox(params: InfoBoxParams) {
                             }
                           />
                         }
-                        size={ss(22)}
+                        size={sp(22)}
                         color={'#00B49E'}
                       />
                     </Pressable>
@@ -139,7 +139,7 @@ export default function InfoBox(params: InfoBoxParams) {
                     <Image
                       alt=''
                       source={require('~/assets/images/reset-pass.png')}
-                      size={ss(16)}
+                      size={sp(16)}
                     />
                     <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
                       重置密码

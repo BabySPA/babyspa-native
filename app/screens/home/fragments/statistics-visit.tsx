@@ -20,7 +20,6 @@ import { Shop, ShopType } from '~/app/stores/manager/type';
 import { FollowUpResultText, FollowUpStatusTextConfig } from '~/app/constants';
 import { FlowItemResponse, FollowUpResult } from '~/app/stores/flow/type';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
-import useLayoutConfigWithRole from '~/app/stores/layout';
 import { useNavigation } from '@react-navigation/native';
 
 const ShopStatisticBox = () => {
@@ -61,12 +60,12 @@ const ShopStatisticBox = () => {
               客户姓名
             </Text>
           </Row>
-          <Row w={ls(60)}>
+          <Row w={ls(80)}>
             <Text fontSize={sp(18)} color={'#333'}>
               状态
             </Text>
           </Row>
-          <Row w={ls(80)}>
+          <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               理疗时间
             </Text>
@@ -76,7 +75,7 @@ const ShopStatisticBox = () => {
               随访结果
             </Text>
           </Row>
-          <Row w={ls(100)} justifyContent={'center'}>
+          <Row w={ls(180)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               随访内容
             </Text>
@@ -86,12 +85,12 @@ const ShopStatisticBox = () => {
               随访人
             </Text>
           </Row>
-          <Row w={ls(180)} justifyContent={'center'}>
+          <Row w={ls(150)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               计划随访时间
             </Text>
           </Row>
-          <Row w={ls(80)} justifyContent={'center'}>
+          <Row w={ls(150)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               实际随访时间
             </Text>
@@ -117,7 +116,7 @@ const ShopStatisticBox = () => {
                     {flow.customer.name}
                   </Text>
                 </Row>
-                <Row w={ls(60)}>
+                <Row w={ls(80)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {
                       FollowUpStatusTextConfig[
@@ -126,7 +125,7 @@ const ShopStatisticBox = () => {
                     }
                   </Text>
                 </Row>
-                <Row w={ls(80)}>
+                <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(flow.analyze.updatedAt).format('YY-MM-DD')}
                   </Text>
@@ -138,7 +137,7 @@ const ShopStatisticBox = () => {
                       : '未设置'}
                   </Text>
                 </Row>
-                <Row w={ls(100)}>
+                <Row w={ls(180)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {flow.analyze.followUp.followUpContent || '未设置'}
                   </Text>
@@ -148,7 +147,7 @@ const ShopStatisticBox = () => {
                     {flow.followUpOperator?.name || '未设置'}
                   </Text>
                 </Row>
-                <Row w={ls(180)} justifyContent={'center'}>
+                <Row w={ls(150)} justifyContent={'center'}>
                   <Text
                     fontSize={sp(18)}
                     color={'#333'}
@@ -159,7 +158,7 @@ const ShopStatisticBox = () => {
                     )}
                   </Text>
                 </Row>
-                <Row w={ls(80)}>
+                <Row w={ls(150)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(flow.analyze.followUp.actualFollowUpTime).format(
                       'YY-MM-DD',
@@ -314,7 +313,7 @@ const CenterStatisticBox = () => {
               {FollowUpResultText[FollowUpResult.BAD]}
             </Text>
           </Row>
-          <Row w={ls(120)} justifyContent={'center'}>
+          <Row w={ls(140)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               {FollowUpResultText[FollowUpResult.WORSE]}
             </Text>
@@ -377,7 +376,7 @@ const CenterStatisticBox = () => {
                     {item.counts.bad}
                   </Text>
                 </Row>
-                <Row w={ls(120)} justifyContent={'center'}>
+                <Row w={ls(140)} justifyContent={'center'}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {item.counts.worse}
                   </Text>
@@ -546,7 +545,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
@@ -577,7 +576,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>

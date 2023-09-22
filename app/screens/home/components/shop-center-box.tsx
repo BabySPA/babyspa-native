@@ -37,7 +37,7 @@ export default function ShopCenterBox({
             {content}
           </Text>
         </Column>
-        <Image size={ss(80)} source={image} alt='' />
+        <Image size={sp(80)} source={image} alt='' />
       </Row>
     </Pressable>
   );

@@ -73,6 +73,7 @@ export default function EditBox(params: EditBoxParams) {
         <Box mt={ss(20)} px={ls(50)}>
           <Row alignItems={'center'}>
             <FormBox
+              titleWidth={ss(75)}
               title='姓名'
               style={{ flex: 1 }}
               required
@@ -103,6 +104,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               title='乳名'
               style={{ flex: 1 }}
               form={
@@ -132,6 +134,7 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              titleWidth={ss(75)}
               required
               title='性别'
               style={{ flex: 1 }}
@@ -156,6 +159,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               title='生日'
               style={{ flex: 1 }}
               required
@@ -183,7 +187,7 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color='#999'
                       />
                     </Row>
@@ -194,6 +198,7 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              titleWidth={ss(75)}
               title='年龄'
               style={{ flex: 1 }}
               form={
@@ -229,6 +234,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               required
               title='电话'
               style={{ flex: 1 }}
@@ -264,6 +270,7 @@ export default function EditBox(params: EditBoxParams) {
 
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              titleWidth={ss(75)}
               title='过敏原'
               style={{ flex: 1 }}
               form={
@@ -295,7 +302,7 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color='#999'
                       />
                     </Row>
@@ -330,6 +337,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               title='理疗师'
               style={{ flex: 1 }}
               form={
@@ -454,7 +462,7 @@ export default function EditBox(params: EditBoxParams) {
             alignItems={'center'}
             borderColor={'#00B49E'}>
             {loading && (
-              <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+              <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
             )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
@@ -502,7 +510,7 @@ export default function EditBox(params: EditBoxParams) {
                 px={ls(26)}
                 py={ss(12)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16), color: 'white' }}>
+                _text={{ fontSize: sp(16), color: 'white' }}>
                 确定
               </Box>
             </Pressable>
@@ -520,7 +528,7 @@ export default function EditBox(params: EditBoxParams) {
                 py={ss(12)}
                 ml={ls(10)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16), color: 'white' }}>
+                _text={{ fontSize: sp(16), color: 'white' }}>
                 取消
               </Box>
             </Pressable>

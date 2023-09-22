@@ -87,7 +87,7 @@ export default function CustomerFollowUpItem({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text

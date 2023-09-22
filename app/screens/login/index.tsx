@@ -168,7 +168,7 @@ export default function LoginScreen({
                 end: [1, 1],
               },
             }}>
-            {loading && <Spinner color='#00B49E' mr={ls(8)} size={ss(22)} />}
+            {loading && <Spinner color='#00B49E' mr={ls(8)} size={sp(22)} />}
             <Text color='#fff' fontSize={sp(22)}>
               确定
             </Text>
@@ -223,7 +223,7 @@ export default function LoginScreen({
                 InputLeftElement={
                   <Icon
                     as={<MaterialIcons name='person' />}
-                    size={ss(22)}
+                    size={sp(22)}
                     ml={ls(20)}
                     color={'#999999'}
                   />
@@ -248,7 +248,7 @@ export default function LoginScreen({
                 InputLeftElement={
                   <Icon
                     as={<MaterialIcons name='lock' />}
-                    size={ss(22)}
+                    size={sp(22)}
                     ml={ls(20)}
                     color={'#999999'}
                   />
@@ -273,7 +273,7 @@ export default function LoginScreen({
                           }
                         />
                       }
-                      size={ss(22)}
+                      size={sp(22)}
                       color={'#999999'}
                     />
                   </Pressable>
@@ -303,7 +303,7 @@ export default function LoginScreen({
                     },
                   }}>
                   {loading && (
-                    <Spinner color='#00B49E' mr={ls(8)} size={ss(22)} />
+                    <Spinner color='#00B49E' mr={ls(8)} size={sp(22)} />
                   )}
                   <Text color='#fff' fontSize={sp(22)}>
                     登录
@@ -331,7 +331,7 @@ export default function LoginScreen({
                           }
                         />
                       }
-                      size={ss(22)}
+                      size={sp(22)}
                       color={selectAgreement ? '#00B49E' : '#DBDBDB'}
                     />
                     <Text color='#999' fontSize={sp(14)} ml={ls(8)}>

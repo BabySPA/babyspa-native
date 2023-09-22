@@ -57,7 +57,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderWidth={ss(1)}
           borderColor={'#CCCCCC'}
           borderRadius={ss(8)}
-          _text={{ fontSize: ss(16), color: 'white' }}>
+          _text={{ fontSize: sp(16), color: 'white' }}>
           取消
         </Box>
       </Pressable>
@@ -79,7 +79,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderRadius={ss(8)}
           borderWidth={ss(1)}
           borderColor={'#00B49E'}>
-          {loading && <Spinner size={ss(20)} mr={ls(5)} color='emerald.500' />}
+          {loading && <Spinner size={sp(20)} mr={ls(5)} color='emerald.500' />}
           <Text fontSize={sp(16)} color={'#00B49E'}>
             确定
           </Text>
@@ -128,7 +128,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           borderRadius={ss(8)}
           borderWidth={ss(1)}
           borderColor={'#00B49E'}>
-          {loading && <Spinner size={ss(20)} mr={ls(5)} color='emerald.500' />}
+          {loading && <Spinner size={sp(20)} mr={ls(5)} color='emerald.500' />}
           <Text fontSize={sp(16)} color={'#00B49E'}>
             确定
           </Text>

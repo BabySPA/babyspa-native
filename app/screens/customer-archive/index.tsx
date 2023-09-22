@@ -10,6 +10,7 @@ import {
   Container,
   useToast,
   Center,
+  ScrollView,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -150,7 +151,7 @@ export default function CustomerArchive({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text ml={ls(16)} fontSize={sp(20)} color={'#666'}>
@@ -175,7 +176,7 @@ export default function CustomerArchive({
               <Row alignItems={'center'}>
                 <Icon
                   as={<AntDesign name='delete' />}
-                  size={ss(24)}
+                  size={sp(24)}
                   color={'#99A9BF'}
                 />
                 <Text fontSize={sp(20)} color={'#000'} ml={ls(4)}>
@@ -216,7 +217,7 @@ export default function CustomerArchive({
               <Row alignItems={'center'}>
                 <Icon
                   as={<FontAwesome name='edit' />}
-                  size={ss(24)}
+                  size={sp(24)}
                   color={'#99A9BF'}
                 />
                 <Text fontSize={sp(20)} color={'#000'} ml={ls(4)}>
@@ -227,7 +228,7 @@ export default function CustomerArchive({
           </Row>
         </Row>
 
-        <Box
+        <ScrollView
           mt={ss(10)}
           bgColor='white'
           borderRadius={ss(10)}
@@ -304,50 +305,51 @@ export default function CustomerArchive({
               </Pressable>
             )}
           </Row>
-
-          {configs[selectFragment].key == 'shop-archive' &&
-            (archives.length > 0 ? (
-              <ShopArchive
-                archives={archives}
-                onPressToFlowInfo={function (archive): void {
-                  updateCurrentFlow(archive);
-                  navigation.navigate('FlowInfo', { from: 'analyze' });
-                }}
-              />
-            ) : (
-              <EmptyBox />
-            ))}
-          {configs[selectFragment].key == 'history-archive' &&
-            (courses.length > 0 ? (
-              <HistoryArchive
-                courses={courses}
-                onPressToFlowInfo={function (archive): void {
-                  updateCurrentFlow(archive);
-                  navigation.navigate('FlowInfo', { from: 'analyze' });
-                }}
-              />
-            ) : (
-              <EmptyBox />
-            ))}
-          {configs[selectFragment].key == 'growth-curve' &&
-            (growthCurves.length > 0 ? (
-              <GrowthCurve
-                growthCurves={growthCurves}
-                onEditClick={function (
-                  item: GrowthCurveStatisticsResponse,
-                ): void {
-                  setShowEditGrowthCurve({
-                    isOpen: true,
-                    date: item.date,
-                    defaultHeight: item.heightData.height,
-                    defaultWeight: item.weightData.weight,
-                  });
-                }}
-              />
-            ) : (
-              <EmptyBox />
-            ))}
-        </Box>
+          <Box mb={ss(60)}>
+            {configs[selectFragment].key == 'shop-archive' &&
+              (archives.length > 0 ? (
+                <ShopArchive
+                  archives={archives}
+                  onPressToFlowInfo={function (archive): void {
+                    updateCurrentFlow(archive);
+                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                  }}
+                />
+              ) : (
+                <EmptyBox />
+              ))}
+            {configs[selectFragment].key == 'history-archive' &&
+              (courses.length > 0 ? (
+                <HistoryArchive
+                  courses={courses}
+                  onPressToFlowInfo={function (archive): void {
+                    updateCurrentFlow(archive);
+                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                  }}
+                />
+              ) : (
+                <EmptyBox />
+              ))}
+            {configs[selectFragment].key == 'growth-curve' &&
+              (growthCurves.length > 0 ? (
+                <GrowthCurve
+                  growthCurves={growthCurves}
+                  onEditClick={function (
+                    item: GrowthCurveStatisticsResponse,
+                  ): void {
+                    setShowEditGrowthCurve({
+                      isOpen: true,
+                      date: item.date,
+                      defaultHeight: item.heightData.height,
+                      defaultWeight: item.weightData.weight,
+                    });
+                  }}
+                />
+              ) : (
+                <EmptyBox />
+              ))}
+          </Box>
+        </ScrollView>
       </Column>
       <GrowthCurveModal
         isOpen={showEditGrowthCurve.isOpen}

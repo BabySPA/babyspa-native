@@ -59,7 +59,7 @@ export default function HealthInfo({
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
                 borderWidth: ss(1),
-                height: ss(170),
+                height: '100%',
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
               }}>
@@ -108,6 +108,7 @@ export default function HealthInfo({
               axis='vertical'
               dashLength={ss(12)}
               dashGap={ss(12)}
+              dashThickness={ss(1.5)}
               dashColor='#DFE1DE'
               style={{ marginHorizontal: ls(15) }}
             />
@@ -233,6 +234,7 @@ export default function HealthInfo({
               axis='vertical'
               dashLength={ss(12)}
               dashGap={ss(12)}
+              dashThickness={ss(1.5)}
               dashColor='#DFE1DE'
               style={{ marginHorizontal: ls(15) }}
             />

@@ -56,7 +56,7 @@ export default function CustomerDetail({
                 px={ls(26)}
                 py={ss(10)}>
                 {loading && (
-                  <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+                  <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
                 )}
                 <Text
                   color={'#03CBB2'}

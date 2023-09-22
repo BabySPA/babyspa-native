@@ -172,7 +172,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color='#999'
                       />
                     </Row>
@@ -280,7 +280,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color='#999'
                       />
                     </Row>
@@ -424,7 +424,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
             alignItems={'center'}
             borderColor={'#00B49E'}>
             {loading && (
-              <Spinner mr={ls(5)} size={ss(20)} color='emerald.500' />
+              <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
             )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
@@ -469,7 +469,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 px={ls(26)}
                 py={ss(12)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16), color: 'white' }}>
+                _text={{ fontSize: sp(16), color: 'white' }}>
                 确定
               </Box>
             </Pressable>
@@ -487,7 +487,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 py={ss(12)}
                 ml={ls(10)}
                 borderRadius={ss(8)}
-                _text={{ fontSize: ss(16), color: 'white' }}>
+                _text={{ fontSize: sp(16), color: 'white' }}>
                 取消
               </Box>
             </Pressable>

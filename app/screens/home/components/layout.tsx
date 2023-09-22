@@ -67,7 +67,7 @@ export default function Layout() {
             }}
           />
           <Text
-            fontSize={ls(20)}
+            fontSize={sp(20)}
             color={'white'}
             mt={ss(5)}
             fontWeight={600}
@@ -75,7 +75,7 @@ export default function Layout() {
             掌阅未来
           </Text>
         </Center>
-        <Box mt={ss(30)}>
+        <Box mt={ss(30, 20)}>
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
@@ -103,7 +103,7 @@ export default function Layout() {
                     alt=''
                   />
                   <Text
-                    fontSize={ls(18)}
+                    fontSize={sp(18)}
                     color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}>
                     {item.text}
                   </Text>
@@ -118,7 +118,7 @@ export default function Layout() {
           px={ls(6)}
           w={'100%'}
           position={'absolute'}
-          bottom={ss(60, 20)}>
+          bottom={ss(60, 16)}>
           <Pressable
             _pressed={{
               opacity: 0.6,
@@ -133,14 +133,14 @@ export default function Layout() {
               borderRadius={ss(23)}
               borderWidth={ss(3)}
               borderColor={'#fff'}
-              w={ss(46, 40)}
-              h={ss(46, 40)}
+              w={ss(46, 44)}
+              h={ss(46, 44)}
               bgColor={'#F7CE51'}>
               <Text fontSize={sp(16, 14)} color='#fff'>
                 {user?.name?.[0]}
               </Text>
             </Center>
-            <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4)}>
+            <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4, 2)}>
               <Text fontSize={sp(14)} color='#fff'>
                 {user?.name}
               </Text>
@@ -204,7 +204,7 @@ export default function Layout() {
                     changeFeatureSelected(idx);
                   }}>
                   <Center>
-                    <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
+                    <Text color={'white'} fontSize={sp(20)} fontWeight={600}>
                       {item.text}
                     </Text>
                     <Box

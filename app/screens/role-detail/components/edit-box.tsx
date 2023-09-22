@@ -83,31 +83,29 @@ export default function EditBox(params: EditBoxParams) {
               <FormBox
                 title='角色类型'
                 required
-                titleWidth={ls(180)}
+                titleWidth={ls(100)}
                 style={{ flex: 1 }}
                 form={
-                  <Box ml={ls(20)}>
-                    <RadioBox
-                      margin={ss(20)}
-                      config={[
-                        { label: '门店角色', value: 1 },
-                        { label: '中心角色', value: 0 },
-                      ]}
-                      current={tempRole.type}
-                      onChange={({ label, value }) => {
-                        setTempRole({
-                          ...(tempRole || {}),
-                          type: +value,
-                        });
-                      }}
-                    />
-                  </Box>
+                  <RadioBox
+                    margin={ss(20)}
+                    config={[
+                      { label: '门店角色', value: 1 },
+                      { label: '中心角色', value: 0 },
+                    ]}
+                    current={tempRole.type}
+                    onChange={({ label, value }) => {
+                      setTempRole({
+                        ...(tempRole || {}),
+                        type: +value,
+                      });
+                    }}
+                  />
                 }
               />
               <FormBox
                 title='状态'
                 required
-                style={{ flex: 1, marginLeft: ls(20) }}
+                style={{ flex: 1 }}
                 form={
                   <RadioBox
                     margin={ss(20)}
@@ -128,13 +126,12 @@ export default function EditBox(params: EditBoxParams) {
             </Row>
             <Row mt={ss(30)}>
               <FormBox
-                titleWidth={ss(180)}
+                titleWidth={ss(100)}
                 title='角色名称'
                 style={{ flex: 1 }}
                 required
                 form={
                   <Input
-                    ml={ls(20)}
                     autoCorrect={false}
                     flex={1}
                     h={ss(48)}
@@ -161,12 +158,11 @@ export default function EditBox(params: EditBoxParams) {
               <FormBox
                 required
                 title='角色说明'
-                titleWidth={ss(180)}
+                titleWidth={ss(100)}
                 style={{ flex: 1, alignItems: 'flex-start' }}
                 form={
                   <>
                     <Input
-                      ml={ls(20)}
                       autoCorrect={false}
                       defaultValue={tempRole.description}
                       flex={1}
@@ -206,11 +202,11 @@ export default function EditBox(params: EditBoxParams) {
             <Row alignItems={'center'} mt={ss(30)}>
               <FormBox
                 required
-                titleWidth={ss(180)}
+                titleWidth={ss(100)}
                 title='功能权限'
                 style={{ alignItems: 'flex-start', flex: 1 }}
                 form={
-                  <Box ml={ls(20)}>
+                  <Box>
                     {configAuthTree?.length > 0 &&
                       configAuthTree.map((node, nodeIdx) => {
                         return (
@@ -273,7 +269,7 @@ export default function EditBox(params: EditBoxParams) {
                                         }
                                       />
                                     }
-                                    size={ss(20)}
+                                    size={sp(20)}
                                     color='#BCBCBC'
                                   />
                                 </Pressable>
@@ -412,7 +408,7 @@ export default function EditBox(params: EditBoxParams) {
             alignItems={'center'}
             borderColor={'#00B49E'}>
             {loading && (
-              <Spinner mr={ls(5)} color='emerald.500' size={ss(20)} />
+              <Spinner mr={ls(5)} color='emerald.500' size={sp(20)} />
             )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存

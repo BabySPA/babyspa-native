@@ -58,7 +58,7 @@ export default function DatePickerModal({
               px={ls(26)}
               py={ss(12)}
               borderRadius={ss(8)}
-              _text={{ fontSize: ss(16), color: 'white' }}>
+              _text={{ fontSize: sp(16), color: 'white' }}>
               确定
             </Box>
           </Pressable>
@@ -76,7 +76,7 @@ export default function DatePickerModal({
               py={ss(12)}
               ml={ls(10)}
               borderRadius={ss(8)}
-              _text={{ fontSize: ss(16), color: 'white' }}>
+              _text={{ fontSize: sp(16), color: 'white' }}>
               取消
             </Box>
           </Pressable>

@@ -82,7 +82,7 @@ export default function AnalyzeInfo({
           alignItems={'center'}
           justifyContent={'space-between'}>
           <Row alignItems={'center'}>
-            <Circle bgColor={'#F56121'} size={ss(24)}>
+            <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
@@ -101,7 +101,7 @@ export default function AnalyzeInfo({
               setShowWarn(false);
             }}>
             <Icon
-              as={<AntDesign name='closecircleo' size={ss(30)} />}
+              as={<AntDesign name='closecircleo' size={sp(30)} />}
               color={'#99A9BF'}
             />
           </Pressable>
@@ -399,7 +399,7 @@ export default function AnalyzeInfo({
               }}>
               <Icon
                 as={<AntDesign name={'close'} />}
-                size={ss(24)}
+                size={sp(24)}
                 color='#999'
               />
             </Pressable>

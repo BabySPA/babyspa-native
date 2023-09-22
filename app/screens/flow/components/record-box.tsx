@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
-import { current } from 'immer';
 import _ from 'lodash';
 import { Box, Center, Modal, ScrollView, Text, useToast } from 'native-base';
 import { useRef, useState } from 'react';
@@ -172,7 +171,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
                 }}
                 resizeMode='contain'
               />
-              <Text my={ss(16)} fontSize={sp(10)} color='#1E262F' opacity={0.4}>
+              <Text my={ss(16)} fontSize={sp(12)} color='#1E262F' opacity={0.4}>
                 您可以录下咳嗽等声音哦
               </Text>
             </Center>
@@ -193,8 +192,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
               end: [1, 1],
             },
           }}
-          opacity={isTouchNow ? 0.5 : 1}
-        >
+          opacity={isTouchNow ? 0.5 : 1}>
           <Text color='white' fontSize={sp(12)}>
             按住录音
           </Text>
@@ -204,8 +202,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
         isOpen={showRecordBox}
         onClose={() => {
           setShowRecordBox(false);
-        }}
-      >
+        }}>
         <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
           <ArrowBox />
           <Text color={'white'} mt={ss(30)}>
@@ -232,8 +229,7 @@ const ArrowBox = () => {
           }}
           borderRadius={8}
           py={ss(27)}
-          px={ls(38)}
-        >
+          px={ls(38)}>
           <Image
             source={require('~/assets/images/record-loading.png')}
             style={{ height: ss(18), width: ls(72) }}

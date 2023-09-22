@@ -8,7 +8,7 @@ export default function ShopCenterHeader() {
   return (
     <Row bgColor={'#fff'} borderRadius={ss(10)} p={ss(30)}>
       <Image
-        size={ss(100)}
+        size={sp(100)}
         source={require('~/assets/images/shop-header.png')}
         alt=''
       />

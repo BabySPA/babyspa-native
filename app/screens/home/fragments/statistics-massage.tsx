@@ -276,12 +276,12 @@ const CenterStatisticBox = () => {
         <StatisticsCountBox
           image={require('~/assets/images/statistic-application.png')}
           title={'贴敷总量（贴）'}
-          count={counts.application || 0}
+          count={counts?.application || 0}
         />
         <StatisticsCountBox
           image={require('~/assets/images/statistic-massage.png')}
           title={'推拿总量（次）'}
-          count={counts.massage || 0}
+          count={counts?.massage || 0}
           style={{ marginLeft: ss(10) }}
         />
       </Row>
@@ -411,7 +411,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
@@ -442,7 +442,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>

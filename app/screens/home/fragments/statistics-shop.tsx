@@ -14,9 +14,6 @@ import { useEffect, useRef, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import EmptyBox from '~/app/components/empty-box';
-import { debounce, set } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import dayjs from 'dayjs';
@@ -185,18 +182,18 @@ const ShopStatisticBox = () => {
       <Row flex={1}>
         <StatisticsCountBox
           title={'登记人数'}
-          count={counts.register}
+          count={counts?.register}
           image={require('~/assets/images/statistic-register.png')}
         />
         <StatisticsCountBox
           title={'采集人数'}
-          count={counts.collect}
+          count={counts?.collect}
           style={{ marginLeft: ss(10) }}
           image={require('~/assets/images/statistic-collect.png')}
         />
         <StatisticsCountBox
           title={'分析人数'}
-          count={counts.analyze}
+          count={counts?.analyze}
           style={{ marginLeft: ss(10) }}
           image={require('~/assets/images/statistic-analyze.png')}
         />
@@ -204,12 +201,12 @@ const ShopStatisticBox = () => {
       <Row flex={1} mt={ss(10)}>
         <StatisticsCountBox
           title={'贴敷总量（贴）'}
-          count={counts.application}
+          count={counts?.application}
           image={require('~/assets/images/statistic-application.png')}
         />
         <StatisticsCountBox
           title={'推拿总量（次）'}
-          count={counts.massage}
+          count={counts?.massage}
           style={{ marginLeft: ss(10) }}
           image={require('~/assets/images/statistic-massage.png')}
         />
@@ -554,7 +551,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
@@ -585,7 +582,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
           <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>

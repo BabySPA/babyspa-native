@@ -144,7 +144,7 @@ export default function ManagerRole({
                       <Row alignItems={'center'}>
                         <Image
                           source={require('~/assets/images/list-detail.png')}
-                          size={ss(20)}
+                          size={sp(20)}
                           alt=''
                         />
                         <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
@@ -165,7 +165,7 @@ export default function ManagerRole({
                       <Row alignItems={'center'}>
                         <Image
                           source={require('~/assets/images/list-edit.png')}
-                          size={ss(20)}
+                          size={sp(20)}
                           alt=''
                         />
                         <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
@@ -248,7 +248,7 @@ function Filter({
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={sp(25)}
               color='#AFB0B4'
               ml={ss(10)}
             />
