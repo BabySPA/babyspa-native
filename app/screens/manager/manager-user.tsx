@@ -49,27 +49,27 @@ export default function ManagerUser({
           borderTopRadius={ss(10)}
           width={'100%'}
           justifyContent={'space-around'}>
-          <Row w={ls(150)}>
+          <Row w={ls(100)}>
             <Text fontSize={sp(18)} color={'#333'}>
               员工姓名
             </Text>
           </Row>
-          <Row w={ls(90)}>
+          <Row w={ls(50)}>
             <Text fontSize={sp(18)} color={'#333'}>
               性别
             </Text>
           </Row>
-          <Row w={ls(140)}>
+          <Row w={ls(130)}>
             <Text fontSize={sp(18)} color={'#333'}>
               角色
             </Text>
           </Row>
-          <Row w={ls(140)}>
+          <Row w={ls(160)}>
             <Text fontSize={sp(18)} color={'#333'}>
               账号
             </Text>
           </Row>
-          <Row w={ls(140)}>
+          <Row w={ls(160)}>
             <Text fontSize={sp(18)} color={'#333'}>
               联系电话
             </Text>
@@ -90,7 +90,8 @@ export default function ManagerUser({
             <Row
               key={idx}
               px={ls(40)}
-              h={ss(60)}
+              minH={ss(60)}
+              py={ss(6)}
               alignItems={'center'}
               bgColor={'#fff'}
               width={'100%'}
@@ -98,33 +99,33 @@ export default function ManagerUser({
               borderBottomColor={'#DFE1DE'}
               borderBottomStyle={'solid'}
               justifyContent={'space-around'}>
-              <Row w={ls(150)}>
+              <Row w={ls(100)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {user.name}
                 </Text>
               </Row>
-              <Row w={ls(90)}>
+              <Row w={ls(50)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {user.gender == Gender.MAN ? '男' : '女'}
                 </Text>
               </Row>
-              <Row w={ls(140)}>
+              <Row w={ls(130)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {user.role?.name}
                 </Text>
               </Row>
-              <Row w={ls(140)}>
+              <Row w={ls(160)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {user.username}
                 </Text>
               </Row>
-              <Row w={ls(140)}>
+              <Row w={ls(160)}>
                 <Text fontSize={sp(18)} color={'#333'}>
                   {user.phoneNumber}
                 </Text>
               </Row>
               <Row w={ls(140)}>
-                <Text fontSize={sp(18)} color={'#333'}>
+                <Text fontSize={sp(18)} color={'#333'} numberOfLines={2}>
                   {user.idCardNumber}
                 </Text>
               </Row>
@@ -247,7 +248,7 @@ function Filter({
       <Row py={ss(20)} alignItems={'center'}>
         <Input
           autoCorrect={false}
-          w={ls(240)}
+          w={ls(240, 340)}
           h={ss(44)}
           p={ss(9)}
           mr={ss(40)}
@@ -284,7 +285,7 @@ function Filter({
           }, 1000)}
           defaultButtonText={userFilter.shop.name}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops}
         />
       </Row>

@@ -58,7 +58,7 @@ export default function ManagerRole({
           borderTopRadius={ss(10)}
           width={'100%'}
           justifyContent={'space-around'}>
-          <Row w={ls(100)}>
+          <Row w={ls(120)}>
             <Text fontSize={sp(18)} color={'#333'}>
               角色名称
             </Text>
@@ -78,7 +78,7 @@ export default function ManagerRole({
               角色类型
             </Text>
           </Row>
-          <Row w={ls(200)}>
+          <Row w={ls(230)}>
             <Text fontSize={sp(18)} color={'#333'}>
               更新时间
             </Text>
@@ -105,7 +105,7 @@ export default function ManagerRole({
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
-                <Row w={ls(100)}>
+                <Row w={ls(120)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {role.name}
                   </Text>
@@ -125,7 +125,7 @@ export default function ManagerRole({
                     {role.type == ShopType.CENTER ? '中心' : '门店'}
                   </Text>
                 </Row>
-                <Row w={ls(200)}>
+                <Row w={ls(230)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(role.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
                   </Text>
@@ -235,7 +235,7 @@ function Filter({
       px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
-          w={ls(240)}
+          w={ls(240, 340)}
           h={ss(44)}
           p={ss(9)}
           mr={ss(40)}

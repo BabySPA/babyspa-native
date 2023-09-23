@@ -139,7 +139,7 @@ export default function FlowCustomerItem({
           </Row>
           <Row alignItems={'center'}>
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
-              理疗师：{flow.collectionOperator?.name || '未设置'}
+              理疗师：{flow.collectionOperator?.name || '无'}
             </Text>
             {(type == OperateType.Evaluate ||
               (type == OperateType.Analyze &&

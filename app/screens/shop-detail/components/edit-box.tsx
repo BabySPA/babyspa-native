@@ -333,7 +333,7 @@ export default function EditBox(params: EditBoxParams) {
                     autoCorrect={false}
                     defaultValue={tempShop.description}
                     flex={1}
-                    h={ss(128)}
+                    h={ss(128, 100)}
                     py={ss(10)}
                     px={ls(20)}
                     onChangeText={(text) => {
@@ -356,7 +356,7 @@ export default function EditBox(params: EditBoxParams) {
         </Column>
       </ScrollView>
 
-      <Row justifyContent={'center'} mb={ss(40)} mt={ss(20)}>
+      <Row justifyContent={'center'} mb={ss(40, 20)} mt={ss(10)}>
         <Pressable
           _pressed={{
             opacity: 0.8,

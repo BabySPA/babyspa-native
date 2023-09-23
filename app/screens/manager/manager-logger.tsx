@@ -61,7 +61,7 @@ export default function ManagerLogger({
               操作内容
             </Text>
           </Row>
-          <Row w={ls(200)} justifyContent={'center'}>
+          <Row w={ls(230)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               操作时间
             </Text>
@@ -102,7 +102,7 @@ export default function ManagerLogger({
                     {log.action}
                   </Text>
                 </Row>
-                <Row w={ls(200)}>
+                <Row w={ls(230)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(log.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </Text>
@@ -279,7 +279,7 @@ function Filter() {
             : logFilter.endDate
         }
         selected={
-          isOpenDatePicker.type == logFilter.startDate
+          isOpenDatePicker.type == 'start'
             ? logFilter.startDate
             : logFilter.endDate
         }

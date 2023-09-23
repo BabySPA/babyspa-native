@@ -351,7 +351,7 @@ export function GrowthCurveModal({
         <Modal.Header fontSize={sp(20)}>{'生长记录'}</Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 身高(CM)
               </Text>
@@ -372,7 +372,7 @@ export function GrowthCurveModal({
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 体重(KG)
               </Text>
@@ -393,7 +393,7 @@ export function GrowthCurveModal({
                 }}
               />
             </Row>
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
                 _pressed={{
                   opacity: 0.6,
@@ -475,7 +475,7 @@ export function ChangePasswordModal({
         </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 原密码
               </Text>
@@ -496,7 +496,7 @@ export function ChangePasswordModal({
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 新密码
               </Text>
@@ -516,7 +516,7 @@ export function ChangePasswordModal({
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 确认新密码
               </Text>
@@ -634,7 +634,7 @@ export function NewTemplateModalModal({
         </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'flex-start'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 {type == 'group' ? '模版组' : '模版项'}
               </Text>
@@ -650,8 +650,8 @@ export function NewTemplateModalModal({
                 ml={ls(20)}
                 multiline
                 textAlignVertical='top'
-                w={ls(240)}
-                height={ss(110)}
+                w={ls(340)}
+                height={ss(110, 100)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -660,7 +660,7 @@ export function NewTemplateModalModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
                 _pressed={{
                   opacity: 0.6,
@@ -745,7 +745,7 @@ export function NewTemplateGroupModal({
         </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 分组名称
               </Text>
@@ -759,7 +759,7 @@ export function NewTemplateGroupModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
+                w={ls(340)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -768,7 +768,7 @@ export function NewTemplateGroupModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
                 _pressed={{
                   opacity: 0.6,
@@ -858,7 +858,7 @@ export function NewLevel3TemplateGroupModal({
         </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 模版名称
               </Text>
@@ -872,7 +872,7 @@ export function NewLevel3TemplateGroupModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
+                w={ls(240, 340)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -880,7 +880,7 @@ export function NewLevel3TemplateGroupModal({
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
                 所属分组
               </Text>
@@ -898,7 +898,7 @@ export function NewLevel3TemplateGroupModal({
                   return item;
                 }}
                 buttonStyle={{
-                  width: ss(240),
+                  width: ls(240, 340),
                   height: ss(48),
                   backgroundColor: '#fff',
                   borderRadius: ss(4),
@@ -943,7 +943,7 @@ export function NewLevel3TemplateGroupModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
                 _pressed={{
                   opacity: 0.6,
@@ -1041,8 +1041,8 @@ export function NewTemplateExtraModal({
         </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' width={ls(85)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' width={ls(105)}>
                 {des1}
               </Text>
               <Input
@@ -1055,7 +1055,7 @@ export function NewTemplateExtraModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
+                w={ls(340)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -1063,8 +1063,8 @@ export function NewTemplateExtraModal({
                 }}
               />
             </Row>
-            <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' width={ls(85)}>
+            <Row alignItems={'flex-start'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' width={ls(105)}>
                 {des2}
               </Text>
               <Input
@@ -1079,8 +1079,8 @@ export function NewTemplateExtraModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
-                h={ss(145)}
+                w={ls(340)}
+                h={ss(145, 100)}
                 defaultValue={defaultContent}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -1089,7 +1089,7 @@ export function NewTemplateExtraModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
                 _pressed={{
                   opacity: 0.6,

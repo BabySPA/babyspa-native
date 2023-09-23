@@ -340,7 +340,7 @@ export default function SolutionInfo({
                             />
                           ) : (
                             <Text color='#E36C36' fontSize={sp(16)}>
-                              {item.remark || '未设置'}
+                              {item.remark || '无'}
                             </Text>
                           )}
                         </Pressable>

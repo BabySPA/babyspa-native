@@ -34,20 +34,20 @@ export default function SelectUser({
       }}
       numberOfLines={1}
       buttonStyle={{
-        width: ls(130),
-        height: buttonHeight || ss(40, 36),
+        width: ls(120),
+        height: buttonHeight || ss(40, 34),
         backgroundColor: 'transparent',
         ...style,
       }}
       buttonTextStyle={{
         color: '#fff',
-        fontSize: sp(14),
+        fontSize: sp(14, 17),
       }}
       renderDropdownIcon={(isOpened) => {
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={sp(15)}
+            size={sp(15, 17)}
             color='#fff'
           />
         );

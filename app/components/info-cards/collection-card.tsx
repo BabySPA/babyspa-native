@@ -50,7 +50,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               过敏原：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
-              {collect.healthInfo.allergy || '未设置'}
+              {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Row mt={ss(20)}>
@@ -81,7 +81,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
-                未设置
+                无
               </Text>
             )}
           </Row>
@@ -113,7 +113,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
-                未设置
+                无
               </Text>
             )}
           </Row>
@@ -145,7 +145,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
-                未设置
+                无
               </Text>
             )}
           </Row>
@@ -196,7 +196,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               })
             ) : (
               <Text fontSize={sp(18)} color='#333'>
-                未设置
+                无
               </Text>
             )}
           </Row>
@@ -209,7 +209,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               调理导向：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
-              {collect.guidance || '未设置'}
+              {collect.guidance || '无'}
             </Text>
           </Row>
 

@@ -85,12 +85,12 @@ const ShopStatisticBox = () => {
               随访人
             </Text>
           </Row>
-          <Row w={ls(150)} justifyContent={'center'}>
+          <Row w={ls(110)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               计划随访时间
             </Text>
           </Row>
-          <Row w={ls(150)} justifyContent={'center'}>
+          <Row w={ls(110)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               实际随访时间
             </Text>
@@ -112,12 +112,12 @@ const ShopStatisticBox = () => {
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
                 <Row w={ls(100)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
+                  <Text fontSize={sp(16)} color={'#333'}>
                     {flow.customer.name}
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
+                  <Text fontSize={sp(16)} color={'#333'}>
                     {
                       FollowUpStatusTextConfig[
                         flow.analyze.followUp.followUpStatus
@@ -126,30 +126,30 @@ const ShopStatisticBox = () => {
                   </Text>
                 </Row>
                 <Row w={ls(100)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
+                  <Text fontSize={sp(16)} color={'#333'}>
                     {dayjs(flow.analyze.updatedAt).format('YY-MM-DD')}
                   </Text>
                 </Row>
                 <Row w={ls(110)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
+                  <Text fontSize={sp(16)} color={'#333'}>
                     {flow.analyze.followUp.followUpResult
                       ? FollowUpResultText[flow.analyze.followUp.followUpResult]
-                      : '未设置'}
+                      : '无'}
                   </Text>
                 </Row>
                 <Row w={ls(180)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.analyze.followUp.followUpContent || '未设置'}
+                  <Text fontSize={sp(16)} color={'#333'}>
+                    {flow.analyze.followUp.followUpContent || '无'}
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.followUpOperator?.name || '未设置'}
+                  <Text fontSize={sp(16)} color={'#333'}>
+                    {flow.followUpOperator?.name || '无'}
                   </Text>
                 </Row>
-                <Row w={ls(150)} justifyContent={'center'}>
+                <Row w={ls(110)} justifyContent={'center'}>
                   <Text
-                    fontSize={sp(18)}
+                    fontSize={sp(16)}
                     color={'#333'}
                     numberOfLines={2}
                     ellipsizeMode='tail'>
@@ -158,8 +158,8 @@ const ShopStatisticBox = () => {
                     )}
                   </Text>
                 </Row>
-                <Row w={ls(150)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
+                <Row w={ls(110)}>
+                  <Text fontSize={sp(16)} color={'#333'}>
                     {dayjs(flow.analyze.followUp.actualFollowUpTime).format(
                       'YY-MM-DD',
                     )}
@@ -293,7 +293,7 @@ const CenterStatisticBox = () => {
               门店
             </Text>
           </Row>
-          <Row w={ls(100)}>
+          <Row w={ls(80)}>
             <Text fontSize={sp(18)} color={'#333'}>
               随访数
             </Text>
@@ -353,7 +353,7 @@ const CenterStatisticBox = () => {
                     {item.shop.name}
                   </Text>
                 </Row>
-                <Row w={ls(100)}>
+                <Row w={ls(80)} justifyContent={'center'}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {item.counts.done}
                   </Text>
@@ -512,7 +512,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+      <Row h={ss(75)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             onSelectShop(selectedItem);
@@ -520,7 +520,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           defaultButtonText={defaultSelectShop?.name}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops}
         />
         <Pressable
@@ -600,7 +600,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             }
           }}
           current={isOpenDatePicker.type == 'start' ? startDate : endDate}
-          selected={isOpenDatePicker.type == startDate ? startDate : endDate}
+          selected={isOpenDatePicker.type == 'start' ? startDate : endDate}
         />
       </Row>
     </Column>

@@ -211,7 +211,7 @@ function Filter() {
       <Row py={ss(20)} alignItems={'center'}>
         <Input
           autoCorrect={false}
-          w={ls(240)}
+          w={ls(240, 340)}
           h={ss(44)}
           p={ss(9)}
           placeholderTextColor={'#6E6F73'}

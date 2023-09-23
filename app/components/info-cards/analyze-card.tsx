@@ -97,7 +97,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                       <Text fontSize={sp(18)} color='#999' maxW={'60%'}>
                         穴位：
                         <Text fontSize={sp(16)} color='#333'>
-                          {item.acupoint || '未设置'}
+                          {item.acupoint || '无'}
                         </Text>
                       </Text>
                     </Row>
@@ -135,7 +135,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                       mt={ss(20)}>
                       备注：
                       <Text fontSize={sp(16)} color='#333'>
-                        {item.remark || '未设置'}
+                        {item.remark || '无'}
                       </Text>
                     </Text>
                   </Column>
@@ -153,7 +153,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               注意事项：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={ls(400)}>
-              {analyze.remark || '未设置'}
+              {analyze.remark || '无'}
             </Text>
           </Row>
 
@@ -193,7 +193,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             </Text>
             <Text fontSize={sp(18)} color='#333'>
               {analyze.followUp.followUpStatus === FollowUpStatus.NOT_SET
-                ? '未设置随访'
+                ? '无'
                 : dayjs(analyze.followUp?.followUpTime).format(
                     'YYYY-MM-DD HH:mm:ss',
                   )}
@@ -211,7 +211,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text fontSize={sp(18)} color='#333'>
               {analyze.next.hasNext
                 ? dayjs(analyze.next?.nextTime).format('YYYY-MM-DD HH:mm:ss')
-                : '未设置复推'}
+                : '无'}
             </Text>
           </Row>
         </Column>

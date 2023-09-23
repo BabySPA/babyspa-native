@@ -83,6 +83,7 @@ function Filter() {
     type?: 'start' | 'end';
     isOpen: boolean;
   }>({
+    type: 'start',
     isOpen: false,
   });
 
@@ -105,7 +106,7 @@ function Filter() {
       px={ls(40)}
       justifyContent={'space-between'}
       alignItems={'center'}>
-      <Row py={ss(20)} alignItems={'center'}>
+      <Row alignItems={'center'} h={ss(75)}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             updateArchiveCustomersFilter({
@@ -114,7 +115,7 @@ function Filter() {
             requestArchiveCustomers();
           }}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops}
           defaultButtonText={defaultSelectShop?.name}
         />
@@ -206,7 +207,6 @@ function Filter() {
             {archiveCustomers.endDate}
           </Text>
         </Pressable>
-
         <DatePickerModal
           isOpen={isOpenDatePicker.isOpen}
           onClose={() => {
@@ -234,7 +234,7 @@ function Filter() {
               : archiveCustomers.endDate
           }
           selected={
-            isOpenDatePicker.type == archiveCustomers.startDate
+            isOpenDatePicker.type == 'start'
               ? archiveCustomers.startDate
               : archiveCustomers.endDate
           }

@@ -128,7 +128,7 @@ function Filter() {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+      <Row px={ls(40)} alignItems={'center'} h={ss(75)}>
         <Icon
           as={<Ionicons name={'people'} />}
           size={sp(35)}
@@ -324,7 +324,7 @@ function Filter() {
               onPress={() => {
                 updateAnalyzeFilter({
                   searchKeywords: '',
-                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+                  startDate: dayjs().format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
                   status: FlowStatus.NO_SET,
                 });
@@ -391,7 +391,7 @@ function Filter() {
                 : analyze.endDate
             }
             selected={
-              isOpenDatePicker.type == analyze.startDate
+              isOpenDatePicker.type == 'start'
                 ? analyze.startDate
                 : analyze.endDate
             }

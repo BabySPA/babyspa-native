@@ -16,7 +16,7 @@ import SelectUser from '~/app/components/select-user';
 import { useNavigation } from '@react-navigation/native';
 import useGlobalLoading from '~/app/stores/loading';
 
-export default function Layout() {
+const Layout = () => {
   const {
     currentSelected,
     getLayoutConfig,
@@ -46,6 +46,7 @@ export default function Layout() {
 
   const { openLoading, closeLoading } = useGlobalLoading();
   const toast = useToast();
+
   return (
     <Flex
       bg={{
@@ -80,12 +81,12 @@ export default function Layout() {
             return (
               <Pressable
                 _pressed={{
-                  opacity: 0.6,
+                  opacity: idx != currentSelected ? 0.6 : 1,
                 }}
                 hitSlop={ss(20)}
                 key={idx}
                 onPress={() => {
-                  changeCurrentSelected(idx);
+                  idx != currentSelected && changeCurrentSelected(idx);
                 }}>
                 <Center
                   safeAreaLeft
@@ -130,24 +131,24 @@ export default function Layout() {
               navigation.navigate('Personal');
             }}>
             <Center
-              borderRadius={ss(23)}
+              borderRadius={ss(23, 22)}
               borderWidth={ss(3)}
               borderColor={'#fff'}
               w={ss(46, 44)}
               h={ss(46, 44)}
               bgColor={'#F7CE51'}>
-              <Text fontSize={sp(16, 14)} color='#fff'>
+              <Text fontSize={sp(16, 16)} color='#fff'>
                 {user?.name?.[0]}
               </Text>
             </Center>
             <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4, 2)}>
-              <Text fontSize={sp(14)} color='#fff'>
+              <Text fontSize={sp(14, 17)} color='#fff'>
                 {user?.name}
               </Text>
-              <Text fontSize={sp(14)} color='#fff'>
+              <Text fontSize={sp(14, 17)} color='#fff'>
                 -
               </Text>
-              <Text fontSize={sp(14)} color='#fff'>
+              <Text fontSize={sp(14, 17)} color='#fff'>
                 {currentShopWithRole?.role.name}
               </Text>
             </Row>
@@ -195,13 +196,15 @@ export default function Layout() {
               return (
                 <Pressable
                   _pressed={{
-                    opacity: 0.6,
+                    opacity:
+                      idx != currentSelectedModule.featureSelected ? 0.6 : 1,
                   }}
                   hitSlop={ss(20)}
                   key={idx}
                   paddingRight={'8%'}
                   onPress={() => {
-                    changeFeatureSelected(idx);
+                    currentSelectedModule.featureSelected !== idx &&
+                      changeFeatureSelected(idx);
                   }}>
                   <Center>
                     <Text color={'white'} fontSize={sp(20)} fontWeight={600}>
@@ -227,4 +230,6 @@ export default function Layout() {
       </Flex>
     </Flex>
   );
-}
+};
+
+export default Layout;

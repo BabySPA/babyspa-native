@@ -103,7 +103,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+      <Row h={ss(75)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             updateCustomersFollowupFilter({
@@ -113,7 +113,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           }}
           defaultButtonText={shop?.name || defaultSelectShop?.name}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops}
         />
         <Input
@@ -232,7 +232,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
               : customersFollowUp.endDate
           }
           selected={
-            isOpenDatePicker.type == customersFollowUp.startDate
+            isOpenDatePicker.type == 'start'
               ? customersFollowUp.startDate
               : customersFollowUp.endDate
           }

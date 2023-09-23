@@ -18,7 +18,7 @@ export function PrintButton() {
         <div class="row-space-between px-10 py-10">
           <span class="ct text-left">备注：</span>
           <span class="ct flex1 text-left ml-30">
-            ${item.remark || '未设置'}
+            ${item.remark || '无'}
           </span>
         </div>`;
   });
@@ -31,7 +31,7 @@ export function PrintButton() {
         </div>
         <div class="column px-10 py-10">
           <span class="ct flex1 text-left mt-10">
-            穴位：${item.acupoint || '未设置'}
+            穴位：${item.acupoint || '无'}
           </span>
         </div>
       </div>`;
@@ -138,12 +138,12 @@ export function PrintButton() {
           </tr>
           <tr>
             <td colspan="3">
-              调理导向：${currentFlow.collect.guidance || '未设置'}
+              调理导向：${currentFlow.collect.guidance || '无'}
             </td>
           </tr>
           <tr>
             <td colspan="3">
-              注意事项：${currentFlow.analyze.remark || '未设置'}
+              注意事项：${currentFlow.analyze.remark || '无'}
             </td>
           </tr>
         </tbody>

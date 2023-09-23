@@ -52,12 +52,12 @@ export default function InfoBox(params: InfoBoxParams) {
             <Row alignItems={'center'} mt={ss(40)}>
               <LabelBox
                 title='过敏原'
-                value={currentFlow.collect.healthInfo.allergy || '未设置'}
+                value={currentFlow.collect.healthInfo.allergy || '无'}
                 alignItems='flex-start'
               />
               <LabelBox
                 title='理疗师'
-                value={currentFlow.collectionOperator?.name || '未设置'}
+                value={currentFlow.collectionOperator?.name || '无'}
               />
             </Row>
             <Row alignItems={'center'} mt={ss(40)}>

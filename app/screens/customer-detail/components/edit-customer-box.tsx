@@ -64,249 +64,253 @@ export default function EditCustomerBox(params: EditCustomerBox) {
       p={ss(20)}
       borderRadius={ss(10)}
       justifyContent={'space-between'}>
-      <Column>
-        <BoxTitle title='客户信息' />
-        <Box mt={ss(30)} px={ls(50)}>
-          <Row alignItems={'center'}>
-            <FormBox
-              title='姓名'
-              style={{ flex: 1 }}
-              required
-              form={
-                <Input
-                  autoCorrect={false}
-                  w={ls(380)}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  borderWidth={ss(1)}
-                  borderColor={'#D8D8D8'}
-                  defaultValue={tempCustomer.name}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                  onChangeText={(text) => {
-                    setTempCustomer({
-                      ...tempCustomer,
-                      name: text,
-                    });
-                  }}
-                />
-              }
-            />
-            <FormBox
-              title='乳名'
-              style={{ flex: 1 }}
-              form={
-                <Input
-                  autoCorrect={false}
-                  w={ls(380)}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  borderWidth={ss(1)}
-                  borderColor={'#D8D8D8'}
-                  defaultValue={tempCustomer.nickname}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                  onChangeText={(text) => {
-                    setTempCustomer({
-                      ...tempCustomer,
-                      nickname: text,
-                    });
-                  }}
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(20)}>
-            <FormBox
-              required
-              title='性别'
-              style={{ flex: 1 }}
-              form={
-                <RadioBox
-                  margin={ss(20)}
-                  config={[
-                    { label: '男', value: 1 },
-                    { label: '女', value: 0 },
-                  ]}
-                  current={tempCustomer.gender}
-                  onChange={({ label, value }) => {
-                    setTempCustomer({
-                      ...tempCustomer,
-                      gender: +value,
-                    });
-                  }}
-                />
-              }
-            />
-            <FormBox
-              title='生日'
-              style={{ flex: 1 }}
-              required
-              form={
-                <Box w={ls(380)}>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      showDatePicker();
-                    }}>
-                    <Row
-                      borderRadius={ss(4)}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      borderWidth={ss(1)}
-                      borderColor={'#D8D8D8'}
-                      py={ss(10)}
-                      pr={ss(10)}
-                      pl={ss(20)}>
-                      <Text color={'#333'} fontSize={sp(16)}>
-                        {tempCustomer.birthday}
-                      </Text>
-                      <Icon
-                        as={<FontAwesome name='angle-down' />}
-                        size={sp(18)}
-                        color='#999'
-                      />
-                    </Row>
-                  </Pressable>
-                </Box>
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(20)}>
-            <FormBox
-              title='年龄'
-              style={{ flex: 1 }}
-              form={
-                <Row alignItems={'center'}>
-                  <Center
-                    borderRadius={ss(4)}
-                    borderWidth={ss(1)}
+      <ScrollView>
+        <Column>
+          <BoxTitle title='客户信息' />
+          <Box mt={ss(30)} px={ls(50)}>
+            <Row alignItems={'center'}>
+              <FormBox
+                title='姓名'
+                style={{ flex: 1 }}
+                required
+                form={
+                  <Input
+                    autoCorrect={false}
+                    w={ls(380)}
                     h={ss(48)}
-                    w={ls(72)}
-                    borderColor={'#D8D8D8'}>
-                    <Text fontSize={sp(20)} color={'#333'}>
-                      {age?.year}
-                    </Text>
-                  </Center>
-                  <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
-                    岁
-                  </Text>
-                  <Center
-                    ml={ls(20)}
-                    borderRadius={ss(4)}
+                    py={ss(10)}
+                    px={ls(20)}
                     borderWidth={ss(1)}
-                    h={ss(48)}
-                    w={ls(72)}
-                    borderColor={'#D8D8D8'}>
-                    <Text fontSize={sp(20)} color={'#333'}>
-                      {age?.month}
-                    </Text>
-                  </Center>
-                  <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
-                    月
-                  </Text>
-                </Row>
-              }
-            />
-            <FormBox
-              required
-              title='电话'
-              style={{ flex: 1 }}
-              form={
-                <Input
-                  inputMode='numeric'
-                  returnKeyType='done'
-                  autoCorrect={false}
-                  w={ls(380)}
-                  defaultValue={tempCustomer.phoneNumber}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  borderWidth={ss(1)}
-                  borderColor={'#D8D8D8'}
-                  onChangeText={(text) => {
-                    setTempCustomer({
-                      ...tempCustomer,
-                      phoneNumber: text,
-                    });
-                  }}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(20)}>
-            <FormBox
-              title='过敏原'
-              style={{ flex: 1 }}
-              form={
-                <Box>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
+                    borderColor={'#D8D8D8'}
+                    defaultValue={tempCustomer.name}
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    inputMode='text'
+                    returnKeyType='done'
+                    placeholder='请输入'
+                    onChangeText={(text) => {
+                      setTempCustomer({
+                        ...tempCustomer,
+                        name: text,
+                      });
                     }}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      setIsOpenTemplatePicker(true);
-                    }}>
-                    <Row
-                      w={ls(380)}
+                  />
+                }
+              />
+              <FormBox
+                title='乳名'
+                style={{ flex: 1 }}
+                form={
+                  <Input
+                    autoCorrect={false}
+                    w={ls(380)}
+                    h={ss(48)}
+                    py={ss(10)}
+                    px={ls(20)}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
+                    defaultValue={tempCustomer.nickname}
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    placeholder='请输入'
+                    onChangeText={(text) => {
+                      setTempCustomer({
+                        ...tempCustomer,
+                        nickname: text,
+                      });
+                    }}
+                  />
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(20)}>
+              <FormBox
+                required
+                title='性别'
+                style={{ flex: 1 }}
+                form={
+                  <RadioBox
+                    margin={ss(20)}
+                    config={[
+                      { label: '男', value: 1 },
+                      { label: '女', value: 0 },
+                    ]}
+                    current={tempCustomer.gender}
+                    onChange={({ label, value }) => {
+                      setTempCustomer({
+                        ...tempCustomer,
+                        gender: +value,
+                      });
+                    }}
+                  />
+                }
+              />
+              <FormBox
+                title='生日'
+                style={{ flex: 1 }}
+                required
+                form={
+                  <Box w={ls(380)}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        showDatePicker();
+                      }}>
+                      <Row
+                        borderRadius={ss(4)}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        borderWidth={ss(1)}
+                        borderColor={'#D8D8D8'}
+                        py={ss(10)}
+                        pr={ss(10)}
+                        pl={ss(20)}>
+                        <Text color={'#333'} fontSize={sp(16)}>
+                          {tempCustomer.birthday}
+                        </Text>
+                        <Icon
+                          as={<FontAwesome name='angle-down' />}
+                          size={sp(18)}
+                          color='#999'
+                        />
+                      </Row>
+                    </Pressable>
+                  </Box>
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(20)}>
+              <FormBox
+                title='年龄'
+                style={{ flex: 1 }}
+                form={
+                  <Row alignItems={'center'}>
+                    <Center
                       borderRadius={ss(4)}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
                       borderWidth={ss(1)}
-                      borderColor={'#D8D8D8'}
-                      py={ss(10)}
-                      pl={ss(20)}
-                      pr={ss(8)}>
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode='tail'
-                        color={'#333'}
-                        fontSize={sp(16)}>
-                        {tempCustomer.allergy || '请选择或输入'}
+                      h={ss(48)}
+                      w={ls(72)}
+                      borderColor={'#D8D8D8'}>
+                      <Text fontSize={sp(20)} color={'#333'}>
+                        {age?.year}
                       </Text>
-                      <Icon
-                        as={<FontAwesome name='angle-down' />}
-                        size={sp(18)}
-                        color='#999'
-                      />
-                    </Row>
+                    </Center>
+                    <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                      岁
+                    </Text>
+                    <Center
+                      ml={ls(20)}
+                      borderRadius={ss(4)}
+                      borderWidth={ss(1)}
+                      h={ss(48)}
+                      w={ls(72)}
+                      borderColor={'#D8D8D8'}>
+                      <Text fontSize={sp(20)} color={'#333'}>
+                        {age?.month}
+                      </Text>
+                    </Center>
+                    <Text fontSize={sp(20)} color={'#333'} ml={ls(10)}>
+                      月
+                    </Text>
+                  </Row>
+                }
+              />
+              <FormBox
+                required
+                title='电话'
+                style={{ flex: 1 }}
+                form={
+                  <Input
+                    inputMode='numeric'
+                    returnKeyType='done'
+                    autoCorrect={false}
+                    w={ls(380)}
+                    defaultValue={tempCustomer.phoneNumber}
+                    h={ss(48)}
+                    py={ss(10)}
+                    px={ls(20)}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
+                    onChangeText={(text) => {
+                      setTempCustomer({
+                        ...tempCustomer,
+                        phoneNumber: text,
+                      });
+                    }}
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    placeholder='请输入'
+                  />
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(20)}>
+              <FormBox
+                title='过敏原'
+                style={{ flex: 1 }}
+                form={
+                  <Box>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        setIsOpenTemplatePicker(true);
+                      }}>
+                      <Row
+                        w={ls(380)}
+                        borderRadius={ss(4)}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        borderWidth={ss(1)}
+                        borderColor={'#D8D8D8'}
+                        py={ss(10)}
+                        pl={ss(20)}
+                        pr={ss(8)}>
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode='tail'
+                          color={'#333'}
+                          fontSize={sp(16)}>
+                          {tempCustomer.allergy || '请选择或输入'}
+                        </Text>
+                        <Icon
+                          as={<FontAwesome name='angle-down' />}
+                          size={sp(18)}
+                          color='#999'
+                        />
+                      </Row>
 
-                    <TemplateModal
-                      defaultText={tempCustomer.allergy || ''}
-                      template={getTemplateGroups(TemplateGroupKeys.allergy)}
-                      isOpen={isOpenTemplatePicker}
-                      onClose={function (): void {
-                        setIsOpenTemplatePicker(false);
-                      }}
-                      onConfirm={function (text): void {
-                        setTempCustomer({
-                          ...tempCustomer,
-                          allergy: text,
-                        });
-                        setIsOpenTemplatePicker(false);
-                      }}
-                    />
-                  </Pressable>
-                </Box>
-              }
-            />
-          </Row>
-        </Box>
-      </Column>
+                      <TemplateModal
+                        defaultText={tempCustomer.allergy || ''}
+                        template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                        isOpen={isOpenTemplatePicker}
+                        onClose={function (): void {
+                          setIsOpenTemplatePicker(false);
+                        }}
+                        onConfirm={function (text): void {
+                          setTempCustomer({
+                            ...tempCustomer,
+                            allergy: text,
+                          });
+                          setIsOpenTemplatePicker(false);
+                        }}
+                      />
+                    </Pressable>
+                  </Box>
+                }
+              />
+            </Row>
+          </Box>
+        </Column>
+      </ScrollView>
 
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable

@@ -27,7 +27,7 @@ const DefaultFlowListData = {
   flows: [],
   searchKeywords: '',
   status: FlowStatus.NO_SET,
-  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+  startDate: dayjs().format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
@@ -51,7 +51,7 @@ const DefaultCustomerListData = {
   customers: [],
   searchKeywords: '',
   status: FlowStatus.NO_SET,
-  startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+  startDate: dayjs().format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 
@@ -162,7 +162,7 @@ const initialState = {
   archiveCustomers: { ...DefaultCustomerListData },
   customersFollowUp: {
     ...DefaultFlowListData,
-    startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+    startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
   },
   currentArchiveCustomer: DefaultCustomer,
@@ -181,7 +181,6 @@ const useFlowStore = create(
       set({ ...initialState });
     },
     requestGetInitializeData: async () => {
-      console.log('requestGetInitializeData');
       useManagerStore.getState().requestGetTemplates();
       useManagerStore.getState().requestGetRoles();
       useManagerStore.getState().requestGetShops();
@@ -191,7 +190,7 @@ const useFlowStore = create(
       if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
         await get().requestGetRegisterFlows();
       }
-      if (hasAuthority(RoleAuthority.FLOW_COLLECTION, 'R')) {
+      if (hasAuthority(RoleAuthority.CUSTOMER_ARCHIVE, 'R')) {
         await get().requestGetCollectionFlows();
       }
       if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
@@ -1000,14 +999,16 @@ const useFlowStore = create(
             },
             0,
           );
-          dateRange[date].massage += massageCount;
-          const applicationsCount = flow.analyze.solution.applications.reduce(
-            (sum: number, item: { count: number }) => {
-              return sum + item.count;
-            },
-            0,
-          );
-          dateRange[date].application += applicationsCount;
+          if (dateRange[date]) {
+            dateRange[date].massage += massageCount;
+            const applicationsCount = flow.analyze.solution.applications.reduce(
+              (sum: number, item: { count: number }) => {
+                return sum + item.count;
+              },
+              0,
+            );
+            dateRange[date].application += applicationsCount;
+          }
         }
       }
       let statisticCountWithDate = [];

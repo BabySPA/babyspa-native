@@ -6,6 +6,7 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "noImplicitAny": true,
+    "module": "esnext",
     "paths": {
       "~/assets": ["./assets/*"],
       "~/app/*": ["./app/*"]

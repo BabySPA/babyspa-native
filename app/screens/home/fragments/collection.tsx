@@ -130,7 +130,7 @@ function Filter() {
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row
-        py={ss(20, 18)}
+        h={ss(75)}
         px={ls(40)}
         alignItems={'center'}
         justifyContent={'space-between'}>
@@ -354,7 +354,7 @@ function Filter() {
               onPress={() => {
                 updateCollectionFilter({
                   searchKeywords: '',
-                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+                  startDate: dayjs().format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
                   status: FlowStatus.NO_SET,
                 });
@@ -421,7 +421,7 @@ function Filter() {
                 : collection.endDate
             }
             selected={
-              isOpenDatePicker.type == collection.startDate
+              isOpenDatePicker.type == 'start'
                 ? collection.startDate
                 : collection.endDate
             }

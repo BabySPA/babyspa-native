@@ -155,7 +155,7 @@ export default function AnalyzeInfo({
                                   maxW={'60%'}>
                                   穴位：
                                   <Text fontSize={sp(16)} color='#333'>
-                                    {item.acupoint || '未设置'}
+                                    {item.acupoint || '无'}
                                   </Text>
                                 </Text>
                               </Row>
@@ -181,7 +181,7 @@ export default function AnalyzeInfo({
                         color='#1E262F'
                         opacity={0.4}
                         mt={ss(10)}>
-                        贴敷未设置
+                        贴敷无
                       </Text>
                     </Center>
                   )}
@@ -252,7 +252,7 @@ export default function AnalyzeInfo({
                                   fontSize={sp(16)}
                                   color='#333'
                                   maxW={'85%'}>
-                                  {item.remark || '未设置'}
+                                  {item.remark || '无'}
                                 </Text>
                               </Row>
                             </Column>
@@ -270,7 +270,7 @@ export default function AnalyzeInfo({
                       调理导向：
                     </Text>
                     <Text fontSize={sp(18)} color='#333'>
-                      {collect.guidance || '未设置'}
+                      {collect.guidance || '无'}
                     </Text>
                   </Row>
                   <Row mt={ss(20)}>
@@ -282,7 +282,7 @@ export default function AnalyzeInfo({
                       注意事项：
                     </Text>
                     <Text fontSize={sp(18)} color='#333'>
-                      {analyze.remark || '未设置'}
+                      {analyze.remark || '无'}
                     </Text>
                   </Row>
                   <Row mt={ss(20)} justifyContent={'space-between'}>
@@ -311,7 +311,7 @@ export default function AnalyzeInfo({
                           ? dayjs(analyze.followUp.followUpTime).format(
                               'YYYY-MM-DD',
                             )
-                          : '未设置'}
+                          : '无'}
                       </Text>
                     </Row>
                   </Row>
@@ -341,7 +341,7 @@ export default function AnalyzeInfo({
                       <Text fontSize={sp(18)} color='#333'>
                         {analyze.next.nextTime
                           ? dayjs(analyze.next.nextTime).format('YYYY-MM-DD')
-                          : '未设置'}
+                          : '无'}
                       </Text>
                     </Row>
                   </Row>
@@ -416,7 +416,7 @@ export default function AnalyzeInfo({
                   过敏原：
                 </Text>
                 <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
-                  {collect.healthInfo.allergy || '未设置'}
+                  {collect.healthInfo.allergy || '无'}
                 </Text>
               </Row>
               <Row mt={ss(20)}>
@@ -447,7 +447,7 @@ export default function AnalyzeInfo({
                   })
                 ) : (
                   <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                    无
                   </Text>
                 )}
               </Row>
@@ -479,7 +479,7 @@ export default function AnalyzeInfo({
                   })
                 ) : (
                   <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                    无
                   </Text>
                 )}
               </Row>
@@ -511,7 +511,7 @@ export default function AnalyzeInfo({
                   })
                 ) : (
                   <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                    无
                   </Text>
                 )}
               </Row>
@@ -562,7 +562,7 @@ export default function AnalyzeInfo({
                   })
                 ) : (
                   <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                    无
                   </Text>
                 )}
               </Row>
@@ -575,7 +575,7 @@ export default function AnalyzeInfo({
                   调理导向：
                 </Text>
                 <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
-                  {collect.guidance || '未设置'}
+                  {collect.guidance || '无'}
                 </Text>
               </Row>
 
@@ -588,7 +588,7 @@ export default function AnalyzeInfo({
                   理疗师：
                 </Text>
                 <Text fontSize={sp(18)} color='#333'>
-                  {collectionOperator?.name || '未设置'}
+                  {collectionOperator?.name || '无'}
                 </Text>
               </Row>
 

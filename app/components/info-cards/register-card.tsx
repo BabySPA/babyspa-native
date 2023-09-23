@@ -88,7 +88,7 @@ export default function RegisterCard(params: RegisterCardParams) {
             <Text fontSize={sp(18)} color='#999' ml={ls(40)}>
               预约理疗师：
               <Text color='#333'>
-                {currentFlow.collectionOperator?.name || '未设置'}
+                {currentFlow.collectionOperator?.name || '无'}
               </Text>
             </Text>
           </Row>

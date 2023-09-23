@@ -115,12 +115,14 @@ const CenterStatisticBox = () => {
       top: ss(20),
       left: ls(50),
       right: 0,
-      bottom: ss(50),
+      bottom: ss(50, 60),
     },
     textStyle: {
+      fontSize: sp(16),
       fontFamily: 'PingFang SC', // 指定字体类型
     },
     tooltip: {
+      fontSize: sp(16),
       fontFamily: 'PingFang SC', // 指定字体类型
       trigger: 'axis',
       position: function (pt: any) {
@@ -133,10 +135,11 @@ const CenterStatisticBox = () => {
         return item.analyzeOperator.name;
       }),
       axisLabel: {
+        margin: ss(0, 20),
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
         rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
-        fontSize: sp(12),
+        fontSize: sp(14),
         color: '#8C8C8C',
       },
     },
@@ -156,6 +159,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
+        interval: 2,
       },
     ],
     series: [
@@ -275,7 +279,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+      <Row h={ss(75)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             onSelectShop(selectedItem);
@@ -283,7 +287,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           defaultButtonText={defaultSelectShop?.name}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops.filter((item) => {
             return item.type == ShopType.CENTER;
           })}
@@ -365,7 +369,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             }
           }}
           current={isOpenDatePicker.type == 'start' ? startDate : endDate}
-          selected={isOpenDatePicker.type == startDate ? startDate : endDate}
+          selected={isOpenDatePicker.type == 'start' ? startDate : endDate}
         />
       </Row>
     </Column>
