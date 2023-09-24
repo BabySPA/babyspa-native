@@ -214,9 +214,6 @@ export default function ManagerTemplate({
           </Text>
           {canEdit && (
             <Pressable
-              _pressed={{
-                opacity: 0.6,
-              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // 删除
@@ -264,9 +261,6 @@ export default function ManagerTemplate({
           </Row>
           <Row>
             <Pressable
-              _pressed={{
-                opacity: 0.6,
-              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowExtraModal({
@@ -296,9 +290,6 @@ export default function ManagerTemplate({
               />
             </Pressable>
             <Pressable
-              _pressed={{
-                opacity: 0.6,
-              }}
               hitSlop={ss(20)}
               ml={ss(20)}
               onPress={() => {
@@ -495,9 +486,6 @@ export default function ManagerTemplate({
               },
             )}
             <Pressable
-              _pressed={{
-                opacity: 0.6,
-              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowEditTemplateModal({
@@ -594,9 +582,6 @@ export default function ManagerTemplate({
 
           <Box bg='white' flex={1} mt={ss(20)}>
             <Pressable
-              _pressed={{
-                opacity: 0.6,
-              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // toggle
@@ -1446,9 +1431,6 @@ function Tabs() {
         {templates.map((item, index) => {
           return (
             <Pressable
-              _pressed={{
-                opacity: 0.6,
-              }}
               hitSlop={ss(20)}
               key={index}
               onPress={() => {

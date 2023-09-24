@@ -150,48 +150,54 @@ export default function MessageDrawer() {
         )}
       </Row>
       <Divider h={ss(1)} />
-      <FlatList
-        p={ss(20)}
-        data={messages}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => {
-          const action = getAction(item);
-          return (
-            <Pressable onPress={action.action}>
-              <Column
-                p={ss(10)}
-                mb={ss(20)}
-                borderRadius={ss(4)}
-                borderWidth={ss(1)}
-                borderColor={'#D8D8D8'}>
-                <Row alignItems={'center'} justifyContent={'space-between'}>
-                  <Row alignItems={'center'}>
-                    <Image
-                      source={
-                        item.hasRead
-                          ? require('~/assets/images/msg-item.png')
-                          : require('~/assets/images/msg-item-read.png')
-                      }
-                      style={{ width: ss(40), height: ss(40) }}
-                      resizeMode='cover'
-                    />
-                    <Text fontSize={sp(16)} color={'#333'} ml={ss(10)}>
-                      {action.title}
+      {messages.length > 0 ? (
+        <FlatList
+          p={ss(20)}
+          data={messages}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => {
+            const action = getAction(item);
+            return (
+              <Pressable onPress={action.action}>
+                <Column
+                  p={ss(10)}
+                  mb={ss(20)}
+                  borderRadius={ss(4)}
+                  borderWidth={ss(1)}
+                  borderColor={'#D8D8D8'}>
+                  <Row alignItems={'center'} justifyContent={'space-between'}>
+                    <Row alignItems={'center'}>
+                      <Image
+                        source={
+                          item.hasRead
+                            ? require('~/assets/images/msg-item.png')
+                            : require('~/assets/images/msg-item-read.png')
+                        }
+                        style={{ width: ss(40), height: ss(40) }}
+                        resizeMode='cover'
+                      />
+                      <Text fontSize={sp(16)} color={'#333'} ml={ss(10)}>
+                        {action.title}
+                      </Text>
+                    </Row>
+                    <Text fontSize={sp(12)} color={'#666'}>
+                      {dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm')}
                     </Text>
                   </Row>
-                  <Text fontSize={sp(12)} color={'#666'}>
-                    {dayjs(item.updatedAt).format('YYYY-MM-DD HH:mm')}
+                  <Text color='#666' fontSize={sp(14)} mt={ss(12)}>
+                    {action.des}
                   </Text>
-                </Row>
-                <Text color='#666' fontSize={sp(14)} mt={ss(12)}>
-                  {action.des}
-                </Text>
-              </Column>
-            </Pressable>
-          );
-        }}
-      />
+                </Column>
+              </Pressable>
+            );
+          }}
+        />
+      ) : (
+        <Text color={'#999'} fontSize={sp(14)} textAlign={'center'} mt={ss(20)}>
+          暂无消息
+        </Text>
+      )}
     </Column>
   );
 }

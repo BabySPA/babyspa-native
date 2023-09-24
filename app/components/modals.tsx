@@ -200,7 +200,7 @@ export function TemplateModal({
           </Column>
           <Column w={ls(470)} h={ss(350)}>
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-              <ScrollView bgColor={'#EDF7F6'} w={ls(240)}>
+              <ScrollView bgColor={'#EDF7F6'}>
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
@@ -233,7 +233,7 @@ export function TemplateModal({
                   );
                 })}
               </ScrollView>
-              <ScrollView>
+              <ScrollView w={ls(340)}>
                 <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
                   {(
                     template?.groups[selectTemplateItemsIdx]
@@ -635,7 +635,7 @@ export function NewTemplateModalModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'flex-start'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' w={ss(70)}>
                 {type == 'group' ? '模版组' : '模版项'}
               </Text>
               <Input
@@ -746,7 +746,7 @@ export function NewTemplateGroupModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' w={ss(80)}>
                 分组名称
               </Text>
               <Input
@@ -859,7 +859,7 @@ export function NewLevel3TemplateGroupModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333'>
+              <Text fontSize={sp(20)} color='#333' w={ss(80)}>
                 模版名称
               </Text>
               <Input
@@ -881,7 +881,7 @@ export function NewLevel3TemplateGroupModal({
               />
             </Row>
             <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
+              <Text fontSize={sp(20)} color='#333' mr={ls(20)} w={ss(80)}>
                 所属分组
               </Text>
               <SelectDropdown

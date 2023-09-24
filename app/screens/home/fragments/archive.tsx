@@ -145,66 +145,6 @@ function Filter() {
           }
           placeholder='请输入客户姓名、手机号'
         />
-        <Pressable
-          _pressed={{
-            opacity: 0.8,
-          }}
-          hitSlop={ss(20)}
-          onPress={() => {
-            setIsOpenDatePicker({
-              isOpen: true,
-              type: 'start',
-            });
-          }}
-          flexDirection={'row'}
-          ml={ls(20)}
-          h={ss(44)}
-          alignItems={'center'}
-          pl={ls(12)}
-          pr={ls(25)}
-          borderRadius={ss(4)}
-          borderColor={'#D8D8D8'}
-          borderWidth={ss(1)}>
-          <Icon
-            as={<MaterialIcons name='date-range' />}
-            size={sp(20)}
-            color='rgba(0,0,0,0.2)'
-          />
-          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
-            {archiveCustomers.startDate}
-          </Text>
-        </Pressable>
-        <Text mx={ls(10)} color='#333' fontSize={sp(16)}>
-          至
-        </Text>
-        <Pressable
-          _pressed={{
-            opacity: 0.8,
-          }}
-          hitSlop={ss(20)}
-          onPress={() => {
-            setIsOpenDatePicker({
-              isOpen: true,
-              type: 'end',
-            });
-          }}
-          flexDirection={'row'}
-          h={ss(44)}
-          pl={ls(12)}
-          pr={ls(25)}
-          alignItems={'center'}
-          borderRadius={ss(4)}
-          borderColor={'#D8D8D8'}
-          borderWidth={ss(1)}>
-          <Icon
-            as={<MaterialIcons name='date-range' />}
-            size={sp(20)}
-            color='rgba(0,0,0,0.2)'
-          />
-          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
-            {archiveCustomers.endDate}
-          </Text>
-        </Pressable>
         <DatePickerModal
           isOpen={isOpenDatePicker.isOpen}
           onClose={() => {
