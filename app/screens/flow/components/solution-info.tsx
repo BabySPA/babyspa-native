@@ -71,7 +71,7 @@ export default function SolutionInfo({
       <Row flex={1}>
         <Column flex={1}>
           <BoxItem
-            flex={2}
+            flex={3}
             title={'贴敷'}
             icon={require('~/assets/images/tiefu.png')}>
             <Box>
@@ -214,16 +214,16 @@ export default function SolutionInfo({
             </Box>
           </BoxItem>
           <BoxItem
+            flex={2}
             mt={ss(10)}
             title={'注意事项'}
-            autoScroll={false}
+            autoScroll={true}
             icon={require('~/assets/images/guidance.png')}>
             <Pressable
               _pressed={{
                 opacity: 0.6,
               }}
               hitSlop={ss(20)}
-              flex={1}
               pt={ss(10)}
               onPress={() => {
                 setShowRemarkModal(true);
@@ -258,7 +258,7 @@ export default function SolutionInfo({
         </Column>
         <Column flex={1} ml={ss(10)}>
           <BoxItem
-            flex={2}
+            flex={3}
             title={'理疗'}
             icon={require('~/assets/images/massages.png')}>
             <Box>
@@ -398,9 +398,10 @@ export default function SolutionInfo({
             </Box>
           </BoxItem>
           <BoxItem
+            flex={2}
             mt={ss(10)}
             title={'随访'}
-            autoScroll={false}
+            autoScroll={true}
             icon={require('~/assets/images/guidance.png')}>
             <Row alignItems={'center'}>
               <Text fontSize={sp(20)} color='#333' mr={ls(20)}>

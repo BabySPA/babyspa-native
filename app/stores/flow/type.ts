@@ -181,6 +181,7 @@ export interface FlowState {
   statisticFlowWithDate: StatisticFlowWithDate[];
 
   requestGetInitializeData: () => Promise<any>;
+  requestGetFlowById: (flowId: string) => Promise<FlowItemResponse>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
   requestGetRegisterFlows: () => Promise<any>;
   requestGetCollectionFlows: () => Promise<any>;

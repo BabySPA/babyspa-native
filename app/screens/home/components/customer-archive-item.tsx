@@ -44,7 +44,7 @@ export default function CustomerArchiveItem({
               color='#333'
               fontSize={sp(20)}
               fontWeight={400}
-              maxW={ls(150)}
+              maxW={ls(150, 200)}
               ellipsizeMode='tail'
               numberOfLines={1}>
               {customer.name}
@@ -64,7 +64,7 @@ export default function CustomerArchiveItem({
             <Text
               color={'#666'}
               fontWeight={400}
-              fontSize={sp(18, 18)}
+              fontSize={sp(18, 20)}
               ml={ls(3)}>
               {ageText}
             </Text>
@@ -72,7 +72,7 @@ export default function CustomerArchiveItem({
             <Text
               color={'#666'}
               fontWeight={400}
-              fontSize={sp(18, 18)}
+              fontSize={sp(18, 20)}
               ml={ls(4, 4)}>
               {customer.phoneNumber}
             </Text>
@@ -80,13 +80,13 @@ export default function CustomerArchiveItem({
           <Row alignItems={'center'} mt={ss(5)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}
-              size={sp(17, 17)}
+              size={sp(18, 20)}
               color={'#C87939'}
             />
             <Text
               color={'#C87939'}
               fontWeight={400}
-              fontSize={sp(17, 17)}
+              fontSize={sp(18, 20)}
               ml={ls(4, 4)}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>

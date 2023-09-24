@@ -22,6 +22,7 @@ import { fuzzySearch, generateFlowCounts } from '~/app/utils';
 import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
+import useMessageStore from '../message';
 
 const DefaultFlowListData = {
   flows: [],
@@ -184,6 +185,7 @@ const useFlowStore = create(
       useManagerStore.getState().requestGetTemplates();
       useManagerStore.getState().requestGetRoles();
       useManagerStore.getState().requestGetShops();
+
       // 获取当前用户的信息
       const hasAuthority = useAuthStore.getState().hasAuthority;
 
@@ -199,6 +201,11 @@ const useFlowStore = create(
       if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
         await get().requestGetEvaluateFlows();
       }
+    },
+
+    requestGetFlowById: async (flowId) => {
+      const { data } = await request.get(`/flows/${flowId}`);
+      return data;
     },
     requestAllCustomers: async (searchKeywords: string) => {
       const params: any = {

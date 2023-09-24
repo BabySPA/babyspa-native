@@ -283,7 +283,6 @@ export default function LoginScreen({
                 _pressed={{
                   opacity: 0.6,
                 }}
-                hitSlop={ss(20)}
                 onPress={() => {
                   onClickLogin();
                 }}>
@@ -292,7 +291,7 @@ export default function LoginScreen({
                   justifyContent={'center'}
                   w={ls(360)}
                   h={ss(60)}
-                  mt={ss(50)}
+                  mt={ss(50, 40)}
                   borderRadius={ss(30)}
                   opacity={username && password && selectAgreement ? 1 : 0.5}
                   bg={{
@@ -316,7 +315,7 @@ export default function LoginScreen({
                   _pressed={{
                     opacity: 0.6,
                   }}
-                  hitSlop={ss(20)}
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setSelectAgreement(!selectAgreement);
                   }}>

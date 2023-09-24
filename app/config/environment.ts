@@ -9,4 +9,3 @@ const Environment = {
 };
 
 export default Environment;
-9;

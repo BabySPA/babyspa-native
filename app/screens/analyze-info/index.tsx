@@ -265,7 +265,7 @@ export default function AnalyzeInfo({
                     <Text
                       fontSize={sp(18)}
                       color='#999'
-                      w={ls(100)}
+                      w={ls(120)}
                       textAlign={'right'}>
                       调理导向：
                     </Text>
@@ -277,7 +277,7 @@ export default function AnalyzeInfo({
                     <Text
                       fontSize={sp(18)}
                       color='#999'
-                      w={ls(100)}
+                      w={ls(120)}
                       textAlign={'right'}>
                       注意事项：
                     </Text>
@@ -290,7 +290,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         分析师：
                       </Text>
@@ -302,7 +302,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         随访时间：
                       </Text>
@@ -320,7 +320,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         分析时间：
                       </Text>
@@ -334,7 +334,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         复推时间：
                       </Text>
@@ -411,7 +411,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   过敏原：
                 </Text>
@@ -423,7 +423,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   舌象：
                 </Text>
@@ -455,7 +455,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   左手手相：
                 </Text>
@@ -487,7 +487,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   右手手相：
                 </Text>
@@ -519,7 +519,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   录音：
                 </Text>
@@ -538,7 +538,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   其他：
                 </Text>
@@ -570,7 +570,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   调理导向：
                 </Text>
@@ -583,7 +583,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   理疗师：
                 </Text>
@@ -596,7 +596,7 @@ export default function AnalyzeInfo({
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(120)}
                   textAlign={'right'}>
                   采集时间：
                 </Text>
