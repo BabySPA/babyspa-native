@@ -48,7 +48,7 @@ export default function SoundList({
               borderWidth={ss(1)}
               alignItems={'center'}
               justifyContent={'space-between'}
-              w={ls(253)}
+              w={ls(303)}
               p={ss(10)}>
               <Row alignItems={'center'}>
                 <Image

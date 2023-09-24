@@ -56,10 +56,10 @@ export default function CustomerFollowUpItem({
       borderStyle={'dashed'}
       borderWidth={ss(1)}
       borderColor={'#15BD8F'}
-      w={'100%'}
+      w={400}
       minH={ss(148)}
       justifyContent={'space-between'}>
-      <Row p={ss(20)} maxW={'80%'} alignItems={'center'}>
+      <Row p={ss(20)} maxW={'70%'} alignItems={'center'}>
         <Image
           style={{ width: ss(80), height: ss(80) }}
           source={

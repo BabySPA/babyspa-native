@@ -175,7 +175,12 @@ export default function ConclusionInfo({
                 },
               )}
             </Column>
-            <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+            <Row
+              flex={1}
+              flexWrap={'wrap'}
+              py={ss(16)}
+              px={ls(20)}
+              height={'fit-content'}>
               {(
                 (
                   getTemplateGroups(TemplateGroupKeys.conclusion)?.groups[
@@ -199,6 +204,7 @@ export default function ConclusionInfo({
                       });
                     }}>
                     <Box
+                      h={ss(40)}
                       px={ls(20)}
                       py={ss(7)}
                       mr={ls(10)}

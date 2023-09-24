@@ -20,7 +20,6 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
-import { showAreaPicker, showTimePicker } from '~/app/utils/picker';
 import useGlobalLoading from '~/app/stores/loading';
 interface EditBoxParams {
   onEditFinish: () => void;
@@ -178,37 +177,24 @@ export default function EditBox(params: EditBoxParams) {
                 required
                 form={
                   <Box flex={1} ml={ls(20)}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.8,
-                      }}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        showAreaPicker(tempShop.region.split('-'), (val) => {
-                          setTempShop({
-                            ...tempShop,
-                            region: val.join('-'),
-                          });
+                    <Input
+                      autoCorrect={false}
+                      defaultValue={tempShop.address}
+                      flex={1}
+                      h={ss(48)}
+                      py={ss(10)}
+                      px={ls(20)}
+                      onChangeText={(text) => {
+                        setTempShop({
+                          ...tempShop,
+                          region: text,
                         });
-                      }}>
-                      <Row
-                        borderRadius={ss(4)}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        borderWidth={ss(1)}
-                        borderColor={'#D8D8D8'}
-                        py={ss(10)}
-                        px={ss(20)}>
-                        <Text color={'#333'} fontSize={sp(16)}>
-                          {tempShop.region || '请选择'}
-                        </Text>
-                        <Icon
-                          as={<FontAwesome name='angle-down' />}
-                          size={ss(18)}
-                          color='#999'
-                        />
-                      </Row>
-                    </Pressable>
+                      }}
+                      placeholderTextColor={'#CCC'}
+                      color={'#333333'}
+                      fontSize={sp(16)}
+                      placeholder='请输入所属区域，使用 - 分割，例如 北京市-朝阳区-望京'
+                    />
                   </Box>
                 }
               />
@@ -221,77 +207,45 @@ export default function EditBox(params: EditBoxParams) {
                 style={{ flex: 1 }}
                 form={
                   <Row flex={1} alignItems={'center'} ml={ls(20)}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.8,
+                    <Input
+                      autoCorrect={false}
+                      defaultValue={tempShop.openingTime}
+                      flex={1}
+                      h={ss(48)}
+                      py={ss(10)}
+                      px={ls(20)}
+                      onChangeText={(text) => {
+                        setTempShop({
+                          ...tempShop,
+                          openingTime: text,
+                        });
                       }}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        showTimePicker(
-                          tempShop.openingTime.split(':'),
-                          (val) => {
-                            setTempShop({
-                              ...tempShop,
-                              openingTime: val.join(':'),
-                            });
-                          },
-                        );
-                      }}>
-                      <Row
-                        borderRadius={ss(4)}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        borderWidth={ss(1)}
-                        borderColor={'#D8D8D8'}
-                        py={ss(10)}
-                        px={ss(10)}>
-                        <Text color={'#333'} fontSize={sp(16)}>
-                          {tempShop.openingTime || '请选择'}
-                        </Text>
-                        <Icon
-                          as={<FontAwesome name='angle-down' />}
-                          size={ss(18)}
-                          color='#999'
-                        />
-                      </Row>
-                    </Pressable>
+                      placeholderTextColor={'#CCC'}
+                      color={'#333333'}
+                      fontSize={sp(16)}
+                      placeholder='开始营业时间(08:00)'
+                    />
                     <Text mx={ls(12)} fontSize={sp(14)}>
                       至
                     </Text>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.8,
+                    <Input
+                      autoCorrect={false}
+                      defaultValue={tempShop.closingTime}
+                      flex={1}
+                      h={ss(48)}
+                      py={ss(10)}
+                      px={ls(20)}
+                      onChangeText={(text) => {
+                        setTempShop({
+                          ...tempShop,
+                          closingTime: text,
+                        });
                       }}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        showTimePicker(
-                          tempShop.closingTime.split(':'),
-                          (val) => {
-                            setTempShop({
-                              ...tempShop,
-                              closingTime: val.join(':'),
-                            });
-                          },
-                        );
-                      }}>
-                      <Row
-                        borderRadius={ss(4)}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        borderWidth={ss(1)}
-                        borderColor={'#D8D8D8'}
-                        py={ss(10)}
-                        px={ss(10)}>
-                        <Text color={'#333'} fontSize={sp(16)}>
-                          {tempShop.closingTime || '请选择'}
-                        </Text>
-                        <Icon
-                          as={<FontAwesome name='angle-down' />}
-                          size={ss(18)}
-                          color='#999'
-                        />
-                      </Row>
-                    </Pressable>
+                      placeholderTextColor={'#CCC'}
+                      color={'#333333'}
+                      fontSize={sp(16)}
+                      placeholder='结束营业时间(18:00)'
+                    />
                   </Row>
                 }
               />

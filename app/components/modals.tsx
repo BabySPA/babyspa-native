@@ -200,7 +200,7 @@ export function TemplateModal({
           </Column>
           <Column w={ls(470)} h={ss(350)}>
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-              <ScrollView bgColor={'#EDF7F6'} maxW={ls(130)}>
+              <ScrollView bgColor={'#EDF7F6'} w={ls(240)}>
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
@@ -1298,7 +1298,7 @@ export function TemplateExtraModal({
                         template?.groups[selectTemplateItemsIdx].children[
                           selectTemplateItemsLevel3Idx
                         ] as TemplateItem
-                      ).children as ExtraItem[]
+                      )?.children as ExtraItem[]
                     )?.map((item, index) => {
                       return (
                         <Pressable

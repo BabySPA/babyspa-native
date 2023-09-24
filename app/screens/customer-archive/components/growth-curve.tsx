@@ -17,25 +17,19 @@ import {
   DataZoomComponent,
   TooltipComponent,
 } from 'echarts/components';
-import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
+import { SkiaChart } from '@wuba/react-native-echarts';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Dimensions, Platform } from 'react-native';
 
-echarts.use([
-  SVGRenderer,
-  LineChart,
-  GridComponent,
-  DataZoomComponent,
-  TooltipComponent,
-]);
+echarts.use([LineChart, GridComponent, DataZoomComponent, TooltipComponent]);
 
 interface GrowthCurveParams {
   growthCurves: GrowthCurveStatisticsResponse[];
   onEditClick: (item: GrowthCurveStatisticsResponse) => void;
 }
 export function GrowthCurve(params: GrowthCurveParams) {
-  const svgRef = useRef<any>(null);
+  const chartRef = useRef<any>(null);
   const { growthCurves, onEditClick } = params;
 
   // 获取最大高度
@@ -294,12 +288,6 @@ export function GrowthCurve(params: GrowthCurveParams) {
       ],
     },
     weight: {
-      grid: {
-        top: ss(20),
-        left: ls(90),
-        right: 0,
-        bottom: ss(90),
-      },
       textStyle: {
         fontFamily: 'PingFang SC', // 指定字体类型
       },
@@ -379,8 +367,8 @@ export function GrowthCurve(params: GrowthCurveParams) {
 
   useEffect(() => {
     let chart: any;
-    if (svgRef.current) {
-      chart = echarts.init(svgRef.current, 'light', {
+    if (chartRef.current) {
+      chart = echarts.init(chartRef.current, 'light', {
         renderer: 'svg',
         height: ss(306),
         width: Dimensions.get('window').width * 0.85,
@@ -492,7 +480,7 @@ export function GrowthCurve(params: GrowthCurveParams) {
             标准值
           </Text>
         </Row>
-        <SvgChart ref={svgRef} />
+        <SkiaChart ref={chartRef} />
       </Column>
       <List />
     </ScrollView>

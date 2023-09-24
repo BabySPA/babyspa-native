@@ -18,6 +18,7 @@ export const calculateDropdownHeight = (
       const count = search ? dataLength + 1 : dataLength;
       if (rowStyle && rowStyle.height) {
         const height = rowStyle.height * count;
+
         return height < DROPDOWN_MAX_HEIGHT ? height : DROPDOWN_MAX_HEIGHT;
       } else {
         const height = ss(50) * count;

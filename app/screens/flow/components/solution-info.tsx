@@ -124,42 +124,12 @@ export default function SolutionInfo({
                             穴位：
                           </Text>
 
-                          <Pressable
-                            _pressed={{
-                              opacity: 0.6,
-                            }}
-                            hitSlop={ss(20)}
-                            onPress={() => {
-                              setEditAcupoint(true);
-                            }}>
-                            {editAcupoint ? (
-                              <Input
-                                borderWidth={ss(1)}
-                                borderColor={'#D8D8D8'}
-                                autoFocus
-                                onChangeText={(text) => {
-                                  updateSolutionApplication(
-                                    { ...item, acupoint: text },
-                                    idx,
-                                  );
-                                }}
-                                defaultValue={item.acupoint}
-                                w={ls(130)}
-                                height={ss(48)}
-                                fontSize={sp(16)}
-                                onBlur={() => {
-                                  setEditAcupoint(false);
-                                }}
-                              />
-                            ) : (
-                              <Text
-                                color='#E36C36'
-                                fontSize={sp(16)}
-                                maxW={ls(130)}>
-                                {item.acupoint}
-                              </Text>
-                            )}
-                          </Pressable>
+                          <Text
+                            color='#E36C36'
+                            fontSize={sp(16)}
+                            maxW={ls(130)}>
+                            {item.acupoint}
+                          </Text>
                         </Row>
                       </Row>
                       <Row alignItems={'center'}>
@@ -310,40 +280,9 @@ export default function SolutionInfo({
                           备注：
                         </Text>
 
-                        <Pressable
-                          _pressed={{
-                            opacity: 0.6,
-                          }}
-                          hitSlop={ss(20)}
-                          onPress={() => {
-                            setEditMassageRemark(true);
-                          }}>
-                          {editMassageRemark ? (
-                            <Input
-                              borderWidth={ss(1)}
-                              borderColor={'#D8D8D8'}
-                              autoFocus
-                              onChangeText={(text) => {
-                                updateSolutionMassage(
-                                  { ...item, remark: text },
-                                  idx,
-                                );
-                              }}
-                              multiline
-                              textAlignVertical='top'
-                              defaultValue={item.remark}
-                              w={ls(300)}
-                              fontSize={sp(16)}
-                              onBlur={() => {
-                                setEditMassageRemark(false);
-                              }}
-                            />
-                          ) : (
-                            <Text color='#E36C36' fontSize={sp(16)}>
-                              {item.remark || '无'}
-                            </Text>
-                          )}
-                        </Pressable>
+                        <Text color='#E36C36' fontSize={sp(16)} maxW={ls(400)}>
+                          {item.remark || '无'}
+                        </Text>
                       </Row>
 
                       <Row alignItems={'center'}>

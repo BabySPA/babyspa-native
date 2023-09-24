@@ -16,7 +16,6 @@ import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomerItem from '../components/flow-customer-item';
 import { CustomerScreenType, FlowStatus, OperateType } from '~/app/types';
 import EmptyBox from '~/app/components/empty-box';
 import { debounce } from 'lodash';
@@ -25,6 +24,7 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 import { CollectStatus, RegisterStatus } from '~/app/stores/flow/type';
 import { Image as NativeImage } from 'react-native';
 import useGlobalLoading from '~/app/stores/loading';
+import FlowCustomerItem from '../components/flow-customer-item';
 
 export default function Collection() {
   const navigation = useNavigation();
@@ -45,34 +45,28 @@ export default function Collection() {
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
-          <Row
-            flex={1}
-            p={ss(40)}
-            pb={0}
-            bgColor='white'
-            borderRadius={ss(10)}
-            minH={'100%'}>
+          <Row flex={1} p={ss(40)} bgColor='#fff' borderRadius={ss(10)}>
             <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => {
-                return (
-                  <Center width={'50%'} key={idx}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.6,
-                      }}
-                      ml={idx % 2 == 1 ? ss(20) : 0}
-                      mr={idx % 2 == 0 ? ss(20) : 0}
-                      mb={ss(40)}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        updateCurrentFlow(flow);
-                        navigation.navigate('AnalyzeInfo');
-                      }}>
-                      <CustomerItem flow={flow} type={OperateType.Collection} />
-                    </Pressable>
-                  </Center>
-                );
-              })}
+              {flows.map((flow, idx) => (
+                <Center key={idx}>
+                  <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
+                    mb={ss(20)}
+                    ml={ss(20)}
+                    hitSlop={ss(20)}
+                    onPress={() => {
+                      updateCurrentFlow(flow);
+                      navigation.navigate('AnalyzeInfo');
+                    }}>
+                    <FlowCustomerItem
+                      flow={flow}
+                      type={OperateType.Collection}
+                    />
+                  </Pressable>
+                </Center>
+              ))}
             </Row>
           </Row>
         )}
@@ -214,7 +208,7 @@ function Filter() {
               type: CustomerScreenType.collection,
             });
           }}>
-          <Box
+          {/* <Box
             ml={ls(20)}
             bgColor={'#E1F6EF'}
             borderWidth={ss(1)}
@@ -224,7 +218,7 @@ function Filter() {
             py={ss(10)}
             _text={{ fontSize: sp(14), color: '#0C1B16' }}>
             快速采集
-          </Box>
+          </Box> */}
         </Pressable>
       </Row>
       {showFilter && (

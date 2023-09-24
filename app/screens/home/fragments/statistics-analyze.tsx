@@ -25,17 +25,11 @@ import {
   DataZoomComponent,
   TooltipComponent,
 } from 'echarts/components';
-import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
+import { SkiaChart } from '@wuba/react-native-echarts';
 import { generateFlowCounts } from '~/app/utils';
 import { Dimensions, Platform } from 'react-native';
 
-echarts.use([
-  SVGRenderer,
-  BarChart,
-  GridComponent,
-  DataZoomComponent,
-  TooltipComponent,
-]);
+echarts.use([BarChart, GridComponent, DataZoomComponent, TooltipComponent]);
 
 type StatisticAnalyzeOperator = {
   analyzeOperator: any;
@@ -50,7 +44,7 @@ type StatisticAnalyzeOperator = {
 }[];
 const CenterStatisticBox = () => {
   const { statisticShops } = useFlowStore();
-  const svgRef = useRef<any>(null);
+  const chartRef = useRef<any>(null);
 
   const [counts, setCounts] = useState({
     analyze: 0,
@@ -61,8 +55,8 @@ const CenterStatisticBox = () => {
     useState<StatisticAnalyzeOperator>([]);
   useEffect(() => {
     let chart: any;
-    if (svgRef.current) {
-      chart = echarts.init(svgRef.current, 'light', {
+    if (chartRef.current) {
+      chart = echarts.init(chartRef.current, 'light', {
         renderer: 'svg',
         height: ss(306),
         width: Dimensions.get('window').width * 0.85,
@@ -135,7 +129,7 @@ const CenterStatisticBox = () => {
         return item.analyzeOperator.name;
       }),
       axisLabel: {
-        margin: ss(0, 20),
+        margin: ss(20, 20),
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
         rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
@@ -225,7 +219,7 @@ const CenterStatisticBox = () => {
             错误数
           </Text>
         </Row>
-        <SvgChart ref={svgRef} />
+        <SkiaChart ref={chartRef} />
       </Box>
     </ScrollView>
   );

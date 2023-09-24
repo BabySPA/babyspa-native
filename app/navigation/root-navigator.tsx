@@ -10,6 +10,7 @@ import AuthNavigator from './auth-navigator';
 import AppNavigator from './app-navigator';
 import useAuthStore from '../stores/auth';
 import { RootStackParamList } from '../types';
+import linking from './linking-configuration';
 
 export default function Navigation({
   colorScheme,
@@ -18,8 +19,8 @@ export default function Navigation({
 }) {
   return (
     <NavigationContainer
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-    >
+      linking={linking}
+      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );

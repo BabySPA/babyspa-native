@@ -9,6 +9,7 @@ const { width, height } = Dimensions.get('window');
 
 export const isPhone = height < 500;
 
+export const isWeb = Platform.OS == 'web';
 const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
 
@@ -26,6 +27,9 @@ const S = Math.min(
 );
 
 const setSpText = (size: number, phoneSize?: number) => {
+  if (isWeb) {
+    return size * 0.8 + 0.01;
+  }
   const num = Math.round(((size * S + 0.5) * PR) / FS);
   const r = num / PR;
 
@@ -39,6 +43,9 @@ const setSpText = (size: number, phoneSize?: number) => {
 };
 
 export const longScale = (size: number, phoneSize?: number) => {
+  if (isWeb) {
+    return size * 0.8 + 0.01;
+  }
   const r = (shortDimension / guidelineShort) * size;
   let pr = 0;
   if (phoneSize) {
@@ -48,6 +55,9 @@ export const longScale = (size: number, phoneSize?: number) => {
 };
 
 export const shortScale = (size: number, phoneSize?: number) => {
+  if (isWeb) {
+    return size * 0.8 + 0.01;
+  }
   const r = (shortDimension / guidelineShort) * size;
   let pr = 0;
   if (phoneSize) {

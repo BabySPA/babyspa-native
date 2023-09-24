@@ -31,7 +31,10 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/logo.png",
+      "description": "致力于为广大客户提供全方位、高品质的健康咨询和管理服务。",
+      "lang": "zn-CN",
+      "name": "掌阅未来"
     },
     "plugins": [
       [

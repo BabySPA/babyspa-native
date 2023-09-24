@@ -90,7 +90,7 @@ export default function FlowCustomerItem({
       borderStyle={'dashed'}
       borderWidth={ss(1)}
       borderColor={'#15BD8F'}
-      w={'100%'}
+      w={400}
       minH={ss(148)}
       justifyContent={'space-between'}>
       <Row p={ss(20)} maxW={'70%'}>
@@ -203,7 +203,8 @@ export default function FlowCustomerItem({
       <Flex justifyContent={'space-between'} alignItems={'flex-end'} flex={1}>
         <OperatorStatusFlag />
 
-        {type === OperateType.Collection &&
+        {/* NOTE：ISWEB */}
+        {/* {type === OperateType.Collection &&
           flow.register.status == RegisterStatus.DONE &&
           flow.collect.status == CollectStatus.NOT_SET && (
             <OperateButton
@@ -215,7 +216,7 @@ export default function FlowCustomerItem({
                 });
               }}
             />
-          )}
+          )} */}
 
         {type === OperateType.Analyze &&
           flow.register.status == RegisterStatus.DONE &&

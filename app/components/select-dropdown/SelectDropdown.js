@@ -176,18 +176,25 @@ const SelectDropdown = (
               {renderCustomizedRowChild(item, index, isSelected)}
             </View>
           ) : (
-            <Text
-              numberOfLines={numberOfLines || 1}
-              allowFontScaling={false}
-              style={mergeStyles(
-                styles.dropdownRowText,
-                rowTextStyle,
-                isSelected && selectedRowTextStyle,
-              )}>
-              {rowTextForSelection
-                ? rowTextForSelection(item, index)
-                : item.toString()}
-            </Text>
+            <View
+              style={{
+                height: ss(50),
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                numberOfLines={numberOfLines || 1}
+                allowFontScaling={false}
+                style={mergeStyles(
+                  rowTextStyle,
+                  isSelected && selectedRowTextStyle,
+                )}>
+                {rowTextForSelection
+                  ? rowTextForSelection(item, index)
+                  : item.toString()}
+              </Text>
+            </View>
           )}
         </TouchableOpacity>
       )

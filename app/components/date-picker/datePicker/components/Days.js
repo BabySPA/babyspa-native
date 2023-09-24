@@ -22,6 +22,7 @@ const Days = () => {
 
   const changeItemHeight = ({ nativeEvent }) => {
     const { width } = nativeEvent.layout;
+    if (width === 0) return;
     !itemSize && setItemSize((width / 7).toFixed(2) * 1 - 0.5);
   };
 

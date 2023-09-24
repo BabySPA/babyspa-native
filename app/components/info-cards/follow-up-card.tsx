@@ -7,11 +7,10 @@ import {
   Spinner,
   Text,
 } from 'native-base';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -157,9 +156,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(120)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
-                  <Dot color='#333' w={ss(15)} h={ss(15)} /> 随访结果：
+                  随访结果：
                 </Text>
                 <Row>
                   {Object.keys(FollowUpResultText).map((key) => (

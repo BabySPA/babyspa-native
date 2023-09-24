@@ -112,7 +112,7 @@ const useAuthStore = create(
       },
     }),
     {
-      name: 'local-storage',
+      name: 'auth-storage',
       storage: createJSONStorage(() => AsyncStorage),
     },
   ),
