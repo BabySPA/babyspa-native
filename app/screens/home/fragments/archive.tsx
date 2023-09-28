@@ -36,7 +36,6 @@ export default function Archive() {
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
-          
           <Row
             flex={1}
             py={ss(40)}
@@ -130,6 +129,7 @@ function Filter() {
           h={ss(44)}
           p={ss(9)}
           borderRadius={ss(4)}
+          defaultValue={archiveCustomers.searchKeywords}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={sp(16)}
