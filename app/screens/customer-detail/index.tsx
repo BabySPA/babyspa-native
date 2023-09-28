@@ -1,5 +1,5 @@
 import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
-import { AppStackScreenProps, FlowStatus } from '../../types';
+import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useEffect, useState } from 'react';
@@ -8,7 +8,6 @@ import { toastAlert } from '~/app/utils/toast';
 import EditBox from './components/edit-box';
 import InfoBox from './components/info-box';
 import { DialogModal } from '~/app/components/modals';
-import Register from '../home/fragments/register';
 import { RegisterStatus } from '~/app/stores/flow/type';
 
 export default function CustomerDetail({

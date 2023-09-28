@@ -5,13 +5,11 @@ import {
   Icon,
   Input,
   Modal,
-  Radio,
   Row,
   Text,
   Pressable,
   useToast,
   Spinner,
-  ScrollView,
   Center,
 } from 'native-base';
 import { useState } from 'react';
@@ -22,7 +20,6 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
 import DatePicker from '~/app/components/date-picker';
 import { toastAlert } from '~/app/utils/toast';
-import { FlowStatus } from '~/app/types';
 import SelectOperator from '~/app/components/select-operator';
 import { TemplateModal } from '~/app/components/modals';
 import useManagerStore from '~/app/stores/manager';

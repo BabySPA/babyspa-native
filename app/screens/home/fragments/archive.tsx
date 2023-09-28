@@ -1,12 +1,10 @@
 import {
   Box,
   Flex,
-  Text,
   ScrollView,
   Icon,
   Input,
   Row,
-  Column,
   Pressable,
   Center,
 } from 'native-base';
@@ -92,6 +90,7 @@ function Filter() {
       updateArchiveCustomersFilter({
         shopId: defaultSelectShop._id,
       });
+      console.log('requestArchiveCustomers', archiveCustomers);
       requestArchiveCustomers();
     }
   }, [defaultSelectShop]);
@@ -129,6 +128,7 @@ function Filter() {
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={sp(16)}
+          defaultValue={archiveCustomers.searchKeywords}
           onChangeText={debounce((text) => {
             updateArchiveCustomersFilter({
               searchKeywords: text,

@@ -4,6 +4,7 @@ import * as Print from 'expo-print';
 import useFlowStore from '../stores/flow';
 import { getAge } from '../utils';
 import dayjs from 'dayjs';
+import { Platform } from 'react-native';
 
 export function PrintButton() {
   const { currentFlow } = useFlowStore();
@@ -199,13 +200,26 @@ export function PrintButton() {
   };
 
   const print = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html: getPrintHtml(),
-      orientation: Print.Orientation.portrait,
-      width: 595,
-      height: 842,
-    });
+    if (Platform.OS == 'web') {
+      // 创建一个新的窗口以显示HTML内容
+      const printWindow = window.open('', '_blank') as Window;
+      printWindow.document.open();
+      printWindow.document.write(getPrintHtml());
+      printWindow.document.close();
+
+      // 延迟打印操作以便用户有时间预览
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 1000); // 1000毫秒（1秒）延迟
+    } else {
+      await Print.printAsync({
+        html: getPrintHtml(),
+        orientation: Print.Orientation.portrait,
+        width: 595,
+        height: 842,
+      });
+    }
   };
 
   return (

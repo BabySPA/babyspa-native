@@ -8,6 +8,7 @@ import {
   useToast,
   Alert,
   Circle,
+  Column,
 } from 'native-base';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
@@ -78,70 +79,69 @@ const Layout = () => {
         }}
         flex={1}
         direction='row'>
-        <Box>
-          <Center pt={ss(30)} px={ss(20)} minH={ss(120)} safeAreaLeft>
-            <Image
-              source={require('~/assets/images/logo.png')}
-              style={{
-                width: ss(63),
-                height: ss(63),
-              }}
-            />
-            <Text
-              fontSize={sp(20)}
-              color={'white'}
-              mt={ss(5)}
-              fontWeight={600}
-              textAlign={'center'}>
-              掌阅未来
-            </Text>
-          </Center>
-          <Box mt={ss(30, 20)}>
-            {getLayoutConfig().map((item, idx) => {
-              return (
-                <Pressable
-                  _pressed={{
-                    opacity: idx != currentSelected ? 0.6 : 1,
-                  }}
-                  hitSlop={ss(20)}
-                  key={idx}
-                  onPress={() => {
-                    idx != currentSelected && changeCurrentSelected(idx);
-                  }}>
-                  <Center
-                    safeAreaLeft
-                    px={ss(20)}
-                    background={
-                      idx == currentSelected ? 'warmGray.50' : 'transparent'
-                    }
-                    py={ss(16, 10)}>
-                    <Image
-                      source={
-                        idx == currentSelected ? item.selectedImage : item.image
+        <Column justifyContent={'space-between'}>
+          <Column>
+            <Center pt={ss(30)} px={ss(20)} minH={ss(120)} safeAreaLeft>
+              <Image
+                source={require('~/assets/images/logo.png')}
+                style={{
+                  width: ss(63),
+                  height: ss(63),
+                }}
+              />
+              <Text
+                fontSize={sp(20)}
+                color={'white'}
+                mt={ss(5)}
+                fontWeight={600}
+                textAlign={'center'}>
+                掌阅未来
+              </Text>
+            </Center>
+            <Box mt={ss(30, 20)}>
+              {getLayoutConfig().map((item, idx) => {
+                return (
+                  <Pressable
+                    _pressed={{
+                      opacity: idx != currentSelected ? 0.6 : 1,
+                    }}
+                    hitSlop={ss(20)}
+                    key={idx}
+                    onPress={() => {
+                      idx != currentSelected && changeCurrentSelected(idx);
+                    }}>
+                    <Center
+                      safeAreaLeft
+                      px={ss(20)}
+                      background={
+                        idx == currentSelected ? 'warmGray.50' : 'transparent'
                       }
-                      style={{ width: ss(44), height: ss(44) }}
-                      resizeMode='contain'
-                      alt=''
-                    />
-                    <Text
-                      fontSize={sp(18)}
-                      color={
-                        idx == currentSelected ? '#64CF97' : 'warmGray.50'
-                      }>
-                      {item.text}
-                    </Text>
-                  </Center>
-                </Pressable>
-              );
-            })}
-          </Box>
+                      py={ss(16, 10)}>
+                      <Image
+                        source={
+                          idx == currentSelected
+                            ? item.selectedImage
+                            : item.image
+                        }
+                        style={{ width: ss(44), height: ss(44) }}
+                        resizeMode='contain'
+                        alt=''
+                      />
+                      <Text
+                        fontSize={sp(18)}
+                        color={
+                          idx == currentSelected ? '#64CF97' : 'warmGray.50'
+                        }>
+                        {item.text}
+                      </Text>
+                    </Center>
+                  </Pressable>
+                );
+              })}
+            </Box>
+          </Column>
 
-          <Center
-            safeAreaLeft
-            px={ls(6)}
-            w={'100%'}
-            position={'absolute'}
-            bottom={ss(60, 16)}>
+          <Center safeAreaLeft px={ls(6)} w={'100%'} mt={ss(20)} mb={ss(20)}>
             <Pressable
               _pressed={{
                 opacity: 0.6,
@@ -206,7 +206,7 @@ const Layout = () => {
               }}
             />
           </Center>
-        </Box>
+        </Column>
         <Flex direction='column' flex={1} safeAreaTop>
           <Flex
             direction='row'

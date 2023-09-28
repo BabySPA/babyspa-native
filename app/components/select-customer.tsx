@@ -9,7 +9,7 @@ import {
   FlatList,
   Column,
 } from 'native-base';
-import { StyleProp, ViewStyle, Image } from 'react-native';
+import { StyleProp, ViewStyle, Image, Dimensions } from 'react-native';
 import BoxTitle from './box-title';
 import { ss, ls, sp } from '../utils/style';
 import { useEffect, useState } from 'react';
@@ -153,6 +153,7 @@ export default function SelectCustomer(params: SelectCustomerParams) {
 
         <Box mt={ss(30)}>
           <FlatList
+            maxH={Dimensions.get('window').height - ss(350)}
             data={allCustomers}
             renderItem={({ item, index }) => {
               return (
