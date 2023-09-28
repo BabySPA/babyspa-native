@@ -6,7 +6,7 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
 import { AnalyzeStatus, FollowUpStatus } from '~/app/stores/flow/type';
 
@@ -22,7 +22,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
   const { style = {}, edit } = params;
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<AppStackList, 'FlowInfo'>>();
+    useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
 
   return (
     <Column

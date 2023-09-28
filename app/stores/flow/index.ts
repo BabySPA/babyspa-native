@@ -258,12 +258,12 @@ const useFlowStore = create(
       } = get();
       const params: any = {};
 
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
+      // if (startDate) {
+      //   params.startDate = startDate;
+      // }
+      // if (endDate) {
+      //   params.endDate = endDate;
+      // }
 
       if (shopId) {
         params.shopId = shopId;

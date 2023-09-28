@@ -1,4 +1,8 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  StackCardStyleInterpolator,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import { AppStackList } from '../types';
 import HomeScreen from '../screens/home';
 import RegisterScreen from '../screens/register-customer';
@@ -24,7 +28,7 @@ import Picker from 'react-native-patchpicker';
 import FollowUp from '../screens/follow-up';
 import AnalyzeInfo from '../screens/analyze-info';
 
-const Stack = createNativeStackNavigator<AppStackList>();
+const Stack = createStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
   const { loading, loadingText, spinner, closeLoading } = useGlobalLoading();
@@ -45,7 +49,11 @@ export default function AppNavigator() {
           </Row>
         )}
       </Modal>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}>
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />
         <Stack.Screen name='CustomerDetail' component={CustomerDetail} />

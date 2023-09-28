@@ -14,7 +14,7 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
 import { FollowUpResult, FollowUpStatus } from '~/app/stores/flow/type';
 import {
@@ -40,7 +40,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
   const { style = {}, edit } = params;
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<AppStackList, 'FlowInfo'>>();
+    useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
 
   const { followUp } = analyze;
 

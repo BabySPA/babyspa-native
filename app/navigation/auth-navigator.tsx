@@ -1,9 +1,9 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import { AuthStackList } from '../types';
 import LoginScreen from '../screens/login';
 
-const Stack = createNativeStackNavigator<AuthStackList>();
+const Stack = createStackNavigator<AuthStackList>();
 
 export default function AuthNavigator() {
   return (

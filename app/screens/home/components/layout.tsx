@@ -164,18 +164,21 @@ const Layout = () => {
                 </Text>
               </Center>
               <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4, 2)}>
-                <Text fontSize={sp(14, 17)} color='#fff'>
+                <Text fontSize={sp(14, 15)} color='#fff'>
                   {user?.name}
                 </Text>
-                <Text fontSize={sp(14, 17)} color='#fff'>
+                <Text fontSize={sp(14, 15)} color='#fff'>
                   -
                 </Text>
-                <Text fontSize={sp(14, 17)} color='#fff'>
+                <Text fontSize={sp(14, 15)} color='#fff'>
                   {currentShopWithRole?.role.name}
                 </Text>
               </Row>
             </Pressable>
             <SelectUser
+              textStyle={{
+                fontSize: sp(14, 15),
+              }}
               onSelect={async function (selectedItem: any) {
                 openLoading();
                 changeCurrentShopWithRole(selectedItem)

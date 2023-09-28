@@ -9,12 +9,14 @@ export default function SelectUser({
   buttonHeight,
   buttonWidth,
   style,
+  textStyle,
 }: {
   onSelect: (selectedItem: any, index: number) => void;
   defaultButtonText?: string;
   buttonHeight?: number;
   buttonWidth?: number;
   style?: any;
+  textStyle?: any;
 }) {
   const { user, currentShopWithRole } = useAuthStore();
 
@@ -42,6 +44,7 @@ export default function SelectUser({
       buttonTextStyle={{
         color: '#fff',
         fontSize: sp(14, 17),
+        ...textStyle,
       }}
       renderDropdownIcon={(isOpened) => {
         return (
