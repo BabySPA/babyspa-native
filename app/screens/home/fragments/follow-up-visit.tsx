@@ -9,6 +9,7 @@ import {
   Column,
   Pressable,
   Center,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
@@ -35,7 +36,7 @@ export default function FollowUpVisit(params: {
   return (
     <Flex flex={1}>
       <Filter shop={params?.shop} />
-      <ScrollView margin={ss(10)}>
+      <Box margin={ss(10)} flex={1}>
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -46,31 +47,36 @@ export default function FollowUpVisit(params: {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => (
-                <Center width={'50%'} key={idx}>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    ml={idx % 2 == 1 ? ss(20) : 0}
-                    mr={idx % 2 == 0 ? ss(20) : 0}
-                    mb={ss(40)}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      updateCurrentFlow(flow);
-                      navigation.navigate('FlowInfo', {
-                        from: 'follow-up-detail',
-                      });
-                    }}>
-                    <CustomerFollowUpItem flow={flow} />
-                  </Pressable>
-                </Center>
-              ))}
-            </Row>
+            <FlatList
+              mb={ss(120)}
+              data={flows}
+              numColumns={2}
+              renderItem={({ item: flow, index: idx }) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('FlowInfo', {
+                          from: 'follow-up-detail',
+                        });
+                      }}>
+                      <CustomerFollowUpItem flow={flow} />
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -205,38 +211,40 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
           </Text>
         </Pressable>
 
-        <DatePickerModal
-          isOpen={isOpenDatePicker.isOpen}
-          onClose={() => {
-            setIsOpenDatePicker({
-              isOpen: false,
-            });
-          }}
-          onSelectedChange={(date: string) => {
-            if (!isOpenDatePicker.type) return;
-            if (isOpenDatePicker.type == 'start') {
-              updateCustomersFollowupFilter({
-                startDate: date,
+        {isOpenDatePicker.isOpen && (
+          <DatePickerModal
+            isOpen={isOpenDatePicker.isOpen}
+            onClose={() => {
+              setIsOpenDatePicker({
+                isOpen: false,
               });
-              requestGetFollowUps();
-            } else {
-              updateCustomersFollowupFilter({
-                endDate: date,
-              });
-              requestGetFollowUps();
+            }}
+            onSelectedChange={(date: string) => {
+              if (!isOpenDatePicker.type) return;
+              if (isOpenDatePicker.type == 'start') {
+                updateCustomersFollowupFilter({
+                  startDate: date,
+                });
+                requestGetFollowUps();
+              } else {
+                updateCustomersFollowupFilter({
+                  endDate: date,
+                });
+                requestGetFollowUps();
+              }
+            }}
+            current={
+              isOpenDatePicker.type == 'start'
+                ? customersFollowUp.startDate
+                : customersFollowUp.endDate
             }
-          }}
-          current={
-            isOpenDatePicker.type == 'start'
-              ? customersFollowUp.startDate
-              : customersFollowUp.endDate
-          }
-          selected={
-            isOpenDatePicker.type == 'start'
-              ? customersFollowUp.startDate
-              : customersFollowUp.endDate
-          }
-        />
+            selected={
+              isOpenDatePicker.type == 'start'
+                ? customersFollowUp.startDate
+                : customersFollowUp.endDate
+            }
+          />
+        )}
       </Row>
     </Column>
   );

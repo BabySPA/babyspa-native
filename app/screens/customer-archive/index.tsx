@@ -184,27 +184,29 @@ export default function CustomerArchive({
                 </Text>
               </Row>
             </Pressable>
-            <DialogModal
-              isOpen={showDeleteDialog}
-              title={'是否确认删除客户？'}
-              onClose={function (): void {
-                setShowDeleteDialog(false);
-              }}
-              onConfirm={function (): void {
-                requestDeleteCustomer(customer?._id || '')
-                  .then(async (res) => {
-                    toastAlert(toast, 'success', '删除成功！');
-                    await requestArchiveCustomers();
-                    navigation.goBack();
-                  })
-                  .catch((err) => {
-                    toastAlert(toast, 'error', '删除失败！');
-                  })
-                  .finally(() => {
-                    setShowDeleteDialog(false);
-                  });
-              }}
-            />
+            {showDeleteDialog && (
+              <DialogModal
+                isOpen={showDeleteDialog}
+                title={'是否确认删除客户？'}
+                onClose={function (): void {
+                  setShowDeleteDialog(false);
+                }}
+                onConfirm={function (): void {
+                  requestDeleteCustomer(customer?._id || '')
+                    .then(async (res) => {
+                      toastAlert(toast, 'success', '删除成功！');
+                      await requestArchiveCustomers();
+                      navigation.goBack();
+                    })
+                    .catch((err) => {
+                      toastAlert(toast, 'error', '删除失败！');
+                    })
+                    .finally(() => {
+                      setShowDeleteDialog(false);
+                    });
+                }}
+              />
+            )}
             <Pressable
               _pressed={{
                 opacity: 0.6,
@@ -287,10 +289,8 @@ export default function CustomerArchive({
                 hitSlop={ss(20)}
                 onPress={() => {
                   setShowEditGrowthCurve({
+                    ...showEditGrowthCurve,
                     isOpen: true,
-                    date: '',
-                    defaultHeight: 0,
-                    defaultWeight: 0,
                   });
                 }}
                 bgColor={'rgba(0, 180, 158, 0.10)'}
@@ -351,77 +351,79 @@ export default function CustomerArchive({
           </Box>
         </ScrollView>
       </Column>
-      <GrowthCurveModal
-        isOpen={showEditGrowthCurve.isOpen}
-        defaultHeight={showEditGrowthCurve.defaultHeight}
-        defaultWeight={showEditGrowthCurve.defaultWeight}
-        onClose={function (): void {
-          setShowEditGrowthCurve({
-            isOpen: false,
-            date: '',
-            defaultHeight: 0,
-            defaultWeight: 0,
-          });
-        }}
-        onConfirm={function ({
-          height,
-          weight,
-        }: {
-          height: number;
-          weight: number;
-        }): void {
-          if (showEditGrowthCurve.date.length > 0) {
-            requestPatchCustomerGrowthCurve(customer?._id || '', {
-              height,
-              weight,
-              date: showEditGrowthCurve.date,
-            })
-              .then((res) => {
-                toastAlert(toast, 'success', '修改信息成功！');
-                getGrowthCurveDatas();
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
-                });
+      {showEditGrowthCurve.isOpen && (
+        <GrowthCurveModal
+          isOpen={showEditGrowthCurve.isOpen}
+          defaultHeight={showEditGrowthCurve.defaultHeight}
+          defaultWeight={showEditGrowthCurve.defaultWeight}
+          onClose={function (): void {
+            setShowEditGrowthCurve({
+              isOpen: false,
+              date: '',
+              defaultHeight: 0,
+              defaultWeight: 0,
+            });
+          }}
+          onConfirm={function ({
+            height,
+            weight,
+          }: {
+            height: number;
+            weight: number;
+          }): void {
+            if (showEditGrowthCurve.date.length > 0) {
+              requestPatchCustomerGrowthCurve(customer?._id || '', {
+                height,
+                weight,
+                date: showEditGrowthCurve.date,
               })
-              .catch((err) => {
-                toastAlert(toast, 'error', '修改信息失败！');
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
+                .then((res) => {
+                  toastAlert(toast, 'success', '修改信息成功！');
+                  getGrowthCurveDatas();
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '修改信息失败！');
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
                 });
-              });
-          } else {
-            requestPutCustomerGrowthCurve(customer?._id || '', {
-              height,
-              weight,
-            })
-              .then((res) => {
-                toastAlert(toast, 'success', '添加成功！');
-                getGrowthCurveDatas();
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
-                });
+            } else {
+              requestPutCustomerGrowthCurve(customer?._id || '', {
+                height,
+                weight,
               })
-              .catch((err) => {
-                toastAlert(toast, 'error', '添加失败！');
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
+                .then((res) => {
+                  toastAlert(toast, 'success', '添加成功！');
+                  getGrowthCurveDatas();
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '添加失败！');
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
                 });
-              });
-          }
-        }}
-      />
+            }
+          }}
+        />
+      )}
     </Box>
   );
 }

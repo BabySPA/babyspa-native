@@ -199,6 +199,7 @@ export default function Personal({
               }}
               onConfirm={function (): void {
                 logout();
+                setShowDialog(false);
               }}
             />
           </Row>

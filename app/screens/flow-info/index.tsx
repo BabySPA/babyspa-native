@@ -11,7 +11,7 @@ import {
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
@@ -133,15 +133,17 @@ export default function FlowInfo({
           </ScrollView>
         </Column>
       </Row>
-      <EvaluateCardDialog
-        isOpen={isEvaluateCardDialogShow}
-        onClose={function (): void {
-          setIsEvaluateCardDialogShow(false);
-        }}
-        onEvaluated={() => {
-          evalutedDone();
-        }}
-      />
+      {isEvaluateCardDialogShow && (
+        <EvaluateCardDialog
+          isOpen={isEvaluateCardDialogShow}
+          onClose={function (): void {
+            setIsEvaluateCardDialogShow(false);
+          }}
+          onEvaluated={() => {
+            evalutedDone();
+          }}
+        />
+      )}
     </Box>
   );
 }

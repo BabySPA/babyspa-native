@@ -233,7 +233,7 @@ export default function FlowScreen({
             </Circle>
             <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
               过敏原：
-              {collect.healthInfo.allergy}
+              {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Pressable
@@ -488,13 +488,13 @@ export default function FlowScreen({
           )}
         </Box>
       </Box>
-      <Modal
-        isOpen={showResultModal.type !== 'none'}
-        onClose={() =>
-          setShowResultModal({ type: 'none', message: '', tip: '' })
-        }>
-        <Modal.Content>
-          {showResultModal.type !== 'none' && (
+      {showResultModal.type !== 'none' && (
+        <Modal
+          isOpen={true}
+          onClose={() =>
+            setShowResultModal({ type: 'none', message: '', tip: '' })
+          }>
+          <Modal.Content>
             <Center py={ss(60)}>
               <Image
                 style={{ width: ss(72), height: ss(72) }}
@@ -511,89 +511,92 @@ export default function FlowScreen({
                 {showResultModal.tip}
               </Text>
             </Center>
-          )}
-        </Modal.Content>
-      </Modal>
-      <DialogModal
-        isOpen={showFinishModal}
-        title='是否确认结束？'
-        onClose={function (): void {
-          setShowFinishModal(false);
-        }}
-        onConfirm={function (): void {
-          if (closeLoading) return;
-          setCloseLoading(true);
+          </Modal.Content>
+        </Modal>
+      )}
+      {showFinishModal && (
+        <DialogModal
+          isOpen={showFinishModal}
+          title='是否确认结束？'
+          onClose={function (): void {
+            setShowFinishModal(false);
+          }}
+          onConfirm={function (): void {
+            if (closeLoading) return;
+            setCloseLoading(true);
 
-          let promiseResult;
-          if (selectedConfig.auth == RoleAuthority.FLOW_ANALYZE) {
-            promiseResult = requestPatchAnalyzeStatus({
-              status: AnalyzeStatus.CANCEL,
-            });
-          } else {
-            promiseResult = requestPatchCollectionStatus({
-              status: CollectStatus.CANCEL,
-            });
-          }
-          promiseResult
-            .then(async (res) => {
-              // 取消成功
-              toastAlert(toast, 'success', '取消成功！');
-              await requestGetInitializeData();
-              navigation.goBack();
-            })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '取消失败！');
-            })
-            .finally(() => {
-              setShowFinishModal(false);
-              setCloseLoading(false);
-            });
-        }}
-      />
-
-      <Modal isOpen={openLockModal.isOpen} onClose={() => {}}>
-        <Modal.Content>
-          <Modal.Header>
-            <Text fontSize={sp(20)}>温馨提示</Text>
-          </Modal.Header>
-          <Modal.Body>
-            <Center>
-              <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
-                当前订单
-                <Text fontSize={sp(20)} color='#F7BA2A' fontWeight={600}>
-                  {openLockModal.name}
+            let promiseResult;
+            if (selectedConfig.auth == RoleAuthority.FLOW_ANALYZE) {
+              promiseResult = requestPatchAnalyzeStatus({
+                status: AnalyzeStatus.CANCEL,
+              });
+            } else {
+              promiseResult = requestPatchCollectionStatus({
+                status: CollectStatus.CANCEL,
+              });
+            }
+            promiseResult
+              .then(async (res) => {
+                // 取消成功
+                toastAlert(toast, 'success', '取消成功！');
+                await requestGetInitializeData();
+                navigation.goBack();
+              })
+              .catch((err) => {
+                // 取消失败
+                toastAlert(toast, 'error', '取消失败！');
+              })
+              .finally(() => {
+                setShowFinishModal(false);
+                setCloseLoading(false);
+              });
+          }}
+        />
+      )}
+      {openLockModal.isOpen && (
+        <Modal isOpen={openLockModal.isOpen} onClose={() => {}}>
+          <Modal.Content>
+            <Modal.Header>
+              <Text fontSize={sp(20)}>温馨提示</Text>
+            </Modal.Header>
+            <Modal.Body>
+              <Center>
+                <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
+                  当前订单
+                  <Text fontSize={sp(20)} color='#F7BA2A' fontWeight={600}>
+                    {openLockModal.name}
+                  </Text>
+                  正在分析，请确认避免重复分析。
                 </Text>
-                正在分析，请确认避免重复分析。
-              </Text>
-              <Row mt={ss(50)} mb={ss(20)}>
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    setOpenLockModal({
-                      isOpen: false,
-                      name: '',
-                    });
-                  }}>
-                  <Center
-                    borderRadius={ss(4)}
-                    borderWidth={ss(1)}
-                    borderColor={'#03CBB2'}
-                    px={ls(30)}
-                    py={ss(10)}>
-                    <Text color='#0C1B16' fontSize={sp(14)}>
-                      我知道了
-                    </Text>
-                  </Center>
-                </Pressable>
-              </Row>
-            </Center>
-          </Modal.Body>
-        </Modal.Content>
-      </Modal>
+                <Row mt={ss(50)} mb={ss(20)}>
+                  <Pressable
+                    _pressed={{
+                      opacity: 0.6,
+                    }}
+                    hitSlop={ss(20)}
+                    onPress={() => {
+                      setOpenLockModal({
+                        isOpen: false,
+                        name: '',
+                      });
+                    }}>
+                    <Center
+                      borderRadius={ss(4)}
+                      borderWidth={ss(1)}
+                      borderColor={'#03CBB2'}
+                      px={ls(30)}
+                      py={ss(10)}>
+                      <Text color='#0C1B16' fontSize={sp(14)}>
+                        我知道了
+                      </Text>
+                    </Center>
+                  </Pressable>
+                </Row>
+              </Center>
+            </Modal.Body>
+          </Modal.Content>
+        </Modal>
+      )}
     </Box>
   );
 }

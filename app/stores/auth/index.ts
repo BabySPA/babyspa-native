@@ -50,7 +50,7 @@ const useAuthStore = create(
                   user: { ...rest },
                   currentShopWithRole: user.shopsWithRole[0],
                 });
-
+                useLayoutStore.getState().clearCache();
                 useFlowStore.getState().requestGetInitializeData();
 
                 resolve({
@@ -59,6 +59,7 @@ const useAuthStore = create(
                   shouldChooseShops: false,
                 });
               } else {
+                useLayoutStore.getState().clearCache();
                 // 选择店铺
                 resolve({
                   accessToken: accessToken,
@@ -105,7 +106,6 @@ const useAuthStore = create(
       },
       clearAllStoreCache: () => {
         useAuthStore.getState().clearCache();
-        useLayoutStore.getState().clearCache();
         useFlowStore.getState().clearCache();
         useManagerStore.getState().clearCache();
         useMessageStore.getState().clearCache();

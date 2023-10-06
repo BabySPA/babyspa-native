@@ -1,16 +1,13 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon } from 'native-base';
+import { memo } from 'react';
 import { Image } from 'react-native';
 import { Customer } from '~/app/stores/flow/type';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-export default function CustomerArchiveItem({
-  customer,
-}: {
-  customer: Customer;
-}) {
+function CustomerArchiveItem({ customer }: { customer: Customer }) {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
@@ -96,3 +93,5 @@ export default function CustomerArchiveItem({
     </Row>
   );
 }
+
+export default memo(CustomerArchiveItem);

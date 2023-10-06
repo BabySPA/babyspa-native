@@ -288,21 +288,25 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                         />
                       </Row>
 
-                      <TemplateModal
-                        defaultText={tempCustomer.allergy || ''}
-                        template={getTemplateGroups(TemplateGroupKeys.allergy)}
-                        isOpen={isOpenTemplatePicker}
-                        onClose={function (): void {
-                          setIsOpenTemplatePicker(false);
-                        }}
-                        onConfirm={function (text): void {
-                          setTempCustomer({
-                            ...tempCustomer,
-                            allergy: text,
-                          });
-                          setIsOpenTemplatePicker(false);
-                        }}
-                      />
+                      {isOpenTemplatePicker && (
+                        <TemplateModal
+                          defaultText={tempCustomer.allergy || ''}
+                          template={getTemplateGroups(
+                            TemplateGroupKeys.allergy,
+                          )}
+                          isOpen={isOpenTemplatePicker}
+                          onClose={function (): void {
+                            setIsOpenTemplatePicker(false);
+                          }}
+                          onConfirm={function (text): void {
+                            setTempCustomer({
+                              ...tempCustomer,
+                              allergy: text,
+                            });
+                            setIsOpenTemplatePicker(false);
+                          }}
+                        />
+                      )}
                     </Pressable>
                   </Box>
                 }
@@ -311,7 +315,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
           </Box>
         </Column>
       </ScrollView>
-
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
           _pressed={{
@@ -436,68 +439,69 @@ export default function EditCustomerBox(params: EditCustomerBox) {
           </Row>
         </Pressable>
       </Row>
-
-      <Modal
-        isOpen={isOpenBirthdayPicker}
-        onClose={() => {
-          setIsOpenBirthdayPicker(false);
-        }}>
-        <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
-          <DatePicker
-            options={{
-              textHeaderFontSize: sp(16),
-              mainColor: '#00B49E',
-            }}
-            onSelectedChange={(date) => {
-              currentSelectBirthday = date;
-            }}
-            current={tempCustomer.birthday}
-            selected={tempCustomer.birthday}
-            mode='calendar'
-          />
-          <Row justifyContent={'flex-end'} mt={ss(12)}>
-            <Pressable
-              _pressed={{
-                opacity: 0.6,
+      {isOpenBirthdayPicker && (
+        <Modal
+          isOpen={isOpenBirthdayPicker}
+          onClose={() => {
+            setIsOpenBirthdayPicker(false);
+          }}>
+          <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
+            <DatePicker
+              options={{
+                textHeaderFontSize: sp(16),
+                mainColor: '#00B49E',
               }}
-              hitSlop={ss(20)}
-              onPress={() => {
-                setTempCustomer({
-                  ...tempCustomer,
-                  birthday: currentSelectBirthday,
-                });
-                setIsOpenBirthdayPicker(false);
-              }}>
-              <Box
-                bgColor={'#00B49E'}
-                px={ls(26)}
-                py={ss(12)}
-                borderRadius={ss(8)}
-                _text={{ fontSize: sp(16), color: 'white' }}>
-                确定
-              </Box>
-            </Pressable>
-            <Pressable
-              _pressed={{
-                opacity: 0.6,
+              onSelectedChange={(date) => {
+                currentSelectBirthday = date;
               }}
-              hitSlop={ss(20)}
-              onPress={() => {
-                setIsOpenBirthdayPicker(false);
-              }}>
-              <Box
-                bgColor={'#D8D8D8'}
-                px={ls(26)}
-                py={ss(12)}
-                ml={ls(10)}
-                borderRadius={ss(8)}
-                _text={{ fontSize: sp(16), color: 'white' }}>
-                取消
-              </Box>
-            </Pressable>
-          </Row>
-        </Flex>
-      </Modal>
+              current={tempCustomer.birthday}
+              selected={tempCustomer.birthday}
+              mode='calendar'
+            />
+            <Row justifyContent={'flex-end'} mt={ss(12)}>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setTempCustomer({
+                    ...tempCustomer,
+                    birthday: currentSelectBirthday,
+                  });
+                  setIsOpenBirthdayPicker(false);
+                }}>
+                <Box
+                  bgColor={'#00B49E'}
+                  px={ls(26)}
+                  py={ss(12)}
+                  borderRadius={ss(8)}
+                  _text={{ fontSize: sp(16), color: 'white' }}>
+                  确定
+                </Box>
+              </Pressable>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setIsOpenBirthdayPicker(false);
+                }}>
+                <Box
+                  bgColor={'#D8D8D8'}
+                  px={ls(26)}
+                  py={ss(12)}
+                  ml={ls(10)}
+                  borderRadius={ss(8)}
+                  _text={{ fontSize: sp(16), color: 'white' }}>
+                  取消
+                </Box>
+              </Pressable>
+            </Row>
+          </Flex>
+        </Modal>
+      )}
     </Column>
   );
 }

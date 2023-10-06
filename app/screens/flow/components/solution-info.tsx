@@ -191,8 +191,8 @@ export default function SolutionInfo({
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowExtraModal({
+                      ...showExtraModal,
                       isOpen: true,
-                      type: 'application',
                     });
                   }}>
                   <Center
@@ -241,18 +241,20 @@ export default function SolutionInfo({
                 }}>
                 {remark || '您可输入，或从模板选择'}
               </Text>
-              <TemplateModal
-                template={getTemplateGroups(TemplateGroupKeys['flow-remark'])}
-                defaultText={remark}
-                isOpen={showRemarkModal}
-                onClose={function (): void {
-                  setShowRemarkModal(false);
-                }}
-                onConfirm={function (text: string): void {
-                  updateAnalyzeRemark(text);
-                  setShowRemarkModal(false);
-                }}
-              />
+              {showRemarkModal && (
+                <TemplateModal
+                  template={getTemplateGroups(TemplateGroupKeys['flow-remark'])}
+                  defaultText={remark}
+                  isOpen={showRemarkModal}
+                  onClose={function (): void {
+                    setShowRemarkModal(false);
+                  }}
+                  onConfirm={function (text: string): void {
+                    updateAnalyzeRemark(text);
+                    setShowRemarkModal(false);
+                  }}
+                />
+              )}
             </Pressable>
           </BoxItem>
         </Column>
@@ -493,35 +495,37 @@ export default function SolutionInfo({
             </Row>
           </BoxItem>
         </Column>
-        <TemplateExtraModal
-          template={getTemplateGroups(TemplateGroupKeys[showExtraModal.type])}
-          isOpen={showExtraModal.isOpen}
-          onClose={function (): void {
-            setShowExtraModal({
-              isOpen: false,
-              type: 'application',
-            });
-          }}
-          onConfirm={function (res): void {
-            if (showExtraModal.type === 'application') {
-              addSolutionApplication({
-                name: res.title,
-                acupoint: res.content,
-                count: 1,
+        {showExtraModal.isOpen && (
+          <TemplateExtraModal
+            template={getTemplateGroups(TemplateGroupKeys[showExtraModal.type])}
+            isOpen={showExtraModal.isOpen}
+            onClose={function (): void {
+              setShowExtraModal({
+                isOpen: false,
+                type: 'application',
               });
-            } else {
-              addSolutionMassage({
-                name: res.title,
-                remark: res.content,
-                count: 1,
+            }}
+            onConfirm={function (res): void {
+              if (showExtraModal.type === 'application') {
+                addSolutionApplication({
+                  name: res.title,
+                  acupoint: res.content,
+                  count: 1,
+                });
+              } else {
+                addSolutionMassage({
+                  name: res.title,
+                  remark: res.content,
+                  count: 1,
+                });
+              }
+              setShowExtraModal({
+                isOpen: false,
+                type: 'application',
               });
-            }
-            setShowExtraModal({
-              isOpen: false,
-              type: 'application',
-            });
-          }}
-        />
+            }}
+          />
+        )}
       </Row>
     </KeyboardAvoidingView>
   );

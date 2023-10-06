@@ -32,7 +32,7 @@ export default function MessageDrawer() {
   const navigation = useNavigation();
 
   // 开启消息轮询
-  let interval: NodeJS.Timer;
+  let interval: any;
   const startRequestMessagesInterval = () => {
     if (interval) {
       return;
@@ -132,7 +132,7 @@ export default function MessageDrawer() {
 
   const safe = useSafeAreaInsets();
   return (
-    <Column paddingBottom={safe.bottom + 50}>
+    <Column paddingBottom={safe.bottom + 50} bgColor={'#fff'} h={'100%'}>
       <Row alignItems={'flex-start'} p={ss(24)}>
         <Text fontSize={sp(20)} color={'#000'} fontWeight={600}>
           消息

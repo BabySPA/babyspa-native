@@ -8,6 +8,7 @@ import {
   Row,
   Pressable,
   Center,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultCustomer } from '~/app/stores/flow';
@@ -18,7 +19,6 @@ import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import { debounce } from 'lodash';
-import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function Archive() {
   const navigation = useNavigation();
@@ -27,12 +27,10 @@ export default function Archive() {
     updateCurrentArchiveCustomer,
   } = useFlowStore();
 
-  const [loading, setLoading] = useState(false);
-
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      <Box mt={ss(10)} flex={1}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -45,28 +43,33 @@ export default function Archive() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {customers.map((customer, idx) => (
-                <Center w={'33.33%'} key={idx}>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    key={idx}
-                    pr={ls(20)}
-                    onPress={() => {
-                      updateCurrentArchiveCustomer(customer);
-                      navigation.navigate('CustomerArchive');
-                    }}>
-                    <CustomerArchiveItem customer={customer} />
-                  </Pressable>
-                </Center>
-              ))}
-            </Row>
+            <FlatList
+              numColumns={3}
+              mb={ss(120)}
+              data={customers}
+              renderItem={({ item: customer, index: idx }) => {
+                return (
+                  <Center w={'33.33%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      key={idx}
+                      pr={ls(20)}
+                      onPress={() => {
+                        updateCurrentArchiveCustomer(customer);
+                        navigation.navigate('CustomerArchive');
+                      }}>
+                      <CustomerArchiveItem customer={customer} />
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -79,14 +82,6 @@ function Filter() {
     updateCurrentArchiveCustomer,
     requestArchiveCustomers,
   } = useFlowStore();
-
-  const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
-    type?: 'start' | 'end';
-    isOpen: boolean;
-  }>({
-    type: 'start',
-    isOpen: false,
-  });
 
   const [defaultSelectShop, selectShops] = useSelectShops(true);
 

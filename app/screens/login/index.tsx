@@ -18,6 +18,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ImageBackground, Image } from 'react-native';
 import { ls, ss, sp } from '~/app/utils/style';
 import { ShopsWithRole } from '~/app/stores/auth/type';
+import { toastAlert } from '~/app/utils/toast';
 
 export default function LoginScreen({
   navigation,
@@ -52,33 +53,12 @@ export default function LoginScreen({
             });
           } else {
             setLoading(false);
-            toast.show({
-              variant: 'left-accent',
-              placement: 'top',
-              title: '登录成功',
-              bg: 'success.500',
-            });
+            toastAlert(toast, 'success', '登录成功');
           }
         })
-        .catch((error) => {
+        .catch(() => {
           setLoading(false);
-          if (error.code == 403) {
-            toast.show({
-              variant: 'left-accent',
-              placement: 'top',
-              title: '登录失败',
-              description: error.message,
-              bg: 'danger.500',
-            });
-          } else {
-            toast.show({
-              variant: 'left-accent',
-              placement: 'top',
-              title: '登录失败',
-              description: '请查看用户名/密码是否正确',
-              bg: 'danger.500',
-            });
-          }
+          toastAlert(toast, 'error', '登录失败，请查看用户名/密码是否正确');
         });
     }
   };
@@ -89,6 +69,7 @@ export default function LoginScreen({
 
     setTimeout(() => {
       setLoading(false);
+      toastAlert(toast, 'success', '登录成功');
       selectLoginShop({
         ...loginUser,
         currentShopWithRole: currentShopWithRole,

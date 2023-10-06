@@ -1,7 +1,6 @@
 import {
   Flex,
   Text,
-  ScrollView,
   Icon,
   Input,
   Row,
@@ -10,6 +9,8 @@ import {
   Center,
   Circle,
   Image,
+  Box,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
@@ -43,49 +44,59 @@ export default function Analyze() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      <Box margin={ss(10)} flex={1}>
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
           <Row
             flex={1}
-            p={ss(40)}
-            pb={0}
+            pt={ss(30)}
+            pr={ss(30)}
+            pl={ss(40)}
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => (
-                <Center width={'50%'} key={idx}>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    ml={idx % 2 == 1 ? ss(20) : 0}
-                    mr={idx % 2 == 0 ? ss(20) : 0}
-                    mb={ss(40)}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      updateCurrentFlow(flow);
-                      navigation.navigate('FlowInfo', { from: 'analyze' });
-                    }}>
-                    <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
-                    {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
-                      <Circle
-                        size={sp(18)}
-                        bgColor={'#FC554F'}
-                        position={'absolute'}
-                        right={-ss(9)}
-                        top={-ss(9)}
+            <FlatList
+              data={flows}
+              mb={ss(120)}
+              numColumns={2}
+              contentContainerStyle={{ marginTop: ss(10), marginRight: ss(10) }}
+              renderItem={({ item: flow, index: idx }) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('FlowInfo', { from: 'analyze' });
+                      }}>
+                      <FlowCustomerItem
+                        flow={flow}
+                        type={OperateType.Analyze}
                       />
-                    )}
-                  </Pressable>
-                </Center>
-              ))}
-            </Row>
+                      {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
+                        <Circle
+                          size={sp(18)}
+                          bgColor={'#FC554F'}
+                          position={'absolute'}
+                          right={-ss(9)}
+                          top={-ss(9)}
+                        />
+                      )}
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -366,36 +377,38 @@ function Filter() {
               </Text>
             </Pressable>
           </Row>
-          <DatePickerModal
-            isOpen={isOpenDatePicker.isOpen}
-            onClose={() => {
-              setIsOpenDatePicker({
-                isOpen: false,
-              });
-            }}
-            onSelectedChange={(date: string) => {
-              if (!isOpenDatePicker.type) return;
-              if (isOpenDatePicker.type == 'start') {
-                updateAnalyzeFilter({
-                  startDate: date,
+          {isOpenDatePicker.isOpen && (
+            <DatePickerModal
+              isOpen={isOpenDatePicker.isOpen}
+              onClose={() => {
+                setIsOpenDatePicker({
+                  isOpen: false,
                 });
-              } else {
-                updateAnalyzeFilter({
-                  endDate: date,
-                });
+              }}
+              onSelectedChange={(date: string) => {
+                if (!isOpenDatePicker.type) return;
+                if (isOpenDatePicker.type == 'start') {
+                  updateAnalyzeFilter({
+                    startDate: date,
+                  });
+                } else {
+                  updateAnalyzeFilter({
+                    endDate: date,
+                  });
+                }
+              }}
+              current={
+                isOpenDatePicker.type == 'start'
+                  ? analyze.startDate
+                  : analyze.endDate
               }
-            }}
-            current={
-              isOpenDatePicker.type == 'start'
-                ? analyze.startDate
-                : analyze.endDate
-            }
-            selected={
-              isOpenDatePicker.type == 'start'
-                ? analyze.startDate
-                : analyze.endDate
-            }
-          />
+              selected={
+                isOpenDatePicker.type == 'start'
+                  ? analyze.startDate
+                  : analyze.endDate
+              }
+            />
+          )}
         </Column>
       )}
     </Column>

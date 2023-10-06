@@ -37,17 +37,19 @@ export default function PreviewImage({
           transition={1000}
         />
       </Pressable>
-      <Modal isOpen={showImageModal} onClose={() => setShowImageModal(false)}>
-        <ImageViewer
-          index={current}
-          imageUrls={images}
-          saveToLocalByLongPress={false}
-          style={{
-            width: ss(800),
-            height: ss(600),
-          }}
-        />
-      </Modal>
+      {showImageModal && (
+        <Modal isOpen={showImageModal} onClose={() => setShowImageModal(false)}>
+          <ImageViewer
+            index={current}
+            imageUrls={images}
+            saveToLocalByLongPress={false}
+            style={{
+              width: ss(800),
+              height: ss(600),
+            }}
+          />
+        </Modal>
+      )}
     </>
   );
 }

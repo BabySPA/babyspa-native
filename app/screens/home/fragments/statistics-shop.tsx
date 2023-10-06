@@ -583,25 +583,26 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
             {endDate}
           </Text>
         </Pressable>
-
-        <DatePickerModal
-          isOpen={isOpenDatePicker.isOpen}
-          onClose={() => {
-            setIsOpenDatePicker({
-              isOpen: false,
-            });
-          }}
-          onSelectedChange={(date: string) => {
-            if (!isOpenDatePicker.type) return;
-            if (isOpenDatePicker.type == 'start') {
-              setStartDate(date);
-            } else {
-              setEndDate(date);
-            }
-          }}
-          current={isOpenDatePicker.type == 'start' ? startDate : endDate}
-          selected={isOpenDatePicker.type == 'start' ? startDate : endDate}
-        />
+        {isOpenDatePicker.isOpen && (
+          <DatePickerModal
+            isOpen={isOpenDatePicker.isOpen}
+            onClose={() => {
+              setIsOpenDatePicker({
+                isOpen: false,
+              });
+            }}
+            onSelectedChange={(date: string) => {
+              if (!isOpenDatePicker.type) return;
+              if (isOpenDatePicker.type == 'start') {
+                setStartDate(date);
+              } else {
+                setEndDate(date);
+              }
+            }}
+            current={isOpenDatePicker.type == 'start' ? startDate : endDate}
+            selected={isOpenDatePicker.type == 'start' ? startDate : endDate}
+          />
+        )}
       </Row>
     </Column>
   );

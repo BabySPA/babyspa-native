@@ -274,42 +274,46 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   完成随访
                 </Text>
               </Pressable>
-              <DialogModal
-                title='是否确认结束随访？'
-                isOpen={showCancelDialog}
-                onClose={function (): void {
-                  setShowCancelDialog(false);
-                }}
-                onConfirm={function (): void {
-                  setCancelLoading(true);
-                  requestPatchFollowUp({
-                    followUpStatus: FollowUpStatus.CANCEL,
-                  }).then(async (res) => {
-                    await requestGetFollowUps();
-                    setCancelLoading(false);
-                    navigation.goBack();
-                  });
-                }}
-              />
-              <DialogModal
-                title='是否确认完成随访？'
-                isOpen={showConfirmDialog}
-                onClose={function (): void {
-                  setShowConfirmDialog(false);
-                }}
-                onConfirm={function (): void {
-                  setConfirmLoading(true);
-                  requestPatchFollowUp({
-                    followUpStatus: FollowUpStatus.DONE,
-                    followUpResult: selectResult,
-                    followUpContent: followupContent,
-                  }).then(async (res) => {
-                    await requestGetFollowUps();
-                    setConfirmLoading(false);
-                    navigation.goBack();
-                  });
-                }}
-              />
+              {showCancelDialog && (
+                <DialogModal
+                  title='是否确认结束随访？'
+                  isOpen={showCancelDialog}
+                  onClose={function (): void {
+                    setShowCancelDialog(false);
+                  }}
+                  onConfirm={function (): void {
+                    setCancelLoading(true);
+                    requestPatchFollowUp({
+                      followUpStatus: FollowUpStatus.CANCEL,
+                    }).then(async (res) => {
+                      await requestGetFollowUps();
+                      setCancelLoading(false);
+                      navigation.goBack();
+                    });
+                  }}
+                />
+              )}
+              {showConfirmDialog && (
+                <DialogModal
+                  title='是否确认完成随访？'
+                  isOpen={showConfirmDialog}
+                  onClose={function (): void {
+                    setShowConfirmDialog(false);
+                  }}
+                  onConfirm={function (): void {
+                    setConfirmLoading(true);
+                    requestPatchFollowUp({
+                      followUpStatus: FollowUpStatus.DONE,
+                      followUpResult: selectResult,
+                      followUpContent: followupContent,
+                    }).then(async (res) => {
+                      await requestGetFollowUps();
+                      setConfirmLoading(false);
+                      navigation.goBack();
+                    });
+                  }}
+                />
+              )}
             </Row>
           </Column>
         ) : followUp.followUpStatus == FollowUpStatus.CANCEL ? (

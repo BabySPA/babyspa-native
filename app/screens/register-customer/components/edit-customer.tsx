@@ -36,7 +36,7 @@ export default function EditCustomer(params: EditCustomerParams) {
 
   const { operators } = useFlowStore();
 
-  const { templates, getTemplateGroups } = useManagerStore();
+  const { getTemplateGroups } = useManagerStore();
 
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
@@ -289,35 +289,37 @@ export default function EditCustomer(params: EditCustomerParams) {
                     />
                   </Row>
 
-                  <TemplateModal
-                    defaultText={
-                      currentFlow.customer.allergy ||
-                      currentFlow.collect.healthInfo.allergy ||
-                      ''
-                    }
-                    template={getTemplateGroups(TemplateGroupKeys.allergy)}
-                    isOpen={isOpenTemplatePicker}
-                    onClose={function (): void {
-                      setIsOpenTemplatePicker(false);
-                    }}
-                    onConfirm={function (text): void {
-                      updateCurrentFlow({
-                        ...currentFlow,
-                        customer: {
-                          ...currentFlow.customer,
-                          allergy: text,
-                        },
-                        collect: {
-                          ...currentFlow.collect,
-                          healthInfo: {
-                            ...currentFlow.collect.healthInfo,
+                  {isOpenTemplatePicker && (
+                    <TemplateModal
+                      defaultText={
+                        currentFlow.customer.allergy ||
+                        currentFlow.collect.healthInfo.allergy ||
+                        ''
+                      }
+                      template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                      isOpen={isOpenTemplatePicker}
+                      onClose={function (): void {
+                        setIsOpenTemplatePicker(false);
+                      }}
+                      onConfirm={function (text): void {
+                        updateCurrentFlow({
+                          ...currentFlow,
+                          customer: {
+                            ...currentFlow.customer,
                             allergy: text,
                           },
-                        },
-                      });
-                      setIsOpenTemplatePicker(false);
-                    }}
-                  />
+                          collect: {
+                            ...currentFlow.collect,
+                            healthInfo: {
+                              ...currentFlow.collect.healthInfo,
+                              allergy: text,
+                            },
+                          },
+                        });
+                        setIsOpenTemplatePicker(false);
+                      }}
+                    />
+                  )}
                 </Pressable>
               </Box>
             }
@@ -349,23 +351,25 @@ export default function EditCustomer(params: EditCustomerParams) {
           />
         </Column>
       </Flex>
-      <DatePickerModal
-        isOpen={isOpenBirthdayPicker}
-        onClose={() => {
-          setIsOpenBirthdayPicker(false);
-        }}
-        onSelectedChange={(date: string) => {
-          updateCurrentFlow({
-            ...currentFlow,
-            customer: {
-              ...currentFlow.customer,
-              birthday: date,
-            },
-          });
-        }}
-        current={currentFlow.customer.birthday}
-        selected={currentFlow.customer.birthday}
-      />
+      {isOpenBirthdayPicker && (
+        <DatePickerModal
+          isOpen={isOpenBirthdayPicker}
+          onClose={() => {
+            setIsOpenBirthdayPicker(false);
+          }}
+          onSelectedChange={(date: string) => {
+            updateCurrentFlow({
+              ...currentFlow,
+              customer: {
+                ...currentFlow.customer,
+                birthday: date,
+              },
+            });
+          }}
+          current={currentFlow.customer.birthday}
+          selected={currentFlow.customer.birthday}
+        />
+      )}
     </ScrollView>
   );
 }

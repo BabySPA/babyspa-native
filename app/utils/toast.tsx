@@ -1,4 +1,4 @@
-import { Alert, Text, Toast, Column, Row } from 'native-base';
+import { Alert, Text, Toast, Column, Row, Center } from 'native-base';
 import { sp } from './style';
 
 export function toastAlert(
@@ -6,15 +6,11 @@ export function toastAlert(
   type: 'info' | 'warning' | 'success' | 'error',
   text: string | JSX.Element,
 ) {
-  toast.show({
+  const closeId = toast.show({
     placement: 'top',
     render: () => {
       return (
-        <Alert
-          w='100%'
-          variant={'subtle'}
-          bgColor={'rgba(216, 216, 216, 0.5)'}
-          status={type}>
+        <Alert w='100%' variant={'subtle'} status={type}>
           <Column space={2} flexShrink={1} w='100%'>
             <Row
               flexShrink={1}
@@ -31,4 +27,8 @@ export function toastAlert(
       );
     },
   });
+
+  setTimeout(() => {
+    toast.close(closeId);
+  }, 500);
 }

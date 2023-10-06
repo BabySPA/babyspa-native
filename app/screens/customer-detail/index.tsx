@@ -87,33 +87,35 @@ export default function CustomerDetail({
           />
         )}
       </Row>
-      <DialogModal
-        isOpen={showModal}
-        onClose={function (): void {
-          setShowModal(false);
-        }}
-        title='是否确认取消登记？'
-        onConfirm={function (): void {
-          setShowModal(false);
-          if (loading) return;
-          setLoading(true);
-          requestPatchRegisterStatus({
-            status: RegisterStatus.CANCEL,
-          })
-            .then(async (res) => {
-              // 取消成功
-              toastAlert(toast, 'success', '取消成功！');
-              await requestGetInitializeData();
+      {showModal && (
+        <DialogModal
+          isOpen={showModal}
+          onClose={function (): void {
+            setShowModal(false);
+          }}
+          title='是否确认取消登记？'
+          onConfirm={function (): void {
+            setShowModal(false);
+            if (loading) return;
+            setLoading(true);
+            requestPatchRegisterStatus({
+              status: RegisterStatus.CANCEL,
             })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '取消失败！');
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        }}
-      />
+              .then(async (res) => {
+                // 取消成功
+                toastAlert(toast, 'success', '取消成功！');
+                await requestGetInitializeData();
+              })
+              .catch((err) => {
+                // 取消失败
+                toastAlert(toast, 'error', '取消失败！');
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }}
+        />
+      )}
     </Box>
   );
 }

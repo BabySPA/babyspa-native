@@ -1,7 +1,6 @@
 import {
   Flex,
   Text,
-  ScrollView,
   Icon,
   Input,
   Row,
@@ -9,6 +8,8 @@ import {
   Pressable,
   Center,
   Image,
+  Box,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
@@ -40,7 +41,7 @@ export default function Evaluate() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      <Box margin={ss(10)} flex={1}>
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -51,8 +52,11 @@ export default function Evaluate() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => {
+            <FlatList
+              mb={ss(120)}
+              data={flows}
+              numColumns={2}
+              renderItem={({ item: flow, index: idx }) => {
                 return (
                   <Center width={'50%'} key={idx}>
                     <Pressable
@@ -73,11 +77,11 @@ export default function Evaluate() {
                     </Pressable>
                   </Center>
                 );
-              })}
-            </Row>
+              }}
+            />
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -357,36 +361,38 @@ function Filter() {
               </Text>
             </Pressable>
           </Row>
-          <DatePickerModal
-            isOpen={isOpenDatePicker.isOpen}
-            onClose={() => {
-              setIsOpenDatePicker({
-                isOpen: false,
-              });
-            }}
-            onSelectedChange={(date: string) => {
-              if (!isOpenDatePicker.type) return;
-              if (isOpenDatePicker.type == 'start') {
-                updateEvaluateFilter({
-                  startDate: date,
+          {isOpenDatePicker.isOpen && (
+            <DatePickerModal
+              isOpen={isOpenDatePicker.isOpen}
+              onClose={() => {
+                setIsOpenDatePicker({
+                  isOpen: false,
                 });
-              } else {
-                updateEvaluateFilter({
-                  endDate: date,
-                });
+              }}
+              onSelectedChange={(date: string) => {
+                if (!isOpenDatePicker.type) return;
+                if (isOpenDatePicker.type == 'start') {
+                  updateEvaluateFilter({
+                    startDate: date,
+                  });
+                } else {
+                  updateEvaluateFilter({
+                    endDate: date,
+                  });
+                }
+              }}
+              current={
+                isOpenDatePicker.type == 'start'
+                  ? evaluate.startDate
+                  : evaluate.endDate
               }
-            }}
-            current={
-              isOpenDatePicker.type == 'start'
-                ? evaluate.startDate
-                : evaluate.endDate
-            }
-            selected={
-              isOpenDatePicker.type == 'start'
-                ? evaluate.startDate
-                : evaluate.endDate
-            }
-          />
+              selected={
+                isOpenDatePicker.type == 'start'
+                  ? evaluate.startDate
+                  : evaluate.endDate
+              }
+            />
+          )}
         </Column>
       )}
     </Column>

@@ -24,7 +24,7 @@ const initialState = {
   currentSelected: 0,
 };
 
-export default create(
+const useLayoutStore = create(
   immer<LayoutConfigWithRole>((set, get) => ({
     ...initialState,
     clearCache: () => {
@@ -51,7 +51,11 @@ export default create(
         currentShopWithRole?.role.authorities,
       );
 
-      set({ layoutConfig: filterConfig });
+      console.log('filterConfig');
+      set((state) => {
+        state.layoutConfig = filterConfig;
+      });
+
       return filterConfig;
     },
     changeCurrentSelected: (index: number) => {
@@ -64,3 +68,5 @@ export default create(
     },
   })),
 );
+
+export default useLayoutStore;

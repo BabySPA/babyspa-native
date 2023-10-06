@@ -10,6 +10,7 @@ import {
   Pressable,
   Center,
   Image,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
@@ -41,7 +42,7 @@ export default function Collection() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      <Box margin={ss(10)} flex={1}>
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -52,8 +53,11 @@ export default function Collection() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => {
+            <FlatList
+              mb={ss(120)}
+              numColumns={2}
+              data={flows}
+              renderItem={({ item: flow, index: idx }) => {
                 return (
                   <Center width={'50%'} key={idx}>
                     <Pressable
@@ -72,11 +76,11 @@ export default function Collection() {
                     </Pressable>
                   </Center>
                 );
-              })}
-            </Row>
+              }}
+            />
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -396,36 +400,38 @@ function Filter() {
               </Text>
             </Pressable>
           </Row>
-          <DatePickerModal
-            isOpen={isOpenDatePicker.isOpen}
-            onClose={() => {
-              setIsOpenDatePicker({
-                isOpen: false,
-              });
-            }}
-            onSelectedChange={(date: string) => {
-              if (!isOpenDatePicker.type) return;
-              if (isOpenDatePicker.type == 'start') {
-                updateCollectionFilter({
-                  startDate: date,
+          {isOpenDatePicker.isOpen && (
+            <DatePickerModal
+              isOpen={isOpenDatePicker.isOpen}
+              onClose={() => {
+                setIsOpenDatePicker({
+                  isOpen: false,
                 });
-              } else {
-                updateCollectionFilter({
-                  endDate: date,
-                });
+              }}
+              onSelectedChange={(date: string) => {
+                if (!isOpenDatePicker.type) return;
+                if (isOpenDatePicker.type == 'start') {
+                  updateCollectionFilter({
+                    startDate: date,
+                  });
+                } else {
+                  updateCollectionFilter({
+                    endDate: date,
+                  });
+                }
+              }}
+              current={
+                isOpenDatePicker.type == 'start'
+                  ? collection.startDate
+                  : collection.endDate
               }
-            }}
-            current={
-              isOpenDatePicker.type == 'start'
-                ? collection.startDate
-                : collection.endDate
-            }
-            selected={
-              isOpenDatePicker.type == 'start'
-                ? collection.startDate
-                : collection.endDate
-            }
-          />
+              selected={
+                isOpenDatePicker.type == 'start'
+                  ? collection.startDate
+                  : collection.endDate
+              }
+            />
+          )}
         </Column>
       )}
     </Column>

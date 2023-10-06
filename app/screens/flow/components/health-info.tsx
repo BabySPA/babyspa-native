@@ -76,23 +76,25 @@ export default function HealthInfo({
                 {collect.healthInfo.allergy.length}/300
               </Text>
             </Pressable>
-            <TemplateModal
-              defaultText={collect.healthInfo.allergy || ''}
-              template={getTemplateGroups(TemplateGroupKeys.allergy)}
-              isOpen={isOpenTemplatePicker}
-              onClose={function (): void {
-                setIsOpenTemplatePicker(false);
-              }}
-              onConfirm={function (text): void {
-                updateCollection({
-                  healthInfo: {
-                    ...collect.healthInfo,
-                    allergy: text,
-                  },
-                });
-                setIsOpenTemplatePicker(false);
-              }}
-            />
+            {isOpenTemplatePicker && (
+              <TemplateModal
+                defaultText={collect.healthInfo.allergy || ''}
+                template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                isOpen={isOpenTemplatePicker}
+                onClose={function (): void {
+                  setIsOpenTemplatePicker(false);
+                }}
+                onConfirm={function (text): void {
+                  updateCollection({
+                    healthInfo: {
+                      ...collect.healthInfo,
+                      allergy: text,
+                    },
+                  });
+                  setIsOpenTemplatePicker(false);
+                }}
+              />
+            )}
           </Box>
         </BoxItem>
         <BoxItem

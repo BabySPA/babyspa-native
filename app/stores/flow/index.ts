@@ -28,7 +28,7 @@ const DefaultFlowListData = {
   flows: [],
   searchKeywords: '',
   status: FlowStatus.NO_SET,
-  startDate: dayjs().format('YYYY-MM-DD'),
+  startDate: dayjs().subtract(7, 'days').format('YYYY-MM-DD'),
   endDate: dayjs().format('YYYY-MM-DD'),
 };
 

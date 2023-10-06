@@ -113,33 +113,35 @@ export default function InfoBox(params: InfoBoxParams) {
           </Box>
         </Pressable>
       </Row>
-      <DialogModal
-        isOpen={isDeleteDialogOpen}
-        onClose={function (): void {
-          setIsDeleteDialogOpen(false);
-        }}
-        title='是否确认删除该角色，所有配置该角色的员工可能会出现问题，请谨慎操作！'
-        onConfirm={function (): void {
-          setIsDeleteDialogOpen(false);
-          if (deleteLoading) return;
-          setDeleteLoading(true);
+      {isDeleteDialogOpen && (
+        <DialogModal
+          isOpen={isDeleteDialogOpen}
+          onClose={function (): void {
+            setIsDeleteDialogOpen(false);
+          }}
+          title='是否确认删除该角色，所有配置该角色的员工可能会出现问题，请谨慎操作！'
+          onConfirm={function (): void {
+            setIsDeleteDialogOpen(false);
+            if (deleteLoading) return;
+            setDeleteLoading(true);
 
-          requestDeleteRole()
-            .then(async (res) => {
-              // 取消成功
-              requestGetRoles();
-              toastAlert(toast, 'success', '删除角色成功！');
-              navigation.goBack();
-            })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '删除角色失败！');
-            })
-            .finally(() => {
-              setDeleteLoading(false);
-            });
-        }}
-      />
+            requestDeleteRole()
+              .then(async (res) => {
+                // 取消成功
+                requestGetRoles();
+                toastAlert(toast, 'success', '删除角色成功！');
+                navigation.goBack();
+              })
+              .catch((err) => {
+                // 取消失败
+                toastAlert(toast, 'error', '删除角色失败！');
+              })
+              .finally(() => {
+                setDeleteLoading(false);
+              });
+          }}
+        />
+      )}
     </Column>
   );
 }

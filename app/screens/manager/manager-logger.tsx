@@ -252,38 +252,40 @@ function Filter() {
         </Pressable>
       </Row>
 
-      <DatePickerModal
-        isOpen={isOpenDatePicker.isOpen}
-        onClose={() => {
-          setIsOpenDatePicker({
-            isOpen: false,
-          });
-        }}
-        onSelectedChange={(date: string) => {
-          if (!isOpenDatePicker.type) return;
-          if (isOpenDatePicker.type == 'start') {
-            setLogFilter({
-              startDate: date,
+      {isOpenDatePicker.isOpen && (
+        <DatePickerModal
+          isOpen={isOpenDatePicker.isOpen}
+          onClose={() => {
+            setIsOpenDatePicker({
+              isOpen: false,
             });
-            requestGetLogs();
-          } else {
-            setLogFilter({
-              endDate: date,
-            });
-            requestGetLogs();
+          }}
+          onSelectedChange={(date: string) => {
+            if (!isOpenDatePicker.type) return;
+            if (isOpenDatePicker.type == 'start') {
+              setLogFilter({
+                startDate: date,
+              });
+              requestGetLogs();
+            } else {
+              setLogFilter({
+                endDate: date,
+              });
+              requestGetLogs();
+            }
+          }}
+          current={
+            isOpenDatePicker.type == 'start'
+              ? logFilter.startDate
+              : logFilter.endDate
           }
-        }}
-        current={
-          isOpenDatePicker.type == 'start'
-            ? logFilter.startDate
-            : logFilter.endDate
-        }
-        selected={
-          isOpenDatePicker.type == 'start'
-            ? logFilter.startDate
-            : logFilter.endDate
-        }
-      />
+          selected={
+            isOpenDatePicker.type == 'start'
+              ? logFilter.startDate
+              : logFilter.endDate
+          }
+        />
+      )}
     </Row>
   );
 }

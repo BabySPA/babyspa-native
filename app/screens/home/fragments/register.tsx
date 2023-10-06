@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Text,
-  ScrollView,
   Icon,
   Input,
   Row,
@@ -10,6 +9,7 @@ import {
   Pressable,
   Center,
   Image,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
@@ -42,7 +42,7 @@ export default function Register() {
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      <Box margin={ss(10)} flex={1}>
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -53,29 +53,37 @@ export default function Register() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => (
-                <Center width={'50%'} key={idx}>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    ml={idx % 2 == 1 ? ss(20) : 0}
-                    mr={idx % 2 == 0 ? ss(20) : 0}
-                    mb={ss(40)}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      updateCurrentFlow(flow);
-                      navigation.navigate('CustomerDetail');
-                    }}>
-                    <FlowCustomerItem flow={flow} type={OperateType.Register} />
-                  </Pressable>
-                </Center>
-              ))}
-            </Row>
+            <FlatList
+              mb={ss(120)}
+              data={flows}
+              numColumns={2}
+              renderItem={({ item: flow, index: idx }) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('CustomerDetail');
+                      }}>
+                      <FlowCustomerItem
+                        flow={flow}
+                        type={OperateType.Register}
+                      />
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -378,36 +386,38 @@ function Filter() {
               </Text>
             </Pressable>
           </Row>
-          <DatePickerModal
-            isOpen={isOpenDatePicker.isOpen}
-            onClose={() => {
-              setIsOpenDatePicker({
-                isOpen: false,
-              });
-            }}
-            onSelectedChange={(date: string) => {
-              if (!isOpenDatePicker.type) return;
-              if (isOpenDatePicker.type == 'start') {
-                updateRegisterFilter({
-                  startDate: date,
+          {isOpenDatePicker.isOpen && (
+            <DatePickerModal
+              isOpen={isOpenDatePicker.isOpen}
+              onClose={() => {
+                setIsOpenDatePicker({
+                  isOpen: false,
                 });
-              } else {
-                updateRegisterFilter({
-                  endDate: date,
-                });
+              }}
+              onSelectedChange={(date: string) => {
+                if (!isOpenDatePicker.type) return;
+                if (isOpenDatePicker.type == 'start') {
+                  updateRegisterFilter({
+                    startDate: date,
+                  });
+                } else {
+                  updateRegisterFilter({
+                    endDate: date,
+                  });
+                }
+              }}
+              current={
+                isOpenDatePicker.type == 'start'
+                  ? register.startDate
+                  : register.endDate
               }
-            }}
-            current={
-              isOpenDatePicker.type == 'start'
-                ? register.startDate
-                : register.endDate
-            }
-            selected={
-              isOpenDatePicker.type == 'start'
-                ? register.startDate
-                : register.endDate
-            }
-          />
+              selected={
+                isOpenDatePicker.type == 'start'
+                  ? register.startDate
+                  : register.endDate
+              }
+            />
+          )}
         </Column>
       )}
     </Column>
