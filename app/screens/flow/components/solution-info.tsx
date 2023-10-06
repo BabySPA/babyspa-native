@@ -437,8 +437,8 @@ export default function SolutionInfo({
           isOpen={showExtraModal.isOpen}
           onClose={function (): void {
             setShowExtraModal({
+              ...showExtraModal,
               isOpen: false,
-              type: 'application',
             });
           }}
           onConfirm={function (res): void {

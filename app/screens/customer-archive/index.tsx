@@ -357,10 +357,8 @@ export default function CustomerArchive({
         defaultWeight={showEditGrowthCurve.defaultWeight}
         onClose={function (): void {
           setShowEditGrowthCurve({
+            ...showEditGrowthCurve,
             isOpen: false,
-            date: '',
-            defaultHeight: 0,
-            defaultWeight: 0,
           });
         }}
         onConfirm={function ({

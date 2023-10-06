@@ -51,7 +51,7 @@ export function DialogModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
 
         <Modal.Header>
@@ -346,7 +346,7 @@ export function GrowthCurveModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
         <Modal.Header fontSize={sp(20)}>{'生长记录'}</Modal.Header>
         <Modal.Body>
@@ -468,7 +468,7 @@ export function ChangePasswordModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
         <Modal.Header>
           <Text fontSize={sp(20)}>修改密码</Text>
@@ -625,7 +625,7 @@ export function NewTemplateModalModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
         <Modal.Header>
           <Text fontSize={sp(20)}>{title}</Text>
@@ -714,6 +714,7 @@ interface NewTemplateGroupModalParams {
   title: string;
   onClose: () => void;
   onConfirm: (text: string) => void;
+  onDeleteGroup: (text: string) => void;
 }
 export function NewTemplateGroupModal({
   isOpen,
@@ -721,6 +722,7 @@ export function NewTemplateGroupModal({
   title,
   onClose,
   onConfirm,
+  onDeleteGroup,
 }: NewTemplateGroupModalParams) {
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
@@ -734,7 +736,7 @@ export function NewTemplateGroupModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
         <Modal.Header>
           <Text fontSize={sp(20)}>{title}</Text>
@@ -742,7 +744,7 @@ export function NewTemplateGroupModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333' w={ss(80)}>
+              <Text fontSize={sp(20)} color='#333' w={ss(100)}>
                 分组名称
               </Text>
               <Input
@@ -765,25 +767,48 @@ export function NewTemplateGroupModal({
             </Row>
 
             <Row mt={ss(80, 40)} mb={ss(20)}>
-              <Pressable
-                _pressed={{
-                  opacity: 0.6,
-                }}
-                hitSlop={ss(20)}
-                onPress={() => {
-                  onClose();
-                }}>
-                <Center
-                  borderRadius={ss(4)}
-                  borderWidth={ss(1)}
-                  borderColor={'#03CBB2'}
-                  px={ls(30)}
-                  py={ss(10)}>
-                  <Text color='#00B49E' fontSize={sp(14)}>
-                    取消
-                  </Text>
-                </Center>
-              </Pressable>
+              {defaultName.length > 0 ? (
+                <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
+                  hitSlop={ss(20)}
+                  onPress={() => {
+                    onDeleteGroup(defaultName);
+                  }}>
+                  <Center
+                    borderRadius={ss(4)}
+                    borderWidth={ss(1)}
+                    borderColor={'#F3601E'}
+                    bgColor={'rgba(243, 96, 30, 0.20)'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#F3601E' fontSize={sp(14)}>
+                      删除
+                    </Text>
+                  </Center>
+                </Pressable>
+              ) : (
+                <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
+                  hitSlop={ss(20)}
+                  onPress={() => {
+                    onClose();
+                  }}>
+                  <Center
+                    borderRadius={ss(4)}
+                    borderWidth={ss(1)}
+                    borderColor={'#03CBB2'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#00B49E' fontSize={sp(14)}>
+                      取消
+                    </Text>
+                  </Center>
+                </Pressable>
+              )}
               <Pressable
                 _pressed={{
                   opacity: 0.6,
@@ -849,7 +874,7 @@ export function NewLevel3TemplateGroupModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
         <Modal.Header>
           <Text fontSize={sp(20)}>{title}</Text>
@@ -857,7 +882,7 @@ export function NewLevel3TemplateGroupModal({
         <Modal.Body>
           <Center>
             <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333' w={ss(80)}>
+              <Text fontSize={sp(20)} color='#333' w={ss(100)}>
                 模版名称
               </Text>
               <Input
@@ -880,7 +905,7 @@ export function NewLevel3TemplateGroupModal({
             </Row>
             {!defaultGroup && !defaultName && (
               <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-                <Text fontSize={sp(20)} color='#333' mr={ls(20)} w={ss(80)}>
+                <Text fontSize={sp(20)} color='#333' mr={ls(20)} w={ss(100)}>
                   所属分组
                 </Text>
                 <SelectDropdown
@@ -1042,7 +1067,7 @@ export function NewTemplateExtraModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
         <Modal.Header>
           <Text fontSize={sp(20)}>{title}</Text>

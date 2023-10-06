@@ -90,10 +90,16 @@ export default function ManagerTemplate({
     item: '',
     level: 2,
   });
-  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState({
+  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState<{
+    isOpen: boolean;
+    groupName: string;
+    level: number;
+    groupIdx?: number;
+  }>({
     isOpen: false,
     groupName: '',
     level: 2,
+    groupIdx: -1,
   });
   const [showDeleteTemplateExtraModal, setShowDeleteTemplateExtraModal] =
     useState({
@@ -444,6 +450,7 @@ export default function ManagerTemplate({
                       setShowDeleteTemplateModal({
                         isOpen: true,
                         groupName: rowData.item.name,
+                        level: 2,
                       });
                     }}
                     alignItems='center'>
@@ -751,6 +758,8 @@ export default function ManagerTemplate({
                                 setShowDeleteTemplateModal({
                                   isOpen: true,
                                   groupName: rowData.item.name,
+                                  groupIdx: groupIdx,
+                                  level: 3,
                                 });
                               }}
                               alignItems='center'>
@@ -912,34 +921,62 @@ export default function ManagerTemplate({
         isOpen={showDeleteTemplateModal.isOpen}
         onClose={function (): void {
           setShowDeleteTemplateModal({
+            ...showDeleteTemplateModal,
             isOpen: false,
-            groupName: '',
           });
         }}
         title={`是否确认删除${showDeleteTemplateModal.groupName}整个模版组？`}
         onConfirm={function (): void {
-          requestDeleteTemplateGroup(showDeleteTemplateModal.groupName)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                `删除模版组${showDeleteTemplateModal.groupName}成功！`,
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                `删除模版组${showDeleteTemplateModal.groupName}失败！`,
-              );
-            })
-            .finally(() => {
-              setShowDeleteTemplateModal({
-                isOpen: false,
-                groupName: '',
+          console.log('showDeleteTemplateModal', showDeleteTemplateModal);
+          if (showDeleteTemplateModal.level === 2) {
+            requestDeleteTemplateGroup(showDeleteTemplateModal.groupName)
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  `删除模版组${showDeleteTemplateModal.groupName}成功！`,
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  `删除模版组${showDeleteTemplateModal.groupName}失败！`,
+                );
+              })
+              .finally(() => {
+                setShowDeleteTemplateModal({
+                  ...showDeleteTemplateModal,
+                  isOpen: false,
+                });
               });
-            });
+          } else {
+            requestDeleteTemplateGroup(showDeleteTemplateModal.groupName, {
+              groupIdx: showDeleteTemplateModal.groupIdx,
+            })
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  `删除模版组${showDeleteTemplateModal.groupName}成功！`,
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  `删除模版组${showDeleteTemplateModal.groupName}失败！`,
+                );
+              })
+              .finally(() => {
+                setShowDeleteTemplateModal({
+                  ...showDeleteTemplateModal,
+                  isOpen: false,
+                });
+              });
+          }
         }}
       />
 
@@ -947,9 +984,8 @@ export default function ManagerTemplate({
         isOpen={showDeleteTemplateExtraModal.isOpen}
         onClose={function (): void {
           setShowDeleteTemplateExtraModal({
+            ...showDeleteTemplateExtraModal,
             isOpen: false,
-            content: '',
-            index: -1,
           });
         }}
         title={`是否确认删除${showDeleteTemplateExtraModal.content}？`}
@@ -995,9 +1031,8 @@ export default function ManagerTemplate({
             })
             .finally(() => {
               setShowDeleteTemplateExtraModal({
+                ...showDeleteTemplateExtraModal,
                 isOpen: false,
-                content: '',
-                index: -1,
               });
             });
         }}
@@ -1009,10 +1044,8 @@ export default function ManagerTemplate({
         title={showEditTemplateGroupModal.title}
         onClose={function (): void {
           setShowEditTemplateGroupModal({
+            ...showEditTemplateGroupModal,
             isOpen: false,
-            isEdit: false,
-            title: '',
-            defaultName: '',
           });
         }}
         onConfirm={function (text: string): void {
@@ -1052,12 +1085,21 @@ export default function ManagerTemplate({
             })
             .finally(() => {
               setShowEditTemplateGroupModal({
+                ...showEditTemplateGroupModal,
                 isOpen: false,
-                isEdit: false,
-                title: '',
-                defaultName: '',
               });
             });
+        }}
+        onDeleteGroup={function (text: string): void {
+          setShowEditTemplateGroupModal({
+            ...showEditTemplateGroupModal,
+            isOpen: false,
+          });
+          setShowDeleteTemplateModal({
+            isOpen: true,
+            groupName: text,
+            level: 2,
+          });
         }}
       />
 
@@ -1069,12 +1111,8 @@ export default function ManagerTemplate({
         title={showLevel3EditTemplateModal.title}
         onClose={function (): void {
           setShowLevel3EditTemplateModal({
+            ...showLevel3EditTemplateModal,
             isOpen: false,
-            isEdit: false,
-            title: '',
-            groups: [],
-            defaultGroup: '',
-            defaultName: '',
           });
         }}
         onConfirm={function (res: { name: string; group: string }): void {
@@ -1139,12 +1177,8 @@ export default function ManagerTemplate({
             })
             .finally(() => {
               setShowLevel3EditTemplateModal({
+                ...showLevel3EditTemplateModal,
                 isOpen: false,
-                isEdit: false,
-                title: '',
-                groups: [],
-                defaultGroup: '',
-                defaultName: '',
               });
             });
         }}
@@ -1157,12 +1191,8 @@ export default function ManagerTemplate({
         type={showEditTemplateModal.type === 'group' ? 'group' : 'item'}
         onClose={function (): void {
           setShowEditTemplateModal({
+            ...showEditTemplateModal,
             isOpen: false,
-            isEdit: false,
-            type: 'group',
-            title: '',
-            defaultName: '',
-            level: 2,
           });
         }}
         onConfirm={function (text: string): void {
@@ -1229,12 +1259,8 @@ export default function ManagerTemplate({
             })
             .finally(() => {
               setShowEditTemplateModal({
+                ...showEditTemplateModal,
                 isOpen: false,
-                isEdit: false,
-                type: 'group',
-                title: '',
-                defaultName: '',
-                level: 2,
               });
             });
         }}
@@ -1248,14 +1274,8 @@ export default function ManagerTemplate({
         des2={showExtraModal.des2}
         onClose={function (): void {
           setShowExtraModal({
+            ...showExtraModal,
             isOpen: false,
-            isEdit: false,
-            title: '',
-            des1: '',
-            des2: '',
-            defaultName: '',
-            defaultContent: '',
-            index: -1,
           });
         }}
         onConfirm={function ({
@@ -1341,14 +1361,8 @@ export default function ManagerTemplate({
             })
             .finally(() => {
               setShowExtraModal({
+                ...showExtraModal,
                 isOpen: false,
-                isEdit: false,
-                title: '',
-                des1: '',
-                des2: '',
-                defaultName: '',
-                defaultContent: '',
-                index: -1,
               });
             });
         }}
@@ -1357,9 +1371,8 @@ export default function ManagerTemplate({
         isOpen={showDeleteItemModal.isOpen}
         onClose={function (): void {
           setShowDeleteItemModal({
+            ...showDeleteItemModal,
             isOpen: false,
-            item: '',
-            level: 2,
           });
         }}
         title='是否确认删除模版项？'
@@ -1403,9 +1416,8 @@ export default function ManagerTemplate({
             })
             .finally(() => {
               setShowDeleteItemModal({
+                ...showDeleteItemModal,
                 isOpen: false,
-                item: '',
-                level: 2,
               });
             });
         }}
