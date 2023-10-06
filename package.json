@@ -55,7 +55,6 @@
     "react-native": "0.71.8",
     "react-native-dashed-line": "^1.1.0",
     "react-native-dotenv": "^3.4.9",
-    "react-native-drawer-layout": "^3.2.1",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-image-pan-zoom": "^2.1.12",
     "react-native-mime-types": "^2.4.0",
