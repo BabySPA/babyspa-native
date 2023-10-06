@@ -616,10 +616,8 @@ export function NewTemplateModalModal({
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef.current.value = defaultName;
   }, [isOpen]);
   return (
     <Modal
@@ -684,10 +682,10 @@ export function NewTemplateModalModal({
                 _pressed={{
                   opacity: 0.6,
                 }}
-                opacity={name.length > 0 ? 1 : 0.5}
+                opacity={(name || defaultName).length > 0 ? 1 : 0.5}
                 hitSlop={ss(20)}
                 onPress={() => {
-                  if (name) onConfirm(name);
+                  if (name || defaultName) onConfirm(name);
                 }}>
                 <Center
                   ml={ls(20)}
@@ -727,10 +725,8 @@ export function NewTemplateGroupModal({
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef.current.value = defaultName;
   }, [isOpen]);
   return (
     <Modal
@@ -792,9 +788,12 @@ export function NewTemplateGroupModal({
                 _pressed={{
                   opacity: 0.6,
                 }}
+                opacity={(name || defaultName).length > 0 ? 1 : 0.5}
                 hitSlop={ss(20)}
                 onPress={() => {
-                  onConfirm(name);
+                  if ((name || defaultName).length > 0) {
+                    onConfirm(name);
+                  }
                 }}>
                 <Center
                   ml={ls(20)}
@@ -837,11 +836,10 @@ export function NewLevel3TemplateGroupModal({
 }: NewLevel3TemplateGroupModalParams) {
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
+
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef.current.value = defaultName;
   }, [isOpen]);
 
   const [selectGroup, setSelectGroup] = useState(defaultGroup);
@@ -880,68 +878,70 @@ export function NewLevel3TemplateGroupModal({
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
-              <Text fontSize={sp(20)} color='#333' mr={ls(20)} w={ss(80)}>
-                所属分组
-              </Text>
-              <SelectDropdown
-                data={groups}
-                onSelect={(selectedItem, index) => {
-                  setSelectGroup(selectedItem);
-                }}
-                defaultValue={defaultGroup}
-                defaultButtonText={defaultGroup || '请选择分组'}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item, index) => {
-                  return item;
-                }}
-                buttonStyle={{
-                  width: ls(240, 340),
-                  height: ss(48),
-                  backgroundColor: '#fff',
-                  borderRadius: ss(4),
-                  borderWidth: ss(1),
-                  borderColor: '#D8D8D8',
-                }}
-                buttonTextStyle={{
-                  color: '#333333',
-                  textAlign: 'left',
-                  fontSize: sp(16),
-                }}
-                renderDropdownIcon={(isOpened) => {
-                  return (
-                    <Icon
-                      as={
-                        <FontAwesome
-                          name={isOpened ? 'angle-up' : 'angle-down'}
-                        />
-                      }
-                      size={sp(18)}
-                      color='#999'
-                    />
-                  );
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={{
-                  backgroundColor: '#fff',
-                  borderRadius: ss(8),
-                }}
-                rowStyle={{
-                  backgroundColor: '#fff',
-                  borderBottomColor: '#D8D8D8',
-                }}
-                rowTextStyle={{
-                  color: '#333',
-                  textAlign: 'center',
-                  fontSize: sp(16),
-                }}
-                selectedRowStyle={{
-                  backgroundColor: '#CBEDE2',
-                }}
-              />
-            </Row>
+            {!defaultGroup && !defaultName && (
+              <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+                <Text fontSize={sp(20)} color='#333' mr={ls(20)} w={ss(80)}>
+                  所属分组
+                </Text>
+                <SelectDropdown
+                  data={groups}
+                  onSelect={(selectedItem, index) => {
+                    setSelectGroup(selectedItem);
+                  }}
+                  defaultValue={defaultGroup}
+                  defaultButtonText={defaultGroup || '请选择分组'}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item;
+                  }}
+                  buttonStyle={{
+                    width: ls(240, 340),
+                    height: ss(48),
+                    backgroundColor: '#fff',
+                    borderRadius: ss(4),
+                    borderWidth: ss(1),
+                    borderColor: '#D8D8D8',
+                  }}
+                  buttonTextStyle={{
+                    color: '#333333',
+                    textAlign: 'left',
+                    fontSize: sp(16),
+                  }}
+                  renderDropdownIcon={(isOpened) => {
+                    return (
+                      <Icon
+                        as={
+                          <FontAwesome
+                            name={isOpened ? 'angle-up' : 'angle-down'}
+                          />
+                        }
+                        size={sp(18)}
+                        color='#999'
+                      />
+                    );
+                  }}
+                  dropdownIconPosition={'right'}
+                  dropdownStyle={{
+                    backgroundColor: '#fff',
+                    borderRadius: ss(8),
+                  }}
+                  rowStyle={{
+                    backgroundColor: '#fff',
+                    borderBottomColor: '#D8D8D8',
+                  }}
+                  rowTextStyle={{
+                    color: '#333',
+                    textAlign: 'center',
+                    fontSize: sp(16),
+                  }}
+                  selectedRowStyle={{
+                    backgroundColor: '#CBEDE2',
+                  }}
+                />
+              </Row>
+            )}
 
             <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
@@ -967,13 +967,23 @@ export function NewLevel3TemplateGroupModal({
                 _pressed={{
                   opacity: 0.6,
                 }}
-                opacity={name.length > 0 && selectGroup.length > 0 ? 1 : 0.5}
+                opacity={
+                  (name || defaultName).length > 0 &&
+                  (selectGroup || defaultGroup).length > 0
+                    ? 1
+                    : 0.5
+                }
                 hitSlop={ss(20)}
                 onPress={() => {
-                  onConfirm({
-                    group: selectGroup,
-                    name: name,
-                  });
+                  if (
+                    (name || defaultName).length > 0 &&
+                    (selectGroup || defaultGroup).length > 0
+                  ) {
+                    onConfirm({
+                      group: selectGroup || defaultGroup,
+                      name: name || defaultName,
+                    });
+                  }
                 }}>
                 <Center
                   ml={ls(20)}
@@ -1021,12 +1031,10 @@ export function NewTemplateExtraModal({
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef1.current?.clear?.();
-      // @ts-ignore
-      inputRef2.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef1.current.value = defaultName;
+    // @ts-ignore
+    inputRef2.current.value = defaultContent;
   }, [isOpen]);
   return (
     <Modal

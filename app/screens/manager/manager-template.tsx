@@ -93,6 +93,7 @@ export default function ManagerTemplate({
   const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState({
     isOpen: false,
     groupName: '',
+    level: 2,
   });
   const [showDeleteTemplateExtraModal, setShowDeleteTemplateExtraModal] =
     useState({
@@ -194,9 +195,6 @@ export default function ManagerTemplate({
   const TextChild = ({ item, level }: { item: any; level: number }) => {
     return (
       <Pressable
-        _pressed={{
-          opacity: 0.6,
-        }}
         hitSlop={ss(20)}
         onLongPress={() => {
           setCanEdit(true);
@@ -438,9 +436,6 @@ export default function ManagerTemplate({
                 <Row flex={1}>
                   <Box flex={1} />
                   <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
                     hitSlop={ss(20)}
                     w={ls(72)}
                     bg='red.500'
@@ -617,9 +612,6 @@ export default function ManagerTemplate({
                 return (
                   <Box key={groupIdx}>
                     <Pressable
-                      _pressed={{
-                        opacity: 0.6,
-                      }}
                       onLongPress={() => {
                         // toggle
                         setCurrentLevel3SelectFolderIdx({
@@ -694,9 +686,6 @@ export default function ManagerTemplate({
                           return (
                             <Box>
                               <Pressable
-                                _pressed={{
-                                  opacity: 0.6,
-                                }}
                                 hitSlop={ss(20)}
                                 onPress={() => {
                                   setCurrentLevel3SelectFolderIdx({
@@ -983,14 +972,17 @@ export default function ManagerTemplate({
             ),
           );
 
-          group.children[itemIdx].children.splice(showExtraModal.index, 1);
+          group.children[itemIdx].children.splice(
+            showDeleteTemplateExtraModal.index,
+            1,
+          );
 
           requestPatchTemplateGroup(group)
             .then((res) => {
               toastAlert(
                 toast,
                 'success',
-                `删除模版组${showDeleteTemplateExtraModal.content}成功！`,
+                `删除模版${showDeleteTemplateExtraModal.content}成功！`,
               );
               requestGetTemplates();
             })
