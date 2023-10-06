@@ -19,10 +19,8 @@ import {
 import useAuthStore from '../auth';
 import { RoleAuthority } from '../auth/type';
 import { fuzzySearch, generateFlowCounts } from '~/app/utils';
-import { ShopType } from '../manager/type';
 import useManagerStore from '../manager';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
-import useMessageStore from '../message';
 
 const DefaultFlowListData = {
   flows: [],
