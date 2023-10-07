@@ -8,6 +8,7 @@ import {
   Row,
   Text,
   Image,
+  FlatList,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -15,10 +16,9 @@ import { AppStackScreenProps, Gender } from '~/app/types';
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import useManagerStore, { DefaultUser } from '~/app/stores/manager';
-import { Shop, ShopType, User } from '~/app/stores/manager/type';
+import { User } from '~/app/stores/manager/type';
 import { useNavigation } from '@react-navigation/native';
 import { debounce, throttle } from 'lodash';
-import useAuthStore from '~/app/stores/auth';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 
 export default function ManagerUser({
@@ -85,98 +85,104 @@ export default function ManagerUser({
             </Text>
           </Row>
         </Row>
-        {filterUsers.map((user, idx) => {
-          return (
-            <Row
-              key={idx}
-              px={ls(40)}
-              minH={ss(60)}
-              py={ss(6)}
-              alignItems={'center'}
-              bgColor={'#fff'}
-              width={'100%'}
-              borderBottomWidth={idx == filterUsers.length - 1 ? 0 : ss(1)}
-              borderBottomColor={'#DFE1DE'}
-              borderBottomStyle={'solid'}
-              justifyContent={'space-around'}>
-              <Row w={ls(100)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {user.name}
-                </Text>
-              </Row>
-              <Row w={ls(50)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {user.gender == Gender.MAN ? '男' : '女'}
-                </Text>
-              </Row>
-              <Row w={ls(130)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {user.role?.name}
-                </Text>
-              </Row>
-              <Row w={ls(160)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {user.username}
-                </Text>
-              </Row>
-              <Row w={ls(160)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {user.phoneNumber}
-                </Text>
-              </Row>
-              <Row w={ls(140)}>
-                <Text fontSize={sp(18)} color={'#333'} numberOfLines={2}>
-                  {user.idCardNumber}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Row>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      setCurrentUser(user);
-                      navigation.navigate('UserDetail', { type: 'detail' });
-                    }}>
-                    <Row alignItems={'center'}>
-                      <Image
-                        source={require('~/assets/images/list-detail.png')}
-                        size={sp(20)}
-                        alt=''
-                      />
-                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
-                        查看
-                      </Text>
-                    </Row>
-                  </Pressable>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    ml={ls(24)}
-                    onPress={() => {
-                      setCurrentUser(user);
-                      navigation.navigate('UserDetail', { type: 'edit' });
-                    }}>
-                    <Row alignItems={'center'}>
-                      <Image
-                        source={require('~/assets/images/list-edit.png')}
-                        size={sp(20)}
-                        alt=''
-                      />
-                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
-                        编辑
-                      </Text>
-                    </Row>
-                  </Pressable>
+        <FlatList
+          style={{
+            height: '80%',
+          }}
+          data={filterUsers}
+          renderItem={({ item: user, index: idx }) => {
+            return (
+              <Row
+                key={idx}
+                px={ls(40)}
+                minH={ss(60)}
+                py={ss(6)}
+                alignItems={'center'}
+                bgColor={'#fff'}
+                width={'100%'}
+                borderBottomWidth={idx == filterUsers.length - 1 ? 0 : ss(1)}
+                borderBottomColor={'#DFE1DE'}
+                borderBottomStyle={'solid'}
+                justifyContent={'space-around'}>
+                <Row w={ls(100)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {user.name}
+                  </Text>
+                </Row>
+                <Row w={ls(50)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {user.gender == Gender.MAN ? '男' : '女'}
+                  </Text>
+                </Row>
+                <Row w={ls(130)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {user.role?.name}
+                  </Text>
+                </Row>
+                <Row w={ls(160)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {user.username}
+                  </Text>
+                </Row>
+                <Row w={ls(160)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {user.phoneNumber}
+                  </Text>
+                </Row>
+                <Row w={ls(140)}>
+                  <Text fontSize={sp(18)} color={'#333'} numberOfLines={2}>
+                    {user.idCardNumber}
+                  </Text>
+                </Row>
+                <Row w={ls(150)}>
+                  <Row>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        setCurrentUser(user);
+                        navigation.navigate('UserDetail', { type: 'detail' });
+                      }}>
+                      <Row alignItems={'center'}>
+                        <Image
+                          source={require('~/assets/images/list-detail.png')}
+                          size={sp(20)}
+                          alt=''
+                        />
+                        <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                          查看
+                        </Text>
+                      </Row>
+                    </Pressable>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      ml={ls(24)}
+                      onPress={() => {
+                        setCurrentUser(user);
+                        navigation.navigate('UserDetail', { type: 'edit' });
+                      }}>
+                      <Row alignItems={'center'}>
+                        <Image
+                          source={require('~/assets/images/list-edit.png')}
+                          size={sp(20)}
+                          alt=''
+                        />
+                        <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                          编辑
+                        </Text>
+                      </Row>
+                    </Pressable>
+                  </Row>
                 </Row>
               </Row>
-            </Row>
-          );
-        })}
+            );
+          }}
+        />
       </Column>
     );
   };

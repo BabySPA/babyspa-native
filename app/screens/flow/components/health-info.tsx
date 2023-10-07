@@ -121,6 +121,12 @@ export default function HealthInfo({
               <ImageBox
                 edit={selectedConfig.disabled ? false : true}
                 images={collect.healthInfo.otherImages}
+                previewImages={[
+                  ...collect.healthInfo.otherImages,
+                  ...collect.healthInfo.lingualImage,
+                  ...collect.healthInfo.leftHandImages,
+                  ...collect.healthInfo.rightHandImages,
+                ]}
                 selectedCallback={function (
                   filename: string,
                   uri: string,
@@ -161,6 +167,12 @@ export default function HealthInfo({
           <ImageBox
             edit={selectedConfig.disabled ? false : true}
             images={collect.healthInfo.lingualImage}
+            previewImages={[
+              ...collect.healthInfo.lingualImage,
+              ...collect.healthInfo.leftHandImages,
+              ...collect.healthInfo.rightHandImages,
+              ...collect.healthInfo.otherImages,
+            ]}
             selectedCallback={function (filename: string, uri: string): void {
               addLingualImage({
                 name: filename,
@@ -198,6 +210,12 @@ export default function HealthInfo({
                 <ImageBox
                   edit={selectedConfig.disabled ? false : true}
                   images={collect.healthInfo.leftHandImages}
+                  previewImages={[
+                    ...collect.healthInfo.leftHandImages,
+                    ...collect.healthInfo.rightHandImages,
+                    ...collect.healthInfo.lingualImage,
+                    ...collect.healthInfo.otherImages,
+                  ]}
                   selectedCallback={function (
                     filename: string,
                     uri: string,
@@ -248,6 +266,12 @@ export default function HealthInfo({
                 <ImageBox
                   edit={selectedConfig.disabled ? false : true}
                   images={collect.healthInfo.rightHandImages}
+                  previewImages={[
+                    ...collect.healthInfo.rightHandImages,
+                    ...collect.healthInfo.leftHandImages,
+                    ...collect.healthInfo.lingualImage,
+                    ...collect.healthInfo.otherImages,
+                  ]}
                   selectedCallback={function (
                     filename: string,
                     uri: string,

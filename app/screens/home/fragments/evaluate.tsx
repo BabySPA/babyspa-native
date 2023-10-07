@@ -37,7 +37,13 @@ export default function Evaluate() {
   useEffect(() => {
     requestGetEvaluateFlows();
   }, []);
+  const [renderWaiting, setRenderWaiting] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
   return (
     <Flex flex={1}>
       <Filter />
@@ -52,33 +58,35 @@ export default function Evaluate() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <FlatList
-              mb={ss(120)}
-              data={flows}
-              numColumns={2}
-              renderItem={({ item: flow, index: idx }) => {
-                return (
-                  <Center width={'50%'} key={idx}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.6,
-                      }}
-                      ml={idx % 2 == 1 ? ss(20) : 0}
-                      mr={idx % 2 == 0 ? ss(20) : 0}
-                      mb={ss(40)}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        updateCurrentFlow(flow);
-                        navigation.navigate('FlowInfo', {
-                          from: 'evaluate-detail',
-                        });
-                      }}>
-                      <CustomerItem flow={flow} type={OperateType.Evaluate} />
-                    </Pressable>
-                  </Center>
-                );
-              }}
-            />
+            {renderWaiting && (
+              <FlatList
+                mb={ss(120)}
+                data={flows}
+                numColumns={2}
+                renderItem={({ item: flow, index: idx }) => {
+                  return (
+                    <Center width={'50%'} key={idx}>
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
+                        ml={idx % 2 == 1 ? ss(20) : 0}
+                        mr={idx % 2 == 0 ? ss(20) : 0}
+                        mb={ss(40)}
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          updateCurrentFlow(flow);
+                          navigation.navigate('FlowInfo', {
+                            from: 'evaluate-detail',
+                          });
+                        }}>
+                        <CustomerItem flow={flow} type={OperateType.Evaluate} />
+                      </Pressable>
+                    </Center>
+                  );
+                }}
+              />
+            )}
           </Row>
         )}
       </Box>

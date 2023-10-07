@@ -8,6 +8,8 @@ import {
   Row,
   Text,
   Image,
+  FlatList,
+  useSafeArea,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -28,6 +30,10 @@ export default function ManagerShop({
   }, []);
 
   const List = () => {
+    const safeAreaProps = useSafeArea({
+      safeAreaBottom: true,
+      pt: 2,
+    });
     return (
       <Column>
         <Row
@@ -74,97 +80,103 @@ export default function ManagerShop({
             </Text>
           </Row>
         </Row>
-        {shops.map((shop, idx) => {
-          return (
-            <Row
-              background={'#fff'}
-              key={idx}
-              px={ls(40)}
-              h={ss(60)}
-              alignItems={'center'}
-              width={'100%'}
-              borderBottomWidth={idx === shops.length - 1 ? 0 : ss(1)}
-              borderBottomColor={'#DFE1DE'}
-              borderBottomStyle={'solid'}
-              justifyContent={'space-around'}>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {shop.name}
-                </Text>
-              </Row>
-              <Row w={ls(80)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {shop.maintainer}
-                </Text>
-              </Row>
-              <Row w={ls(200)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {shop.region}
-                </Text>
-              </Row>
-              <Row w={ls(140)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {shop.address}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {shop.phoneNumber}
-                </Text>
-              </Row>
-              <Row w={ls(140)}>
-                <Text fontSize={sp(18)} color={'#333'}>
-                  {shop.openingTime} - {shop.closingTime}
-                </Text>
-              </Row>
-              <Row w={ls(150)}>
-                <Row>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      setCurrentShop(shop);
-                      navigation.navigate('ShopDetail', { type: 'detail' });
-                    }}>
-                    <Row alignItems={'center'}>
-                      <Image
-                        source={require('~/assets/images/list-detail.png')}
-                        size={sp(20)}
-                        alt=''
-                      />
-                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
-                        查看
-                      </Text>
-                    </Row>
-                  </Pressable>
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    ml={ls(24)}
-                    onPress={() => {
-                      setCurrentShop(shop);
-                      navigation.navigate('ShopDetail', { type: 'edit' });
-                    }}>
-                    <Row alignItems={'center'}>
-                      <Image
-                        source={require('~/assets/images/list-edit.png')}
-                        size={sp(20)}
-                        alt=''
-                      />
-                      <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
-                        编辑
-                      </Text>
-                    </Row>
-                  </Pressable>
+        <FlatList
+          style={{
+            height: '80%',
+          }}
+          data={shops}
+          renderItem={({ item: shop, index: idx }) => {
+            return (
+              <Row
+                background={'#fff'}
+                key={idx}
+                px={ls(40)}
+                h={ss(60)}
+                alignItems={'center'}
+                width={'100%'}
+                borderBottomWidth={idx === shops.length - 1 ? 0 : ss(1)}
+                borderBottomColor={'#DFE1DE'}
+                borderBottomStyle={'solid'}
+                justifyContent={'space-around'}>
+                <Row w={ls(150)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {shop.name}
+                  </Text>
+                </Row>
+                <Row w={ls(80)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {shop.maintainer}
+                  </Text>
+                </Row>
+                <Row w={ls(200)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {shop.region}
+                  </Text>
+                </Row>
+                <Row w={ls(140)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {shop.address}
+                  </Text>
+                </Row>
+                <Row w={ls(150)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {shop.phoneNumber}
+                  </Text>
+                </Row>
+                <Row w={ls(140)}>
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {shop.openingTime} - {shop.closingTime}
+                  </Text>
+                </Row>
+                <Row w={ls(150)}>
+                  <Row>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        setCurrentShop(shop);
+                        navigation.navigate('ShopDetail', { type: 'detail' });
+                      }}>
+                      <Row alignItems={'center'}>
+                        <Image
+                          source={require('~/assets/images/list-detail.png')}
+                          size={sp(20)}
+                          alt=''
+                        />
+                        <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                          查看
+                        </Text>
+                      </Row>
+                    </Pressable>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      hitSlop={ss(20)}
+                      ml={ls(24)}
+                      onPress={() => {
+                        setCurrentShop(shop);
+                        navigation.navigate('ShopDetail', { type: 'edit' });
+                      }}>
+                      <Row alignItems={'center'}>
+                        <Image
+                          source={require('~/assets/images/list-edit.png')}
+                          size={sp(20)}
+                          alt=''
+                        />
+                        <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
+                          编辑
+                        </Text>
+                      </Row>
+                    </Pressable>
+                  </Row>
                 </Row>
               </Row>
-            </Row>
-          );
-        })}
+            );
+          }}
+        />
       </Column>
     );
   };

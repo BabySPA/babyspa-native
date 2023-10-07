@@ -233,7 +233,13 @@ const CenterStatisticBox = () => {
 
 export default function StatisticsAnalyze() {
   const [selectShop, setSelectShop] = useState<Shop>();
+  const [renderWaiting, setRenderWaiting] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
   return (
     <Flex flex={1}>
       <Filter
@@ -241,7 +247,7 @@ export default function StatisticsAnalyze() {
           setSelectShop(shop);
         }}
       />
-      <CenterStatisticBox />
+      {renderWaiting && <CenterStatisticBox />}
     </Flex>
   );
 }

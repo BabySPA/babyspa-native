@@ -181,12 +181,7 @@ export default function ManagerTemplate({
   }, [currentLevel3SelectFolderIdx, templates]);
 
   const toast = useToast();
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => {
-      canEdit && setCanEdit(false);
-    },
-  });
+
   const swiperlistRef = useRef(null);
 
   const getGroupLevel = () => {
@@ -432,7 +427,6 @@ export default function ManagerTemplate({
           </Row>
         </Column>
         <Column
-          {...panResponder.panHandlers}
           flex={1}
           ml={ls(10)}
           bgColor={'#fff'}
@@ -441,54 +435,62 @@ export default function ManagerTemplate({
           <BoxTitle title='模版详情' />
 
           <ScrollView>
-            <Row mt={ss(28)} flexWrap={'wrap'}>
-              {getCurrentLevel2SelectTemplateGroupItems().map(
-                (item: any, index: any) => {
-                  return (
-                    <TextChild
-                      item={item}
-                      key={index}
-                      level={2}
-                      onDeleteItem={function (item: any, level: number): void {
-                        // 删除
-                        setShowDeleteItemModal({
-                          isOpen: true,
-                          item: item,
-                          level: level,
-                        });
-                      }}
-                      canEdit={canEdit}
-                      onLongPress={function (): void {
-                        setCanEdit(true);
-                      }}
-                    />
-                  );
-                },
-              )}
-              <Pressable
-                hitSlop={ss(20)}
-                onPress={() => {
-                  setShowEditTemplateModal({
-                    isOpen: true,
-                    isEdit: false,
-                    title: '新增模版',
-                    type: 'item',
-                    defaultName: '',
-                    level: 2,
-                  });
-                }}
-                mr={ls(10)}
-                mb={ss(10)}
-                borderWidth={ss(1)}
-                borderRadius={2}
-                borderColor={'#D8D8D8'}
-                px={ls(20)}
-                py={ss(7)}>
-                <Text color='#BCBCBC' fontSize={sp(18)}>
-                  + 自定义添加
-                </Text>
-              </Pressable>
-            </Row>
+            <Pressable
+              onPress={() => {
+                if (canEdit) setCanEdit(false);
+              }}>
+              <Row mt={ss(28)} flexWrap={'wrap'}>
+                {getCurrentLevel2SelectTemplateGroupItems().map(
+                  (item: any, index: any) => {
+                    return (
+                      <TextChild
+                        item={item}
+                        key={index}
+                        level={2}
+                        onDeleteItem={function (
+                          item: any,
+                          level: number,
+                        ): void {
+                          // 删除
+                          setShowDeleteItemModal({
+                            isOpen: true,
+                            item: item,
+                            level: level,
+                          });
+                        }}
+                        canEdit={canEdit}
+                        onLongPress={function (): void {
+                          setCanEdit(true);
+                        }}
+                      />
+                    );
+                  },
+                )}
+                <Pressable
+                  hitSlop={ss(20)}
+                  onPress={() => {
+                    setShowEditTemplateModal({
+                      isOpen: true,
+                      isEdit: false,
+                      title: '新增模版',
+                      type: 'item',
+                      defaultName: '',
+                      level: 2,
+                    });
+                  }}
+                  mr={ls(10)}
+                  mb={ss(10)}
+                  borderWidth={ss(1)}
+                  borderRadius={2}
+                  borderColor={'#D8D8D8'}
+                  px={ls(20)}
+                  py={ss(7)}>
+                  <Text color='#BCBCBC' fontSize={sp(18)}>
+                    + 自定义添加
+                  </Text>
+                </Pressable>
+              </Row>
+            </Pressable>
           </ScrollView>
         </Column>
       </Row>
@@ -766,7 +768,6 @@ export default function ManagerTemplate({
           </Row>
         </Column>
         <Column
-          {...panResponder.panHandlers}
           flex={1}
           ml={ls(10)}
           bgColor={'#fff'}

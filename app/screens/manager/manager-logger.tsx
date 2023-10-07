@@ -10,6 +10,7 @@ import {
   Image,
   ScrollView,
   FlatList,
+  Flex,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -69,6 +70,9 @@ export default function ManagerLogger({
         </Row>
         <FlatList
           data={logs}
+          style={{
+            height: '80%',
+          }}
           renderItem={({ item: log }) => {
             return (
               <Row

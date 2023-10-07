@@ -27,6 +27,14 @@ export default function Archive() {
     updateCurrentArchiveCustomer,
   } = useFlowStore();
 
+  const [renderWaiting, setRenderWaiting] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
+
   return (
     <Flex flex={1}>
       <Filter />
@@ -43,30 +51,32 @@ export default function Archive() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <FlatList
-              numColumns={3}
-              mb={ss(120)}
-              data={customers}
-              renderItem={({ item: customer, index: idx }) => {
-                return (
-                  <Center w={'33.33%'} key={idx}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.8,
-                      }}
-                      hitSlop={ss(20)}
-                      key={idx}
-                      pr={ls(20)}
-                      onPress={() => {
-                        updateCurrentArchiveCustomer(customer);
-                        navigation.navigate('CustomerArchive');
-                      }}>
-                      <CustomerArchiveItem customer={customer} />
-                    </Pressable>
-                  </Center>
-                );
-              }}
-            />
+            {renderWaiting && (
+              <FlatList
+                numColumns={3}
+                mb={ss(120)}
+                data={customers}
+                renderItem={({ item: customer, index: idx }) => {
+                  return (
+                    <Center w={'33.33%'} key={idx}>
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.8,
+                        }}
+                        hitSlop={ss(20)}
+                        key={idx}
+                        pr={ls(20)}
+                        onPress={() => {
+                          updateCurrentArchiveCustomer(customer);
+                          navigation.navigate('CustomerArchive');
+                        }}>
+                        <CustomerArchiveItem customer={customer} />
+                      </Pressable>
+                    </Center>
+                  );
+                }}
+              />
+            )}
           </Row>
         )}
       </Box>

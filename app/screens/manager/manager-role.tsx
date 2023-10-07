@@ -44,10 +44,6 @@ export default function ManagerRole({
   }, [roles, nameFilter]);
 
   const List = () => {
-    const safeAreaProps = useSafeArea({
-      safeAreaBottom: true,
-      pt: 2,
-    });
     return (
       <Column>
         <Row
@@ -90,7 +86,9 @@ export default function ManagerRole({
           </Row>
         </Row>
         <FlatList
-          mb={safeAreaProps ? ss(64) : 0}
+          style={{
+            height: '80%',
+          }}
           background={'#fff'}
           data={filterRoles}
           renderItem={({ item: role, index }) => {

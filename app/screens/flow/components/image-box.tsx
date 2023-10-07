@@ -35,6 +35,7 @@ interface ImageBoxProps {
   type: 'lingual' | 'lefthand' | 'righthand' | 'other';
   edit: boolean;
   images: UpdatingImage[];
+  previewImages?: UpdatingImage[];
   selectedCallback: (filename: string, uri: string) => void;
   takePhotoCallback: (filename: string, uri: string) => void;
   uploadCallback: (filename: string, url: string) => void;
@@ -50,6 +51,7 @@ export default function ImageBox({
   type,
   edit,
   images,
+  previewImages,
   selectedCallback,
   takePhotoCallback,
   uploadCallback,
@@ -116,7 +118,7 @@ export default function ImageBox({
             mediaTypes: MediaTypeOptions.Images,
             allowsMultipleSelection: false,
             allowsEditing: false,
-            quality: 0.4,
+            quality: 0.7,
           })
             .then(async (res) => {
               if (res.assets && res.assets.length > 0) {
@@ -163,7 +165,7 @@ export default function ImageBox({
             <PreviewImage
               current={index}
               source={typeof item === 'string' ? item : item.uri}
-              images={images.map((item) => ({
+              images={(previewImages || images).map((item) => ({
                 url: typeof item === 'string' ? item : item.uri,
               }))}
             />

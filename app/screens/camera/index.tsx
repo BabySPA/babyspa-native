@@ -78,7 +78,7 @@ export default function CameraScreen({
       const manipResult = await manipulateAsync(
         photo.uri,
         [], // 空的resize选项，不调整宽高
-        { compress: 0.4 }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
+        { compress: 0.8 }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
       );
       if (flag) {
         flag = false;

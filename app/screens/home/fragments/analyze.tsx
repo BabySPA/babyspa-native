@@ -27,7 +27,6 @@ import { AnalyzeStatus } from '~/app/stores/flow/type';
 import { getFlowStatus } from '~/app/constants';
 import useGlobalLoading from '~/app/stores/loading';
 import { Image as NativeImage } from 'react-native';
-import Dot from '~/app/components/dot';
 
 export default function Analyze() {
   const navigation = useNavigation();
@@ -40,7 +39,13 @@ export default function Analyze() {
   useEffect(() => {
     requestGetAnalyzeFlows();
   }, []);
+  const [renderWaiting, setRenderWaiting] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
   return (
     <Flex flex={1}>
       <Filter />
@@ -56,44 +61,49 @@ export default function Analyze() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <FlatList
-              data={flows}
-              mb={ss(120)}
-              numColumns={2}
-              contentContainerStyle={{ marginTop: ss(10), marginRight: ss(10) }}
-              renderItem={({ item: flow, index: idx }) => {
-                return (
-                  <Center width={'50%'} key={idx}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.8,
-                      }}
-                      ml={idx % 2 == 1 ? ss(20) : 0}
-                      mr={idx % 2 == 0 ? ss(20) : 0}
-                      mb={ss(40)}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        updateCurrentFlow(flow);
-                        navigation.navigate('FlowInfo', { from: 'analyze' });
-                      }}>
-                      <FlowCustomerItem
-                        flow={flow}
-                        type={OperateType.Analyze}
-                      />
-                      {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
-                        <Circle
-                          size={sp(18)}
-                          bgColor={'#FC554F'}
-                          position={'absolute'}
-                          right={-ss(9)}
-                          top={-ss(9)}
+            {renderWaiting && (
+              <FlatList
+                data={flows}
+                mb={ss(120)}
+                numColumns={2}
+                contentContainerStyle={{
+                  marginTop: ss(10),
+                  marginRight: ss(10),
+                }}
+                renderItem={({ item: flow, index: idx }) => {
+                  return (
+                    <Center width={'50%'} key={idx}>
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.8,
+                        }}
+                        ml={idx % 2 == 1 ? ss(20) : 0}
+                        mr={idx % 2 == 0 ? ss(20) : 0}
+                        mb={ss(40)}
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          updateCurrentFlow(flow);
+                          navigation.navigate('FlowInfo', { from: 'analyze' });
+                        }}>
+                        <FlowCustomerItem
+                          flow={flow}
+                          type={OperateType.Analyze}
                         />
-                      )}
-                    </Pressable>
-                  </Center>
-                );
-              }}
-            />
+                        {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
+                          <Circle
+                            size={sp(18)}
+                            bgColor={'#FC554F'}
+                            position={'absolute'}
+                            right={-ss(9)}
+                            top={-ss(9)}
+                          />
+                        )}
+                      </Pressable>
+                    </Center>
+                  );
+                }}
+              />
+            )}
           </Row>
         )}
       </Box>

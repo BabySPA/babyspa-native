@@ -31,6 +31,7 @@ interface SelectCustomerParams {
 function SelectCustomerItem({ customer }: { customer: Customer }) {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
+
   return (
     <Row
       borderRadius={ss(4)}
@@ -112,6 +113,12 @@ export default function SelectCustomer(params: SelectCustomerParams) {
     requestAllCustomers('');
   }, []);
 
+  const [renderWaiting, setRenderWaiting] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 100);
+  }, []);
   const { style = {} } = params;
 
   return (
@@ -152,39 +159,41 @@ export default function SelectCustomer(params: SelectCustomerParams) {
         />
 
         <Box mt={ss(30)}>
-          <FlatList
-            data={allCustomers}
-            renderItem={({ item, index }) => {
-              return (
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    updateCurrentFlow({
-                      ...currentFlow,
-                      customer: item,
-                    });
-                  }}>
-                  <SelectCustomerItem customer={item} />
-                  {currentFlow.customer._id === item._id && (
-                    <Image
-                      style={{
-                        position: 'absolute',
-                        bottom: ss(31),
-                        right: 0,
-                        width: ss(20),
-                        height: ss(20),
-                      }}
-                      source={require('~/assets/images/border-select.png')}
-                    />
-                  )}
-                </Pressable>
-              );
-            }}
-            keyExtractor={(item) => item._id}
-          />
+          {renderWaiting && (
+            <FlatList
+              data={allCustomers}
+              renderItem={({ item, index }) => {
+                return (
+                  <Pressable
+                    _pressed={{
+                      opacity: 0.6,
+                    }}
+                    hitSlop={ss(20)}
+                    onPress={() => {
+                      updateCurrentFlow({
+                        ...currentFlow,
+                        customer: item,
+                      });
+                    }}>
+                    <SelectCustomerItem customer={item} />
+                    {currentFlow.customer._id === item._id && (
+                      <Image
+                        style={{
+                          position: 'absolute',
+                          bottom: ss(31),
+                          right: 0,
+                          width: ss(20),
+                          height: ss(20),
+                        }}
+                        source={require('~/assets/images/border-select.png')}
+                      />
+                    )}
+                  </Pressable>
+                );
+              }}
+              keyExtractor={(item) => item._id}
+            />
+          )}
         </Box>
       </Flex>
     </Column>

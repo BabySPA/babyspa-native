@@ -51,7 +51,6 @@ const useLayoutStore = create(
         currentShopWithRole?.role.authorities,
       );
 
-      console.log('filterConfig');
       set((state) => {
         state.layoutConfig = filterConfig;
       });

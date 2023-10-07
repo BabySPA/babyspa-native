@@ -1,6 +1,6 @@
-import { Box, Icon, IconButton, Pressable, Row } from 'native-base';
+import { Icon, Pressable, Row } from 'native-base';
 import { ls, ss, sp } from '../utils/style';
-import { MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 interface NavigationBarParams {
@@ -42,7 +42,7 @@ export default function NavigationBar(props: NavigationBarParams) {
         hitSlop={ss(20)}
         onPress={() => {
           if (onBackIntercept()) return;
-          navigation.goBack();
+          if (navigation.canGoBack()) navigation.goBack();
         }}>
         <Row alignItems={'center'}>
           {hasLeftIcon && (

@@ -10,12 +10,13 @@ import {
   Spinner,
   FlatList,
   ScrollView,
+  Link,
 } from 'native-base';
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { ImageBackground, Image } from 'react-native';
+import { ImageBackground, Image, Linking } from 'react-native';
 import { ls, ss, sp } from '~/app/utils/style';
 import { ShopsWithRole } from '~/app/stores/auth/type';
 import { toastAlert } from '~/app/utils/toast';
@@ -293,9 +294,6 @@ export default function LoginScreen({
 
               <Row mt={ss(20)} alignItems={'center'}>
                 <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
                   hitSlop={ss(10)}
                   onPress={() => {
                     setSelectAgreement(!selectAgreement);
@@ -319,15 +317,22 @@ export default function LoginScreen({
                     </Text>
                   </Row>
                 </Pressable>
-                <Text color='#28F' fontSize={sp(14)}>
-                  《用户协议》
-                </Text>
-                <Text color='#999' fontSize={sp(14)}>
-                  、
-                </Text>
-                <Text color='#28F' fontSize={sp(14)}>
-                  《隐私政策》
-                </Text>
+                <Pressable
+                  flexDirection={'row'}
+                  onPress={() => {
+                    Linking.openURL('https://mcbabyspa.com/privacy');
+                    setSelectAgreement(true);
+                  }}>
+                  <Text color='#28F' fontSize={sp(14)}>
+                    《用户协议》
+                  </Text>
+                  <Text color='#999' fontSize={sp(14)}>
+                    、
+                  </Text>
+                  <Text color='#28F' fontSize={sp(14)}>
+                    《隐私政策》
+                  </Text>
+                </Pressable>
               </Row>
             </Center>
           )}
