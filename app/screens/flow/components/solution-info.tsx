@@ -71,7 +71,7 @@ export default function SolutionInfo({
       <Row flex={1}>
         <Column flex={1}>
           <BoxItem
-            flex={2}
+            flex={3}
             title={'贴敷'}
             icon={require('~/assets/images/tiefu.png')}>
             <Box>
@@ -79,7 +79,7 @@ export default function SolutionInfo({
                 return (
                   <Box
                     key={idx}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderRadius={ss(4)}
                     borderColor={'#7AB6AF'}
                     borderStyle={'dashed'}
@@ -100,13 +100,16 @@ export default function SolutionInfo({
                         </Text>
                       </Row>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         onPress={() => {
                           removeSolutionApplication(idx);
                         }}>
                         <Icon
                           as={<AntDesign name='delete' />}
-                          size={ss(20)}
+                          size={sp(20)}
                           color={'#99A9BF'}
                         />
                       </Pressable>
@@ -122,12 +125,17 @@ export default function SolutionInfo({
                           </Text>
 
                           <Pressable
+                            _pressed={{
+                              opacity: 0.6,
+                            }}
                             hitSlop={ss(20)}
                             onPress={() => {
                               setEditAcupoint(true);
                             }}>
                             {editAcupoint ? (
                               <Input
+                                borderWidth={ss(1)}
+                                borderColor={'#D8D8D8'}
                                 autoFocus
                                 onChangeText={(text) => {
                                   updateSolutionApplication(
@@ -177,18 +185,21 @@ export default function SolutionInfo({
               })}
               <Row justifyContent={'flex-end'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowExtraModal({
+                      ...showExtraModal,
                       isOpen: true,
-                      type: 'application',
                     });
                   }}>
                   <Center
                     mt={ss(20)}
                     bgColor={'#fff'}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#5EACA3'}
                     w={ls(120)}
                     h={ss(44)}
@@ -203,13 +214,16 @@ export default function SolutionInfo({
             </Box>
           </BoxItem>
           <BoxItem
+            flex={2}
             mt={ss(10)}
             title={'注意事项'}
-            autoScroll={false}
+            autoScroll={true}
             icon={require('~/assets/images/guidance.png')}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
-              flex={1}
               pt={ss(10)}
               onPress={() => {
                 setShowRemarkModal(true);
@@ -218,7 +232,7 @@ export default function SolutionInfo({
                 style={{
                   borderRadius: ss(4),
                   borderColor: '#DFE1DE',
-                  borderWidth: 1,
+                  borderWidth: ss(1),
                   height: ss(107),
                   backgroundColor: '#fff',
                   padding: ss(10),
@@ -227,24 +241,26 @@ export default function SolutionInfo({
                 }}>
                 {remark || '您可输入，或从模板选择'}
               </Text>
-              <TemplateModal
-                template={getTemplateGroups(TemplateGroupKeys['flow-remark'])}
-                defaultText={remark}
-                isOpen={showRemarkModal}
-                onClose={function (): void {
-                  setShowRemarkModal(false);
-                }}
-                onConfirm={function (text: string): void {
-                  updateAnalyzeRemark(text);
-                  setShowRemarkModal(false);
-                }}
-              />
+              {showRemarkModal && (
+                <TemplateModal
+                  template={getTemplateGroups(TemplateGroupKeys['flow-remark'])}
+                  defaultText={remark}
+                  isOpen={showRemarkModal}
+                  onClose={function (): void {
+                    setShowRemarkModal(false);
+                  }}
+                  onConfirm={function (text: string): void {
+                    updateAnalyzeRemark(text);
+                    setShowRemarkModal(false);
+                  }}
+                />
+              )}
             </Pressable>
           </BoxItem>
         </Column>
         <Column flex={1} ml={ss(10)}>
           <BoxItem
-            flex={2}
+            flex={3}
             title={'理疗'}
             icon={require('~/assets/images/massages.png')}>
             <Box>
@@ -252,7 +268,7 @@ export default function SolutionInfo({
                 return (
                   <Box
                     key={idx}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderRadius={ss(4)}
                     borderColor={'#7AB6AF'}
                     borderStyle={'dashed'}
@@ -273,13 +289,16 @@ export default function SolutionInfo({
                         </Text>
                       </Row>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         onPress={() => {
                           removeSolutionMassage(idx);
                         }}>
                         <Icon
                           as={<AntDesign name='delete' />}
-                          size={ss(20)}
+                          size={sp(20)}
                           color={'#99A9BF'}
                         />
                       </Pressable>
@@ -294,12 +313,17 @@ export default function SolutionInfo({
                         </Text>
 
                         <Pressable
+                          _pressed={{
+                            opacity: 0.6,
+                          }}
                           hitSlop={ss(20)}
                           onPress={() => {
                             setEditMassageRemark(true);
                           }}>
                           {editMassageRemark ? (
                             <Input
+                              borderWidth={ss(1)}
+                              borderColor={'#D8D8D8'}
                               autoFocus
                               onChangeText={(text) => {
                                 updateSolutionMassage(
@@ -318,7 +342,7 @@ export default function SolutionInfo({
                             />
                           ) : (
                             <Text color='#E36C36' fontSize={sp(16)}>
-                              {item.remark || '未设置'}
+                              {item.remark || '无'}
                             </Text>
                           )}
                         </Pressable>
@@ -347,6 +371,9 @@ export default function SolutionInfo({
               })}
               <Row justifyContent={'flex-end'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowExtraModal({
@@ -358,7 +385,7 @@ export default function SolutionInfo({
                     mt={ss(20)}
                     bgColor={'#fff'}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#5EACA3'}
                     w={ls(120)}
                     h={ss(44)}
@@ -373,9 +400,10 @@ export default function SolutionInfo({
             </Box>
           </BoxItem>
           <BoxItem
+            flex={2}
             mt={ss(10)}
             title={'随访'}
-            autoScroll={false}
+            autoScroll={true}
             icon={require('~/assets/images/guidance.png')}>
             <Row alignItems={'center'}>
               <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
@@ -467,35 +495,37 @@ export default function SolutionInfo({
             </Row>
           </BoxItem>
         </Column>
-        <TemplateExtraModal
-          template={getTemplateGroups(TemplateGroupKeys[showExtraModal.type])}
-          isOpen={showExtraModal.isOpen}
-          onClose={function (): void {
-            setShowExtraModal({
-              isOpen: false,
-              type: 'application',
-            });
-          }}
-          onConfirm={function (res): void {
-            if (showExtraModal.type === 'application') {
-              addSolutionApplication({
-                name: res.title,
-                acupoint: res.content,
-                count: 1,
+        {showExtraModal.isOpen && (
+          <TemplateExtraModal
+            template={getTemplateGroups(TemplateGroupKeys[showExtraModal.type])}
+            isOpen={showExtraModal.isOpen}
+            onClose={function (): void {
+              setShowExtraModal({
+                isOpen: false,
+                type: 'application',
               });
-            } else {
-              addSolutionMassage({
-                name: res.title,
-                remark: res.content,
-                count: 1,
+            }}
+            onConfirm={function (res): void {
+              if (showExtraModal.type === 'application') {
+                addSolutionApplication({
+                  name: res.title,
+                  acupoint: res.content,
+                  count: 1,
+                });
+              } else {
+                addSolutionMassage({
+                  name: res.title,
+                  remark: res.content,
+                  count: 1,
+                });
+              }
+              setShowExtraModal({
+                isOpen: false,
+                type: 'application',
               });
-            }
-            setShowExtraModal({
-              isOpen: false,
-              type: 'application',
-            });
-          }}
-        />
+            }}
+          />
+        )}
       </Row>
     </KeyboardAvoidingView>
   );

@@ -9,12 +9,14 @@ export default function SelectUser({
   buttonHeight,
   buttonWidth,
   style,
+  textStyle,
 }: {
   onSelect: (selectedItem: any, index: number) => void;
   defaultButtonText?: string;
   buttonHeight?: number;
   buttonWidth?: number;
   style?: any;
+  textStyle?: any;
 }) {
   const { user, currentShopWithRole } = useAuthStore();
 
@@ -32,22 +34,23 @@ export default function SelectUser({
       rowTextForSelection={(item, index) => {
         return item.shop.name;
       }}
-      numberOfLines={2}
+      numberOfLines={1}
       buttonStyle={{
         width: ls(120),
-        height: buttonHeight || ss(40),
+        height: buttonHeight || ss(40, 34),
         backgroundColor: 'transparent',
         ...style,
       }}
       buttonTextStyle={{
         color: '#fff',
-        fontSize: sp(14),
+        fontSize: sp(14, 17),
+        ...textStyle,
       }}
       renderDropdownIcon={(isOpened) => {
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(15)}
+            size={sp(15, 17)}
             color='#fff'
           />
         );

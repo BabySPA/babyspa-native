@@ -1,4 +1,8 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  StackCardStyleInterpolator,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import { AppStackList } from '../types';
 import HomeScreen from '../screens/home';
 import RegisterScreen from '../screens/register-customer';
@@ -17,14 +21,14 @@ import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
-import { Box, Modal, Row, Spinner, Text } from 'native-base';
+import { Box, Modal, Row, Spinner, StatusBar, Text } from 'native-base';
 import { sp } from '../utils/style';
 import useGlobalLoading from '../stores/loading';
 import Picker from 'react-native-patchpicker';
 import FollowUp from '../screens/follow-up';
 import AnalyzeInfo from '../screens/analyze-info';
 
-const Stack = createNativeStackNavigator<AppStackList>();
+const Stack = createStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
   const { loading, loadingText, spinner, closeLoading } = useGlobalLoading();
@@ -35,8 +39,7 @@ export default function AppNavigator() {
         onClose={() => {
           Picker.hide();
           closeLoading();
-        }}
-      >
+        }}>
         {spinner && (
           <Row alignItems={'center'}>
             <Text color={'#f0f0f0'} fontSize={sp(16)}>
@@ -46,7 +49,11 @@ export default function AppNavigator() {
           </Row>
         )}
       </Modal>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}>
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='RegisterCustomer' component={RegisterScreen} />
         <Stack.Screen name='CustomerDetail' component={CustomerDetail} />

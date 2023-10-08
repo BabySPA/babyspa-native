@@ -14,9 +14,6 @@ import { useEffect, useRef, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import EmptyBox from '~/app/components/empty-box';
-import { debounce, set } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 import dayjs from 'dayjs';
@@ -33,7 +30,7 @@ import {
   TooltipComponent,
 } from 'echarts/components';
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -73,7 +70,7 @@ const ShopStatisticBox = () => {
               年龄
             </Text>
           </Row>
-          <Row w={ls(110)}>
+          <Row w={ls(120)}>
             <Text fontSize={sp(18)} color={'#333'}>
               电话
             </Text>
@@ -116,7 +113,7 @@ const ShopStatisticBox = () => {
                 alignItems={'center'}
                 borderBottomRadius={ss(10)}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -135,8 +132,8 @@ const ShopStatisticBox = () => {
                     {`${age?.year}岁${age?.month}月`}
                   </Text>
                 </Row>
-                <Row w={ls(110)}>
-                  <Text fontSize={sp(18)} color={'#333'}>
+                <Row w={ls(120)}>
+                  <Text fontSize={sp(16)} color={'#333'}>
                     {flow.customer.phoneNumber}
                   </Text>
                 </Row>
@@ -151,12 +148,8 @@ const ShopStatisticBox = () => {
                   </Text>
                 </Row>
                 <Row w={ls(180)} justifyContent={'center'}>
-                  <Text
-                    fontSize={sp(18)}
-                    color={'#333'}
-                    numberOfLines={2}
-                    ellipsizeMode='tail'>
-                    {flow.collect.guidance || '未设置'}
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {flow.collect.guidance || '无'}
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
@@ -165,12 +158,8 @@ const ShopStatisticBox = () => {
                   </Text>
                 </Row>
                 <Row w={ls(80)}>
-                  <Text
-                    fontSize={sp(18)}
-                    color={'#333'}
-                    numberOfLines={2}
-                    ellipsizeMode='tail'>
-                    {flow.analyze.remark || '未设置'}
+                  <Text fontSize={sp(18)} color={'#333'}>
+                    {flow.analyze.remark || '无'}
                   </Text>
                 </Row>
               </Row>
@@ -185,18 +174,18 @@ const ShopStatisticBox = () => {
       <Row flex={1}>
         <StatisticsCountBox
           title={'登记人数'}
-          count={counts.register}
+          count={counts?.register}
           image={require('~/assets/images/statistic-register.png')}
         />
         <StatisticsCountBox
           title={'采集人数'}
-          count={counts.collect}
+          count={counts?.collect}
           style={{ marginLeft: ss(10) }}
           image={require('~/assets/images/statistic-collect.png')}
         />
         <StatisticsCountBox
           title={'分析人数'}
-          count={counts.analyze}
+          count={counts?.analyze}
           style={{ marginLeft: ss(10) }}
           image={require('~/assets/images/statistic-analyze.png')}
         />
@@ -204,12 +193,12 @@ const ShopStatisticBox = () => {
       <Row flex={1} mt={ss(10)}>
         <StatisticsCountBox
           title={'贴敷总量（贴）'}
-          count={counts.application}
+          count={counts?.application}
           image={require('~/assets/images/statistic-application.png')}
         />
         <StatisticsCountBox
           title={'推拿总量（次）'}
-          count={counts.massage}
+          count={counts?.massage}
           style={{ marginLeft: ss(10) }}
           image={require('~/assets/images/statistic-massage.png')}
         />
@@ -276,7 +265,7 @@ const CenterStatisticBox = () => {
                 py={ss(10)}
                 alignItems={'center'}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -307,12 +296,12 @@ const CenterStatisticBox = () => {
                 </Row>
                 <Row w={ls(100)} justifyContent={'center'}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {item.counts.application}
+                    {item.counts?.application}
                   </Text>
                 </Row>
                 <Row w={ls(100)} justifyContent={'center'}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {item.counts.massage}
+                    {item.counts?.massage}
                   </Text>
                 </Row>
               </Row>
@@ -328,13 +317,16 @@ const CenterStatisticBox = () => {
       top: ss(20),
       left: ls(50),
       right: 0,
+      bottom: ss(50, 60),
     },
     textStyle: {
       fontFamily: 'PingFang SC', // 指定字体类型
+      fontSize: sp(16),
     },
     tooltip: {
       fontFamily: 'PingFang SC', // 指定字体类型
       trigger: 'axis',
+      fontSize: sp(16),
       position: function (pt: any) {
         return [pt[0], '10%'];
       },
@@ -345,10 +337,11 @@ const CenterStatisticBox = () => {
         return item.shop.name;
       }),
       axisLabel: {
+        margin: ss(0, 20),
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-        rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+        rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
-        fontSize: sp(12),
+        fontSize: sp(14),
         color: '#8C8C8C',
       },
     },
@@ -368,6 +361,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
+        interval: 2,
       },
     ],
     series: [
@@ -458,7 +452,13 @@ const CenterStatisticBox = () => {
 };
 export default function StatisticsShop() {
   const [selectShop, setSelectShop] = useState<Shop>();
+  const [renderWaiting, setRenderWaiting] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
   return (
     <Flex flex={1}>
       <Filter
@@ -466,10 +466,14 @@ export default function StatisticsShop() {
           setSelectShop(shop);
         }}
       />
-      {selectShop?.type === ShopType.CENTER ? (
-        <CenterStatisticBox />
-      ) : (
-        <ShopStatisticBox />
+      {renderWaiting && (
+        <>
+          {selectShop?.type === ShopType.CENTER ? (
+            <CenterStatisticBox />
+          ) : (
+            <ShopStatisticBox />
+          )}
+        </>
       )}
     </Flex>
   );
@@ -518,7 +522,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+      <Row h={ss(75)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             onSelectShop(selectedItem);
@@ -526,10 +530,13 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           defaultButtonText={defaultSelectShop?.name}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -541,18 +548,17 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           ml={ls(20)}
           h={ss(44)}
           alignItems={'center'}
-          py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {startDate}
           </Text>
         </Pressable>
@@ -560,6 +566,9 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -569,41 +578,41 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           flexDirection={'row'}
           h={ss(44)}
-          py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {endDate}
           </Text>
         </Pressable>
-
-        <DatePickerModal
-          isOpen={isOpenDatePicker.isOpen}
-          onClose={() => {
-            setIsOpenDatePicker({
-              isOpen: false,
-            });
-          }}
-          onSelectedChange={(date: string) => {
-            if (!isOpenDatePicker.type) return;
-            if (isOpenDatePicker.type == 'start') {
-              setStartDate(date);
-            } else {
-              setEndDate(date);
-            }
-          }}
-          current={isOpenDatePicker.type == 'start' ? startDate : endDate}
-          selected={isOpenDatePicker.type == startDate ? startDate : endDate}
-        />
+        {isOpenDatePicker.isOpen && (
+          <DatePickerModal
+            isOpen={isOpenDatePicker.isOpen}
+            onClose={() => {
+              setIsOpenDatePicker({
+                isOpen: false,
+              });
+            }}
+            onSelectedChange={(date: string) => {
+              if (!isOpenDatePicker.type) return;
+              if (isOpenDatePicker.type == 'start') {
+                setStartDate(date);
+              } else {
+                setEndDate(date);
+              }
+            }}
+            current={isOpenDatePicker.type == 'start' ? startDate : endDate}
+            selected={isOpenDatePicker.type == 'start' ? startDate : endDate}
+          />
+        )}
       </Row>
     </Column>
   );

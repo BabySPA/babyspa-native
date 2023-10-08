@@ -11,7 +11,7 @@ import {
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
@@ -65,6 +65,9 @@ export default function FlowInfo({
           from == 'evaluate-detail' &&
             evaluate.status == EvaluateStatus.NOT_SET ? (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsEvaluateCardDialogShow(true);
@@ -74,7 +77,9 @@ export default function FlowInfo({
                 borderRadius={ss(4)}
                 px={ls(26)}
                 py={ss(10)}>
-                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+                {loading && (
+                  <Spinner mr={ls(5)} color='emerald.500' size={sp(20)} />
+                )}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
@@ -128,15 +133,17 @@ export default function FlowInfo({
           </ScrollView>
         </Column>
       </Row>
-      <EvaluateCardDialog
-        isOpen={isEvaluateCardDialogShow}
-        onClose={function (): void {
-          setIsEvaluateCardDialogShow(false);
-        }}
-        onEvaluated={() => {
-          evalutedDone();
-        }}
-      />
+      {isEvaluateCardDialogShow && (
+        <EvaluateCardDialog
+          isOpen={isEvaluateCardDialogShow}
+          onClose={function (): void {
+            setIsEvaluateCardDialogShow(false);
+          }}
+          onEvaluated={() => {
+            evalutedDone();
+          }}
+        />
+      )}
     </Box>
   );
 }

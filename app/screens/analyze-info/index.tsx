@@ -49,6 +49,9 @@ export default function AnalyzeInfo({
         rightElement={
           <Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowCollection(true);
@@ -79,23 +82,26 @@ export default function AnalyzeInfo({
           alignItems={'center'}
           justifyContent={'space-between'}>
           <Row alignItems={'center'}>
-            <Circle bgColor={'#F56121'} size={ss(24)}>
+            <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
             </Circle>
             <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
               过敏原：
-              {collect.healthInfo.allergy}
+              {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               setShowWarn(false);
             }}>
             <Icon
-              as={<AntDesign name='closecircleo' size={ss(30)} />}
+              as={<AntDesign name='closecircleo' size={sp(30)} />}
               color={'#99A9BF'}
             />
           </Pressable>
@@ -126,7 +132,7 @@ export default function AnalyzeInfo({
                               bgColor={'#F2F9F8'}
                               borderRadius={1}
                               borderStyle={'dashed'}
-                              borderWidth={1}
+                              borderWidth={ss(1)}
                               borderColor={'#7AB6AF'}
                               p={ss(20)}>
                               <Row
@@ -149,7 +155,7 @@ export default function AnalyzeInfo({
                                   maxW={'60%'}>
                                   穴位：
                                   <Text fontSize={sp(16)} color='#333'>
-                                    {item.acupoint || '未设置'}
+                                    {item.acupoint || '无'}
                                   </Text>
                                 </Text>
                               </Row>
@@ -175,7 +181,7 @@ export default function AnalyzeInfo({
                         color='#1E262F'
                         opacity={0.4}
                         mt={ss(10)}>
-                        贴敷未设置
+                        贴敷无
                       </Text>
                     </Center>
                   )}
@@ -222,7 +228,7 @@ export default function AnalyzeInfo({
                               bgColor={'#F2F9F8'}
                               borderRadius={1}
                               borderStyle={'dashed'}
-                              borderWidth={1}
+                              borderWidth={ss(1)}
                               borderColor={'#7AB6AF'}
                               p={ss(20)}>
                               <Row
@@ -246,7 +252,7 @@ export default function AnalyzeInfo({
                                   fontSize={sp(16)}
                                   color='#333'
                                   maxW={'85%'}>
-                                  {item.remark || '未设置'}
+                                  {item.remark || '无'}
                                 </Text>
                               </Row>
                             </Column>
@@ -259,24 +265,24 @@ export default function AnalyzeInfo({
                     <Text
                       fontSize={sp(18)}
                       color='#999'
-                      w={ls(100)}
+                      w={ls(120)}
                       textAlign={'right'}>
                       调理导向：
                     </Text>
                     <Text fontSize={sp(18)} color='#333'>
-                      {collect.guidance || '未设置'}
+                      {collect.guidance || '无'}
                     </Text>
                   </Row>
                   <Row mt={ss(20)}>
                     <Text
                       fontSize={sp(18)}
                       color='#999'
-                      w={ls(100)}
+                      w={ls(120)}
                       textAlign={'right'}>
                       注意事项：
                     </Text>
                     <Text fontSize={sp(18)} color='#333'>
-                      {analyze.remark || '未设置'}
+                      {analyze.remark || '无'}
                     </Text>
                   </Row>
                   <Row mt={ss(20)} justifyContent={'space-between'}>
@@ -284,7 +290,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         分析师：
                       </Text>
@@ -296,7 +302,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         随访时间：
                       </Text>
@@ -305,7 +311,7 @@ export default function AnalyzeInfo({
                           ? dayjs(analyze.followUp.followUpTime).format(
                               'YYYY-MM-DD',
                             )
-                          : '未设置'}
+                          : '无'}
                       </Text>
                     </Row>
                   </Row>
@@ -314,7 +320,7 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         分析时间：
                       </Text>
@@ -328,14 +334,14 @@ export default function AnalyzeInfo({
                       <Text
                         fontSize={sp(18)}
                         color='#999'
-                        w={ls(100)}
+                        w={ls(120)}
                         textAlign={'right'}>
                         复推时间：
                       </Text>
                       <Text fontSize={sp(18)} color='#333'>
                         {analyze.next.nextTime
                           ? dayjs(analyze.next.nextTime).format('YYYY-MM-DD')
-                          : '未设置'}
+                          : '无'}
                       </Text>
                     </Row>
                   </Row>
@@ -366,239 +372,244 @@ export default function AnalyzeInfo({
         </Column>
       </Row>
 
-      <Modal
-        isOpen={showCollection}
-        onClose={() => {
-          setShowCollection(false);
-        }}>
-        <Column bgColor={'white'} borderRadius={ss(10)} w={ls(582)}>
-          <Row
-            px={ls(30)}
-            py={ss(20)}
-            alignItems={'center'}
-            justifyContent={'space-between'}>
-            <Row alignItems={'center'}>
-              <Box bgColor={'#00B49E'} w={ss(4)} h={ss(20)} />
-              <Text fontSize={sp(20)} ml={ls(10)} color={'#000'}>
-                采集信息
-              </Text>
+      {showCollection && (
+        <Modal
+          isOpen={showCollection}
+          onClose={() => {
+            setShowCollection(false);
+          }}>
+          <Column bgColor={'white'} borderRadius={ss(10)} w={ls(582)}>
+            <Row
+              px={ls(30)}
+              py={ss(20)}
+              alignItems={'center'}
+              justifyContent={'space-between'}>
+              <Row alignItems={'center'}>
+                <Box bgColor={'#00B49E'} w={ss(4)} h={ss(20)} />
+                <Text fontSize={sp(20)} ml={ls(10)} color={'#000'}>
+                  采集信息
+                </Text>
+              </Row>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setShowCollection(false);
+                }}>
+                <Icon
+                  as={<AntDesign name={'close'} />}
+                  size={sp(24)}
+                  color='#999'
+                />
+              </Pressable>
             </Row>
-            <Pressable
-              hitSlop={ss(20)}
-              onPress={() => {
-                setShowCollection(false);
-              }}>
-              <Icon
-                as={<AntDesign name={'close'} />}
-                size={ss(24)}
-                color='#999'
-              />
-            </Pressable>
-          </Row>
-          <Divider color={'#DFE1DE'} mb={ss(20)} />
-          <ScrollView maxH={ss(550)}>
-            <Column px={ls(20)}>
-              <Row>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  过敏原：
-                </Text>
-                <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
-                  {collect.healthInfo.allergy || '未设置'}
-                </Text>
-              </Row>
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  舌象：
-                </Text>
-                {collect.healthInfo.lingualImage.length > 0 ? (
-                  collect.healthInfo.lingualImage.map((item, idx) => {
-                    return (
-                      <PreviewImage
-                        source={item as string}
-                        key={idx}
-                        current={idx}
-                        images={[
-                          ...collect.healthInfo.lingualImage,
-                          ...collect.healthInfo.leftHandImages,
-                          ...collect.healthInfo.rightHandImages,
-                          ...collect.healthInfo.otherImages,
-                        ].map((item) => ({
-                          url: typeof item === 'string' ? item : item.uri,
-                        }))}
-                      />
-                    );
-                  })
-                ) : (
-                  <Text fontSize={sp(18)} color='#333'>
-                    未设置
+            <Divider color={'#DFE1DE'} mb={ss(20)} />
+            <ScrollView maxH={ss(550)}>
+              <Column px={ls(20)}>
+                <Row>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    过敏原：
                   </Text>
-                )}
-              </Row>
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  左手手相：
-                </Text>
-                {collect.healthInfo.leftHandImages.length > 0 ? (
-                  collect.healthInfo.leftHandImages.map((item, idx) => {
-                    return (
-                      <PreviewImage
-                        source={item as string}
-                        key={idx}
-                        current={idx}
-                        images={[
-                          ...collect.healthInfo.leftHandImages,
-                          ...collect.healthInfo.rightHandImages,
-                          ...collect.healthInfo.lingualImage,
-                          ...collect.healthInfo.otherImages,
-                        ].map((item) => ({
-                          url: typeof item === 'string' ? item : item.uri,
-                        }))}
-                      />
-                    );
-                  })
-                ) : (
-                  <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                  <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
+                    {collect.healthInfo.allergy || '无'}
                   </Text>
-                )}
-              </Row>
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  右手手相：
-                </Text>
-                {collect.healthInfo.rightHandImages.length > 0 ? (
-                  collect.healthInfo.rightHandImages.map((item, idx) => {
-                    return (
-                      <PreviewImage
-                        source={item as string}
-                        key={idx}
-                        current={idx}
-                        images={[
-                          ...collect.healthInfo.rightHandImages,
-                          ...collect.healthInfo.leftHandImages,
-                          ...collect.healthInfo.lingualImage,
-                          ...collect.healthInfo.otherImages,
-                        ].map((item) => ({
-                          url: typeof item === 'string' ? item : item.uri,
-                        }))}
-                      />
-                    );
-                  })
-                ) : (
-                  <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    舌象：
                   </Text>
-                )}
-              </Row>
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  录音：
-                </Text>
-                {collect.healthInfo.audioFiles.length > 0 ? (
-                  <SoundList
-                    audioFiles={collect.healthInfo.audioFiles}
-                    edit={false}
-                  />
-                ) : (
-                  <Text fontSize={sp(18)} color='#333'>
-                    暂无录音
+                  {collect.healthInfo.lingualImage.length > 0 ? (
+                    collect.healthInfo.lingualImage.map((item, idx) => {
+                      return (
+                        <PreviewImage
+                          source={item as string}
+                          key={idx}
+                          current={idx}
+                          images={[
+                            ...collect.healthInfo.lingualImage,
+                            ...collect.healthInfo.leftHandImages,
+                            ...collect.healthInfo.rightHandImages,
+                            ...collect.healthInfo.otherImages,
+                          ].map((item) => ({
+                            url: typeof item === 'string' ? item : item.uri,
+                          }))}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text fontSize={sp(18)} color='#333'>
+                      无
+                    </Text>
+                  )}
+                </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    左手手相：
                   </Text>
-                )}
-              </Row>
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  其他：
-                </Text>
-                {collect.healthInfo.otherImages.length > 0 ? (
-                  collect.healthInfo.otherImages.map((item, idx) => {
-                    return (
-                      <PreviewImage
-                        source={item as string}
-                        key={idx}
-                        current={idx}
-                        images={[
-                          ...collect.healthInfo.otherImages,
-                          ...collect.healthInfo.lingualImage,
-                          ...collect.healthInfo.leftHandImages,
-                          ...collect.healthInfo.rightHandImages,
-                        ].map((item) => ({
-                          url: typeof item === 'string' ? item : item.uri,
-                        }))}
-                      />
-                    );
-                  })
-                ) : (
-                  <Text fontSize={sp(18)} color='#333'>
-                    未设置
+                  {collect.healthInfo.leftHandImages.length > 0 ? (
+                    collect.healthInfo.leftHandImages.map((item, idx) => {
+                      return (
+                        <PreviewImage
+                          source={item as string}
+                          key={idx}
+                          current={idx}
+                          images={[
+                            ...collect.healthInfo.leftHandImages,
+                            ...collect.healthInfo.rightHandImages,
+                            ...collect.healthInfo.lingualImage,
+                            ...collect.healthInfo.otherImages,
+                          ].map((item) => ({
+                            url: typeof item === 'string' ? item : item.uri,
+                          }))}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text fontSize={sp(18)} color='#333'>
+                      无
+                    </Text>
+                  )}
+                </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    右手手相：
                   </Text>
-                )}
-              </Row>
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  调理导向：
-                </Text>
-                <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
-                  {collect.guidance || '未设置'}
-                </Text>
-              </Row>
+                  {collect.healthInfo.rightHandImages.length > 0 ? (
+                    collect.healthInfo.rightHandImages.map((item, idx) => {
+                      return (
+                        <PreviewImage
+                          source={item as string}
+                          key={idx}
+                          current={idx}
+                          images={[
+                            ...collect.healthInfo.rightHandImages,
+                            ...collect.healthInfo.leftHandImages,
+                            ...collect.healthInfo.lingualImage,
+                            ...collect.healthInfo.otherImages,
+                          ].map((item) => ({
+                            url: typeof item === 'string' ? item : item.uri,
+                          }))}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text fontSize={sp(18)} color='#333'>
+                      无
+                    </Text>
+                  )}
+                </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    录音：
+                  </Text>
+                  {collect.healthInfo.audioFiles.length > 0 ? (
+                    <SoundList
+                      audioFiles={collect.healthInfo.audioFiles}
+                      edit={false}
+                    />
+                  ) : (
+                    <Text fontSize={sp(18)} color='#333'>
+                      暂无录音
+                    </Text>
+                  )}
+                </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    其他：
+                  </Text>
+                  {collect.healthInfo.otherImages.length > 0 ? (
+                    collect.healthInfo.otherImages.map((item, idx) => {
+                      return (
+                        <PreviewImage
+                          source={item as string}
+                          key={idx}
+                          current={idx}
+                          images={[
+                            ...collect.healthInfo.otherImages,
+                            ...collect.healthInfo.lingualImage,
+                            ...collect.healthInfo.leftHandImages,
+                            ...collect.healthInfo.rightHandImages,
+                          ].map((item) => ({
+                            url: typeof item === 'string' ? item : item.uri,
+                          }))}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text fontSize={sp(18)} color='#333'>
+                      无
+                    </Text>
+                  )}
+                </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    调理导向：
+                  </Text>
+                  <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
+                    {collect.guidance || '无'}
+                  </Text>
+                </Row>
 
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  理疗师：
-                </Text>
-                <Text fontSize={sp(18)} color='#333'>
-                  {collectionOperator?.name || '未设置'}
-                </Text>
-              </Row>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    理疗师：
+                  </Text>
+                  <Text fontSize={sp(18)} color='#333'>
+                    {collectionOperator?.name || '无'}
+                  </Text>
+                </Row>
 
-              <Row mt={ss(20)}>
-                <Text
-                  fontSize={sp(18)}
-                  color='#999'
-                  w={ls(100)}
-                  textAlign={'right'}>
-                  采集时间：
-                </Text>
-                <Text fontSize={sp(18)} color='#333'>
-                  {dayjs(collect.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
-                </Text>
-              </Row>
-            </Column>
-          </ScrollView>
-        </Column>
-      </Modal>
+                <Row mt={ss(20)}>
+                  <Text
+                    fontSize={sp(18)}
+                    color='#999'
+                    w={ls(120)}
+                    textAlign={'right'}>
+                    采集时间：
+                  </Text>
+                  <Text fontSize={sp(18)} color='#333'>
+                    {dayjs(collect.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
+                  </Text>
+                </Row>
+              </Column>
+            </ScrollView>
+          </Column>
+        </Modal>
+      )}
     </Box>
   );
 }

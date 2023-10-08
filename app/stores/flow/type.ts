@@ -1,7 +1,6 @@
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { FlowStatus, Gender } from '~/app/types';
 import { Shop } from '../manager/type';
-import { StatusBar } from 'expo-status-bar';
 
 export enum RegisterStatus {
   NOT_SET = -1,
@@ -182,6 +181,7 @@ export interface FlowState {
   statisticFlowWithDate: StatisticFlowWithDate[];
 
   requestGetInitializeData: () => Promise<any>;
+  requestGetFlowById: (flowId: string) => Promise<FlowItemResponse>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
   requestGetRegisterFlows: () => Promise<any>;
   requestGetCollectionFlows: () => Promise<any>;

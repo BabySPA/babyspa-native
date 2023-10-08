@@ -9,14 +9,17 @@ import {
   Pressable,
   Spinner,
   FlatList,
+  ScrollView,
+  Link,
 } from 'native-base';
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { ImageBackground, Image } from 'react-native';
+import { ImageBackground, Image, Linking } from 'react-native';
 import { ls, ss, sp } from '~/app/utils/style';
 import { ShopsWithRole } from '~/app/stores/auth/type';
+import { toastAlert } from '~/app/utils/toast';
 
 export default function LoginScreen({
   navigation,
@@ -51,33 +54,12 @@ export default function LoginScreen({
             });
           } else {
             setLoading(false);
-            toast.show({
-              variant: 'left-accent',
-              placement: 'top',
-              title: '登录成功',
-              bg: 'success.500',
-            });
+            toastAlert(toast, 'success', '登录成功');
           }
         })
-        .catch((error) => {
+        .catch(() => {
           setLoading(false);
-          if (error.code == 403) {
-            toast.show({
-              variant: 'left-accent',
-              placement: 'top',
-              title: '登录失败',
-              description: error.message,
-              bg: 'danger.500',
-            });
-          } else {
-            toast.show({
-              variant: 'left-accent',
-              placement: 'top',
-              title: '登录失败',
-              description: '请查看用户名/密码是否正确',
-              bg: 'danger.500',
-            });
-          }
+          toastAlert(toast, 'error', '登录失败，请查看用户名/密码是否正确');
         });
     }
   };
@@ -88,6 +70,7 @@ export default function LoginScreen({
 
     setTimeout(() => {
       setLoading(false);
+      toastAlert(toast, 'success', '登录成功');
       selectLoginShop({
         ...loginUser,
         currentShopWithRole: currentShopWithRole,
@@ -110,6 +93,9 @@ export default function LoginScreen({
           renderItem={({ item, index }) => {
             return (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 onPress={() => {
                   setSelectShopIdx(index);
                 }}
@@ -143,6 +129,9 @@ export default function LoginScreen({
           }}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             selectShop();
@@ -161,7 +150,7 @@ export default function LoginScreen({
                 end: [1, 1],
               },
             }}>
-            {loading && <Spinner color='#00B49E' mr={ls(8)} size={ss(22)} />}
+            {loading && <Spinner color='#00B49E' mr={ls(8)} size={sp(22)} />}
             <Text color='#fff' fontSize={sp(22)}>
               确定
             </Text>
@@ -203,16 +192,20 @@ export default function LoginScreen({
                 onChangeText={setUsername}
                 borderRadius={ss(40)}
                 w={ls(360)}
+                py={0}
                 h={ss(60)}
                 mt={ss(60)}
                 placeholder='请输入用户名'
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 fontSize={sp(20)}
                 color={'#999'}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 InputLeftElement={
                   <Icon
                     as={<MaterialIcons name='person' />}
-                    size={ss(22)}
+                    size={sp(22)}
                     ml={ls(20)}
                     color={'#999999'}
                   />
@@ -227,20 +220,26 @@ export default function LoginScreen({
                 w={ls(360)}
                 h={ss(60)}
                 mt={ss(30)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 placeholder='请输入密码'
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 fontSize={sp(20)}
                 color={'#999'}
                 InputLeftElement={
                   <Icon
                     as={<MaterialIcons name='lock' />}
-                    size={ss(22)}
+                    size={sp(22)}
                     ml={ls(20)}
                     color={'#999999'}
                   />
                 }
                 InputRightElement={
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     mr={ls(20)}
                     onPress={() => {
@@ -256,14 +255,16 @@ export default function LoginScreen({
                           }
                         />
                       }
-                      size={ss(22)}
+                      size={sp(22)}
                       color={'#999999'}
                     />
                   </Pressable>
                 }
               />
               <Pressable
-                hitSlop={ss(20)}
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 onPress={() => {
                   onClickLogin();
                 }}>
@@ -272,7 +273,7 @@ export default function LoginScreen({
                   justifyContent={'center'}
                   w={ls(360)}
                   h={ss(60)}
-                  mt={ss(50)}
+                  mt={ss(50, 40)}
                   borderRadius={ss(30)}
                   opacity={username && password && selectAgreement ? 1 : 0.5}
                   bg={{
@@ -283,7 +284,7 @@ export default function LoginScreen({
                     },
                   }}>
                   {loading && (
-                    <Spinner color='#00B49E' mr={ls(8)} size={ss(22)} />
+                    <Spinner color='#00B49E' mr={ls(8)} size={sp(22)} />
                   )}
                   <Text color='#fff' fontSize={sp(22)}>
                     登录
@@ -293,7 +294,7 @@ export default function LoginScreen({
 
               <Row mt={ss(20)} alignItems={'center'}>
                 <Pressable
-                  hitSlop={ss(20)}
+                  hitSlop={ss(10)}
                   onPress={() => {
                     setSelectAgreement(!selectAgreement);
                   }}>
@@ -308,7 +309,7 @@ export default function LoginScreen({
                           }
                         />
                       }
-                      size={ss(22)}
+                      size={sp(22)}
                       color={selectAgreement ? '#00B49E' : '#DBDBDB'}
                     />
                     <Text color='#999' fontSize={sp(14)} ml={ls(8)}>
@@ -316,15 +317,22 @@ export default function LoginScreen({
                     </Text>
                   </Row>
                 </Pressable>
-                <Text color='#28F' fontSize={sp(14)}>
-                  《用户协议》
-                </Text>
-                <Text color='#999' fontSize={sp(14)}>
-                  、
-                </Text>
-                <Text color='#28F' fontSize={sp(14)}>
-                  《隐私政策》
-                </Text>
+                <Pressable
+                  flexDirection={'row'}
+                  onPress={() => {
+                    Linking.openURL('https://mcbabyspa.com/privacy');
+                    setSelectAgreement(true);
+                  }}>
+                  <Text color='#28F' fontSize={sp(14)}>
+                    《用户协议》
+                  </Text>
+                  <Text color='#999' fontSize={sp(14)}>
+                    、
+                  </Text>
+                  <Text color='#28F' fontSize={sp(14)}>
+                    《隐私政策》
+                  </Text>
+                </Pressable>
               </Row>
             </Center>
           )}

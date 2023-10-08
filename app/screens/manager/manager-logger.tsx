@@ -10,6 +10,7 @@ import {
   Image,
   ScrollView,
   FlatList,
+  Flex,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -61,7 +62,7 @@ export default function ManagerLogger({
               操作内容
             </Text>
           </Row>
-          <Row w={ls(200)} justifyContent={'center'}>
+          <Row w={ls(230)} justifyContent={'center'}>
             <Text fontSize={sp(18)} color={'#333'}>
               操作时间
             </Text>
@@ -69,7 +70,9 @@ export default function ManagerLogger({
         </Row>
         <FlatList
           data={logs}
-          maxH={ss(520)}
+          style={{
+            height: '80%',
+          }}
           renderItem={({ item: log }) => {
             return (
               <Row
@@ -77,9 +80,9 @@ export default function ManagerLogger({
                 minH={ss(60)}
                 py={ss(10)}
                 alignItems={'center'}
-                borderTopRadius={ss(10)}
+                bgColor={'#fff'}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
@@ -103,7 +106,7 @@ export default function ManagerLogger({
                     {log.action}
                   </Text>
                 </Row>
-                <Row w={ls(200)}>
+                <Row w={ls(230)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(log.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </Text>
@@ -165,17 +168,19 @@ function Filter() {
       px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
-          w={ls(300)}
+          w={ls(360)}
           h={ss(44)}
-          p={ss(8)}
+          p={ss(9)}
           mr={ss(40)}
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={sp(25)}
               color='#AFB0B4'
               ml={ss(10)}
             />
@@ -190,6 +195,9 @@ function Filter() {
           }}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -201,18 +209,17 @@ function Filter() {
           ml={ls(20)}
           h={ss(44)}
           alignItems={'center'}
-          py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {logFilter.startDate}
           </Text>
         </Pressable>
@@ -220,6 +227,9 @@ function Filter() {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -229,56 +239,57 @@ function Filter() {
           }}
           flexDirection={'row'}
           h={ss(44)}
-          py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {logFilter.endDate}
           </Text>
         </Pressable>
       </Row>
 
-      <DatePickerModal
-        isOpen={isOpenDatePicker.isOpen}
-        onClose={() => {
-          setIsOpenDatePicker({
-            isOpen: false,
-          });
-        }}
-        onSelectedChange={(date: string) => {
-          if (!isOpenDatePicker.type) return;
-          if (isOpenDatePicker.type == 'start') {
-            setLogFilter({
-              startDate: date,
+      {isOpenDatePicker.isOpen && (
+        <DatePickerModal
+          isOpen={isOpenDatePicker.isOpen}
+          onClose={() => {
+            setIsOpenDatePicker({
+              isOpen: false,
             });
-            requestGetLogs();
-          } else {
-            setLogFilter({
-              endDate: date,
-            });
-            requestGetLogs();
+          }}
+          onSelectedChange={(date: string) => {
+            if (!isOpenDatePicker.type) return;
+            if (isOpenDatePicker.type == 'start') {
+              setLogFilter({
+                startDate: date,
+              });
+              requestGetLogs();
+            } else {
+              setLogFilter({
+                endDate: date,
+              });
+              requestGetLogs();
+            }
+          }}
+          current={
+            isOpenDatePicker.type == 'start'
+              ? logFilter.startDate
+              : logFilter.endDate
           }
-        }}
-        current={
-          isOpenDatePicker.type == 'start'
-            ? logFilter.startDate
-            : logFilter.endDate
-        }
-        selected={
-          isOpenDatePicker.type == logFilter.startDate
-            ? logFilter.startDate
-            : logFilter.endDate
-        }
-      />
+          selected={
+            isOpenDatePicker.type == 'start'
+              ? logFilter.startDate
+              : logFilter.endDate
+          }
+        />
+      )}
     </Row>
   );
 }

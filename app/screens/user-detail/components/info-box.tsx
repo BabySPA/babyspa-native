@@ -52,18 +52,23 @@ export default function InfoBox(params: InfoBoxParams) {
           title='员工信息'
           rightElement={
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsDeleteDialogOpen(true);
               }}
               bgColor={'rgba(243, 96, 30, 0.20)'}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderColor={'#f3601E'}
               px={ls(26)}
               py={ss(10)}>
               <Row>
-                {deleteLoading && <Spinner mr={ls(5)} color='#999' />}
+                {deleteLoading && (
+                  <Spinner mr={ls(5)} color='#999' size={sp(20)} />
+                )}
                 <Text color='#F3601E' fontSize={sp(14)}>
                   删除
                 </Text>
@@ -99,12 +104,18 @@ export default function InfoBox(params: InfoBoxParams) {
               }
               rightElement={
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setIsResetPassDialogOpen(true);
                   }}>
                   <Row alignItems={'center'} ml={ls(40)}>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       mr={ls(20)}
                       onPress={() => {
@@ -120,41 +131,42 @@ export default function InfoBox(params: InfoBoxParams) {
                             }
                           />
                         }
-                        size={ss(22)}
+                        size={sp(22)}
                         color={'#00B49E'}
                       />
                     </Pressable>
-
                     <Image
                       alt=''
                       source={require('~/assets/images/reset-pass.png')}
-                      size={ss(16)}
+                      size={sp(16)}
                     />
                     <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
                       重置密码
                     </Text>
-                    <DialogModal
-                      isOpen={isResetPassDialogOpen}
-                      title='确认重置密码为身份证后六位？'
-                      onClose={function (): void {
-                        setIsResetPassDialogOpen(false);
-                      }}
-                      onConfirm={function (): void {
-                        requestPatchUserPassword(currentUser._id as string)
-                          .then(({ data }) => {
-                            toastAlert(toast, 'success', '重置密码成功');
-                            updateCurrentUser({
-                              password: data.password,
+                    {isResetPassDialogOpen && (
+                      <DialogModal
+                        isOpen={isResetPassDialogOpen}
+                        title='确认重置密码为身份证后六位？'
+                        onClose={function (): void {
+                          setIsResetPassDialogOpen(false);
+                        }}
+                        onConfirm={function (): void {
+                          requestPatchUserPassword(currentUser._id as string)
+                            .then(({ data }) => {
+                              toastAlert(toast, 'success', '重置密码成功');
+                              updateCurrentUser({
+                                password: data.password,
+                              });
+                            })
+                            .catch(() => {
+                              toastAlert(toast, 'error', '重置密码失败');
+                            })
+                            .finally(() => {
+                              setIsResetPassDialogOpen(false);
                             });
-                          })
-                          .catch(() => {
-                            toastAlert(toast, 'error', '重置密码失败');
-                          })
-                          .finally(() => {
-                            setIsResetPassDialogOpen(false);
-                          });
-                      }}
-                    />
+                        }}
+                      />
+                    )}
                   </Row>
                 </Pressable>
               }
@@ -164,6 +176,9 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -174,7 +189,7 @@ export default function InfoBox(params: InfoBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               编辑
@@ -182,33 +197,35 @@ export default function InfoBox(params: InfoBoxParams) {
           </Box>
         </Pressable>
       </Row>
-      <DialogModal
-        isOpen={isDeleteDialogOpen}
-        onClose={function (): void {
-          setIsDeleteDialogOpen(false);
-        }}
-        title='是否确认删除门店员工？'
-        onConfirm={function (): void {
-          setIsDeleteDialogOpen(false);
-          if (deleteLoading) return;
-          setDeleteLoading(true);
+      {isDeleteDialogOpen && (
+        <DialogModal
+          isOpen={isDeleteDialogOpen}
+          onClose={function (): void {
+            setIsDeleteDialogOpen(false);
+          }}
+          title='是否确认删除门店员工？'
+          onConfirm={function (): void {
+            setIsDeleteDialogOpen(false);
+            if (deleteLoading) return;
+            setDeleteLoading(true);
 
-          requestDeleteUser()
-            .then(async (res) => {
-              // 取消成功
-              requestGetUsers();
-              toastAlert(toast, 'success', '删除员工成功！');
-              navigation.goBack();
-            })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '删除员工失败！');
-            })
-            .finally(() => {
-              setDeleteLoading(false);
-            });
-        }}
-      />
+            requestDeleteUser()
+              .then(async (res) => {
+                // 取消成功
+                requestGetUsers();
+                toastAlert(toast, 'success', '删除员工成功！');
+                navigation.goBack();
+              })
+              .catch((err) => {
+                // 取消失败
+                toastAlert(toast, 'error', '删除员工失败！');
+              })
+              .finally(() => {
+                setDeleteLoading(false);
+              });
+          }}
+        />
+      )}
     </Column>
   );
 }

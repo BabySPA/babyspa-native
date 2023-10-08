@@ -43,6 +43,9 @@ export default function CustomerDetail({
         rightElement={
           !edit && currentFlow.register.status === RegisterStatus.DONE ? (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowModal(true);
@@ -52,7 +55,9 @@ export default function CustomerDetail({
                 borderRadius={ss(4)}
                 px={ls(26)}
                 py={ss(10)}>
-                {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+                {loading && (
+                  <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
+                )}
                 <Text
                   color={'#03CBB2'}
                   opacity={loading ? 0.6 : 1}
@@ -82,33 +87,35 @@ export default function CustomerDetail({
           />
         )}
       </Row>
-      <DialogModal
-        isOpen={showModal}
-        onClose={function (): void {
-          setShowModal(false);
-        }}
-        title='是否确认取消登记？'
-        onConfirm={function (): void {
-          setShowModal(false);
-          if (loading) return;
-          setLoading(true);
-          requestPatchRegisterStatus({
-            status: RegisterStatus.CANCEL,
-          })
-            .then(async (res) => {
-              // 取消成功
-              toastAlert(toast, 'success', '取消成功！');
-              await requestGetInitializeData();
+      {showModal && (
+        <DialogModal
+          isOpen={showModal}
+          onClose={function (): void {
+            setShowModal(false);
+          }}
+          title='是否确认取消登记？'
+          onConfirm={function (): void {
+            setShowModal(false);
+            if (loading) return;
+            setLoading(true);
+            requestPatchRegisterStatus({
+              status: RegisterStatus.CANCEL,
             })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '取消失败！');
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        }}
-      />
+              .then(async (res) => {
+                // 取消成功
+                toastAlert(toast, 'success', '取消成功！');
+                await requestGetInitializeData();
+              })
+              .catch((err) => {
+                // 取消失败
+                toastAlert(toast, 'error', '取消失败！');
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }}
+        />
+      )}
     </Box>
   );
 }

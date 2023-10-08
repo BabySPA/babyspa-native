@@ -10,6 +10,7 @@ import {
   Container,
   useToast,
   Center,
+  ScrollView,
 } from 'native-base';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -150,7 +151,7 @@ export default function CustomerArchive({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text ml={ls(16)} fontSize={sp(20)} color={'#666'}>
@@ -164,6 +165,9 @@ export default function CustomerArchive({
 
           <Row>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 // 删除客户
@@ -172,7 +176,7 @@ export default function CustomerArchive({
               <Row alignItems={'center'}>
                 <Icon
                   as={<AntDesign name='delete' />}
-                  size={ss(24)}
+                  size={sp(24)}
                   color={'#99A9BF'}
                 />
                 <Text fontSize={sp(20)} color={'#000'} ml={ls(4)}>
@@ -180,28 +184,33 @@ export default function CustomerArchive({
                 </Text>
               </Row>
             </Pressable>
-            <DialogModal
-              isOpen={showDeleteDialog}
-              title={'是否确认删除客户？'}
-              onClose={function (): void {
-                setShowDeleteDialog(false);
-              }}
-              onConfirm={function (): void {
-                requestDeleteCustomer(customer?._id || '')
-                  .then(async (res) => {
-                    toastAlert(toast, 'success', '删除成功！');
-                    await requestArchiveCustomers();
-                    navigation.goBack();
-                  })
-                  .catch((err) => {
-                    toastAlert(toast, 'error', '删除失败！');
-                  })
-                  .finally(() => {
-                    setShowDeleteDialog(false);
-                  });
-              }}
-            />
+            {showDeleteDialog && (
+              <DialogModal
+                isOpen={showDeleteDialog}
+                title={'是否确认删除客户？'}
+                onClose={function (): void {
+                  setShowDeleteDialog(false);
+                }}
+                onConfirm={function (): void {
+                  requestDeleteCustomer(customer?._id || '')
+                    .then(async (res) => {
+                      toastAlert(toast, 'success', '删除成功！');
+                      await requestArchiveCustomers();
+                      navigation.goBack();
+                    })
+                    .catch((err) => {
+                      toastAlert(toast, 'error', '删除失败！');
+                    })
+                    .finally(() => {
+                      setShowDeleteDialog(false);
+                    });
+                }}
+              />
+            )}
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               ml={ls(40)}
               onPress={() => {
@@ -210,7 +219,7 @@ export default function CustomerArchive({
               <Row alignItems={'center'}>
                 <Icon
                   as={<FontAwesome name='edit' />}
-                  size={ss(24)}
+                  size={sp(24)}
                   color={'#99A9BF'}
                 />
                 <Text fontSize={sp(20)} color={'#000'} ml={ls(4)}>
@@ -221,7 +230,7 @@ export default function CustomerArchive({
           </Row>
         </Row>
 
-        <Box
+        <ScrollView
           mt={ss(10)}
           bgColor='white'
           borderRadius={ss(10)}
@@ -232,11 +241,14 @@ export default function CustomerArchive({
               <Row
                 borderRadius={ss(4)}
                 borderColor={'#99A9BF'}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderStyle={'solid'}>
                 {configs.map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={item.key}
                       borderRightWidth={idx == configs.length - 1 ? 0 : 1}
@@ -271,19 +283,20 @@ export default function CustomerArchive({
             </Container>
             {configs[selectFragment].key == 'growth-curve' && (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   setShowEditGrowthCurve({
+                    ...showEditGrowthCurve,
                     isOpen: true,
-                    date: '',
-                    defaultHeight: 0,
-                    defaultWeight: 0,
                   });
                 }}
                 bgColor={'rgba(0, 180, 158, 0.10)'}
                 borderColor={'#00B49E'}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 px={ls(16)}
                 py={ss(8)}>
                 <Text color='#03CBB2' fontSize={sp(14)}>
@@ -292,122 +305,125 @@ export default function CustomerArchive({
               </Pressable>
             )}
           </Row>
-
-          {configs[selectFragment].key == 'shop-archive' &&
-            (archives.length > 0 ? (
-              <ShopArchive
-                archives={archives}
-                onPressToFlowInfo={function (archive): void {
-                  updateCurrentFlow(archive);
-                  navigation.navigate('FlowInfo', { from: 'analyze' });
-                }}
-              />
-            ) : (
-              <EmptyBox />
-            ))}
-          {configs[selectFragment].key == 'history-archive' &&
-            (courses.length > 0 ? (
-              <HistoryArchive
-                courses={courses}
-                onPressToFlowInfo={function (archive): void {
-                  updateCurrentFlow(archive);
-                  navigation.navigate('FlowInfo', { from: 'analyze' });
-                }}
-              />
-            ) : (
-              <EmptyBox />
-            ))}
-          {configs[selectFragment].key == 'growth-curve' &&
-            (growthCurves.length > 0 ? (
-              <GrowthCurve
-                growthCurves={growthCurves}
-                onEditClick={function (
-                  item: GrowthCurveStatisticsResponse,
-                ): void {
-                  setShowEditGrowthCurve({
-                    isOpen: true,
-                    date: item.date,
-                    defaultHeight: item.heightData.height,
-                    defaultWeight: item.weightData.weight,
-                  });
-                }}
-              />
-            ) : (
-              <EmptyBox />
-            ))}
-        </Box>
+          <Box mb={ss(60)}>
+            {configs[selectFragment].key == 'shop-archive' &&
+              (archives.length > 0 ? (
+                <ShopArchive
+                  archives={archives}
+                  onPressToFlowInfo={function (archive): void {
+                    updateCurrentFlow(archive);
+                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                  }}
+                />
+              ) : (
+                <EmptyBox />
+              ))}
+            {configs[selectFragment].key == 'history-archive' &&
+              (courses.length > 0 ? (
+                <HistoryArchive
+                  courses={courses}
+                  onPressToFlowInfo={function (archive): void {
+                    updateCurrentFlow(archive);
+                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                  }}
+                />
+              ) : (
+                <EmptyBox />
+              ))}
+            {configs[selectFragment].key == 'growth-curve' &&
+              (growthCurves.length > 0 ? (
+                <GrowthCurve
+                  growthCurves={growthCurves}
+                  onEditClick={function (
+                    item: GrowthCurveStatisticsResponse,
+                  ): void {
+                    setShowEditGrowthCurve({
+                      isOpen: true,
+                      date: item.date,
+                      defaultHeight: item.heightData.height,
+                      defaultWeight: item.weightData.weight,
+                    });
+                  }}
+                />
+              ) : (
+                <EmptyBox />
+              ))}
+          </Box>
+        </ScrollView>
       </Column>
-      <GrowthCurveModal
-        isOpen={showEditGrowthCurve.isOpen}
-        defaultHeight={showEditGrowthCurve.defaultHeight}
-        defaultWeight={showEditGrowthCurve.defaultWeight}
-        onClose={function (): void {
-          setShowEditGrowthCurve({
-            isOpen: false,
-            date: '',
-            defaultHeight: 0,
-            defaultWeight: 0,
-          });
-        }}
-        onConfirm={function ({
-          height,
-          weight,
-        }: {
-          height: number;
-          weight: number;
-        }): void {
-          if (showEditGrowthCurve.date.length > 0) {
-            requestPatchCustomerGrowthCurve(customer?._id || '', {
-              height,
-              weight,
-              date: showEditGrowthCurve.date,
-            })
-              .then((res) => {
-                toastAlert(toast, 'success', '修改信息成功！');
-                getGrowthCurveDatas();
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
-                });
+      {showEditGrowthCurve.isOpen && (
+        <GrowthCurveModal
+          isOpen={showEditGrowthCurve.isOpen}
+          defaultHeight={showEditGrowthCurve.defaultHeight}
+          defaultWeight={showEditGrowthCurve.defaultWeight}
+          onClose={function (): void {
+            setShowEditGrowthCurve({
+              isOpen: false,
+              date: '',
+              defaultHeight: 0,
+              defaultWeight: 0,
+            });
+          }}
+          onConfirm={function ({
+            height,
+            weight,
+          }: {
+            height: number;
+            weight: number;
+          }): void {
+            if (showEditGrowthCurve.date.length > 0) {
+              requestPatchCustomerGrowthCurve(customer?._id || '', {
+                height,
+                weight,
+                date: showEditGrowthCurve.date,
               })
-              .catch((err) => {
-                toastAlert(toast, 'error', '修改信息失败！');
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
+                .then((res) => {
+                  toastAlert(toast, 'success', '修改信息成功！');
+                  getGrowthCurveDatas();
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '修改信息失败！');
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
                 });
-              });
-          } else {
-            requestPutCustomerGrowthCurve(customer?._id || '', {
-              height,
-              weight,
-            })
-              .then((res) => {
-                toastAlert(toast, 'success', '添加成功！');
-                getGrowthCurveDatas();
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
-                });
+            } else {
+              requestPutCustomerGrowthCurve(customer?._id || '', {
+                height,
+                weight,
               })
-              .catch((err) => {
-                toastAlert(toast, 'error', '添加失败！');
-                setShowEditGrowthCurve({
-                  isOpen: false,
-                  date: '',
-                  defaultHeight: 0,
-                  defaultWeight: 0,
+                .then((res) => {
+                  toastAlert(toast, 'success', '添加成功！');
+                  getGrowthCurveDatas();
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
+                })
+                .catch((err) => {
+                  toastAlert(toast, 'error', '添加失败！');
+                  setShowEditGrowthCurve({
+                    isOpen: false,
+                    date: '',
+                    defaultHeight: 0,
+                    defaultWeight: 0,
+                  });
                 });
-              });
-          }
-        }}
-      />
+            }
+          }}
+        />
+      )}
     </Box>
   );
 }

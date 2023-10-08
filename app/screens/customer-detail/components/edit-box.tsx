@@ -73,6 +73,7 @@ export default function EditBox(params: EditBoxParams) {
         <Box mt={ss(20)} px={ls(50)}>
           <Row alignItems={'center'}>
             <FormBox
+              titleWidth={ss(75)}
               title='姓名'
               style={{ flex: 1 }}
               required
@@ -83,6 +84,8 @@ export default function EditBox(params: EditBoxParams) {
                   h={ss(48)}
                   py={ss(10)}
                   px={ls(20)}
+                  borderWidth={ss(1)}
+                  borderColor={'#D8D8D8'}
                   defaultValue={tempFlow.customer.name}
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
@@ -101,6 +104,7 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               title='乳名'
               style={{ flex: 1 }}
               form={
@@ -130,6 +134,7 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              titleWidth={ss(75)}
               required
               title='性别'
               style={{ flex: 1 }}
@@ -154,12 +159,16 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               title='生日'
               style={{ flex: 1 }}
               required
               form={
                 <Box w={ls(360)}>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       showDatePicker();
@@ -168,7 +177,7 @@ export default function EditBox(params: EditBoxParams) {
                       borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
-                      borderWidth={1}
+                      borderWidth={ss(1)}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       pr={ss(10)}
@@ -178,7 +187,7 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color='#999'
                       />
                     </Row>
@@ -189,13 +198,14 @@ export default function EditBox(params: EditBoxParams) {
           </Row>
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              titleWidth={ss(75)}
               title='年龄'
               style={{ flex: 1 }}
               form={
                 <Row alignItems={'center'}>
                   <Center
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     h={ss(48)}
                     w={ls(72)}
                     borderColor={'#D8D8D8'}>
@@ -209,7 +219,7 @@ export default function EditBox(params: EditBoxParams) {
                   <Center
                     ml={ls(20)}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     h={ss(48)}
                     w={ls(72)}
                     borderColor={'#D8D8D8'}>
@@ -224,11 +234,14 @@ export default function EditBox(params: EditBoxParams) {
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               required
               title='电话'
               style={{ flex: 1 }}
               form={
                 <Input
+                  borderWidth={ss(1)}
+                  borderColor={'#D8D8D8'}
                   autoCorrect={false}
                   w={ls(360)}
                   defaultValue={tempFlow.customer.phoneNumber}
@@ -245,6 +258,7 @@ export default function EditBox(params: EditBoxParams) {
                     });
                   }}
                   inputMode='numeric'
+                  returnKeyType='done'
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16)}
@@ -256,11 +270,15 @@ export default function EditBox(params: EditBoxParams) {
 
           <Row alignItems={'center'} mt={ss(20)}>
             <FormBox
+              titleWidth={ss(75)}
               title='过敏原'
               style={{ flex: 1 }}
               form={
                 <Box>
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setIsOpenTemplatePicker(true);
@@ -270,7 +288,7 @@ export default function EditBox(params: EditBoxParams) {
                       borderRadius={ss(4)}
                       justifyContent={'space-between'}
                       alignItems={'center'}
-                      borderWidth={1}
+                      borderWidth={ss(1)}
                       borderColor={'#D8D8D8'}
                       py={ss(10)}
                       pl={ss(20)}
@@ -284,41 +302,44 @@ export default function EditBox(params: EditBoxParams) {
                       </Text>
                       <Icon
                         as={<FontAwesome name='angle-down' />}
-                        size={ss(18)}
+                        size={sp(18)}
                         color='#999'
                       />
                     </Row>
 
-                    <TemplateModal
-                      defaultText={tempFlow.collect.healthInfo.allergy || ''}
-                      template={getTemplateGroups(TemplateGroupKeys.allergy)}
-                      isOpen={isOpenTemplatePicker}
-                      onClose={function (): void {
-                        setIsOpenTemplatePicker(false);
-                      }}
-                      onConfirm={function (text): void {
-                        setTempFlow({
-                          ...tempFlow,
-                          customer: {
-                            ...tempFlow.customer,
-                            allergy: text,
-                          },
-                          collect: {
-                            ...tempFlow.collect,
-                            healthInfo: {
-                              ...tempFlow.collect.healthInfo,
+                    {isOpenTemplatePicker && (
+                      <TemplateModal
+                        defaultText={tempFlow.collect.healthInfo.allergy || ''}
+                        template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                        isOpen={isOpenTemplatePicker}
+                        onClose={function (): void {
+                          setIsOpenTemplatePicker(false);
+                        }}
+                        onConfirm={function (text): void {
+                          setTempFlow({
+                            ...tempFlow,
+                            customer: {
+                              ...tempFlow.customer,
                               allergy: text,
                             },
-                          },
-                        });
-                        setIsOpenTemplatePicker(false);
-                      }}
-                    />
+                            collect: {
+                              ...tempFlow.collect,
+                              healthInfo: {
+                                ...tempFlow.collect.healthInfo,
+                                allergy: text,
+                              },
+                            },
+                          });
+                          setIsOpenTemplatePicker(false);
+                        }}
+                      />
+                    )}
                   </Pressable>
                 </Box>
               }
             />
             <FormBox
+              titleWidth={ss(75)}
               title='理疗师'
               style={{ flex: 1 }}
               form={
@@ -348,6 +369,9 @@ export default function EditBox(params: EditBoxParams) {
 
       <Row justifyContent={'center'} mb={ss(20)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
@@ -357,7 +381,7 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
@@ -366,6 +390,9 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -433,10 +460,12 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             alignItems={'center'}
             borderColor={'#00B49E'}>
-            {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+            {loading && (
+              <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
+            )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
             </Text>
@@ -444,64 +473,72 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
       </Row>
 
-      <Modal
-        isOpen={isOpenBirthdayPicker}
-        onClose={() => {
-          setIsOpenBirthdayPicker(false);
-        }}>
-        <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
-          <DatePicker
-            options={{
-              textHeaderFontSize: sp(16),
-              mainColor: '#00B49E',
-            }}
-            onSelectedChange={(date) => {
-              currentSelectBirthday = date;
-            }}
-            current={tempFlow.customer.birthday}
-            selected={tempFlow.customer.birthday}
-            mode='calendar'
-          />
-          <Row justifyContent={'flex-end'} mt={ss(12)}>
-            <Pressable
-              hitSlop={ss(20)}
-              onPress={() => {
-                setTempFlow({
-                  ...tempFlow,
-                  customer: {
-                    ...tempFlow.customer,
-                    birthday: currentSelectBirthday,
-                  },
-                });
-                setIsOpenBirthdayPicker(false);
-              }}>
-              <Box
-                bgColor={'#00B49E'}
-                px={ls(26)}
-                py={ss(12)}
-                borderRadius={ss(8)}
-                _text={{ fontSize: ss(16), color: 'white' }}>
-                确定
-              </Box>
-            </Pressable>
-            <Pressable
-              hitSlop={ss(20)}
-              onPress={() => {
-                setIsOpenBirthdayPicker(false);
-              }}>
-              <Box
-                bgColor={'#D8D8D8'}
-                px={ls(26)}
-                py={ss(12)}
-                ml={ls(10)}
-                borderRadius={ss(8)}
-                _text={{ fontSize: ss(16), color: 'white' }}>
-                取消
-              </Box>
-            </Pressable>
-          </Row>
-        </Flex>
-      </Modal>
+      {isOpenBirthdayPicker && (
+        <Modal
+          isOpen={isOpenBirthdayPicker}
+          onClose={() => {
+            setIsOpenBirthdayPicker(false);
+          }}>
+          <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
+            <DatePicker
+              options={{
+                textHeaderFontSize: sp(16),
+                mainColor: '#00B49E',
+              }}
+              onSelectedChange={(date) => {
+                currentSelectBirthday = date;
+              }}
+              current={tempFlow.customer.birthday}
+              selected={tempFlow.customer.birthday}
+              mode='calendar'
+            />
+            <Row justifyContent={'flex-end'} mt={ss(12)}>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setTempFlow({
+                    ...tempFlow,
+                    customer: {
+                      ...tempFlow.customer,
+                      birthday: currentSelectBirthday,
+                    },
+                  });
+                  setIsOpenBirthdayPicker(false);
+                }}>
+                <Box
+                  bgColor={'#00B49E'}
+                  px={ls(26)}
+                  py={ss(12)}
+                  borderRadius={ss(8)}
+                  _text={{ fontSize: sp(16), color: 'white' }}>
+                  确定
+                </Box>
+              </Pressable>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setIsOpenBirthdayPicker(false);
+                }}>
+                <Box
+                  bgColor={'#D8D8D8'}
+                  px={ls(26)}
+                  py={ss(12)}
+                  ml={ls(10)}
+                  borderRadius={ss(8)}
+                  _text={{ fontSize: sp(16), color: 'white' }}>
+                  取消
+                </Box>
+              </Pressable>
+            </Row>
+          </Flex>
+        </Modal>
+      )}
     </Column>
   );
 }

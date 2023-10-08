@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Text,
-  ScrollView,
   Icon,
   Input,
   Row,
@@ -10,6 +9,7 @@ import {
   Pressable,
   Center,
   Image,
+  FlatList,
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
@@ -38,11 +38,17 @@ export default function Register() {
   useEffect(() => {
     requestGetRegisterFlows();
   }, []);
+  const [renderWaiting, setRenderWaiting] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
   return (
     <Flex flex={1}>
       <Filter />
-      <ScrollView margin={ss(10)}>
+      <Box margin={ss(10)} flex={1}>
         {flows.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -53,26 +59,39 @@ export default function Register() {
             bgColor='white'
             borderRadius={ss(10)}
             minH={'100%'}>
-            <Row flexWrap={'wrap'} alignItems={'flex-start'} w={'100%'}>
-              {flows.map((flow, idx) => (
-                <Center width={'50%'} key={idx}>
-                  <Pressable
-                    ml={idx % 2 == 1 ? ss(20) : 0}
-                    mr={idx % 2 == 0 ? ss(20) : 0}
-                    mb={ss(40)}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      updateCurrentFlow(flow);
-                      navigation.navigate('CustomerDetail');
-                    }}>
-                    <FlowCustomerItem flow={flow} type={OperateType.Register} />
-                  </Pressable>
-                </Center>
-              ))}
-            </Row>
+            {renderWaiting && (
+              <FlatList
+                mb={ss(120)}
+                data={flows}
+                numColumns={2}
+                renderItem={({ item: flow, index: idx }) => {
+                  return (
+                    <Center width={'50%'} key={idx}>
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.8,
+                        }}
+                        ml={idx % 2 == 1 ? ss(20) : 0}
+                        mr={idx % 2 == 0 ? ss(20) : 0}
+                        mb={ss(40)}
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          updateCurrentFlow(flow);
+                          navigation.navigate('CustomerDetail');
+                        }}>
+                        <FlowCustomerItem
+                          flow={flow}
+                          type={OperateType.Register}
+                        />
+                      </Pressable>
+                    </Center>
+                  );
+                }}
+              />
+            )}
           </Row>
         )}
-      </ScrollView>
+      </Box>
     </Flex>
   );
 }
@@ -107,14 +126,14 @@ function Filter() {
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
       <Row
-        py={ss(20)}
+        h={ss(75)}
         px={ls(40)}
         alignItems={'center'}
         justifyContent={'space-between'}>
         <Row alignItems={'center'}>
           <Icon
             as={<Ionicons name={'people'} />}
-            size={ss(35)}
+            size={sp(35)}
             color={'#5EACA3'}
           />
           <Text color='#000' fontSize={sp(20)} fontWeight={600} ml={ls(10)}>
@@ -122,15 +141,18 @@ function Filter() {
             <Text color='#5EACA3'>{registerCount}</Text>
           </Text>
           <Input
-            ml={ls(30)}
-            w={ls(240)}
             h={ss(44)}
+            ml={ls(30)}
+            minW={ls(240, 360)}
+            py={ss(9)}
             p={ss(9)}
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             defaultValue={register.searchKeywords}
             placeholderTextColor={'#6E6F73'}
             color={'#333333'}
             borderRadius={ss(4)}
-            fontSize={ss(16)}
+            fontSize={sp(16)}
             onChangeText={debounce((text) => {
               updateRegisterFilter({
                 searchKeywords: text,
@@ -141,7 +163,7 @@ function Filter() {
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
-                size={ss(25)}
+                size={sp(25)}
                 color='#AFB0B4'
                 ml={ss(10)}
               />
@@ -149,6 +171,9 @@ function Filter() {
             placeholder='请输入客户姓名、手机号'
           />
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               setShowFilter(!showFilter);
@@ -161,8 +186,8 @@ function Filter() {
                     : require('~/assets/images/filter-off.png')
                 }
                 style={{
-                  width: ss(16),
-                  height: ss(16),
+                  width: sp(16),
+                  height: sp(16),
                   marginLeft: ls(27),
                 }}
               />
@@ -173,6 +198,9 @@ function Filter() {
           </Pressable>
         </Row>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             updateCurrentFlow(DefaultFlow);
@@ -192,7 +220,7 @@ function Filter() {
             px={ls(26)}
             py={ss(10)}
             borderRadius={ss(4)}
-            _text={{ fontSize: ss(14), color: 'white' }}>
+            _text={{ fontSize: sp(14), color: 'white' }}>
             登记
           </Box>
         </Pressable>
@@ -204,6 +232,9 @@ function Filter() {
               时间选择
             </Text>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
@@ -215,18 +246,17 @@ function Filter() {
               ml={ls(20)}
               h={ss(44)}
               alignItems={'center'}
-              py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
               borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='rgba(0,0,0,0.2)'
               />
-              <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+              <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
                 {register.startDate}
               </Text>
             </Pressable>
@@ -234,6 +264,9 @@ function Filter() {
               至
             </Text>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsOpenDatePicker({
@@ -243,19 +276,18 @@ function Filter() {
               }}
               flexDirection={'row'}
               h={ss(44)}
-              py={ss(8)}
               pl={ls(12)}
               pr={ls(25)}
               alignItems={'center'}
               borderRadius={ss(4)}
               borderColor={'#D8D8D8'}
-              borderWidth={1}>
+              borderWidth={ss(1)}>
               <Icon
                 as={<MaterialIcons name='date-range' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='rgba(0,0,0,0.2)'
               />
-              <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+              <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
                 {register.endDate}
               </Text>
             </Pressable>
@@ -268,6 +300,9 @@ function Filter() {
               {register.allStatus?.map((status, idx) => {
                 return (
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       updateRegisterFilter({
@@ -278,7 +313,7 @@ function Filter() {
                     w={ls(90)}
                     h={ss(44)}
                     borderRadius={ss(4)}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     alignItems={'center'}
                     justifyContent={'center'}
                     mr={ls(20)}
@@ -310,17 +345,20 @@ function Filter() {
           </Row>
           <Row alignItems={'center'} mt={ss(20)} justifyContent={'flex-end'}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 updateRegisterFilter({
                   searchKeywords: '',
-                  startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+                  startDate: dayjs().format('YYYY-MM-DD'),
                   endDate: dayjs().format('YYYY-MM-DD'),
                   status: FlowStatus.NO_SET,
                 });
               }}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               w={ls(80)}
               h={ss(44)}
               justifyContent={'center'}
@@ -331,6 +369,9 @@ function Filter() {
               </Text>
             </Pressable>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={async () => {
                 openLoading();
@@ -340,7 +381,7 @@ function Filter() {
                 }, 300);
               }}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderColor='#00B49E'
               w={ls(80)}
               h={ss(44)}
@@ -353,36 +394,38 @@ function Filter() {
               </Text>
             </Pressable>
           </Row>
-          <DatePickerModal
-            isOpen={isOpenDatePicker.isOpen}
-            onClose={() => {
-              setIsOpenDatePicker({
-                isOpen: false,
-              });
-            }}
-            onSelectedChange={(date: string) => {
-              if (!isOpenDatePicker.type) return;
-              if (isOpenDatePicker.type == 'start') {
-                updateRegisterFilter({
-                  startDate: date,
+          {isOpenDatePicker.isOpen && (
+            <DatePickerModal
+              isOpen={isOpenDatePicker.isOpen}
+              onClose={() => {
+                setIsOpenDatePicker({
+                  isOpen: false,
                 });
-              } else {
-                updateRegisterFilter({
-                  endDate: date,
-                });
+              }}
+              onSelectedChange={(date: string) => {
+                if (!isOpenDatePicker.type) return;
+                if (isOpenDatePicker.type == 'start') {
+                  updateRegisterFilter({
+                    startDate: date,
+                  });
+                } else {
+                  updateRegisterFilter({
+                    endDate: date,
+                  });
+                }
+              }}
+              current={
+                isOpenDatePicker.type == 'start'
+                  ? register.startDate
+                  : register.endDate
               }
-            }}
-            current={
-              isOpenDatePicker.type == 'start'
-                ? register.startDate
-                : register.endDate
-            }
-            selected={
-              isOpenDatePicker.type == register.startDate
-                ? register.startDate
-                : register.endDate
-            }
-          />
+              selected={
+                isOpenDatePicker.type == 'start'
+                  ? register.startDate
+                  : register.endDate
+              }
+            />
+          )}
         </Column>
       )}
     </Column>

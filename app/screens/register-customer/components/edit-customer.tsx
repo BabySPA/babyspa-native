@@ -9,8 +9,9 @@ import {
   Row,
   ScrollView,
   Text,
+  Pressable,
 } from 'native-base';
-import { Pressable, StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import useFlowStore from '~/app/stores/flow';
@@ -35,7 +36,7 @@ export default function EditCustomer(params: EditCustomerParams) {
 
   const { operators } = useFlowStore();
 
-  const { templates, getTemplateGroups } = useManagerStore();
+  const { getTemplateGroups } = useManagerStore();
 
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
@@ -57,6 +58,7 @@ export default function EditCustomer(params: EditCustomerParams) {
         <BoxTitle title='客户信息' />
         <Column m={ss(30)}>
           <FormBox
+            titleWidth={ss(75)}
             title='姓名'
             required
             form={
@@ -70,6 +72,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 placeholderTextColor={'#CCC'}
                 color={'#333333'}
                 fontSize={sp(16)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 placeholder='请输入'
                 onChangeText={(text) => {
                   updateCurrentFlow({
@@ -84,6 +88,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='乳名'
             style={{ marginTop: ss(20) }}
             form={
@@ -93,6 +98,8 @@ export default function EditCustomer(params: EditCustomerParams) {
                 h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 defaultValue={currentFlow.customer.nickname}
                 placeholderTextColor={'#CCC'}
                 onChangeText={(text) => {
@@ -111,6 +118,7 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             required
             title='性别'
             style={{ marginTop: ss(20) }}
@@ -135,12 +143,16 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='生日'
             required
             style={{ marginTop: ss(20) }}
             form={
               <Box w={'70%'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     showDatePicker();
@@ -149,7 +161,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
@@ -159,7 +171,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
-                      size={ss(18)}
+                      size={sp(18)}
                       color='#999'
                     />
                   </Row>
@@ -168,13 +180,14 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='年龄'
             style={{ marginTop: ss(20) }}
             form={
               <Row w={'70%'} alignItems={'center'}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   h={ss(48)}
                   w={ls(72)}
                   borderColor={'#D8D8D8'}>
@@ -188,7 +201,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   h={ss(48)}
                   w={ls(72)}
                   borderColor={'#D8D8D8'}>
@@ -203,17 +216,21 @@ export default function EditCustomer(params: EditCustomerParams) {
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             required
             title='电话'
             style={{ marginTop: ss(20) }}
             form={
               <Input
                 autoCorrect={false}
+                borderRadius={ss(4)}
                 w={'70%'}
                 defaultValue={currentFlow.customer.phoneNumber}
                 h={ss(48)}
                 py={ss(10)}
                 px={ls(20)}
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 onChangeText={(text) => {
                   updateCurrentFlow({
                     ...currentFlow,
@@ -228,15 +245,20 @@ export default function EditCustomer(params: EditCustomerParams) {
                 fontSize={sp(16)}
                 placeholder='请输入'
                 inputMode='numeric'
+                returnKeyType='done'
               />
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='过敏原'
             style={{ marginTop: ss(20), alignItems: 'center' }}
             form={
               <Box w={'70%'}>
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setIsOpenTemplatePicker(true);
@@ -245,7 +267,7 @@ export default function EditCustomer(params: EditCustomerParams) {
                     borderRadius={ss(4)}
                     justifyContent={'space-between'}
                     alignItems={'center'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}
                     py={ss(10)}
                     pl={ss(20)}
@@ -262,45 +284,48 @@ export default function EditCustomer(params: EditCustomerParams) {
                     </Text>
                     <Icon
                       as={<FontAwesome name='angle-down' />}
-                      size={ss(18)}
+                      size={sp(18)}
                       color='#999'
                     />
                   </Row>
 
-                  <TemplateModal
-                    defaultText={
-                      currentFlow.customer.allergy ||
-                      currentFlow.collect.healthInfo.allergy ||
-                      ''
-                    }
-                    template={getTemplateGroups(TemplateGroupKeys.allergy)}
-                    isOpen={isOpenTemplatePicker}
-                    onClose={function (): void {
-                      setIsOpenTemplatePicker(false);
-                    }}
-                    onConfirm={function (text): void {
-                      updateCurrentFlow({
-                        ...currentFlow,
-                        customer: {
-                          ...currentFlow.customer,
-                          allergy: text,
-                        },
-                        collect: {
-                          ...currentFlow.collect,
-                          healthInfo: {
-                            ...currentFlow.collect.healthInfo,
+                  {isOpenTemplatePicker && (
+                    <TemplateModal
+                      defaultText={
+                        currentFlow.customer.allergy ||
+                        currentFlow.collect.healthInfo.allergy ||
+                        ''
+                      }
+                      template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                      isOpen={isOpenTemplatePicker}
+                      onClose={function (): void {
+                        setIsOpenTemplatePicker(false);
+                      }}
+                      onConfirm={function (text): void {
+                        updateCurrentFlow({
+                          ...currentFlow,
+                          customer: {
+                            ...currentFlow.customer,
                             allergy: text,
                           },
-                        },
-                      });
-                      setIsOpenTemplatePicker(false);
-                    }}
-                  />
+                          collect: {
+                            ...currentFlow.collect,
+                            healthInfo: {
+                              ...currentFlow.collect.healthInfo,
+                              allergy: text,
+                            },
+                          },
+                        });
+                        setIsOpenTemplatePicker(false);
+                      }}
+                    />
+                  )}
                 </Pressable>
               </Box>
             }
           />
           <FormBox
+            titleWidth={ss(75)}
             title='理疗师'
             style={{ marginTop: ss(20) }}
             form={
@@ -326,23 +351,25 @@ export default function EditCustomer(params: EditCustomerParams) {
           />
         </Column>
       </Flex>
-      <DatePickerModal
-        isOpen={isOpenBirthdayPicker}
-        onClose={() => {
-          setIsOpenBirthdayPicker(false);
-        }}
-        onSelectedChange={(date: string) => {
-          updateCurrentFlow({
-            ...currentFlow,
-            customer: {
-              ...currentFlow.customer,
-              birthday: date,
-            },
-          });
-        }}
-        current={currentFlow.customer.birthday}
-        selected={currentFlow.customer.birthday}
-      />
+      {isOpenBirthdayPicker && (
+        <DatePickerModal
+          isOpen={isOpenBirthdayPicker}
+          onClose={() => {
+            setIsOpenBirthdayPicker(false);
+          }}
+          onSelectedChange={(date: string) => {
+            updateCurrentFlow({
+              ...currentFlow,
+              customer: {
+                ...currentFlow.customer,
+                birthday: date,
+              },
+            });
+          }}
+          current={currentFlow.customer.birthday}
+          selected={currentFlow.customer.birthday}
+        />
+      )}
     </ScrollView>
   );
 }

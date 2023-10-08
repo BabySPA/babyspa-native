@@ -20,8 +20,8 @@ import { useEffect, useRef, useState } from 'react';
 import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
 import useManagerStore from '../stores/manager';
-import SelectRole from './select-role';
 import SelectDropdown from './select-dropdown';
+import { StatusBar } from 'expo-status-bar';
 
 interface DialogParams {
   isOpen: boolean;
@@ -51,9 +51,12 @@ export function DialogModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{headerText || '温馨提示'}</Modal.Header>
+
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{headerText || '温馨提示'}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
             <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
@@ -61,13 +64,16 @@ export function DialogModal({
             </Text>
             <Row mt={ss(50)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -77,6 +83,9 @@ export function DialogModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm();
@@ -84,7 +93,7 @@ export function DialogModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -146,13 +155,16 @@ export function TemplateModal({
             {template?.name}
           </Text>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}>
             <Icon
               as={<AntDesign name={'close'} />}
-              size={ss(24)}
+              size={sp(24)}
               color='#999'
             />
           </Pressable>
@@ -160,6 +172,8 @@ export function TemplateModal({
         <Row>
           <Column h={ss(350)}>
             <Input
+              borderWidth={ss(1)}
+              borderColor={'#D8D8D8'}
               ref={inputRef}
               multiline
               placeholder='请输入或选择内容'
@@ -169,7 +183,6 @@ export function TemplateModal({
               maxLength={300}
               w={ls(340)}
               h={'100%'}
-              borderColor={'#E4E4E4'}
               textAlignVertical='top'
               ml={ls(30)}
               autoCorrect={false}
@@ -187,10 +200,13 @@ export function TemplateModal({
           </Column>
           <Column w={ls(470)} h={ss(350)}>
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-              <ScrollView bgColor={'#EDF7F6'} maxW={ls(130)}>
+              <ScrollView bgColor={'#EDF7F6'}>
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
@@ -198,11 +214,13 @@ export function TemplateModal({
                       }}>
                       <Center
                         p={ss(10)}
-                        h={ss(80)}
+                        minH={ss(80)}
                         bgColor={
                           selectTemplateItemsIdx === idx ? '#ffffff' : '#EDF7F6'
                         }>
                         <Text
+                          numberOfLines={2}
+                          ellipsizeMode='tail'
                           mt={ss(3)}
                           color={
                             selectTemplateItemsIdx === idx
@@ -218,13 +236,21 @@ export function TemplateModal({
                 })}
               </ScrollView>
               <ScrollView>
-                <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+                <Row
+                  flex={1}
+                  flexWrap={'wrap'}
+                  py={ss(16)}
+                  px={ls(20)}
+                  w={ls(320)}>
                   {(
                     template?.groups[selectTemplateItemsIdx]
                       .children as string[]
                   )?.map((item, idx) => {
                     return (
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         key={idx}
                         onPress={() => {
@@ -244,7 +270,7 @@ export function TemplateModal({
                           mb={ss(10)}
                           borderRadius={2}
                           borderColor={'#D8D8D8'}
-                          borderWidth={1}>
+                          borderWidth={ss(1)}>
                           <Text fontSize={sp(18)} color='#000'>
                             {item}
                           </Text>
@@ -260,12 +286,15 @@ export function TemplateModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             w={ls(100)}
             h={ss(46)}
             justifyContent={'center'}
@@ -276,12 +305,15 @@ export function TemplateModal({
             </Text>
           </Pressable>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onConfirm(templateText);
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor='#00B49E'
             w={ls(100)}
             h={ss(46)}
@@ -321,16 +353,18 @@ export function GrowthCurveModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{'生长记录'}</Modal.Header>
+        <Modal.Header fontSize={sp(20)}>{'生长记录'}</Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 身高(CM)
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入'
@@ -339,16 +373,19 @@ export function GrowthCurveModal({
                 ml={ls(20)}
                 defaultValue={`${defaultHeight}`}
                 inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(h) => {
                   setHeight(+h);
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333'>
                 体重(KG)
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入'
@@ -357,20 +394,24 @@ export function GrowthCurveModal({
                 ml={ls(20)}
                 defaultValue={`${defaultWeight}`}
                 inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(w) => {
                   setWeight(+w);
                 }}
               />
             </Row>
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -380,6 +421,9 @@ export function GrowthCurveModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onConfirm({
@@ -390,7 +434,7 @@ export function GrowthCurveModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -431,16 +475,20 @@ export function ChangePasswordModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{'修改密码'}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>修改密码</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 原密码
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请输入原密码'
@@ -448,96 +496,109 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(text) => {
                   setOriginalPassword(text);
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 新密码
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='密码由超过6位数字和字母组成'
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(text) => {
                   setNewPassword(text);
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' w={ls(65)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' w={ls(75)}>
                 确认新密码
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 px={ls(20)}
                 py={ss(10)}
                 placeholder='请再次输入新密码确认'
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='decimal'
+                inputMode='numeric'
+                returnKeyType='done'
                 onChangeText={(text) => {
                   setConfirmPassword(text);
                 }}
               />
             </Row>
-            <Row mt={ss(80)} mb={ss(20)}>
-              <Pressable
-                hitSlop={ss(20)}
-                onPress={() => {
-                  onClose();
-                }}>
-                <Center
-                  borderRadius={ss(4)}
-                  borderWidth={1}
-                  borderColor={'#03CBB2'}
-                  px={ls(30)}
-                  py={ss(10)}>
-                  <Text color='#00B49E' fontSize={sp(14)}>
-                    取消
-                  </Text>
-                </Center>
-              </Pressable>
-              <Pressable
-                hitSlop={ss(20)}
-                onPress={() => {
-                  if (decodePassword(password) !== originalPassword) {
-                    toastAlert(toast, 'error', '原密码错误');
-                    return;
-                  }
-                  if (newPassword !== confirmPassword) {
-                    toastAlert(toast, 'error', '两次密码不一致');
-                    return;
-                  }
-                  if (newPassword.length < 6) {
-                    toastAlert(toast, 'error', '新密码长度不能小于6位');
-                    return;
-                  }
-                  onConfirm(newPassword);
-                }}>
-                <Center
-                  ml={ls(20)}
-                  borderRadius={ss(4)}
-                  borderWidth={1}
-                  borderColor={'#03CBB2'}
-                  bgColor={'rgba(3, 203, 178, 0.20)'}
-                  px={ls(30)}
-                  py={ss(10)}>
-                  <Text color='#00B49E' fontSize={sp(14)}>
-                    保存
-                  </Text>
-                </Center>
-              </Pressable>
-            </Row>
           </Center>
         </Modal.Body>
+        <Row mt={ss(20)} mb={ss(20)} justifyContent={'center'}>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              onClose();
+            }}>
+            <Center
+              borderRadius={ss(4)}
+              borderWidth={ss(1)}
+              borderColor={'#03CBB2'}
+              px={ls(30)}
+              py={ss(10)}>
+              <Text color='#00B49E' fontSize={sp(14)}>
+                取消
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              if (decodePassword(password) !== originalPassword) {
+                toastAlert(toast, 'error', '原密码错误');
+                return;
+              }
+              if (newPassword !== confirmPassword) {
+                toastAlert(toast, 'error', '两次密码不一致');
+                return;
+              }
+              if (newPassword.length < 6) {
+                toastAlert(toast, 'error', '新密码长度不能小于6位');
+                return;
+              }
+              onConfirm(newPassword);
+            }}>
+            <Center
+              ml={ls(20)}
+              borderRadius={ss(4)}
+              borderWidth={ss(1)}
+              borderColor={'#03CBB2'}
+              bgColor={'rgba(3, 203, 178, 0.20)'}
+              px={ls(30)}
+              py={ss(10)}>
+              <Text color='#00B49E' fontSize={sp(14)}>
+                保存
+              </Text>
+            </Center>
+          </Pressable>
+        </Row>
       </Modal.Content>
     </Modal>
   );
@@ -562,10 +623,8 @@ export function NewTemplateModalModal({
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef.current.value = defaultName;
   }, [isOpen]);
   return (
     <Modal
@@ -573,16 +632,20 @@ export function NewTemplateModalModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+            <Row alignItems={'flex-start'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' w={ss(70)}>
                 {type == 'group' ? '模版组' : '模版项'}
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
@@ -592,8 +655,8 @@ export function NewTemplateModalModal({
                 ml={ls(20)}
                 multiline
                 textAlignVertical='top'
-                w={ls(240)}
-                height={ss(110)}
+                w={ls(340)}
+                height={ss(110, 100)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -602,15 +665,18 @@ export function NewTemplateModalModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -620,15 +686,18 @@ export function NewTemplateModalModal({
                 </Center>
               </Pressable>
               <Pressable
-                opacity={name.length > 0 ? 1 : 0.5}
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                opacity={(name || defaultName).length > 0 ? 1 : 0.5}
                 hitSlop={ss(20)}
                 onPress={() => {
-                  if (name) onConfirm(name);
+                  if (name || defaultName) onConfirm(name);
                 }}>
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -652,6 +721,7 @@ interface NewTemplateGroupModalParams {
   title: string;
   onClose: () => void;
   onConfirm: (text: string) => void;
+  onDeleteGroup: (text: string) => void;
 }
 export function NewTemplateGroupModal({
   isOpen,
@@ -659,14 +729,13 @@ export function NewTemplateGroupModal({
   title,
   onClose,
   onConfirm,
+  onDeleteGroup,
 }: NewTemplateGroupModalParams) {
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef.current.value = defaultName;
   }, [isOpen]);
   return (
     <Modal
@@ -674,16 +743,20 @@ export function NewTemplateGroupModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' w={ss(100)}>
                 分组名称
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
@@ -691,7 +764,7 @@ export function NewTemplateGroupModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
+                w={ls(340)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -700,32 +773,64 @@ export function NewTemplateGroupModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
+              {defaultName.length > 0 ? (
+                <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
+                  hitSlop={ss(20)}
+                  onPress={() => {
+                    onDeleteGroup(defaultName);
+                  }}>
+                  <Center
+                    borderRadius={ss(4)}
+                    borderWidth={ss(1)}
+                    borderColor={'#F3601E'}
+                    bgColor={'rgba(243, 96, 30, 0.20)'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#F3601E' fontSize={sp(14)}>
+                      删除
+                    </Text>
+                  </Center>
+                </Pressable>
+              ) : (
+                <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
+                  hitSlop={ss(20)}
+                  onPress={() => {
+                    onClose();
+                  }}>
+                  <Center
+                    borderRadius={ss(4)}
+                    borderWidth={ss(1)}
+                    borderColor={'#03CBB2'}
+                    px={ls(30)}
+                    py={ss(10)}>
+                    <Text color='#00B49E' fontSize={sp(14)}>
+                      取消
+                    </Text>
+                  </Center>
+                </Pressable>
+              )}
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                opacity={(name || defaultName).length > 0 ? 1 : 0.5}
                 hitSlop={ss(20)}
                 onPress={() => {
-                  onClose();
-                }}>
-                <Center
-                  borderRadius={ss(4)}
-                  borderWidth={1}
-                  borderColor={'#03CBB2'}
-                  px={ls(30)}
-                  py={ss(10)}>
-                  <Text color='#00B49E' fontSize={sp(14)}>
-                    取消
-                  </Text>
-                </Center>
-              </Pressable>
-              <Pressable
-                hitSlop={ss(20)}
-                onPress={() => {
-                  onConfirm(name);
+                  if ((name || defaultName).length > 0) {
+                    onConfirm(name);
+                  }
                 }}>
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -763,11 +868,10 @@ export function NewLevel3TemplateGroupModal({
 }: NewLevel3TemplateGroupModalParams) {
   const [name, setName] = useState(defaultName);
   const inputRef = useRef(null);
+
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef.current.value = defaultName;
   }, [isOpen]);
 
   const [selectGroup, setSelectGroup] = useState(defaultGroup);
@@ -777,16 +881,20 @@ export function NewLevel3TemplateGroupModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333'>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' w={ss(100)}>
                 模版名称
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef}
                 px={ls(20)}
                 py={ss(10)}
@@ -794,7 +902,7 @@ export function NewLevel3TemplateGroupModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
+                w={ls(240, 340)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -802,78 +910,83 @@ export function NewLevel3TemplateGroupModal({
                 }}
               />
             </Row>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
-                所属分组
-              </Text>
-              <SelectDropdown
-                data={groups}
-                onSelect={(selectedItem, index) => {
-                  setSelectGroup(selectedItem);
-                }}
-                defaultValue={defaultGroup}
-                defaultButtonText={defaultGroup || '请选择分组'}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item, index) => {
-                  return item;
-                }}
-                buttonStyle={{
-                  width: ss(240),
-                  height: ss(48),
-                  backgroundColor: '#fff',
-                  borderRadius: ss(4),
-                  borderWidth: 1,
-                  borderColor: '#D8D8D8',
-                }}
-                buttonTextStyle={{
-                  color: '#333333',
-                  textAlign: 'left',
-                  fontSize: sp(16),
-                }}
-                renderDropdownIcon={(isOpened) => {
-                  return (
-                    <Icon
-                      as={
-                        <FontAwesome
-                          name={isOpened ? 'angle-up' : 'angle-down'}
-                        />
-                      }
-                      size={ss(18)}
-                      color='#999'
-                    />
-                  );
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={{
-                  backgroundColor: '#fff',
-                  borderRadius: ss(8),
-                }}
-                rowStyle={{
-                  backgroundColor: '#fff',
-                  borderBottomColor: '#D8D8D8',
-                }}
-                rowTextStyle={{
-                  color: '#333',
-                  textAlign: 'center',
-                  fontSize: sp(16),
-                }}
-                selectedRowStyle={{
-                  backgroundColor: '#CBEDE2',
-                }}
-              />
-            </Row>
+            {!defaultGroup && !defaultName && (
+              <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+                <Text fontSize={sp(20)} color='#333' mr={ls(20)} w={ss(100)}>
+                  所属分组
+                </Text>
+                <SelectDropdown
+                  data={groups}
+                  onSelect={(selectedItem, index) => {
+                    setSelectGroup(selectedItem);
+                  }}
+                  defaultValue={defaultGroup}
+                  defaultButtonText={defaultGroup || '请选择分组'}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item;
+                  }}
+                  buttonStyle={{
+                    width: ls(240, 340),
+                    height: ss(48),
+                    backgroundColor: '#fff',
+                    borderRadius: ss(4),
+                    borderWidth: ss(1),
+                    borderColor: '#D8D8D8',
+                  }}
+                  buttonTextStyle={{
+                    color: '#333333',
+                    textAlign: 'left',
+                    fontSize: sp(16),
+                  }}
+                  renderDropdownIcon={(isOpened) => {
+                    return (
+                      <Icon
+                        as={
+                          <FontAwesome
+                            name={isOpened ? 'angle-up' : 'angle-down'}
+                          />
+                        }
+                        size={sp(18)}
+                        color='#999'
+                      />
+                    );
+                  }}
+                  dropdownIconPosition={'right'}
+                  dropdownStyle={{
+                    backgroundColor: '#fff',
+                    borderRadius: ss(8),
+                  }}
+                  rowStyle={{
+                    backgroundColor: '#fff',
+                    borderBottomColor: '#D8D8D8',
+                  }}
+                  rowTextStyle={{
+                    color: '#333',
+                    textAlign: 'center',
+                    fontSize: sp(16),
+                  }}
+                  selectedRowStyle={{
+                    backgroundColor: '#CBEDE2',
+                  }}
+                />
+              </Row>
+            )}
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -883,18 +996,31 @@ export function NewLevel3TemplateGroupModal({
                 </Center>
               </Pressable>
               <Pressable
-                opacity={name.length > 0 && selectGroup.length > 0 ? 1 : 0.5}
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                opacity={
+                  (name || defaultName).length > 0 &&
+                  (selectGroup || defaultGroup).length > 0
+                    ? 1
+                    : 0.5
+                }
                 hitSlop={ss(20)}
                 onPress={() => {
-                  onConfirm({
-                    group: selectGroup,
-                    name: name,
-                  });
+                  if (
+                    (name || defaultName).length > 0 &&
+                    (selectGroup || defaultGroup).length > 0
+                  ) {
+                    onConfirm({
+                      group: selectGroup || defaultGroup,
+                      name: name || defaultName,
+                    });
+                  }
                 }}>
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -937,12 +1063,10 @@ export function NewTemplateExtraModal({
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
   useEffect(() => {
-    if (!isOpen) {
-      // @ts-ignore
-      inputRef1.current?.clear?.();
-      // @ts-ignore
-      inputRef2.current?.clear?.();
-    }
+    // @ts-ignore
+    inputRef1.current.value = defaultName;
+    // @ts-ignore
+    inputRef2.current.value = defaultContent;
   }, [isOpen]);
   return (
     <Modal
@@ -950,16 +1074,20 @@ export function NewTemplateExtraModal({
       onClose={() => {
         onClose();
       }}>
-      <Modal.Content>
+      <Modal.Content maxW={ss(500)}>
         <Modal.CloseButton />
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Text fontSize={sp(20)}>{title}</Text>
+        </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'center'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' width={ls(85)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' width={ls(105)}>
                 {des1}
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef1}
                 px={ls(20)}
                 py={ss(10)}
@@ -967,7 +1095,7 @@ export function NewTemplateExtraModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
+                w={ls(340)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -975,11 +1103,13 @@ export function NewTemplateExtraModal({
                 }}
               />
             </Row>
-            <Row alignItems={'flex-start'} mt={ss(30)} px={ls(60)}>
-              <Text fontSize={sp(20)} color='#333' width={ls(85)}>
+            <Row alignItems={'flex-start'} mt={ss(30, 20)} px={ls(60, 30)}>
+              <Text fontSize={sp(20)} color='#333' width={ls(105)}>
                 {des2}
               </Text>
               <Input
+                borderWidth={ss(1)}
+                borderColor={'#D8D8D8'}
                 ref={inputRef2}
                 px={ls(20)}
                 py={ss(10)}
@@ -989,8 +1119,8 @@ export function NewTemplateExtraModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                w={ls(240)}
-                h={ss(145)}
+                w={ls(340)}
+                h={ss(145, 100)}
                 defaultValue={defaultContent}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -999,15 +1129,18 @@ export function NewTemplateExtraModal({
               />
             </Row>
 
-            <Row mt={ss(80)} mb={ss(20)}>
+            <Row mt={ss(80, 40)} mb={ss(20)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   onClose();
                 }}>
                 <Center
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   px={ls(30)}
                   py={ss(10)}>
@@ -1017,6 +1150,9 @@ export function NewTemplateExtraModal({
                 </Center>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   const n = name || defaultName;
@@ -1031,7 +1167,7 @@ export function NewTemplateExtraModal({
                 <Center
                   ml={ls(20)}
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#03CBB2'}
                   bgColor={'rgba(3, 203, 178, 0.20)'}
                   px={ls(30)}
@@ -1098,13 +1234,16 @@ export function TemplateExtraModal({
             {template?.name}
           </Text>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}>
             <Icon
               as={<AntDesign name={'close'} />}
-              size={ss(24)}
+              size={sp(24)}
               color='#999'
             />
           </Pressable>
@@ -1112,10 +1251,13 @@ export function TemplateExtraModal({
         <Row>
           <Column h={ss(350)}>
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-              <ScrollView bgColor={'#EDF7F6'} maxW={ls(130)}>
+              <ScrollView bgColor={'#EDF7F6'} minW={ls(130)}>
                 {template?.groups.map((item, idx) => {
                   return (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={idx}
                       onPress={() => {
@@ -1153,6 +1295,9 @@ export function TemplateExtraModal({
                         (item: any, idx) => {
                           return (
                             <Pressable
+                              _pressed={{
+                                opacity: 0.6,
+                              }}
                               hitSlop={ss(20)}
                               key={idx}
                               onPress={() => {
@@ -1170,7 +1315,7 @@ export function TemplateExtraModal({
                                     ? '#3AAEA3'
                                     : '#D8D8D8'
                                 }
-                                borderWidth={1}>
+                                borderWidth={ss(1)}>
                                 <Text
                                   fontSize={sp(18)}
                                   color={
@@ -1193,10 +1338,13 @@ export function TemplateExtraModal({
                         template?.groups[selectTemplateItemsIdx].children[
                           selectTemplateItemsLevel3Idx
                         ] as TemplateItem
-                      ).children as ExtraItem[]
+                      )?.children as ExtraItem[]
                     )?.map((item, index) => {
                       return (
                         <Pressable
+                          _pressed={{
+                            opacity: 0.6,
+                          }}
                           key={index}
                           onPress={() => {
                             setSelectTemplateContentItemIdx(index);
@@ -1215,7 +1363,7 @@ export function TemplateExtraModal({
                               alignItems={'center'}
                               justifyContent={'space-between'}>
                               <Row alignItems={'center'}>
-                                <Circle size={ss(30)} bgColor={'#5EACA3'}>
+                                <Circle size={sp(30)} bgColor={'#5EACA3'}>
                                   <Text fontSize={sp(18)} color='#fff'>
                                     {index + 1}
                                   </Text>
@@ -1283,12 +1431,15 @@ export function TemplateExtraModal({
 
         <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             w={ls(100)}
             h={ss(46)}
             justifyContent={'center'}
@@ -1299,6 +1450,9 @@ export function TemplateExtraModal({
             </Text>
           </Pressable>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               const result = (
@@ -1312,7 +1466,7 @@ export function TemplateExtraModal({
               }
             }}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor='#00B49E'
             w={ls(100)}
             h={ss(46)}

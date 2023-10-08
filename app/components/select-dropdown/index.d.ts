@@ -65,10 +65,6 @@ export type SelectDropdownProps = {
    */
   dropdownIconPosition?: 'left' | 'right';
   /**
-   * required to set true when statusbar is translucent (android only)
-   */
-  statusBarTranslucent?: boolean;
-  /**
    * style object for dropdown view
    */
   dropdownStyle?: StyleProp<ViewStyle>;

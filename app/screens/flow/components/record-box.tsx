@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
-import { current } from 'immer';
 import _ from 'lodash';
 import { Box, Center, Modal, ScrollView, Text, useToast } from 'native-base';
 import { useRef, useState } from 'react';
@@ -9,7 +8,7 @@ import { upload } from '~/app/api/upload';
 import SoundList from '~/app/components/sound-list';
 import useFlowStore from '~/app/stores/flow';
 import useOssStore from '~/app/stores/oss';
-import { ss, ls, sp } from '~/app/utils/style';
+import { ss, ls, sp, isPhone } from '~/app/utils/style';
 import { toastAlert } from '~/app/utils/toast';
 
 export default function RecordBox({ edit }: { edit: boolean }) {
@@ -163,16 +162,18 @@ export default function RecordBox({ edit }: { edit: boolean }) {
             />
           ) : (
             <Center flex={1}>
-              <Image
-                source={require('~/assets/images/empty-record.png')}
-                style={{
-                  marginTop: ss(30),
-                  width: ls(180),
-                  height: ss(80),
-                }}
-                resizeMode='contain'
-              />
-              <Text my={ss(16)} fontSize={sp(10)} color='#1E262F' opacity={0.4}>
+              {!isPhone && (
+                <Image
+                  source={require('~/assets/images/empty-record.png')}
+                  style={{
+                    marginTop: ss(30),
+                    width: ls(180),
+                    height: ss(80),
+                  }}
+                  resizeMode='contain'
+                />
+              )}
+              <Text my={ss(16)} fontSize={sp(12)} color='#1E262F' opacity={0.4}>
                 您可以录下咳嗽等声音哦
               </Text>
             </Center>
@@ -193,26 +194,26 @@ export default function RecordBox({ edit }: { edit: boolean }) {
               end: [1, 1],
             },
           }}
-          opacity={isTouchNow ? 0.5 : 1}
-        >
+          opacity={isTouchNow ? 0.5 : 1}>
           <Text color='white' fontSize={sp(12)}>
             按住录音
           </Text>
         </Center>
       )}
-      <Modal
-        isOpen={showRecordBox}
-        onClose={() => {
-          setShowRecordBox(false);
-        }}
-      >
-        <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
-          <ArrowBox />
-          <Text color={'white'} mt={ss(30)}>
-            松开保存，上划取消
-          </Text>
-        </Box>
-      </Modal>
+      {showRecordBox && (
+        <Modal
+          isOpen={showRecordBox}
+          onClose={() => {
+            setShowRecordBox(false);
+          }}>
+          <Box position={'absolute'} left={'7%'} bottom={ss(150)}>
+            <ArrowBox />
+            <Text color={'white'} mt={ss(30)}>
+              松开保存，上划取消
+            </Text>
+          </Box>
+        </Modal>
+      )}
     </>
   );
 }
@@ -232,8 +233,7 @@ const ArrowBox = () => {
           }}
           borderRadius={8}
           py={ss(27)}
-          px={ls(38)}
-        >
+          px={ls(38)}>
           <Image
             source={require('~/assets/images/record-loading.png')}
             style={{ height: ss(18), width: ls(72) }}

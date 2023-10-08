@@ -163,7 +163,7 @@ interface TemplateState {
 
   requestDeleteTemplateGroup: (
     groupName: string,
-    extra?: { isGroup: boolean; groupName: string },
+    extra?: { groupIdx?: number },
   ) => Promise<any>;
 
   setCurrentSelectTemplateIdx: (idx: number) => void;

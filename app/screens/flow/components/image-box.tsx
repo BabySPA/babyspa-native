@@ -35,6 +35,7 @@ interface ImageBoxProps {
   type: 'lingual' | 'lefthand' | 'righthand' | 'other';
   edit: boolean;
   images: UpdatingImage[];
+  previewImages?: UpdatingImage[];
   selectedCallback: (filename: string, uri: string) => void;
   takePhotoCallback: (filename: string, uri: string) => void;
   uploadCallback: (filename: string, url: string) => void;
@@ -50,6 +51,7 @@ export default function ImageBox({
   type,
   edit,
   images,
+  previewImages,
   selectedCallback,
   takePhotoCallback,
   uploadCallback,
@@ -116,7 +118,7 @@ export default function ImageBox({
             mediaTypes: MediaTypeOptions.Images,
             allowsMultipleSelection: false,
             allowsEditing: false,
-            quality: 0.4,
+            quality: 0.7,
           })
             .then(async (res) => {
               if (res.assets && res.assets.length > 0) {
@@ -163,7 +165,7 @@ export default function ImageBox({
             <PreviewImage
               current={index}
               source={typeof item === 'string' ? item : item.uri}
-              images={images.map((item) => ({
+              images={(previewImages || images).map((item) => ({
                 url: typeof item === 'string' ? item : item.uri,
               }))}
             />
@@ -173,11 +175,14 @@ export default function ImageBox({
                 h={'100%'}
                 position={'absolute'}
                 bgColor={'rgba(0,0,0,0.3)'}>
-                <Spinner color='emerald.500' />
+                <Spinner color='emerald.500' size={sp(20)} />
               </Center>
             )}
             {edit && (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   removedCallback(index);
@@ -193,7 +198,7 @@ export default function ImageBox({
                 <Icon
                   as={<AntDesign name={'close'} />}
                   color='#fff'
-                  size={ss(12)}
+                  size={sp(12)}
                 />
               </Pressable>
             )}
@@ -206,16 +211,21 @@ export default function ImageBox({
           _text={{ fontSize: sp(18), color: '#000' }}
           trigger={(triggerProps) => {
             return (
-              <Pressable hitSlop={ss(20)} {...triggerProps}>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                {...triggerProps}>
                 <Center
                   borderColor={'#ACACAC'}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderStyle={'dashed'}
                   bgColor={'#FFF'}
                   w={ss(100)}
                   h={ss(100)}>
                   <Icon
-                    as={<AntDesign name='plus' size={ss(40)} />}
+                    as={<AntDesign name='plus' size={sp(40)} />}
                     color={'#ACACAC'}
                   />
                 </Center>
@@ -229,7 +239,7 @@ export default function ImageBox({
           </Box>
           <Menu.Item
             borderTopColor={'#DFE1DE'}
-            borderTopWidth={1}
+            borderTopWidth={ss(1)}
             justifyContent={'center'}
             alignItems={'center'}
             onPress={() => {
@@ -240,7 +250,7 @@ export default function ImageBox({
           </Menu.Item>
           <Menu.Item
             borderTopColor={'#DFE1DE'}
-            borderTopWidth={1}
+            borderTopWidth={ss(1)}
             justifyContent={'center'}
             alignItems={'center'}
             onPress={() => {

@@ -39,13 +39,16 @@ export default function InfoBox(params: InfoBoxParams) {
           <Row alignItems={'center'} mt={ss(40)}>
             <LabelBox
               title='门店介绍'
-              value={currentShop?.description || '未设置'}
+              value={currentShop?.description || '无'}
             />
           </Row>
         </Box>
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -56,7 +59,7 @@ export default function InfoBox(params: InfoBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               编辑

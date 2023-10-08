@@ -43,18 +43,23 @@ export default function InfoBox(params: InfoBoxParams) {
           title='角色信息'
           rightElement={
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setIsDeleteDialogOpen(true);
               }}
               bgColor={'rgba(243, 96, 30, 0.20)'}
               borderRadius={ss(4)}
-              borderWidth={1}
+              borderWidth={ss(1)}
               borderColor={'#f3601E'}
               px={ls(26)}
               py={ss(10)}>
               <Row>
-                {deleteLoading && <Spinner mr={ls(5)} color='#999' />}
+                {deleteLoading && (
+                  <Spinner mr={ls(5)} color='#999' size={sp(20)} />
+                )}
                 <Text color='#F3601E' fontSize={sp(14)}>
                   删除
                 </Text>
@@ -87,6 +92,9 @@ export default function InfoBox(params: InfoBoxParams) {
       </Column>
       <Row justifyContent={'center'} mb={ss(40)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -97,7 +105,7 @@ export default function InfoBox(params: InfoBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#00B49E'}>
             <Text color='#00B49E' fontSize={sp(16)}>
               编辑
@@ -105,33 +113,35 @@ export default function InfoBox(params: InfoBoxParams) {
           </Box>
         </Pressable>
       </Row>
-      <DialogModal
-        isOpen={isDeleteDialogOpen}
-        onClose={function (): void {
-          setIsDeleteDialogOpen(false);
-        }}
-        title='是否确认删除该角色，所有配置该角色的员工可能会出现问题，请谨慎操作！'
-        onConfirm={function (): void {
-          setIsDeleteDialogOpen(false);
-          if (deleteLoading) return;
-          setDeleteLoading(true);
+      {isDeleteDialogOpen && (
+        <DialogModal
+          isOpen={isDeleteDialogOpen}
+          onClose={function (): void {
+            setIsDeleteDialogOpen(false);
+          }}
+          title='是否确认删除该角色，所有配置该角色的员工可能会出现问题，请谨慎操作！'
+          onConfirm={function (): void {
+            setIsDeleteDialogOpen(false);
+            if (deleteLoading) return;
+            setDeleteLoading(true);
 
-          requestDeleteRole()
-            .then(async (res) => {
-              // 取消成功
-              requestGetRoles();
-              toastAlert(toast, 'success', '删除角色成功！');
-              navigation.goBack();
-            })
-            .catch((err) => {
-              // 取消失败
-              toastAlert(toast, 'error', '删除角色失败！');
-            })
-            .finally(() => {
-              setDeleteLoading(false);
-            });
-        }}
-      />
+            requestDeleteRole()
+              .then(async (res) => {
+                // 取消成功
+                requestGetRoles();
+                toastAlert(toast, 'success', '删除角色成功！');
+                navigation.goBack();
+              })
+              .catch((err) => {
+                // 取消失败
+                toastAlert(toast, 'error', '删除角色失败！');
+              })
+              .finally(() => {
+                setDeleteLoading(false);
+              });
+          }}
+        />
+      )}
     </Column>
   );
 }

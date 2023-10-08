@@ -88,7 +88,7 @@ export default function FlowCustomerItem({
     <Row
       borderRadius={ss(8)}
       borderStyle={'dashed'}
-      borderWidth={1}
+      borderWidth={ss(1)}
       borderColor={'#15BD8F'}
       w={'100%'}
       minH={ss(148)}
@@ -126,7 +126,7 @@ export default function FlowCustomerItem({
                   name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text
@@ -139,7 +139,7 @@ export default function FlowCustomerItem({
           </Row>
           <Row alignItems={'center'}>
             <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
-              理疗师：{flow.collectionOperator?.name || '未设置'}
+              理疗师：{flow.collectionOperator?.name || '无'}
             </Text>
             {(type == OperateType.Evaluate ||
               (type == OperateType.Analyze &&
@@ -162,36 +162,32 @@ export default function FlowCustomerItem({
                 </Text>
               )}
           </Row>
-
-          <Row
-            alignItems={'center'}
-            mt={ss(10)}
-            opacity={
-              type == OperateType.Evaluate &&
-              flow.evaluate.status == EvaluateStatus.DONE
-                ? 1
-                : 0
-            }>
-            <Text color={'#666'} fontSize={sp(18)} ml={ss(30)}>
-              评星：
-            </Text>
-            {new Array(Number(flow.evaluate.score || 0))
-              .fill(1)
-              .map((item, idx) => {
-                return (
-                  <Image
-                    key={idx}
-                    source={require('~/assets/images/star.png')}
-                    style={{ width: ss(20), height: ss(20) }}
-                  />
-                );
-              })}
-          </Row>
-
+          {type == OperateType.Evaluate && (
+            <Row alignItems={'center'} mt={ss(10)}>
+              <Text color={'#666'} fontSize={sp(18)}>
+                评星：
+              </Text>
+              {flow.evaluate.score ? (
+                new Array(flow.evaluate.score).fill(1).map((item, idx) => {
+                  return (
+                    <Image
+                      key={idx}
+                      source={require('~/assets/images/star.png')}
+                      style={{ width: ss(20), height: ss(20) }}
+                    />
+                  );
+                })
+              ) : (
+                <Text color={'#999'} fontSize={sp(16)}>
+                  暂未评价
+                </Text>
+              )}
+            </Row>
+          )}
           <Row alignItems={'center'} mt={ss(10)}>
             <Icon
               as={<Ionicons name={'ios-time-outline'} />}
-              size={ss(17)}
+              size={sp(17)}
               color={'#C87939'}
             />
             <Text

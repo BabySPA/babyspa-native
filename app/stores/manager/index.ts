@@ -77,7 +77,7 @@ const initialState = {
   logs: [],
   logFilter: {
     searchKeywords: '',
-    startDate: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+    startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
   },
 };

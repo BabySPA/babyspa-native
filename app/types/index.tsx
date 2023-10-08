@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/typescript/
  */
 import { NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import { Shop } from '../stores/manager/type';
 
 declare global {
@@ -105,7 +105,7 @@ export type RootStackParamList = {
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, Screen>;
+  StackScreenProps<RootStackParamList, Screen>;
 
 export type AppStackList = {
   Home: undefined;
@@ -146,11 +146,11 @@ export type AppStackList = {
 };
 
 export type AppStackScreenProps<T extends keyof AppStackList> =
-  NativeStackScreenProps<AppStackList, T>;
+  StackScreenProps<AppStackList, T>;
 
 export type AuthStackList = {
   Login: undefined;
 };
 
 export type AuthStackScreenProps<T extends keyof AuthStackList> =
-  NativeStackScreenProps<AuthStackList, T>;
+  StackScreenProps<AuthStackList, T>;

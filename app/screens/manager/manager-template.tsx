@@ -37,6 +37,7 @@ import { toastAlert } from '~/app/utils/toast';
 import { debounce } from 'lodash';
 import { ExtraItem, TemplateItem } from '~/app/stores/manager/type';
 import { PanResponder } from 'react-native';
+import TextChild from './components/TextChild';
 
 export default function ManagerTemplate({
   navigation,
@@ -90,9 +91,16 @@ export default function ManagerTemplate({
     item: '',
     level: 2,
   });
-  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState({
+  const [showDeleteTemplateModal, setShowDeleteTemplateModal] = useState<{
+    isOpen: boolean;
+    groupName: string;
+    level: number;
+    groupIdx?: number;
+  }>({
     isOpen: false,
     groupName: '',
+    level: 2,
+    groupIdx: -1,
   });
   const [showDeleteTemplateExtraModal, setShowDeleteTemplateExtraModal] =
     useState({
@@ -173,12 +181,7 @@ export default function ManagerTemplate({
   }, [currentLevel3SelectFolderIdx, templates]);
 
   const toast = useToast();
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => {
-      canEdit && setCanEdit(false);
-    },
-  });
+
   const swiperlistRef = useRef(null);
 
   const getGroupLevel = () => {
@@ -189,46 +192,6 @@ export default function ManagerTemplate({
       templates[currentSelectTemplateIdx]?.key === 'guidance'
       ? 3
       : 2;
-  };
-
-  const TextChild = ({ item, level }: { item: any; level: number }) => {
-    return (
-      <Pressable
-        hitSlop={ss(20)}
-        onLongPress={() => {
-          setCanEdit(true);
-        }}
-        mr={ls(10)}
-        mb={ss(10)}
-        borderWidth={1}
-        borderRadius={2}
-        borderColor={'#D8D8D8'}
-        px={ls(20)}
-        py={ss(7)}>
-        <Row alignItems={'center'}>
-          <Text maxWidth={ss(300)}>{item}</Text>
-          {canEdit && (
-            <Pressable
-              hitSlop={ss(20)}
-              onPress={() => {
-                // 删除
-                setShowDeleteItemModal({
-                  isOpen: true,
-                  item: item,
-                  level: level,
-                });
-              }}>
-              <Icon
-                ml={ls(10)}
-                as={<Ionicons name='ios-close-circle-outline' />}
-                size={ss(20)}
-                color='#FB6459'
-              />
-            </Pressable>
-          )}
-        </Row>
-      </Pressable>
-    );
   };
 
   const ExtraChild = ({ item, index }: { item: any; index: number }) => {
@@ -245,7 +208,7 @@ export default function ManagerTemplate({
         bgColor={'#FAFAFA'}>
         <Row alignItems={'center'} justifyContent={'space-between'}>
           <Row alignItems={'center'}>
-            <Circle size={ss(30)} bgColor={'#5EACA3'}>
+            <Circle size={sp(30)} bgColor={'#5EACA3'}>
               <Text fontSize={sp(18)} color='#fff'>
                 {index}
               </Text>
@@ -280,7 +243,7 @@ export default function ManagerTemplate({
               }}>
               <Icon
                 as={<FontAwesome name='edit' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='#99A9BF'
               />
             </Pressable>
@@ -296,7 +259,7 @@ export default function ManagerTemplate({
               }}>
               <Icon
                 as={<AntDesign name='delete' />}
-                size={ss(20)}
+                size={sp(20)}
                 color='#99A9BF'
               />
             </Pressable>
@@ -327,6 +290,9 @@ export default function ManagerTemplate({
               title='模版列表'
               rightElement={
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowEditTemplateModal({
@@ -344,7 +310,7 @@ export default function ManagerTemplate({
                     px={ls(12)}
                     py={ss(10)}
                     borderColor={'#15BD8F'}
-                    borderWidth={1}>
+                    borderWidth={ss(1)}>
                     <Text color={'#0C1B16'} fontSize={sp(14)}>
                       新增模版
                     </Text>
@@ -359,14 +325,15 @@ export default function ManagerTemplate({
             h={ss(50)}
             p={ss(10)}
             mx={ls(20)}
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             placeholderTextColor={'#C0CCDA'}
             color={'#333333'}
-            fontSize={ss(16)}
-            borderColor={'#C0CCDA'}
+            fontSize={sp(16)}
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
-                size={ss(25)}
+                size={sp(25)}
                 color='#C0CCDA'
                 ml={ss(10)}
               />
@@ -409,7 +376,7 @@ export default function ManagerTemplate({
                       }
                       justifyContent='center'
                       borderBottomColor='trueGray.200'
-                      borderBottomWidth={1}
+                      borderBottomWidth={ss(1)}
                       px={ls(20)}
                       py={ss(16)}>
                       <Text
@@ -437,12 +404,10 @@ export default function ManagerTemplate({
                       setShowDeleteTemplateModal({
                         isOpen: true,
                         groupName: rowData.item.name,
+                        level: 2,
                       });
                     }}
-                    alignItems='center'
-                    _pressed={{
-                      opacity: 0.5,
-                    }}>
+                    alignItems='center'>
                     <Text fontSize={sp(14)} color={'#fff'}>
                       删除
                     </Text>
@@ -462,7 +427,6 @@ export default function ManagerTemplate({
           </Row>
         </Column>
         <Column
-          {...panResponder.panHandlers}
           flex={1}
           ml={ls(10)}
           bgColor={'#fff'}
@@ -470,34 +434,64 @@ export default function ManagerTemplate({
           p={ss(20)}>
           <BoxTitle title='模版详情' />
 
-          <Row mt={ss(28)} flexWrap={'wrap'}>
-            {getCurrentLevel2SelectTemplateGroupItems().map(
-              (item: any, index: any) => {
-                return <TextChild item={item} key={index} level={2} />;
-              },
-            )}
+          <ScrollView>
             <Pressable
-              hitSlop={ss(20)}
               onPress={() => {
-                setShowEditTemplateModal({
-                  isOpen: true,
-                  isEdit: false,
-                  title: '新增模版',
-                  type: 'item',
-                  defaultName: '',
-                  level: 2,
-                });
-              }}
-              mr={ls(10)}
-              mb={ss(10)}
-              borderWidth={1}
-              borderRadius={2}
-              borderColor={'#D8D8D8'}
-              px={ls(20)}
-              py={ss(7)}>
-              <Text color='#BCBCBC'>+ 自定义添加</Text>
+                if (canEdit) setCanEdit(false);
+              }}>
+              <Row mt={ss(28)} flexWrap={'wrap'}>
+                {getCurrentLevel2SelectTemplateGroupItems().map(
+                  (item: any, index: any) => {
+                    return (
+                      <TextChild
+                        item={item}
+                        key={index}
+                        level={2}
+                        onDeleteItem={function (
+                          item: any,
+                          level: number,
+                        ): void {
+                          // 删除
+                          setShowDeleteItemModal({
+                            isOpen: true,
+                            item: item,
+                            level: level,
+                          });
+                        }}
+                        canEdit={canEdit}
+                        onLongPress={function (): void {
+                          setCanEdit(true);
+                        }}
+                      />
+                    );
+                  },
+                )}
+                <Pressable
+                  hitSlop={ss(20)}
+                  onPress={() => {
+                    setShowEditTemplateModal({
+                      isOpen: true,
+                      isEdit: false,
+                      title: '新增模版',
+                      type: 'item',
+                      defaultName: '',
+                      level: 2,
+                    });
+                  }}
+                  mr={ls(10)}
+                  mb={ss(10)}
+                  borderWidth={ss(1)}
+                  borderRadius={2}
+                  borderColor={'#D8D8D8'}
+                  px={ls(20)}
+                  py={ss(7)}>
+                  <Text color='#BCBCBC' fontSize={sp(18)}>
+                    + 自定义添加
+                  </Text>
+                </Pressable>
+              </Row>
             </Pressable>
-          </Row>
+          </ScrollView>
         </Column>
       </Row>
     );
@@ -512,6 +506,9 @@ export default function ManagerTemplate({
               title='模版列表'
               rightElement={
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     setShowLevel3EditTemplateModal({
@@ -532,7 +529,7 @@ export default function ManagerTemplate({
                     px={ls(12)}
                     py={ss(10)}
                     borderColor={'#15BD8F'}
-                    borderWidth={1}>
+                    borderWidth={ss(1)}>
                     <Text color={'#0C1B16'} fontSize={sp(14)}>
                       新增模版
                     </Text>
@@ -548,13 +545,14 @@ export default function ManagerTemplate({
             p={ss(10)}
             mx={ls(20)}
             placeholderTextColor={'#C0CCDA'}
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             color={'#333333'}
-            fontSize={ss(16)}
-            borderColor={'#C0CCDA'}
+            fontSize={sp(16)}
             InputLeftElement={
               <Icon
                 as={<MaterialIcons name='search' />}
-                size={ss(25)}
+                size={sp(25)}
                 color='#C0CCDA'
                 ml={ss(10)}
               />
@@ -581,7 +579,7 @@ export default function ManagerTemplate({
               justifyContent={'space-between'}
               bg={'#FFF'}
               borderBottomColor='trueGray.200'
-              borderBottomWidth={1}
+              borderBottomWidth={ss(1)}
               flexDirection={'row'}
               px={ls(20)}
               py={ss(16)}>
@@ -589,7 +587,7 @@ export default function ManagerTemplate({
                 <Icon
                   ml={ls(10)}
                   as={<AntDesign name='addfolder' />}
-                  size={ss(24)}
+                  size={sp(24)}
                   color='#E36C36'
                 />
                 <Text fontSize={sp(20)} ml={ls(10)} color={'#E36C36'}>
@@ -637,7 +635,7 @@ export default function ManagerTemplate({
                           : '#fff'
                       }
                       borderBottomColor='trueGray.200'
-                      borderBottomWidth={1}
+                      borderBottomWidth={ss(1)}
                       flexDirection={'row'}
                       px={ls(20)}
                       py={ss(16)}>
@@ -645,7 +643,7 @@ export default function ManagerTemplate({
                         <Icon
                           ml={ls(10)}
                           as={<AntDesign name='folder1' />}
-                          size={ss(24)}
+                          size={sp(24)}
                           color='#B4B4B4'
                         />
                         <Text fontSize={sp(20)} ml={ls(10)} color={'#333'}>
@@ -663,7 +661,7 @@ export default function ManagerTemplate({
                             }
                           />
                         }
-                        size={ss(16)}
+                        size={sp(16)}
                         color={'#BCBCBC'}
                       />
                     </Pressable>
@@ -708,7 +706,7 @@ export default function ManagerTemplate({
                                 }
                                 justifyContent='center'
                                 borderBottomColor='trueGray.200'
-                                borderBottomWidth={1}
+                                borderBottomWidth={ss(1)}
                                 px={ls(20)}
                                 py={ss(16)}>
                                 <Text
@@ -730,6 +728,9 @@ export default function ManagerTemplate({
                           <Row flex={1}>
                             <Box flex={1} />
                             <Pressable
+                              _pressed={{
+                                opacity: 0.6,
+                              }}
                               hitSlop={ss(20)}
                               w={ls(72)}
                               bg='red.500'
@@ -738,12 +739,11 @@ export default function ManagerTemplate({
                                 setShowDeleteTemplateModal({
                                   isOpen: true,
                                   groupName: rowData.item.name,
+                                  groupIdx: groupIdx,
+                                  level: 3,
                                 });
                               }}
-                              alignItems='center'
-                              _pressed={{
-                                opacity: 0.5,
-                              }}>
+                              alignItems='center'>
                               <Text fontSize={sp(14)} color={'#fff'}>
                                 删除
                               </Text>
@@ -768,7 +768,6 @@ export default function ManagerTemplate({
           </Row>
         </Column>
         <Column
-          {...panResponder.panHandlers}
           flex={1}
           ml={ls(10)}
           bgColor={'#fff'}
@@ -781,6 +780,9 @@ export default function ManagerTemplate({
                 {(templates[currentSelectTemplateIdx].key == 'application' ||
                   templates[currentSelectTemplateIdx].key == 'massage') && (
                   <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
                     hitSlop={ss(20)}
                     onPress={() => {
                       setShowExtraModal({
@@ -812,7 +814,7 @@ export default function ManagerTemplate({
                       px={ls(12)}
                       py={ss(10)}
                       borderColor={'#15BD8F'}
-                      borderWidth={1}>
+                      borderWidth={ss(1)}>
                       <Text color={'#0C1B16'} fontSize={sp(14)}>
                         添加详情
                       </Text>
@@ -823,39 +825,62 @@ export default function ManagerTemplate({
             }
           />
 
-          <Row mt={ss(28)} flexWrap={'wrap'}>
-            {level3Children?.map((item: any, index: any) => {
-              return typeof item === 'string' ? (
-                <TextChild key={index} item={item} level={3} />
-              ) : (
-                <ExtraChild key={index} item={item} index={index + 1} />
-              );
-            })}
-            {templates[currentSelectTemplateIdx].key !== 'application' &&
-              templates[currentSelectTemplateIdx].key !== 'massage' && (
-                <Pressable
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    setShowEditTemplateModal({
-                      isOpen: true,
-                      isEdit: false,
-                      title: '新增模版',
-                      type: 'item',
-                      defaultName: '',
-                      level: 3,
-                    });
-                  }}
-                  mr={ls(10)}
-                  mb={ss(10)}
-                  borderWidth={1}
-                  borderRadius={2}
-                  borderColor={'#D8D8D8'}
-                  px={ls(20)}
-                  py={ss(7)}>
-                  <Text color='#BCBCBC'>+ 自定义添加</Text>
-                </Pressable>
-              )}
-          </Row>
+          <ScrollView>
+            <Row mt={ss(28)} flexWrap={'wrap'}>
+              {level3Children?.map((item: any, index: any) => {
+                return typeof item === 'string' ? (
+                  <TextChild
+                    key={index}
+                    item={item}
+                    level={3}
+                    onDeleteItem={function (item: any, level: number): void {
+                      // 删除
+                      setShowDeleteItemModal({
+                        isOpen: true,
+                        item: item,
+                        level: level,
+                      });
+                    }}
+                    canEdit={canEdit}
+                    onLongPress={function (): void {
+                      setCanEdit(true);
+                    }}
+                  />
+                ) : (
+                  <ExtraChild key={index} item={item} index={index + 1} />
+                );
+              })}
+              {templates[currentSelectTemplateIdx].key !== 'application' &&
+                templates[currentSelectTemplateIdx].key !== 'massage' && (
+                  <Pressable
+                    _pressed={{
+                      opacity: 0.6,
+                    }}
+                    hitSlop={ss(20)}
+                    onPress={() => {
+                      setShowEditTemplateModal({
+                        isOpen: true,
+                        isEdit: false,
+                        title: '新增模版',
+                        type: 'item',
+                        defaultName: '',
+                        level: 3,
+                      });
+                    }}
+                    mr={ls(10)}
+                    mb={ss(10)}
+                    borderWidth={ss(1)}
+                    borderRadius={2}
+                    borderColor={'#D8D8D8'}
+                    px={ls(20)}
+                    py={ss(7)}>
+                    <Text color='#BCBCBC' fontSize={sp(18)}>
+                      + 自定义添加
+                    </Text>
+                  </Pressable>
+                )}
+            </Row>
+          </ScrollView>
         </Column>
       </Row>
     );
@@ -885,515 +910,536 @@ export default function ManagerTemplate({
         safeAreaBottom>
         <Box mt={ss(10)} flex={1}>
           <Box>
-            <Tabs />
+            <Tabs
+              onChangeTab={() => {
+                if (canEdit) setCanEdit(false);
+              }}
+            />
           </Box>
           {getGroupLevel() == 2 ? <Level2 /> : <Level3 />}
         </Box>
       </Column>
-      <DialogModal
-        isOpen={showDeleteTemplateModal.isOpen}
-        onClose={function (): void {
-          setShowDeleteTemplateModal({
-            isOpen: false,
-            groupName: '',
-          });
-        }}
-        title={`是否确认删除${showDeleteTemplateModal.groupName}整个模版组？`}
-        onConfirm={function (): void {
-          requestDeleteTemplateGroup(showDeleteTemplateModal.groupName)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                `删除模版组${showDeleteTemplateModal.groupName}成功！`,
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                `删除模版组${showDeleteTemplateModal.groupName}失败！`,
-              );
-            })
-            .finally(() => {
-              setShowDeleteTemplateModal({
-                isOpen: false,
-                groupName: '',
-              });
+      {showDeleteTemplateModal.isOpen && (
+        <DialogModal
+          isOpen={showDeleteTemplateModal.isOpen}
+          onClose={function (): void {
+            setShowDeleteTemplateModal({
+              ...showDeleteTemplateModal,
+              isOpen: false,
             });
-        }}
-      />
-
-      <DialogModal
-        isOpen={showDeleteTemplateExtraModal.isOpen}
-        onClose={function (): void {
-          setShowDeleteTemplateExtraModal({
-            isOpen: false,
-            content: '',
-            index: -1,
-          });
-        }}
-        title={`是否确认删除${showDeleteTemplateExtraModal.content}？`}
-        onConfirm={function (): void {
-          const group: any = {};
-          let folderIdx =
-            currentLevel3SelectFolderIdx.folder === -1
-              ? 0
-              : currentLevel3SelectFolderIdx.folder;
-
-          let itemIdx = currentLevel3SelectFolderIdx.item;
-
-          group.name =
-            templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
-
-          group.children = JSON.parse(
-            JSON.stringify(
-              templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
-                ?.children,
-            ),
-          );
-
-          group.children[itemIdx].children.splice(showExtraModal.index, 1);
-
-          requestPatchTemplateGroup(group)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                `删除模版组${showDeleteTemplateExtraModal.content}成功！`,
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                `删除模版组${showDeleteTemplateExtraModal.content}失败！`,
-              );
-            })
-            .finally(() => {
-              setShowDeleteTemplateExtraModal({
-                isOpen: false,
-                content: '',
-                index: -1,
-              });
-            });
-        }}
-      />
-
-      <NewTemplateGroupModal
-        isOpen={showEditTemplateGroupModal.isOpen}
-        defaultName={showEditTemplateGroupModal.defaultName}
-        title={showEditTemplateGroupModal.title}
-        onClose={function (): void {
-          setShowEditTemplateGroupModal({
-            isOpen: false,
-            isEdit: false,
-            title: '',
-            defaultName: '',
-          });
-        }}
-        onConfirm={function (text: string): void {
-          // 新增分组
-          const group: any = {};
-          if (showEditTemplateGroupModal.isEdit) {
-            group.originalName = showEditTemplateGroupModal.defaultName;
-            group.name = text;
-            group.children =
-              templates[currentSelectTemplateIdx]?.groups?.[
-                currentLevel3SelectFolderIdx.folder
-              ]?.children;
-          } else {
-            group.name = text;
-            group.children = [];
-          }
-
-          requestPatchTemplateGroup(group)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                showEditTemplateGroupModal.isEdit
-                  ? '编辑分组成功！'
-                  : '新增分组成功！',
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                showEditTemplateGroupModal.isEdit
-                  ? '编辑分组失败！'
-                  : '新增分组失败！',
-              );
-            })
-            .finally(() => {
-              setShowEditTemplateGroupModal({
-                isOpen: false,
-                isEdit: false,
-                title: '',
-                defaultName: '',
-              });
-            });
-        }}
-      />
-
-      <NewLevel3TemplateGroupModal
-        isOpen={showLevel3EditTemplateModal.isOpen}
-        defaultName={showLevel3EditTemplateModal.defaultName}
-        defaultGroup={showLevel3EditTemplateModal.defaultGroup}
-        groups={showLevel3EditTemplateModal.groups}
-        title={showLevel3EditTemplateModal.title}
-        onClose={function (): void {
-          setShowLevel3EditTemplateModal({
-            isOpen: false,
-            isEdit: false,
-            title: '',
-            groups: [],
-            defaultGroup: '',
-            defaultName: '',
-          });
-        }}
-        onConfirm={function (res: { name: string; group: string }): void {
-          const group: any = {};
-          group.name = res.name;
-          group.children = showLevel3EditTemplateModal.isEdit
-            ? getCurrentLevel2SelectTemplateGroupItems()
-            : [];
-          if (showLevel3EditTemplateModal.isEdit) {
-            group.originalName = showEditTemplateModal.defaultName;
-            group.name = res.group;
-            const idx = templates[currentSelectTemplateIdx]?.groups.findIndex(
-              (item) => item.name == res.group,
-            );
-
-            const children = JSON.parse(
-              JSON.stringify(
-                (templates[currentSelectTemplateIdx]?.groups[idx]
-                  .children as any[]) || [],
-              ),
-            );
-
-            const tidx = children.findIndex(
-              (item: any) =>
-                item.name == showLevel3EditTemplateModal.defaultName,
-            );
-
-            children[tidx].name = res.name;
-
-            group.children = children || [];
-          } else {
-            group.name = res.group;
-            const idx = templates[currentSelectTemplateIdx]?.groups.findIndex(
-              (item) => item.name == res.group,
-            );
-
-            const children =
-              (templates[currentSelectTemplateIdx]?.groups[idx]
-                .children as any[]) || [];
-
-            group.children = children.concat({
-              name: res.name,
-              children: [],
-            });
-          }
-
-          requestPatchTemplateGroup(group)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
-              );
-            })
-            .finally(() => {
-              setShowLevel3EditTemplateModal({
-                isOpen: false,
-                isEdit: false,
-                title: '',
-                groups: [],
-                defaultGroup: '',
-                defaultName: '',
-              });
-            });
-        }}
-      />
-
-      <NewTemplateModalModal
-        title={showEditTemplateModal.title}
-        isOpen={showEditTemplateModal.isOpen}
-        defaultName={showEditTemplateModal.defaultName}
-        type={showEditTemplateModal.type === 'group' ? 'group' : 'item'}
-        onClose={function (): void {
-          setShowEditTemplateModal({
-            isOpen: false,
-            isEdit: false,
-            type: 'group',
-            title: '',
-            defaultName: '',
-            level: 2,
-          });
-        }}
-        onConfirm={function (text: string): void {
-          const group: any = {};
-          if (showEditTemplateModal.level === 3) {
-            let folderIdx =
-              currentLevel3SelectFolderIdx.folder === -1
-                ? 0
-                : currentLevel3SelectFolderIdx.folder;
-
-            let itemIdx = currentLevel3SelectFolderIdx.item;
-
-            const item = templates[currentSelectTemplateIdx]?.groups?.[
-              folderIdx
-            ]?.children[itemIdx] as TemplateItem;
-
-            if (!item) {
-              toastAlert(toast, 'error', '请先选择模版组！');
-              return;
-            }
-
-            group.name =
-              templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
-
-            group.children = JSON.parse(
-              JSON.stringify(
-                templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
-                  ?.children,
-              ),
-            );
-
-            group.children[itemIdx].children.push(text);
-          } else {
-            if (showEditTemplateModal.type === 'group') {
-              group.name = text;
-              group.children = showEditTemplateModal.isEdit
-                ? getCurrentLevel2SelectTemplateGroupItems()
-                : [];
-              if (showEditTemplateModal.isEdit) {
-                group.originalName = showEditTemplateModal.defaultName;
-              }
+          }}
+          title={`是否确认删除${showDeleteTemplateModal.groupName}整个模版组？`}
+          onConfirm={function (): void {
+            console.log('showDeleteTemplateModal', showDeleteTemplateModal);
+            if (showDeleteTemplateModal.level === 2) {
+              requestDeleteTemplateGroup(showDeleteTemplateModal.groupName)
+                .then((res) => {
+                  toastAlert(
+                    toast,
+                    'success',
+                    `删除模版组${showDeleteTemplateModal.groupName}成功！`,
+                  );
+                  requestGetTemplates();
+                })
+                .catch((err) => {
+                  toastAlert(
+                    toast,
+                    'error',
+                    `删除模版组${showDeleteTemplateModal.groupName}失败！`,
+                  );
+                })
+                .finally(() => {
+                  setShowDeleteTemplateModal({
+                    ...showDeleteTemplateModal,
+                    isOpen: false,
+                  });
+                });
             } else {
-              group.name = groups[currentLevel2SelectTemplateGroupIndex].name;
+              requestDeleteTemplateGroup(showDeleteTemplateModal.groupName, {
+                groupIdx: showDeleteTemplateModal.groupIdx,
+              })
+                .then((res) => {
+                  toastAlert(
+                    toast,
+                    'success',
+                    `删除模版组${showDeleteTemplateModal.groupName}成功！`,
+                  );
+                  requestGetTemplates();
+                })
+                .catch((err) => {
+                  toastAlert(
+                    toast,
+                    'error',
+                    `删除模版组${showDeleteTemplateModal.groupName}失败！`,
+                  );
+                })
+                .finally(() => {
+                  setShowDeleteTemplateModal({
+                    ...showDeleteTemplateModal,
+                    isOpen: false,
+                  });
+                });
+            }
+          }}
+        />
+      )}
+      {showDeleteTemplateExtraModal.isOpen && (
+        <DialogModal
+          isOpen={showDeleteTemplateExtraModal.isOpen}
+          onClose={function (): void {
+            setShowDeleteTemplateExtraModal({
+              ...showDeleteTemplateExtraModal,
+              isOpen: false,
+            });
+          }}
+          title={`是否确认删除${showDeleteTemplateExtraModal.content}？`}
+          onConfirm={function (): void {
+            const group: any = {};
+            let folderIdx =
+              currentLevel3SelectFolderIdx.folder === -1
+                ? 0
+                : currentLevel3SelectFolderIdx.folder;
+
+            let itemIdx = currentLevel3SelectFolderIdx.item;
+
+            group.name =
+              templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
+
+            group.children = JSON.parse(
+              JSON.stringify(
+                templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
+                  ?.children,
+              ),
+            );
+
+            group.children[itemIdx].children.splice(
+              showDeleteTemplateExtraModal.index,
+              1,
+            );
+
+            requestPatchTemplateGroup(group)
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  `删除模版${showDeleteTemplateExtraModal.content}成功！`,
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  `删除模版组${showDeleteTemplateExtraModal.content}失败！`,
+                );
+              })
+              .finally(() => {
+                setShowDeleteTemplateExtraModal({
+                  ...showDeleteTemplateExtraModal,
+                  isOpen: false,
+                });
+              });
+          }}
+        />
+      )}
+      {showEditTemplateGroupModal.isOpen && (
+        <NewTemplateGroupModal
+          isOpen={showEditTemplateGroupModal.isOpen}
+          defaultName={showEditTemplateGroupModal.defaultName}
+          title={showEditTemplateGroupModal.title}
+          onClose={function (): void {
+            setShowEditTemplateGroupModal({
+              ...showEditTemplateGroupModal,
+              isOpen: false,
+            });
+          }}
+          onConfirm={function (text: string): void {
+            // 新增分组
+            const group: any = {};
+            if (showEditTemplateGroupModal.isEdit) {
+              group.originalName = showEditTemplateGroupModal.defaultName;
+              group.name = text;
               group.children =
-                getCurrentLevel2SelectTemplateGroupItems().concat(text);
-            }
-          }
-
-          requestPatchTemplateGroup(group)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
-              );
-            })
-            .finally(() => {
-              setShowEditTemplateModal({
-                isOpen: false,
-                isEdit: false,
-                type: 'group',
-                title: '',
-                defaultName: '',
-                level: 2,
-              });
-            });
-        }}
-      />
-      <NewTemplateExtraModal
-        isOpen={showExtraModal.isOpen}
-        defaultName={showExtraModal.defaultName}
-        defaultContent={showExtraModal.defaultContent}
-        title={showExtraModal.title}
-        des1={showExtraModal.des1}
-        des2={showExtraModal.des2}
-        onClose={function (): void {
-          setShowExtraModal({
-            isOpen: false,
-            isEdit: false,
-            title: '',
-            des1: '',
-            des2: '',
-            defaultName: '',
-            defaultContent: '',
-            index: -1,
-          });
-        }}
-        onConfirm={function ({
-          title,
-          content,
-        }: {
-          title: string;
-          content: string;
-        }): void {
-          let group: any = {};
-          if (showExtraModal.isEdit) {
-            let folderIdx =
-              currentLevel3SelectFolderIdx.folder === -1
-                ? 0
-                : currentLevel3SelectFolderIdx.folder;
-
-            let itemIdx = currentLevel3SelectFolderIdx.item;
-
-            const item = templates[currentSelectTemplateIdx]?.groups?.[
-              folderIdx
-            ]?.children[itemIdx] as TemplateItem;
-
-            group.name =
-              templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
-
-            group.children = JSON.parse(
-              JSON.stringify(
-                templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
-                  ?.children,
-              ),
-            );
-
-            group.children[itemIdx].children.splice(showExtraModal.index, 1, {
-              extra: { title, content },
-            });
-          } else {
-            let folderIdx =
-              currentLevel3SelectFolderIdx.folder === -1
-                ? 0
-                : currentLevel3SelectFolderIdx.folder;
-
-            let itemIdx = currentLevel3SelectFolderIdx.item;
-
-            const item = templates[currentSelectTemplateIdx]?.groups?.[
-              folderIdx
-            ]?.children[itemIdx] as TemplateItem;
-
-            if (!item) {
-              toastAlert(toast, 'error', '请先选择模版组！');
-              return;
+                templates[currentSelectTemplateIdx]?.groups?.[
+                  currentLevel3SelectFolderIdx.folder
+                ]?.children;
+            } else {
+              group.name = text;
+              group.children = [];
             }
 
-            group.name =
-              templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
-
-            group.children = JSON.parse(
-              JSON.stringify(
-                templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
-                  ?.children,
-              ),
-            );
-
-            group.children[itemIdx].children.push({
-              extra: { title, content },
-            });
-          }
-
-          requestPatchTemplateGroup(group)
-            .then((res) => {
-              toastAlert(
-                toast,
-                'success',
-                showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
-              );
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(
-                toast,
-                'error',
-                showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
-              );
-            })
-            .finally(() => {
-              setShowExtraModal({
-                isOpen: false,
-                isEdit: false,
-                title: '',
-                des1: '',
-                des2: '',
-                defaultName: '',
-                defaultContent: '',
-                index: -1,
+            requestPatchTemplateGroup(group)
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  showEditTemplateGroupModal.isEdit
+                    ? '编辑分组成功！'
+                    : '新增分组成功！',
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  showEditTemplateGroupModal.isEdit
+                    ? '编辑分组失败！'
+                    : '新增分组失败！',
+                );
+              })
+              .finally(() => {
+                setShowEditTemplateGroupModal({
+                  ...showEditTemplateGroupModal,
+                  isOpen: false,
+                });
               });
+          }}
+          onDeleteGroup={function (text: string): void {
+            setShowEditTemplateGroupModal({
+              ...showEditTemplateGroupModal,
+              isOpen: false,
             });
-        }}
-      />
-      <DialogModal
-        isOpen={showDeleteItemModal.isOpen}
-        onClose={function (): void {
-          setShowDeleteItemModal({
-            isOpen: false,
-            item: '',
-            level: 2,
-          });
-        }}
-        title='是否确认删除模版项？'
-        onConfirm={function (): void {
-          let group: any;
-          if (showDeleteItemModal.level === 2) {
-            const currentGroup = groups[currentLevel2SelectTemplateGroupIndex];
-            group = {
-              name: currentGroup.name,
-              children: getCurrentLevel2SelectTemplateGroupItems().filter(
-                (child) => child !== showDeleteItemModal.item,
-              ),
-            };
-          } else {
-            group = {
-              name: groups[currentLevel3SelectFolderIdx.folder].name,
-              children: groups[
-                currentLevel3SelectFolderIdx.folder
-              ].children.map((item, index) => {
-                let _item = item as TemplateItem;
-                if (currentLevel3SelectFolderIdx.item === index) {
-                  return {
-                    ..._item,
-                    children: _item.children.filter(
-                      (child) => child !== showDeleteItemModal.item,
-                    ),
-                  };
-                } else {
-                  return _item;
+            setShowDeleteTemplateModal({
+              isOpen: true,
+              groupName: text,
+              level: 2,
+            });
+          }}
+        />
+      )}
+      {showLevel3EditTemplateModal.isOpen && (
+        <NewLevel3TemplateGroupModal
+          isOpen={showLevel3EditTemplateModal.isOpen}
+          defaultName={showLevel3EditTemplateModal.defaultName}
+          defaultGroup={showLevel3EditTemplateModal.defaultGroup}
+          groups={showLevel3EditTemplateModal.groups}
+          title={showLevel3EditTemplateModal.title}
+          onClose={function (): void {
+            setShowLevel3EditTemplateModal({
+              ...showLevel3EditTemplateModal,
+              isOpen: false,
+            });
+          }}
+          onConfirm={function (res: { name: string; group: string }): void {
+            const group: any = {};
+            group.name = res.name;
+            group.children = showLevel3EditTemplateModal.isEdit
+              ? getCurrentLevel2SelectTemplateGroupItems()
+              : [];
+            if (showLevel3EditTemplateModal.isEdit) {
+              group.originalName = showEditTemplateModal.defaultName;
+              group.name = res.group;
+              const idx = templates[currentSelectTemplateIdx]?.groups.findIndex(
+                (item) => item.name == res.group,
+              );
+
+              const children = JSON.parse(
+                JSON.stringify(
+                  (templates[currentSelectTemplateIdx]?.groups[idx]
+                    .children as any[]) || [],
+                ),
+              );
+
+              const tidx = children.findIndex(
+                (item: any) =>
+                  item.name == showLevel3EditTemplateModal.defaultName,
+              );
+
+              children[tidx].name = res.name;
+
+              group.children = children || [];
+            } else {
+              group.name = res.group;
+              const idx = templates[currentSelectTemplateIdx]?.groups.findIndex(
+                (item) => item.name == res.group,
+              );
+
+              const children =
+                (templates[currentSelectTemplateIdx]?.groups[idx]
+                  .children as any[]) || [];
+
+              group.children = children.concat({
+                name: res.name,
+                children: [],
+              });
+            }
+
+            requestPatchTemplateGroup(group)
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
+                );
+              })
+              .finally(() => {
+                setShowLevel3EditTemplateModal({
+                  ...showLevel3EditTemplateModal,
+                  isOpen: false,
+                });
+              });
+          }}
+        />
+      )}
+      {showEditTemplateModal.isOpen && (
+        <NewTemplateModalModal
+          title={showEditTemplateModal.title}
+          isOpen={showEditTemplateModal.isOpen}
+          defaultName={showEditTemplateModal.defaultName}
+          type={showEditTemplateModal.type === 'group' ? 'group' : 'item'}
+          onClose={function (): void {
+            setShowEditTemplateModal({
+              ...showEditTemplateModal,
+              isOpen: false,
+            });
+          }}
+          onConfirm={function (text: string): void {
+            const group: any = {};
+            if (showEditTemplateModal.level === 3) {
+              let folderIdx =
+                currentLevel3SelectFolderIdx.folder === -1
+                  ? 0
+                  : currentLevel3SelectFolderIdx.folder;
+
+              let itemIdx = currentLevel3SelectFolderIdx.item;
+
+              const item = templates[currentSelectTemplateIdx]?.groups?.[
+                folderIdx
+              ]?.children[itemIdx] as TemplateItem;
+
+              if (!item) {
+                toastAlert(toast, 'error', '请先选择模版组！');
+                return;
+              }
+
+              group.name =
+                templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
+
+              group.children = JSON.parse(
+                JSON.stringify(
+                  templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
+                    ?.children,
+                ),
+              );
+
+              group.children[itemIdx].children.push(text);
+            } else {
+              if (showEditTemplateModal.type === 'group') {
+                group.name = text;
+                group.children = showEditTemplateModal.isEdit
+                  ? getCurrentLevel2SelectTemplateGroupItems()
+                  : [];
+                if (showEditTemplateModal.isEdit) {
+                  group.originalName = showEditTemplateModal.defaultName;
                 }
-              }),
-            };
-          }
-          requestPatchTemplateGroup(group)
-            .then((res) => {
-              toastAlert(toast, 'success', '删除模板项成功！');
-              requestGetTemplates();
-            })
-            .catch((err) => {
-              toastAlert(toast, 'error', '删除模板项失败！');
-            })
-            .finally(() => {
-              setShowDeleteItemModal({
-                isOpen: false,
-                item: '',
-                level: 2,
+              } else {
+                group.name = groups[currentLevel2SelectTemplateGroupIndex].name;
+                group.children =
+                  getCurrentLevel2SelectTemplateGroupItems().concat(text);
+              }
+            }
+
+            requestPatchTemplateGroup(group)
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
+                );
+              })
+              .finally(() => {
+                setShowEditTemplateModal({
+                  ...showEditTemplateModal,
+                  isOpen: false,
+                });
               });
+          }}
+        />
+      )}
+      {showExtraModal.isOpen && (
+        <NewTemplateExtraModal
+          isOpen={showExtraModal.isOpen}
+          defaultName={showExtraModal.defaultName}
+          defaultContent={showExtraModal.defaultContent}
+          title={showExtraModal.title}
+          des1={showExtraModal.des1}
+          des2={showExtraModal.des2}
+          onClose={function (): void {
+            setShowExtraModal({
+              ...showExtraModal,
+              isOpen: false,
             });
-        }}
-      />
+          }}
+          onConfirm={function ({
+            title,
+            content,
+          }: {
+            title: string;
+            content: string;
+          }): void {
+            let group: any = {};
+            if (showExtraModal.isEdit) {
+              let folderIdx =
+                currentLevel3SelectFolderIdx.folder === -1
+                  ? 0
+                  : currentLevel3SelectFolderIdx.folder;
+
+              let itemIdx = currentLevel3SelectFolderIdx.item;
+
+              const item = templates[currentSelectTemplateIdx]?.groups?.[
+                folderIdx
+              ]?.children[itemIdx] as TemplateItem;
+
+              group.name =
+                templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
+
+              group.children = JSON.parse(
+                JSON.stringify(
+                  templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
+                    ?.children,
+                ),
+              );
+
+              group.children[itemIdx].children.splice(showExtraModal.index, 1, {
+                extra: { title, content },
+              });
+            } else {
+              let folderIdx =
+                currentLevel3SelectFolderIdx.folder === -1
+                  ? 0
+                  : currentLevel3SelectFolderIdx.folder;
+
+              let itemIdx = currentLevel3SelectFolderIdx.item;
+
+              const item = templates[currentSelectTemplateIdx]?.groups?.[
+                folderIdx
+              ]?.children[itemIdx] as TemplateItem;
+
+              if (!item) {
+                toastAlert(toast, 'error', '请先选择模版组！');
+                return;
+              }
+
+              group.name =
+                templates[currentSelectTemplateIdx]?.groups?.[folderIdx].name;
+
+              group.children = JSON.parse(
+                JSON.stringify(
+                  templates[currentSelectTemplateIdx]?.groups?.[folderIdx]
+                    ?.children,
+                ),
+              );
+
+              group.children[itemIdx].children.push({
+                extra: { title, content },
+              });
+            }
+
+            requestPatchTemplateGroup(group)
+              .then((res) => {
+                toastAlert(
+                  toast,
+                  'success',
+                  showEditTemplateModal.isEdit ? '编辑成功！' : '新增成功！',
+                );
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(
+                  toast,
+                  'error',
+                  showEditTemplateModal.isEdit ? '编辑失败！' : '新增失败！',
+                );
+              })
+              .finally(() => {
+                setShowExtraModal({
+                  ...showExtraModal,
+                  isOpen: false,
+                });
+              });
+          }}
+        />
+      )}
+      {showDeleteItemModal.isOpen && (
+        <DialogModal
+          isOpen={showDeleteItemModal.isOpen}
+          onClose={function (): void {
+            setShowDeleteItemModal({
+              ...showDeleteItemModal,
+              isOpen: false,
+            });
+          }}
+          title='是否确认删除模版项？'
+          onConfirm={function (): void {
+            let group: any;
+            if (showDeleteItemModal.level === 2) {
+              const currentGroup =
+                groups[currentLevel2SelectTemplateGroupIndex];
+              group = {
+                name: currentGroup.name,
+                children: getCurrentLevel2SelectTemplateGroupItems().filter(
+                  (child) => child !== showDeleteItemModal.item,
+                ),
+              };
+            } else {
+              group = {
+                name: groups[currentLevel3SelectFolderIdx.folder].name,
+                children: groups[
+                  currentLevel3SelectFolderIdx.folder
+                ].children.map((item, index) => {
+                  let _item = item as TemplateItem;
+                  if (currentLevel3SelectFolderIdx.item === index) {
+                    return {
+                      ..._item,
+                      children: _item.children.filter(
+                        (child) => child !== showDeleteItemModal.item,
+                      ),
+                    };
+                  } else {
+                    return _item;
+                  }
+                }),
+              };
+            }
+            requestPatchTemplateGroup(group)
+              .then((res) => {
+                toastAlert(toast, 'success', '删除模板项成功！');
+                requestGetTemplates();
+              })
+              .catch((err) => {
+                toastAlert(toast, 'error', '删除模板项失败！');
+              })
+              .finally(() => {
+                setShowDeleteItemModal({
+                  ...showDeleteItemModal,
+                  isOpen: false,
+                });
+              });
+          }}
+        />
+      )}
     </Box>
   );
 }
 
-function Tabs() {
+function Tabs({ onChangeTab }: { onChangeTab(): void }) {
   const { templates, currentSelectTemplateIdx, setCurrentSelectTemplateIdx } =
     useManagerStore();
   return (
@@ -1405,7 +1451,11 @@ function Tabs() {
               hitSlop={ss(20)}
               key={index}
               onPress={() => {
+                if (currentSelectTemplateIdx === index) {
+                  return;
+                }
                 setCurrentSelectTemplateIdx(index);
+                onChangeTab();
               }}>
               <Column
                 flex={1}

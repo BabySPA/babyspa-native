@@ -20,7 +20,6 @@ import useManagerStore, { DefaultRole } from '~/app/stores/manager';
 import { useNavigation } from '@react-navigation/native';
 import { Role, RoleStatus, ShopType } from '~/app/stores/manager/type';
 import { debounce } from 'lodash';
-import { SafeAreaView } from 'react-native';
 
 export default function ManagerRole({
   navigation,
@@ -45,10 +44,6 @@ export default function ManagerRole({
   }, [roles, nameFilter]);
 
   const List = () => {
-    const safeAreaProps = useSafeArea({
-      safeAreaBottom: true,
-      pt: 2,
-    });
     return (
       <Column>
         <Row
@@ -59,7 +54,7 @@ export default function ManagerRole({
           borderTopRadius={ss(10)}
           width={'100%'}
           justifyContent={'space-around'}>
-          <Row w={ls(100)}>
+          <Row w={ls(120)}>
             <Text fontSize={sp(18)} color={'#333'}>
               角色名称
             </Text>
@@ -79,7 +74,7 @@ export default function ManagerRole({
               角色类型
             </Text>
           </Row>
-          <Row w={ls(200)}>
+          <Row w={ls(230)}>
             <Text fontSize={sp(18)} color={'#333'}>
               更新时间
             </Text>
@@ -91,23 +86,24 @@ export default function ManagerRole({
           </Row>
         </Row>
         <FlatList
-          mb={safeAreaProps ? ss(64) : 0}
+          style={{
+            height: '80%',
+          }}
           background={'#fff'}
           data={filterRoles}
-          renderItem={({ item: role }) => {
+          renderItem={({ item: role, index }) => {
             return (
               <Row
                 px={ls(40)}
                 minH={ss(60)}
                 py={ss(10)}
                 alignItems={'center'}
-                borderBottomRadius={ss(10)}
                 width={'100%'}
-                borderBottomWidth={1}
+                borderBottomWidth={index === filterRoles.length - 1 ? 0 : ss(1)}
                 borderBottomColor={'#DFE1DE'}
                 borderBottomStyle={'solid'}
                 justifyContent={'space-around'}>
-                <Row w={ls(100)}>
+                <Row w={ls(120)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {role.name}
                   </Text>
@@ -127,7 +123,7 @@ export default function ManagerRole({
                     {role.type == ShopType.CENTER ? '中心' : '门店'}
                   </Text>
                 </Row>
-                <Row w={ls(200)}>
+                <Row w={ls(230)}>
                   <Text fontSize={sp(18)} color={'#333'}>
                     {dayjs(role.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
                   </Text>
@@ -135,6 +131,9 @@ export default function ManagerRole({
                 <Row w={ls(150)}>
                   <Row>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       onPress={() => {
                         setCurrentRole(role);
@@ -143,7 +142,7 @@ export default function ManagerRole({
                       <Row alignItems={'center'}>
                         <Image
                           source={require('~/assets/images/list-detail.png')}
-                          size={ss(20)}
+                          size={sp(20)}
                           alt=''
                         />
                         <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
@@ -152,6 +151,9 @@ export default function ManagerRole({
                       </Row>
                     </Pressable>
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       ml={ls(24)}
                       onPress={() => {
@@ -161,7 +163,7 @@ export default function ManagerRole({
                       <Row alignItems={'center'}>
                         <Image
                           source={require('~/assets/images/list-edit.png')}
-                          size={ss(20)}
+                          size={sp(20)}
                           alt=''
                         />
                         <Text fontSize={sp(18)} color='#40C7B6' ml={ls(10)}>
@@ -231,18 +233,20 @@ function Filter({
       px={ls(40)}>
       <Row py={ss(20)} alignItems={'center'}>
         <Input
-          w={ls(240)}
+          w={ls(240, 340)}
           h={ss(44)}
-          p={ss(8)}
+          p={ss(9)}
           mr={ss(40)}
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           borderRadius={ss(4)}
-          fontSize={ss(16)}
+          fontSize={sp(16)}
           InputLeftElement={
             <Icon
               as={<MaterialIcons name='search' />}
-              size={ss(25)}
+              size={sp(25)}
               color='#AFB0B4'
               ml={ss(10)}
             />
@@ -254,6 +258,9 @@ function Filter({
         />
       </Row>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           setCurrentRole(DefaultRole);
@@ -265,7 +272,7 @@ function Filter({
           px={ls(26)}
           py={ss(10)}
           borderColor={'#15BD8F'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Text color={'#0C1B16'} fontSize={sp(14)}>
             新增角色
           </Text>

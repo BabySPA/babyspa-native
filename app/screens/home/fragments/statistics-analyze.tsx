@@ -27,7 +27,7 @@ import {
 } from 'echarts/components';
 import SvgChart, { SVGRenderer } from '@wuba/react-native-echarts/svgChart';
 import { generateFlowCounts } from '~/app/utils';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 echarts.use([
   SVGRenderer,
@@ -115,11 +115,14 @@ const CenterStatisticBox = () => {
       top: ss(20),
       left: ls(50),
       right: 0,
+      bottom: ss(50, 60),
     },
     textStyle: {
+      fontSize: sp(16),
       fontFamily: 'PingFang SC', // 指定字体类型
     },
     tooltip: {
+      fontSize: sp(16),
       fontFamily: 'PingFang SC', // 指定字体类型
       trigger: 'axis',
       position: function (pt: any) {
@@ -132,10 +135,11 @@ const CenterStatisticBox = () => {
         return item.analyzeOperator.name;
       }),
       axisLabel: {
+        margin: ss(0, 20),
         align: 'center', // 设置刻度标签居中对齐，显示在刻度线正下方
-        rotate: 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
+        rotate: Platform.OS == 'android' ? 1 : 0, // 可选：如果有旋转刻度标签的需求，可以设置旋转角度
         interval: 0, // 强制显示所有刻度标签
-        fontSize: sp(12),
+        fontSize: sp(14),
         color: '#8C8C8C',
       },
     },
@@ -155,6 +159,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
+        interval: 2,
       },
     ],
     series: [
@@ -228,7 +233,13 @@ const CenterStatisticBox = () => {
 
 export default function StatisticsAnalyze() {
   const [selectShop, setSelectShop] = useState<Shop>();
+  const [renderWaiting, setRenderWaiting] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 50);
+  }, []);
   return (
     <Flex flex={1}>
       <Filter
@@ -236,7 +247,7 @@ export default function StatisticsAnalyze() {
           setSelectShop(shop);
         }}
       />
-      <CenterStatisticBox />
+      {renderWaiting && <CenterStatisticBox />}
     </Flex>
   );
 }
@@ -274,7 +285,7 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
-      <Row py={ss(20)} px={ls(40)} alignItems={'center'}>
+      <Row h={ss(75)} px={ls(40)} alignItems={'center'}>
         <SelectShop
           onSelect={function (selectedItem: any, index: number): void {
             onSelectShop(selectedItem);
@@ -282,12 +293,15 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           defaultButtonText={defaultSelectShop?.name}
           buttonHeight={ss(44)}
-          buttonWidth={ls(140)}
+          buttonWidth={ls(140, 210)}
           shops={selectShops.filter((item) => {
             return item.type == ShopType.CENTER;
           })}
         />
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -299,18 +313,17 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           ml={ls(20)}
           h={ss(44)}
           alignItems={'center'}
-          py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {startDate}
           </Text>
         </Pressable>
@@ -318,6 +331,9 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           至
         </Text>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             setIsOpenDatePicker({
@@ -327,41 +343,42 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
           }}
           flexDirection={'row'}
           h={ss(44)}
-          py={ss(8)}
           pl={ls(12)}
           pr={ls(25)}
           alignItems={'center'}
           borderRadius={ss(4)}
           borderColor={'#D8D8D8'}
-          borderWidth={1}>
+          borderWidth={ss(1)}>
           <Icon
             as={<MaterialIcons name='date-range' />}
-            size={ss(20)}
+            size={sp(20)}
             color='rgba(0,0,0,0.2)'
           />
-          <Text color={'#333333'} fontSize={ss(18)} ml={ls(8)}>
+          <Text color={'#333333'} fontSize={sp(18)} ml={ls(8)}>
             {endDate}
           </Text>
         </Pressable>
 
-        <DatePickerModal
-          isOpen={isOpenDatePicker.isOpen}
-          onClose={() => {
-            setIsOpenDatePicker({
-              isOpen: false,
-            });
-          }}
-          onSelectedChange={(date: string) => {
-            if (!isOpenDatePicker.type) return;
-            if (isOpenDatePicker.type == 'start') {
-              setStartDate(date);
-            } else {
-              setEndDate(date);
-            }
-          }}
-          current={isOpenDatePicker.type == 'start' ? startDate : endDate}
-          selected={isOpenDatePicker.type == startDate ? startDate : endDate}
-        />
+        {isOpenDatePicker.isOpen && (
+          <DatePickerModal
+            isOpen={isOpenDatePicker.isOpen}
+            onClose={() => {
+              setIsOpenDatePicker({
+                isOpen: false,
+              });
+            }}
+            onSelectedChange={(date: string) => {
+              if (!isOpenDatePicker.type) return;
+              if (isOpenDatePicker.type == 'start') {
+                setStartDate(date);
+              } else {
+                setEndDate(date);
+              }
+            }}
+            current={isOpenDatePicker.type == 'start' ? startDate : endDate}
+            selected={isOpenDatePicker.type == 'start' ? startDate : endDate}
+          />
+        )}
       </Row>
     </Column>
   );

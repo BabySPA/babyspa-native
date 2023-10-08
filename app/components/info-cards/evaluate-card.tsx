@@ -43,6 +43,9 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   const DialogBtn = () => (
     <Row justifyContent={'center'} mt={ss(110)}>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           onClose?.();
@@ -51,14 +54,17 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           bgColor={'#D8D8D8'}
           px={ls(26)}
           py={ss(12)}
-          borderWidth={1}
+          borderWidth={ss(1)}
           borderColor={'#CCCCCC'}
           borderRadius={ss(8)}
-          _text={{ fontSize: ss(16), color: 'white' }}>
+          _text={{ fontSize: sp(16), color: 'white' }}>
           取消
         </Box>
       </Pressable>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           evaluateNow();
@@ -71,10 +77,10 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           py={ss(12)}
           ml={ss(20)}
           borderRadius={ss(8)}
-          borderWidth={1}
+          borderWidth={ss(1)}
           borderColor={'#00B49E'}>
-          {loading && <Spinner mr={ls(5)} color='emerald.500' />}
-          <Text fontSize={ss(16)} color={'#00B49E'}>
+          {loading && <Spinner size={sp(20)} mr={ls(5)} color='emerald.500' />}
+          <Text fontSize={sp(16)} color={'#00B49E'}>
             确定
           </Text>
         </Row>
@@ -105,6 +111,9 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   const CardBtn = () => (
     <Row justifyContent={'flex-end'} mt={ss(40)}>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           evaluateNow();
@@ -117,10 +126,10 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           py={ss(12)}
           ml={ss(20)}
           borderRadius={ss(8)}
-          borderWidth={1}
+          borderWidth={ss(1)}
           borderColor={'#00B49E'}>
-          {loading && <Spinner mr={ls(5)} color='emerald.500' />}
-          <Text fontSize={ss(16)} color={'#00B49E'}>
+          {loading && <Spinner size={sp(20)} mr={ls(5)} color='emerald.500' />}
+          <Text fontSize={sp(16)} color={'#00B49E'}>
             确定
           </Text>
         </Row>
@@ -144,6 +153,9 @@ export default function EvaluateCard(params: EvaluateCardParams) {
           {EvaluateStores.map((item: Score) => {
             return (
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 key={item}
                 mr={ss(10)}
@@ -185,6 +197,8 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         </Text>
         <Box flex={1} ml={ss(12)}>
           <Input
+            borderWidth={ss(1)}
+            borderColor={'#D8D8D8'}
             isReadOnly={!canEdit}
             autoCorrect={false}
             multiline={true}

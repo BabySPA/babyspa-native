@@ -10,7 +10,7 @@ export default function EmptyBox(params: { title?: string }) {
         source={require('~/assets/images/no-data.png')}
         resizeMode='contain'
       />
-      <Text fontSize={sp(20)} color='#1E262F' mt={ss(46)} opacity={0.4}>
+      <Text fontSize={sp(18)} color='#1E262F' mt={ss(46)} opacity={0.4}>
         {params.title ?? '暂无数据'}
       </Text>
     </Center>

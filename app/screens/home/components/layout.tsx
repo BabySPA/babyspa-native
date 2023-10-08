@@ -4,12 +4,10 @@ import {
   Flex,
   Text,
   Pressable,
-  Icon,
   Row,
-  Modal,
-  Spinner,
   useToast,
   Alert,
+  Circle,
 } from 'native-base';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
@@ -18,8 +16,57 @@ import useAuthStore from '~/app/stores/auth';
 import SelectUser from '~/app/components/select-user';
 import { useNavigation } from '@react-navigation/native';
 import useGlobalLoading from '~/app/stores/loading';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import MessageDrawer from './message-drawer';
+import useMessageStore from '~/app/stores/message';
+import { memo } from 'react';
 
-export default function Layout() {
+const Drawer = createDrawerNavigator();
+
+function DrawerLayout() {
+  return (
+    <Drawer.Navigator
+      drawerContent={() => <MessageDrawer />}
+      screenOptions={{ drawerPosition: 'right', headerShown: false }}>
+      <Drawer.Screen name='content' component={Layout} />
+    </Drawer.Navigator>
+  );
+}
+export default DrawerLayout;
+
+const MessageNotify = memo(() => {
+  const { unReadCount } = useMessageStore();
+  const navigation = useNavigation();
+  return (
+    <Pressable
+      _pressed={{
+        opacity: 0.8,
+      }}
+      onPress={() => {
+        // @ts-ignore
+        navigation.openDrawer();
+      }}
+      hitSlop={ss(20)}
+      position={'absolute'}
+      right={ss(20, 50)}>
+      <Image
+        source={require('~/assets/images/msg-notice.png')}
+        style={{ width: sp(32), height: sp(32) }}
+      />
+      {unReadCount > 0 && (
+        <Circle
+          size={sp(6)}
+          bgColor={'#E24A3D'}
+          position={'absolute'}
+          top={0}
+          right={ss(3)}
+        />
+      )}
+    </Pressable>
+  );
+});
+
+const Layout = memo(() => {
   const {
     currentSelected,
     getLayoutConfig,
@@ -28,7 +75,7 @@ export default function Layout() {
   } = useLayoutConfigWithRole();
 
   const navigation = useNavigation();
-  const { logout, user, currentShopWithRole, changeCurrentShopWithRole } =
+  const { user, currentShopWithRole, changeCurrentShopWithRole } =
     useAuthStore();
 
   const currentSelectedModule = getLayoutConfig()[currentSelected];
@@ -49,6 +96,7 @@ export default function Layout() {
 
   const { openLoading, closeLoading } = useGlobalLoading();
   const toast = useToast();
+
   return (
     <Flex
       bg={{
@@ -61,12 +109,7 @@ export default function Layout() {
       flex={1}
       direction='row'>
       <Box>
-        <Center
-          pt={ss(30)}
-          px={ss(20)}
-          minW={ss(120)}
-          minH={ss(120)}
-          safeAreaLeft>
+        <Center pt={ss(30)} px={ss(20)} minH={ss(120)} safeAreaLeft>
           <Image
             source={require('~/assets/images/logo.png')}
             style={{
@@ -75,7 +118,7 @@ export default function Layout() {
             }}
           />
           <Text
-            fontSize={ls(20)}
+            fontSize={sp(20)}
             color={'white'}
             mt={ss(5)}
             fontWeight={600}
@@ -83,21 +126,25 @@ export default function Layout() {
             掌阅未来
           </Text>
         </Center>
-        <Box mt={ss(30)}>
+        <Box mt={ss(30, 20)}>
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
+                _pressed={{
+                  opacity: idx != currentSelected ? 0.6 : 1,
+                }}
                 hitSlop={ss(20)}
                 key={idx}
                 onPress={() => {
-                  changeCurrentSelected(idx);
+                  idx != currentSelected && changeCurrentSelected(idx);
                 }}>
                 <Center
                   safeAreaLeft
+                  px={ss(20)}
                   background={
                     idx == currentSelected ? 'warmGray.50' : 'transparent'
                   }
-                  py={ss(16)}>
+                  py={ss(16, 10)}>
                   <Image
                     source={
                       idx == currentSelected ? item.selectedImage : item.image
@@ -107,7 +154,7 @@ export default function Layout() {
                     alt=''
                   />
                   <Text
-                    fontSize={ls(18)}
+                    fontSize={sp(18)}
                     color={idx == currentSelected ? '#64CF97' : 'warmGray.50'}>
                     {item.text}
                   </Text>
@@ -118,12 +165,15 @@ export default function Layout() {
         </Box>
 
         <Center
+          safeAreaLeft
           px={ls(6)}
-          maxW={ls(130)}
           w={'100%'}
           position={'absolute'}
-          bottom={ss(60)}>
+          bottom={ss(60, 16)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             alignItems={'center'}
             onPress={() => {
@@ -131,62 +181,65 @@ export default function Layout() {
               navigation.navigate('Personal');
             }}>
             <Center
-              borderRadius={ss(23)}
+              borderRadius={ss(23, 22)}
               borderWidth={ss(3)}
               borderColor={'#fff'}
-              w={ss(46)}
-              h={ss(46)}
+              w={ss(46, 44)}
+              h={ss(46, 44)}
               bgColor={'#F7CE51'}>
-              <Text fontSize={sp(16)} color='#fff'>
+              <Text fontSize={sp(16, 16)} color='#fff'>
                 {user?.name?.[0]}
               </Text>
             </Center>
-            <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4)}>
-              <Text fontSize={sp(14)} color='#fff'>
+            <Row flexWrap={'wrap'} justifyContent={'center'} mt={ss(4, 2)}>
+              <Text fontSize={sp(14, 15)} color='#fff'>
                 {user?.name}
               </Text>
-              <Text fontSize={sp(14)} color='#fff'>
+              <Text fontSize={sp(14, 15)} color='#fff'>
                 -
               </Text>
-              <Text fontSize={sp(14)} color='#fff'>
+              <Text fontSize={sp(14, 15)} color='#fff'>
                 {currentShopWithRole?.role.name}
               </Text>
             </Row>
           </Pressable>
           <SelectUser
-            style={{ marginTop: ss(4) }}
+            textStyle={{
+              fontSize: sp(14, 15),
+            }}
             onSelect={async function (selectedItem: any) {
               openLoading();
               changeCurrentShopWithRole(selectedItem)
                 .then(() => {})
                 .finally(() => {
-                  setTimeout(() => {
-                    toast.show({
-                      placement: 'top',
-                      duration: 1000,
-                      render: () => {
-                        return (
-                          <Alert w='100%' bgColor={'rgba(244,244,244,1)'}>
-                            <Box>
-                              <Text color={'#333'}>
-                                已切换至
-                                <Text color={'#00B49E'}>
-                                  {selectedItem.shop.name}
-                                </Text>
+                  const toastid = toast.show({
+                    placement: 'top',
+                    duration: 1000,
+                    render: () => {
+                      return (
+                        <Alert w='100%' bgColor={'rgba(244,244,244, 1)'}>
+                          <Box>
+                            <Text color={'#333'}>
+                              正在切换至
+                              <Text color={'#00B49E'}>
+                                {selectedItem.shop.name}
                               </Text>
-                            </Box>
-                          </Alert>
-                        );
-                      },
-                    });
+                            </Text>
+                          </Box>
+                        </Alert>
+                      );
+                    },
+                  });
+                  setTimeout(() => {
+                    toast.close(toastid);
                     closeLoading();
-                  }, 600);
+                  }, 800);
                 });
             }}
           />
         </Center>
       </Box>
-      <Flex direction='column' flex={1}>
+      <Flex direction='column' flex={1} safeAreaTop>
         <Flex
           direction='row'
           justifyContent={'center'}
@@ -196,17 +249,21 @@ export default function Layout() {
             currentSelectedModule?.features.map((item, idx) => {
               return (
                 <Pressable
+                  _pressed={{
+                    opacity:
+                      idx != currentSelectedModule.featureSelected ? 0.6 : 1,
+                  }}
                   hitSlop={ss(20)}
                   key={idx}
                   paddingRight={'8%'}
                   onPress={() => {
-                    changeFeatureSelected(idx);
+                    currentSelectedModule.featureSelected !== idx &&
+                      changeFeatureSelected(idx);
                   }}>
                   <Center>
-                    <Text color={'white'} fontSize={ls(20)} fontWeight={600}>
+                    <Text color={'white'} fontSize={sp(20)} fontWeight={600}>
                       {item.text}
                     </Text>
-
                     <Box
                       w={ss(40)}
                       h={ss(4)}
@@ -220,6 +277,7 @@ export default function Layout() {
                 </Pressable>
               );
             })}
+          <MessageNotify />
         </Flex>
         <Flex bgColor={'#E6EEF1'} flex={1} borderTopLeftRadius={ss(10)}>
           {currentSelectedModule.noTab ? <NoTabFragment /> : <Fragment />}
@@ -227,4 +285,4 @@ export default function Layout() {
       </Flex>
     </Flex>
   );
-}
+});

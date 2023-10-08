@@ -32,7 +32,7 @@ export default function RegisterCard(params: RegisterCardParams) {
         <Column ml={ss(20)}>
           <Row alignItems={'center'}>
             <Text
-              fontSize={ss(22)}
+              fontSize={sp(22)}
               color={'#333'}
               maxW={ls(220)}
               ellipsizeMode='tail'
@@ -53,7 +53,7 @@ export default function RegisterCard(params: RegisterCardParams) {
                   }
                 />
               }
-              size={ss(26)}
+              size={sp(26)}
               color={currentFlow.customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text fontSize={sp(20)} color={'#666'} ml={ss(12)}>
@@ -88,7 +88,7 @@ export default function RegisterCard(params: RegisterCardParams) {
             <Text fontSize={sp(18)} color='#999' ml={ls(40)}>
               预约理疗师：
               <Text color='#333'>
-                {currentFlow.collectionOperator?.name || '未设置'}
+                {currentFlow.collectionOperator?.name || '无'}
               </Text>
             </Text>
           </Row>

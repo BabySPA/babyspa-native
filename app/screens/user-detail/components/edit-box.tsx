@@ -8,6 +8,7 @@ import {
   Pressable,
   useToast,
   Spinner,
+  ScrollView,
 } from 'native-base';
 import { useState } from 'react';
 import BoxTitle from '~/app/components/box-title';
@@ -79,69 +80,70 @@ export default function EditBox(params: EditBoxParams) {
       p={ss(20)}
       borderRadius={ss(10)}
       justifyContent={'space-between'}>
-      <Column>
-        <BoxTitle title={'员工信息'} />
-        <Box mt={ss(30)} px={ls(20)}>
-          <Row alignItems={'center'}>
-            <FormBox
-              title='员工姓名'
-              titleWidth={ls(180)}
-              style={{ flex: 1 }}
-              required
-              form={
-                <Input
-                  ml={ss(20)}
-                  maxW={ls(380)}
-                  autoCorrect={false}
-                  flex={1}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  defaultValue={tempUser.name}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                  onChangeText={(text) => {
-                    setTempUser({
-                      ...(tempUser || {}),
-                      name: text,
-                    });
-                  }}
-                />
-              }
-            />
-            <FormBox
-              titleWidth={ls(180)}
-              title='性别'
-              required
-              style={{ flex: 1, marginLeft: ls(20) }}
-              form={
-                <RadioBox
-                  margin={ss(20)}
-                  config={[
-                    { label: '男', value: 1 },
-                    { label: '女', value: 0 },
-                  ]}
-                  current={tempUser.gender}
-                  onChange={({ label, value }) => {
-                    setTempUser({
-                      ...(tempUser || {}),
-                      gender: +value,
-                    });
-                  }}
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(30)}>
-            <FormBox
-              titleWidth={ls(180)}
-              required
-              title='所属门店'
-              style={{ flex: 1 }}
-              form={
-                <Box ml={ls(20)}>
+      <ScrollView>
+        <Column>
+          <BoxTitle title={'员工信息'} />
+          <Box mt={ss(30)} px={ls(20)}>
+            <Row alignItems={'center'}>
+              <FormBox
+                title='员工姓名'
+                titleWidth={ls(100)}
+                style={{ flex: 1 }}
+                required
+                form={
+                  <Input
+                    maxW={ls(380)}
+                    autoCorrect={false}
+                    flex={1}
+                    h={ss(48)}
+                    py={ss(10)}
+                    px={ls(20)}
+                    defaultValue={tempUser.name}
+                    placeholderTextColor={'#CCC'}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    placeholder='请输入'
+                    onChangeText={(text) => {
+                      setTempUser({
+                        ...(tempUser || {}),
+                        name: text,
+                      });
+                    }}
+                  />
+                }
+              />
+              <FormBox
+                titleWidth={ls(100)}
+                title='性别'
+                required
+                style={{ flex: 1 }}
+                form={
+                  <RadioBox
+                    margin={ss(20)}
+                    config={[
+                      { label: '男', value: 1 },
+                      { label: '女', value: 0 },
+                    ]}
+                    current={tempUser.gender}
+                    onChange={({ label, value }) => {
+                      setTempUser({
+                        ...(tempUser || {}),
+                        gender: +value,
+                      });
+                    }}
+                  />
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)}>
+              <FormBox
+                titleWidth={ls(100)}
+                required
+                title='所属门店'
+                style={{ flex: 1 }}
+                form={
                   <SelectShop
                     onSelect={function (
                       selectedItem: Shop,
@@ -162,162 +164,170 @@ export default function EditBox(params: EditBoxParams) {
                     buttonWidth={ls(380)}
                     shops={selectShops}
                   />
-                </Box>
-              }
-            />
-            <FormBox
-              titleWidth={ls(180)}
-              required
-              title={'角色'}
-              style={{ flex: 1, marginLeft: ls(20) }}
-              form={
-                <SelectRole
-                  type={tempUser.shop?.type as ShopType}
-                  onSelect={function (selectedItem): void {
-                    setTempUser({
-                      ...(tempUser || {}),
-                      role: {
-                        roleKey: selectedItem.roleKey,
-                        name: selectedItem.name,
-                        type: selectedItem.type,
-                      },
-                    });
-                  }}
-                  defaultButtonText={currentUser.role?.name}
-                  buttonHeight={ss(44)}
-                  buttonWidth={ls(380)}
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(30)}>
-            <FormBox
-              titleWidth={ls(180)}
-              required
-              title='联系电话'
-              style={{ flex: 1 }}
-              form={
-                <Input
-                  ml={ss(20)}
-                  inputMode='numeric'
-                  autoCorrect={false}
-                  defaultValue={tempUser.phoneNumber}
-                  w={ls(380)}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  onChangeText={(text) => {
-                    setTempUser({
-                      ...tempUser,
-                      phoneNumber: text,
-                      username: text,
-                    });
-                  }}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                />
-              }
-            />
-            <FormBox
-              titleWidth={ls(180)}
-              required
-              title='账号'
-              style={{ flex: 1, marginLeft: ls(20) }}
-              form={
-                <Input
-                  autoCorrect={false}
-                  defaultValue={tempUser.username}
-                  w={ls(380)}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  isReadOnly
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(30)}>
-            <FormBox
-              titleWidth={ls(180)}
-              required
-              title='身份证号'
-              style={{ flex: 1 }}
-              form={
-                <Input
-                  ml={ss(20)}
-                  autoCorrect={false}
-                  defaultValue={tempUser.idCardNumber}
-                  w={ls(380)}
-                  h={ss(48)}
-                  py={ss(10)}
-                  px={ls(20)}
-                  onChangeText={(text) => {
-                    setTempUser({
-                      ...tempUser,
-                      idCardNumber: text,
-                    });
-                  }}
-                  placeholderTextColor={'#CCC'}
-                  color={'#333333'}
-                  fontSize={sp(16)}
-                  placeholder='请输入'
-                />
-              }
-            />
-          </Row>
-          <Row alignItems={'center'} mt={ss(30)}>
-            <FormBox
-              titleWidth={ls(180)}
-              title='员工简介'
-              style={{ alignItems: 'flex-start', flex: 1 }}
-              form={
-                <>
+                }
+              />
+              <FormBox
+                titleWidth={ls(100)}
+                required
+                title={'角色'}
+                style={{ flex: 1 }}
+                form={
+                  <SelectRole
+                    type={tempUser.shop?.type as ShopType}
+                    onSelect={function (selectedItem): void {
+                      setTempUser({
+                        ...(tempUser || {}),
+                        role: {
+                          roleKey: selectedItem.roleKey,
+                          name: selectedItem.name,
+                          type: selectedItem.type,
+                        },
+                      });
+                    }}
+                    defaultButtonText={currentUser.role?.name}
+                    buttonHeight={ss(44)}
+                    buttonWidth={ls(380)}
+                  />
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)}>
+              <FormBox
+                titleWidth={ls(100)}
+                required
+                title='联系电话'
+                style={{ flex: 1 }}
+                form={
                   <Input
-                    ml={ss(20)}
+                    inputMode='numeric'
+                    returnKeyType='done'
                     autoCorrect={false}
-                    defaultValue={tempUser.description}
-                    flex={1}
-                    h={ss(128)}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
+                    defaultValue={tempUser.phoneNumber}
+                    w={ls(380)}
+                    h={ss(48)}
                     py={ss(10)}
                     px={ls(20)}
                     onChangeText={(text) => {
                       setTempUser({
                         ...tempUser,
-                        description: text,
+                        phoneNumber: text,
+                        username: text,
                       });
                     }}
-                    multiline
-                    textAlignVertical='top'
                     placeholderTextColor={'#CCC'}
                     color={'#333333'}
                     fontSize={sp(16)}
                     placeholder='请输入'
                   />
-                  <Text
-                    color={'#999'}
-                    fontSize={sp(14)}
-                    style={{
-                      position: 'absolute',
-                      right: ss(10),
-                      bottom: ss(10),
-                    }}>
-                    {tempUser.description.length}/300
-                  </Text>
-                </>
-              }
-            />
-          </Row>
-        </Box>
-      </Column>
-
-      <Row justifyContent={'center'} mb={ss(40)}>
+                }
+              />
+              <FormBox
+                titleWidth={ls(100)}
+                required
+                title='账号'
+                style={{ flex: 1 }}
+                form={
+                  <Input
+                    autoCorrect={false}
+                    defaultValue={tempUser.username}
+                    w={ls(380)}
+                    h={ss(48)}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
+                    py={ss(10)}
+                    px={ls(20)}
+                    isReadOnly
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    placeholder='请输入'
+                  />
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)}>
+              <FormBox
+                titleWidth={ls(100)}
+                required
+                title='身份证号'
+                style={{ flex: 1 }}
+                form={
+                  <Input
+                    autoCorrect={false}
+                    defaultValue={tempUser.idCardNumber}
+                    w={ls(380)}
+                    h={ss(48)}
+                    py={ss(10)}
+                    px={ls(20)}
+                    borderWidth={ss(1)}
+                    borderColor={'#D8D8D8'}
+                    onChangeText={(text) => {
+                      setTempUser({
+                        ...tempUser,
+                        idCardNumber: text,
+                      });
+                    }}
+                    placeholderTextColor={'#CCC'}
+                    color={'#333333'}
+                    fontSize={sp(16)}
+                    placeholder='请输入'
+                  />
+                }
+              />
+            </Row>
+            <Row alignItems={'center'} mt={ss(30)}>
+              <FormBox
+                titleWidth={ls(100)}
+                title='员工简介'
+                style={{ alignItems: 'flex-start', flex: 1 }}
+                form={
+                  <>
+                    <Input
+                      autoCorrect={false}
+                      defaultValue={tempUser.description}
+                      flex={1}
+                      h={ss(128)}
+                      py={ss(10)}
+                      px={ls(20)}
+                      borderWidth={ss(1)}
+                      borderColor={'#D8D8D8'}
+                      onChangeText={(text) => {
+                        setTempUser({
+                          ...tempUser,
+                          description: text,
+                        });
+                      }}
+                      multiline
+                      textAlignVertical='top'
+                      placeholderTextColor={'#CCC'}
+                      color={'#333333'}
+                      fontSize={sp(16)}
+                      placeholder='请输入'
+                    />
+                    <Text
+                      color={'#999'}
+                      fontSize={sp(14)}
+                      style={{
+                        position: 'absolute',
+                        right: ss(10),
+                        bottom: ss(10),
+                      }}>
+                      {tempUser.description.length}/300
+                    </Text>
+                  </>
+                }
+              />
+            </Row>
+          </Box>
+        </Column>
+      </ScrollView>
+      <Row justifyContent={'center'} mb={ss(40)} mt={ss(20)}>
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           onPress={() => {
             params.onEditFinish();
@@ -327,7 +337,7 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(216, 216, 216, 0.10)'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             borderColor={'#D8D8D8'}>
             <Text color='#333' fontSize={sp(16)}>
               取消
@@ -336,6 +346,9 @@ export default function EditBox(params: EditBoxParams) {
         </Pressable>
 
         <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
           hitSlop={ss(20)}
           ml={ls(74)}
           onPress={() => {
@@ -384,10 +397,12 @@ export default function EditBox(params: EditBoxParams) {
             py={ss(12)}
             bgColor={'rgba(0, 180, 158, 0.10);'}
             borderRadius={ss(4)}
-            borderWidth={1}
+            borderWidth={ss(1)}
             alignItems={'center'}
             borderColor={'#00B49E'}>
-            {loading && <Spinner mr={ls(5)} color='emerald.500' />}
+            {loading && (
+              <Spinner mr={ls(5)} color='emerald.500' size={sp(20)} />
+            )}
             <Text color='#00B49E' fontSize={sp(16)}>
               保存
             </Text>

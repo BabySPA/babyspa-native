@@ -138,6 +138,8 @@ const SelectDropdown = (
     return (
       search && (
         <Input
+          borderWidth={ss(1)}
+          borderColor={'#D8D8D8'}
           searchViewWidth={buttonLayout.w}
           value={searchTxt}
           valueColor={searchInputTxtColor}
@@ -194,10 +196,7 @@ const SelectDropdown = (
   const renderDropdown = () => {
     return (
       isVisible && (
-        <DropdownModal
-          statusBarTranslucent={statusBarTranslucent}
-          visible={isVisible}
-          onRequestClose={onRequestClose}>
+        <DropdownModal visible={isVisible} onRequestClose={onRequestClose}>
           <DropdownOverlay
             onPress={closeDropdown}
             backgroundColor={dropdownOverlayColor}

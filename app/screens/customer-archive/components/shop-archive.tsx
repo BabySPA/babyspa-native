@@ -22,6 +22,9 @@ export function ShopArchive(params: ShopArchiveParams) {
         {params.archives.map((archive, idx) => {
           return (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               key={archive._id}
               w={ls(302)}
@@ -29,8 +32,8 @@ export function ShopArchive(params: ShopArchiveParams) {
                 params.onPressToFlowInfo(archive);
               }}>
               <Row alignItems={'center'}>
-                <Circle size={ss(20)} borderRadius={ss(18)} bgColor={'#DCEEED'}>
-                  <Circle size={ss(12)} bgColor={'#5EACA3'} />
+                <Circle size={sp(20)} borderRadius={ss(18)} bgColor={'#DCEEED'}>
+                  <Circle size={sp(12)} bgColor={'#5EACA3'} />
                 </Circle>
                 {idx !== params.archives.length - 1 && (
                   <Box w={'100%'} h={ss(1)} bgColor={'#DFE1DE'} />
@@ -45,7 +48,7 @@ export function ShopArchive(params: ShopArchiveParams) {
                 w={ls(262)}
                 h={ss(404)}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={'#5EACA3'}>
                 <Box
                   bgColor={'#03CBB2'}
@@ -63,13 +66,19 @@ export function ShopArchive(params: ShopArchiveParams) {
                   调理导向:
                 </Text>
                 <Text
-                  height={ss(74)}
+                  minH={ss(74)}
                   color='#000'
                   fontSize={sp(16)}
+                  numberOfLines={3}
                   mt={ss(10)}>
                   {archive.collect?.guidance}
                 </Text>
-                <Box bgColor={'#F6FBFA'} px={ls(10)} py={ss(20)} flex={1}>
+                <Box
+                  bgColor={'#F6FBFA'}
+                  px={ls(10)}
+                  py={ss(20)}
+                  flex={1}
+                  mt={ss(5)}>
                   <Text color='#5FADA4' fontSize={sp(16)}>
                     {archive.analyze?.remark}
                   </Text>

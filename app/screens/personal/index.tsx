@@ -89,6 +89,9 @@ export default function Personal({
                   rightElement={
                     <Row alignItems={'center'} ml={ls(18)}>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         onPress={() => {
                           setShowPassword(!showPassword);
@@ -103,11 +106,14 @@ export default function Personal({
                               }
                             />
                           }
-                          size={ss(22)}
+                          size={sp(22)}
                           color={'#00B49E'}
                         />
                       </Pressable>
                       <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
                         hitSlop={ss(20)}
                         ml={ls(38)}
                         onPress={() => {
@@ -117,7 +123,7 @@ export default function Personal({
                           <Image
                             alt=''
                             source={require('~/assets/images/reset-pass.png')}
-                            size={ss(24)}
+                            size={sp(24)}
                           />
                           <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
                             修改密码
@@ -159,6 +165,9 @@ export default function Personal({
           </Column>
           <Row justifyContent={'center'} mb={ss(60)}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 setShowDialog(true);
@@ -183,13 +192,14 @@ export default function Personal({
               </Row>
             </Pressable>
             <DialogModal
-              title='是否确认退出登录'
+              title='是否确认退出登录？'
               isOpen={showDialog}
               onClose={function (): void {
                 setShowDialog(false);
               }}
               onConfirm={function (): void {
                 logout();
+                setShowDialog(false);
               }}
             />
           </Row>

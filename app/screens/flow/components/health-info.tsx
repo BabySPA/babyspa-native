@@ -43,10 +43,12 @@ export default function HealthInfo({
         <BoxItem
           title={'过敏原'}
           icon={require('~/assets/images/notice.png')}
-          autoScroll={false}
-        >
+          autoScroll={false}>
           <Box flex={1}>
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               onPress={() => {
                 if (selectedConfig.disabled) {
                   return;
@@ -56,52 +58,50 @@ export default function HealthInfo({
               style={{
                 borderRadius: ss(4),
                 borderColor: '#DFE1DE',
-                borderWidth: 1,
-                height: ss(170),
+                borderWidth: ss(1),
+                height: '100%',
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
-              }}
-            >
+              }}>
               <Text
                 fontSize={sp(14)}
                 color='#999'
-                style={{ textAlignVertical: 'top' }}
-              >
+                style={{ textAlignVertical: 'top' }}>
                 {collect.healthInfo.allergy || '请输入或选择过敏原'}
               </Text>
               <Text
                 fontSize={sp(14)}
                 color={'#999'}
-                style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}
-              >
+                style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
                 {collect.healthInfo.allergy.length}/300
               </Text>
             </Pressable>
-            <TemplateModal
-              defaultText={collect.healthInfo.allergy || ''}
-              template={getTemplateGroups(TemplateGroupKeys.allergy)}
-              isOpen={isOpenTemplatePicker}
-              onClose={function (): void {
-                setIsOpenTemplatePicker(false);
-              }}
-              onConfirm={function (text): void {
-                updateCollection({
-                  healthInfo: {
-                    ...collect.healthInfo,
-                    allergy: text,
-                  },
-                });
-                setIsOpenTemplatePicker(false);
-              }}
-            />
+            {isOpenTemplatePicker && (
+              <TemplateModal
+                defaultText={collect.healthInfo.allergy || ''}
+                template={getTemplateGroups(TemplateGroupKeys.allergy)}
+                isOpen={isOpenTemplatePicker}
+                onClose={function (): void {
+                  setIsOpenTemplatePicker(false);
+                }}
+                onConfirm={function (text): void {
+                  updateCollection({
+                    healthInfo: {
+                      ...collect.healthInfo,
+                      allergy: text,
+                    },
+                  });
+                  setIsOpenTemplatePicker(false);
+                }}
+              />
+            )}
           </Box>
         </BoxItem>
         <BoxItem
           title={'备注'}
           icon={require('~/assets/images/notice.png')}
           mt={ss(10)}
-          autoScroll={false}
-        >
+          autoScroll={false}>
           <Row flex={1}>
             <Box flex={1}>
               <RecordBox edit={selectedConfig.disabled ? false : true} />
@@ -110,6 +110,7 @@ export default function HealthInfo({
               axis='vertical'
               dashLength={ss(12)}
               dashGap={ss(12)}
+              dashThickness={ss(1.5)}
               dashColor='#DFE1DE'
               style={{ marginHorizontal: ls(15) }}
             />
@@ -120,6 +121,12 @@ export default function HealthInfo({
               <ImageBox
                 edit={selectedConfig.disabled ? false : true}
                 images={collect.healthInfo.otherImages}
+                previewImages={[
+                  ...collect.healthInfo.otherImages,
+                  ...collect.healthInfo.lingualImage,
+                  ...collect.healthInfo.leftHandImages,
+                  ...collect.healthInfo.rightHandImages,
+                ]}
                 selectedCallback={function (
                   filename: string,
                   uri: string,
@@ -156,11 +163,16 @@ export default function HealthInfo({
       <Column flex={1} ml={ss(10)}>
         <BoxItem
           title={'舌部图片'}
-          icon={require('~/assets/images/tongue.png')}
-        >
+          icon={require('~/assets/images/tongue.png')}>
           <ImageBox
             edit={selectedConfig.disabled ? false : true}
             images={collect.healthInfo.lingualImage}
+            previewImages={[
+              ...collect.healthInfo.lingualImage,
+              ...collect.healthInfo.leftHandImages,
+              ...collect.healthInfo.rightHandImages,
+              ...collect.healthInfo.otherImages,
+            ]}
             selectedCallback={function (filename: string, uri: string): void {
               addLingualImage({
                 name: filename,
@@ -188,8 +200,7 @@ export default function HealthInfo({
         <BoxItem
           title={'手部图片'}
           icon={require('~/assets/images/hand.png')}
-          mt={ss(10)}
-        >
+          mt={ss(10)}>
           <Row>
             <Box flex={1}>
               <Text mr={ls(10)} fontSize={sp(12)} fontWeight={600} color='#333'>
@@ -199,6 +210,12 @@ export default function HealthInfo({
                 <ImageBox
                   edit={selectedConfig.disabled ? false : true}
                   images={collect.healthInfo.leftHandImages}
+                  previewImages={[
+                    ...collect.healthInfo.leftHandImages,
+                    ...collect.healthInfo.rightHandImages,
+                    ...collect.healthInfo.lingualImage,
+                    ...collect.healthInfo.otherImages,
+                  ]}
                   selectedCallback={function (
                     filename: string,
                     uri: string,
@@ -237,6 +254,7 @@ export default function HealthInfo({
               axis='vertical'
               dashLength={ss(12)}
               dashGap={ss(12)}
+              dashThickness={ss(1.5)}
               dashColor='#DFE1DE'
               style={{ marginHorizontal: ls(15) }}
             />
@@ -248,6 +266,12 @@ export default function HealthInfo({
                 <ImageBox
                   edit={selectedConfig.disabled ? false : true}
                   images={collect.healthInfo.rightHandImages}
+                  previewImages={[
+                    ...collect.healthInfo.rightHandImages,
+                    ...collect.healthInfo.leftHandImages,
+                    ...collect.healthInfo.lingualImage,
+                    ...collect.healthInfo.otherImages,
+                  ]}
                   selectedCallback={function (
                     filename: string,
                     uri: string,

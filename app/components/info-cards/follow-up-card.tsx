@@ -14,7 +14,7 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
 import { FollowUpResult, FollowUpStatus } from '~/app/stores/flow/type';
 import {
@@ -40,7 +40,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
   const { style = {}, edit } = params;
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<AppStackList, 'FlowInfo'>>();
+    useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
 
   const { followUp } = analyze;
 
@@ -75,7 +75,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访编号：
                 </Text>
@@ -83,7 +83,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -95,7 +95,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访状态：
                 </Text>
@@ -103,7 +103,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -115,7 +115,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}
                   pr={ls(20)}>
                   计划随访日期：
@@ -124,7 +124,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -136,7 +136,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}
                   pr={ls(20)}>
                   实际随访日期：
@@ -145,7 +145,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   fontSize={sp(18)}
                   color='#333'
                   borderRadius={ss(4)}
-                  borderWidth={1}
+                  borderWidth={ss(1)}
                   borderColor={'#EBEBEB'}
                   w={ls(362)}
                   px={ls(20)}
@@ -164,6 +164,9 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Row>
                   {Object.keys(FollowUpResultText).map((key) => (
                     <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
                       hitSlop={ss(20)}
                       key={key}
                       onPress={() => {
@@ -196,11 +199,13 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#333'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访内容：
                 </Text>
                 <Input
+                  borderWidth={ss(1)}
+                  borderColor={'#D8D8D8'}
                   w={ls(362)}
                   h={ss(120)}
                   p={ss(8)}
@@ -209,7 +214,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   defaultValue={followupContent}
                   placeholderTextColor={'#999'}
                   color={'#333333'}
-                  fontSize={ss(16)}
+                  fontSize={sp(16)}
                   onChangeText={(text) => {
                     setFollowupContent(text);
                   }}
@@ -219,13 +224,16 @@ export default function FollowUpCard(params: FollowUpCardParams) {
             </Column>
             <Row mt={ss(100)} justifyContent={'flex-end'} pr={ss(30)}>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   // 取消随访
                   setShowCancelDialog(true);
                 }}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={'#F3AF62'}
                 bgColor={'rgba(243, 175, 98, 0.20)'}
                 width={ls(100)}
@@ -233,12 +241,17 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 flexDirection={'row'}
                 justifyContent={'center'}
                 alignItems={'center'}>
-                {cancelLoading && <Spinner mr={ls(5)} color='#F3AF62' />}
+                {cancelLoading && (
+                  <Spinner mr={ls(5)} size={sp(20)} color='#F3AF62' />
+                )}
                 <Text fontSize={sp(14)} color='#F3AF62'>
                   结束随访
                 </Text>
               </Pressable>
               <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
                 hitSlop={ss(20)}
                 onPress={() => {
                   // 随访
@@ -246,7 +259,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 }}
                 ml={ls(20)}
                 borderRadius={ss(4)}
-                borderWidth={1}
+                borderWidth={ss(1)}
                 borderColor={'#03CBB2'}
                 bgColor={'rgba(3, 203, 178, 0.20)'}
                 width={ls(100)}
@@ -254,47 +267,53 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 flexDirection={'row'}
                 justifyContent={'center'}
                 alignItems={'center'}>
-                {confirmLoading && <Spinner mr={ls(5)} color='#03CBB2' />}
+                {confirmLoading && (
+                  <Spinner mr={ls(5)} size={sp(20)} color='#03CBB2' />
+                )}
                 <Text fontSize={sp(14)} color='#03CBB2'>
                   完成随访
                 </Text>
               </Pressable>
-              <DialogModal
-                title='是否确认结束随访？'
-                isOpen={showCancelDialog}
-                onClose={function (): void {
-                  setShowCancelDialog(false);
-                }}
-                onConfirm={function (): void {
-                  setCancelLoading(true);
-                  requestPatchFollowUp({
-                    followUpStatus: FollowUpStatus.CANCEL,
-                  }).then(async (res) => {
-                    await requestGetFollowUps();
-                    setCancelLoading(false);
-                    navigation.goBack();
-                  });
-                }}
-              />
-              <DialogModal
-                title='是否确认完成随访？'
-                isOpen={showConfirmDialog}
-                onClose={function (): void {
-                  setShowConfirmDialog(false);
-                }}
-                onConfirm={function (): void {
-                  setConfirmLoading(true);
-                  requestPatchFollowUp({
-                    followUpStatus: FollowUpStatus.DONE,
-                    followUpResult: selectResult,
-                    followUpContent: followupContent,
-                  }).then(async (res) => {
-                    await requestGetFollowUps();
-                    setConfirmLoading(false);
-                    navigation.goBack();
-                  });
-                }}
-              />
+              {showCancelDialog && (
+                <DialogModal
+                  title='是否确认结束随访？'
+                  isOpen={showCancelDialog}
+                  onClose={function (): void {
+                    setShowCancelDialog(false);
+                  }}
+                  onConfirm={function (): void {
+                    setCancelLoading(true);
+                    requestPatchFollowUp({
+                      followUpStatus: FollowUpStatus.CANCEL,
+                    }).then(async (res) => {
+                      await requestGetFollowUps();
+                      setCancelLoading(false);
+                      navigation.goBack();
+                    });
+                  }}
+                />
+              )}
+              {showConfirmDialog && (
+                <DialogModal
+                  title='是否确认完成随访？'
+                  isOpen={showConfirmDialog}
+                  onClose={function (): void {
+                    setShowConfirmDialog(false);
+                  }}
+                  onConfirm={function (): void {
+                    setConfirmLoading(true);
+                    requestPatchFollowUp({
+                      followUpStatus: FollowUpStatus.DONE,
+                      followUpResult: selectResult,
+                      followUpContent: followupContent,
+                    }).then(async (res) => {
+                      await requestGetFollowUps();
+                      setConfirmLoading(false);
+                      navigation.goBack();
+                    });
+                  }}
+                />
+              )}
             </Row>
           </Column>
         ) : followUp.followUpStatus == FollowUpStatus.CANCEL ? (
@@ -340,7 +359,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访编号：
                 </Text>
@@ -352,7 +371,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访状态：
                 </Text>
@@ -364,7 +383,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 <Text
                   fontSize={sp(18)}
                   color='#999'
-                  w={ls(100)}
+                  w={ls(100, 140)}
                   textAlign={'right'}>
                   随访时间：
                 </Text>
@@ -381,7 +400,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   <Text
                     fontSize={sp(18)}
                     color='#999'
-                    w={ls(100)}
+                    w={ls(100, 140)}
                     textAlign={'right'}>
                     随访结果：
                   </Text>
@@ -395,7 +414,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   <Text
                     fontSize={sp(18)}
                     color='#999'
-                    w={ls(100)}
+                    w={ls(100, 140)}
                     textAlign={'right'}>
                     随访内容：
                   </Text>
@@ -409,7 +428,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   <Text
                     fontSize={sp(18)}
                     color='#999'
-                    w={ls(100)}
+                    w={ls(100, 140)}
                     textAlign={'right'}>
                     随访人：
                   </Text>

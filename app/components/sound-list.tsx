@@ -33,6 +33,9 @@ export default function SoundList({
       {audioFiles.map((audioFile, idx) => {
         return (
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             key={idx}
             mt={idx === 0 ? 0 : ss(10)}
@@ -42,7 +45,7 @@ export default function SoundList({
             <Row
               borderRadius={ss(4)}
               borderColor={'#A4D4D6'}
-              borderWidth={1}
+              borderWidth={ss(1)}
               alignItems={'center'}
               justifyContent={'space-between'}
               w={ls(253)}
@@ -61,13 +64,16 @@ export default function SoundList({
               </Row>
               {edit && (
                 <Pressable
+                  _pressed={{
+                    opacity: 0.6,
+                  }}
                   hitSlop={ss(20)}
                   onPress={() => {
                     removedCallback(idx);
                   }}>
                   <Icon
                     as={<AntDesign name={'delete'} />}
-                    size={ss(20)}
+                    size={sp(20)}
                     color='#99A9BF'
                   />
                 </Pressable>

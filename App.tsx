@@ -7,6 +7,7 @@ import useColorScheme from './app/hooks/use-color-scheme';
 import Navigation from './app/navigation/root-navigator';
 import { LogBox } from 'react-native';
 import KeyboardAvoider from '~/app/components/keyboard-avoid';
+import 'react-native-gesture-handler';
 
 LogBox.ignoreLogs([
   'Require cycle',
@@ -55,7 +56,7 @@ export default function App() {
         <NativeBaseProvider config={config} theme={theme}>
           <KeyboardAvoider>
             <Navigation colorScheme={colorScheme} />
-            <StatusBar />
+            <StatusBar hidden={true} />
           </KeyboardAvoider>
         </NativeBaseProvider>
       </SafeAreaProvider>

@@ -14,7 +14,12 @@ export default function ShopCenterBox({
   onPress: () => void;
 }) {
   return (
-    <Pressable hitSlop={ss(20)} onPress={onPress}>
+    <Pressable
+      _pressed={{
+        opacity: 0.6,
+      }}
+      hitSlop={ss(20)}
+      onPress={onPress}>
       <Row
         bgColor={'#fff'}
         minH={ss(128)}
@@ -32,7 +37,7 @@ export default function ShopCenterBox({
             {content}
           </Text>
         </Column>
-        <Image size={ss(80)} source={image} alt='' />
+        <Image size={sp(80)} source={image} alt='' />
       </Row>
     </Pressable>
   );

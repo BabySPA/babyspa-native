@@ -31,7 +31,7 @@ export default function SelectOperator({
         height: ss(48),
         backgroundColor: '#fff',
         borderRadius: ss(4),
-        borderWidth: 1,
+        borderWidth: ss(1),
         borderColor: '#D8D8D8',
       }}
       buttonTextStyle={{
@@ -43,7 +43,7 @@ export default function SelectOperator({
         return (
           <Icon
             as={<FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} />}
-            size={ss(18)}
+            size={sp(18)}
             color='#999'
           />
         );

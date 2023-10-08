@@ -7,12 +7,15 @@ interface M {
 
 const { width, height } = Dimensions.get('window');
 
+export const isPhone = height < 500;
+
 const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
 
 //Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineLong = 1194;
-const guidelineShort = 835;
+
+let guidelineLong = 1194;
+let guidelineShort = 835;
 
 const PR = PixelRatio.get();
 const FS = PixelRatio.getFontScale();
@@ -22,34 +25,35 @@ const S = Math.min(
   shortDimension / guidelineShort,
 );
 
-const setSpText = (size: number, minAndMax?: M) => {
+const setSpText = (size: number, phoneSize?: number) => {
   const num = Math.round(((size * S + 0.5) * PR) / FS);
   const r = num / PR;
 
-  if (minAndMax === undefined) return r;
-  const { min = r, max = r } = minAndMax;
+  let pr = 0;
+  if (phoneSize) {
+    const pnum = Math.round(((phoneSize * S + 0.5) * PR) / FS);
+    pr = pnum / PR;
+  }
 
-  return r <= min ? min : r >= max ? max : r;
+  return (isPhone ? pr || r * 1.3 + 1 : r) + 0.01;
 };
 
-export const longScale = (size: number, minAndMax?: M) => {
+export const longScale = (size: number, phoneSize?: number) => {
   const r = (shortDimension / guidelineShort) * size;
-
-  if (minAndMax === undefined) {
-    return r;
+  let pr = 0;
+  if (phoneSize) {
+    pr = (shortDimension / guidelineShort) * phoneSize;
   }
-  const { min = r, max = r } = minAndMax;
-  return r <= min ? min : r >= max ? max : r;
+  return (isPhone ? pr || r * 1.25 : r) + 0.01;
 };
 
-export const shortScale = (size: number, minAndMax?: M) => {
+export const shortScale = (size: number, phoneSize?: number) => {
   const r = (shortDimension / guidelineShort) * size;
-
-  if (minAndMax === undefined) {
-    return r;
+  let pr = 0;
+  if (phoneSize) {
+    pr = (shortDimension / guidelineShort) * phoneSize;
   }
-  const { min = r, max = r } = minAndMax;
-  return r <= min ? min : r >= max ? max : r;
+  return (isPhone ? pr || r * 1.25 : r) + 0.01;
 };
 
 export const sp = setSpText;

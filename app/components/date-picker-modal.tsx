@@ -3,6 +3,7 @@ import { Modal, Row, Flex, Pressable, Box, useToast } from 'native-base';
 import DatePicker from '~/app/components/date-picker';
 import { ss, ls, sp } from '~/app/utils/style';
 import { toastAlert } from '../utils/toast';
+import { useEffect, useState } from 'react';
 
 interface DatePickerModalParams {
   isOpen: boolean;
@@ -19,7 +20,48 @@ export default function DatePickerModal({
   selected,
 }: DatePickerModalParams) {
   const toast = useToast();
-  let currentSelectBirthday = current;
+
+  const [currentSelect, setCurrentSelect] = useState<string | undefined>(
+    current,
+  );
+
+  const [picker, setPicker] = useState<any>();
+  useEffect(() => {
+    if (isOpen)
+      setPicker(() => (
+        <DatePicker
+          options={{
+            textHeaderFontSize: sp(16),
+            mainColor: '#00B49E',
+          }}
+          onSelectedChange={(date) => {
+            setCurrentSelect(date);
+          }}
+          current={current}
+          selected={selected}
+          mode='calendar'
+        />
+      ));
+  }, [current, selected, isOpen]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPicker(() => (
+        <DatePicker
+          options={{
+            textHeaderFontSize: sp(16),
+            mainColor: '#00B49E',
+          }}
+          onSelectedChange={(date) => {
+            setCurrentSelect(date);
+          }}
+          current={current}
+          selected={selected}
+          mode='calendar'
+        />
+      ));
+    }, 500);
+  }, []);
   return (
     <Modal
       isOpen={isOpen}
@@ -27,27 +69,19 @@ export default function DatePickerModal({
         onClose();
       }}>
       <Flex w={'35%'} backgroundColor='white' borderRadius={5} p={ss(8)}>
-        <DatePicker
-          options={{
-            textHeaderFontSize: sp(16),
-            mainColor: '#00B49E',
-          }}
-          onSelectedChange={(date) => {
-            currentSelectBirthday = date;
-          }}
-          current={current}
-          selected={selected}
-          mode='calendar'
-        />
+        {picker}
         <Row justifyContent={'flex-end'} mt={ss(12)}>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
-              if (dayjs(currentSelectBirthday).isAfter(dayjs())) {
+              if (dayjs(currentSelect).isAfter(dayjs())) {
                 toastAlert(toast, 'error', '不能大于当前日期');
                 return;
               }
-              onSelectedChange(currentSelectBirthday ?? '');
+              onSelectedChange(currentSelect ?? '');
               onClose();
             }}>
             <Box
@@ -60,6 +94,9 @@ export default function DatePickerModal({
             </Box>
           </Pressable>
           <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
             hitSlop={ss(20)}
             onPress={() => {
               onClose();

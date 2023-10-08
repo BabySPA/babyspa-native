@@ -6,7 +6,7 @@ import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
 import { AnalyzeStatus, FollowUpStatus } from '~/app/stores/flow/type';
 
@@ -22,7 +22,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
   const { style = {}, edit } = params;
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<AppStackList, 'FlowInfo'>>();
+    useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
 
   return (
     <Column
@@ -37,6 +37,9 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
           edit &&
           analyze.editable !== false && (
             <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
               hitSlop={ss(20)}
               onPress={() => {
                 navigation.replace('Flow', {
@@ -74,7 +77,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     bgColor={'#F2F9F8'}
                     borderRadius={1}
                     borderStyle={'dashed'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#7AB6AF'}
                     p={ss(20)}>
                     <Row
@@ -94,7 +97,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                       <Text fontSize={sp(18)} color='#999' maxW={'60%'}>
                         穴位：
                         <Text fontSize={sp(16)} color='#333'>
-                          {item.acupoint || '未设置'}
+                          {item.acupoint || '无'}
                         </Text>
                       </Text>
                     </Row>
@@ -112,7 +115,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     bgColor={'#F2F9F8'}
                     borderRadius={1}
                     borderStyle={'dashed'}
-                    borderWidth={1}
+                    borderWidth={ss(1)}
                     borderColor={'#7AB6AF'}
                     p={ss(20)}>
                     <Row
@@ -132,7 +135,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                       mt={ss(20)}>
                       备注：
                       <Text fontSize={sp(16)} color='#333'>
-                        {item.remark || '未设置'}
+                        {item.remark || '无'}
                       </Text>
                     </Text>
                   </Column>
@@ -145,12 +148,12 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               注意事项：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={ls(400)}>
-              {analyze.remark || '未设置'}
+              {analyze.remark || '无'}
             </Text>
           </Row>
 
@@ -158,7 +161,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               分析师：
             </Text>
@@ -171,7 +174,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               分析时间：
             </Text>
@@ -184,13 +187,13 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               随访时间：
             </Text>
             <Text fontSize={sp(18)} color='#333'>
               {analyze.followUp.followUpStatus === FollowUpStatus.NOT_SET
-                ? '未设置随访'
+                ? '无'
                 : dayjs(analyze.followUp?.followUpTime).format(
                     'YYYY-MM-DD HH:mm:ss',
                   )}
@@ -201,14 +204,14 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text
               fontSize={sp(18)}
               color='#999'
-              w={ls(100)}
+              w={ls(100, 140)}
               textAlign={'right'}>
               复推时间：
             </Text>
             <Text fontSize={sp(18)} color='#333'>
               {analyze.next.hasNext
                 ? dayjs(analyze.next?.nextTime).format('YYYY-MM-DD HH:mm:ss')
-                : '未设置复推'}
+                : '无'}
             </Text>
           </Row>
         </Column>

@@ -19,6 +19,9 @@ export default function PreviewImage({
   return (
     <>
       <Pressable
+        _pressed={{
+          opacity: 0.6,
+        }}
         hitSlop={ss(20)}
         onPress={() => {
           setShowImageModal(true);
@@ -34,17 +37,19 @@ export default function PreviewImage({
           transition={1000}
         />
       </Pressable>
-      <Modal isOpen={showImageModal} onClose={() => setShowImageModal(false)}>
-        <ImageViewer
-          index={current}
-          imageUrls={images}
-          saveToLocalByLongPress={false}
-          style={{
-            width: ss(800),
-            height: ss(600),
-          }}
-        />
-      </Modal>
+      {showImageModal && (
+        <Modal isOpen={showImageModal} onClose={() => setShowImageModal(false)}>
+          <ImageViewer
+            index={current}
+            imageUrls={images}
+            saveToLocalByLongPress={false}
+            style={{
+              width: ss(800),
+              height: ss(600),
+            }}
+          />
+        </Modal>
+      )}
     </>
   );
 }

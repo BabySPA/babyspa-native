@@ -6,6 +6,7 @@ import { AuthState, RW, RoleAuthority } from './type';
 import useLayoutStore from '../layout';
 import useFlowStore from '../flow';
 import useManagerStore from '../manager';
+import useMessageStore from '../message';
 
 const initialState = {
   accessToken: null,
@@ -22,6 +23,7 @@ const useAuthStore = create(
       },
       selectLoginShop: ({ accessToken, user, currentShopWithRole }) => {
         useFlowStore.getState().requestGetInitializeData();
+        useMessageStore.getState().requestMessages();
         set({
           accessToken,
           user,
@@ -48,7 +50,7 @@ const useAuthStore = create(
                   user: { ...rest },
                   currentShopWithRole: user.shopsWithRole[0],
                 });
-
+                useLayoutStore.getState().clearCache();
                 useFlowStore.getState().requestGetInitializeData();
 
                 resolve({
@@ -57,6 +59,7 @@ const useAuthStore = create(
                   shouldChooseShops: false,
                 });
               } else {
+                useLayoutStore.getState().clearCache();
                 // 选择店铺
                 resolve({
                   accessToken: accessToken,
@@ -76,6 +79,9 @@ const useAuthStore = create(
         useLayoutStore.getState().clearCache();
         useFlowStore.getState().clearCache();
         useManagerStore.getState().clearCache();
+        useMessageStore.getState().clearCache();
+
+        useMessageStore.getState().requestMessages();
         await useFlowStore.getState().requestGetInitializeData();
       },
       logout: async () => {
@@ -100,9 +106,9 @@ const useAuthStore = create(
       },
       clearAllStoreCache: () => {
         useAuthStore.getState().clearCache();
-        useLayoutStore.getState().clearCache();
         useFlowStore.getState().clearCache();
         useManagerStore.getState().clearCache();
+        useMessageStore.getState().clearCache();
       },
     }),
     {
