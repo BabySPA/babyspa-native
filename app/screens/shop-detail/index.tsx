@@ -12,7 +12,7 @@ export default function ShopDetail({
   navigation,
   route: { params },
 }: AppStackScreenProps<'ShopDetail'>) {
-  const { currentShop } = useManagerStore();
+  const currentShop = useManagerStore((state) => state.currentShop);
 
   const [edit, setEdit] = useState(params.type === 'edit' || !currentShop._id);
 

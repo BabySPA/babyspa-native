@@ -16,24 +16,30 @@ export default function HealthInfo({
 }: {
   selectedConfig: FlowOperatorConfigItem;
 }) {
-  const {
-    addLingualImage,
-    updateLingualImage,
-    addLeftHandImage,
-    updateLeftHandImage,
-    addRightHandImage,
-    updateRightHandImage,
-    addOtherImage,
-    updateOtherImage,
-    updateCollection,
-    removeOtherImage,
-    removeLingualImage,
-    removeLeftHandImage,
-    removeRightHandImage,
-    currentFlow: { collect },
-  } = useFlowStore();
+  const addLingualImage = useFlowStore((state) => state.addLingualImage);
+  const updateLingualImage = useFlowStore((state) => state.updateLingualImage);
+  const addLeftHandImage = useFlowStore((state) => state.addLeftHandImage);
+  const updateLeftHandImage = useFlowStore(
+    (state) => state.updateLeftHandImage,
+  );
+  const addRightHandImage = useFlowStore((state) => state.addRightHandImage);
+  const updateRightHandImage = useFlowStore(
+    (state) => state.updateRightHandImage,
+  );
+  const addOtherImage = useFlowStore((state) => state.addOtherImage);
+  const updateOtherImage = useFlowStore((state) => state.updateOtherImage);
+  const updateCollection = useFlowStore((state) => state.updateCollection);
+  const removeOtherImage = useFlowStore((state) => state.removeOtherImage);
+  const removeLingualImage = useFlowStore((state) => state.removeLingualImage);
+  const removeLeftHandImage = useFlowStore(
+    (state) => state.removeLeftHandImage,
+  );
+  const removeRightHandImage = useFlowStore(
+    (state) => state.removeRightHandImage,
+  );
+  const collect = useFlowStore((state) => state.currentFlow.collect);
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
-  const { getTemplateGroups } = useManagerStore();
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
   const toast = useToast();
 

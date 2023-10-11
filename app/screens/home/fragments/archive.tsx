@@ -22,23 +22,18 @@ import { debounce } from 'lodash';
 
 export default function Archive() {
   const navigation = useNavigation();
-  const {
-    archiveCustomers: { customers },
-    updateCurrentArchiveCustomer,
-  } = useFlowStore();
 
-  const [renderWaiting, setRenderWaiting] = useState(false);
+  const customers = useFlowStore((state) => state.archiveCustomers.customers);
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
 
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderWaiting(true);
-    }, 50);
-  }, []);
+  const [renderWaiting, setRenderWaiting] = useState(true);
 
   return (
     <Flex flex={1}>
       <Filter />
-      <Box mt={ss(10)} flex={1}>
+      <Box margin={ss(10)} flex={1}>
         {customers.length == 0 ? (
           <EmptyBox />
         ) : (
@@ -86,12 +81,17 @@ export default function Archive() {
 
 function Filter() {
   const navigation = useNavigation();
-  const {
-    archiveCustomers,
-    updateArchiveCustomersFilter,
-    updateCurrentArchiveCustomer,
-    requestArchiveCustomers,
-  } = useFlowStore();
+
+  const archiveCustomers = useFlowStore((state) => state.archiveCustomers);
+  const updateArchiveCustomersFilter = useFlowStore(
+    (state) => state.updateArchiveCustomersFilter,
+  );
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
 
   const [defaultSelectShop, selectShops] = useSelectShops(true);
 

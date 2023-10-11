@@ -24,7 +24,8 @@ import SelectShop, { useSelectShops } from '~/app/components/select-shop';
 export default function ManagerUser({
   navigation,
 }: AppStackScreenProps<'ManagerUser'>) {
-  const { users, setCurrentUser } = useManagerStore();
+  const users = useManagerStore((state) => state.users);
+  const setCurrentUser = useManagerStore((state) => state.setCurrentUser);
 
   const [filterUsers, setFilterUsers] = useState<User[]>([]);
   const [nameFilter, setNameFilter] = useState('');
@@ -227,8 +228,11 @@ function Filter({
   onSearchChangeText: (text: string) => void;
 }) {
   const navigation = useNavigation();
-  const { setCurrentUser, requestGetUsers, userFilter, setUserFilter } =
-    useManagerStore();
+
+  const setCurrentUser = useManagerStore((state) => state.setCurrentUser);
+  const requestGetUsers = useManagerStore((state) => state.requestGetUsers);
+  const userFilter = useManagerStore((state) => state.userFilter);
+  const setUserFilter = useManagerStore((state) => state.setUserFilter);
 
   const [defaultShop, selectShops] = useSelectShops(false);
 

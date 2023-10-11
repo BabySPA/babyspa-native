@@ -120,8 +120,10 @@ export function TemplateModal({
 }: TemplateModalParams) {
   const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
   const [templateText, setTemplateText] = useState('');
-  const { requestGetTemplates, templates } = useManagerStore();
-
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
+  const templates = useManagerStore((state) => state.templates);
   useEffect(() => {
     setTemplateText(defaultText);
   }, [defaultText]);
@@ -1209,7 +1211,10 @@ export function TemplateExtraModal({
     useState(0);
   const [selectTemplateContentItemIdx, setSelectTemplateContentItemIdx] =
     useState(0);
-  const { requestGetTemplates, templates } = useManagerStore();
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
+  const templates = useManagerStore((state) => state.templates);
 
   useEffect(() => {
     if (isOpen && templates.length === 0) {

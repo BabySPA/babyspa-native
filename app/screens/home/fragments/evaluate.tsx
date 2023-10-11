@@ -28,11 +28,12 @@ import useGlobalLoading from '~/app/stores/loading';
 
 export default function Evaluate() {
   const navigation = useNavigation();
-  const {
-    updateCurrentFlow,
-    requestGetEvaluateFlows,
-    evaluate: { flows },
-  } = useFlowStore();
+
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const requestGetEvaluateFlows = useFlowStore(
+    (state) => state.requestGetEvaluateFlows,
+  );
+  const flows = useFlowStore((state) => state.evaluate.flows);
 
   useEffect(() => {
     requestGetEvaluateFlows();
@@ -102,8 +103,14 @@ function Filter() {
   }>({
     isOpen: false,
   });
-  const { evaluate, updateEvaluateFilter, requestGetEvaluateFlows } =
-    useFlowStore();
+
+  const evaluate = useFlowStore((state) => state.evaluate);
+  const updateEvaluateFilter = useFlowStore(
+    (state) => state.updateEvaluateFilter,
+  );
+  const requestGetEvaluateFlows = useFlowStore(
+    (state) => state.requestGetEvaluateFlows,
+  );
 
   const [count, setCount] = useState({
     done: 0,

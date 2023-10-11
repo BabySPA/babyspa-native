@@ -20,16 +20,21 @@ export default function RegisterCustomerScreen({
   const { type } = params;
   const isRegister = type == CustomerScreenType.register;
 
-  const {
-    currentFlow,
-    requestGetOperators,
-    requestPostRegisterInfo,
-    requestGetInitializeData,
-    updateCurrentFlow,
-  } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const requestGetOperators = useFlowStore(
+    (state) => state.requestGetOperators,
+  );
+  const requestPostRegisterInfo = useFlowStore(
+    (state) => state.requestPostRegisterInfo,
+  );
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
-  const { requestGetTemplates } = useManagerStore();
-
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 

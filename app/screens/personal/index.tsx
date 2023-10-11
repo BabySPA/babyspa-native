@@ -25,11 +25,18 @@ import useManagerStore from '~/app/stores/manager';
 export default function Personal({
   navigation,
 }: AppStackScreenProps<'Personal'>) {
-  const { user, currentShopWithRole, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const currentShopWithRole = useAuthStore(
+    (state) => state.currentShopWithRole,
+  );
+
+  const logout = useAuthStore((state) => state.logout);
   const [showPassword, setShowPassword] = useState(false);
   const [isResetPassDialogOpen, setIsResetPassDialogOpen] = useState(false);
 
-  const { requestPatchUserPassword } = useManagerStore();
+  const requestPatchUserPassword = useManagerStore(
+    (state) => state.requestPatchUserPassword,
+  );
   const toast = useToast();
   const [showDialog, setShowDialog] = useState(false);
   return (

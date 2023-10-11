@@ -44,20 +44,35 @@ export default function FlowScreen({
 }: AppStackScreenProps<'Flow'>) {
   const { type } = params;
   const toast = useToast();
-  const {
-    requestPatchFlowToCollection,
-    getFlowOperatorConfigByUser,
-    requestGetInitializeData,
-    requestPatchFlowToAnalyze,
-    currentFlow: { collect, analyze, customer },
-    updateCurrentArchiveCustomer,
-    requestPatchCollectionStatus,
-    requestPatchAnalyzeStatus,
-    requestStartAnalyze,
-  } = useFlowStore();
 
-  const { user } = useAuthStore();
+  const requestPatchFlowToAnalyze = useFlowStore(
+    (state) => state.requestPatchFlowToAnalyze,
+  );
+  const requestPatchFlowToCollection = useFlowStore(
+    (state) => state.requestPatchFlowToCollection,
+  );
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
+  const requestPatchCollectionStatus = useFlowStore(
+    (state) => state.requestPatchCollectionStatus,
+  );
+  const requestPatchAnalyzeStatus = useFlowStore(
+    (state) => state.requestPatchAnalyzeStatus,
+  );
+  const requestStartAnalyze = useFlowStore(
+    (state) => state.requestStartAnalyze,
+  );
+  const getFlowOperatorConfigByUser = useFlowStore(
+    (state) => state.getFlowOperatorConfigByUser,
+  );
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+  const { collect, analyze, customer } = currentFlow;
 
+  const user = useAuthStore((state) => state.user);
   useEffect(() => {
     if (
       analyze.status !== AnalyzeStatus.DONE &&
@@ -84,7 +99,9 @@ export default function FlowScreen({
     }
   }, []);
 
-  const { requestGetTemplates } = useManagerStore();
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 

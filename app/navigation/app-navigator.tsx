@@ -27,11 +27,76 @@ import useGlobalLoading from '../stores/loading';
 import Picker from 'react-native-patchpicker';
 import FollowUp from '../screens/follow-up';
 import AnalyzeInfo from '../screens/analyze-info';
+import { useEffect, useRef } from 'react';
+import useAuthStore from '../stores/auth';
 
 const Stack = createStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
   const { loading, loadingText, spinner, closeLoading } = useGlobalLoading();
+  const userId = useAuthStore((state) => state.user?.id);
+  const roleKey = useAuthStore(
+    (state) => state.currentShopWithRole?.role.roleKey,
+  );
+  const shopId = useAuthStore((state) => state.currentShopWithRole?.shop._id);
+  const socket = useRef(new WebSocket('ws://127.0.0.1:17000?a=1')).current;
+
+  const closeSocket = () => {
+    // 发送消息登录socket
+    const message = {
+      event: 'message', // 事件名称
+      data: JSON.stringify({
+        type: 'logout',
+        data: {
+          shopId,
+          userId,
+          roleKey,
+        },
+      }), // 消息内容
+    };
+    socket.send(JSON.stringify(message));
+    socket.close();
+  };
+
+  const loginSocket = () => {
+    // 发送消息登录socket
+    const message = {
+      event: 'message', // 事件名称
+      data: JSON.stringify({
+        type: 'login',
+        data: {
+          shopId,
+          userId,
+          roleKey,
+        },
+      }), // 消息内容
+    };
+
+    socket.send(JSON.stringify(message));
+  };
+
+  useEffect(() => {
+    // @ts-ignore
+    socket.onopen = (e) => {
+      loginSocket();
+    };
+    socket.onmessage = (e) => {
+      // 接收到服务器发送的消息
+      console.log('接收到消息:', e);
+    };
+
+    socket.onerror = (e) => {
+      console.error('WebSocket错误:', e);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket连接已关闭');
+    };
+
+    return () => {
+      closeSocket();
+    };
+  });
   return (
     <Box flex={1} bgColor='white'>
       <Modal

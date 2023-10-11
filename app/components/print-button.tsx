@@ -6,7 +6,7 @@ import { getAge } from '../utils';
 import dayjs from 'dayjs';
 
 export function PrintButton() {
-  const { currentFlow } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
   const age = getAge(currentFlow.customer.birthday);
 
   let massageHtml = '';

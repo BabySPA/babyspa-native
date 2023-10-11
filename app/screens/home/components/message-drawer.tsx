@@ -26,9 +26,14 @@ import { FlowStatus } from '~/app/types';
 import { ls, sp, ss } from '~/app/utils/style';
 
 export default function MessageDrawer() {
-  const { messages, requestMessages, unReadCount, readMessage } =
-    useMessageStore();
-  const { updateCurrentFlow, requestGetFlowById } = useFlowStore();
+  const messages = useMessageStore((state) => state.messages);
+  const requestMessages = useMessageStore((state) => state.requestMessages);
+  const unReadCount = useMessageStore((state) => state.unReadCount);
+  const readMessage = useMessageStore((state) => state.readMessage);
+
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const requestGetFlowById = useFlowStore((state) => state.requestGetFlowById);
+
   const navigation = useNavigation();
 
   // 开启消息轮询

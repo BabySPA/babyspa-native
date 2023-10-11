@@ -26,15 +26,13 @@ export default function GuidanceInfo({
 }: {
   selectedConfig: FlowOperatorConfigItem;
 }) {
-  const {
-    currentFlow: { collect },
-    updateCollection,
-  } = useFlowStore();
+  const collect = useFlowStore((state) => state.currentFlow.collect);
+  const updateCollection = useFlowStore((state) => state.updateCollection);
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
   const [selectTemplateLevel2Group, setSelectTemplateLevel2Group] = useState(0);
 
-  const { getTemplateGroups } = useManagerStore();
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
   return (
     <Row flex={1}>

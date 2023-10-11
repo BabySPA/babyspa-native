@@ -30,13 +30,11 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentShop,
-    requestPostShop,
-    requestGetShops,
-    requestPatchShop,
-    setCurrentShop,
-  } = useManagerStore();
+  const currentShop = useManagerStore((state) => state.currentShop);
+  const requestPostShop = useManagerStore((state) => state.requestPostShop);
+  const requestGetShops = useManagerStore((state) => state.requestGetShops);
+  const requestPatchShop = useManagerStore((state) => state.requestPatchShop);
+  const setCurrentShop = useManagerStore((state) => state.setCurrentShop);
 
   const [tempShop, setTempShop] = useState(currentShop);
 

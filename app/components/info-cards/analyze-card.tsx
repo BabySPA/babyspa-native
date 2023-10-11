@@ -16,9 +16,11 @@ interface AnalyzeCardParams {
 }
 
 export default function AnalyzeCard(params: AnalyzeCardParams) {
-  const {
-    currentFlow: { analyze, analyzeOperator },
-  } = useFlowStore();
+  const analyze = useFlowStore((state) => state.currentFlow.analyze);
+  const analyzeOperator = useFlowStore(
+    (state) => state.currentFlow.analyzeOperator,
+  );
+
   const { style = {}, edit } = params;
 
   const navigation =

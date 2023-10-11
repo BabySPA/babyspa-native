@@ -17,8 +17,10 @@ export default function RecordBox({ edit }: { edit: boolean }) {
   const toast = useToast();
   const [showRecordBox, setShowRecordBox] = useState(false);
   const [recorder, setRecorder] = useState<Audio.Recording>();
-  const { addAudioFile, updateAudioFile, removeAudioFile, currentFlow } =
-    useFlowStore();
+  const addAudioFile = useFlowStore((state) => state.addAudioFile);
+  const updateAudioFile = useFlowStore((state) => state.updateAudioFile);
+  const removeAudioFile = useFlowStore((state) => state.removeAudioFile);
+  const currentFlow = useFlowStore((state) => state.currentFlow);
 
   const audioFiles = _.get(currentFlow, 'collect.healthInfo.audioFiles', []);
   const { getOssConfig } = useOssStore();
@@ -97,7 +99,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
           } finally {
             setIsTouchNow(false);
           }
-        }, 500); // 500毫秒为长按的时间阈值，可以根据需要调整
+        }, 50); // 500毫秒为长按的时间阈值，可以根据需要调整
       }
     },
     onPanResponderMove: async (_, gestureState) => {

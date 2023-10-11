@@ -35,7 +35,7 @@ function DrawerLayout() {
 export default DrawerLayout;
 
 const MessageNotify = memo(() => {
-  const { unReadCount } = useMessageStore();
+  const unReadCount = useMessageStore((state) => state.unReadCount);
   const navigation = useNavigation();
   return (
     <Pressable
@@ -75,8 +75,14 @@ const Layout = memo(() => {
   } = useLayoutConfigWithRole();
 
   const navigation = useNavigation();
-  const { user, currentShopWithRole, changeCurrentShopWithRole } =
-    useAuthStore();
+
+  const user = useAuthStore((state) => state.user);
+  const currentShopWithRole = useAuthStore(
+    (state) => state.currentShopWithRole,
+  );
+  const changeCurrentShopWithRole = useAuthStore(
+    (state) => state.changeCurrentShopWithRole,
+  );
 
   const currentSelectedModule = getLayoutConfig()[currentSelected];
 
@@ -130,9 +136,6 @@ const Layout = memo(() => {
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
-                _pressed={{
-                  opacity: idx != currentSelected ? 0.6 : 1,
-                }}
                 hitSlop={ss(20)}
                 key={idx}
                 onPress={() => {
@@ -249,10 +252,6 @@ const Layout = memo(() => {
             currentSelectedModule?.features.map((item, idx) => {
               return (
                 <Pressable
-                  _pressed={{
-                    opacity:
-                      idx != currentSelectedModule.featureSelected ? 0.6 : 1,
-                  }}
                   hitSlop={ss(20)}
                   key={idx}
                   paddingRight={'8%'}

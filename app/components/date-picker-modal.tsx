@@ -60,7 +60,7 @@ export default function DatePickerModal({
           mode='calendar'
         />
       ));
-    }, 500);
+    }, 50);
   }, []);
   return (
     <Modal

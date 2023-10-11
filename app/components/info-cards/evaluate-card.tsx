@@ -28,11 +28,13 @@ interface EvaluateCardParams {
 }
 
 export default function EvaluateCard(params: EvaluateCardParams) {
-  let {
-    currentFlow: { evaluate },
-    requestPutFlowToEvaluate,
-    requestGetEvaluateFlows,
-  } = useFlowStore();
+  const evaluate = useFlowStore((state) => state.currentFlow.evaluate);
+  const requestPutFlowToEvaluate = useFlowStore(
+    (state) => state.requestPutFlowToEvaluate,
+  );
+  const requestGetEvaluateFlows = useFlowStore(
+    (state) => state.requestGetEvaluateFlows,
+  );
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);

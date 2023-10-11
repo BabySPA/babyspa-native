@@ -12,7 +12,8 @@ interface RegisterCardParams {
 }
 
 export default function RegisterCard(params: RegisterCardParams) {
-  const { currentFlow } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+
   const age = getAge(currentFlow.customer.birthday);
   const { style = {} } = params;
 

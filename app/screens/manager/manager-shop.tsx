@@ -23,8 +23,9 @@ import { debounce } from 'lodash';
 export default function ManagerShop({
   navigation,
 }: AppStackScreenProps<'ManagerShop'>) {
-  const { shops, requestGetShops, setCurrentShop } = useManagerStore();
-
+  const shops = useManagerStore((state) => state.shops);
+  const setCurrentShop = useManagerStore((state) => state.setCurrentShop);
+  const requestGetShops = useManagerStore((state) => state.requestGetShops);
   useEffect(() => {
     requestGetShops();
   }, []);
@@ -212,7 +213,8 @@ export default function ManagerShop({
 
 function Filter() {
   const navigation = useNavigation();
-  const { setCurrentShop, requestGetShops } = useManagerStore();
+  const setCurrentShop = useManagerStore((state) => state.setCurrentShop);
+  const requestGetShops = useManagerStore((state) => state.requestGetShops);
   return (
     <Row
       bgColor='white'

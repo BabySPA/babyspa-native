@@ -29,11 +29,11 @@ import useGlobalLoading from '~/app/stores/loading';
 
 export default function Collection() {
   const navigation = useNavigation();
-  const {
-    requestGetCollectionFlows,
-    updateCurrentFlow,
-    collection: { flows },
-  } = useFlowStore();
+  const requestGetCollectionFlows = useFlowStore(
+    (state) => state.requestGetCollectionFlows,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const flows = useFlowStore((state) => state.collection.flows);
 
   useEffect(() => {
     requestGetCollectionFlows();
@@ -105,12 +105,15 @@ function Filter() {
   }>({
     isOpen: false,
   });
-  const {
-    collection,
-    updateCollectionFilter,
-    requestGetCollectionFlows,
-    updateCurrentFlow,
-  } = useFlowStore();
+
+  const collection = useFlowStore((state) => state.collection);
+  const updateCollectionFilter = useFlowStore(
+    (state) => state.updateCollectionFilter,
+  );
+  const requestGetCollectionFlows = useFlowStore(
+    (state) => state.requestGetCollectionFlows,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const [count, setCount] = useState({
     done: 0,

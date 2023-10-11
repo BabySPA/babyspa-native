@@ -61,7 +61,7 @@ export default function ImageBox({
   const toast = useToast();
   const navigation = useNavigation();
 
-  const { currentFlow, addLingualImage, updateLingualImage } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
   const { getOssConfig } = useOssStore();
 
   const openCamera = () => {

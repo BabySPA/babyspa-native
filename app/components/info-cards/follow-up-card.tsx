@@ -32,11 +32,14 @@ interface FollowUpCardParams {
 }
 
 export default function FollowUpCard(params: FollowUpCardParams) {
-  const {
-    currentFlow: { analyze },
-    requestPatchFollowUp,
-    requestGetFollowUps,
-  } = useFlowStore();
+  const analyze = useFlowStore((state) => state.currentFlow.analyze);
+  const requestPatchFollowUp = useFlowStore(
+    (state) => state.requestPatchFollowUp,
+  );
+  const requestGetFollowUps = useFlowStore(
+    (state) => state.requestGetFollowUps,
+  );
+
   const { style = {}, edit } = params;
 
   const navigation =

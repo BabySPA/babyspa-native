@@ -35,7 +35,7 @@ export default function FlowCustomerItem({
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
   const navigation = useNavigation();
-  const { updateCurrentFlow } = useFlowStore();
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const flowStatus = getFlowStatus(flow);
 

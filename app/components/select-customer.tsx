@@ -106,8 +106,12 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
 }
 
 export default function SelectCustomer(params: SelectCustomerParams) {
-  const { requestAllCustomers, allCustomers, updateCurrentFlow, currentFlow } =
-    useFlowStore();
+  const requestAllCustomers = useFlowStore(
+    (state) => state.requestAllCustomers,
+  );
+  const allCustomers = useFlowStore((state) => state.allCustomers);
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const currentFlow = useFlowStore((state) => state.currentFlow);
 
   useEffect(() => {
     requestAllCustomers('');

@@ -49,7 +49,8 @@ type StatisticAnalyzeOperator = {
   };
 }[];
 const CenterStatisticBox = () => {
-  const { statisticShops } = useFlowStore();
+  const statisticShops = useFlowStore((state) => state.statisticShops);
+
   const svgRef = useRef<any>(null);
 
   const [counts, setCounts] = useState({
@@ -260,7 +261,9 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
     isOpen: false,
   });
 
-  const { requestGetStatisticFlowWithShop } = useFlowStore();
+  const requestGetStatisticFlowWithShop = useFlowStore(
+    (state) => state.requestGetStatisticFlowWithShop,
+  );
 
   const [defaultSelectShop, selectShops] = useSelectShops(false);
   const [selectShop, setSelectShop] = useState<Shop>();

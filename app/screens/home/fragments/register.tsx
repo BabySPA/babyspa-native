@@ -29,11 +29,11 @@ import useGlobalLoading from '~/app/stores/loading';
 export default function Register() {
   const navigation = useNavigation();
 
-  const {
-    requestGetRegisterFlows,
-    updateCurrentFlow,
-    register: { flows },
-  } = useFlowStore();
+  const requestGetRegisterFlows = useFlowStore(
+    (state) => state.requestGetRegisterFlows,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const flows = useFlowStore((state) => state.register.flows);
 
   useEffect(() => {
     requestGetRegisterFlows();
@@ -105,12 +105,15 @@ function Filter() {
   }>({
     isOpen: false,
   });
-  const {
-    register,
-    updateRegisterFilter,
-    requestGetRegisterFlows,
-    updateCurrentFlow,
-  } = useFlowStore();
+
+  const register = useFlowStore((state) => state.register);
+  const updateRegisterFilter = useFlowStore(
+    (state) => state.updateRegisterFilter,
+  );
+  const requestGetRegisterFlows = useFlowStore(
+    (state) => state.requestGetRegisterFlows,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const [registerCount, setRegisterCount] = useState(0);
 

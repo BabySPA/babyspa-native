@@ -27,13 +27,14 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const {
-    currentUser,
-    requestPatchUserPassword,
-    requestGetUsers,
-    requestDeleteUser,
-    updateCurrentUser,
-  } = useManagerStore();
+  const currentUser = useManagerStore((state) => state.currentUser);
+  const requestPatchUserPassword = useManagerStore(
+    (state) => state.requestPatchUserPassword,
+  );
+  const requestGetUsers = useManagerStore((state) => state.requestGetUsers);
+  const requestDeleteUser = useManagerStore((state) => state.requestDeleteUser);
+  const updateCurrentUser = useManagerStore((state) => state.updateCurrentUser);
+
   const [isResetPassDialogOpen, setIsResetPassDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);

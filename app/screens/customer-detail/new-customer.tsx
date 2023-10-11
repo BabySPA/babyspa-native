@@ -13,7 +13,12 @@ import EditCustomerBox from './components/edit-customer-box';
 export default function AddNewCustomer({
   navigation,
 }: AppStackScreenProps<'AddNewCustomer'>) {
-  const { requestGetOperators, currentArchiveCustomer } = useFlowStore();
+  const requestGetOperators = useFlowStore(
+    (state) => state.requestGetOperators,
+  );
+  const currentArchiveCustomer = useFlowStore(
+    (state) => state.currentArchiveCustomer,
+  );
 
   useEffect(() => {
     requestGetOperators();

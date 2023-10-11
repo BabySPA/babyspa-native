@@ -41,14 +41,18 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentFlow,
-    updateCurrentFlow,
-    operators,
-    requestPostRegisterInfo,
-    requestPatchCustomerInfo,
-    requestGetInitializeData,
-  } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const operators = useFlowStore((state) => state.operators);
+  const requestPostRegisterInfo = useFlowStore(
+    (state) => state.requestPostRegisterInfo,
+  );
+  const requestPatchCustomerInfo = useFlowStore(
+    (state) => state.requestPatchCustomerInfo,
+  );
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
 
   const [tempFlow, setTempFlow] = useState(currentFlow);
 
@@ -59,7 +63,7 @@ export default function EditBox(params: EditBoxParams) {
   let currentSelectBirthday = tempFlow.customer.birthday;
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
 
-  const { templates, getTemplateGroups } = useManagerStore();
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
   const age = getAge(tempFlow.customer.birthday);
   return (
     <Column

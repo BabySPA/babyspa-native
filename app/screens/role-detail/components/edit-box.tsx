@@ -33,13 +33,11 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentRole,
-    requestPostRole,
-    requestGetRoles,
-    requestPatchRole,
-    setCurrentRole,
-  } = useManagerStore();
+  const currentRole = useManagerStore((state) => state.currentRole);
+  const requestPostRole = useManagerStore((state) => state.requestPostRole);
+  const requestGetRoles = useManagerStore((state) => state.requestGetRoles);
+  const requestPatchRole = useManagerStore((state) => state.requestPatchRole);
+  const setCurrentRole = useManagerStore((state) => state.setCurrentRole);
 
   const [configAuthTree, setConfigAuthTree] = useState(
     generateAuthorityTreeConfig(currentRole.authorities),

@@ -28,10 +28,10 @@ export default function FollowUpVisit(params: {
   shop?: Pick<Shop, 'name' | '_id'>;
 }) {
   const navigation = useNavigation();
-  const {
-    updateCurrentFlow,
-    customersFollowUp: { flows },
-  } = useFlowStore();
+
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const flows = useFlowStore((state) => state.customersFollowUp.flows);
+
   const [renderWaiting, setRenderWaiting] = useState(false);
 
   useEffect(() => {
@@ -90,12 +90,13 @@ export default function FollowUpVisit(params: {
 }
 
 function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
-  const navigation = useNavigation();
-  const {
-    customersFollowUp,
-    updateCustomersFollowupFilter,
-    requestGetFollowUps,
-  } = useFlowStore();
+  const customersFollowUp = useFlowStore((state) => state.customersFollowUp);
+  const updateCustomersFollowupFilter = useFlowStore(
+    (state) => state.updateCustomersFollowupFilter,
+  );
+  const requestGetFollowUps = useFlowStore(
+    (state) => state.requestGetFollowUps,
+  );
 
   const { openLoading, closeLoading } = useGlobalLoading();
 

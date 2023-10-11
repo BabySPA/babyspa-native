@@ -28,7 +28,7 @@ export default function FlowInfo({
   navigation,
   route: { params },
 }: AppStackScreenProps<'FlowInfo'>) {
-  const { currentFlow } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
 
   const { evaluate } = currentFlow;
 

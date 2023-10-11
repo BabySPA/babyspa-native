@@ -24,7 +24,8 @@ import { toastAlert } from '~/app/utils/toast';
 export default function LoginScreen({
   navigation,
 }: AuthStackScreenProps<'Login'>) {
-  const { login, selectLoginShop } = useAuthStore();
+  const login = useAuthStore((state) => state.login);
+  const selectLoginShop = useAuthStore((state) => state.selectLoginShop);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

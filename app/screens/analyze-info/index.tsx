@@ -30,8 +30,7 @@ import EmptyBox from '~/app/components/empty-box';
 export default function AnalyzeInfo({
   navigation,
 }: AppStackScreenProps<'AnalyzeInfo'>) {
-  const { currentFlow } = useFlowStore();
-
+  const currentFlow = useFlowStore((state) => state.currentFlow);
   const { collect, analyze, analyzeOperator, collectionOperator } = currentFlow;
 
   const [showWarn, setShowWarn] = useState<boolean>(true);

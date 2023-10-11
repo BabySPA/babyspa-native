@@ -1,4 +1,13 @@
-import { Box, Center, Column, Icon, Row, Text, Pressable } from 'native-base';
+import {
+  Box,
+  Center,
+  Column,
+  Icon,
+  Row,
+  Text,
+  Pressable,
+  ScrollView,
+} from 'native-base';
 import BoxItem from './box-item';
 import { Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
@@ -17,8 +26,11 @@ export default function ConclusionInfo({
 }: {
   selectedConfig: FlowOperatorConfigItem;
 }) {
-  const { currentFlow, updateAnalyze, requestCustomerArchiveHistory } =
-    useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateAnalyze = useFlowStore((state) => state.updateAnalyze);
+  const requestCustomerArchiveHistory = useFlowStore(
+    (state) => state.requestCustomerArchiveHistory,
+  );
 
   const [analyzeHistory, setAnalyzeHistory] = useState<FlowItemResponse[]>([]);
 
@@ -30,9 +42,18 @@ export default function ConclusionInfo({
         },
       );
   }, [currentFlow.register.customerId]);
-  const { templates, getTemplateGroups } = useManagerStore();
+
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
   const [selectTemplateGroup, setSelectTemplateGroup] = useState(0);
+
+  const [renderWaiting, setRenderWaiting] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 10);
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -132,89 +153,101 @@ export default function ConclusionInfo({
           </BoxItem>
         </Column>
         <Column flex={1} ml={ss(10)}>
-          <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-            <Column bgColor={'#EDF7F6'}>
-              {getTemplateGroups(TemplateGroupKeys.conclusion)?.groups.map(
-                (item, idx) => {
-                  return (
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.6,
-                      }}
-                      hitSlop={ss(20)}
-                      key={idx}
-                      onPress={() => {
-                        setSelectTemplateGroup(idx);
-                      }}>
-                      <Center
-                        p={ss(10)}
-                        w={ss(80)}
-                        h={ss(80)}
-                        borderTopLeftRadius={ss(10)}
-                        bgColor={
-                          selectTemplateGroup === idx ? '#ffffff' : '#EDF7F6'
-                        }>
-                        <Icon
-                          as={<AntDesign name='appstore1' />}
-                          size={sp(18)}
-                          color={
-                            selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
-                          }
-                        />
-                        <Text
-                          mt={ss(3)}
-                          fontSize={sp(18)}
-                          color={
-                            selectTemplateGroup === idx ? '#5EACA3' : '#99A9BF'
-                          }>
-                          {item.name}
-                        </Text>
-                      </Center>
-                    </Pressable>
-                  );
-                },
-              )}
-            </Column>
-            <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
-              {(
-                (
-                  getTemplateGroups(TemplateGroupKeys.conclusion)?.groups[
-                    selectTemplateGroup
-                  ] as TemplateItem
-                )?.children as string[]
-              )?.map((item, idx) => {
-                return (
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
-                    key={idx}
-                    onPress={() => {
-                      updateAnalyze({
-                        conclusion:
-                          currentFlow.analyze.conclusion.trim().length > 0
-                            ? currentFlow.analyze.conclusion + ',' + item
-                            : item,
-                      });
-                    }}>
-                    <Box
-                      px={ls(20)}
-                      py={ss(7)}
-                      mr={ls(10)}
-                      mb={ss(10)}
-                      borderRadius={2}
-                      borderColor={'#D8D8D8'}
-                      borderWidth={ss(1)}>
-                      <Text fontSize={sp(18)} color='#000'>
-                        {item}
-                      </Text>
-                    </Box>
-                  </Pressable>
-                );
-              })}
+          {renderWaiting && (
+            <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
+              <ScrollView>
+                <Column bgColor={'#EDF7F6'}>
+                  {getTemplateGroups(TemplateGroupKeys.conclusion)?.groups.map(
+                    (item, idx) => {
+                      return (
+                        <Pressable
+                          _pressed={{
+                            opacity: 0.6,
+                          }}
+                          hitSlop={ss(20)}
+                          key={idx}
+                          onPress={() => {
+                            setSelectTemplateGroup(idx);
+                          }}>
+                          <Center
+                            p={ss(10)}
+                            w={ss(80)}
+                            h={ss(80)}
+                            borderTopLeftRadius={ss(10)}
+                            bgColor={
+                              selectTemplateGroup === idx
+                                ? '#ffffff'
+                                : '#EDF7F6'
+                            }>
+                            <Icon
+                              as={<AntDesign name='appstore1' />}
+                              size={sp(18)}
+                              color={
+                                selectTemplateGroup === idx
+                                  ? '#5EACA3'
+                                  : '#99A9BF'
+                              }
+                            />
+                            <Text
+                              mt={ss(3)}
+                              fontSize={sp(18)}
+                              color={
+                                selectTemplateGroup === idx
+                                  ? '#5EACA3'
+                                  : '#99A9BF'
+                              }>
+                              {item.name}
+                            </Text>
+                          </Center>
+                        </Pressable>
+                      );
+                    },
+                  )}
+                </Column>
+              </ScrollView>
+              <ScrollView>
+                <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
+                  {(
+                    (
+                      getTemplateGroups(TemplateGroupKeys.conclusion)?.groups[
+                        selectTemplateGroup
+                      ] as TemplateItem
+                    )?.children as string[]
+                  )?.map((item, idx) => {
+                    return (
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.8,
+                        }}
+                        hitSlop={ss(20)}
+                        key={idx}
+                        onPress={() => {
+                          updateAnalyze({
+                            conclusion:
+                              currentFlow.analyze.conclusion.trim().length > 0
+                                ? currentFlow.analyze.conclusion + ',' + item
+                                : item,
+                          });
+                        }}>
+                        <Box
+                          px={ls(20)}
+                          py={ss(7)}
+                          mr={ls(10)}
+                          mb={ss(10)}
+                          borderRadius={2}
+                          borderColor={'#D8D8D8'}
+                          borderWidth={ss(1)}>
+                          <Text fontSize={sp(18)} color='#000'>
+                            {item}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    );
+                  })}
+                </Row>
+              </ScrollView>
             </Row>
-          </Row>
+          )}
         </Column>
       </Row>
     </KeyboardAvoidingView>

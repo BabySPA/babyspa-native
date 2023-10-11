@@ -24,8 +24,9 @@ import { debounce } from 'lodash';
 export default function ManagerRole({
   navigation,
 }: AppStackScreenProps<'ManagerRole'>) {
-  const { roles, requestGetRoles, setCurrentRole } = useManagerStore();
-
+  const roles = useManagerStore((state) => state.roles);
+  const requestGetRoles = useManagerStore((state) => state.requestGetRoles);
+  const setCurrentRole = useManagerStore((state) => state.setCurrentRole);
   useEffect(() => {
     requestGetRoles();
   }, []);
@@ -222,7 +223,7 @@ function Filter({
   onSearchChangeText: (text: string) => void;
 }) {
   const navigation = useNavigation();
-  const { setCurrentRole } = useManagerStore();
+  const setCurrentRole = useManagerStore((state) => state.setCurrentRole);
 
   return (
     <Row

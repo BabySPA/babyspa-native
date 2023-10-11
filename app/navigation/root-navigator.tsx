@@ -18,8 +18,7 @@ export default function Navigation({
 }) {
   return (
     <NavigationContainer
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-    >
+      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -28,7 +27,7 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const { accessToken } = useAuthStore();
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   return (
     <Stack.Navigator>

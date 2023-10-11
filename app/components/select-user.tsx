@@ -18,7 +18,10 @@ export default function SelectUser({
   style?: any;
   textStyle?: any;
 }) {
-  const { user, currentShopWithRole } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const currentShopWithRole = useAuthStore(
+    (state) => state.currentShopWithRole,
+  );
 
   return (
     <SelectDropdown

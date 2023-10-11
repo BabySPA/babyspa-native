@@ -53,17 +53,29 @@ export default function CustomerArchive({
 }: AppStackScreenProps<'CustomerArchive'>) {
   useEffect(() => {}, []);
 
-  const {
-    requestCustomerArchiveHistory,
-    requestCustomerArchiveCourses,
-    requestCustomerGrowthCurve,
-    requestPutCustomerGrowthCurve,
-    requestPatchCustomerGrowthCurve,
-    requestDeleteCustomer,
-    requestArchiveCustomers,
-    currentArchiveCustomer: customer,
-    updateCurrentFlow,
-  } = useFlowStore();
+  const requestCustomerArchiveCourses = useFlowStore(
+    (state) => state.requestCustomerArchiveCourses,
+  );
+  const requestCustomerArchiveHistory = useFlowStore(
+    (state) => state.requestCustomerArchiveHistory,
+  );
+  const requestCustomerGrowthCurve = useFlowStore(
+    (state) => state.requestCustomerGrowthCurve,
+  );
+  const requestPutCustomerGrowthCurve = useFlowStore(
+    (state) => state.requestPutCustomerGrowthCurve,
+  );
+  const requestPatchCustomerGrowthCurve = useFlowStore(
+    (state) => state.requestPatchCustomerGrowthCurve,
+  );
+  const requestDeleteCustomer = useFlowStore(
+    (state) => state.requestDeleteCustomer,
+  );
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
+  const customer = useFlowStore((state) => state.currentArchiveCustomer);
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const age = getAge(customer?.birthday || dayjs().format('YYYY-MM-DD'));
   const toast = useToast();

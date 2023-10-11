@@ -15,12 +15,16 @@ export default function CustomerDetail({
   navigation,
   route: { params },
 }: AppStackScreenProps<'CustomerDetail'>) {
-  const {
-    requestGetOperators,
-    requestPatchRegisterStatus,
-    currentFlow,
-    requestGetInitializeData,
-  } = useFlowStore();
+  const requestGetOperators = useFlowStore(
+    (state) => state.requestGetOperators,
+  );
+  const requestPatchRegisterStatus = useFlowStore(
+    (state) => state.requestPatchRegisterStatus,
+  );
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);

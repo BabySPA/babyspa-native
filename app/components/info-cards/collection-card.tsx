@@ -14,9 +14,10 @@ interface CollectionCardParams {
 }
 
 export default function CollectionCard(params: CollectionCardParams) {
-  const {
-    currentFlow: { collect, collectionOperator },
-  } = useFlowStore();
+  const collect = useFlowStore((state) => state.currentFlow.collect);
+  const collectionOperator = useFlowStore(
+    (state) => state.currentFlow.collectionOperator,
+  );
   const { style = {} } = params;
 
   return (

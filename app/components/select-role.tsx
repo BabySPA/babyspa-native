@@ -19,7 +19,8 @@ export default function SelectRole({
   buttonHeight?: number;
   buttonWidth?: number;
 }) {
-  const { roles, requestGetRoles } = useManagerStore();
+  const roles = useManagerStore((state) => state.roles);
+  const requestGetRoles = useManagerStore((state) => state.requestGetRoles);
 
   const [filterRoles, setFilterRoles] = useState(roles);
   const [defaultValue, setDefaultValue] = useState('');

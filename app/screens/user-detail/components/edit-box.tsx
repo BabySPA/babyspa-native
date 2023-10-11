@@ -29,13 +29,11 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentUser,
-    requestPostUser,
-    requestGetUsers,
-    requestPatchUser,
-    setCurrentUser,
-  } = useManagerStore();
+  const currentUser = useManagerStore((state) => state.currentUser);
+  const requestPostUser = useManagerStore((state) => state.requestPostUser);
+  const requestGetUsers = useManagerStore((state) => state.requestGetUsers);
+  const requestPatchUser = useManagerStore((state) => state.requestPatchUser);
+  const setCurrentUser = useManagerStore((state) => state.setCurrentUser);
 
   const [tempUser, setTempUser] = useState(currentUser);
 

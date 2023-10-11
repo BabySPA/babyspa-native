@@ -30,22 +30,18 @@ import { Image as NativeImage } from 'react-native';
 
 export default function Analyze() {
   const navigation = useNavigation();
-  const {
-    requestGetAnalyzeFlows,
-    updateCurrentFlow,
-    analyze: { flows },
-  } = useFlowStore();
+
+  const requestGetAnalyzeFlows = useFlowStore(
+    (state) => state.requestGetAnalyzeFlows,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const flows = useFlowStore((state) => state.analyze.flows);
 
   useEffect(() => {
     requestGetAnalyzeFlows();
   }, []);
-  const [renderWaiting, setRenderWaiting] = useState(false);
+  const [renderWaiting, setRenderWaiting] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderWaiting(true);
-    }, 50);
-  }, []);
   return (
     <Flex flex={1}>
       <Filter />
@@ -91,11 +87,10 @@ export default function Analyze() {
                         />
                         {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
                           <Circle
-                            size={sp(18)}
+                            size={sp(9)}
                             bgColor={'#FC554F'}
                             position={'absolute'}
-                            right={-ss(9)}
-                            top={-ss(9)}
+                            right={0}
                           />
                         )}
                       </Pressable>
@@ -119,8 +114,13 @@ function Filter() {
   }>({
     isOpen: false,
   });
-  const { analyze, updateAnalyzeFilter, requestGetAnalyzeFlows } =
-    useFlowStore();
+  const analyze = useFlowStore((state) => state.analyze);
+  const updateAnalyzeFilter = useFlowStore(
+    (state) => state.updateAnalyzeFilter,
+  );
+  const requestGetAnalyzeFlows = useFlowStore(
+    (state) => state.requestGetAnalyzeFlows,
+  );
 
   const [count, setCount] = useState({
     done: 0,

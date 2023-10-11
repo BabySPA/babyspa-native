@@ -38,14 +38,23 @@ export default function EditCustomerBox(params: EditCustomerBox) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    requestPostCustomerArchive,
-    requestArchiveCustomers,
-    requestPatchCustomerArchive,
-    currentArchiveCustomer,
-    updateCurrentArchiveCustomer,
-  } = useFlowStore();
-  const { getTemplateGroups } = useManagerStore();
+  const requestPostCustomerArchive = useFlowStore(
+    (state) => state.requestPostCustomerArchive,
+  );
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
+  const requestPatchCustomerArchive = useFlowStore(
+    (state) => state.requestPatchCustomerArchive,
+  );
+  const currentArchiveCustomer = useFlowStore(
+    (state) => state.currentArchiveCustomer,
+  );
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
   const [tempCustomer, setTempCustomer] = useState(currentArchiveCustomer);
 
