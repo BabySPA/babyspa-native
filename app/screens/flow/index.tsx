@@ -73,10 +73,12 @@ export default function FlowScreen({
   const { collect, analyze, customer } = currentFlow;
 
   const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
     if (
       analyze.status !== AnalyzeStatus.DONE &&
-      analyze.status !== AnalyzeStatus.CANCEL
+      analyze.status !== AnalyzeStatus.CANCEL &&
+      type === FlowStatus.ToBeAnalyzed
     ) {
       // 开始分析
       requestStartAnalyze()

@@ -21,10 +21,7 @@ const useAuthStore = create(
       clearCache: () => {
         set({ ...initialState });
       },
-      selectLoginShop: ({ accessToken, user, currentShopWithRole }) => {
-        useManagerStore.getState().requestGetTemplates();
-        useManagerStore.getState().requestGetRoles();
-        useManagerStore.getState().requestGetShops();
+      selectLoginShop: async ({ accessToken, user, currentShopWithRole }) => {
         useFlowStore.getState().requestGetInitializeData();
         useMessageStore.getState().requestMessages();
         set({
@@ -54,9 +51,6 @@ const useAuthStore = create(
                   currentShopWithRole: user.shopsWithRole[0],
                 });
                 useLayoutStore.getState().clearCache();
-                useManagerStore.getState().requestGetTemplates();
-                useManagerStore.getState().requestGetRoles();
-                useManagerStore.getState().requestGetShops();
                 useFlowStore.getState().requestGetInitializeData();
 
                 resolve({
@@ -80,7 +74,11 @@ const useAuthStore = create(
         });
       },
       changeCurrentShopWithRole: async (shopWithRole) => {
+        useMessageStore.getState().logoutSocket();
+
         set({ currentShopWithRole: shopWithRole });
+
+        useMessageStore.getState().loginSocket();
 
         useLayoutStore.getState().clearCache();
         useFlowStore.getState().clearCache();
@@ -88,7 +86,7 @@ const useAuthStore = create(
         useMessageStore.getState().clearCache();
 
         useMessageStore.getState().requestMessages();
-        await useFlowStore.getState().requestGetInitializeData();
+        useFlowStore.getState().requestGetInitializeData();
       },
       logout: async () => {
         get().clearAllStoreCache();

@@ -49,13 +49,11 @@ const Stack = createStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
   const { loading, loadingText, spinner, closeLoading } = useGlobalLoading();
-  const userId = useAuthStore((state) => state.user?.id);
-  const roleKey = useAuthStore(
-    (state) => state.currentShopWithRole?.role.roleKey,
-  );
-  const shopId = useAuthStore((state) => state.currentShopWithRole?.shop._id);
 
   const requestMessages = useMessageStore((state) => state.requestMessages);
+  const getSocketInstance = useMessageStore((state) => state.getSocketInstance);
+  const loginSocket = useMessageStore((state) => state.loginSocket);
+  const closeSocket = useMessageStore((state) => state.closeSocket);
 
   const [showActionDone, setShowActionDone] = useState({
     isOpen: false,
@@ -69,49 +67,21 @@ export default function AppNavigator() {
     (state) => state.requestGetInitializeData,
   );
   const navigation = useNavigation();
+
   useEffect(() => {
     console.log('初始化socket');
-    const socket = new WebSocket(Environment.api.ws);
-    const closeSocket = () => {
-      // 发送消息登录socket
-      const message = {
-        event: 'message', // 事件名称
-        data: JSON.stringify({
-          type: 'logout',
-          data: {
-            shopId,
-            userId,
-            roleKey,
-          },
-        }), // 消息内容
-      };
-      socket.send(JSON.stringify(message));
-      socket.close();
-    };
-
-    const loginSocket = () => {
-      // 发送消息登录socket
-      const message = {
-        event: 'message', // 事件名称
-        data: JSON.stringify({
-          type: 'login',
-          data: {
-            shopId,
-            userId,
-            roleKey,
-          },
-        }), // 消息内容
-      };
-      socket.send(JSON.stringify(message));
-    };
+    const socket = getSocketInstance();
     // @ts-ignore
     socket.onopen = (e) => {
-      console.log('WebSocket连接成功');
+      console.log('WebSocket连接已打开');
       loginSocket();
     };
+
     socket.onmessage = async (e) => {
       // 接收到服务器发送的消息
       const payload = JSON.parse(e.data);
+      console.log('接收到服务器发送的消息:', payload);
+
       const { event, message } = payload;
       if (event === MessageAction.ANALYZE_UPDATE) {
         setShowActionDone({
@@ -230,16 +200,9 @@ export default function AppNavigator() {
                     } else {
                       // 去分析
                       // 还未分析
-                      if (flow.analyze.status === AnalyzeStatus.NOT_SET) {
-                        navigation.navigate('Flow', {
-                          type: FlowStatus.ToBeCollected,
-                        });
-                      } else {
-                        // 已经被其他人分析
-                        navigation.navigate('FlowInfo', {
-                          from: 'analyze',
-                        });
-                      }
+                      navigation.navigate('Flow', {
+                        type: FlowStatus.ToBeAnalyzed,
+                      });
                     }
                   });
                 }}>

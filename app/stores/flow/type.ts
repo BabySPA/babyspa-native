@@ -180,7 +180,7 @@ export interface FlowState {
   statisticShop: StatisticShop;
   statisticFlowWithDate: StatisticFlowWithDate[];
 
-  requestGetInitializeData: () => Promise<any>;
+  requestGetInitializeData: () => void;
   requestGetFlowById: (flowId: string) => Promise<FlowItemResponse>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
   requestGetRegisterFlows: () => Promise<any>;

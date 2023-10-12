@@ -21,6 +21,7 @@ import { RoleAuthority } from '../auth/type';
 import { fuzzySearch, generateFlowCounts } from '~/app/utils';
 import useManagerStore from '../manager';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
+import { InteractionManager } from 'react-native';
 
 const DefaultFlowListData = {
   flows: [],
@@ -180,23 +181,28 @@ const useFlowStore = create(
       set({ ...initialState });
     },
 
-    requestGetInitializeData: async () => {
-      setTimeout(() => {
+    requestGetInitializeData: () => {
+      InteractionManager.runAfterInteractions(async () => {
+        await useManagerStore.getState().requestGetTemplates();
+        await useManagerStore.getState().requestGetRoles();
+        await useManagerStore.getState().requestGetShops();
+
         // 获取当前用户的信息
         const hasAuthority = useAuthStore.getState().hasAuthority;
+
         if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
-          get().requestGetRegisterFlows();
+          await get().requestGetRegisterFlows();
         }
         if (hasAuthority(RoleAuthority.CUSTOMER_ARCHIVE, 'R')) {
-          get().requestGetCollectionFlows();
+          await get().requestGetCollectionFlows();
         }
         if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
-          get().requestGetAnalyzeFlows();
+          await get().requestGetAnalyzeFlows();
         }
         if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
-          get().requestGetEvaluateFlows();
+          await get().requestGetEvaluateFlows();
         }
-      }, 0);
+      });
     },
 
     requestGetFlowById: async (flowId) => {
