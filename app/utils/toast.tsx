@@ -6,29 +6,25 @@ export function toastAlert(
   type: 'info' | 'warning' | 'success' | 'error',
   text: string | JSX.Element,
 ) {
-  const closeId = toast.show({
-    placement: 'top',
-    render: () => {
-      return (
-        <Alert w='100%' variant={'subtle'} status={type}>
-          <Column space={2} flexShrink={1} w='100%'>
-            <Row
-              flexShrink={1}
-              space={2}
-              alignItems='center'
-              justifyContent='space-between'>
-              <Row space={2} flexShrink={1} alignItems='center'>
-                <Alert.Icon />
-                <Text fontSize={sp(22)}>{text}</Text>
-              </Row>
-            </Row>
-          </Column>
-        </Alert>
-      );
-    },
-  });
-
-  setTimeout(() => {
-    toast.close(closeId);
-  }, 500);
+  // toast.show({
+  //   placement: 'top',
+  //   render: () => {
+  //     return (
+  //       <Alert w='100%' variant={'subtle'} status={type}>
+  //         <Column space={2} flexShrink={1} w='100%'>
+  //           <Row
+  //             flexShrink={1}
+  //             space={2}
+  //             alignItems='center'
+  //             justifyContent='space-between'>
+  //             <Row space={2} flexShrink={1} alignItems='center'>
+  //               <Alert.Icon />
+  //               <Text fontSize={sp(22)}>{text}</Text>
+  //             </Row>
+  //           </Row>
+  //         </Column>
+  //       </Alert>
+  //     );
+  //   },
+  // });
 }
