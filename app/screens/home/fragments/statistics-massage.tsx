@@ -335,7 +335,7 @@ export default function StatisticsMassage() {
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
   return (
     <Flex flex={1}>

@@ -455,7 +455,7 @@ export default function StatisticsVisit() {
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
   return (
     <Flex flex={1}>

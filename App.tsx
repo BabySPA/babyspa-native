@@ -15,6 +15,7 @@ LogBox.ignoreLogs([
   'No native splash',
   'Sending `onAnimatedValueUpdate` with no listeners registered',
   'Cannot update a component',
+  '请不要频繁请求相同的接口',
 ]);
 
 const config = {

@@ -22,6 +22,9 @@ const useAuthStore = create(
         set({ ...initialState });
       },
       selectLoginShop: ({ accessToken, user, currentShopWithRole }) => {
+        useManagerStore.getState().requestGetTemplates();
+        useManagerStore.getState().requestGetRoles();
+        useManagerStore.getState().requestGetShops();
         useFlowStore.getState().requestGetInitializeData();
         useMessageStore.getState().requestMessages();
         set({
@@ -51,6 +54,9 @@ const useAuthStore = create(
                   currentShopWithRole: user.shopsWithRole[0],
                 });
                 useLayoutStore.getState().clearCache();
+                useManagerStore.getState().requestGetTemplates();
+                useManagerStore.getState().requestGetRoles();
+                useManagerStore.getState().requestGetShops();
                 useFlowStore.getState().requestGetInitializeData();
 
                 resolve({

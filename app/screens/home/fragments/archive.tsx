@@ -28,7 +28,13 @@ export default function Archive() {
     (state) => state.updateCurrentArchiveCustomer,
   );
 
-  const [renderWaiting, setRenderWaiting] = useState(true);
+  const [renderWaiting, setRenderWaiting] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 10);
+  }, []);
 
   return (
     <Flex flex={1}>

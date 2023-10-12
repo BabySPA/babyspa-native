@@ -52,7 +52,7 @@ export default function ConclusionInfo({
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 10);
+    }, 50);
   }, []);
 
   return (
@@ -78,8 +78,8 @@ export default function ConclusionInfo({
                   height: ss(170),
                   backgroundColor: '#F8F8F8',
                   padding: ss(10),
-                  fontSize: sp(14),
-                  color: '#999',
+                  fontSize: sp(16),
+                  color: '#000',
                 }}
                 value={currentFlow.analyze.conclusion}
                 onChangeText={(text) => {
@@ -155,8 +155,8 @@ export default function ConclusionInfo({
         <Column flex={1} ml={ss(10)}>
           {renderWaiting && (
             <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
-              <ScrollView>
-                <Column bgColor={'#EDF7F6'}>
+              <Column bgColor={'#EDF7F6'}>
+                <ScrollView>
                   {getTemplateGroups(TemplateGroupKeys.conclusion)?.groups.map(
                     (item, idx) => {
                       return (
@@ -203,8 +203,8 @@ export default function ConclusionInfo({
                       );
                     },
                   )}
-                </Column>
-              </ScrollView>
+                </ScrollView>
+              </Column>
               <ScrollView>
                 <Row flex={1} flexWrap={'wrap'} py={ss(16)} px={ls(20)}>
                   {(

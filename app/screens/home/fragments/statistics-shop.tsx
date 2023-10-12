@@ -390,7 +390,7 @@ const CenterStatisticBox = () => {
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
 
   useEffect(() => {

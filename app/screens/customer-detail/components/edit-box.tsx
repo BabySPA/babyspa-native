@@ -432,7 +432,7 @@ export default function EditBox(params: EditBoxParams) {
             if (tempFlow.register.status === RegisterStatus.CANCEL) {
               requestPostRegisterInfo()
                 .then(async (res) => {
-                  await requestGetInitializeData();
+                  requestGetInitializeData();
                   toastAlert(toast, 'success', '再次登记客户信息成功！');
                   params.onEditFinish();
                 })
@@ -446,7 +446,7 @@ export default function EditBox(params: EditBoxParams) {
             } else {
               requestPatchCustomerInfo()
                 .then(async (res) => {
-                  await requestGetInitializeData();
+                  requestGetInitializeData();
                   toastAlert(toast, 'success', '修改客户信息成功！');
                   params.onEditFinish();
                 })

@@ -36,23 +36,8 @@ export default function MessageDrawer() {
 
   const navigation = useNavigation();
 
-  // 开启消息轮询
-  let interval: any;
-  const startRequestMessagesInterval = () => {
-    if (interval) {
-      return;
-    }
-    interval = setInterval(() => {
-      requestMessages();
-    }, 15 * 1000);
-  };
-
   useEffect(() => {
     requestMessages();
-    startRequestMessagesInterval();
-    return () => {
-      interval && clearInterval(interval);
-    };
   }, []);
 
   const getAction = (message: Message) => {

@@ -179,26 +179,24 @@ const useFlowStore = create(
     clearCache: () => {
       set({ ...initialState });
     },
+
     requestGetInitializeData: async () => {
-      useManagerStore.getState().requestGetTemplates();
-      useManagerStore.getState().requestGetRoles();
-      useManagerStore.getState().requestGetShops();
-
-      // 获取当前用户的信息
-      const hasAuthority = useAuthStore.getState().hasAuthority;
-
-      if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
-        await get().requestGetRegisterFlows();
-      }
-      if (hasAuthority(RoleAuthority.CUSTOMER_ARCHIVE, 'R')) {
-        await get().requestGetCollectionFlows();
-      }
-      if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
-        await get().requestGetAnalyzeFlows();
-      }
-      if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
-        await get().requestGetEvaluateFlows();
-      }
+      setTimeout(() => {
+        // 获取当前用户的信息
+        const hasAuthority = useAuthStore.getState().hasAuthority;
+        if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
+          get().requestGetRegisterFlows();
+        }
+        if (hasAuthority(RoleAuthority.CUSTOMER_ARCHIVE, 'R')) {
+          get().requestGetCollectionFlows();
+        }
+        if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
+          get().requestGetAnalyzeFlows();
+        }
+        if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
+          get().requestGetEvaluateFlows();
+        }
+      }, 0);
     },
 
     requestGetFlowById: async (flowId) => {
@@ -241,11 +239,12 @@ const useFlowStore = create(
             item.collect.status !== CollectStatus.CANCEL,
         );
 
-        set({
-          register: {
-            ...get().register,
-            flows: fuzzySearch(filterDocs, searchKeywords, status),
-          },
+        set((state) => {
+          state.register = produce(state.register, (draft) => {
+            Object.assign(draft, {
+              flows: fuzzySearch(filterDocs, searchKeywords, status),
+            });
+          });
         });
       });
     },

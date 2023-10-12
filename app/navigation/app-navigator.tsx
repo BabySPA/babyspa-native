@@ -3,7 +3,7 @@ import {
   StackCardStyleInterpolator,
   createStackNavigator,
 } from '@react-navigation/stack';
-import { AppStackList } from '../types';
+import { AppStackList, FlowStatus } from '../types';
 import HomeScreen from '../screens/home';
 import RegisterScreen from '../screens/register-customer';
 import FlowScreen from '../screens/flow';
@@ -21,14 +21,29 @@ import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
-import { Box, Modal, Row, Spinner, StatusBar, Text } from 'native-base';
-import { sp } from '../utils/style';
+import {
+  Box,
+  Center,
+  Modal,
+  Pressable,
+  Row,
+  Spinner,
+  StatusBar,
+  Text,
+} from 'native-base';
+import { sp, ss, ls } from '../utils/style';
 import useGlobalLoading from '../stores/loading';
 import Picker from 'react-native-patchpicker';
 import FollowUp from '../screens/follow-up';
 import AnalyzeInfo from '../screens/analyze-info';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useAuthStore from '../stores/auth';
+import Environment from '../config/environment';
+import useMessageStore, { MessageAction } from '../stores/message';
+import { Audio } from 'expo-av';
+import useFlowStore from '../stores/flow';
+import { useNavigation } from '@react-navigation/native';
+import { AnalyzeStatus } from '../stores/flow/type';
 
 const Stack = createStackNavigator<AppStackList>();
 
@@ -39,50 +54,92 @@ export default function AppNavigator() {
     (state) => state.currentShopWithRole?.role.roleKey,
   );
   const shopId = useAuthStore((state) => state.currentShopWithRole?.shop._id);
-  const socket = useRef(new WebSocket('ws://127.0.0.1:17000?a=1')).current;
 
-  const closeSocket = () => {
-    // 发送消息登录socket
-    const message = {
-      event: 'message', // 事件名称
-      data: JSON.stringify({
-        type: 'logout',
-        data: {
-          shopId,
-          userId,
-          roleKey,
-        },
-      }), // 消息内容
-    };
-    socket.send(JSON.stringify(message));
-    socket.close();
-  };
+  const requestMessages = useMessageStore((state) => state.requestMessages);
 
-  const loginSocket = () => {
-    // 发送消息登录socket
-    const message = {
-      event: 'message', // 事件名称
-      data: JSON.stringify({
-        type: 'login',
-        data: {
-          shopId,
-          userId,
-          roleKey,
-        },
-      }), // 消息内容
-    };
-
-    socket.send(JSON.stringify(message));
-  };
-
+  const [showActionDone, setShowActionDone] = useState({
+    isOpen: false,
+    type: '',
+    customer: '',
+    flowId: '',
+  });
+  const requestGetFlowById = useFlowStore((state) => state.requestGetFlowById);
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
+  const navigation = useNavigation();
   useEffect(() => {
+    console.log('初始化socket');
+    const socket = new WebSocket(Environment.api.ws);
+    const closeSocket = () => {
+      // 发送消息登录socket
+      const message = {
+        event: 'message', // 事件名称
+        data: JSON.stringify({
+          type: 'logout',
+          data: {
+            shopId,
+            userId,
+            roleKey,
+          },
+        }), // 消息内容
+      };
+      socket.send(JSON.stringify(message));
+      socket.close();
+    };
+
+    const loginSocket = () => {
+      // 发送消息登录socket
+      const message = {
+        event: 'message', // 事件名称
+        data: JSON.stringify({
+          type: 'login',
+          data: {
+            shopId,
+            userId,
+            roleKey,
+          },
+        }), // 消息内容
+      };
+      socket.send(JSON.stringify(message));
+    };
     // @ts-ignore
     socket.onopen = (e) => {
+      console.log('WebSocket连接成功');
       loginSocket();
     };
-    socket.onmessage = (e) => {
+    socket.onmessage = async (e) => {
       // 接收到服务器发送的消息
-      console.log('接收到消息:', e);
+      const payload = JSON.parse(e.data);
+      const { event, message } = payload;
+      if (event === MessageAction.ANALYZE_UPDATE) {
+        setShowActionDone({
+          isOpen: true,
+          customer: message.customer,
+          flowId: message.flowId,
+          type: MessageAction.ANALYZE_UPDATE,
+        });
+        const { sound } = await Audio.Sound.createAsync(
+          require('~/assets/analyze_done.mp3'),
+        );
+        sound.setIsLoopingAsync(false);
+        sound.playAsync();
+      } else if (event == MessageAction.COLLECTION_UPDATE) {
+        setShowActionDone({
+          isOpen: true,
+          customer: message.customer,
+          flowId: message.flowId,
+          type: MessageAction.COLLECTION_TODO,
+        });
+        const { sound } = await Audio.Sound.createAsync(
+          require('~/assets/collection_done.mp3'),
+        );
+        sound.setIsLoopingAsync(false);
+        sound.playAsync();
+      }
+      requestMessages();
+      requestGetInitializeData();
     };
 
     socket.onerror = (e) => {
@@ -96,7 +153,8 @@ export default function AppNavigator() {
     return () => {
       closeSocket();
     };
-  });
+  }, []);
+
   return (
     <Box flex={1} bgColor='white'>
       <Modal
@@ -114,6 +172,94 @@ export default function AppNavigator() {
           </Row>
         )}
       </Modal>
+
+      {showActionDone.isOpen && (
+        <Modal
+          isOpen={showActionDone.isOpen}
+          onClose={() => {
+            setShowActionDone({
+              ...showActionDone,
+              isOpen: false,
+            });
+          }}>
+          <Center bgColor={'#fff'} borderRadius={ss(8)} px={ss(60)} py={ss(30)}>
+            <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
+              {showActionDone.type === MessageAction.ANALYZE_UPDATE
+                ? `${showActionDone.customer}的信息已经完成分析，请及时处理。`
+                : `${showActionDone.customer}需要进行分析，请及时处理。`}
+            </Text>
+            <Row mt={ss(50)} mb={ss(20)}>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setShowActionDone({
+                    ...showActionDone,
+                    isOpen: false,
+                  });
+                }}>
+                <Center
+                  borderRadius={ss(4)}
+                  borderWidth={ss(1)}
+                  borderColor={'#03CBB2'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    知道了
+                  </Text>
+                </Center>
+              </Pressable>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setShowActionDone({
+                    ...showActionDone,
+                    isOpen: false,
+                  });
+                  requestGetFlowById(showActionDone.flowId).then((flow) => {
+                    updateCurrentFlow(flow);
+
+                    if (showActionDone.type === MessageAction.ANALYZE_UPDATE) {
+                      // 查看分析详情
+                      navigation.navigate('AnalyzeInfo');
+                    } else {
+                      // 去分析
+                      // 还未分析
+                      if (flow.analyze.status === AnalyzeStatus.NOT_SET) {
+                        navigation.navigate('Flow', {
+                          type: FlowStatus.ToBeCollected,
+                        });
+                      } else {
+                        // 已经被其他人分析
+                        navigation.navigate('FlowInfo', {
+                          from: 'analyze',
+                        });
+                      }
+                    }
+                  });
+                }}>
+                <Center
+                  ml={ls(20)}
+                  borderRadius={ss(4)}
+                  borderWidth={ss(1)}
+                  borderColor={'#03CBB2'}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  px={ls(30)}
+                  py={ss(10)}>
+                  <Text color='#00B49E' fontSize={sp(14)}>
+                    查看
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          </Center>
+        </Modal>
+      )}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

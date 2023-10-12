@@ -108,7 +108,7 @@ export default function CustomerDetail({
               .then(async (res) => {
                 // 取消成功
                 toastAlert(toast, 'success', '取消成功！');
-                await requestGetInitializeData();
+                requestGetInitializeData();
               })
               .catch((err) => {
                 // 取消失败

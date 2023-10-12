@@ -93,7 +93,7 @@ export default function FlowScreen({
         })
         .catch(async (err) => {
           toastAlert(toast, 'error', err.message);
-          await requestGetInitializeData();
+          requestGetInitializeData();
           navigation.goBack();
         });
     }
@@ -372,7 +372,7 @@ export default function FlowScreen({
                             message: '',
                             tip: '',
                           });
-                          await requestGetInitializeData();
+                          requestGetInitializeData();
                           navigation.goBack();
                         }, 2000);
                       })
@@ -458,7 +458,7 @@ export default function FlowScreen({
                           message: '',
                           tip: '',
                         });
-                        await requestGetInitializeData();
+                        requestGetInitializeData();
                         // navigation.goBack();
                         navigation.replace('FlowInfo', {
                           from: 'analyze',
@@ -556,7 +556,7 @@ export default function FlowScreen({
               .then(async (res) => {
                 // 取消成功
                 toastAlert(toast, 'success', '取消成功！');
-                await requestGetInitializeData();
+                requestGetInitializeData();
                 navigation.goBack();
               })
               .catch((err) => {

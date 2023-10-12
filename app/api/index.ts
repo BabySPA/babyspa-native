@@ -27,6 +27,9 @@ class Request {
   instance: AxiosInstance;
   // 基础配置，url和超时时间
 
+  // 存储最后一次请求的时间戳和接口路径
+  private lastRequest: { [key: string]: number } = {};
+
   baseConfig: AxiosRequestConfig = {
     baseURL: Environment.api.manager,
     timeout: 60000,
@@ -113,6 +116,19 @@ class Request {
     url: string,
     data?: Record<string, any>,
   ): Promise<Result<T>> {
+    // 获取请求的接口路径
+    const requestKey = url + JSON.stringify(data);
+
+    // 检查上一次请求的时间戳，如果小于3秒，拒绝此请求
+    const currentTimestamp = Date.now();
+    if (requestKey in this.lastRequest) {
+      if (currentTimestamp - this.lastRequest[requestKey] < 3000) {
+        return Promise.reject('请不要频繁请求相同的接口');
+      }
+    }
+
+    this.lastRequest[requestKey] = currentTimestamp;
+
     return this.instance.get(url, data);
   }
 
