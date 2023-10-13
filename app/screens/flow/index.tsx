@@ -7,10 +7,10 @@ import {
   Container,
   Center,
   Modal,
-  useToast,
   Spinner,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';

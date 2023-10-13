@@ -4,14 +4,12 @@ import {
   Icon,
   Input,
   Text,
-  useToast,
   Row,
   Pressable,
   Spinner,
   FlatList,
-  ScrollView,
-  Link,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';

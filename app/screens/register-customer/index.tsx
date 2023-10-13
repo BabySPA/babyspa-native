@@ -1,10 +1,12 @@
-import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
+import { Box, Text, Pressable, Row,  Spinner } from 'native-base';
 import {
   AppStackScreenProps,
   CustomerScreenType,
   FlowStatus,
 } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
+import { useToast } from 'react-native-toast-notifications';
+
 import { sp, ss, ls } from '~/app/utils/style';
 import EditCustomer from './components/edit-customer';
 import SelectCustomer from '~/app/components/select-customer';

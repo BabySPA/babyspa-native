@@ -61,28 +61,52 @@ export default function AppNavigator() {
     customer: '',
     flowId: '',
   });
+
   const requestGetFlowById = useFlowStore((state) => state.requestGetFlowById);
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
   const requestGetInitializeData = useFlowStore(
     (state) => state.requestGetInitializeData,
   );
   const navigation = useNavigation();
+  const heartbeatInterval = useRef<NodeJS.Timeout>();
 
-  useEffect(() => {
-    console.log('初始化socket');
+  const sendHeartbeat = () => {
+    const socket = getSocketInstance();
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      // 发送心跳包消息
+      const message = {
+        event: 'PingPong', // 事件名称
+        data: 'ping', // 消息内容
+      };
+      socket.send(JSON.stringify(message));
+    } else {
+      console.log('WEBSOCKET:::WebSocket连接已断开，尝试重连');
+      connectWebSocket();
+    }
+  };
+
+  const connectWebSocket = () => {
     const socket = getSocketInstance();
     // @ts-ignore
     socket.onopen = (e) => {
-      console.log('WebSocket连接已打开');
+      console.log('WEBSOCKET:::WebSocket连接已打开');
       loginSocket();
+      // 设置心跳包定时器，每5秒发送一次
+      heartbeatInterval.current = setInterval(sendHeartbeat, 5000);
     };
 
     socket.onmessage = async (e) => {
       // 接收到服务器发送的消息
       const payload = JSON.parse(e.data);
-      console.log('接收到服务器发送的消息:', payload);
+      console.log('WEBSOCKET:::接收到服务器发送的消息:', payload);
 
       const { event, message } = payload;
+
+      if (event === 'PingPong') {
+        console.log('WEBSOCKET:::收到心跳包', message);
+        return;
+      }
+
       if (event === MessageAction.ANALYZE_UPDATE) {
         setShowActionDone({
           isOpen: true,
@@ -113,15 +137,21 @@ export default function AppNavigator() {
     };
 
     socket.onerror = (e) => {
-      console.error('WebSocket错误:', e);
+      console.error('WEBSOCKET:::WebSocket错误:', e);
     };
 
     socket.onclose = () => {
-      console.log('WebSocket连接已关闭');
+      console.log('WEBSOCKET:::WebSocket连接已关闭');
     };
+  };
+
+  useEffect(() => {
+    console.log('WEBSOCKET:::初始化socket');
+    connectWebSocket();
 
     return () => {
       closeSocket();
+      clearInterval(heartbeatInterval.current);
     };
   }, []);
 

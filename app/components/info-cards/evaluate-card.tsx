@@ -8,8 +8,9 @@ import {
   Row,
   Spinner,
   Text,
-  useToast,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
+
 import { StyleProp, ViewStyle, Image, TextInput } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';

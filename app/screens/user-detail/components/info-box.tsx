@@ -5,10 +5,11 @@ import {
   Text,
   Pressable,
   Image,
-  useToast,
   Spinner,
   Icon,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
+
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import LabelBox from '~/app/components/label-box';

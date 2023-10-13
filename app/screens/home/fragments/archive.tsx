@@ -24,9 +24,18 @@ export default function Archive() {
   const navigation = useNavigation();
 
   const customers = useFlowStore((state) => state.archiveCustomers.customers);
+
   const updateCurrentArchiveCustomer = useFlowStore(
     (state) => state.updateCurrentArchiveCustomer,
   );
+
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
+
+  useEffect(() => {
+    requestArchiveCustomers();
+  }, []);
 
   const [renderWaiting, setRenderWaiting] = useState(false);
 
@@ -88,7 +97,11 @@ export default function Archive() {
 function Filter() {
   const navigation = useNavigation();
 
-  const archiveCustomers = useFlowStore((state) => state.archiveCustomers);
+  const customers = useFlowStore((state) => state.archiveCustomers.customers);
+  const searchKeywords = useFlowStore(
+    (state) => state.archiveCustomers.searchKeywords,
+  );
+
   const updateArchiveCustomersFilter = useFlowStore(
     (state) => state.updateArchiveCustomersFilter,
   );
@@ -99,16 +112,6 @@ function Filter() {
     (state) => state.requestArchiveCustomers,
   );
 
-  const [defaultSelectShop, selectShops] = useSelectShops(true);
-
-  useEffect(() => {
-    if (defaultSelectShop) {
-      updateArchiveCustomersFilter({
-        shopId: defaultSelectShop._id,
-      });
-      requestArchiveCustomers();
-    }
-  }, [defaultSelectShop]);
   return (
     <Row
       mx={ss(10)}
@@ -119,28 +122,20 @@ function Filter() {
       justifyContent={'space-between'}
       alignItems={'center'}>
       <Row alignItems={'center'} h={ss(75)}>
-        <SelectShop
-          onSelect={function (selectedItem: any, index: number): void {
-            updateArchiveCustomersFilter({
-              shopId: selectedItem._id,
-            });
-            requestArchiveCustomers();
-          }}
-          buttonHeight={ss(44)}
-          buttonWidth={ls(140, 210)}
-          shops={selectShops}
-          defaultButtonText={defaultSelectShop?.name}
-        />
+        <Text color='#000' fontSize={sp(20)} fontWeight={600}>
+          当前客户总量：
+          <Text color='#5EACA3'>{customers.length}</Text>
+        </Text>
         <Input
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           autoCorrect={false}
-          minW={ls(240, 360)}
           ml={ls(20)}
+          minW={ls(240, 360)}
           h={ss(44)}
           p={ss(9)}
           borderRadius={ss(4)}
-          defaultValue={archiveCustomers.searchKeywords}
+          defaultValue={searchKeywords}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={sp(16)}

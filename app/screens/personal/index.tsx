@@ -6,9 +6,9 @@ import {
   Pressable,
   Image,
   Icon,
-  useToast,
 } from 'native-base';
 import { AppStackScreenProps, Gender } from '../../types';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import dayjs from 'dayjs';

@@ -8,6 +8,7 @@ import Navigation from './app/navigation/root-navigator';
 import { LogBox } from 'react-native';
 import KeyboardAvoider from '~/app/components/keyboard-avoid';
 import 'react-native-gesture-handler';
+import { ToastProvider } from 'react-native-toast-notifications';
 
 LogBox.ignoreLogs([
   'Require cycle',
@@ -54,12 +55,14 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <NativeBaseProvider config={config} theme={theme}>
-          <KeyboardAvoider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar hidden={true} />
-          </KeyboardAvoider>
-        </NativeBaseProvider>
+        <ToastProvider>
+          <NativeBaseProvider config={config} theme={theme}>
+            <KeyboardAvoider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar hidden={true} />
+            </KeyboardAvoider>
+          </NativeBaseProvider>
+        </ToastProvider>
       </SafeAreaProvider>
     );
   }

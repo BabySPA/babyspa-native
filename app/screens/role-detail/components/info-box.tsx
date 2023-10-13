@@ -4,11 +4,10 @@ import {
   Row,
   Text,
   Pressable,
-  Image,
-  useToast,
   Spinner,
 } from 'native-base';
 import BoxTitle from '~/app/components/box-title';
+import { useToast } from 'react-native-toast-notifications';
 import { ss, ls, sp } from '~/app/utils/style';
 import useManagerStore from '~/app/stores/manager';
 import { DialogModal } from '~/app/components/modals';

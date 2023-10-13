@@ -261,16 +261,9 @@ const useFlowStore = create(
       } = get();
       const params: any = {};
 
-      // if (startDate) {
-      //   params.startDate = startDate;
+      // if (shopId) {
+      //   params.shopId = shopId;
       // }
-      // if (endDate) {
-      //   params.endDate = endDate;
-      // }
-
-      if (shopId) {
-        params.shopId = shopId;
-      }
 
       request.get('/customers/all', { params }).then(({ data }) => {
         const { docs } = data;

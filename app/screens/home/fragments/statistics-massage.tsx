@@ -91,7 +91,7 @@ const ShopStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
-        interval: 2,
+        interval: 20,
       },
     ],
     series: [
@@ -229,7 +229,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
-        interval: 2,
+        interval: 20,
       },
     ],
     series: [

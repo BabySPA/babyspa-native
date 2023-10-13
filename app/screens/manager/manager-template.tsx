@@ -8,9 +8,9 @@ import {
   Pressable,
   Icon,
   Input,
-  useToast,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { AppStackScreenProps } from '~/app/types';
 import { ls, sp, ss } from '~/app/utils/style';

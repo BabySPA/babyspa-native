@@ -5,10 +5,10 @@ import {
   Text,
   Pressable,
   Row,
-  useToast,
   Alert,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
 import useLayoutConfigWithRole from '~/app/stores/layout';
@@ -215,28 +215,9 @@ const Layout = memo(() => {
               changeCurrentShopWithRole(selectedItem)
                 .then(() => {})
                 .finally(() => {
-                  const toastid = toast.show({
-                    placement: 'top',
-                    duration: 1000,
-                    render: () => {
-                      return (
-                        <Alert w='100%' bgColor={'rgba(244,244,244, 1)'}>
-                          <Box>
-                            <Text color={'#333'}>
-                              正在切换至
-                              <Text color={'#00B49E'}>
-                                {selectedItem.shop.name}
-                              </Text>
-                            </Text>
-                          </Box>
-                        </Alert>
-                      );
-                    },
+                  toast.show(`正在切换至${selectedItem.shop.name}`, {
+                    duration: 3000,
                   });
-                  setTimeout(() => {
-                    toast.close(toastid);
-                    closeLoading();
-                  }, 800);
                 });
             }}
           />

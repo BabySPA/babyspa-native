@@ -71,7 +71,7 @@ const useMessageStore = create<MessageState>((set, get) => ({
 
   loginSocket: () => {
     const appSocket = get().getSocketInstance();
-    if (appSocket && appSocket?.readyState !== appSocket.CLOSED) {
+    if (appSocket && appSocket?.readyState === appSocket.OPEN) {
       const { currentShopWithRole, user } = useAuthStore.getState();
       // 发送消息登录socket
       const message = {
@@ -96,7 +96,7 @@ const useMessageStore = create<MessageState>((set, get) => ({
   logoutSocket: () => {
     // 发送消息登录socket
     const appSocket = get().getSocketInstance();
-    if (appSocket && appSocket?.readyState !== appSocket.CLOSED) {
+    if (appSocket && appSocket?.readyState === appSocket.OPEN) {
       const { currentShopWithRole, user } = useAuthStore.getState();
       const message = {
         event: 'message', // 事件名称

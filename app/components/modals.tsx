@@ -10,10 +10,11 @@ import {
   Icon,
   Box,
   ScrollView,
-  useToast,
   Image,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
+
 import { sp, ss, ls } from '~/app/utils/style';
 import { ExtraItem, Template, TemplateItem } from '../stores/manager/type';
 import { useEffect, useRef, useState } from 'react';

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
 import _ from 'lodash';
-import { Box, Center, Modal, ScrollView, Text, useToast } from 'native-base';
+import { Box, Center, Modal, ScrollView, Text } from 'native-base';
 import { useRef, useState } from 'react';
 import { Image, PanResponder, Vibration } from 'react-native';
 import { upload } from '~/app/api/upload';
@@ -10,6 +10,7 @@ import useFlowStore from '~/app/stores/flow';
 import useOssStore from '~/app/stores/oss';
 import { ss, ls, sp, isPhone } from '~/app/utils/style';
 import { toastAlert } from '~/app/utils/toast';
+import { useToast } from 'react-native-toast-notifications';
 
 export default function RecordBox({ edit }: { edit: boolean }) {
   const [isDone, setIsDone] = useState(true);

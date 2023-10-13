@@ -1,4 +1,4 @@
-import { Box, Text, Row, useToast } from 'native-base';
+import { Box, Text, Row } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss } from '~/app/utils/style';

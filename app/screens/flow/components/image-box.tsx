@@ -7,12 +7,10 @@ import {
   Icon,
   Pressable,
   Menu,
-  useToast,
-  ScrollView,
   Spinner,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { DeviceEventEmitter } from 'react-native';
-import { Image } from 'expo-image';
 import { ss, sp, ls } from '~/app/utils/style';
 import {
   MediaTypeOptions,

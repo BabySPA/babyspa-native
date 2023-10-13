@@ -6,11 +6,11 @@ import {
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
   ScrollView,
   Icon,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { Image } from 'react-native';
 import { useEffect, useState } from 'react';
 import BoxTitle from '~/app/components/box-title';

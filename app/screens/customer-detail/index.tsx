@@ -1,5 +1,6 @@
-import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
-import { AppStackScreenProps, FlowStatus } from '../../types';
+import { Box, Text, Pressable, Row, Spinner } from 'native-base';
+import { AppStackScreenProps } from '../../types';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useEffect, useState } from 'react';

@@ -8,10 +8,9 @@ import {
   Text,
   Image,
   Container,
-  useToast,
-  Center,
   ScrollView,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { AppStackScreenProps } from '~/app/types';

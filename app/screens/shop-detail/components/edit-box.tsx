@@ -9,10 +9,11 @@ import {
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
   ScrollView,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
+
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import BoxTitle from '~/app/components/box-title';
