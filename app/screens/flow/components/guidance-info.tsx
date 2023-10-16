@@ -54,8 +54,8 @@ export default function GuidanceInfo({
                 height: ss(221),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
-                fontSize: sp(14),
-                color: '#999',
+                fontSize: sp(16),
+                color: '#000',
               }}
               value={collect.guidance}
               editable={selectedConfig.disabled ? false : true}
