@@ -64,9 +64,7 @@ export default function AppNavigator() {
 
   const requestGetFlowById = useFlowStore((state) => state.requestGetFlowById);
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
-  const requestGetInitializeData = useFlowStore(
-    (state) => state.requestGetInitializeData,
-  );
+  const requsetGetHomeList = useFlowStore((state) => state.requsetGetHomeList);
   const navigation = useNavigation();
   const heartbeatInterval = useRef<NodeJS.Timeout>();
 
@@ -107,6 +105,12 @@ export default function AppNavigator() {
         return;
       }
 
+      setTimeout(() => {
+        console.log('WEBSOCKET:::刷新消息列表与数据列表');
+        requestMessages();
+        requsetGetHomeList();
+      }, 0);
+
       if (event === MessageAction.ANALYZE_UPDATE) {
         setShowActionDone({
           isOpen: true,
@@ -132,8 +136,6 @@ export default function AppNavigator() {
         sound.setIsLoopingAsync(false);
         sound.playAsync();
       }
-      requestMessages();
-      requestGetInitializeData();
     };
 
     socket.onerror = (e) => {

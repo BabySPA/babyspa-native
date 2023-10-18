@@ -12,7 +12,7 @@ import {
 import { StyleProp, ViewStyle, Image } from 'react-native';
 import BoxTitle from './box-title';
 import { ss, ls, sp } from '../utils/style';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useFlowStore from '../stores/flow';
 import {
   Ionicons,
@@ -28,7 +28,7 @@ interface SelectCustomerParams {
   style?: StyleProp<ViewStyle>;
 }
 
-function SelectCustomerItem({ customer }: { customer: Customer }) {
+const SelectCustomerItem = memo(({ customer }: { customer: Customer }) => {
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
@@ -103,15 +103,17 @@ function SelectCustomerItem({ customer }: { customer: Customer }) {
       </Row>
     </Row>
   );
-}
+});
 
-export default function SelectCustomer(params: SelectCustomerParams) {
+function SelectCustomer(params: SelectCustomerParams) {
   const requestAllCustomers = useFlowStore(
     (state) => state.requestAllCustomers,
   );
   const allCustomers = useFlowStore((state) => state.allCustomers);
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
-  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const currentFlowCustomerId = useFlowStore(
+    (state) => state.currentFlow.customer._id,
+  );
 
   useEffect(() => {
     requestAllCustomers('');
@@ -124,6 +126,46 @@ export default function SelectCustomer(params: SelectCustomerParams) {
     }, 100);
   }, []);
   const { style = {} } = params;
+
+  const PureFlatList = memo(
+    () => {
+      return (
+        <FlatList
+          data={allCustomers}
+          renderItem={({ item, index }) => {
+            return (
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  updateCurrentFlow({
+                    customer: item,
+                  });
+                }}>
+                <SelectCustomerItem customer={item} />
+                {currentFlowCustomerId === item._id && (
+                  <Image
+                    style={{
+                      position: 'absolute',
+                      bottom: ss(31),
+                      right: 0,
+                      width: ss(20),
+                      height: ss(20),
+                    }}
+                    source={require('~/assets/images/border-select.png')}
+                  />
+                )}
+              </Pressable>
+            );
+          }}
+          keyExtractor={(item) => item._id}
+        />
+      );
+    },
+    () => true,
+  );
 
   return (
     <Column
@@ -162,44 +204,10 @@ export default function SelectCustomer(params: SelectCustomerParams) {
           }, 1000)}
         />
 
-        <Box mt={ss(30)}>
-          {renderWaiting && (
-            <FlatList
-              data={allCustomers}
-              renderItem={({ item, index }) => {
-                return (
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.6,
-                    }}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      updateCurrentFlow({
-                        ...currentFlow,
-                        customer: item,
-                      });
-                    }}>
-                    <SelectCustomerItem customer={item} />
-                    {currentFlow.customer._id === item._id && (
-                      <Image
-                        style={{
-                          position: 'absolute',
-                          bottom: ss(31),
-                          right: 0,
-                          width: ss(20),
-                          height: ss(20),
-                        }}
-                        source={require('~/assets/images/border-select.png')}
-                      />
-                    )}
-                  </Pressable>
-                );
-              }}
-              keyExtractor={(item) => item._id}
-            />
-          )}
-        </Box>
+        <Box mt={ss(30)}>{renderWaiting && <PureFlatList />}</Box>
       </Flex>
     </Column>
   );
 }
+
+export default memo(SelectCustomer);

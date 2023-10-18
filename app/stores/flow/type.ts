@@ -180,6 +180,7 @@ export interface FlowState {
   statisticShop: StatisticShop;
   statisticFlowWithDate: StatisticFlowWithDate[];
 
+  requsetGetHomeList: () => void;
   requestGetInitializeData: () => void;
   requestGetFlowById: (flowId: string) => Promise<FlowItemResponse>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;

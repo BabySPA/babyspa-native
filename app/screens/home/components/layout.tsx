@@ -218,6 +218,9 @@ const Layout = memo(() => {
                   toast.show(`正在切换至${selectedItem.shop.name}`, {
                     duration: 3000,
                   });
+                  setTimeout(() => {
+                    closeLoading();
+                  }, 1500);
                 });
             }}
           />

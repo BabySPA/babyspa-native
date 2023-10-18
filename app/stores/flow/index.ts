@@ -22,6 +22,7 @@ import { fuzzySearch, generateFlowCounts } from '~/app/utils';
 import useManagerStore from '../manager';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
 import { InteractionManager } from 'react-native';
+import useLayoutStore from '../layout';
 
 const DefaultFlowListData = {
   flows: [],
@@ -187,22 +188,27 @@ const useFlowStore = create(
         await useManagerStore.getState().requestGetRoles();
         await useManagerStore.getState().requestGetShops();
 
-        // 获取当前用户的信息
-        const hasAuthority = useAuthStore.getState().hasAuthority;
-
-        if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
-          await get().requestGetRegisterFlows();
-        }
-        if (hasAuthority(RoleAuthority.CUSTOMER_ARCHIVE, 'R')) {
-          await get().requestGetCollectionFlows();
-        }
-        if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
-          await get().requestGetAnalyzeFlows();
-        }
-        if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
-          await get().requestGetEvaluateFlows();
-        }
+        await get().requsetGetHomeList();
       });
+    },
+
+    requsetGetHomeList: async () => {
+      // 获取当前在首页哪个tab下
+      const { layoutConfig, currentSelected } = useLayoutStore.getState();
+      const featureSelected =
+        layoutConfig[currentSelected].features[
+          layoutConfig[currentSelected].featureSelected
+        ];
+
+      if (featureSelected.auth === RoleAuthority.FLOW_REGISTER) {
+        await get().requestGetRegisterFlows();
+      } else if (featureSelected.auth === RoleAuthority.FLOW_COLLECTION) {
+        await get().requestGetCollectionFlows();
+      } else if (featureSelected.auth === RoleAuthority.FLOW_ANALYZE) {
+        await get().requestGetAnalyzeFlows();
+      } else if (featureSelected.auth === RoleAuthority.FLOW_EVALUATE) {
+        await get().requestGetEvaluateFlows();
+      }
     },
 
     requestGetFlowById: async (flowId) => {
