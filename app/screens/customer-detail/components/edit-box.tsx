@@ -261,7 +261,6 @@ export default function EditBox(params: EditBoxParams) {
                     });
                   }}
                   inputMode='numeric'
-                  returnKeyType='done'
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16)}

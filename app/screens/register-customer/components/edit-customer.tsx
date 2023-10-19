@@ -245,7 +245,6 @@ export default function EditCustomer(params: EditCustomerParams) {
                 fontSize={sp(16)}
                 placeholder='请输入'
                 inputMode='numeric'
-                returnKeyType='done'
               />
             }
           />

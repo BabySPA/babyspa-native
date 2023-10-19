@@ -95,7 +95,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                     color={'#333333'}
                     fontSize={sp(16)}
                     inputMode='text'
-                    returnKeyType='done'
                     placeholder='请输入'
                     onChangeText={(text) => {
                       setTempCustomer({
@@ -235,7 +234,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 form={
                   <Input
                     inputMode='numeric'
-                    returnKeyType='done'
                     autoCorrect={false}
                     w={ls(380)}
                     defaultValue={tempCustomer.phoneNumber}

@@ -90,18 +90,21 @@ export default function AppNavigator() {
       console.log('WEBSOCKET:::WebSocket连接已打开');
       loginSocket();
       // 设置心跳包定时器，每5秒发送一次
+      if (heartbeatInterval.current) {
+        clearInterval(heartbeatInterval.current);
+      }
       heartbeatInterval.current = setInterval(sendHeartbeat, 5000);
     };
 
     socket.onmessage = async (e) => {
       // 接收到服务器发送的消息
       const payload = JSON.parse(e.data);
-      console.log('WEBSOCKET:::接收到服务器发送的消息:', payload);
+      // console.log('WEBSOCKET:::接收到服务器发送的消息:', payload);
 
       const { event, message } = payload;
 
       if (event === 'PingPong') {
-        console.log('WEBSOCKET:::收到心跳包', message);
+        // console.log('WEBSOCKET:::收到心跳包', message);
         return;
       }
 
@@ -144,6 +147,7 @@ export default function AppNavigator() {
 
     socket.onclose = () => {
       console.log('WEBSOCKET:::WebSocket连接已关闭');
+      connectWebSocket();
     };
   };
 

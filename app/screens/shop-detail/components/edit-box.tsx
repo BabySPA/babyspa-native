@@ -151,7 +151,6 @@ export default function EditBox(params: EditBoxParams) {
                     autoCorrect={false}
                     flex={1}
                     inputMode='numeric'
-                    returnKeyType='done'
                     ml={ls(20)}
                     h={ss(48)}
                     py={ss(10)}

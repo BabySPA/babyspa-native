@@ -85,7 +85,6 @@ export default function ConclusionInfo({
                 onChangeText={(text) => {
                   updateAnalyze({ conclusion: text });
                 }}
-                returnKeyType='done'
               />
             </Box>
           </BoxItem>

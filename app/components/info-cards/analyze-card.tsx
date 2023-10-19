@@ -154,7 +154,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               textAlign={'right'}>
               注意事项：
             </Text>
-            <Text fontSize={sp(18)} color='#333' maxW={ls(400)}>
+            <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
               {analyze.remark || '无'}
             </Text>
           </Row>

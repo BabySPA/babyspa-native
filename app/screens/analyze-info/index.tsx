@@ -86,7 +86,7 @@ export default function AnalyzeInfo({
                 !
               </Text>
             </Circle>
-            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
+            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} maxW={'90%'}>
               过敏原：
               {collect.healthInfo.allergy || '无'}
             </Text>
@@ -268,7 +268,7 @@ export default function AnalyzeInfo({
                       textAlign={'right'}>
                       调理导向：
                     </Text>
-                    <Text fontSize={sp(18)} color='#333'>
+                    <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
                       {collect.guidance || '无'}
                     </Text>
                   </Row>
@@ -280,7 +280,7 @@ export default function AnalyzeInfo({
                       textAlign={'right'}>
                       注意事项：
                     </Text>
-                    <Text fontSize={sp(18)} color='#333'>
+                    <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
                       {analyze.remark || '无'}
                     </Text>
                   </Row>

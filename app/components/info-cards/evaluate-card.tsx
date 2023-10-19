@@ -225,7 +225,6 @@ export default function EvaluateCard(params: EvaluateCardParams) {
                 score: templateEvaluate?.score || 3,
               });
             }}
-            returnKeyType='done'
           />
         </Box>
       </Row>

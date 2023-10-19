@@ -198,7 +198,6 @@ export default function EditBox(params: EditBoxParams) {
                 form={
                   <Input
                     inputMode='numeric'
-                    returnKeyType='done'
                     autoCorrect={false}
                     borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}

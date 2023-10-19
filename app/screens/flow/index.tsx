@@ -250,7 +250,7 @@ export default function FlowScreen({
                 !
               </Text>
             </Circle>
-            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
+            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} maxW={'90%'}>
               过敏原：
               {collect.healthInfo.allergy || '无'}
             </Text>
