@@ -143,7 +143,7 @@ export function PrintButton() {
           </tr>
           <tr>
             <td colspan="3">
-              注意事项：${currentFlow.analyze.remark || '无'}
+              注意事项：${currentFlow.analyze.conclusion || '无'}
             </td>
           </tr>
         </tbody>

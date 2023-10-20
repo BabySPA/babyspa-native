@@ -440,13 +440,16 @@ export interface Next {
 export interface Analyze {
   status: AnalyzeStatus;
 
+  /**
+   * 原调理方案，现注意事项
+   */
   conclusion: string;
   /**
    * 调理方案
    */
   solution: Solution;
   /**
-   * 注意事项
+   * 注意事项（废弃）
    */
   remark: string;
   /**

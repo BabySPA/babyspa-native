@@ -78,7 +78,9 @@ export default function Archive() {
                         pr={ls(20)}
                         onPress={() => {
                           updateCurrentArchiveCustomer(customer);
-                          navigation.navigate('CustomerArchive');
+                          navigation.navigate('CustomerArchive', {
+                            defaultSelect: 0,
+                          });
                         }}>
                         <CustomerArchiveItem customer={customer} />
                       </Pressable>

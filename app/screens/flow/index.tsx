@@ -216,7 +216,9 @@ export default function FlowScreen({
               onPress={() => {
                 // 跳转到历史记录
                 updateCurrentArchiveCustomer(customer);
-                navigation.navigate('CustomerArchive');
+                navigation.navigate('CustomerArchive', {
+                  defaultSelect: 1,
+                });
               }}>
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
                 <Text color='#03CBB2' fontSize={sp(12)}>

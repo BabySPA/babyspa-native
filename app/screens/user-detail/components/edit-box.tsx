@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'native-base';
 import { useToast } from 'react-native-toast-notifications';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
@@ -38,6 +38,15 @@ export default function EditBox(params: EditBoxParams) {
   const [tempUser, setTempUser] = useState(currentUser);
 
   const [defaultSelect, selectShops] = useSelectShops(false);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: tempUser?.description || '',
+    });
+  }, []);
 
   const checkUser = () => {
     if (tempUser.name.trim() === '') {
@@ -282,8 +291,8 @@ export default function EditBox(params: EditBoxParams) {
                 form={
                   <>
                     <Input
+                      ref={inputRef}
                       autoCorrect={false}
-                      defaultValue={tempUser.description}
                       flex={1}
                       h={ss(128)}
                       py={ss(10)}

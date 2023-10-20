@@ -49,9 +49,11 @@ const configs = [
 ];
 export default function CustomerArchive({
   navigation,
+  route,
 }: AppStackScreenProps<'CustomerArchive'>) {
   useEffect(() => {}, []);
 
+  const selectIdx = route.params?.defaultSelect || 0;
   const requestCustomerArchiveCourses = useFlowStore(
     (state) => state.requestCustomerArchiveCourses,
   );
@@ -102,7 +104,7 @@ export default function CustomerArchive({
     });
   };
 
-  const [selectFragment, setSelectedFragment] = useState(0);
+  const [selectFragment, setSelectedFragment] = useState(selectIdx);
 
   const [showEditGrowthCurve, setShowEditGrowthCurve] = useState({
     isOpen: false,

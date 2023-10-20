@@ -155,7 +155,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               注意事项：
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
-              {analyze.remark || '无'}
+              {analyze.conclusion || '无'}
             </Text>
           </Row>
 

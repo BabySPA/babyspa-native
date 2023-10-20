@@ -85,7 +85,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                       color={'#5FADA4'}
                       numberOfLines={4}
                       ellipsizeMode='tail'>
-                      {course.analyze?.remark}
+                      {course.analyze?.conclusion}
                     </Text>
                   </Box>
                   <Row

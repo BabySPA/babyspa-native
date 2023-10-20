@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import { useToast } from 'react-native-toast-notifications';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
@@ -38,6 +38,14 @@ export default function EditBox(params: EditBoxParams) {
   const setCurrentShop = useManagerStore((state) => state.setCurrentShop);
 
   const [tempShop, setTempShop] = useState(currentShop);
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: currentShop.description,
+    });
+  }, []);
 
   const checkShop = () => {
     if (tempShop.name.trim() === '') {
@@ -328,8 +336,8 @@ export default function EditBox(params: EditBoxParams) {
                 style={{ alignItems: 'flex-start', flex: 1 }}
                 form={
                   <Input
+                    ref={inputRef}
                     autoCorrect={false}
-                    defaultValue={tempShop.description}
                     flex={1}
                     h={ss(128, 100)}
                     py={ss(10)}

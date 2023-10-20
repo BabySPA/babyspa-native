@@ -12,7 +12,7 @@ import BoxItem from './box-item';
 import { Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
@@ -49,10 +49,16 @@ export default function ConclusionInfo({
 
   const [renderWaiting, setRenderWaiting] = useState(false);
 
+  const inputRef = useRef(null);
+
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
     }, 50);
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: currentFlow.analyze.conclusion,
+    });
   }, []);
 
   return (
@@ -66,6 +72,7 @@ export default function ConclusionInfo({
             icon={require('~/assets/images/guidance.png')}>
             <Box flex={1}>
               <TextInput
+                ref={inputRef}
                 autoCorrect={false}
                 multiline={true}
                 textAlignVertical='top'
@@ -81,7 +88,7 @@ export default function ConclusionInfo({
                   fontSize: sp(16),
                   color: '#000',
                 }}
-                value={currentFlow.analyze.conclusion}
+                // value={currentFlow.analyze.conclusion}
                 onChangeText={(text) => {
                   updateAnalyze({ conclusion: text });
                 }}

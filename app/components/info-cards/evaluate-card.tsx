@@ -17,7 +17,7 @@ import BoxTitle from '~/app/components/box-title';
 import { ss, sp, ls } from '~/app/utils/style';
 import { EvaluateStoreConfig, EvaluateStores } from '~/app/constants';
 import { Score } from '~/app/stores/flow/type';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 
 interface EvaluateCardParams {
@@ -42,6 +42,14 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   const { style = {}, type, canEdit, onClose, onEvaluated } = params;
 
   const [templateEvaluate, setTemplateEvaluate] = useState(evaluate);
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: templateEvaluate?.remark || '',
+    });
+  }, []);
 
   const DialogBtn = () => (
     <Row justifyContent={'center'} mt={ss(110)}>
@@ -200,6 +208,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         </Text>
         <Box flex={1} ml={ss(12)}>
           <Input
+            ref={inputRef}
             borderWidth={ss(1)}
             borderColor={'#D8D8D8'}
             isReadOnly={!canEdit}
@@ -217,7 +226,6 @@ export default function EvaluateCard(params: EvaluateCardParams) {
               fontSize: sp(18),
               color: '#999',
             }}
-            value={templateEvaluate?.remark || ''}
             onChangeText={(text) => {
               setTemplateEvaluate({
                 ...templateEvaluate,

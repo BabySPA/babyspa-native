@@ -23,7 +23,7 @@ import {
   getFollowUpStatusTextConfig,
 } from '~/app/constants';
 import Dot from '../dot';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DialogModal } from '../modals';
 
 interface FollowUpCardParams {
@@ -61,6 +61,15 @@ export default function FollowUpCard(params: FollowUpCardParams) {
   const [followupContent, setFollowupContent] = useState(
     followUp.followUpContent,
   );
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: followupContent,
+    });
+  }, []);
   return (
     <>
       {followUp &&
@@ -207,6 +216,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   随访内容：
                 </Text>
                 <Input
+                  ref={inputRef}
                   borderWidth={ss(1)}
                   borderColor={'#D8D8D8'}
                   w={ls(362)}
@@ -214,7 +224,6 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   p={ss(8)}
                   textAlignVertical='top'
                   multiline={true}
-                  defaultValue={followupContent}
                   placeholderTextColor={'#999'}
                   color={'#333333'}
                   fontSize={sp(16)}

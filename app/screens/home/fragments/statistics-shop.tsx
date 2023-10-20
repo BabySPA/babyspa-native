@@ -159,7 +159,7 @@ const ShopStatisticBox = () => {
                 </Row>
                 <Row w={ls(80)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.analyze.remark || '无'}
+                    {flow.analyze.conclusion || '无'}
                   </Text>
                 </Row>
               </Row>

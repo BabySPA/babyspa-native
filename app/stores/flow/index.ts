@@ -863,12 +863,12 @@ const useFlowStore = create(
           auth: RoleAuthority.FLOW_COLLECTION,
           disabled: false,
         },
-        {
-          text: '分析结论',
-          key: FlowOperatorKey.conclusions,
-          auth: RoleAuthority.FLOW_ANALYZE,
-          disabled: false,
-        },
+        // {
+        //   text: '分析结论',
+        //   key: FlowOperatorKey.conclusions,
+        //   auth: RoleAuthority.FLOW_ANALYZE,
+        //   disabled: false,
+        // },
         {
           text: '调理方案',
           key: FlowOperatorKey.solution,
@@ -884,7 +884,7 @@ const useFlowStore = create(
             }
             return item;
           }),
-          selectIdx: 2,
+          selectIdx: 1,
         };
       } else {
         return {
