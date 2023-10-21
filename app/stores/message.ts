@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { Customer } from './flow/type';
 import Environment from '../config/environment';
 export enum MessageAction {
+  UPDATE_FLOWS = 'UPDATE_FLOWS',
   COLLECTION_TODO = 'COLLECTION_TODO',
   COLLECTION_UPDATE = 'COLLECTION_UPDATE',
   ANALYZE_UPDATE = 'ANALYZE_UPDATE',
@@ -31,6 +32,7 @@ interface MessageState {
   getSocketInstance: () => WebSocket;
   closeSocket: () => void;
   requestMessages: () => Promise<void>;
+  requestDeleteAllMessage: () => Promise<void>;
   readMessage: (id: string) => Promise<boolean>;
 }
 
@@ -133,6 +135,12 @@ const useMessageStore = create<MessageState>((set, get) => ({
       (message: Message) => !message.hasRead,
     ).length;
     set({ messages: messages, unReadCount: unReadCount });
+  },
+
+  requestDeleteAllMessage: async () => {
+    await request.delete('/messages');
+
+    set({ messages: [], unReadCount: 0 });
   },
 
   readMessage: async (id) => {

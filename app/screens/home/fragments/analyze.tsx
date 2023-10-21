@@ -90,14 +90,6 @@ export default function Analyze() {
                           flow={flow}
                           type={OperateType.Analyze}
                         />
-                        {flow.analyze.status == AnalyzeStatus.IN_PROGRESS && (
-                          <Circle
-                            size={sp(9)}
-                            bgColor={'#FC554F'}
-                            position={'absolute'}
-                            right={0}
-                          />
-                        )}
                       </Pressable>
                     </Center>
                   );

@@ -223,7 +223,7 @@ export default function SolutionInfo({
               </Row>
             </Box>
           </BoxItem>
-          <BoxItem
+          {/* <BoxItem
             flex={2}
             mt={ss(10)}
             title={'注意事项'}
@@ -266,7 +266,7 @@ export default function SolutionInfo({
                 />
               )}
             </Pressable>
-          </BoxItem>
+          </BoxItem> */}
         </Column>
         <Column flex={1} ml={ss(10)}>
           <BoxItem

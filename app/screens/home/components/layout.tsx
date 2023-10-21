@@ -36,6 +36,7 @@ export default DrawerLayout;
 
 const MessageNotify = memo(() => {
   const unReadCount = useMessageStore((state) => state.unReadCount);
+  const requestMessages = useMessageStore((state) => state.requestMessages);
   const navigation = useNavigation();
   return (
     <Pressable
@@ -43,6 +44,7 @@ const MessageNotify = memo(() => {
         opacity: 0.8,
       }}
       onPress={() => {
+        requestMessages();
         // @ts-ignore
         navigation.openDrawer();
       }}

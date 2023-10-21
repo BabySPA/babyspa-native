@@ -160,7 +160,7 @@ export default function FlowScreen({
 
   const checkAnalyze = () => {
     if (!analyze.conclusion) {
-      toastAlert(toast, 'error', '分析结论尚未输入!');
+      toastAlert(toast, 'error', '注意事项尚未输入!');
       return false;
     }
     if (analyze.solution.applications.length > 0) {
@@ -327,90 +327,89 @@ export default function FlowScreen({
               })}
             </Row>
           </Container>
-          {selectedConfig.auth == RoleAuthority.FLOW_COLLECTION &&
-            !selectedConfig.disabled && (
-              <Row>
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    setShowFinishModal(true);
-                  }}>
-                  <Row
-                    h={ss(44)}
-                    px={ls(26)}
-                    bgColor={'rgba(243, 96, 30, 0.20)'}
-                    borderWidth={ss(1)}
-                    borderColor={'#F3601E'}
-                    alignItems={'center'}
-                    borderRadius={ss(4)}>
-                    {closeLoading && (
-                      <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
-                    )}
-                    <Text color='#F3601E' fontSize={sp(14)}>
-                      结束
-                    </Text>
-                  </Row>
-                </Pressable>
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    if (!checkCollection()) {
-                      return;
-                    }
-                    requestPatchFlowToCollection()
-                      .then((res) => {
-                        setShowResultModal({
-                          type: 'success',
-                          message: '提交成功，待分析师处理',
-                          tip: '',
-                        });
-                        setTimeout(async () => {
-                          setShowResultModal({
-                            type: 'none',
-                            message: '',
-                            tip: '',
-                          });
-                          requestGetInitializeData();
-                          navigation.goBack();
-                        }, 2000);
-                      })
-                      .catch((err) => {
-                        setShowResultModal({
-                          type: 'fail',
-                          message: '提交失败，' + err.message,
-                          tip: '',
-                        });
-                        setTimeout(() => {
-                          setShowResultModal({
-                            type: 'none',
-                            message: '',
-                            tip: '',
-                          });
-                        }, 2000);
+          {type === FlowStatus.ToBeCollected && !selectedConfig.disabled && (
+            <Row>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setShowFinishModal(true);
+                }}>
+                <Row
+                  h={ss(44)}
+                  px={ls(26)}
+                  bgColor={'rgba(243, 96, 30, 0.20)'}
+                  borderWidth={ss(1)}
+                  borderColor={'#F3601E'}
+                  alignItems={'center'}
+                  borderRadius={ss(4)}>
+                  {closeLoading && (
+                    <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
+                  )}
+                  <Text color='#F3601E' fontSize={sp(14)}>
+                    结束
+                  </Text>
+                </Row>
+              </Pressable>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  if (!checkCollection()) {
+                    return;
+                  }
+                  requestPatchFlowToCollection()
+                    .then((res) => {
+                      setShowResultModal({
+                        type: 'success',
+                        message: '提交成功，待分析师处理',
+                        tip: '',
                       });
-                  }}>
-                  <Center
-                    h={ss(44)}
-                    px={ls(12)}
-                    ml={ls(20)}
-                    bgColor={'rgba(3, 203, 178, 0.20)'}
-                    borderWidth={ss(1)}
-                    borderColor={'#03CBB2'}
-                    borderRadius={ss(4)}>
-                    <Text color='#0C1B16' fontSize={sp(14)}>
-                      提交分析
-                    </Text>
-                  </Center>
-                </Pressable>
-              </Row>
-            )}
-          {selectedConfig.auth == RoleAuthority.FLOW_ANALYZE && (
+                      setTimeout(async () => {
+                        setShowResultModal({
+                          type: 'none',
+                          message: '',
+                          tip: '',
+                        });
+                        requestGetInitializeData();
+                        navigation.goBack();
+                      }, 2000);
+                    })
+                    .catch((err) => {
+                      setShowResultModal({
+                        type: 'fail',
+                        message: '提交失败，' + err.message,
+                        tip: '',
+                      });
+                      setTimeout(() => {
+                        setShowResultModal({
+                          type: 'none',
+                          message: '',
+                          tip: '',
+                        });
+                      }, 2000);
+                    });
+                }}>
+                <Center
+                  h={ss(44)}
+                  px={ls(12)}
+                  ml={ls(20)}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  borderWidth={ss(1)}
+                  borderColor={'#03CBB2'}
+                  borderRadius={ss(4)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    提交分析
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          )}
+          {type === FlowStatus.ToBeAnalyzed && (
             <Row>
               <Pressable
                 _pressed={{
@@ -487,7 +486,7 @@ export default function FlowScreen({
                     <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
                   )}
                   <Text color='#0C1B16' fontSize={sp(14)}>
-                    完成
+                    完成分析
                   </Text>
                 </Row>
               </Pressable>

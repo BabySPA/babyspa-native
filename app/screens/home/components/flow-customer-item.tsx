@@ -67,18 +67,22 @@ export default function FlowCustomerItem({
         </Box>
       );
     } else {
+      const statusConfig = getStatusTextConfig(
+        flowStatus,
+        flow.analyzeOperator?.name,
+      );
       return (
         <Box
-          bgColor={getStatusTextConfig(flowStatus)?.bgColor}
+          bgColor={statusConfig?.bgColor}
           px={ls(12)}
           py={ss(6)}
           _text={{
             fontSize: sp(16),
-            color: getStatusTextConfig(flowStatus)?.textColor,
+            color: statusConfig?.textColor,
           }}
           borderBottomLeftRadius={ss(8)}
           borderTopRightRadius={ss(8)}>
-          {getStatusTextConfig(flowStatus)?.text}
+          {statusConfig?.text}
         </Box>
       );
     }
@@ -204,8 +208,7 @@ export default function FlowCustomerItem({
         <OperatorStatusFlag />
 
         {type === OperateType.Collection &&
-          flow.register.status == RegisterStatus.DONE &&
-          flow.collect.status == CollectStatus.NOT_SET && (
+          flow.register.status == RegisterStatus.DONE && (
             <OperateButton
               text={'采集'}
               onPress={() => {

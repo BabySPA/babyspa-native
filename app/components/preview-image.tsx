@@ -34,7 +34,6 @@ export default function PreviewImage({
           }}
           source={source}
           contentFit='cover'
-          transition={1000}
         />
       </Pressable>
       {showImageModal && (

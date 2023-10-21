@@ -33,6 +33,7 @@ export enum FlowStatus {
   Collected, // 已采集
   CollectCanceled, // 采集取消
   ToBeAnalyzed, // 待分析
+  AnalyzeInProgress, //  分析中
   Analyzed, // 已分析
   AnalyzeCanceled, // 分析取消
   ToBeEvaluated, // 待评价

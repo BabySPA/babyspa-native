@@ -1,3 +1,4 @@
+import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import {
@@ -9,11 +10,14 @@ import {
   Pressable,
   Circle,
   Center,
+  Icon,
 } from 'native-base';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
 import EmptyBox from '~/app/components/empty-box';
+import { DialogModal } from '~/app/components/modals';
 
 import useFlowStore from '~/app/stores/flow';
 import {
@@ -24,9 +28,13 @@ import {
 import useMessageStore, { Message, MessageAction } from '~/app/stores/message';
 import { FlowStatus } from '~/app/types';
 import { ls, sp, ss } from '~/app/utils/style';
+import { toastAlert } from '~/app/utils/toast';
 
 export default function MessageDrawer() {
   const messages = useMessageStore((state) => state.messages);
+  const requestDeleteAllMessage = useMessageStore(
+    (state) => state.requestDeleteAllMessage,
+  );
   const requestMessages = useMessageStore((state) => state.requestMessages);
   const unReadCount = useMessageStore((state) => state.unReadCount);
   const readMessage = useMessageStore((state) => state.readMessage);
@@ -35,6 +43,8 @@ export default function MessageDrawer() {
   const requestGetFlowById = useFlowStore((state) => state.requestGetFlowById);
 
   const navigation = useNavigation();
+
+  const toast = useToast();
 
   useEffect(() => {
     requestMessages();
@@ -117,29 +127,71 @@ export default function MessageDrawer() {
         },
       },
     };
+    // @ts-ignore
     return actions[message.action];
   };
 
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const safe = useSafeAreaInsets();
   return (
     <Column paddingBottom={safe.bottom + 50} bgColor={'#fff'} h={'100%'}>
-      <Row alignItems={'flex-start'} p={ss(24)}>
-        <Text fontSize={sp(20)} color={'#000'} fontWeight={600}>
-          消息
-        </Text>
-        {unReadCount > 0 && (
-          <Circle
-            bgColor={'#E24A3D'}
+      <Row p={ss(24)} justifyContent={'space-between'}>
+        <Row>
+          <Text fontSize={sp(20)} color={'#000'} fontWeight={600}>
+            消息
+          </Text>
+          {unReadCount > 0 && (
+            <Circle
+              bgColor={'#E24A3D'}
+              size={sp(16)}
+              mt={-ss(5)}
+              ml={-ss(5)}
+              justifyContent={'center'}
+              alignContent={'center'}>
+              <Text color={'#fff'} fontSize={sp(10)}>
+                {unReadCount}
+              </Text>
+            </Circle>
+          )}
+        </Row>
+        <Pressable
+          alignItems={'center'}
+          flexDirection={'row'}
+          onPress={() => {
+            setIsDeleteDialogOpen(true);
+          }}>
+          <Icon
+            as={<AntDesign name='delete' />}
             size={sp(16)}
-            mt={-ss(5)}
-            ml={-ss(5)}
-            justifyContent={'center'}
-            alignContent={'center'}>
-            <Text color={'#fff'} fontSize={sp(12)}>
-              {unReadCount}
-            </Text>
-          </Circle>
-        )}
+            color={'#99A9BF'}
+          />
+          <Text fontSize={sp(16)} color={'#333'} ml={ss(3)}>
+            清空
+          </Text>
+          {isDeleteDialogOpen && (
+            <DialogModal
+              isOpen={isDeleteDialogOpen}
+              onClose={function (): void {
+                setIsDeleteDialogOpen(false);
+              }}
+              title='是否确认清空所有消息，清空后不可恢复。'
+              onConfirm={function (): void {
+                setIsDeleteDialogOpen(false);
+
+                requestDeleteAllMessage()
+                  .then(async (res) => {
+                    // 取消成功
+                    toastAlert(toast, 'success', '清空消息成功！');
+                    navigation.goBack();
+                  })
+                  .catch(() => {
+                    // 取消失败
+                    toastAlert(toast, 'error', '清空消息失败！');
+                  });
+              }}
+            />
+          )}
+        </Pressable>
       </Row>
       <Divider h={ss(1)} />
       {messages.length > 0 ? (

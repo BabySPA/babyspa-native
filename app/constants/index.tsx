@@ -80,11 +80,12 @@ export const getFlowStatus = (flow: FlowItemResponse): FlowStatus => {
     return FlowStatus.ToBeCollected;
   } else if (
     flow.collect.status === CollectStatus.DONE &&
-    (flow.analyze.status === AnalyzeStatus.NOT_SET ||
-      flow.analyze.status === AnalyzeStatus.IN_PROGRESS)
+    flow.analyze.status === AnalyzeStatus.NOT_SET
   ) {
     // 待分析
     return FlowStatus.ToBeAnalyzed;
+  } else if (flow.analyze.status === AnalyzeStatus.IN_PROGRESS) {
+    return FlowStatus.AnalyzeInProgress;
   } else if (flow.analyze.status === AnalyzeStatus.DONE) {
     // 已完成
     return FlowStatus.Analyzed;
@@ -96,7 +97,10 @@ export const getFlowStatus = (flow: FlowItemResponse): FlowStatus => {
   return FlowStatus.NO_SET;
 };
 
-export const getStatusTextConfig = (status: FlowStatus) => {
+export const getStatusTextConfig = (
+  status: FlowStatus,
+  operatorName?: string,
+) => {
   if (status == FlowStatus.ToBeCollected) {
     return {
       text: '待采集',
@@ -108,6 +112,12 @@ export const getStatusTextConfig = (status: FlowStatus) => {
       text: '待分析',
       textColor: '#2AA1F7',
       bgColor: 'rgba(42, 161, 247, 0.2)',
+    };
+  } else if (status == FlowStatus.AnalyzeInProgress) {
+    return {
+      text: operatorName + '分析中',
+      textColor: '#C87939',
+      bgColor: '#F9EDA5',
     };
   } else if (status == FlowStatus.Analyzed) {
     return {

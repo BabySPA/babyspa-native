@@ -108,11 +108,11 @@ export default function AppNavigator() {
         return;
       }
 
-      setTimeout(() => {
-        console.log('WEBSOCKET:::刷新消息列表与数据列表');
-        requestMessages();
+      console.log('WEBSOCKET:::收到消息', event, message);
+
+      if (event == MessageAction.UPDATE_FLOWS) {
         requsetGetHomeList();
-      }, 0);
+      }
 
       if (event === MessageAction.ANALYZE_UPDATE) {
         setShowActionDone({
@@ -192,7 +192,7 @@ export default function AppNavigator() {
             <Text fontSize={sp(20)} color='#333' mt={ss(40)}>
               {showActionDone.type === MessageAction.ANALYZE_UPDATE
                 ? `${showActionDone.customer}的信息已经完成分析，请及时处理。`
-                : `${showActionDone.customer}需要进行分析，请及时处理。`}
+                : `${showActionDone.customer}的采集信息已更新，请及时处理。`}
             </Text>
             <Row mt={ss(50)} mb={ss(20)}>
               <Pressable
