@@ -379,7 +379,6 @@ export function GrowthCurveModal({
                 color='#333'
                 ml={ls(20)}
                 defaultValue={`${defaultHeight}`}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(h) => {
                   setHeight(+h);
@@ -400,7 +399,6 @@ export function GrowthCurveModal({
                 color='#333'
                 ml={ls(20)}
                 defaultValue={`${defaultWeight}`}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(w) => {
                   setWeight(+w);
@@ -503,7 +501,6 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(text) => {
                   setOriginalPassword(text);
@@ -523,7 +520,6 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(text) => {
                   setNewPassword(text);
@@ -543,7 +539,6 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(text) => {
                   setConfirmPassword(text);

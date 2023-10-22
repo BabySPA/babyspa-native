@@ -22,7 +22,6 @@ import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import { showAreaPicker, showTimePicker } from '~/app/utils/picker';
-import useGlobalLoading from '~/app/stores/loading';
 interface EditBoxParams {
   onEditFinish: () => void;
 }
@@ -80,7 +79,6 @@ export default function EditBox(params: EditBoxParams) {
     return true;
   };
 
-  const { openLoading, closeLoading } = useGlobalLoading();
   return (
     <Column
       flex={1}
@@ -158,7 +156,6 @@ export default function EditBox(params: EditBoxParams) {
                   <Input
                     autoCorrect={false}
                     flex={1}
-                    inputMode='numeric'
                     ml={ls(20)}
                     h={ss(48)}
                     py={ss(10)}

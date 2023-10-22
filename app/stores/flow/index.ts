@@ -263,19 +263,27 @@ const useFlowStore = create(
 
     requestArchiveCustomers: async () => {
       const {
-        archiveCustomers: { startDate, endDate, searchKeywords, shopId },
+        archiveCustomers: { startDate, endDate, searchKeywords },
       } = get();
       const params: any = {};
+
+      // if (startDate) {
+      //   params.startDate = startDate;
+      // }
+      // if (endDate) {
+      //   params.endDate = endDate;
+      // }
 
       // if (shopId) {
       //   params.shopId = shopId;
       // }
 
-      request.get('/customers/all', { params }).then(({ data }) => {
+      return request.get('/customers/all', { params }).then(({ data }) => {
         const { docs } = data;
         set({
           archiveCustomers: {
             ...get().archiveCustomers,
+            total: docs.length,
             customers: fuzzySearch(docs, searchKeywords),
           },
         });

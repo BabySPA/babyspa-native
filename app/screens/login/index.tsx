@@ -195,7 +195,6 @@ export default function LoginScreen({
                 h={ss(60)}
                 mt={ss(60)}
                 placeholder='请输入用户名'
-                inputMode='numeric'
                 fontSize={sp(20)}
                 color={'#999'}
                 borderWidth={ss(1)}
@@ -221,7 +220,6 @@ export default function LoginScreen({
                 borderWidth={ss(1)}
                 borderColor={'#D8D8D8'}
                 placeholder='请输入密码'
-                inputMode='numeric'
                 fontSize={sp(20)}
                 color={'#999'}
                 InputLeftElement={

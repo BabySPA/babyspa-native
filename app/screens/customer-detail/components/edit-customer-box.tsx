@@ -233,7 +233,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 style={{ flex: 1 }}
                 form={
                   <Input
-                    inputMode='numeric'
                     autoCorrect={false}
                     w={ls(380)}
                     defaultValue={tempCustomer.phoneNumber}

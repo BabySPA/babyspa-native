@@ -91,7 +91,7 @@ export default function GuidanceInfo({
                 maxHeight: ss(221),
                 backgroundColor: '#F8F8F8',
                 padding: ss(10),
-                fontSize: sp(16),
+                fontSize: sp(20),
                 color: '#000',
               }}
               editable={selectedConfig.disabled ? false : true}
@@ -188,8 +188,8 @@ export default function GuidanceInfo({
                   padding: ss(10),
                 }}>
                 <Text
-                  fontSize={sp(14)}
-                  color='#999'
+                  fontSize={sp(20)}
+                  color='#333'
                   style={{ textAlignVertical: 'top' }}>
                   {conclusion || '请输入或选择注意事项'}
                 </Text>

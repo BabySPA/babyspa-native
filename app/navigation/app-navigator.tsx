@@ -37,8 +37,6 @@ import Picker from 'react-native-patchpicker';
 import FollowUp from '../screens/follow-up';
 import AnalyzeInfo from '../screens/analyze-info';
 import { useEffect, useRef, useState } from 'react';
-import useAuthStore from '../stores/auth';
-import Environment from '../config/environment';
 import useMessageStore, { MessageAction } from '../stores/message';
 import { Audio } from 'expo-av';
 import useFlowStore from '../stores/flow';

@@ -206,7 +206,6 @@ export default function EditBox(params: EditBoxParams) {
                 style={{ flex: 1 }}
                 form={
                   <Input
-                    inputMode='numeric'
                     autoCorrect={false}
                     borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}

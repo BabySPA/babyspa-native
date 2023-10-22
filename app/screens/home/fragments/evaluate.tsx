@@ -24,7 +24,6 @@ import dayjs from 'dayjs';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import { EvaluateStatus } from '~/app/stores/flow/type';
 import { Image as NativeImage } from 'react-native';
-import useGlobalLoading from '~/app/stores/loading';
 
 export default function Evaluate() {
   const navigation = useNavigation();
@@ -36,8 +35,19 @@ export default function Evaluate() {
   const flows = useFlowStore((state) => state.evaluate.flows);
 
   useEffect(() => {
-    requestGetEvaluateFlows();
+    refresh();
   }, []);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    await requestGetEvaluateFlows();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
   const [renderWaiting, setRenderWaiting] = useState(false);
 
   useEffect(() => {
@@ -45,57 +55,63 @@ export default function Evaluate() {
       setRenderWaiting(true);
     }, 10);
   }, []);
+
   return (
     <Flex flex={1}>
-      <Filter />
+      <Filter
+        onRequest={() => {
+          refresh();
+        }}
+      />
       <Box margin={ss(10)} flex={1}>
-        {flows.length == 0 ? (
-          <EmptyBox />
-        ) : (
-          <Row
-            flex={1}
-            p={ss(40)}
-            pb={0}
-            bgColor='white'
-            borderRadius={ss(10)}
-            minH={'100%'}>
-            {renderWaiting && (
-              <FlatList
-                mb={ss(120)}
-                data={flows}
-                numColumns={2}
-                renderItem={({ item: flow, index: idx }) => {
-                  return (
-                    <Center width={'50%'} key={idx}>
-                      <Pressable
-                        _pressed={{
-                          opacity: 0.6,
-                        }}
-                        ml={idx % 2 == 1 ? ss(20) : 0}
-                        mr={idx % 2 == 0 ? ss(20) : 0}
-                        mb={ss(40)}
-                        hitSlop={ss(20)}
-                        onPress={() => {
-                          updateCurrentFlow(flow);
-                          navigation.navigate('FlowInfo', {
-                            from: 'evaluate-detail',
-                          });
-                        }}>
-                        <CustomerItem flow={flow} type={OperateType.Evaluate} />
-                      </Pressable>
-                    </Center>
-                  );
-                }}
-              />
-            )}
-          </Row>
-        )}
+        <Row
+          flex={1}
+          p={ss(40)}
+          pb={0}
+          bgColor='white'
+          borderRadius={ss(10)}
+          minH={'100%'}>
+          {renderWaiting && (
+            <FlatList
+              refreshing={refreshing}
+              onRefresh={() => {
+                refresh();
+              }}
+              ListEmptyComponent={<EmptyBox />}
+              mb={ss(120)}
+              data={flows}
+              numColumns={2}
+              renderItem={({ item: flow, index: idx }) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('FlowInfo', {
+                          from: 'evaluate-detail',
+                        });
+                      }}>
+                      <CustomerItem flow={flow} type={OperateType.Evaluate} />
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
+          )}
+        </Row>
       </Box>
     </Flex>
   );
 }
 
-function Filter() {
+function Filter({ onRequest }: { onRequest: () => void }) {
   const [showFilter, setShowFilter] = useState(false);
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
     type?: 'start' | 'end';
@@ -108,16 +124,11 @@ function Filter() {
   const updateEvaluateFilter = useFlowStore(
     (state) => state.updateEvaluateFilter,
   );
-  const requestGetEvaluateFlows = useFlowStore(
-    (state) => state.requestGetEvaluateFlows,
-  );
 
   const [count, setCount] = useState({
     done: 0,
     todo: 0,
   });
-
-  const { openLoading, closeLoading } = useGlobalLoading();
 
   useEffect(() => {
     let done = 0,
@@ -168,7 +179,7 @@ function Filter() {
             updateEvaluateFilter({
               searchKeywords: text,
             });
-            requestGetEvaluateFlows();
+            onRequest();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -356,11 +367,7 @@ function Filter() {
               }}
               hitSlop={ss(20)}
               onPress={async () => {
-                openLoading();
-                await requestGetEvaluateFlows();
-                setTimeout(() => {
-                  closeLoading();
-                }, 300);
+                onRequest();
               }}
               borderRadius={ss(4)}
               borderWidth={ss(1)}

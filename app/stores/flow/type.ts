@@ -83,6 +83,7 @@ export interface QueryFlowList {
 }
 
 export interface QueryCustomerList {
+  total?: number;
   customers: Customer[];
   searchKeywords: string;
   startDate: string;

@@ -24,7 +24,6 @@ import { Image as NativeImage } from 'react-native';
 import dayjs from 'dayjs';
 import FlowCustomerItem from '../components/flow-customer-item';
 import { RegisterStatus } from '~/app/stores/flow/type';
-import useGlobalLoading from '~/app/stores/loading';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -36,8 +35,19 @@ export default function Register() {
   const flows = useFlowStore((state) => state.register.flows);
 
   useEffect(() => {
-    requestGetRegisterFlows();
+    refresh();
   }, []);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    await requestGetRegisterFlows();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
   const [renderWaiting, setRenderWaiting] = useState(false);
 
   useEffect(() => {
@@ -45,58 +55,64 @@ export default function Register() {
       setRenderWaiting(true);
     }, 10);
   }, []);
+
   return (
     <Flex flex={1}>
-      <Filter />
+      <Filter
+        onRequest={function (): void {
+          refresh();
+        }}
+      />
       <Box margin={ss(10)} flex={1}>
-        {flows.length == 0 ? (
-          <EmptyBox />
-        ) : (
-          <Row
-            flex={1}
-            p={ss(40)}
-            pb={0}
-            bgColor='white'
-            borderRadius={ss(10)}
-            minH={'100%'}>
-            {renderWaiting && (
-              <FlatList
-                mb={ss(120)}
-                data={flows}
-                numColumns={2}
-                renderItem={({ item: flow, index: idx }) => {
-                  return (
-                    <Center width={'50%'} key={idx}>
-                      <Pressable
-                        _pressed={{
-                          opacity: 0.8,
-                        }}
-                        ml={idx % 2 == 1 ? ss(20) : 0}
-                        mr={idx % 2 == 0 ? ss(20) : 0}
-                        mb={ss(40)}
-                        hitSlop={ss(20)}
-                        onPress={() => {
-                          updateCurrentFlow(flow);
-                          navigation.navigate('CustomerDetail');
-                        }}>
-                        <FlowCustomerItem
-                          flow={flow}
-                          type={OperateType.Register}
-                        />
-                      </Pressable>
-                    </Center>
-                  );
-                }}
-              />
-            )}
-          </Row>
-        )}
+        <Row
+          flex={1}
+          p={ss(40)}
+          pb={0}
+          bgColor='white'
+          borderRadius={ss(10)}
+          minH={'100%'}>
+          {renderWaiting && (
+            <FlatList
+              refreshing={refreshing}
+              onRefresh={() => {
+                refresh();
+              }}
+              ListEmptyComponent={<EmptyBox />}
+              mb={ss(120)}
+              data={flows}
+              numColumns={2}
+              renderItem={({ item: flow, index: idx }) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('CustomerDetail');
+                      }}>
+                      <FlowCustomerItem
+                        flow={flow}
+                        type={OperateType.Register}
+                      />
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
+          )}
+        </Row>
       </Box>
     </Flex>
   );
 }
 
-function Filter() {
+function Filter({ onRequest }: { onRequest: () => void }) {
   const [showFilter, setShowFilter] = useState(false);
   const navigation = useNavigation();
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
@@ -110,9 +126,7 @@ function Filter() {
   const updateRegisterFilter = useFlowStore(
     (state) => state.updateRegisterFilter,
   );
-  const requestGetRegisterFlows = useFlowStore(
-    (state) => state.requestGetRegisterFlows,
-  );
+
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const [registerCount, setRegisterCount] = useState(0);
@@ -124,7 +138,6 @@ function Filter() {
       }).length,
     );
   }, [register.flows]);
-  const { openLoading, closeLoading } = useGlobalLoading();
 
   return (
     <Column mx={ss(10)} mt={ss(10)} bgColor='white' borderRadius={ss(10)}>
@@ -161,7 +174,7 @@ function Filter() {
                 searchKeywords: text,
               });
 
-              requestGetRegisterFlows();
+              onRequest();
             }, 1000)}
             InputLeftElement={
               <Icon
@@ -377,11 +390,7 @@ function Filter() {
               }}
               hitSlop={ss(20)}
               onPress={async () => {
-                openLoading();
-                await requestGetRegisterFlows();
-                setTimeout(() => {
-                  closeLoading();
-                }, 300);
+                onRequest();
               }}
               borderRadius={ss(4)}
               borderWidth={ss(1)}

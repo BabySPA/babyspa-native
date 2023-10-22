@@ -121,8 +121,7 @@ export default function FlowScreen({
 
   const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
   const [showWarn, setShowWarn] = useState<boolean>(
-    selectedConfig.auth === RoleAuthority.FLOW_ANALYZE &&
-      collect.healthInfo.allergy !== '',
+    type === FlowStatus.ToBeAnalyzed && collect.healthInfo.allergy !== '',
   );
   const [closeLoading, setCloseLoading] = useState<boolean>(false);
   const [finishLoading, setFinishLoading] = useState<boolean>(false);

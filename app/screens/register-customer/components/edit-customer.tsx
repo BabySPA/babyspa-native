@@ -244,7 +244,6 @@ export default function EditCustomer(params: EditCustomerParams) {
                 color={'#333333'}
                 fontSize={sp(16)}
                 placeholder='请输入'
-                inputMode='numeric'
               />
             }
           />

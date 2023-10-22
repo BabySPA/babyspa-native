@@ -71,8 +71,8 @@ export default function HealthInfo({
                 padding: ss(10),
               }}>
               <Text
-                fontSize={sp(14)}
-                color='#999'
+                fontSize={sp(20)}
+                color='#333'
                 style={{ textAlignVertical: 'top' }}>
                 {collect.healthInfo.allergy || '请输入或选择过敏原'}
               </Text>

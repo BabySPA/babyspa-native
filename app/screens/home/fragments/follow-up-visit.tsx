@@ -21,7 +21,6 @@ import { debounce } from 'lodash';
 import DatePickerModal from '~/app/components/date-picker-modal';
 import CustomerFollowUpItem from '../components/customer-followup-item';
 import SelectShop, { useSelectShops } from '~/app/components/select-shop';
-import useGlobalLoading from '~/app/stores/loading';
 import { Shop } from '../../../stores/manager/type';
 
 export default function FollowUpVisit(params: {
@@ -31,6 +30,19 @@ export default function FollowUpVisit(params: {
 
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
   const flows = useFlowStore((state) => state.customersFollowUp.flows);
+  const requestGetFollowUps = useFlowStore(
+    (state) => state.requestGetFollowUps,
+  );
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    await requestGetFollowUps();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
 
   const [renderWaiting, setRenderWaiting] = useState(false);
 
@@ -41,64 +53,71 @@ export default function FollowUpVisit(params: {
   }, []);
   return (
     <Flex flex={1}>
-      <Filter shop={params?.shop} />
+      <Filter
+        shop={params?.shop}
+        onRequest={() => {
+          refresh();
+        }}
+      />
       <Box margin={ss(10)} flex={1}>
-        {flows.length == 0 ? (
-          <EmptyBox />
-        ) : (
-          <Row
-            flex={1}
-            p={ss(40)}
-            pb={0}
-            bgColor='white'
-            borderRadius={ss(10)}
-            minH={'100%'}>
-            {renderWaiting && (
-              <FlatList
-                mb={ss(120)}
-                data={flows}
-                numColumns={2}
-                renderItem={({ item: flow, index: idx }) => {
-                  return (
-                    <Center width={'50%'} key={idx}>
-                      <Pressable
-                        _pressed={{
-                          opacity: 0.8,
-                        }}
-                        ml={idx % 2 == 1 ? ss(20) : 0}
-                        mr={idx % 2 == 0 ? ss(20) : 0}
-                        mb={ss(40)}
-                        hitSlop={ss(20)}
-                        onPress={() => {
-                          updateCurrentFlow(flow);
-                          navigation.navigate('FlowInfo', {
-                            from: 'follow-up-detail',
-                          });
-                        }}>
-                        <CustomerFollowUpItem flow={flow} />
-                      </Pressable>
-                    </Center>
-                  );
-                }}
-              />
-            )}
-          </Row>
-        )}
+        <Row
+          flex={1}
+          p={ss(40)}
+          pb={0}
+          bgColor='white'
+          borderRadius={ss(10)}
+          minH={'100%'}>
+          {renderWaiting && (
+            <FlatList
+              refreshing={refreshing}
+              onRefresh={() => {
+                refresh();
+              }}
+              ListEmptyComponent={<EmptyBox />}
+              mb={ss(120)}
+              data={flows}
+              numColumns={2}
+              renderItem={({ item: flow, index: idx }) => {
+                return (
+                  <Center width={'50%'} key={idx}>
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.8,
+                      }}
+                      ml={idx % 2 == 1 ? ss(20) : 0}
+                      mr={idx % 2 == 0 ? ss(20) : 0}
+                      mb={ss(40)}
+                      hitSlop={ss(20)}
+                      onPress={() => {
+                        updateCurrentFlow(flow);
+                        navigation.navigate('FlowInfo', {
+                          from: 'follow-up-detail',
+                        });
+                      }}>
+                      <CustomerFollowUpItem flow={flow} />
+                    </Pressable>
+                  </Center>
+                );
+              }}
+            />
+          )}
+        </Row>
       </Box>
     </Flex>
   );
 }
 
-function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
+function Filter({
+  shop,
+  onRequest,
+}: {
+  shop?: Pick<Shop, 'name' | '_id'>;
+  onRequest: () => void;
+}) {
   const customersFollowUp = useFlowStore((state) => state.customersFollowUp);
   const updateCustomersFollowupFilter = useFlowStore(
     (state) => state.updateCustomersFollowupFilter,
   );
-  const requestGetFollowUps = useFlowStore(
-    (state) => state.requestGetFollowUps,
-  );
-
-  const { openLoading, closeLoading } = useGlobalLoading();
 
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
     type?: 'start' | 'end';
@@ -111,7 +130,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
     updateCustomersFollowupFilter({
       shopId: shop?._id,
     });
-    requestGetFollowUps();
+    onRequest();
   }, [shop]);
 
   const [defaultSelectShop, selectShops] = useSelectShops(true);
@@ -124,7 +143,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
             updateCustomersFollowupFilter({
               shopId: selectedItem._id,
             });
-            requestGetFollowUps();
+            onRequest();
           }}
           defaultButtonText={shop?.name || defaultSelectShop?.name}
           buttonHeight={ss(44)}
@@ -147,7 +166,7 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
             updateCustomersFollowupFilter({
               searchKeywords: text,
             });
-            requestGetFollowUps();
+            onRequest();
           }, 1000)}
           InputLeftElement={
             <Icon
@@ -234,12 +253,12 @@ function Filter({ shop }: { shop?: Pick<Shop, 'name' | '_id'> }) {
                 updateCustomersFollowupFilter({
                   startDate: date,
                 });
-                requestGetFollowUps();
+                onRequest();
               } else {
                 updateCustomersFollowupFilter({
                   endDate: date,
                 });
-                requestGetFollowUps();
+                onRequest();
               }
             }}
             current={

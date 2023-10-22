@@ -260,7 +260,6 @@ export default function EditBox(params: EditBoxParams) {
                       },
                     });
                   }}
-                  inputMode='numeric'
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16)}
