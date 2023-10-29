@@ -5,6 +5,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Shop } from '../stores/manager/type';
+import { FlowItemResponse } from '../stores/flow/type';
 
 declare global {
   namespace ReactNavigation {
@@ -77,6 +78,7 @@ export type RootStackParamList = {
   };
   FlowInfo: {
     from: FlowFrom;
+    currentFlow: FlowItemResponse;
   };
   Modal: undefined;
   NotFound: undefined;
@@ -122,6 +124,7 @@ export type AppStackList = {
   };
   FlowInfo: {
     from: FlowFrom;
+    currentFlow: FlowItemResponse;
   };
   Camera: {
     type: 'lingual' | 'lefthand' | 'righthand' | 'other';

@@ -1,13 +1,4 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Text,
-  Pressable,
-  Row,
-  Alert,
-  Circle,
-} from 'native-base';
+import { Box, Center, Flex, Text, Pressable, Row, Circle } from 'native-base';
 import { useToast } from 'react-native-toast-notifications';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
@@ -19,7 +10,7 @@ import useGlobalLoading from '~/app/stores/loading';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MessageDrawer from './message-drawer';
 import useMessageStore from '~/app/stores/message';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 
 const Drawer = createDrawerNavigator();
 

@@ -109,7 +109,7 @@ export const DefaultFlow = {
       nextTime: '',
     },
     remark: '',
-    editable: 0,
+    editable: true,
   },
   evaluate: {
     status: EvaluateStatus.NOT_SET,
@@ -160,7 +160,11 @@ const initialState = {
   },
   currentFlow: DefaultFlow,
 
-  archiveCustomers: { ...DefaultCustomerListData },
+  archiveCustomers: {
+    ...DefaultCustomerListData,
+    all: [],
+    totalPages: 0,
+  },
   customersFollowUp: {
     ...DefaultFlowListData,
     startDate: dayjs().format('YYYY-MM-DD'),
@@ -174,6 +178,8 @@ const initialState = {
   statisticShop: DefaultStatisticShop,
   statisticFlowWithDate: [],
 };
+
+let currentDate = dayjs().format('YYYY-MM-DD');
 
 const useFlowStore = create(
   immer<FlowState>((set, get) => ({
@@ -227,7 +233,28 @@ const useFlowStore = create(
       });
     },
 
+    resetRegisterFlows: () => {
+      set((state) => {
+        state.register = produce(state.register, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     requestGetRegisterFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateRegisterFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
+
       const {
         register: { searchKeywords, startDate, endDate, status },
       } = get();
@@ -261,33 +288,48 @@ const useFlowStore = create(
       });
     },
 
-    requestArchiveCustomers: async () => {
-      const {
-        archiveCustomers: { startDate, endDate, searchKeywords },
-      } = get();
-      const params: any = {};
-
-      // if (startDate) {
-      //   params.startDate = startDate;
-      // }
-      // if (endDate) {
-      //   params.endDate = endDate;
-      // }
-
-      // if (shopId) {
-      //   params.shopId = shopId;
-      // }
-
-      return request.get('/customers/all', { params }).then(({ data }) => {
-        const { docs } = data;
-        set({
-          archiveCustomers: {
-            ...get().archiveCustomers,
-            total: docs.length,
-            customers: fuzzySearch(docs, searchKeywords),
-          },
+    resetArchiveCustomers: () => {
+      set((state) => {
+        state.archiveCustomers = produce(state.archiveCustomers, (draft) => {
+          Object.assign(draft, {
+            ...DefaultCustomerListData,
+            all: [],
+            totalPages: 0,
+          });
         });
       });
+    },
+    requestArchiveCustomers: async (page: number) => {
+      if (page === 1) {
+        const {
+          archiveCustomers: { startDate, endDate, searchKeywords },
+        } = get();
+        const params: any = {};
+
+        return request.get('/customers/all', { params }).then(({ data }) => {
+          const { docs } = data;
+          set({
+            archiveCustomers: {
+              ...get().archiveCustomers,
+              total: docs.length,
+              totalPages: Math.ceil(docs.length / 15),
+              all: docs,
+              // @ts-ignore
+              customers: fuzzySearch(docs, searchKeywords).slice(0, 15),
+            },
+          });
+        });
+      } else {
+        if (get().archiveCustomers.totalPages < page) {
+          return;
+        }
+        set((state) => {
+          state.archiveCustomers.customers =
+            state.archiveCustomers.customers.concat(
+              ...get().archiveCustomers.all.slice(page * 15, (page + 1) * 15),
+            );
+        });
+      }
     },
 
     async requestCustomerArchiveHistory(customerId) {
@@ -304,7 +346,27 @@ const useFlowStore = create(
       return data;
     },
 
+    resetCollectionCustomers: () => {
+      set((state) => {
+        state.collection = produce(state.collection, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     requestGetCollectionFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateCollectionFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
       const {
         collection: { status, searchKeywords, startDate, endDate },
       } = get();
@@ -372,7 +434,28 @@ const useFlowStore = create(
       return data;
     },
 
+    resetAnalyzeFlows: () => {
+      set((state) => {
+        state.analyze = produce(state.analyze, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
+
     requestGetAnalyzeFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateAnalyzeFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
       const {
         analyze: { status, searchKeywords, startDate, endDate },
       } = get();
@@ -403,7 +486,27 @@ const useFlowStore = create(
       });
     },
 
+    resetEvaluateFlows: () => {
+      set((state) => {
+        state.evaluate = produce(state.evaluate, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     requestGetEvaluateFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateEvaluateFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
       const {
         evaluate: { status, startDate, searchKeywords, endDate },
       } = get();
@@ -940,8 +1043,29 @@ const useFlowStore = create(
       });
     },
 
+    resetFollowUps() {
+      return set((state) => {
+        state.customersFollowUp = produce(state.customersFollowUp, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     // 客户随访
     async requestGetFollowUps() {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateCustomersFollowupFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
+
       const {
         customersFollowUp: { shopId, startDate, endDate, searchKeywords },
       } = get();

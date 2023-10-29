@@ -76,7 +76,6 @@ export default function CustomerArchive({
     (state) => state.requestArchiveCustomers,
   );
   const customer = useFlowStore((state) => state.currentArchiveCustomer);
-  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const age = getAge(customer?.birthday || dayjs().format('YYYY-MM-DD'));
   const toast = useToast();
@@ -208,7 +207,7 @@ export default function CustomerArchive({
                   requestDeleteCustomer(customer?._id || '')
                     .then(async (res) => {
                       toastAlert(toast, 'success', '删除成功！');
-                      await requestArchiveCustomers();
+                      await requestArchiveCustomers(1);
                       navigation.goBack();
                     })
                     .catch((err) => {
@@ -324,8 +323,10 @@ export default function CustomerArchive({
                 <ShopArchive
                   archives={archives}
                   onPressToFlowInfo={function (archive): void {
-                    updateCurrentFlow(archive);
-                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                    navigation.navigate('FlowInfo', {
+                      from: 'analyze',
+                      currentFlow: archive,
+                    });
                   }}
                 />
               ) : (
@@ -336,8 +337,10 @@ export default function CustomerArchive({
                 <HistoryArchive
                   courses={courses}
                   onPressToFlowInfo={function (archive): void {
-                    updateCurrentFlow(archive);
-                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                    navigation.navigate('FlowInfo', {
+                      from: 'analyze',
+                      currentFlow: archive,
+                    });
                   }}
                 />
               ) : (

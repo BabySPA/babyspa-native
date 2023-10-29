@@ -1,12 +1,14 @@
 import { Pressable, Text, Row } from 'native-base';
 import { ss, ls, sp } from '../utils/style';
 import * as Print from 'expo-print';
-import useFlowStore from '../stores/flow';
 import { getAge } from '../utils';
-import dayjs from 'dayjs';
+import { FlowItemResponse } from '../stores/flow/type';
 
-export function PrintButton() {
-  const currentFlow = useFlowStore((state) => state.currentFlow);
+export function PrintButton({
+  currentFlow,
+}: {
+  currentFlow: FlowItemResponse;
+}) {
   const age = getAge(currentFlow.customer.birthday);
 
   let massageHtml = '';

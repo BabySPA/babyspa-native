@@ -3,9 +3,13 @@ import { immer } from 'zustand/middleware/immer';
 import useAuthStore from '../auth';
 import { LayoutConfig } from '~/app/constants';
 import { LayoutConfigWithRole } from './type';
-import { AuthorityConfig } from '../auth/type';
+import { AuthorityConfig, RoleAuthority } from '../auth/type';
+import { ShopType } from '../manager/type';
 
-const getFilteredLayoutConfig = (authorityConfig: AuthorityConfig[]) => {
+const getFilteredLayoutConfig = (
+  authorityConfig: AuthorityConfig[],
+  isCenter: boolean,
+) => {
   const filteredConfig = LayoutConfig.map((tab) => {
     const features = tab.features.filter((feature) => {
       const featureAuthority = feature.auth;
@@ -15,6 +19,13 @@ const getFilteredLayoutConfig = (authorityConfig: AuthorityConfig[]) => {
     });
     return { ...tab, features };
   }).filter((tab) => tab.features.length > 0);
+
+  const f0 = filteredConfig[0];
+  if (isCenter && f0.text == '门店') {
+    filteredConfig[0].featureSelected = f0.features.findIndex((item) => {
+      return item.auth == RoleAuthority.FLOW_ANALYZE;
+    });
+  }
 
   return filteredConfig;
 };
@@ -49,6 +60,7 @@ const useLayoutStore = create(
 
       const filterConfig = getFilteredLayoutConfig(
         currentShopWithRole?.role.authorities,
+        currentShopWithRole.shop.type === ShopType.CENTER,
       );
 
       set((state) => {

@@ -6,16 +6,17 @@ import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { getAge } from '~/app/utils';
 import dayjs from 'dayjs';
+import { FlowItemResponse } from '~/app/stores/flow/type';
 
 interface RegisterCardParams {
   style?: StyleProp<ViewStyle>;
+  currentFlow: FlowItemResponse;
 }
 
 export default function RegisterCard(params: RegisterCardParams) {
-  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const { style = {}, currentFlow } = params;
 
   const age = getAge(currentFlow.customer.birthday);
-  const { style = {} } = params;
 
   return (
     <Column bgColor={'#fff'} p={ss(20)} borderRadius={ss(10)} style={style}>

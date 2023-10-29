@@ -41,14 +41,18 @@ import useMessageStore, { MessageAction } from '../stores/message';
 import { Audio } from 'expo-av';
 import useFlowStore from '../stores/flow';
 import { useNavigation } from '@react-navigation/native';
-import { AnalyzeStatus } from '../stores/flow/type';
+import JPush from 'jpush-react-native';
+import { AppState, AppStateStatus } from 'react-native';
+import dayjs from 'dayjs';
 
 const Stack = createStackNavigator<AppStackList>();
 
 export default function AppNavigator() {
   const { loading, loadingText, spinner, closeLoading } = useGlobalLoading();
 
-  const requestMessages = useMessageStore((state) => state.requestMessages);
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
   const getSocketInstance = useMessageStore((state) => state.getSocketInstance);
   const loginSocket = useMessageStore((state) => state.loginSocket);
   const closeSocket = useMessageStore((state) => state.closeSocket);
@@ -150,6 +154,15 @@ export default function AppNavigator() {
   };
 
   useEffect(() => {
+    JPush.setBadge({
+      badge: 0,
+      appBadge: 0,
+    });
+    JPush.init({
+      appKey: 'd185f1ce96771ab023bc7d86',
+      channel: 'BABYSPA_MANAGE',
+      production: true,
+    });
     console.log('WEBSOCKET:::初始化socket');
     connectWebSocket();
 

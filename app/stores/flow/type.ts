@@ -1,6 +1,7 @@
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { FlowStatus, Gender } from '~/app/types';
 import { Shop } from '../manager/type';
+import dayjs from 'dayjs';
 
 export enum RegisterStatus {
   NOT_SET = -1,
@@ -169,11 +170,20 @@ export interface FlowState {
   collection: QueryFlowList;
   analyze: QueryFlowList;
   evaluate: QueryFlowList;
+  customersFollowUp: QueryFlowList;
   currentFlow: FlowItemResponse;
 
-  archiveCustomers: QueryCustomerList;
+  archiveCustomers: QueryCustomerList & {
+    all: Customer[];
+    totalPages: number;
+  };
 
-  customersFollowUp: QueryFlowList;
+  resetArchiveCustomers: () => void;
+  resetAnalyzeFlows: () => void;
+  resetCollectionCustomers: () => void;
+  resetEvaluateFlows: () => void;
+  resetFollowUps: () => void;
+  resetRegisterFlows: () => void;
 
   currentArchiveCustomer: Customer;
 
@@ -202,7 +212,7 @@ export interface FlowState {
   requestStartAnalyze: () => Promise<FlowItemResponse>;
 
   // 客户档案
-  requestArchiveCustomers: () => Promise<any>;
+  requestArchiveCustomers: (page: number) => Promise<any>;
   requestCustomerArchiveHistory: (
     customerId: string,
   ) => Promise<FlowItemResponse[]>;
@@ -465,7 +475,7 @@ export interface Analyze {
   /**
    * 是否可编辑
    */
-  editable?: number | false;
+  editable?: boolean;
 
   updatedAt?: string;
 }

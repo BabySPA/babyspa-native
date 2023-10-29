@@ -16,7 +16,11 @@ import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
-import { FollowUpResult, FollowUpStatus } from '~/app/stores/flow/type';
+import {
+  FlowItemResponse,
+  FollowUpResult,
+  FollowUpStatus,
+} from '~/app/stores/flow/type';
 import {
   FollowUpResultText,
   FollowUpStatusTextConfig,
@@ -29,18 +33,19 @@ import { DialogModal } from '../modals';
 interface FollowUpCardParams {
   style?: StyleProp<ViewStyle>;
   edit: boolean;
+  currentFlow: FlowItemResponse;
 }
 
 export default function FollowUpCard(params: FollowUpCardParams) {
-  const analyze = useFlowStore((state) => state.currentFlow.analyze);
+  const { style = {}, edit, currentFlow } = params;
+
+  const analyze = currentFlow.analyze;
   const requestPatchFollowUp = useFlowStore(
     (state) => state.requestPatchFollowUp,
   );
   const requestGetFollowUps = useFlowStore(
     (state) => state.requestGetFollowUps,
   );
-
-  const { style = {}, edit } = params;
 
   const navigation =
     useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();

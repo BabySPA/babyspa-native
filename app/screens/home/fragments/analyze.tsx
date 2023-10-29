@@ -31,11 +31,14 @@ export default function Analyze() {
   const requestGetAnalyzeFlows = useFlowStore(
     (state) => state.requestGetAnalyzeFlows,
   );
-  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const resetAnalyzeFlows = useFlowStore((state) => state.resetAnalyzeFlows);
   const flows = useFlowStore((state) => state.analyze.flows);
 
   useEffect(() => {
     refresh();
+    return () => {
+      resetAnalyzeFlows();
+    };
   }, []);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -98,8 +101,10 @@ export default function Analyze() {
                       mb={ss(40)}
                       hitSlop={ss(20)}
                       onPress={() => {
-                        updateCurrentFlow(flow);
-                        navigation.navigate('FlowInfo', { from: 'analyze' });
+                        navigation.navigate('FlowInfo', {
+                          from: 'analyze',
+                          currentFlow: flow,
+                        });
                       }}>
                       <FlowCustomerItem
                         flow={flow}

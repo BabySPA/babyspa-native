@@ -1,6 +1,5 @@
 import { Column, Divider, Icon, Pressable, Row, Text } from 'native-base';
 import { StyleProp, ViewStyle } from 'react-native';
-import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { Image } from 'expo-image';
@@ -8,20 +7,23 @@ import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
-import { AnalyzeStatus, FollowUpStatus } from '~/app/stores/flow/type';
+import {
+  AnalyzeStatus,
+  FlowItemResponse,
+  FollowUpStatus,
+} from '~/app/stores/flow/type';
 
 interface AnalyzeCardParams {
   style?: StyleProp<ViewStyle>;
   edit: boolean;
+  currentFlow: FlowItemResponse;
 }
 
 export default function AnalyzeCard(params: AnalyzeCardParams) {
-  const analyze = useFlowStore((state) => state.currentFlow.analyze);
-  const analyzeOperator = useFlowStore(
-    (state) => state.currentFlow.analyzeOperator,
-  );
+  const { style = {}, edit, currentFlow } = params;
 
-  const { style = {}, edit } = params;
+  const analyze = currentFlow.analyze;
+  const analyzeOperator = currentFlow.analyzeOperator;
 
   const navigation =
     useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
@@ -37,7 +39,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
         title='分析信息'
         rightElement={
           edit &&
-          analyze.editable !== false && (
+          analyze.editable && (
             <Pressable
               _pressed={{
                 opacity: 0.6,
@@ -154,7 +156,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               textAlign={'right'}>
               注意事项：
             </Text>
-            <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
+            <Text fontSize={sp(18)} color='#333' maxW={'85%'}>
               {analyze.conclusion || '无'}
             </Text>
           </Row>

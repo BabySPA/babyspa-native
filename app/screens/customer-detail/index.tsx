@@ -42,7 +42,7 @@ export default function CustomerDetail({
         onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20)}>
-            客户详情
+            登记详情
           </Text>
         }
         rightElement={

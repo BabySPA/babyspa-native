@@ -5739,6 +5739,11 @@ istanbul-reports@^3.1.3:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
+jcore-react-native@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/jcore-react-native/-/jcore-react-native-2.1.4.tgz#29e3993c285eb21e4bb14fb2bb54f369da811411"
+  integrity sha512-ywdsja7BAadMwyZShBD2viBdPXF4uZakk+wvcytbfdgtIwr+XpUv9JUEqJuW3oPduy/YGkJf1CnS8gRTlelalg==
+
 jest-changed-files@^29.7.0:
   version "29.7.0"
   resolved "https://registry.npmmirror.com/jest-changed-files/-/jest-changed-files-29.7.0.tgz#1c06d07e77c78e1585d020424dedc10d6e17ac3a"
@@ -6220,6 +6225,11 @@ join-component@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmmirror.com/join-component/-/join-component-1.1.0.tgz#b8417b750661a392bee2c2537c68b2a9d4977cd5"
   integrity sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==
+
+jpush-react-native@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/jpush-react-native/-/jpush-react-native-3.0.5.tgz#9b34ae457c0b8c5f75d785add3c49e05b3d101be"
+  integrity sha512-vnFKNWvF0adomxxTCcO45R7AIKpNddDJ+zXLEHlRDwb3WHA+dWrs9fdsQS8gbaB+jzSx/GDaZr10OIVs4MAEcw==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

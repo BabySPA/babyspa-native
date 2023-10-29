@@ -74,6 +74,7 @@ export default function FlowScreen({
 
   const user = useAuthStore((state) => state.user);
 
+  console.log('collect.healthInfo.allergy', collect.healthInfo.allergy);
   useEffect(() => {
     if (
       analyze.status !== AnalyzeStatus.DONE &&
@@ -85,7 +86,8 @@ export default function FlowScreen({
         .then((flow) => {
           if (
             flow.analyze.status === AnalyzeStatus.IN_PROGRESS &&
-            flow.analyzeOperator?._id !== user?.id
+            flow.analyzeOperator?._id !== user?.id &&
+            flow.analyze.updatedAt
           ) {
             setOpenLockModal({
               isOpen: true,
@@ -245,18 +247,19 @@ export default function FlowScreen({
           bgColor={'#F9EDA5'}
           alignItems={'center'}
           justifyContent={'space-between'}>
-          <Row alignItems={'center'}>
+          <Row alignItems={'center'} flex={1}>
             <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
             </Circle>
-            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} maxW={'90%'}>
+            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} flex={1}>
               过敏原：
               {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Pressable
+            ml={ls(20)}
             _pressed={{
               opacity: 0.6,
             }}
@@ -464,6 +467,7 @@ export default function FlowScreen({
                         // navigation.goBack();
                         navigation.replace('FlowInfo', {
                           from: 'analyze',
+                          currentFlow: currentFlow,
                         });
                       }, 2000);
                     })

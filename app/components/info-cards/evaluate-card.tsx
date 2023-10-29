@@ -16,7 +16,7 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, sp, ls } from '~/app/utils/style';
 import { EvaluateStoreConfig, EvaluateStores } from '~/app/constants';
-import { Score } from '~/app/stores/flow/type';
+import { FlowItemResponse, Score } from '~/app/stores/flow/type';
 import { useEffect, useRef, useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 
@@ -26,10 +26,20 @@ interface EvaluateCardParams {
   canEdit: boolean;
   onClose?: () => void;
   onEvaluated?: () => void;
+  currentFlow: FlowItemResponse;
 }
 
 export default function EvaluateCard(params: EvaluateCardParams) {
-  const evaluate = useFlowStore((state) => state.currentFlow.evaluate);
+  const {
+    style = {},
+    type,
+    canEdit,
+    onClose,
+    onEvaluated,
+    currentFlow,
+  } = params;
+
+  const evaluate = currentFlow.evaluate;
   const requestPutFlowToEvaluate = useFlowStore(
     (state) => state.requestPutFlowToEvaluate,
   );
@@ -39,7 +49,6 @@ export default function EvaluateCard(params: EvaluateCardParams) {
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const { style = {}, type, canEdit, onClose, onEvaluated } = params;
 
   const [templateEvaluate, setTemplateEvaluate] = useState(evaluate);
 
@@ -245,12 +254,14 @@ interface EvaluateCardDialogParams {
   isOpen: boolean;
   onClose: () => void;
   onEvaluated?: () => void;
+  currentFlow: FlowItemResponse;
 }
 
 export function EvaluateCardDialog({
   isOpen,
   onClose,
   onEvaluated,
+  currentFlow,
 }: EvaluateCardDialogParams) {
   return (
     <Modal
@@ -259,6 +270,7 @@ export function EvaluateCardDialog({
         onClose();
       }}>
       <EvaluateCard
+        currentFlow={currentFlow}
         type={'dialog'}
         canEdit={true}
         onEvaluated={onEvaluated}

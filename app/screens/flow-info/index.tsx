@@ -7,12 +7,10 @@ import {
   Column,
   ScrollView,
 } from 'native-base';
-import { useToast } from 'react-native-toast-notifications';
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useState } from 'react';
-import useFlowStore from '~/app/stores/flow';
 import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
 import AnalyzeCard from '~/app/components/info-cards/analyze-card';
@@ -28,11 +26,10 @@ export default function FlowInfo({
   navigation,
   route: { params },
 }: AppStackScreenProps<'FlowInfo'>) {
-  const currentFlow = useFlowStore((state) => state.currentFlow);
-
+  const { from: paramFlow, currentFlow } = params;
   const { evaluate } = currentFlow;
 
-  const [from, setFrom] = useState(params.from);
+  const [from, setFrom] = useState(paramFlow);
 
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +38,7 @@ export default function FlowInfo({
 
   const ShowPrintButton = () => {
     return getFlowStatus(currentFlow) == FlowStatus.Analyzed ? (
-      <PrintButton />
+      <PrintButton currentFlow={currentFlow} />
     ) : null;
   };
 
@@ -94,10 +91,17 @@ export default function FlowInfo({
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>
         <Column flex={1}>
           <ScrollView>
-            <RegisterCard />
-            <CollectionCard style={{ marginTop: ls(10) }} />
+            <RegisterCard currentFlow={currentFlow} />
+            <CollectionCard
+              style={{ marginTop: ls(10) }}
+              currentFlow={currentFlow}
+            />
             {(from == 'evaluate' || from == 'follow-up') && (
-              <AnalyzeCard edit={false} style={{ marginTop: ls(10) }} />
+              <AnalyzeCard
+                edit={false}
+                style={{ marginTop: ls(10) }}
+                currentFlow={currentFlow}
+              />
             )}
           </ScrollView>
         </Column>
@@ -105,6 +109,7 @@ export default function FlowInfo({
           <ScrollView>
             {from !== 'evaluate' && from !== 'follow-up' && (
               <AnalyzeCard
+                currentFlow={currentFlow}
                 edit={Boolean(
                   currentFlow.analyze.status == AnalyzeStatus.DONE &&
                     currentFlow.analyze.editable,
@@ -116,6 +121,7 @@ export default function FlowInfo({
               (from == 'evaluate-detail' &&
                 evaluate.status == EvaluateStatus.DONE)) && (
               <EvaluateCard
+                currentFlow={currentFlow}
                 type='card'
                 canEdit={from == 'evaluate'}
                 onEvaluated={() => {
@@ -126,6 +132,7 @@ export default function FlowInfo({
             {/* 从随访点击卡片进来 */}
             {(from == 'follow-up' || from === 'follow-up-detail') && (
               <FollowUpCard
+                currentFlow={currentFlow}
                 edit={from == 'follow-up'}
                 style={from == 'follow-up-detail' ? { marginTop: ss(10) } : {}}
               />
@@ -135,6 +142,7 @@ export default function FlowInfo({
       </Row>
       {isEvaluateCardDialogShow && (
         <EvaluateCardDialog
+          currentFlow={currentFlow}
           isOpen={isEvaluateCardDialogShow}
           onClose={function (): void {
             setIsEvaluateCardDialogShow(false);

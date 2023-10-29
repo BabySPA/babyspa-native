@@ -25,7 +25,6 @@ import dayjs from 'dayjs';
 import SoundList from '~/app/components/sound-list';
 import PreviewImage from '~/app/components/preview-image';
 import { AnalyzeStatus } from '~/app/stores/flow/type';
-import EmptyBox from '~/app/components/empty-box';
 
 export default function AnalyzeInfo({
   navigation,
@@ -69,7 +68,9 @@ export default function AnalyzeInfo({
               </Row>
             </Pressable>
             {(analyze.status === AnalyzeStatus.DONE ||
-              analyze.status === AnalyzeStatus.CANCEL) && <PrintButton />}
+              analyze.status === AnalyzeStatus.CANCEL) && (
+              <PrintButton currentFlow={currentFlow} />
+            )}
           </Row>
         }
       />
@@ -80,18 +81,19 @@ export default function AnalyzeInfo({
           bgColor={'#F9EDA5'}
           alignItems={'center'}
           justifyContent={'space-between'}>
-          <Row alignItems={'center'}>
+          <Row alignItems={'center'} flex={1}>
             <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
             </Circle>
-            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} maxW={'90%'}>
+            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} flex={1}>
               过敏原：
               {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Pressable
+            ml={ls(20)}
             _pressed={{
               opacity: 0.6,
             }}
@@ -109,7 +111,7 @@ export default function AnalyzeInfo({
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>
         <Column flex={1}>
           <ScrollView>
-            <RegisterCard />
+            <RegisterCard currentFlow={currentFlow} />
             <Column
               flex={1}
               bgColor={'#fff'}

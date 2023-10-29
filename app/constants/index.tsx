@@ -114,11 +114,19 @@ export const getStatusTextConfig = (
       bgColor: 'rgba(42, 161, 247, 0.2)',
     };
   } else if (status == FlowStatus.AnalyzeInProgress) {
-    return {
-      text: operatorName + '分析中',
-      textColor: '#C87939',
-      bgColor: '#F9EDA5',
-    };
+    if (operatorName) {
+      return {
+        text: operatorName + '分析中',
+        textColor: '#C87939',
+        bgColor: '#F9EDA5',
+      };
+    } else {
+      return {
+        text: '待分析',
+        textColor: '#2AA1F7',
+        bgColor: 'rgba(42, 161, 247, 0.2)',
+      };
+    }
   } else if (status == FlowStatus.Analyzed) {
     return {
       text: '已完成',

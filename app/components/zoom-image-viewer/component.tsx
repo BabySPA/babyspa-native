@@ -522,8 +522,7 @@ export default class ImageViewer extends React.Component<Props, State> {
           pinchToZoom={this.props.enableImageZoom}
           enableDoubleClickZoom={this.props.enableImageZoom}
           doubleClickInterval={this.props.doubleClickInterval}
-          {...others}
-        >
+          {...others}>
           {children}
         </ImageZoom>
       );
@@ -538,8 +537,7 @@ export default class ImageViewer extends React.Component<Props, State> {
                 ...this.styles.loadingContainer,
               }}
               imageWidth={screenWidth}
-              imageHeight={screenHeight}
-            >
+              imageHeight={screenHeight}>
               <View style={this.styles.loadingContainer}>
                 {this!.props!.loadingRender!()}
               </View>
@@ -600,8 +598,7 @@ export default class ImageViewer extends React.Component<Props, State> {
               }
               doubleClickInterval={this.props.doubleClickInterval}
               minScale={this.props.minScale}
-              maxScale={this.props.maxScale}
-            >
+              maxScale={this.props.maxScale}>
               {this!.props!.renderImage!(image.props)}
             </ImageZoom>
           );
@@ -619,8 +616,7 @@ export default class ImageViewer extends React.Component<Props, State> {
                 this.props.failImageSource
                   ? this.props.failImageSource.height
                   : screenHeight
-              }
-            >
+              }>
               {this.props.failImageSource &&
                 this!.props!.renderImage!({
                   source: {
@@ -639,8 +635,7 @@ export default class ImageViewer extends React.Component<Props, State> {
     return (
       <Animated.View style={{ zIndex: 9 }}>
         <Animated.View
-          style={{ ...this.styles.container, opacity: this.fadeAnim }}
-        >
+          style={{ ...this.styles.container, opacity: this.fadeAnim }}>
           {this!.props!.renderHeader!(this.state.currentShowIndex)}
 
           <View style={this.styles.arrowLeftContainer}>
@@ -660,8 +655,7 @@ export default class ImageViewer extends React.Component<Props, State> {
               ...this.styles.moveBox,
               transform: [{ translateX: this.positionX }],
               width: this.width * this.props.imageUrls.length,
-            }}
-          >
+            }}>
             {ImageElements}
           </Animated.View>
           {this!.props!.renderIndicator!(
@@ -684,8 +678,7 @@ export default class ImageViewer extends React.Component<Props, State> {
             style={[
               { bottom: 0, position: 'absolute', zIndex: 9 },
               this.props.footerContainerStyle,
-            ]}
-          >
+            ]}>
             {this!.props!.renderFooter!(this.state.currentShowIndex || 0)}
           </View>
         </Animated.View>
@@ -735,8 +728,7 @@ export default class ImageViewer extends React.Component<Props, State> {
           <TouchableHighlight
             underlayColor='#F2F2F2'
             onPress={this.saveToLocal}
-            style={this.styles.operateContainer}
-          >
+            style={this.styles.operateContainer}>
             <Text style={this.styles.operateText}>
               {this.props.menuContext.saveToLocal}
             </Text>
@@ -744,8 +736,7 @@ export default class ImageViewer extends React.Component<Props, State> {
           <TouchableHighlight
             underlayColor='#F2F2F2'
             onPress={this.handleLeaveMenu}
-            style={this.styles.operateContainer}
-          >
+            style={this.styles.operateContainer}>
             <Text style={this.styles.operateText}>
               {this.props.menuContext.cancel}
             </Text>
@@ -783,8 +774,7 @@ export default class ImageViewer extends React.Component<Props, State> {
           flex: 1,
           overflow: 'hidden',
           ...this.props.style,
-        }}
-      >
+        }}>
         {childs}
       </View>
     );

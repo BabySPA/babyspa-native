@@ -28,11 +28,18 @@ export default function FollowUpVisit(params: {
 }) {
   const navigation = useNavigation();
 
-  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
   const flows = useFlowStore((state) => state.customersFollowUp.flows);
   const requestGetFollowUps = useFlowStore(
     (state) => state.requestGetFollowUps,
   );
+  const resetFollowUps = useFlowStore((state) => state.resetFollowUps);
+
+  useEffect(() => {
+    refresh();
+    return () => {
+      resetFollowUps();
+    };
+  }, []);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -89,9 +96,9 @@ export default function FollowUpVisit(params: {
                       mb={ss(40)}
                       hitSlop={ss(20)}
                       onPress={() => {
-                        updateCurrentFlow(flow);
                         navigation.navigate('FlowInfo', {
                           from: 'follow-up-detail',
+                          currentFlow: flow,
                         });
                       }}>
                       <CustomerFollowUpItem flow={flow} />

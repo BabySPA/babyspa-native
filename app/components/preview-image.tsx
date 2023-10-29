@@ -41,6 +41,7 @@ export default function PreviewImage({
           <ImageViewer
             index={current}
             imageUrls={images}
+            enablePreload={true}
             saveToLocalByLongPress={false}
             style={{
               width: ss(800),

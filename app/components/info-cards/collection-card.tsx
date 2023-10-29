@@ -7,18 +7,18 @@ import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import SoundList from '../sound-list';
 import PreviewImage from '../preview-image';
-import { CollectStatus } from '~/app/stores/flow/type';
+import { CollectStatus, FlowItemResponse } from '~/app/stores/flow/type';
 
 interface CollectionCardParams {
   style?: StyleProp<ViewStyle>;
+  currentFlow: FlowItemResponse;
 }
 
 export default function CollectionCard(params: CollectionCardParams) {
-  const collect = useFlowStore((state) => state.currentFlow.collect);
-  const collectionOperator = useFlowStore(
-    (state) => state.currentFlow.collectionOperator,
-  );
-  const { style = {} } = params;
+  const { style = {}, currentFlow } = params;
+
+  const collect = currentFlow.collect;
+  const collectionOperator = currentFlow.collectionOperator;
 
   return (
     <Column
@@ -50,7 +50,10 @@ export default function CollectionCard(params: CollectionCardParams) {
               textAlign={'right'}>
               过敏原：
             </Text>
-            <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
+            <Text fontSize={sp(18)} color='#333' maxW={'85%'}>
+              {collect.healthInfo.allergy || '无'}
+              {collect.healthInfo.allergy || '无'}
+              {collect.healthInfo.allergy || '无'}
               {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>

@@ -31,11 +31,17 @@ export default function Collection() {
   const requestGetCollectionFlows = useFlowStore(
     (state) => state.requestGetCollectionFlows,
   );
+  const resetCollectionCustomers = useFlowStore(
+    (state) => state.resetCollectionCustomers,
+  );
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
   const flows = useFlowStore((state) => state.collection.flows);
 
   useEffect(() => {
     refresh();
+    return () => {
+      resetCollectionCustomers();
+    };
   }, []);
 
   const [refreshing, setRefreshing] = useState(false);

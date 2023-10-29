@@ -28,14 +28,17 @@ import { Image as NativeImage } from 'react-native';
 export default function Evaluate() {
   const navigation = useNavigation();
 
-  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
   const requestGetEvaluateFlows = useFlowStore(
     (state) => state.requestGetEvaluateFlows,
   );
+  const resetEvaluateFlows = useFlowStore((state) => state.resetEvaluateFlows);
   const flows = useFlowStore((state) => state.evaluate.flows);
 
   useEffect(() => {
     refresh();
+    return () => {
+      resetEvaluateFlows();
+    };
   }, []);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -93,9 +96,9 @@ export default function Evaluate() {
                       mb={ss(40)}
                       hitSlop={ss(20)}
                       onPress={() => {
-                        updateCurrentFlow(flow);
                         navigation.navigate('FlowInfo', {
                           from: 'evaluate-detail',
+                          currentFlow: flow,
                         });
                       }}>
                       <CustomerItem flow={flow} type={OperateType.Evaluate} />

@@ -8,28 +8,28 @@ import {
   Pressable,
   Center,
   FlatList,
+  Spinner,
 } from 'native-base';
-import {
-  PureComponent,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { PureComponent, ReactNode, useEffect, useRef, useState } from 'react';
 import useFlowStore, { DefaultCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
-import { debounce } from 'lodash';
-import { View } from 'react-native';
+import { debounce, set } from 'lodash';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function Archive() {
   const navigation = useNavigation();
 
   const customers = useFlowStore((state) => state.archiveCustomers.customers);
+  const resetArchiveCustomers = useFlowStore(
+    (state) => state.resetArchiveCustomers,
+  );
+  const totalPages = useFlowStore((state) => state.archiveCustomers.totalPages);
 
+  const requestPage = useRef(1);
   const updateCurrentArchiveCustomer = useFlowStore(
     (state) => state.updateCurrentArchiveCustomer,
   );
@@ -40,17 +40,22 @@ export default function Archive() {
 
   useEffect(() => {
     refresh();
+    return () => {
+      resetArchiveCustomers();
+    };
   }, []);
 
   const refresh = async () => {
+    requestPage.current = 1;
     setRefreshing(true);
-    await requestArchiveCustomers();
+    await requestArchiveCustomers(requestPage.current);
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   };
   const [renderWaiting, setRenderWaiting] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -77,6 +82,17 @@ export default function Archive() {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
+              onEndReachedThreshold={0}
+              onEndReached={async () => {
+                if (customers.length > 0) {
+                  requestPage.current = requestPage.current + 1;
+                  if (requestPage.current <= totalPages) {
+                    await requestArchiveCustomers(requestPage.current);
+                  } else {
+                    setLoadingMore(false);
+                  }
+                }
+              }}
               removeClippedSubviews={true}
               refreshing={refreshing}
               onRefresh={() => {
@@ -101,6 +117,11 @@ export default function Archive() {
                   />
                 );
               }}
+              ListFooterComponent={
+                loadingMore ? (
+                  <Spinner size={sp(20)} mr={ls(5)} color={'emerald.500'} />
+                ) : null
+              }
             />
           )}
         </Row>

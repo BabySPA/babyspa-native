@@ -119,7 +119,11 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.2"
+        versionName "1.0.3"
+        manifestPlaceholders = [
+                JPUSH_APPKEY: "d185f1ce96771ab023bc7d86",         //在此替换你的APPKey
+                JPUSH_CHANNEL: "BABYSPA_MANAGE"        //在此替换你的channel
+        ]
     }
 
     splits {
@@ -234,6 +238,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation project(':jpush-react-native')  // 添加 jpush 依赖
+    implementation project(':jcore-react-native')  // 添加 jcore 依赖
 }
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");

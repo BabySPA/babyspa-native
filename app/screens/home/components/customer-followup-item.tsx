@@ -9,11 +9,7 @@ import {
   getFollowUpStatusTextConfig,
 } from '~/app/constants';
 import useFlowStore from '~/app/stores/flow';
-import {
-  Customer,
-  FlowItemResponse,
-  FollowUpStatus,
-} from '~/app/stores/flow/type';
+import { FlowItemResponse, FollowUpStatus } from '~/app/stores/flow/type';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
@@ -131,9 +127,9 @@ export default function CustomerFollowUpItem({
             text={'随访'}
             onPress={function (): void {
               // goto followup
-              updateCurrentFlow(flow);
               navigation.navigate('FlowInfo', {
                 from: 'follow-up',
+                currentFlow: flow,
               });
             }}
           />

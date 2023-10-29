@@ -69,7 +69,7 @@ export default function FlowCustomerItem({
     } else {
       const statusConfig = getStatusTextConfig(
         flowStatus,
-        flow.analyzeOperator?.name,
+        flow.analyze.updatedAt ? flow.analyzeOperator?.name : '',
       );
       return (
         <Box
@@ -241,9 +241,9 @@ export default function FlowCustomerItem({
             <OperateButton
               text={'评价'}
               onPress={() => {
-                updateCurrentFlow(flow);
                 navigation.navigate('FlowInfo', {
                   from: 'evaluate',
+                  currentFlow: flow,
                 });
               }}
             />

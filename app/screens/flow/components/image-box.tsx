@@ -217,7 +217,7 @@ export default function ImageBox({
                 {...triggerProps}>
                 <Center
                   borderColor={'#ACACAC'}
-                  borderWidth={ss(1)}
+                  borderWidth={ss(1.5)}
                   borderStyle={'dashed'}
                   bgColor={'#FFF'}
                   w={ss(100)}

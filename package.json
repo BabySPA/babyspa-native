@@ -1,6 +1,6 @@
 {
   "name": "babyspa",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scripts": {
     "start:client": "expo start --dev-client",
     "start": "expo start --dev-client",
@@ -48,6 +48,8 @@
     "expo-updates": "~0.16.4",
     "expo-web-browser": "~12.1.1",
     "immer": "^10.0.2",
+    "jcore-react-native": "^2.1.4",
+    "jpush-react-native": "^3.0.5",
     "lodash": "^4.17.21",
     "native-base": "3.4.28",
     "react": "18.2.0",

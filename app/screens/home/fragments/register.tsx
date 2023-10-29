@@ -31,11 +31,15 @@ export default function Register() {
   const requestGetRegisterFlows = useFlowStore(
     (state) => state.requestGetRegisterFlows,
   );
+  const resetRegisterFlows = useFlowStore((state) => state.resetRegisterFlows);
   const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
   const flows = useFlowStore((state) => state.register.flows);
 
   useEffect(() => {
     refresh();
+    return () => {
+      resetRegisterFlows();
+    };
   }, []);
 
   const [refreshing, setRefreshing] = useState(false);

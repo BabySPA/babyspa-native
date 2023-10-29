@@ -77,15 +77,15 @@ export default function MessageDrawer() {
         des: `当前有客户【${message.customer.name}】采集更新，点击查看并分析！`,
         action: () => {
           requestGetFlowById(message.flowId).then((flow) => {
-            updateCurrentFlow(flow);
-
             if (flow.analyze.status === AnalyzeStatus.NOT_SET) {
+              updateCurrentFlow(flow);
               navigation.navigate('Flow', {
                 type: FlowStatus.ToBeCollected,
               });
             } else {
               navigation.navigate('FlowInfo', {
                 from: 'analyze',
+                currentFlow: flow,
               });
             }
 
@@ -111,14 +111,15 @@ export default function MessageDrawer() {
         des: `当前有客户【${message.customer.name}】设置待回访，请查看并及时跟进回访！`,
         action: () => {
           requestGetFlowById(message.flowId).then((flow) => {
-            updateCurrentFlow(flow);
             if (flow.analyze.followUp.followUpStatus === FollowUpStatus.WAIT) {
               navigation.navigate('FlowInfo', {
                 from: 'follow-up',
+                currentFlow: flow,
               });
             } else {
               navigation.navigate('FlowInfo', {
                 from: 'follow-up-detail',
+                currentFlow: flow,
               });
             }
             // 更新message hasRead

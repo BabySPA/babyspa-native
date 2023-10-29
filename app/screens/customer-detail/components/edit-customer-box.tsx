@@ -394,7 +394,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                     allergy: tempCustomer.allergy,
                     birthday: tempCustomer.birthday,
                   });
-                  await requestArchiveCustomers();
+                  await requestArchiveCustomers(1);
                   toastAlert(toast, 'success', '修改客户成功！');
                   params.onEditFinish();
                 })
@@ -415,7 +415,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 birthday: tempCustomer.birthday,
               })
                 .then(async (res) => {
-                  await requestArchiveCustomers();
+                  await requestArchiveCustomers(1);
                   toastAlert(toast, 'success', '新增客户成功！');
                   params.onEditFinish();
                 })
