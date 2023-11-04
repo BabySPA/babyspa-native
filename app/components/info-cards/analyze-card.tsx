@@ -2,7 +2,7 @@ import { Column, Divider, Icon, Pressable, Row, Text } from 'native-base';
 import { StyleProp, ViewStyle } from 'react-native';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
+import { Image } from 'react-native';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -12,6 +12,7 @@ import {
   FlowItemResponse,
   FollowUpStatus,
 } from '~/app/stores/flow/type';
+import useFlowStore from '~/app/stores/flow';
 
 interface AnalyzeCardParams {
   style?: StyleProp<ViewStyle>;
@@ -24,6 +25,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
 
   const analyze = currentFlow.analyze;
   const analyzeOperator = currentFlow.analyzeOperator;
+
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const navigation =
     useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
@@ -46,7 +49,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               }}
               hitSlop={ss(20)}
               onPress={() => {
-                navigation.replace('Flow', {
+                updateCurrentFlow(currentFlow);
+                navigation.navigate('Flow', {
                   type: FlowStatus.ToBeAnalyzed,
                 });
               }}>
@@ -64,7 +68,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
           <Image
             source={require('~/assets/images/empty-box.png')}
             style={{ width: ls(250), height: ls(170) }}
-            contentFit='contain'
+            resizeMode='contain'
           />
           <Text color='#909499' fontSize={sp(16)} mt={ss(20)}>
             暂无分析信息

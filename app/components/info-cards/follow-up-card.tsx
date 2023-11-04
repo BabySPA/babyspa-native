@@ -7,11 +7,10 @@ import {
   Spinner,
   Text,
 } from 'native-base';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';

@@ -75,11 +75,33 @@ export default function CameraScreen({
   const takePhoto = async () => {
     if (cameraRef) {
       const photo = await cameraRef.takePictureAsync({ skipProcessing: true });
+
+      // let ratio = 1;
+
+      // if (photo.width > 2000) {
+      //   ratio = photo.width / 2000;
+      // }
+
+      // const resize = {
+      //   width: photo.width / ratio,
+      //   height: photo.height / ratio,
+      // };
+
+      // let actions = [];
+
+      // if (
+      //   typeof resize.width === 'number' &&
+      //   typeof resize.height === 'number'
+      // ) {
+      //   actions.push({ resize: resize });
+      // }
+
       const manipResult = await manipulateAsync(
         photo.uri,
         [], // 空的resize选项，不调整宽高
         { compress: 0.7, format: SaveFormat.PNG }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
       );
+
       if (flag) {
         flag = false;
         DeviceEventEmitter.emit('event.take.photo', {

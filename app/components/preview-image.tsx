@@ -1,4 +1,4 @@
-import { Image } from 'expo-image';
+import { Image } from 'react-native';
 import { Modal, Pressable } from 'native-base';
 import { ss } from '../utils/style';
 import { useState } from 'react';
@@ -32,8 +32,8 @@ export default function PreviewImage({
             height: ss(100),
             ...style,
           }}
-          source={source}
-          contentFit='cover'
+          source={{ uri: source }}
+          resizeMode='cover'
         />
       </Pressable>
       {showImageModal && (
@@ -41,11 +41,13 @@ export default function PreviewImage({
           <ImageViewer
             index={current}
             imageUrls={images}
-            enablePreload={true}
             saveToLocalByLongPress={false}
             style={{
               width: ss(800),
               height: ss(600),
+            }}
+            renderImage={(props) => {
+              return <Image {...props} />;
             }}
           />
         </Modal>

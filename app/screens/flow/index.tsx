@@ -74,7 +74,6 @@ export default function FlowScreen({
 
   const user = useAuthStore((state) => state.user);
 
-  console.log('collect.healthInfo.allergy', collect.healthInfo.allergy);
   useEffect(() => {
     if (
       analyze.status !== AnalyzeStatus.DONE &&

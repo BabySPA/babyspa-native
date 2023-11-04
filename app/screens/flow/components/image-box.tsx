@@ -28,6 +28,7 @@ import useOssStore from '~/app/stores/oss';
 import { upload } from '~/app/api/upload';
 import { throttle } from 'lodash';
 import PreviewImage from '~/app/components/preview-image';
+import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
 
 interface ImageBoxProps {
   type: 'lingual' | 'lefthand' | 'righthand' | 'other';
@@ -39,10 +40,6 @@ interface ImageBoxProps {
   uploadCallback: (filename: string, url: string) => void;
   errorCallback: (err: any) => void;
   removedCallback: (idx: number) => void;
-}
-function getFileNameFromPath(filePath: string) {
-  const parts = filePath.split('/');
-  return parts.length > 1 ? parts[parts.length - 1] : filePath;
 }
 
 export default function ImageBox({
@@ -77,8 +74,9 @@ export default function ImageBox({
           DeviceEventEmitter.addListener(
             'event.take.photo',
             throttle(async ({ photo, type }) => {
-              const filename = getFileNameFromPath(photo.uri);
-
+              const filename = `${Date.now()}.${getBase64ImageFormat(
+                photo.uri,
+              )}`;
               const name = `${currentFlow.tag}-${
                 currentFlow._id
               }-${dayjs().format('YYYYMMDDHHmmss')}-${filename}`;
@@ -116,29 +114,49 @@ export default function ImageBox({
             mediaTypes: MediaTypeOptions.Images,
             allowsMultipleSelection: false,
             allowsEditing: false,
-            quality: 0.7,
           })
             .then(async (res) => {
               if (res.assets && res.assets.length > 0) {
                 const selectImageFile = res.assets[0];
 
-                const filename =
-                  selectImageFile.fileName ??
-                  `${Date.now()}.${getBase64ImageFormat(selectImageFile.uri)}`;
+                // let ratio = 1;
+
+                // if (selectImageFile.width > 2000) {
+                //   ratio = selectImageFile.width / 2000;
+                // }
+
+                // const resize = {
+                //   width: selectImageFile.width / ratio,
+                //   height: selectImageFile.height / ratio,
+                // };
+
+                // let actions = [];
+
+                // if (
+                //   typeof resize.width === 'number' &&
+                //   typeof resize.height === 'number'
+                // ) {
+                //   actions.push({ resize: resize });
+                // }
+
+                const manipResult = await manipulateAsync(
+                  selectImageFile.uri,
+                  [], // 空的resize选项，不调整宽高
+                  { compress: 0.7, format: SaveFormat.PNG }, // 使用 compress 选项压缩图像（0.1 表示 10% 的质量）
+                );
+                const filename = `${Date.now()}.${getBase64ImageFormat(
+                  manipResult.uri,
+                )}`;
 
                 const name = `${currentFlow.tag}-${
                   currentFlow._id
                 }-${dayjs().format('YYYYMMDDHHmmss')}-${filename}`;
 
-                selectedCallback(name, selectImageFile.uri);
+                selectedCallback(name, manipResult.uri);
 
                 try {
                   const oss = await getOssConfig();
-                  const fileUrl = await upload(
-                    selectImageFile.uri,
-                    filename,
-                    oss,
-                  );
+                  const fileUrl = await upload(manipResult.uri, filename, oss);
                   uploadCallback(name, fileUrl);
                 } catch (err) {
                   errorCallback(err);

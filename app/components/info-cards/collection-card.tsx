@@ -1,9 +1,7 @@
 import { Column, Divider, Icon, Row, Text } from 'native-base';
-import { StyleProp, ViewStyle } from 'react-native';
-import useFlowStore from '~/app/stores/flow';
+import { Image, StyleProp, ViewStyle } from 'react-native';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import SoundList from '../sound-list';
 import PreviewImage from '../preview-image';
@@ -34,7 +32,7 @@ export default function CollectionCard(params: CollectionCardParams) {
           <Image
             source={require('~/assets/images/empty-box.png')}
             style={{ width: ls(250), height: ls(170) }}
-            contentFit='contain'
+            resizeMode='contain'
           />
           <Text color='#909499' fontSize={sp(16)} mt={ss(20)}>
             暂无采集信息
