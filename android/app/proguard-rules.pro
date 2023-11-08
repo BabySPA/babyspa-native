@@ -10,5 +10,6 @@
 # react-native-reanimated
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
-
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
 # Add any project specific keep options here:

@@ -1,6 +1,6 @@
 {
   "name": "babyspa",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "scripts": {
     "start:client": "expo start --dev-client",
     "start": "expo start --dev-client",

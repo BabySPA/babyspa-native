@@ -2,7 +2,7 @@
 import { MANAGER_API_URL } from '@env';
 
 const Environment = {
-  version: '1.0.5',
+  version: '1.0.6',
   api: {
     manager: 'https://mcbabyspa.com/api/manager',
     ws: 'wss://mcbabyspa.com/websocket',

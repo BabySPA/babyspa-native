@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
-
+#import <Bugly/Bugly.h>
 #import <RCTJPushModule.h>
 
 #import <React/RCTBundleURLProvider.h>
@@ -17,6 +17,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
+   [Bugly startWithAppId:@"99aebd192f"];
   // APNS
    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
    if (@available(iOS 12.0, *)) {

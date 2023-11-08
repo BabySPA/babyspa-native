@@ -16,6 +16,12 @@ export default function PreviewImage({
   style?: any;
 }) {
   const [showImageModal, setShowImageModal] = useState(false);
+  const loadImages = images.map((item) => {
+    Image.prefetch(`${item.url}?x-oss-process=image/resize,p_70`);
+    return {
+      url: `${item.url}?x-oss-process=image/resize,p_70`,
+    };
+  });
   return (
     <>
       <Pressable
@@ -32,7 +38,7 @@ export default function PreviewImage({
             height: ss(100),
             ...style,
           }}
-          source={{ uri: source }}
+          source={{ uri: `${source}?x-oss-process=image/resize,h_100,m_lfit` }}
           resizeMode='cover'
         />
       </Pressable>
@@ -40,7 +46,7 @@ export default function PreviewImage({
         <Modal isOpen={showImageModal} onClose={() => setShowImageModal(false)}>
           <ImageViewer
             index={current}
-            imageUrls={images}
+            imageUrls={loadImages}
             saveToLocalByLongPress={false}
             style={{
               width: ss(800),

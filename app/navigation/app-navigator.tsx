@@ -86,85 +86,89 @@ export default function AppNavigator() {
   };
 
   const connectWebSocket = () => {
-    const socket = getSocketInstance();
-    // @ts-ignore
-    socket.onopen = (e) => {
-      console.log('WEBSOCKET:::WebSocket连接已打开');
-      loginSocket();
-      // 设置心跳包定时器，每5秒发送一次
-      if (heartbeatInterval.current) {
-        clearInterval(heartbeatInterval.current);
-      }
-      heartbeatInterval.current = setInterval(sendHeartbeat, 5000);
-    };
+    try {
+      const socket = getSocketInstance();
+      // @ts-ignore
+      socket.onopen = (e) => {
+        console.log('WEBSOCKET:::WebSocket连接已打开');
+        loginSocket();
+        // 设置心跳包定时器，每5秒发送一次
+        if (heartbeatInterval.current) {
+          clearInterval(heartbeatInterval.current);
+        }
+        heartbeatInterval.current = setInterval(sendHeartbeat, 5000);
+      };
 
-    socket.onmessage = async (e) => {
-      // 接收到服务器发送的消息
-      const payload = JSON.parse(e.data);
-      // console.log('WEBSOCKET:::接收到服务器发送的消息:', payload);
+      socket.onmessage = async (e) => {
+        // 接收到服务器发送的消息
+        const payload = JSON.parse(e.data);
+        // console.log('WEBSOCKET:::接收到服务器发送的消息:', payload);
 
-      const { event, message } = payload;
+        const { event, message } = payload;
 
-      if (event === 'PingPong') {
-        // console.log('WEBSOCKET:::收到心跳包', message);
-        return;
-      }
+        if (event === 'PingPong') {
+          // console.log('WEBSOCKET:::收到心跳包', message);
+          return;
+        }
 
-      console.log('WEBSOCKET:::收到消息', event, message);
+        console.log('WEBSOCKET:::收到消息', event, message);
 
-      if (event == MessageAction.UPDATE_FLOWS) {
-        requsetGetHomeList();
-      }
+        if (event == MessageAction.UPDATE_FLOWS) {
+          requsetGetHomeList();
+        }
 
-      if (event === MessageAction.ANALYZE_UPDATE) {
-        setShowActionDone({
-          isOpen: true,
-          customer: message.customer,
-          flowId: message.flowId,
-          type: MessageAction.ANALYZE_UPDATE,
-        });
-        const { sound } = await Audio.Sound.createAsync(
-          require('~/assets/analyze_done.mp3'),
-        );
-        sound.setIsLoopingAsync(false);
-        sound.playAsync();
-      } else if (event == MessageAction.COLLECTION_UPDATE) {
-        setShowActionDone({
-          isOpen: true,
-          customer: message.customer,
-          flowId: message.flowId,
-          type: MessageAction.COLLECTION_TODO,
-        });
-        const { sound } = await Audio.Sound.createAsync(
-          require('~/assets/collection_done.mp3'),
-        );
-        sound.setIsLoopingAsync(false);
-        sound.playAsync();
-      }
-    };
+        if (event === MessageAction.ANALYZE_UPDATE) {
+          setShowActionDone({
+            isOpen: true,
+            customer: message.customer,
+            flowId: message.flowId,
+            type: MessageAction.ANALYZE_UPDATE,
+          });
+          const { sound } = await Audio.Sound.createAsync(
+            require('~/assets/analyze_done.mp3'),
+          );
+          sound.setIsLoopingAsync(false);
+          sound.playAsync();
+        } else if (event == MessageAction.COLLECTION_UPDATE) {
+          setShowActionDone({
+            isOpen: true,
+            customer: message.customer,
+            flowId: message.flowId,
+            type: MessageAction.COLLECTION_TODO,
+          });
+          const { sound } = await Audio.Sound.createAsync(
+            require('~/assets/collection_done.mp3'),
+          );
+          sound.setIsLoopingAsync(false);
+          sound.playAsync();
+        }
+      };
 
-    socket.onerror = (e) => {
-      console.error('WEBSOCKET:::WebSocket错误:', e);
-    };
+      socket.onerror = (e) => {
+        console.error('WEBSOCKET:::WebSocket错误:', e);
+      };
 
-    socket.onclose = () => {
-      console.log('WEBSOCKET:::WebSocket连接已关闭');
-      connectWebSocket();
-    };
+      socket.onclose = () => {
+        console.log('WEBSOCKET:::WebSocket连接已关闭');
+        connectWebSocket();
+      };
+    } catch (error) {}
   };
 
   useEffect(() => {
-    JPush.setBadge({
-      badge: 0,
-      appBadge: 0,
-    });
-    JPush.init({
-      appKey: 'd185f1ce96771ab023bc7d86',
-      channel: 'BABYSPA_MANAGE',
-      production: true,
-    });
-    console.log('WEBSOCKET:::初始化socket');
-    connectWebSocket();
+    try {
+      JPush.setBadge({
+        badge: 0,
+        appBadge: 0,
+      });
+      JPush.init({
+        appKey: 'd185f1ce96771ab023bc7d86',
+        channel: 'BABYSPA_MANAGE',
+        production: true,
+      });
+      console.log('WEBSOCKET:::初始化socket');
+      connectWebSocket();
+    } catch (error) {}
 
     return () => {
       closeSocket();

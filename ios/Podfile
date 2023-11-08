@@ -87,4 +87,5 @@ target 'app' do
       Pod::UI.warn e
     end
   end
+  pod 'Bugly'
 end
