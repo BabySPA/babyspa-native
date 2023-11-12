@@ -1,8 +1,6 @@
 // @ts-ignore
-import { MANAGER_API_URL } from '@env';
-
 const Environment = {
-  version: '1.0.6',
+  version: '1.1.0',
   api: {
     manager: 'https://mcbabyspa.com/api/manager',
     ws: 'wss://mcbabyspa.com/websocket',

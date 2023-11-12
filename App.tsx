@@ -5,10 +5,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import useCachedResources from './app/hooks/use-cached-resources';
 import useColorScheme from './app/hooks/use-color-scheme';
 import Navigation from './app/navigation/root-navigator';
-import { LogBox } from 'react-native';
+import { LogBox, Platform } from 'react-native';
 import KeyboardAvoider from '~/app/components/keyboard-avoid';
 import 'react-native-gesture-handler';
 import { ToastProvider } from 'react-native-toast-notifications';
+import _updateConfig from './update.json';
+import { simpleUpdate } from './app/pushy';
+
+type PlatformType = 'ios' | 'android';
+const { appKey } = _updateConfig[Platform.OS as PlatformType];
 
 LogBox.ignoreLogs([
   'Require cycle',
@@ -25,7 +30,7 @@ const config = {
   },
 };
 
-export default function App() {
+function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -67,3 +72,11 @@ export default function App() {
     );
   }
 }
+
+export default simpleUpdate(App, {
+  appKey,
+  onPushyEvents: ({ type, data }) => {
+    // 热更成功或报错的事件回调
+    // 可上报自有或第三方数据统计服务
+  },
+});

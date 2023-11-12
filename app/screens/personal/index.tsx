@@ -1,12 +1,4 @@
-import {
-  Box,
-  Text,
-  Row,
-  Column,
-  Pressable,
-  Image,
-  Icon,
-} from 'native-base';
+import { Box, Text, Row, Column, Pressable, Image, Icon } from 'native-base';
 import { AppStackScreenProps, Gender } from '../../types';
 import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';

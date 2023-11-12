@@ -16,6 +16,7 @@ import com.facebook.soloader.SoLoader;
 import cn.jiguang.plugins.push.JPushModule;
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
+import cn.reactnative.modules.update.UpdateContext;
 
 import java.util.List;
 
@@ -26,6 +27,11 @@ public class MainApplication extends Application implements ReactApplication {
                 @Override
                 public boolean getUseDeveloperSupport() {
                     return BuildConfig.DEBUG;
+                }
+
+                @Override
+                protected String getJSBundleFile() {
+                    return UpdateContext.getBundleUrl(MainApplication.this);
                 }
 
                 @Override
