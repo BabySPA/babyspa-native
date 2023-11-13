@@ -62,8 +62,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
         }
       />
       <Divider color={'#DFE1DE'} my={ss(14)} />
-      {analyze.status === AnalyzeStatus.NOT_SET ||
-      analyze.status === AnalyzeStatus.IN_PROGRESS ? (
+      {!currentFlow.analyze.conclusion ? (
         <Column alignItems={'center'} py={ss(20)}>
           <Image
             source={require('~/assets/images/empty-box.png')}

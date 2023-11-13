@@ -50,9 +50,6 @@ export default function CollectionCard(params: CollectionCardParams) {
             </Text>
             <Text fontSize={sp(18)} color='#333' maxW={'85%'}>
               {collect.healthInfo.allergy || '无'}
-              {collect.healthInfo.allergy || '无'}
-              {collect.healthInfo.allergy || '无'}
-              {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Row mt={ss(20)}>

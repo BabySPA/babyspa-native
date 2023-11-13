@@ -30,6 +30,7 @@ export default function GuidanceInfo({
   selectedConfig: FlowOperatorConfigItem;
 }) {
   const collect = useFlowStore((state) => state.currentFlow.collect);
+
   // 原分析结论，现注意事项
   const conclusion = useFlowStore(
     (state) => state.currentFlow.analyze.conclusion,
@@ -67,7 +68,7 @@ export default function GuidanceInfo({
     inputRef.current?.setNativeProps({
       text: collect.guidance,
     });
-  }, []);
+  }, [collect.guidance]);
 
   return (
     <Row flex={1}>

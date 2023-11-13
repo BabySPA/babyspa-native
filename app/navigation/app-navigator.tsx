@@ -1,6 +1,5 @@
 import {
   CardStyleInterpolators,
-  StackCardStyleInterpolator,
   createStackNavigator,
 } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '../types';
@@ -21,16 +20,7 @@ import RoleDetail from '../screens/role-detail';
 import AddNewCustomer from '../screens/customer-detail/new-customer';
 import CustomerArchive from '../screens/customer-archive';
 import Personal from '../screens/personal';
-import {
-  Box,
-  Center,
-  Modal,
-  Pressable,
-  Row,
-  Spinner,
-  StatusBar,
-  Text,
-} from 'native-base';
+import { Box, Center, Modal, Pressable, Row, Spinner, Text } from 'native-base';
 import { sp, ss, ls } from '../utils/style';
 import useGlobalLoading from '../stores/loading';
 import Picker from 'react-native-patchpicker';
@@ -42,8 +32,6 @@ import { Audio } from 'expo-av';
 import useFlowStore from '../stores/flow';
 import { useNavigation } from '@react-navigation/native';
 import JPush from 'jpush-react-native';
-import { AppState, AppStateStatus } from 'react-native';
-import dayjs from 'dayjs';
 
 const Stack = createStackNavigator<AppStackList>();
 
