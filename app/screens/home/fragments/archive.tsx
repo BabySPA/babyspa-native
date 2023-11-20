@@ -30,6 +30,7 @@ export default function Archive() {
   const totalPages = useFlowStore((state) => state.archiveCustomers.totalPages);
 
   const requestPage = useRef(1);
+
   const updateCurrentArchiveCustomer = useFlowStore(
     (state) => state.updateCurrentArchiveCustomer,
   );
@@ -53,6 +54,7 @@ export default function Archive() {
       setRefreshing(false);
     }, 1000);
   };
+
   const [renderWaiting, setRenderWaiting] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(true);

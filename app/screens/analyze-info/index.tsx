@@ -270,7 +270,7 @@ export default function AnalyzeInfo({
                       textAlign={'right'}>
                       调理导向：
                     </Text>
-                    <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
+                    <Text fontSize={sp(18)} color='#333' maxW={'75%'}>
                       {collect.guidance || '无'}
                     </Text>
                   </Row>
@@ -282,7 +282,7 @@ export default function AnalyzeInfo({
                       textAlign={'right'}>
                       注意事项：
                     </Text>
-                    <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
+                    <Text fontSize={sp(18)} color='#333' maxW={'75%'}>
                       {analyze.conclusion || '无'}
                     </Text>
                   </Row>
@@ -576,7 +576,7 @@ export default function AnalyzeInfo({
                     textAlign={'right'}>
                     调理导向：
                   </Text>
-                  <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
+                  <Text fontSize={sp(18)} color='#333' maxW={'75%'}>
                     {collect.guidance || '无'}
                   </Text>
                 </Row>

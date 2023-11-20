@@ -394,6 +394,7 @@ function Filter({ onRequest }: { onRequest: () => void }) {
               }}
               hitSlop={ss(20)}
               onPress={async () => {
+                setShowFilter(false);
                 onRequest();
               }}
               borderRadius={ss(4)}

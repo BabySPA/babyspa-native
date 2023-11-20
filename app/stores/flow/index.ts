@@ -149,6 +149,8 @@ const initialState = {
       { label: '已完成', value: FlowStatus.Analyzed },
       { label: '已取消', value: FlowStatus.AnalyzeCanceled },
     ],
+    all: [],
+    totalPages: 0,
   },
   evaluate: {
     ...DefaultFlowListData,
@@ -165,6 +167,7 @@ const initialState = {
     all: [],
     totalPages: 0,
   },
+
   customersFollowUp: {
     ...DefaultFlowListData,
     startDate: dayjs().format('YYYY-MM-DD'),
@@ -211,7 +214,7 @@ const useFlowStore = create(
       } else if (featureSelected.auth === RoleAuthority.FLOW_COLLECTION) {
         await get().requestGetCollectionFlows();
       } else if (featureSelected.auth === RoleAuthority.FLOW_ANALYZE) {
-        await get().requestGetAnalyzeFlows();
+        await get().requestGetAnalyzeFlows(1);
       } else if (featureSelected.auth === RoleAuthority.FLOW_EVALUATE) {
         await get().requestGetEvaluateFlows();
       }
@@ -440,12 +443,14 @@ const useFlowStore = create(
           Object.assign(draft, {
             ...DefaultFlowListData,
             flows: [],
+            all: [],
+            totalPages: 0,
           });
         });
       });
     },
 
-    requestGetAnalyzeFlows: async () => {
+    requestGetAnalyzeFlows: async (page) => {
       const today = dayjs().format('YYYY-MM-DD');
 
       if (currentDate !== today) {
@@ -455,35 +460,57 @@ const useFlowStore = create(
           endDate: today,
         });
         currentDate = today;
-      }
-      const {
-        analyze: { status, searchKeywords, startDate, endDate },
-      } = get();
-      const params: any = {};
-
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
+        page = 1;
       }
 
-      request.get('/flows', { params }).then((res) => {
-        const { docs } = res.data;
+      if (page === 1) {
+        const {
+          analyze: { status, searchKeywords, startDate, endDate },
+        } = get();
+        const params: any = {};
 
-        const filterDocs = docs.filter(
-          (item: FlowItemResponse) =>
-            item.collect.status !== CollectStatus.CANCEL &&
-            item.register.status !== RegisterStatus.CANCEL &&
-            item.collect.status !== CollectStatus.NOT_SET,
-        );
-        set({
-          analyze: {
-            ...get().analyze,
-            flows: fuzzySearch(filterDocs, searchKeywords, status),
-          },
+        if (startDate) {
+          params.startDate = startDate;
+        }
+        if (endDate) {
+          params.endDate = endDate;
+        }
+
+        request.get('/flows', { params }).then((res) => {
+          const { docs } = res.data;
+
+          const filterDocs = docs.filter(
+            (item: FlowItemResponse) =>
+              item.collect.status !== CollectStatus.CANCEL &&
+              item.register.status !== RegisterStatus.CANCEL &&
+              item.collect.status !== CollectStatus.NOT_SET,
+          );
+
+          set({
+            analyze: {
+              ...get().analyze,
+              total: filterDocs.length,
+              totalPages: Math.ceil(filterDocs.length / 10),
+              // @ts-ignore
+              all: filterDocs,
+              // @ts-ignore
+              flows: fuzzySearch(filterDocs, searchKeywords, status).slice(
+                0,
+                10,
+              ),
+            },
+          });
         });
-      });
+      } else {
+        if (get().analyze.totalPages < page) {
+          return;
+        }
+        set((state) => {
+          state.analyze.flows = state.analyze.flows.concat(
+            ...get().analyze.all.slice(page * 15, (page + 1) * 15),
+          );
+        });
+      }
     },
 
     resetEvaluateFlows: () => {

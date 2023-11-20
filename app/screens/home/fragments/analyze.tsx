@@ -10,8 +10,9 @@ import {
   Image,
   Box,
   FlatList,
+  Spinner,
 } from 'native-base';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -33,6 +34,9 @@ export default function Analyze() {
   );
   const resetAnalyzeFlows = useFlowStore((state) => state.resetAnalyzeFlows);
   const flows = useFlowStore((state) => state.analyze.flows);
+  const totalPages = useFlowStore((state) => state.analyze.totalPages);
+
+  const requestPage = useRef(1);
 
   useEffect(() => {
     refresh();
@@ -41,17 +45,18 @@ export default function Analyze() {
     };
   }, []);
 
-  const [refreshing, setRefreshing] = useState(false);
-
   const refresh = async () => {
+    requestPage.current = 1;
     setRefreshing(true);
-    await requestGetAnalyzeFlows();
+    await requestGetAnalyzeFlows(requestPage.current);
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   };
 
-  const [renderWaiting, setRenderWaiting] = useState(false);
+  const [renderWaiting, setRenderWaiting] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -77,10 +82,25 @@ export default function Analyze() {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
+              onEndReachedThreshold={0}
+              onEndReached={async () => {
+                if (flows.length > 0) {
+                  requestPage.current = requestPage.current + 1;
+                  if (requestPage.current <= totalPages) {
+                    console.log('1111', requestPage.current);
+                    await requestGetAnalyzeFlows(requestPage.current);
+                  } else {
+                    setLoadingMore(false);
+                  }
+                }
+              }}
+              removeClippedSubviews={true}
               refreshing={refreshing}
               onRefresh={() => {
                 refresh();
               }}
+              initialNumToRender={10}
+              keyExtractor={(item) => item._id}
               ListEmptyComponent={<EmptyBox />}
               data={flows}
               mb={ss(120)}
@@ -114,6 +134,11 @@ export default function Analyze() {
                   </Center>
                 );
               }}
+              ListFooterComponent={
+                loadingMore ? (
+                  <Spinner size={sp(20)} mr={ls(5)} color={'emerald.500'} />
+                ) : null
+              }
             />
           )}
         </Row>
@@ -134,9 +159,6 @@ function Filter({ onRequest }: { onRequest: () => void }) {
   const updateAnalyzeFilter = useFlowStore(
     (state) => state.updateAnalyzeFilter,
   );
-  // const requestGetAnalyzeFlows = useFlowStore(
-  //   (state) => state.requestGetAnalyzeFlows,
-  // );
 
   const [count, setCount] = useState({
     done: 0,
@@ -147,7 +169,7 @@ function Filter({ onRequest }: { onRequest: () => void }) {
     let done = 0,
       todo = 0;
 
-    analyze.flows.forEach((flow) => {
+    analyze.all.forEach((flow) => {
       const flowStatus = getFlowStatus(flow);
       if (flowStatus == FlowStatus.Analyzed) {
         done++;
@@ -381,6 +403,7 @@ function Filter({ onRequest }: { onRequest: () => void }) {
               }}
               hitSlop={ss(20)}
               onPress={async () => {
+                setShowFilter(false);
                 onRequest();
               }}
               borderRadius={ss(4)}

@@ -168,7 +168,10 @@ export interface FlowState {
   operators: Operator[];
   register: QueryFlowList;
   collection: QueryFlowList;
-  analyze: QueryFlowList;
+  analyze: QueryFlowList & {
+    all: FlowItemResponse[];
+    totalPages: number;
+  };
   evaluate: QueryFlowList;
   customersFollowUp: QueryFlowList;
   currentFlow: FlowItemResponse;
@@ -197,7 +200,7 @@ export interface FlowState {
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
   requestGetRegisterFlows: () => Promise<any>;
   requestGetCollectionFlows: () => Promise<any>;
-  requestGetAnalyzeFlows: () => Promise<any>;
+  requestGetAnalyzeFlows: (page: number) => Promise<any>;
   requestGetEvaluateFlows: () => Promise<any>;
   requestGetOperators: () => Promise<any>;
   requestDeleteCustomer: (customerId: string) => Promise<any>;

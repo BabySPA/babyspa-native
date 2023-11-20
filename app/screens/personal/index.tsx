@@ -180,34 +180,34 @@ export default function Personal({
                 <LabelBox
                   title='版本'
                   alignItems='center'
-                  rightElement={
-                    newVersionUrl !== '' ? (
-                      <Row alignItems={'center'} ml={ls(18)}>
-                        <Pressable
-                          _pressed={{
-                            opacity: 0.6,
-                          }}
-                          hitSlop={ss(20)}
-                          onPress={() => {
-                            Linking.openURL(newVersionUrl);
-                          }}>
-                          <Row alignItems={'center'}>
-                            <Icon
-                              as={<MaterialIcons name='get-app' />}
-                              size={sp(24)}
-                              color='#00B49E'
-                            />
+                  // rightElement={
+                  //   newVersionUrl !== '' ? (
+                  //     <Row alignItems={'center'} ml={ls(18)}>
+                  //       <Pressable
+                  //         _pressed={{
+                  //           opacity: 0.6,
+                  //         }}
+                  //         hitSlop={ss(20)}
+                  //         onPress={() => {
+                  //           Linking.openURL(newVersionUrl);
+                  //         }}>
+                  //         <Row alignItems={'center'}>
+                  //           <Icon
+                  //             as={<MaterialIcons name='get-app' />}
+                  //             size={sp(24)}
+                  //             color='#00B49E'
+                  //           />
 
-                            <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
-                              发现新版本，点击下载
-                            </Text>
-                          </Row>
-                        </Pressable>
-                      </Row>
-                    ) : (
-                      <></>
-                    )
-                  }
+                  //           <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
+                  //             发现新版本，点击下载
+                  //           </Text>
+                  //         </Row>
+                  //       </Pressable>
+                  //     </Row>
+                  //   ) : (
+                  //     <></>
+                  //   )
+                  // }
                   value={Environment.version}
                 />
               </Row>
