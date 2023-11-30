@@ -23,7 +23,7 @@ import { AntDesign } from '@expo/vector-icons';
 import BoxTitle from '~/app/components/box-title';
 import dayjs from 'dayjs';
 import SoundList from '~/app/components/sound-list';
-import PreviewImage from '~/app/components/preview-image';
+import PreviewImage from '~/app/components/PreviewImage';
 import { AnalyzeStatus } from '~/app/stores/flow/type';
 
 export default function AnalyzeInfo({
@@ -427,7 +427,7 @@ export default function AnalyzeInfo({
                     color='#999'
                     w={ls(120)}
                     textAlign={'right'}>
-                    舌象：
+                    舌头照片：
                   </Text>
                   {collect.healthInfo.lingualImage.length > 0 ? (
                     collect.healthInfo.lingualImage.map((item, idx) => {
@@ -459,7 +459,7 @@ export default function AnalyzeInfo({
                     color='#999'
                     w={ls(120)}
                     textAlign={'right'}>
-                    左手手相：
+                    左手图片：
                   </Text>
                   {collect.healthInfo.leftHandImages.length > 0 ? (
                     collect.healthInfo.leftHandImages.map((item, idx) => {
@@ -491,7 +491,7 @@ export default function AnalyzeInfo({
                     color='#999'
                     w={ls(120)}
                     textAlign={'right'}>
-                    右手手相：
+                    右手图片：
                   </Text>
                   {collect.healthInfo.rightHandImages.length > 0 ? (
                     collect.healthInfo.rightHandImages.map((item, idx) => {

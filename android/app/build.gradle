@@ -7,9 +7,9 @@ def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 def expoDebuggableVariants = ['debug']
 // Override `debuggableVariants` for expo-updates debugging
 if (System.getenv('EX_UPDATES_NATIVE_DEBUG') == "1") {
-  react {
-    expoDebuggableVariants = []
-  }
+    react {
+        expoDebuggableVariants = []
+    }
 }
 
 
@@ -69,7 +69,7 @@ react {
 
 // Override `hermesEnabled` by `expo.jsEngine`
 ext {
-  hermesEnabled = (findProperty('expo.jsEngine') ?: "hermes") == "hermes"
+    hermesEnabled = (findProperty('expo.jsEngine') ?: "hermes") == "hermes"
 }
 
 /**
@@ -119,14 +119,14 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.1.0"
+        versionName "1.2.0"
         manifestPlaceholders = [
-                JPUSH_APPKEY: "d185f1ce96771ab023bc7d86",         //在此替换你的APPKey
+                JPUSH_APPKEY : "d185f1ce96771ab023bc7d86",         //在此替换你的APPKey
                 JPUSH_CHANNEL: "BABYSPA_MANAGE"        //在此替换你的channel
         ]
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
 
@@ -135,7 +135,7 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include (*reactNativeArchitectures())
+            include(*reactNativeArchitectures())
         }
     }
     signingConfigs {
@@ -157,9 +157,10 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            crunchPngs false
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
-            shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
+            shrinkResources(findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -232,7 +233,7 @@ dependencies {
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
 
@@ -244,8 +245,11 @@ dependencies {
 
     implementation project(':jpush-react-native')  // 添加 jpush 依赖
     implementation project(':jcore-react-native')  // 添加 jcore 依赖
-    implementation 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如4.0.3
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如4.0.3
 }
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
 applyNativeModulesAppBuildGradle(project)
+
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"

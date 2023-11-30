@@ -15,7 +15,8 @@ import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import Environment from '~/app/config/environment';
 import request from '~/app/api';
-import { Linking, Platform } from 'react-native';
+import { Platform } from 'react-native';
+import CodePush from 'react-native-code-push';
 
 export default function Personal({
   navigation,
@@ -180,34 +181,41 @@ export default function Personal({
                 <LabelBox
                   title='版本'
                   alignItems='center'
-                  // rightElement={
-                  //   newVersionUrl !== '' ? (
-                  //     <Row alignItems={'center'} ml={ls(18)}>
-                  //       <Pressable
-                  //         _pressed={{
-                  //           opacity: 0.6,
-                  //         }}
-                  //         hitSlop={ss(20)}
-                  //         onPress={() => {
-                  //           Linking.openURL(newVersionUrl);
-                  //         }}>
-                  //         <Row alignItems={'center'}>
-                  //           <Icon
-                  //             as={<MaterialIcons name='get-app' />}
-                  //             size={sp(24)}
-                  //             color='#00B49E'
-                  //           />
+                  rightElement={
+                    <Row alignItems={'center'} ml={ls(18)}>
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          CodePush.sync({
+                            updateDialog: {
+                              title: '发现更新',
+                              optionalUpdateMessage: '是否立即更新~',
+                              optionalInstallButtonLabel: '立即更新',
+                              optionalIgnoreButtonLabel: '忽略此更新',
+                              mandatoryUpdateMessage:
+                                '该更新为强制更新，是否立即更新~',
+                              mandatoryContinueButtonLabel: '继续',
+                            },
+                            installMode: CodePush.InstallMode.IMMEDIATE,
+                          });
+                        }}>
+                        <Row alignItems={'center'}>
+                          <Icon
+                            as={<MaterialIcons name='get-app' />}
+                            size={sp(24)}
+                            color='#00B49E'
+                          />
 
-                  //           <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
-                  //             发现新版本，点击下载
-                  //           </Text>
-                  //         </Row>
-                  //       </Pressable>
-                  //     </Row>
-                  //   ) : (
-                  //     <></>
-                  //   )
-                  // }
+                          <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
+                            检查更新
+                          </Text>
+                        </Row>
+                      </Pressable>
+                    </Row>
+                  }
                   value={Environment.version}
                 />
               </Row>

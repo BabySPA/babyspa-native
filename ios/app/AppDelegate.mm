@@ -1,7 +1,8 @@
 #import "AppDelegate.h"
 #import <Bugly/Bugly.h>
 #import <RCTJPushModule.h>
-#import "RCTPushy.h"
+#import <CodePush/CodePush.h>
+
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
@@ -17,6 +18,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
+  // Bugly
    [Bugly startWithAppId:@"99aebd192f"];
   // APNS
    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
@@ -41,7 +43,7 @@
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
 #else
-  return [RCTPushy bundleURL];
+  return [CodePush bundleURL];
 #endif
 }
 

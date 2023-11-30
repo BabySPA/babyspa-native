@@ -6,6 +6,7 @@ import {
   Spinner,
   Column,
   ScrollView,
+  Icon,
 } from 'native-base';
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
@@ -21,6 +22,8 @@ import FollowUpCard from '~/app/components/info-cards/follow-up-card';
 import { PrintButton } from '~/app/components/print-button';
 import { AnalyzeStatus, EvaluateStatus } from '~/app/stores/flow/type';
 import { getFlowStatus } from '~/app/constants';
+import { AntDesign } from '@expo/vector-icons';
+import useFlowStore from '~/app/stores/flow';
 
 export default function FlowInfo({
   navigation,
@@ -45,15 +48,44 @@ export default function FlowInfo({
   const evalutedDone = () => {
     setFrom('evaluate-detail');
   };
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
 
   return (
     <Box flex={1}>
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20)}>
-            客户详情
-          </Text>
+          <Row alignItems={'center'}>
+            <Text color='white' fontWeight={600} fontSize={sp(20)}>
+              客户详情
+            </Text>
+            <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
+              ml={ls(30)}
+              hitSlop={ss(20)}
+              onPress={() => {
+                // 跳转到历史记录
+                updateCurrentArchiveCustomer(currentFlow.customer);
+                navigation.navigate('CustomerArchive', {
+                  defaultSelect: 1,
+                });
+              }}>
+              <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
+                <Text color='#03CBB2' fontSize={sp(12)}>
+                  历史记录
+                </Text>
+                <Icon
+                  size={sp(12)}
+                  as={<AntDesign name='doubleright' />}
+                  color={'#03CBB2'}
+                />
+              </Row>
+            </Pressable>
+          </Row>
         }
         rightElement={
           from == 'analyze' ? (

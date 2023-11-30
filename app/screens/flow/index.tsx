@@ -29,7 +29,11 @@ import { toastAlert } from '~/app/utils/toast';
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { RoleAuthority } from '~/app/stores/auth/type';
 import useManagerStore from '~/app/stores/manager';
-import { CollectStatus, AnalyzeStatus } from '~/app/stores/flow/type';
+import {
+  CollectStatus,
+  AnalyzeStatus,
+  UpdatingImage,
+} from '~/app/stores/flow/type';
 import useAuthStore from '~/app/stores/auth';
 
 interface ResultModal {
@@ -138,6 +142,10 @@ export default function FlowScreen({
     requestGetTemplates();
   }, []);
 
+  const hasNoUpdateFinished = (images: UpdatingImage[]) => {
+    return images.some((item) => typeof item !== 'string');
+  };
+
   const checkCollection = () => {
     if (
       collect.healthInfo.audioFiles.length == 0 &&
@@ -150,6 +158,19 @@ export default function FlowScreen({
       return false;
     }
 
+    if (
+      hasNoUpdateFinished(collect.healthInfo.leftHandImages) ||
+      hasNoUpdateFinished(collect.healthInfo.rightHandImages) ||
+      hasNoUpdateFinished(collect.healthInfo.lingualImage) ||
+      hasNoUpdateFinished(collect.healthInfo.otherImages)
+    ) {
+      toastAlert(
+        toast,
+        'error',
+        '图片还没有传输完成请稍后，或者删除还在上传中(转圈)的图片...',
+      );
+      return false;
+    }
     if (!collect.guidance.trim()) {
       toastAlert(toast, 'error', '调理导向不能为空！');
       return false;

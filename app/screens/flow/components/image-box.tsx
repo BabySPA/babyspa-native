@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 import useOssStore from '~/app/stores/oss';
 import { upload } from '~/app/api/upload';
 import { throttle } from 'lodash';
-import PreviewImage from '~/app/components/preview-image';
+import PreviewImage from '~/app/components/PreviewImage';
 import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
 
 interface ImageBoxProps {

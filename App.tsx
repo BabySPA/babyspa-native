@@ -1,19 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { NativeBaseProvider, ScrollView, extendTheme } from 'native-base';
+import { NativeBaseProvider, extendTheme } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import useCachedResources from './app/hooks/use-cached-resources';
 import useColorScheme from './app/hooks/use-color-scheme';
 import Navigation from './app/navigation/root-navigator';
-import { LogBox, Platform } from 'react-native';
+import { LogBox } from 'react-native';
 import KeyboardAvoider from '~/app/components/keyboard-avoid';
 import 'react-native-gesture-handler';
 import { ToastProvider } from 'react-native-toast-notifications';
-import _updateConfig from './update.json';
-import { simpleUpdate } from './app/pushy';
-
-type PlatformType = 'ios' | 'android';
-const { appKey } = _updateConfig[Platform.OS as PlatformType];
+import CodePush from 'react-native-code-push';
+import { CacheManager } from '@georstat/react-native-image-cache';
+import { Dirs } from 'react-native-file-access';
 
 LogBox.ignoreLogs([
   'Require cycle',
@@ -23,6 +21,16 @@ LogBox.ignoreLogs([
   'Cannot update a component',
   '请不要频繁请求相同的接口',
 ]);
+
+CacheManager.config = {
+  baseDir: `${Dirs.CacheDir}/images_cache/`,
+  blurRadius: 0,
+  cacheLimit: 0,
+  maxRetries: 3 /* optional, if not provided defaults to 0 */,
+  retryDelay: 3000 /* in milliseconds, optional, if not provided defaults to 0 */,
+  sourceAnimationDuration: 1000,
+  thumbnailAnimationDuration: 1000,
+};
 
 const config = {
   dependencies: {
@@ -72,11 +80,17 @@ function App() {
     );
   }
 }
-
-export default simpleUpdate(App, {
-  appKey,
-  onPushyEvents: ({ type, data }) => {
-    // 热更成功或报错的事件回调
-    // 可上报自有或第三方数据统计服务
+let codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
+  updateDialog: {
+    title: '发现更新',
+    optionalUpdateMessage: '是否立即更新~',
+    optionalInstallButtonLabel: '立即更新',
+    optionalIgnoreButtonLabel: '忽略此更新',
+    mandatoryUpdateMessage: '该更新为强制更新，是否立即更新~',
+    mandatoryContinueButtonLabel: '继续',
   },
-});
+  installMode: CodePush.InstallMode.IMMEDIATE,
+};
+
+export default CodePush(codePushOptions)(App);

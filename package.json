@@ -1,6 +1,6 @@
 {
   "name": "babyspa",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
     "start:client": "expo start --dev-client",
     "start": "expo start --dev-client",
@@ -11,12 +11,8 @@
     "eas:android": "eas build -p android --profile preview --local",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "bundle:android": "node node_modules/react-native/local-cli/cli.js bundle --assets-dest .pushy/intermedia/android --bundle-output .pushy/intermedia/android/index.bundlejs --dev false --entry-file index.js --platform android --reset-cache",
-    "bundle:ios": "node node_modules/react-native/local-cli/cli.js bundle --assets-dest .pushy/intermedia/ios --bundle-output .pushy/intermedia/ios/index.bundlejs --dev false --entry-file index.js --platform ios --reset-cache",
-    "pushy:android": "pushy bundle --platform android",
-    "pushy:ios": "pushy bundle --platform ios",
-    "pushy:upload:android": "pushy uploadApk",
-    "pushy:upload:ipa": "pushy uploadIpa"
+    "codepush:ios": "appcenter codepush release-react -a  Ulannxx/Babyspa-ios -t 1.2.0 -o ./build -d Production -m",
+    "codepush:android": "appcenter codepush release-react -a  Ulannxx/Babyspa-android -t 1.2.0 -o ./build -d Production -m"
   },
   "jest": {
     "preset": "jest-expo"
@@ -24,6 +20,8 @@
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@expo/vector-icons": "13.0.0",
+    "@georstat/react-native-image-cache": "^3.1.0",
+    "@georstat/react-native-image-gallery": "^1.1.0",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/native": "6.0.2",
@@ -52,7 +50,9 @@
     "native-base": "3.4.28",
     "react": "18.2.0",
     "react-native": "0.71.8",
+    "react-native-code-push": "^8.1.0",
     "react-native-dashed-line": "^1.1.0",
+    "react-native-file-access": "^3.0.4",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-image-pan-zoom": "^2.1.12",
     "react-native-mime-types": "^2.4.0",
@@ -63,7 +63,6 @@
     "react-native-svg": "13.4.0",
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-toast-notifications": "^3.4.0",
-    "react-native-update": "^9.1.4",
     "zustand": "^4.3.9"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Box, Icon, Pressable, Row, ScrollView, Text } from 'native-base';
 import { useState } from 'react';
-import PreviewImage from '~/app/components/preview-image';
+import PreviewImage from '~/app/components/PreviewImage';
 import { FlowItemResponse } from '~/app/stores/flow/type';
 import { arabicToChineseNumber } from '~/app/utils';
 import { ls, ss, sp } from '~/app/utils/style';

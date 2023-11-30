@@ -4,7 +4,7 @@ import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import dayjs from 'dayjs';
 import SoundList from '../sound-list';
-import PreviewImage from '../preview-image';
+import PreviewImage from '../PreviewImage';
 import { CollectStatus, FlowItemResponse } from '~/app/stores/flow/type';
 
 interface CollectionCardParams {
@@ -58,7 +58,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               color='#999'
               w={ls(100, 140)}
               textAlign={'right'}>
-              舌象：
+              舌头照片：
             </Text>
             {collect.healthInfo.lingualImage.length > 0 ? (
               collect.healthInfo.lingualImage.map((item, idx) => {
@@ -90,7 +90,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               color='#999'
               w={ls(100, 140)}
               textAlign={'right'}>
-              左手手相：
+              左手图片：
             </Text>
             {collect.healthInfo.leftHandImages.length > 0 ? (
               collect.healthInfo.leftHandImages.map((item, idx) => {
@@ -122,7 +122,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               color='#999'
               w={ls(100, 140)}
               textAlign={'right'}>
-              右手手相：
+              右手图片：
             </Text>
             {collect.healthInfo.rightHandImages.length > 0 ? (
               collect.healthInfo.rightHandImages.map((item, idx) => {
