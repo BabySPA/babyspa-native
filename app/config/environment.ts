@@ -1,6 +1,6 @@
 // @ts-ignore
 const Environment = {
-  version: '1.2.0',
+  version: '1.2.1',
   api: {
     manager: 'https://mcbabyspa.com/api/manager',
     ws: 'wss://mcbabyspa.com/websocket',
