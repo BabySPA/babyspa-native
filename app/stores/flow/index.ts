@@ -214,7 +214,7 @@ const useFlowStore = create(
       } else if (featureSelected.auth === RoleAuthority.FLOW_COLLECTION) {
         await get().requestGetCollectionFlows();
       } else if (featureSelected.auth === RoleAuthority.FLOW_ANALYZE) {
-        await get().requestGetAnalyzeFlows(1);
+        await get().requestGetAnalyzeFlows();
       } else if (featureSelected.auth === RoleAuthority.FLOW_EVALUATE) {
         await get().requestGetEvaluateFlows();
       }
@@ -450,7 +450,7 @@ const useFlowStore = create(
       });
     },
 
-    requestGetAnalyzeFlows: async (page) => {
+    requestGetAnalyzeFlows: async () => {
       const today = dayjs().format('YYYY-MM-DD');
 
       if (currentDate !== today) {
@@ -460,57 +460,40 @@ const useFlowStore = create(
           endDate: today,
         });
         currentDate = today;
-        page = 1;
       }
 
-      if (page === 1) {
-        const {
-          analyze: { status, searchKeywords, startDate, endDate },
-        } = get();
-        const params: any = {};
+      const {
+        analyze: { status, searchKeywords, startDate, endDate },
+      } = get();
+      const params: any = {};
 
-        if (startDate) {
-          params.startDate = startDate;
-        }
-        if (endDate) {
-          params.endDate = endDate;
-        }
-
-        request.get('/flows', { params }).then((res) => {
-          const { docs } = res.data;
-
-          const filterDocs = docs.filter(
-            (item: FlowItemResponse) =>
-              item.collect.status !== CollectStatus.CANCEL &&
-              item.register.status !== RegisterStatus.CANCEL &&
-              item.collect.status !== CollectStatus.NOT_SET,
-          );
-
-          set({
-            analyze: {
-              ...get().analyze,
-              total: filterDocs.length,
-              totalPages: Math.ceil(filterDocs.length / 10),
-              // @ts-ignore
-              all: filterDocs,
-              // @ts-ignore
-              flows: fuzzySearch(filterDocs, searchKeywords, status).slice(
-                0,
-                10,
-              ),
-            },
-          });
-        });
-      } else {
-        if (get().analyze.totalPages < page) {
-          return;
-        }
-        set((state) => {
-          state.analyze.flows = state.analyze.flows.concat(
-            ...get().analyze.all.slice(page * 15, (page + 1) * 15),
-          );
-        });
+      if (startDate) {
+        params.startDate = startDate;
       }
+      if (endDate) {
+        params.endDate = endDate;
+      }
+
+      request.get('/flows', { params }).then((res) => {
+        const { docs } = res.data;
+
+        const filterDocs = docs.filter(
+          (item: FlowItemResponse) =>
+            item.collect.status !== CollectStatus.CANCEL &&
+            item.register.status !== RegisterStatus.CANCEL &&
+            item.collect.status !== CollectStatus.NOT_SET,
+        );
+
+        set({
+          analyze: {
+            ...get().analyze,
+            // @ts-ignore
+            all: filterDocs,
+            // @ts-ignore
+            flows: fuzzySearch(filterDocs, searchKeywords, status),
+          },
+        });
+      });
     },
 
     resetEvaluateFlows: () => {

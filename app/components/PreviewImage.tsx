@@ -1,4 +1,4 @@
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar, Text, View, ImageResizeMode } from 'react-native';
 import { Box, Center, Icon, Pressable, Row } from 'native-base';
 import { ls, sp, ss } from '../utils/style';
 import { useState } from 'react';

@@ -483,11 +483,18 @@ export default function FlowScreen({
                           message: '',
                           tip: '',
                         });
+
                         requestGetInitializeData();
                         // navigation.goBack();
                         navigation.replace('FlowInfo', {
                           from: 'analyze',
-                          currentFlow: currentFlow,
+                          currentFlow: {
+                            ...currentFlow,
+                            analyze: {
+                              ...currentFlow.analyze,
+                              status: AnalyzeStatus.DONE,
+                            },
+                          },
                         });
                       }, 2000);
                     })

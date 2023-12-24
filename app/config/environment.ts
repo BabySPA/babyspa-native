@@ -4,8 +4,8 @@ const Environment = {
   api: {
     manager: 'https://mcbabyspa.com/api/manager',
     ws: 'wss://mcbabyspa.com/websocket',
-    // manager: 'http://192.168.110.211:4000/manager',
-    // ws: 'ws://192.168.110.211:17000',
+    // manager: 'http://127.0.0.1:4000/manager',
+    // ws: 'ws://127.0.0.1:17000',
   },
 };
 

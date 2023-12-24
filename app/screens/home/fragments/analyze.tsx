@@ -34,9 +34,6 @@ export default function Analyze() {
   );
   const resetAnalyzeFlows = useFlowStore((state) => state.resetAnalyzeFlows);
   const flows = useFlowStore((state) => state.analyze.flows);
-  const totalPages = useFlowStore((state) => state.analyze.totalPages);
-
-  const requestPage = useRef(1);
 
   useEffect(() => {
     refresh();
@@ -46,9 +43,8 @@ export default function Analyze() {
   }, []);
 
   const refresh = async () => {
-    requestPage.current = 1;
     setRefreshing(true);
-    await requestGetAnalyzeFlows(requestPage.current);
+    await requestGetAnalyzeFlows();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -56,7 +52,6 @@ export default function Analyze() {
 
   const [renderWaiting, setRenderWaiting] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -82,24 +77,12 @@ export default function Analyze() {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
-              onEndReachedThreshold={0}
-              onEndReached={async () => {
-                if (flows.length > 0) {
-                  requestPage.current = requestPage.current + 1;
-                  if (requestPage.current <= totalPages) {
-                    console.log('1111', requestPage.current);
-                    await requestGetAnalyzeFlows(requestPage.current);
-                  } else {
-                    setLoadingMore(false);
-                  }
-                }
-              }}
               removeClippedSubviews={true}
               refreshing={refreshing}
               onRefresh={() => {
                 refresh();
               }}
-              initialNumToRender={10}
+              initialNumToRender={30}
               keyExtractor={(item) => item._id}
               ListEmptyComponent={<EmptyBox />}
               data={flows}
@@ -134,11 +117,6 @@ export default function Analyze() {
                   </Center>
                 );
               }}
-              ListFooterComponent={
-                loadingMore ? (
-                  <Spinner size={sp(20)} mr={ls(5)} color={'emerald.500'} />
-                ) : null
-              }
             />
           )}
         </Row>

@@ -189,6 +189,7 @@ export default function Personal({
                         }}
                         hitSlop={ss(20)}
                         onPress={() => {
+                          toastAlert(toast, 'success', '正在检查更新...');
                           CodePush.sync({
                             updateDialog: {
                               title: '发现更新',
