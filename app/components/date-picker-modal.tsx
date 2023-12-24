@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
-import { Modal, Row, Flex, Pressable, Box, useToast } from 'native-base';
+import { Modal, Row, Flex, Pressable, Box } from 'native-base';
 import DatePicker from '~/app/components/date-picker';
 import { ss, ls, sp } from '~/app/utils/style';
 import { toastAlert } from '../utils/toast';
 import { useEffect, useState } from 'react';
+import { useToast } from 'react-native-toast-notifications';
 
 interface DatePickerModalParams {
   isOpen: boolean;
@@ -60,7 +61,7 @@ export default function DatePickerModal({
           mode='calendar'
         />
       ));
-    }, 500);
+    }, 50);
   }, []);
   return (
     <Modal

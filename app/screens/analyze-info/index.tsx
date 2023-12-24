@@ -23,15 +23,13 @@ import { AntDesign } from '@expo/vector-icons';
 import BoxTitle from '~/app/components/box-title';
 import dayjs from 'dayjs';
 import SoundList from '~/app/components/sound-list';
-import PreviewImage from '~/app/components/preview-image';
+import PreviewImage from '~/app/components/PreviewImage';
 import { AnalyzeStatus } from '~/app/stores/flow/type';
-import EmptyBox from '~/app/components/empty-box';
 
 export default function AnalyzeInfo({
   navigation,
 }: AppStackScreenProps<'AnalyzeInfo'>) {
-  const { currentFlow } = useFlowStore();
-
+  const currentFlow = useFlowStore((state) => state.currentFlow);
   const { collect, analyze, analyzeOperator, collectionOperator } = currentFlow;
 
   const [showWarn, setShowWarn] = useState<boolean>(true);
@@ -70,7 +68,9 @@ export default function AnalyzeInfo({
               </Row>
             </Pressable>
             {(analyze.status === AnalyzeStatus.DONE ||
-              analyze.status === AnalyzeStatus.CANCEL) && <PrintButton />}
+              analyze.status === AnalyzeStatus.CANCEL) && (
+              <PrintButton currentFlow={currentFlow} />
+            )}
           </Row>
         }
       />
@@ -81,18 +81,19 @@ export default function AnalyzeInfo({
           bgColor={'#F9EDA5'}
           alignItems={'center'}
           justifyContent={'space-between'}>
-          <Row alignItems={'center'}>
+          <Row alignItems={'center'} flex={1}>
             <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
             </Circle>
-            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
+            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} flex={1}>
               过敏原：
               {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Pressable
+            ml={ls(20)}
             _pressed={{
               opacity: 0.6,
             }}
@@ -110,7 +111,7 @@ export default function AnalyzeInfo({
       <Row safeAreaLeft bgColor={'#F6F6FA'} flex={1} p={ss(20)} safeAreaBottom>
         <Column flex={1}>
           <ScrollView>
-            <RegisterCard />
+            <RegisterCard currentFlow={currentFlow} />
             <Column
               flex={1}
               bgColor={'#fff'}
@@ -269,7 +270,7 @@ export default function AnalyzeInfo({
                       textAlign={'right'}>
                       调理导向：
                     </Text>
-                    <Text fontSize={sp(18)} color='#333'>
+                    <Text fontSize={sp(18)} color='#333' maxW={'75%'}>
                       {collect.guidance || '无'}
                     </Text>
                   </Row>
@@ -281,8 +282,8 @@ export default function AnalyzeInfo({
                       textAlign={'right'}>
                       注意事项：
                     </Text>
-                    <Text fontSize={sp(18)} color='#333'>
-                      {analyze.remark || '无'}
+                    <Text fontSize={sp(18)} color='#333' maxW={'75%'}>
+                      {analyze.conclusion || '无'}
                     </Text>
                   </Row>
                   <Row mt={ss(20)} justifyContent={'space-between'}>
@@ -426,7 +427,7 @@ export default function AnalyzeInfo({
                     color='#999'
                     w={ls(120)}
                     textAlign={'right'}>
-                    舌象：
+                    舌头照片：
                   </Text>
                   {collect.healthInfo.lingualImage.length > 0 ? (
                     collect.healthInfo.lingualImage.map((item, idx) => {
@@ -458,7 +459,7 @@ export default function AnalyzeInfo({
                     color='#999'
                     w={ls(120)}
                     textAlign={'right'}>
-                    左手手相：
+                    左手图片：
                   </Text>
                   {collect.healthInfo.leftHandImages.length > 0 ? (
                     collect.healthInfo.leftHandImages.map((item, idx) => {
@@ -490,7 +491,7 @@ export default function AnalyzeInfo({
                     color='#999'
                     w={ls(120)}
                     textAlign={'right'}>
-                    右手手相：
+                    右手图片：
                   </Text>
                   {collect.healthInfo.rightHandImages.length > 0 ? (
                     collect.healthInfo.rightHandImages.map((item, idx) => {
@@ -575,7 +576,7 @@ export default function AnalyzeInfo({
                     textAlign={'right'}>
                     调理导向：
                   </Text>
-                  <Text fontSize={sp(18)} color='#333' maxW={'80%'}>
+                  <Text fontSize={sp(18)} color='#333' maxW={'75%'}>
                     {collect.guidance || '无'}
                   </Text>
                 </Row>

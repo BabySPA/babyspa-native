@@ -34,15 +34,15 @@ export default function EditCustomer(params: EditCustomerParams) {
   const [isOpenBirthdayPicker, setIsOpenBirthdayPicker] = useState(false);
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
 
-  const { operators } = useFlowStore();
+  const operators = useFlowStore((state) => state.operators);
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
-  const { getTemplateGroups } = useManagerStore();
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
   const showDatePicker = () => {
     setIsOpenBirthdayPicker(true);
   };
-
-  const { currentFlow, updateCurrentFlow } = useFlowStore();
 
   const { style = {} } = params;
 
@@ -244,8 +244,6 @@ export default function EditCustomer(params: EditCustomerParams) {
                 color={'#333333'}
                 fontSize={sp(16)}
                 placeholder='请输入'
-                inputMode='numeric'
-                returnKeyType='done'
               />
             }
           />

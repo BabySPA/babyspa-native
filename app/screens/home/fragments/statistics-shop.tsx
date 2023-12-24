@@ -41,9 +41,9 @@ echarts.use([
 ]);
 
 const ShopStatisticBox = () => {
-  const {
-    statisticShop: { counts, flows },
-  } = useFlowStore();
+  const counts = useFlowStore((state) => state.statisticShop.counts);
+  const flows = useFlowStore((state) => state.statisticShop.flows);
+
   const List = () => {
     return (
       <Column>
@@ -159,7 +159,7 @@ const ShopStatisticBox = () => {
                 </Row>
                 <Row w={ls(80)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {flow.analyze.remark || '无'}
+                    {flow.analyze.conclusion || '无'}
                   </Text>
                 </Row>
               </Row>
@@ -211,8 +211,7 @@ const ShopStatisticBox = () => {
   );
 };
 const CenterStatisticBox = () => {
-  const { statisticShops } = useFlowStore();
-
+  const statisticShops = useFlowStore((state) => state.statisticShops);
   const List = () => {
     return (
       <Column>
@@ -361,7 +360,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
-        interval: 2,
+        interval: 20,
       },
     ],
     series: [
@@ -386,6 +385,13 @@ const CenterStatisticBox = () => {
     ],
   };
   const svgRef = useRef<any>(null);
+
+  const [renderWaiting, setRenderWaiting] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderWaiting(true);
+    }, 10);
+  }, []);
 
   useEffect(() => {
     let chart: any;
@@ -442,7 +448,7 @@ const CenterStatisticBox = () => {
             调理人数
           </Text>
         </Row>
-        <SvgChart ref={svgRef} />
+        {renderWaiting && <SvgChart ref={svgRef} />}
       </Box>
       <Box mt={ss(10)}>
         <List />
@@ -452,13 +458,7 @@ const CenterStatisticBox = () => {
 };
 export default function StatisticsShop() {
   const [selectShop, setSelectShop] = useState<Shop>();
-  const [renderWaiting, setRenderWaiting] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderWaiting(true);
-    }, 50);
-  }, []);
   return (
     <Flex flex={1}>
       <Filter
@@ -466,14 +466,10 @@ export default function StatisticsShop() {
           setSelectShop(shop);
         }}
       />
-      {renderWaiting && (
-        <>
-          {selectShop?.type === ShopType.CENTER ? (
-            <CenterStatisticBox />
-          ) : (
-            <ShopStatisticBox />
-          )}
-        </>
+      {selectShop?.type === ShopType.CENTER ? (
+        <CenterStatisticBox />
+      ) : (
+        <ShopStatisticBox />
       )}
     </Flex>
   );
@@ -487,8 +483,12 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
     isOpen: false,
   });
 
-  const { requestGetStatisticFlow, requestGetStatisticFlowWithShop } =
-    useFlowStore();
+  const requestGetStatisticFlow = useFlowStore(
+    (state) => state.requestGetStatisticFlow,
+  );
+  const requestGetStatisticFlowWithShop = useFlowStore(
+    (state) => state.requestGetStatisticFlowWithShop,
+  );
 
   const [defaultSelectShop, selectShops] = useSelectShops(false);
   const [selectShop, setSelectShop] = useState<Shop>();

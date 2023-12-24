@@ -8,10 +8,9 @@ import {
   Text,
   Image,
   Container,
-  useToast,
-  Center,
   ScrollView,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { AppStackScreenProps } from '~/app/types';
@@ -50,20 +49,33 @@ const configs = [
 ];
 export default function CustomerArchive({
   navigation,
+  route,
 }: AppStackScreenProps<'CustomerArchive'>) {
   useEffect(() => {}, []);
 
-  const {
-    requestCustomerArchiveHistory,
-    requestCustomerArchiveCourses,
-    requestCustomerGrowthCurve,
-    requestPutCustomerGrowthCurve,
-    requestPatchCustomerGrowthCurve,
-    requestDeleteCustomer,
-    requestArchiveCustomers,
-    currentArchiveCustomer: customer,
-    updateCurrentFlow,
-  } = useFlowStore();
+  const selectIdx = route.params?.defaultSelect || 0;
+  const requestCustomerArchiveCourses = useFlowStore(
+    (state) => state.requestCustomerArchiveCourses,
+  );
+  const requestCustomerArchiveHistory = useFlowStore(
+    (state) => state.requestCustomerArchiveHistory,
+  );
+  const requestCustomerGrowthCurve = useFlowStore(
+    (state) => state.requestCustomerGrowthCurve,
+  );
+  const requestPutCustomerGrowthCurve = useFlowStore(
+    (state) => state.requestPutCustomerGrowthCurve,
+  );
+  const requestPatchCustomerGrowthCurve = useFlowStore(
+    (state) => state.requestPatchCustomerGrowthCurve,
+  );
+  const requestDeleteCustomer = useFlowStore(
+    (state) => state.requestDeleteCustomer,
+  );
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
+  const customer = useFlowStore((state) => state.currentArchiveCustomer);
 
   const age = getAge(customer?.birthday || dayjs().format('YYYY-MM-DD'));
   const toast = useToast();
@@ -91,7 +103,7 @@ export default function CustomerArchive({
     });
   };
 
-  const [selectFragment, setSelectedFragment] = useState(0);
+  const [selectFragment, setSelectedFragment] = useState(selectIdx);
 
   const [showEditGrowthCurve, setShowEditGrowthCurve] = useState({
     isOpen: false,
@@ -195,7 +207,7 @@ export default function CustomerArchive({
                   requestDeleteCustomer(customer?._id || '')
                     .then(async (res) => {
                       toastAlert(toast, 'success', '删除成功！');
-                      await requestArchiveCustomers();
+                      await requestArchiveCustomers(1);
                       navigation.goBack();
                     })
                     .catch((err) => {
@@ -311,8 +323,10 @@ export default function CustomerArchive({
                 <ShopArchive
                   archives={archives}
                   onPressToFlowInfo={function (archive): void {
-                    updateCurrentFlow(archive);
-                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                    navigation.navigate('FlowInfo', {
+                      from: 'analyze',
+                      currentFlow: archive,
+                    });
                   }}
                 />
               ) : (
@@ -323,8 +337,10 @@ export default function CustomerArchive({
                 <HistoryArchive
                   courses={courses}
                   onPressToFlowInfo={function (archive): void {
-                    updateCurrentFlow(archive);
-                    navigation.navigate('FlowInfo', { from: 'analyze' });
+                    navigation.navigate('FlowInfo', {
+                      from: 'analyze',
+                      currentFlow: archive,
+                    });
                   }}
                 />
               ) : (

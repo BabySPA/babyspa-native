@@ -49,7 +49,8 @@ type StatisticAnalyzeOperator = {
   };
 }[];
 const CenterStatisticBox = () => {
-  const { statisticShops } = useFlowStore();
+  const statisticShops = useFlowStore((state) => state.statisticShops);
+
   const svgRef = useRef<any>(null);
 
   const [counts, setCounts] = useState({
@@ -159,7 +160,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
-        interval: 2,
+        interval: 20,
       },
     ],
     series: [
@@ -238,7 +239,7 @@ export default function StatisticsAnalyze() {
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
   return (
     <Flex flex={1}>
@@ -260,7 +261,9 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
     isOpen: false,
   });
 
-  const { requestGetStatisticFlowWithShop } = useFlowStore();
+  const requestGetStatisticFlowWithShop = useFlowStore(
+    (state) => state.requestGetStatisticFlowWithShop,
+  );
 
   const [defaultSelectShop, selectShops] = useSelectShops(false);
   const [selectShop, setSelectShop] = useState<Shop>();

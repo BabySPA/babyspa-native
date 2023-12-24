@@ -1,14 +1,5 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Text,
-  Pressable,
-  Row,
-  useToast,
-  Alert,
-  Circle,
-} from 'native-base';
+import { Box, Center, Flex, Text, Pressable, Row, Circle } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Image } from 'react-native';
 import useLayoutConfigWithRole from '~/app/stores/layout';
@@ -19,7 +10,7 @@ import useGlobalLoading from '~/app/stores/loading';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MessageDrawer from './message-drawer';
 import useMessageStore from '~/app/stores/message';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,7 +26,8 @@ function DrawerLayout() {
 export default DrawerLayout;
 
 const MessageNotify = memo(() => {
-  const { unReadCount } = useMessageStore();
+  const unReadCount = useMessageStore((state) => state.unReadCount);
+  const requestMessages = useMessageStore((state) => state.requestMessages);
   const navigation = useNavigation();
   return (
     <Pressable
@@ -43,6 +35,7 @@ const MessageNotify = memo(() => {
         opacity: 0.8,
       }}
       onPress={() => {
+        requestMessages();
         // @ts-ignore
         navigation.openDrawer();
       }}
@@ -75,8 +68,14 @@ const Layout = memo(() => {
   } = useLayoutConfigWithRole();
 
   const navigation = useNavigation();
-  const { user, currentShopWithRole, changeCurrentShopWithRole } =
-    useAuthStore();
+
+  const user = useAuthStore((state) => state.user);
+  const currentShopWithRole = useAuthStore(
+    (state) => state.currentShopWithRole,
+  );
+  const changeCurrentShopWithRole = useAuthStore(
+    (state) => state.changeCurrentShopWithRole,
+  );
 
   const currentSelectedModule = getLayoutConfig()[currentSelected];
 
@@ -130,9 +129,6 @@ const Layout = memo(() => {
           {getLayoutConfig().map((item, idx) => {
             return (
               <Pressable
-                _pressed={{
-                  opacity: idx != currentSelected ? 0.6 : 1,
-                }}
                 hitSlop={ss(20)}
                 key={idx}
                 onPress={() => {
@@ -212,28 +208,12 @@ const Layout = memo(() => {
               changeCurrentShopWithRole(selectedItem)
                 .then(() => {})
                 .finally(() => {
-                  const toastid = toast.show({
-                    placement: 'top',
-                    duration: 1000,
-                    render: () => {
-                      return (
-                        <Alert w='100%' bgColor={'rgba(244,244,244, 1)'}>
-                          <Box>
-                            <Text color={'#333'}>
-                              正在切换至
-                              <Text color={'#00B49E'}>
-                                {selectedItem.shop.name}
-                              </Text>
-                            </Text>
-                          </Box>
-                        </Alert>
-                      );
-                    },
+                  toast.show(`正在切换至${selectedItem.shop.name}`, {
+                    duration: 3000,
                   });
                   setTimeout(() => {
-                    toast.close(toastid);
                     closeLoading();
-                  }, 800);
+                  }, 1500);
                 });
             }}
           />
@@ -249,10 +229,6 @@ const Layout = memo(() => {
             currentSelectedModule?.features.map((item, idx) => {
               return (
                 <Pressable
-                  _pressed={{
-                    opacity:
-                      idx != currentSelectedModule.featureSelected ? 0.6 : 1,
-                  }}
                   hitSlop={ss(20)}
                   key={idx}
                   paddingRight={'8%'}

@@ -8,15 +8,16 @@ import {
   Row,
   Spinner,
   Text,
-  useToast,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
+
 import { StyleProp, ViewStyle, Image, TextInput } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, sp, ls } from '~/app/utils/style';
 import { EvaluateStoreConfig, EvaluateStores } from '~/app/constants';
-import { Score } from '~/app/stores/flow/type';
-import { useState } from 'react';
+import { FlowItemResponse, Score } from '~/app/stores/flow/type';
+import { useEffect, useRef, useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 
 interface EvaluateCardParams {
@@ -25,20 +26,39 @@ interface EvaluateCardParams {
   canEdit: boolean;
   onClose?: () => void;
   onEvaluated?: () => void;
+  currentFlow: FlowItemResponse;
 }
 
 export default function EvaluateCard(params: EvaluateCardParams) {
-  let {
-    currentFlow: { evaluate },
-    requestPutFlowToEvaluate,
-    requestGetEvaluateFlows,
-  } = useFlowStore();
+  const {
+    style = {},
+    type,
+    canEdit,
+    onClose,
+    onEvaluated,
+    currentFlow,
+  } = params;
+
+  const evaluate = currentFlow.evaluate;
+  const requestPutFlowToEvaluate = useFlowStore(
+    (state) => state.requestPutFlowToEvaluate,
+  );
+  const requestGetEvaluateFlows = useFlowStore(
+    (state) => state.requestGetEvaluateFlows,
+  );
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const { style = {}, type, canEdit, onClose, onEvaluated } = params;
 
   const [templateEvaluate, setTemplateEvaluate] = useState(evaluate);
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: templateEvaluate?.remark || '',
+    });
+  }, []);
 
   const DialogBtn = () => (
     <Row justifyContent={'center'} mt={ss(110)}>
@@ -197,6 +217,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         </Text>
         <Box flex={1} ml={ss(12)}>
           <Input
+            ref={inputRef}
             borderWidth={ss(1)}
             borderColor={'#D8D8D8'}
             isReadOnly={!canEdit}
@@ -214,7 +235,6 @@ export default function EvaluateCard(params: EvaluateCardParams) {
               fontSize: sp(18),
               color: '#999',
             }}
-            value={templateEvaluate?.remark || ''}
             onChangeText={(text) => {
               setTemplateEvaluate({
                 ...templateEvaluate,
@@ -222,7 +242,6 @@ export default function EvaluateCard(params: EvaluateCardParams) {
                 score: templateEvaluate?.score || 3,
               });
             }}
-            returnKeyType='done'
           />
         </Box>
       </Row>
@@ -235,12 +254,14 @@ interface EvaluateCardDialogParams {
   isOpen: boolean;
   onClose: () => void;
   onEvaluated?: () => void;
+  currentFlow: FlowItemResponse;
 }
 
 export function EvaluateCardDialog({
   isOpen,
   onClose,
   onEvaluated,
+  currentFlow,
 }: EvaluateCardDialogParams) {
   return (
     <Modal
@@ -249,6 +270,7 @@ export function EvaluateCardDialog({
         onClose();
       }}>
       <EvaluateCard
+        currentFlow={currentFlow}
         type={'dialog'}
         canEdit={true}
         onEvaluated={onEvaluated}

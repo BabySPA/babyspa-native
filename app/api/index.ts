@@ -84,7 +84,7 @@ class Request {
             setTimeout(() => {
               logout();
               closeLoading();
-            }, 500);
+            }, 50);
           }
         }
 

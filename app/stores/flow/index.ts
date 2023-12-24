@@ -21,6 +21,8 @@ import { RoleAuthority } from '../auth/type';
 import { fuzzySearch, generateFlowCounts } from '~/app/utils';
 import useManagerStore from '../manager';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
+import { InteractionManager } from 'react-native';
+import useLayoutStore from '../layout';
 
 const DefaultFlowListData = {
   flows: [],
@@ -107,7 +109,7 @@ export const DefaultFlow = {
       nextTime: '',
     },
     remark: '',
-    editable: 0,
+    editable: true,
   },
   evaluate: {
     status: EvaluateStatus.NOT_SET,
@@ -147,6 +149,8 @@ const initialState = {
       { label: '已完成', value: FlowStatus.Analyzed },
       { label: '已取消', value: FlowStatus.AnalyzeCanceled },
     ],
+    all: [],
+    totalPages: 0,
   },
   evaluate: {
     ...DefaultFlowListData,
@@ -158,7 +162,12 @@ const initialState = {
   },
   currentFlow: DefaultFlow,
 
-  archiveCustomers: { ...DefaultCustomerListData },
+  archiveCustomers: {
+    ...DefaultCustomerListData,
+    all: [],
+    totalPages: 0,
+  },
+
   customersFollowUp: {
     ...DefaultFlowListData,
     startDate: dayjs().format('YYYY-MM-DD'),
@@ -173,30 +182,40 @@ const initialState = {
   statisticFlowWithDate: [],
 };
 
+let currentDate = dayjs().format('YYYY-MM-DD');
+
 const useFlowStore = create(
   immer<FlowState>((set, get) => ({
     ...initialState,
     clearCache: () => {
       set({ ...initialState });
     },
-    requestGetInitializeData: async () => {
-      useManagerStore.getState().requestGetTemplates();
-      useManagerStore.getState().requestGetRoles();
-      useManagerStore.getState().requestGetShops();
 
-      // 获取当前用户的信息
-      const hasAuthority = useAuthStore.getState().hasAuthority;
+    requestGetInitializeData: () => {
+      InteractionManager.runAfterInteractions(async () => {
+        await useManagerStore.getState().requestGetTemplates();
+        await useManagerStore.getState().requestGetRoles();
+        await useManagerStore.getState().requestGetShops();
 
-      if (hasAuthority(RoleAuthority.FLOW_REGISTER, 'R')) {
+        await get().requsetGetHomeList();
+      });
+    },
+
+    requsetGetHomeList: async () => {
+      // 获取当前在首页哪个tab下
+      const { layoutConfig, currentSelected } = useLayoutStore.getState();
+      const featureSelected =
+        layoutConfig[currentSelected].features[
+          layoutConfig[currentSelected].featureSelected
+        ];
+
+      if (featureSelected.auth === RoleAuthority.FLOW_REGISTER) {
         await get().requestGetRegisterFlows();
-      }
-      if (hasAuthority(RoleAuthority.CUSTOMER_ARCHIVE, 'R')) {
+      } else if (featureSelected.auth === RoleAuthority.FLOW_COLLECTION) {
         await get().requestGetCollectionFlows();
-      }
-      if (hasAuthority(RoleAuthority.FLOW_ANALYZE, 'R')) {
+      } else if (featureSelected.auth === RoleAuthority.FLOW_ANALYZE) {
         await get().requestGetAnalyzeFlows();
-      }
-      if (hasAuthority(RoleAuthority.FLOW_EVALUATE, 'R')) {
+      } else if (featureSelected.auth === RoleAuthority.FLOW_EVALUATE) {
         await get().requestGetEvaluateFlows();
       }
     },
@@ -217,7 +236,28 @@ const useFlowStore = create(
       });
     },
 
+    resetRegisterFlows: () => {
+      set((state) => {
+        state.register = produce(state.register, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     requestGetRegisterFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateRegisterFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
+
       const {
         register: { searchKeywords, startDate, endDate, status },
       } = get();
@@ -241,41 +281,58 @@ const useFlowStore = create(
             item.collect.status !== CollectStatus.CANCEL,
         );
 
-        set({
-          register: {
-            ...get().register,
-            flows: fuzzySearch(filterDocs, searchKeywords, status),
-          },
+        set((state) => {
+          state.register = produce(state.register, (draft) => {
+            Object.assign(draft, {
+              flows: fuzzySearch(filterDocs, searchKeywords, status),
+            });
+          });
         });
       });
     },
 
-    requestArchiveCustomers: async () => {
-      const {
-        archiveCustomers: { startDate, endDate, searchKeywords, shopId },
-      } = get();
-      const params: any = {};
-
-      // if (startDate) {
-      //   params.startDate = startDate;
-      // }
-      // if (endDate) {
-      //   params.endDate = endDate;
-      // }
-
-      if (shopId) {
-        params.shopId = shopId;
-      }
-
-      request.get('/customers/all', { params }).then(({ data }) => {
-        const { docs } = data;
-        set({
-          archiveCustomers: {
-            ...get().archiveCustomers,
-            customers: fuzzySearch(docs, searchKeywords),
-          },
+    resetArchiveCustomers: () => {
+      set((state) => {
+        state.archiveCustomers = produce(state.archiveCustomers, (draft) => {
+          Object.assign(draft, {
+            ...DefaultCustomerListData,
+            all: [],
+            totalPages: 0,
+          });
         });
       });
+    },
+    requestArchiveCustomers: async (page: number) => {
+      if (page === 1) {
+        const {
+          archiveCustomers: { startDate, endDate, searchKeywords },
+        } = get();
+        const params: any = {};
+
+        return request.get('/customers/all', { params }).then(({ data }) => {
+          const { docs } = data;
+          set({
+            archiveCustomers: {
+              ...get().archiveCustomers,
+              total: docs.length,
+              totalPages: Math.ceil(docs.length / 15),
+              all: docs,
+              // @ts-ignore
+              customers: fuzzySearch(docs, searchKeywords).slice(0, 15),
+            },
+          });
+        });
+      } else {
+        if (get().archiveCustomers.totalPages < page) {
+          return;
+        }
+        set((state) => {
+          state.archiveCustomers.customers =
+            state.archiveCustomers.customers.concat(
+              ...get().archiveCustomers.all.slice(page * 15, (page + 1) * 15),
+            );
+        });
+      }
     },
 
     async requestCustomerArchiveHistory(customerId) {
@@ -292,7 +349,27 @@ const useFlowStore = create(
       return data;
     },
 
+    resetCollectionCustomers: () => {
+      set((state) => {
+        state.collection = produce(state.collection, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     requestGetCollectionFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateCollectionFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
       const {
         collection: { status, searchKeywords, startDate, endDate },
       } = get();
@@ -360,7 +437,31 @@ const useFlowStore = create(
       return data;
     },
 
+    resetAnalyzeFlows: () => {
+      set((state) => {
+        state.analyze = produce(state.analyze, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+            all: [],
+            totalPages: 0,
+          });
+        });
+      });
+    },
+
     requestGetAnalyzeFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateAnalyzeFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
+
       const {
         analyze: { status, searchKeywords, startDate, endDate },
       } = get();
@@ -382,16 +483,40 @@ const useFlowStore = create(
             item.register.status !== RegisterStatus.CANCEL &&
             item.collect.status !== CollectStatus.NOT_SET,
         );
+
         set({
           analyze: {
             ...get().analyze,
+            // @ts-ignore
+            all: filterDocs,
+            // @ts-ignore
             flows: fuzzySearch(filterDocs, searchKeywords, status),
           },
         });
       });
     },
 
+    resetEvaluateFlows: () => {
+      set((state) => {
+        state.evaluate = produce(state.evaluate, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     requestGetEvaluateFlows: async () => {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateEvaluateFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
       const {
         evaluate: { status, startDate, searchKeywords, endDate },
       } = get();
@@ -859,12 +984,12 @@ const useFlowStore = create(
           auth: RoleAuthority.FLOW_COLLECTION,
           disabled: false,
         },
-        {
-          text: '分析结论',
-          key: FlowOperatorKey.conclusions,
-          auth: RoleAuthority.FLOW_ANALYZE,
-          disabled: false,
-        },
+        // {
+        //   text: '分析结论',
+        //   key: FlowOperatorKey.conclusions,
+        //   auth: RoleAuthority.FLOW_ANALYZE,
+        //   disabled: false,
+        // },
         {
           text: '调理方案',
           key: FlowOperatorKey.solution,
@@ -880,7 +1005,7 @@ const useFlowStore = create(
             }
             return item;
           }),
-          selectIdx: 2,
+          selectIdx: 1,
         };
       } else {
         return {
@@ -928,8 +1053,29 @@ const useFlowStore = create(
       });
     },
 
+    resetFollowUps() {
+      return set((state) => {
+        state.customersFollowUp = produce(state.customersFollowUp, (draft) => {
+          Object.assign(draft, {
+            ...DefaultFlowListData,
+            flows: [],
+          });
+        });
+      });
+    },
     // 客户随访
     async requestGetFollowUps() {
+      const today = dayjs().format('YYYY-MM-DD');
+
+      if (currentDate !== today) {
+        // 如果不是当天了，纠正时间
+        get().updateCustomersFollowupFilter({
+          startDate: today,
+          endDate: today,
+        });
+        currentDate = today;
+      }
+
       const {
         customersFollowUp: { shopId, startDate, endDate, searchKeywords },
       } = get();

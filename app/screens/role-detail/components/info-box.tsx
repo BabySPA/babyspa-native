@@ -4,11 +4,10 @@ import {
   Row,
   Text,
   Pressable,
-  Image,
-  useToast,
   Spinner,
 } from 'native-base';
 import BoxTitle from '~/app/components/box-title';
+import { useToast } from 'react-native-toast-notifications';
 import { ss, ls, sp } from '~/app/utils/style';
 import useManagerStore from '~/app/stores/manager';
 import { DialogModal } from '~/app/components/modals';
@@ -25,7 +24,10 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const { currentRole, requestDeleteRole, requestGetRoles } = useManagerStore();
+  const currentRole = useManagerStore((state) => state.currentRole);
+  const requestDeleteRole = useManagerStore((state) => state.requestDeleteRole);
+  const requestGetRoles = useManagerStore((state) => state.requestGetRoles);
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const toast = useToast();

@@ -37,7 +37,11 @@ echarts.use([
 ]);
 
 const ShopStatisticBox = () => {
-  const { statisticShop, statisticFlowWithDate } = useFlowStore();
+  const statisticShop = useFlowStore((state) => state.statisticShop);
+  const statisticFlowWithDate = useFlowStore(
+    (state) => state.statisticFlowWithDate,
+  );
+
   const options = {
     grid: {
       top: ss(20),
@@ -87,7 +91,7 @@ const ShopStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
-        interval: 2,
+        interval: 20,
       },
     ],
     series: [
@@ -174,7 +178,7 @@ const ShopStatisticBox = () => {
   );
 };
 const CenterStatisticBox = () => {
-  const { statisticShops } = useFlowStore();
+  const statisticShops = useFlowStore((state) => state.statisticShops);
 
   const options = {
     grid: {
@@ -225,7 +229,7 @@ const CenterStatisticBox = () => {
             type: 'dashed', // 将网格线显示为虚线
           },
         },
-        interval: 2,
+        interval: 20,
       },
     ],
     series: [
@@ -331,7 +335,7 @@ export default function StatisticsMassage() {
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
   return (
     <Flex flex={1}>
@@ -361,8 +365,12 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
     isOpen: false,
   });
 
-  const { requestGetStatisticFlow, requestGetStatisticFlowWithShop } =
-    useFlowStore();
+  const requestGetStatisticFlow = useFlowStore(
+    (state) => state.requestGetStatisticFlow,
+  );
+  const requestGetStatisticFlowWithShop = useFlowStore(
+    (state) => state.requestGetStatisticFlowWithShop,
+  );
 
   const [defaultSelectShop, selectShops] = useSelectShops(false);
   const [selectShop, setSelectShop] = useState<Shop>();

@@ -78,8 +78,11 @@ export default function SelectShop({
 }
 
 export function useSelectShops(filterCenter: boolean): [Shop | null, Shop[]] {
-  const { currentShopWithRole } = useAuthStore();
-  const { shops, requestGetShops } = useManagerStore();
+  const currentShopWithRole = useAuthStore(
+    (state) => state.currentShopWithRole,
+  );
+  const shops = useManagerStore((state) => state.shops);
+  const requestGetShops = useManagerStore((state) => state.requestGetShops);
 
   const [defaultSelectShop, setDefaultSelectShop] = useState<Shop | null>();
   const [selectShops, setSelectShops] = useState<Shop[]>([]);

@@ -8,7 +8,7 @@ import {
   Column,
   Pressable,
 } from 'native-base';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -23,9 +23,7 @@ import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
 import { useNavigation } from '@react-navigation/native';
 
 const ShopStatisticBox = () => {
-  const {
-    statisticShop: { flows },
-  } = useFlowStore();
+  const flows = useFlowStore((state) => state.statisticShop.flows);
 
   const [followUpData, setFollowUpData] = useState<{
     flows: FlowItemResponse[];
@@ -207,7 +205,7 @@ const ShopStatisticBox = () => {
 };
 const CenterStatisticBox = () => {
   const navigation = useNavigation();
-  const { statisticShops } = useFlowStore();
+  const statisticShops = useFlowStore((state) => state.statisticShops);
 
   const [flowsWithShopData, setFlowsWithShopData] = useState<{
     flowsWithShop: {
@@ -457,7 +455,7 @@ export default function StatisticsVisit() {
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
   return (
     <Flex flex={1}>
@@ -487,8 +485,12 @@ function Filter({ onSelectShop }: { onSelectShop: (shop: Shop) => void }) {
     isOpen: false,
   });
 
-  const { requestGetStatisticFlow, requestGetStatisticFlowWithShop } =
-    useFlowStore();
+  const requestGetStatisticFlow = useFlowStore(
+    (state) => state.requestGetStatisticFlow,
+  );
+  const requestGetStatisticFlowWithShop = useFlowStore(
+    (state) => state.requestGetStatisticFlowWithShop,
+  );
 
   const [defaultSelectShop, selectShops] = useSelectShops(false);
   const [selectShop, setSelectShop] = useState<Shop>();

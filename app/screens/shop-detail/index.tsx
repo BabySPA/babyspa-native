@@ -1,4 +1,4 @@
-import { Box, Text, Row, useToast } from 'native-base';
+import { Box, Text, Row } from 'native-base';
 import { AppStackScreenProps } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss } from '~/app/utils/style';
@@ -12,7 +12,7 @@ export default function ShopDetail({
   navigation,
   route: { params },
 }: AppStackScreenProps<'ShopDetail'>) {
-  const { currentShop } = useManagerStore();
+  const currentShop = useManagerStore((state) => state.currentShop);
 
   const [edit, setEdit] = useState(params.type === 'edit' || !currentShop._id);
 

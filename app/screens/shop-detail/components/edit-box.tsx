@@ -9,11 +9,12 @@ import {
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
   ScrollView,
 } from 'native-base';
-import { useState } from 'react';
+import { useToast } from 'react-native-toast-notifications';
+
+import { useEffect, useRef, useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
@@ -21,7 +22,6 @@ import { FormBox } from '~/app/components/form-box';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
 import { showAreaPicker, showTimePicker } from '~/app/utils/picker';
-import useGlobalLoading from '~/app/stores/loading';
 interface EditBoxParams {
   onEditFinish: () => void;
 }
@@ -30,15 +30,21 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentShop,
-    requestPostShop,
-    requestGetShops,
-    requestPatchShop,
-    setCurrentShop,
-  } = useManagerStore();
+  const currentShop = useManagerStore((state) => state.currentShop);
+  const requestPostShop = useManagerStore((state) => state.requestPostShop);
+  const requestGetShops = useManagerStore((state) => state.requestGetShops);
+  const requestPatchShop = useManagerStore((state) => state.requestPatchShop);
+  const setCurrentShop = useManagerStore((state) => state.setCurrentShop);
 
   const [tempShop, setTempShop] = useState(currentShop);
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: currentShop.description,
+    });
+  }, []);
 
   const checkShop = () => {
     if (tempShop.name.trim() === '') {
@@ -73,7 +79,6 @@ export default function EditBox(params: EditBoxParams) {
     return true;
   };
 
-  const { openLoading, closeLoading } = useGlobalLoading();
   return (
     <Column
       flex={1}
@@ -151,8 +156,6 @@ export default function EditBox(params: EditBoxParams) {
                   <Input
                     autoCorrect={false}
                     flex={1}
-                    inputMode='numeric'
-                    returnKeyType='done'
                     ml={ls(20)}
                     h={ss(48)}
                     py={ss(10)}
@@ -330,8 +333,8 @@ export default function EditBox(params: EditBoxParams) {
                 style={{ alignItems: 'flex-start', flex: 1 }}
                 form={
                   <Input
+                    ref={inputRef}
                     autoCorrect={false}
-                    defaultValue={tempShop.description}
                     flex={1}
                     h={ss(128, 100)}
                     py={ss(10)}

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Audio } from 'expo-av';
 import _ from 'lodash';
-import { Box, Center, Modal, ScrollView, Text, useToast } from 'native-base';
+import { Box, Center, Modal, ScrollView, Text } from 'native-base';
 import { useRef, useState } from 'react';
 import { Image, PanResponder, Vibration } from 'react-native';
 import { upload } from '~/app/api/upload';
@@ -10,6 +10,7 @@ import useFlowStore from '~/app/stores/flow';
 import useOssStore from '~/app/stores/oss';
 import { ss, ls, sp, isPhone } from '~/app/utils/style';
 import { toastAlert } from '~/app/utils/toast';
+import { useToast } from 'react-native-toast-notifications';
 
 export default function RecordBox({ edit }: { edit: boolean }) {
   const [isDone, setIsDone] = useState(true);
@@ -17,8 +18,10 @@ export default function RecordBox({ edit }: { edit: boolean }) {
   const toast = useToast();
   const [showRecordBox, setShowRecordBox] = useState(false);
   const [recorder, setRecorder] = useState<Audio.Recording>();
-  const { addAudioFile, updateAudioFile, removeAudioFile, currentFlow } =
-    useFlowStore();
+  const addAudioFile = useFlowStore((state) => state.addAudioFile);
+  const updateAudioFile = useFlowStore((state) => state.updateAudioFile);
+  const removeAudioFile = useFlowStore((state) => state.removeAudioFile);
+  const currentFlow = useFlowStore((state) => state.currentFlow);
 
   const audioFiles = _.get(currentFlow, 'collect.healthInfo.audioFiles', []);
   const { getOssConfig } = useOssStore();
@@ -97,7 +100,7 @@ export default function RecordBox({ edit }: { edit: boolean }) {
           } finally {
             setIsTouchNow(false);
           }
-        }, 500); // 500毫秒为长按的时间阈值，可以根据需要调整
+        }, 50); // 500毫秒为长按的时间阈值，可以根据需要调整
       }
     },
     onPanResponderMove: async (_, gestureState) => {

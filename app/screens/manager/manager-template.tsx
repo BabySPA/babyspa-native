@@ -8,9 +8,9 @@ import {
   Pressable,
   Icon,
   Input,
-  useToast,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { AppStackScreenProps } from '~/app/types';
 import { ls, sp, ss } from '~/app/utils/style';
@@ -36,19 +36,24 @@ import {
 import { toastAlert } from '~/app/utils/toast';
 import { debounce } from 'lodash';
 import { ExtraItem, TemplateItem } from '~/app/stores/manager/type';
-import { PanResponder } from 'react-native';
 import TextChild from './components/TextChild';
 
 export default function ManagerTemplate({
   navigation,
 }: AppStackScreenProps<'ManagerTemplate'>) {
-  const {
-    templates,
-    currentSelectTemplateIdx,
-    requestGetTemplates,
-    requestPatchTemplateGroup,
-    requestDeleteTemplateGroup,
-  } = useManagerStore();
+  const templates = useManagerStore((state) => state.templates);
+  const currentSelectTemplateIdx = useManagerStore(
+    (state) => state.currentSelectTemplateIdx,
+  );
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
+  const requestPatchTemplateGroup = useManagerStore(
+    (state) => state.requestPatchTemplateGroup,
+  );
+  const requestDeleteTemplateGroup = useManagerStore(
+    (state) => state.requestDeleteTemplateGroup,
+  );
 
   const [currentLevel3SelectFolderIdx, setCurrentLevel3SelectFolderIdx] =
     useState<{ folder: number; item: number }>({ folder: -1, item: 0 });
@@ -1440,8 +1445,13 @@ export default function ManagerTemplate({
 }
 
 function Tabs({ onChangeTab }: { onChangeTab(): void }) {
-  const { templates, currentSelectTemplateIdx, setCurrentSelectTemplateIdx } =
-    useManagerStore();
+  const templates = useManagerStore((state) => state.templates);
+  const currentSelectTemplateIdx = useManagerStore(
+    (state) => state.currentSelectTemplateIdx,
+  );
+  const setCurrentSelectTemplateIdx = useManagerStore(
+    (state) => state.setCurrentSelectTemplateIdx,
+  );
   return (
     <ScrollView horizontal={true} bgColor={'#fff'} borderRadius={ss(10)}>
       <Row h={ss(80)}>

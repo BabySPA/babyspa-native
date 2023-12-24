@@ -10,7 +10,7 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const { currentShop } = useManagerStore();
+  const currentShop = useManagerStore((state) => state.currentShop);
   return (
     <Column
       flex={1}

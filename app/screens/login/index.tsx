@@ -4,14 +4,12 @@ import {
   Icon,
   Input,
   Text,
-  useToast,
   Row,
   Pressable,
   Spinner,
   FlatList,
-  ScrollView,
-  Link,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { AuthStackScreenProps } from '../../types';
 import { useState } from 'react';
 import useAuthStore from '../../stores/auth';
@@ -24,7 +22,8 @@ import { toastAlert } from '~/app/utils/toast';
 export default function LoginScreen({
   navigation,
 }: AuthStackScreenProps<'Login'>) {
-  const { login, selectLoginShop } = useAuthStore();
+  const login = useAuthStore((state) => state.login);
+  const selectLoginShop = useAuthStore((state) => state.selectLoginShop);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -196,8 +195,6 @@ export default function LoginScreen({
                 h={ss(60)}
                 mt={ss(60)}
                 placeholder='请输入用户名'
-                inputMode='numeric'
-                returnKeyType='done'
                 fontSize={sp(20)}
                 color={'#999'}
                 borderWidth={ss(1)}
@@ -223,8 +220,6 @@ export default function LoginScreen({
                 borderWidth={ss(1)}
                 borderColor={'#D8D8D8'}
                 placeholder='请输入密码'
-                inputMode='numeric'
-                returnKeyType='done'
                 fontSize={sp(20)}
                 color={'#999'}
                 InputLeftElement={

@@ -1,25 +1,32 @@
 import { Column, Divider, Icon, Pressable, Row, Text } from 'native-base';
 import { StyleProp, ViewStyle } from 'react-native';
-import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
+import { Image } from 'react-native';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
-import { AnalyzeStatus, FollowUpStatus } from '~/app/stores/flow/type';
+import {
+  AnalyzeStatus,
+  FlowItemResponse,
+  FollowUpStatus,
+} from '~/app/stores/flow/type';
+import useFlowStore from '~/app/stores/flow';
 
 interface AnalyzeCardParams {
   style?: StyleProp<ViewStyle>;
   edit: boolean;
+  currentFlow: FlowItemResponse;
 }
 
 export default function AnalyzeCard(params: AnalyzeCardParams) {
-  const {
-    currentFlow: { analyze, analyzeOperator },
-  } = useFlowStore();
-  const { style = {}, edit } = params;
+  const { style = {}, edit, currentFlow } = params;
+
+  const analyze = currentFlow.analyze;
+  const analyzeOperator = currentFlow.analyzeOperator;
+
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
   const navigation =
     useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
@@ -35,14 +42,15 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
         title='分析信息'
         rightElement={
           edit &&
-          analyze.editable !== false && (
+          analyze.editable && (
             <Pressable
               _pressed={{
                 opacity: 0.6,
               }}
               hitSlop={ss(20)}
               onPress={() => {
-                navigation.replace('Flow', {
+                updateCurrentFlow(currentFlow);
+                navigation.navigate('Flow', {
                   type: FlowStatus.ToBeAnalyzed,
                 });
               }}>
@@ -54,13 +62,12 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
         }
       />
       <Divider color={'#DFE1DE'} my={ss(14)} />
-      {analyze.status === AnalyzeStatus.NOT_SET ||
-      analyze.status === AnalyzeStatus.IN_PROGRESS ? (
+      {!currentFlow.analyze.conclusion ? (
         <Column alignItems={'center'} py={ss(20)}>
           <Image
             source={require('~/assets/images/empty-box.png')}
             style={{ width: ls(250), height: ls(170) }}
-            contentFit='contain'
+            resizeMode='contain'
           />
           <Text color='#909499' fontSize={sp(16)} mt={ss(20)}>
             暂无分析信息
@@ -152,8 +159,8 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
               textAlign={'right'}>
               注意事项：
             </Text>
-            <Text fontSize={sp(18)} color='#333' maxW={ls(400)}>
-              {analyze.remark || '无'}
+            <Text fontSize={sp(18)} color='#333' maxW={'85%'}>
+              {analyze.conclusion || '无'}
             </Text>
           </Row>
 

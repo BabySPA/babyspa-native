@@ -135,8 +135,6 @@ const SelectMonth = () => {
         </TouchableOpacity>
         <TextInput
           style={style.yearInput}
-          inputMode='numeric'
-          returnKeyType='done'
           maxLength={4}
           value={year}
           onBlur={() => onSelectYear(0)}

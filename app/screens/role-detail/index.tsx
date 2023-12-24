@@ -12,7 +12,7 @@ export default function RoleDetail({
   navigation,
   route: { params },
 }: AppStackScreenProps<'RoleDetail'>) {
-  const { currentRole } = useManagerStore();
+  const currentRole = useManagerStore((state) => state.currentRole);
 
   const [edit, setEdit] = useState(params.type === 'edit' || !currentRole._id);
 

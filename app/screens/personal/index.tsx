@@ -1,14 +1,6 @@
-import {
-  Box,
-  Text,
-  Row,
-  Column,
-  Pressable,
-  Image,
-  Icon,
-  useToast,
-} from 'native-base';
+import { Box, Text, Row, Column, Pressable, Image, Icon } from 'native-base';
 import { AppStackScreenProps, Gender } from '../../types';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import dayjs from 'dayjs';
@@ -16,22 +8,46 @@ import BoxTitle from '~/app/components/box-title';
 import LabelBox from '~/app/components/label-box';
 import useAuthStore from '~/app/stores/auth';
 import { decodePassword, maskString } from '~/app/utils';
-import { useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ChangePasswordModal, DialogModal } from '~/app/components/modals';
 import { toastAlert } from '~/app/utils/toast';
 import useManagerStore from '~/app/stores/manager';
+import Environment from '~/app/config/environment';
+import request from '~/app/api';
+import { Platform } from 'react-native';
+import CodePush from 'react-native-code-push';
 
 export default function Personal({
   navigation,
 }: AppStackScreenProps<'Personal'>) {
-  const { user, currentShopWithRole, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const currentShopWithRole = useAuthStore(
+    (state) => state.currentShopWithRole,
+  );
+
+  const logout = useAuthStore((state) => state.logout);
   const [showPassword, setShowPassword] = useState(false);
   const [isResetPassDialogOpen, setIsResetPassDialogOpen] = useState(false);
 
-  const { requestPatchUserPassword } = useManagerStore();
+  const requestPatchUserPassword = useManagerStore(
+    (state) => state.requestPatchUserPassword,
+  );
   const toast = useToast();
   const [showDialog, setShowDialog] = useState(false);
+
+  const [newVersionUrl, setNewVersionUrl] = useState('');
+
+  useEffect(() => {
+    request.get(`/client/version`).then(({ data }) => {
+      const { version, android, ios } = data;
+      console.log(version, android, ios);
+      if (version !== Environment.version) {
+        // has new version
+        setNewVersionUrl(Platform.OS === 'ios' ? ios : android);
+      }
+    });
+  }, []);
   return (
     <Box flex={1}>
       <NavigationBar
@@ -161,6 +177,49 @@ export default function Personal({
                   }
                 />
               </Row>
+              <Row alignItems={'center'} mt={ss(40)}>
+                <LabelBox
+                  title='版本'
+                  alignItems='center'
+                  rightElement={
+                    <Row alignItems={'center'} ml={ls(18)}>
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          toastAlert(toast, 'success', '正在检查更新...');
+                          CodePush.sync({
+                            updateDialog: {
+                              title: '发现更新',
+                              optionalUpdateMessage: '是否立即更新~',
+                              optionalInstallButtonLabel: '立即更新',
+                              optionalIgnoreButtonLabel: '忽略此更新',
+                              mandatoryUpdateMessage:
+                                '该更新为强制更新，是否立即更新~',
+                              mandatoryContinueButtonLabel: '继续',
+                            },
+                            installMode: CodePush.InstallMode.IMMEDIATE,
+                          });
+                        }}>
+                        <Row alignItems={'center'}>
+                          <Icon
+                            as={<MaterialIcons name='get-app' />}
+                            size={sp(24)}
+                            color='#00B49E'
+                          />
+
+                          <Text color='#00B49E' fontSize={sp(16)} ml={ls(5)}>
+                            检查更新
+                          </Text>
+                        </Row>
+                      </Pressable>
+                    </Row>
+                  }
+                  value={Environment.version}
+                />
+              </Row>
             </Box>
           </Column>
           <Row justifyContent={'center'} mb={ss(60)}>
@@ -191,17 +250,19 @@ export default function Personal({
                 </Text>
               </Row>
             </Pressable>
-            <DialogModal
-              title='是否确认退出登录？'
-              isOpen={showDialog}
-              onClose={function (): void {
-                setShowDialog(false);
-              }}
-              onConfirm={function (): void {
-                logout();
-                setShowDialog(false);
-              }}
-            />
+            {showDialog && (
+              <DialogModal
+                title='是否确认退出登录？'
+                isOpen={showDialog}
+                onClose={function (): void {
+                  setShowDialog(false);
+                }}
+                onConfirm={function (): void {
+                  logout();
+                  setShowDialog(false);
+                }}
+              />
+            )}
           </Row>
         </Column>
       </Row>

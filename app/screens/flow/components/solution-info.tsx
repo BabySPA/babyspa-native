@@ -29,20 +29,30 @@ export default function SolutionInfo({
 }: {
   selectedConfig: FlowOperatorConfigItem;
 }) {
-  const {
-    currentFlow,
-    updateSolutionMassage,
-    updateSolutionApplication,
-    addSolutionApplication,
-    removeSolutionApplication,
-    updateAnalyzeRemark,
-    addSolutionMassage,
-    removeSolutionMassage,
-    updateFollowUp,
-    updateNextTime,
-  } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateSolutionMassage = useFlowStore(
+    (state) => state.updateSolutionMassage,
+  );
+  const updateSolutionApplication = useFlowStore(
+    (state) => state.updateSolutionApplication,
+  );
+  const addSolutionApplication = useFlowStore(
+    (state) => state.addSolutionApplication,
+  );
+  const removeSolutionApplication = useFlowStore(
+    (state) => state.removeSolutionApplication,
+  );
+  const updateAnalyzeRemark = useFlowStore(
+    (state) => state.updateAnalyzeRemark,
+  );
+  const addSolutionMassage = useFlowStore((state) => state.addSolutionMassage);
+  const removeSolutionMassage = useFlowStore(
+    (state) => state.removeSolutionMassage,
+  );
+  const updateFollowUp = useFlowStore((state) => state.updateFollowUp);
+  const updateNextTime = useFlowStore((state) => state.updateNextTime);
 
-  const { getTemplateGroups } = useManagerStore();
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
   const {
     analyze: {
@@ -213,7 +223,7 @@ export default function SolutionInfo({
               </Row>
             </Box>
           </BoxItem>
-          <BoxItem
+          {/* <BoxItem
             flex={2}
             mt={ss(10)}
             title={'注意事项'}
@@ -256,7 +266,7 @@ export default function SolutionInfo({
                 />
               )}
             </Pressable>
-          </BoxItem>
+          </BoxItem> */}
         </Column>
         <Column flex={1} ml={ss(10)}>
           <BoxItem

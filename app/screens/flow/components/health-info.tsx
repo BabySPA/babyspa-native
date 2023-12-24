@@ -1,4 +1,4 @@
-import { Box, Column, Pressable, Row, Text, useToast } from 'native-base';
+import { Box, Column, Pressable, Row, Text } from 'native-base';
 import { ss, sp, ls } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import ImageBox from './image-box';
@@ -10,30 +10,37 @@ import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 import { useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
+import { useToast } from 'react-native-toast-notifications';
 
 export default function HealthInfo({
   selectedConfig,
 }: {
   selectedConfig: FlowOperatorConfigItem;
 }) {
-  const {
-    addLingualImage,
-    updateLingualImage,
-    addLeftHandImage,
-    updateLeftHandImage,
-    addRightHandImage,
-    updateRightHandImage,
-    addOtherImage,
-    updateOtherImage,
-    updateCollection,
-    removeOtherImage,
-    removeLingualImage,
-    removeLeftHandImage,
-    removeRightHandImage,
-    currentFlow: { collect },
-  } = useFlowStore();
+  const addLingualImage = useFlowStore((state) => state.addLingualImage);
+  const updateLingualImage = useFlowStore((state) => state.updateLingualImage);
+  const addLeftHandImage = useFlowStore((state) => state.addLeftHandImage);
+  const updateLeftHandImage = useFlowStore(
+    (state) => state.updateLeftHandImage,
+  );
+  const addRightHandImage = useFlowStore((state) => state.addRightHandImage);
+  const updateRightHandImage = useFlowStore(
+    (state) => state.updateRightHandImage,
+  );
+  const addOtherImage = useFlowStore((state) => state.addOtherImage);
+  const updateOtherImage = useFlowStore((state) => state.updateOtherImage);
+  const updateCollection = useFlowStore((state) => state.updateCollection);
+  const removeOtherImage = useFlowStore((state) => state.removeOtherImage);
+  const removeLingualImage = useFlowStore((state) => state.removeLingualImage);
+  const removeLeftHandImage = useFlowStore(
+    (state) => state.removeLeftHandImage,
+  );
+  const removeRightHandImage = useFlowStore(
+    (state) => state.removeRightHandImage,
+  );
+  const collect = useFlowStore((state) => state.currentFlow.collect);
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
-  const { getTemplateGroups } = useManagerStore();
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
   const toast = useToast();
 
@@ -64,8 +71,8 @@ export default function HealthInfo({
                 padding: ss(10),
               }}>
               <Text
-                fontSize={sp(14)}
-                color='#999'
+                fontSize={sp(20)}
+                color='#333'
                 style={{ textAlignVertical: 'top' }}>
                 {collect.healthInfo.allergy || '请输入或选择过敏原'}
               </Text>

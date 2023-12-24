@@ -1,23 +1,22 @@
 import { Column, Divider, Icon, Row, Text } from 'native-base';
-import { StyleProp, ViewStyle } from 'react-native';
-import useFlowStore from '~/app/stores/flow';
+import { Image, StyleProp, ViewStyle } from 'react-native';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import SoundList from '../sound-list';
-import PreviewImage from '../preview-image';
-import { CollectStatus } from '~/app/stores/flow/type';
+import PreviewImage from '../PreviewImage';
+import { CollectStatus, FlowItemResponse } from '~/app/stores/flow/type';
 
 interface CollectionCardParams {
   style?: StyleProp<ViewStyle>;
+  currentFlow: FlowItemResponse;
 }
 
 export default function CollectionCard(params: CollectionCardParams) {
-  const {
-    currentFlow: { collect, collectionOperator },
-  } = useFlowStore();
-  const { style = {} } = params;
+  const { style = {}, currentFlow } = params;
+
+  const collect = currentFlow.collect;
+  const collectionOperator = currentFlow.collectionOperator;
 
   return (
     <Column
@@ -33,7 +32,7 @@ export default function CollectionCard(params: CollectionCardParams) {
           <Image
             source={require('~/assets/images/empty-box.png')}
             style={{ width: ls(250), height: ls(170) }}
-            contentFit='contain'
+            resizeMode='contain'
           />
           <Text color='#909499' fontSize={sp(16)} mt={ss(20)}>
             暂无采集信息
@@ -49,7 +48,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               textAlign={'right'}>
               过敏原：
             </Text>
-            <Text fontSize={sp(18)} color='#333' maxW={ls(370)}>
+            <Text fontSize={sp(18)} color='#333' maxW={'85%'}>
               {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
@@ -59,7 +58,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               color='#999'
               w={ls(100, 140)}
               textAlign={'right'}>
-              舌象：
+              舌头照片：
             </Text>
             {collect.healthInfo.lingualImage.length > 0 ? (
               collect.healthInfo.lingualImage.map((item, idx) => {
@@ -91,7 +90,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               color='#999'
               w={ls(100, 140)}
               textAlign={'right'}>
-              左手手相：
+              左手图片：
             </Text>
             {collect.healthInfo.leftHandImages.length > 0 ? (
               collect.healthInfo.leftHandImages.map((item, idx) => {
@@ -123,7 +122,7 @@ export default function CollectionCard(params: CollectionCardParams) {
               color='#999'
               w={ls(100, 140)}
               textAlign={'right'}>
-              右手手相：
+              右手图片：
             </Text>
             {collect.healthInfo.rightHandImages.length > 0 ? (
               collect.healthInfo.rightHandImages.map((item, idx) => {

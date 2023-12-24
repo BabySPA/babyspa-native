@@ -7,10 +7,10 @@ import {
   Container,
   Center,
   Modal,
-  useToast,
   Spinner,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
@@ -29,7 +29,11 @@ import { toastAlert } from '~/app/utils/toast';
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { RoleAuthority } from '~/app/stores/auth/type';
 import useManagerStore from '~/app/stores/manager';
-import { CollectStatus, AnalyzeStatus } from '~/app/stores/flow/type';
+import {
+  CollectStatus,
+  AnalyzeStatus,
+  UpdatingImage,
+} from '~/app/stores/flow/type';
 import useAuthStore from '~/app/stores/auth';
 
 interface ResultModal {
@@ -44,31 +48,49 @@ export default function FlowScreen({
 }: AppStackScreenProps<'Flow'>) {
   const { type } = params;
   const toast = useToast();
-  const {
-    requestPatchFlowToCollection,
-    getFlowOperatorConfigByUser,
-    requestGetInitializeData,
-    requestPatchFlowToAnalyze,
-    currentFlow: { collect, analyze, customer },
-    updateCurrentArchiveCustomer,
-    requestPatchCollectionStatus,
-    requestPatchAnalyzeStatus,
-    requestStartAnalyze,
-  } = useFlowStore();
 
-  const { user } = useAuthStore();
+  const requestPatchFlowToAnalyze = useFlowStore(
+    (state) => state.requestPatchFlowToAnalyze,
+  );
+  const requestPatchFlowToCollection = useFlowStore(
+    (state) => state.requestPatchFlowToCollection,
+  );
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
+  const requestPatchCollectionStatus = useFlowStore(
+    (state) => state.requestPatchCollectionStatus,
+  );
+  const requestPatchAnalyzeStatus = useFlowStore(
+    (state) => state.requestPatchAnalyzeStatus,
+  );
+  const requestStartAnalyze = useFlowStore(
+    (state) => state.requestStartAnalyze,
+  );
+  const getFlowOperatorConfigByUser = useFlowStore(
+    (state) => state.getFlowOperatorConfigByUser,
+  );
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+  const { collect, analyze, customer } = currentFlow;
+
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     if (
       analyze.status !== AnalyzeStatus.DONE &&
-      analyze.status !== AnalyzeStatus.CANCEL
+      analyze.status !== AnalyzeStatus.CANCEL &&
+      type === FlowStatus.ToBeAnalyzed
     ) {
       // 开始分析
       requestStartAnalyze()
         .then((flow) => {
           if (
             flow.analyze.status === AnalyzeStatus.IN_PROGRESS &&
-            flow.analyzeOperator?._id !== user?.id
+            flow.analyzeOperator?._id !== user?.id &&
+            flow.analyze.updatedAt
           ) {
             setOpenLockModal({
               isOpen: true,
@@ -78,13 +100,15 @@ export default function FlowScreen({
         })
         .catch(async (err) => {
           toastAlert(toast, 'error', err.message);
-          await requestGetInitializeData();
+          requestGetInitializeData();
           navigation.goBack();
         });
     }
   }, []);
 
-  const { requestGetTemplates } = useManagerStore();
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
@@ -102,8 +126,7 @@ export default function FlowScreen({
 
   const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
   const [showWarn, setShowWarn] = useState<boolean>(
-    selectedConfig.auth === RoleAuthority.FLOW_ANALYZE &&
-      collect.healthInfo.allergy !== '',
+    type === FlowStatus.ToBeAnalyzed && collect.healthInfo.allergy !== '',
   );
   const [closeLoading, setCloseLoading] = useState<boolean>(false);
   const [finishLoading, setFinishLoading] = useState<boolean>(false);
@@ -119,6 +142,10 @@ export default function FlowScreen({
     requestGetTemplates();
   }, []);
 
+  const hasNoUpdateFinished = (images: UpdatingImage[]) => {
+    return images.some((item) => typeof item !== 'string');
+  };
+
   const checkCollection = () => {
     if (
       collect.healthInfo.audioFiles.length == 0 &&
@@ -131,6 +158,19 @@ export default function FlowScreen({
       return false;
     }
 
+    if (
+      hasNoUpdateFinished(collect.healthInfo.leftHandImages) ||
+      hasNoUpdateFinished(collect.healthInfo.rightHandImages) ||
+      hasNoUpdateFinished(collect.healthInfo.lingualImage) ||
+      hasNoUpdateFinished(collect.healthInfo.otherImages)
+    ) {
+      toastAlert(
+        toast,
+        'error',
+        '图片还没有传输完成请稍后，或者删除还在上传中(转圈)的图片...',
+      );
+      return false;
+    }
     if (!collect.guidance.trim()) {
       toastAlert(toast, 'error', '调理导向不能为空！');
       return false;
@@ -141,7 +181,7 @@ export default function FlowScreen({
 
   const checkAnalyze = () => {
     if (!analyze.conclusion) {
-      toastAlert(toast, 'error', '分析结论尚未输入!');
+      toastAlert(toast, 'error', '注意事项尚未输入!');
       return false;
     }
     if (analyze.solution.applications.length > 0) {
@@ -197,7 +237,9 @@ export default function FlowScreen({
               onPress={() => {
                 // 跳转到历史记录
                 updateCurrentArchiveCustomer(customer);
-                navigation.navigate('CustomerArchive');
+                navigation.navigate('CustomerArchive', {
+                  defaultSelect: 1,
+                });
               }}>
               <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
                 <Text color='#03CBB2' fontSize={sp(12)}>
@@ -225,18 +267,19 @@ export default function FlowScreen({
           bgColor={'#F9EDA5'}
           alignItems={'center'}
           justifyContent={'space-between'}>
-          <Row alignItems={'center'}>
+          <Row alignItems={'center'} flex={1}>
             <Circle bgColor={'#F56121'} size={sp(24)}>
               <Text color='#fff' fontSize={sp(14)}>
                 !
               </Text>
             </Circle>
-            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)}>
+            <Text color='#F86021' fontSize={sp(18)} ml={ss(20)} flex={1}>
               过敏原：
               {collect.healthInfo.allergy || '无'}
             </Text>
           </Row>
           <Pressable
+            ml={ls(20)}
             _pressed={{
               opacity: 0.6,
             }}
@@ -306,90 +349,89 @@ export default function FlowScreen({
               })}
             </Row>
           </Container>
-          {selectedConfig.auth == RoleAuthority.FLOW_COLLECTION &&
-            !selectedConfig.disabled && (
-              <Row>
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    setShowFinishModal(true);
-                  }}>
-                  <Row
-                    h={ss(44)}
-                    px={ls(26)}
-                    bgColor={'rgba(243, 96, 30, 0.20)'}
-                    borderWidth={ss(1)}
-                    borderColor={'#F3601E'}
-                    alignItems={'center'}
-                    borderRadius={ss(4)}>
-                    {closeLoading && (
-                      <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
-                    )}
-                    <Text color='#F3601E' fontSize={sp(14)}>
-                      结束
-                    </Text>
-                  </Row>
-                </Pressable>
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    if (!checkCollection()) {
-                      return;
-                    }
-                    requestPatchFlowToCollection()
-                      .then((res) => {
-                        setShowResultModal({
-                          type: 'success',
-                          message: '提交成功，待分析师处理',
-                          tip: '',
-                        });
-                        setTimeout(async () => {
-                          setShowResultModal({
-                            type: 'none',
-                            message: '',
-                            tip: '',
-                          });
-                          await requestGetInitializeData();
-                          navigation.goBack();
-                        }, 2000);
-                      })
-                      .catch((err) => {
-                        setShowResultModal({
-                          type: 'fail',
-                          message: '提交失败，' + err.message,
-                          tip: '',
-                        });
-                        setTimeout(() => {
-                          setShowResultModal({
-                            type: 'none',
-                            message: '',
-                            tip: '',
-                          });
-                        }, 2000);
+          {type === FlowStatus.ToBeCollected && !selectedConfig.disabled && (
+            <Row>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setShowFinishModal(true);
+                }}>
+                <Row
+                  h={ss(44)}
+                  px={ls(26)}
+                  bgColor={'rgba(243, 96, 30, 0.20)'}
+                  borderWidth={ss(1)}
+                  borderColor={'#F3601E'}
+                  alignItems={'center'}
+                  borderRadius={ss(4)}>
+                  {closeLoading && (
+                    <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
+                  )}
+                  <Text color='#F3601E' fontSize={sp(14)}>
+                    结束
+                  </Text>
+                </Row>
+              </Pressable>
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
+                }}
+                hitSlop={ss(20)}
+                onPress={() => {
+                  if (!checkCollection()) {
+                    return;
+                  }
+                  requestPatchFlowToCollection()
+                    .then((res) => {
+                      setShowResultModal({
+                        type: 'success',
+                        message: '提交成功，待分析师处理',
+                        tip: '',
                       });
-                  }}>
-                  <Center
-                    h={ss(44)}
-                    px={ls(12)}
-                    ml={ls(20)}
-                    bgColor={'rgba(3, 203, 178, 0.20)'}
-                    borderWidth={ss(1)}
-                    borderColor={'#03CBB2'}
-                    borderRadius={ss(4)}>
-                    <Text color='#0C1B16' fontSize={sp(14)}>
-                      提交分析
-                    </Text>
-                  </Center>
-                </Pressable>
-              </Row>
-            )}
-          {selectedConfig.auth == RoleAuthority.FLOW_ANALYZE && (
+                      setTimeout(async () => {
+                        setShowResultModal({
+                          type: 'none',
+                          message: '',
+                          tip: '',
+                        });
+                        requestGetInitializeData();
+                        navigation.goBack();
+                      }, 2000);
+                    })
+                    .catch((err) => {
+                      setShowResultModal({
+                        type: 'fail',
+                        message: '提交失败，' + err.message,
+                        tip: '',
+                      });
+                      setTimeout(() => {
+                        setShowResultModal({
+                          type: 'none',
+                          message: '',
+                          tip: '',
+                        });
+                      }, 2000);
+                    });
+                }}>
+                <Center
+                  h={ss(44)}
+                  px={ls(12)}
+                  ml={ls(20)}
+                  bgColor={'rgba(3, 203, 178, 0.20)'}
+                  borderWidth={ss(1)}
+                  borderColor={'#03CBB2'}
+                  borderRadius={ss(4)}>
+                  <Text color='#0C1B16' fontSize={sp(14)}>
+                    提交分析
+                  </Text>
+                </Center>
+              </Pressable>
+            </Row>
+          )}
+          {type === FlowStatus.ToBeAnalyzed && (
             <Row>
               <Pressable
                 _pressed={{
@@ -441,10 +483,18 @@ export default function FlowScreen({
                           message: '',
                           tip: '',
                         });
-                        await requestGetInitializeData();
+
+                        requestGetInitializeData();
                         // navigation.goBack();
                         navigation.replace('FlowInfo', {
                           from: 'analyze',
+                          currentFlow: {
+                            ...currentFlow,
+                            analyze: {
+                              ...currentFlow.analyze,
+                              status: AnalyzeStatus.DONE,
+                            },
+                          },
                         });
                       }, 2000);
                     })
@@ -466,7 +516,7 @@ export default function FlowScreen({
                     <Spinner mr={ls(5)} size={sp(20)} color='emerald.500' />
                   )}
                   <Text color='#0C1B16' fontSize={sp(14)}>
-                    完成
+                    完成分析
                   </Text>
                 </Row>
               </Pressable>
@@ -539,7 +589,7 @@ export default function FlowScreen({
               .then(async (res) => {
                 // 取消成功
                 toastAlert(toast, 'success', '取消成功！');
-                await requestGetInitializeData();
+                requestGetInitializeData();
                 navigation.goBack();
               })
               .catch((err) => {

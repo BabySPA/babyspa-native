@@ -6,11 +6,11 @@ import {
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
   ScrollView,
 } from 'native-base';
-import { useState } from 'react';
+import { useToast } from 'react-native-toast-notifications';
+import { useEffect, useRef, useState } from 'react';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
@@ -29,17 +29,24 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentUser,
-    requestPostUser,
-    requestGetUsers,
-    requestPatchUser,
-    setCurrentUser,
-  } = useManagerStore();
+  const currentUser = useManagerStore((state) => state.currentUser);
+  const requestPostUser = useManagerStore((state) => state.requestPostUser);
+  const requestGetUsers = useManagerStore((state) => state.requestGetUsers);
+  const requestPatchUser = useManagerStore((state) => state.requestPatchUser);
+  const setCurrentUser = useManagerStore((state) => state.setCurrentUser);
 
   const [tempUser, setTempUser] = useState(currentUser);
 
   const [defaultSelect, selectShops] = useSelectShops(false);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: tempUser?.description || '',
+    });
+  }, []);
 
   const checkUser = () => {
     if (tempUser.name.trim() === '') {
@@ -199,8 +206,6 @@ export default function EditBox(params: EditBoxParams) {
                 style={{ flex: 1 }}
                 form={
                   <Input
-                    inputMode='numeric'
-                    returnKeyType='done'
                     autoCorrect={false}
                     borderWidth={ss(1)}
                     borderColor={'#D8D8D8'}
@@ -285,8 +290,8 @@ export default function EditBox(params: EditBoxParams) {
                 form={
                   <>
                     <Input
+                      ref={inputRef}
                       autoCorrect={false}
-                      defaultValue={tempUser.description}
                       flex={1}
                       h={ss(128)}
                       py={ss(10)}

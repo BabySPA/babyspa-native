@@ -6,13 +6,13 @@ import {
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
   ScrollView,
   Icon,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { Image } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
 import { FormBox } from '~/app/components/form-box';
@@ -33,19 +33,26 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentRole,
-    requestPostRole,
-    requestGetRoles,
-    requestPatchRole,
-    setCurrentRole,
-  } = useManagerStore();
+  const currentRole = useManagerStore((state) => state.currentRole);
+  const requestPostRole = useManagerStore((state) => state.requestPostRole);
+  const requestGetRoles = useManagerStore((state) => state.requestGetRoles);
+  const requestPatchRole = useManagerStore((state) => state.requestPatchRole);
+  const setCurrentRole = useManagerStore((state) => state.setCurrentRole);
 
   const [configAuthTree, setConfigAuthTree] = useState(
     generateAuthorityTreeConfig(currentRole.authorities),
   );
 
   const [tempRole, setTempRole] = useState(currentRole);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: tempRole.description,
+    });
+  }, []);
 
   const checkRole = () => {
     if (!tempRole.name) {
@@ -163,8 +170,8 @@ export default function EditBox(params: EditBoxParams) {
                 form={
                   <>
                     <Input
+                      ref={inputRef}
                       autoCorrect={false}
-                      defaultValue={tempRole.description}
                       flex={1}
                       multiline
                       textAlignVertical='top'

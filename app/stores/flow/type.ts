@@ -1,6 +1,7 @@
 import { FlowOperatorConfigItem, FlowOperatorKey } from '~/app/constants';
 import { FlowStatus, Gender } from '~/app/types';
 import { Shop } from '../manager/type';
+import dayjs from 'dayjs';
 
 export enum RegisterStatus {
   NOT_SET = -1,
@@ -83,6 +84,7 @@ export interface QueryFlowList {
 }
 
 export interface QueryCustomerList {
+  total?: number;
   customers: Customer[];
   searchKeywords: string;
   startDate: string;
@@ -166,13 +168,24 @@ export interface FlowState {
   operators: Operator[];
   register: QueryFlowList;
   collection: QueryFlowList;
-  analyze: QueryFlowList;
+  analyze: QueryFlowList & {
+    all: FlowItemResponse[];
+  };
   evaluate: QueryFlowList;
+  customersFollowUp: QueryFlowList;
   currentFlow: FlowItemResponse;
 
-  archiveCustomers: QueryCustomerList;
+  archiveCustomers: QueryCustomerList & {
+    all: Customer[];
+    totalPages: number;
+  };
 
-  customersFollowUp: QueryFlowList;
+  resetArchiveCustomers: () => void;
+  resetAnalyzeFlows: () => void;
+  resetCollectionCustomers: () => void;
+  resetEvaluateFlows: () => void;
+  resetFollowUps: () => void;
+  resetRegisterFlows: () => void;
 
   currentArchiveCustomer: Customer;
 
@@ -180,7 +193,8 @@ export interface FlowState {
   statisticShop: StatisticShop;
   statisticFlowWithDate: StatisticFlowWithDate[];
 
-  requestGetInitializeData: () => Promise<any>;
+  requsetGetHomeList: () => void;
+  requestGetInitializeData: () => void;
   requestGetFlowById: (flowId: string) => Promise<FlowItemResponse>;
   requestAllCustomers: (searchKeywords: string) => Promise<any>;
   requestGetRegisterFlows: () => Promise<any>;
@@ -200,7 +214,7 @@ export interface FlowState {
   requestStartAnalyze: () => Promise<FlowItemResponse>;
 
   // 客户档案
-  requestArchiveCustomers: () => Promise<any>;
+  requestArchiveCustomers: (page: number) => Promise<any>;
   requestCustomerArchiveHistory: (
     customerId: string,
   ) => Promise<FlowItemResponse[]>;
@@ -439,13 +453,16 @@ export interface Next {
 export interface Analyze {
   status: AnalyzeStatus;
 
+  /**
+   * 原调理方案，现注意事项
+   */
   conclusion: string;
   /**
    * 调理方案
    */
   solution: Solution;
   /**
-   * 注意事项
+   * 注意事项（废弃）
    */
   remark: string;
   /**
@@ -460,7 +477,7 @@ export interface Analyze {
   /**
    * 是否可编辑
    */
-  editable?: number | false;
+  editable?: boolean;
 
   updatedAt?: string;
 }

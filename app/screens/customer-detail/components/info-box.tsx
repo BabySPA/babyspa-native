@@ -15,7 +15,7 @@ interface InfoBoxParams {
 }
 
 export default function InfoBox(params: InfoBoxParams) {
-  const { currentFlow } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
   const age = getAge(currentFlow.customer.birthday ?? '');
 
   return (

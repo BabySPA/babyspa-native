@@ -9,11 +9,10 @@ import {
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
-  ScrollView,
   Center,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import useFlowStore from '~/app/stores/flow';
@@ -41,14 +40,18 @@ export default function EditBox(params: EditBoxParams) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    currentFlow,
-    updateCurrentFlow,
-    operators,
-    requestPostRegisterInfo,
-    requestPatchCustomerInfo,
-    requestGetInitializeData,
-  } = useFlowStore();
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+  const operators = useFlowStore((state) => state.operators);
+  const requestPostRegisterInfo = useFlowStore(
+    (state) => state.requestPostRegisterInfo,
+  );
+  const requestPatchCustomerInfo = useFlowStore(
+    (state) => state.requestPatchCustomerInfo,
+  );
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
 
   const [tempFlow, setTempFlow] = useState(currentFlow);
 
@@ -59,7 +62,7 @@ export default function EditBox(params: EditBoxParams) {
   let currentSelectBirthday = tempFlow.customer.birthday;
   const [isOpenTemplatePicker, setIsOpenTemplatePicker] = useState(false);
 
-  const { templates, getTemplateGroups } = useManagerStore();
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
   const age = getAge(tempFlow.customer.birthday);
   return (
     <Column
@@ -257,8 +260,6 @@ export default function EditBox(params: EditBoxParams) {
                       },
                     });
                   }}
-                  inputMode='numeric'
-                  returnKeyType='done'
                   placeholderTextColor={'#CCC'}
                   color={'#333333'}
                   fontSize={sp(16)}
@@ -428,7 +429,7 @@ export default function EditBox(params: EditBoxParams) {
             if (tempFlow.register.status === RegisterStatus.CANCEL) {
               requestPostRegisterInfo()
                 .then(async (res) => {
-                  await requestGetInitializeData();
+                  requestGetInitializeData();
                   toastAlert(toast, 'success', '再次登记客户信息成功！');
                   params.onEditFinish();
                 })
@@ -442,7 +443,7 @@ export default function EditBox(params: EditBoxParams) {
             } else {
               requestPatchCustomerInfo()
                 .then(async (res) => {
-                  await requestGetInitializeData();
+                  requestGetInitializeData();
                   toastAlert(toast, 'success', '修改客户信息成功！');
                   params.onEditFinish();
                 })

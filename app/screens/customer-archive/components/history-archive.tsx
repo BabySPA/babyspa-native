@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Box, Icon, Pressable, Row, ScrollView, Text } from 'native-base';
 import { useState } from 'react';
+import PreviewImage from '~/app/components/PreviewImage';
 import { FlowItemResponse } from '~/app/stores/flow/type';
 import { arabicToChineseNumber } from '~/app/utils';
 import { ls, ss, sp } from '~/app/utils/style';
@@ -20,6 +21,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
           <ScrollView py={ss(10)} maxW={ls(290)} maxH={ss(530)}>
             {params.courses.map((course, idx) => {
               const latestCourse = course[0];
+
               return (
                 <Pressable
                   _pressed={{
@@ -52,6 +54,13 @@ export function HistoryArchive(params: HistoryArchiveParams) {
           </ScrollView>
           <ScrollView horizontal ml={ls(30)} mt={ss(30)} flex={1}>
             {params.courses[selectIdx].map((course, idx) => {
+              const healthImages = [
+                ...course.collect.healthInfo.lingualImage,
+                ...course.collect.healthInfo.leftHandImages,
+                ...course.collect.healthInfo.rightHandImages,
+                ...course.collect.healthInfo.otherImages,
+              ];
+
               return (
                 <Pressable
                   _pressed={{
@@ -63,7 +72,7 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                   }}
                   key={idx}
                   w={ls(370)}
-                  maxH={ss(280)}
+                  minH={ss(280)}
                   borderRadius={ss(4)}
                   borderWidth={ss(1)}
                   mr={ls(40)}
@@ -73,21 +82,37 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                     fontSize={sp(16)}
                     color={'#C87939'}
                     m={ss(20)}
-                    numberOfLines={2}
+                    numberOfLines={3}
                     ellipsizeMode='tail'>
                     调理导向：
                     <Text color='#999'>{course.collect?.guidance}</Text>
                   </Text>
 
-                  <Box bgColor={'#F6FBFA'} mx={ls(10)} p={ss(16)} h={ss(116)}>
+                  <Box bgColor={'#F6FBFA'} mx={ls(10)} p={ss(16)}>
                     <Text
                       fontSize={sp(16)}
                       color={'#5FADA4'}
                       numberOfLines={4}
                       ellipsizeMode='tail'>
-                      {course.analyze?.remark}
+                      {course.analyze?.conclusion}
                     </Text>
                   </Box>
+
+                  <ScrollView horizontal padding={ss(10)}>
+                    {healthImages.map((image, idx) => {
+                      return (
+                        <PreviewImage
+                          source={image as string}
+                          key={idx}
+                          current={idx}
+                          images={[...healthImages].map((item) => ({
+                            url: typeof item === 'string' ? item : item.uri,
+                          }))}
+                        />
+                      );
+                    })}
+                  </ScrollView>
+
                   <Row
                     justifyContent={'space-between'}
                     alignItems={'center'}

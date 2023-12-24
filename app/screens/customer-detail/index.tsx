@@ -1,5 +1,6 @@
-import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
-import { AppStackScreenProps, FlowStatus } from '../../types';
+import { Box, Text, Pressable, Row, Spinner } from 'native-base';
+import { AppStackScreenProps } from '../../types';
+import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
 import { useEffect, useState } from 'react';
@@ -15,12 +16,16 @@ export default function CustomerDetail({
   navigation,
   route: { params },
 }: AppStackScreenProps<'CustomerDetail'>) {
-  const {
-    requestGetOperators,
-    requestPatchRegisterStatus,
-    currentFlow,
-    requestGetInitializeData,
-  } = useFlowStore();
+  const requestGetOperators = useFlowStore(
+    (state) => state.requestGetOperators,
+  );
+  const requestPatchRegisterStatus = useFlowStore(
+    (state) => state.requestPatchRegisterStatus,
+  );
+  const currentFlow = useFlowStore((state) => state.currentFlow);
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
@@ -37,7 +42,7 @@ export default function CustomerDetail({
         onBackIntercept={() => false}
         leftElement={
           <Text color='white' fontWeight={600} fontSize={sp(20)}>
-            客户详情
+            登记详情
           </Text>
         }
         rightElement={
@@ -104,7 +109,7 @@ export default function CustomerDetail({
               .then(async (res) => {
                 // 取消成功
                 toastAlert(toast, 'success', '取消成功！');
-                await requestGetInitializeData();
+                requestGetInitializeData();
               })
               .catch((err) => {
                 // 取消失败

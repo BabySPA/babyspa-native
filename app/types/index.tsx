@@ -5,6 +5,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Shop } from '../stores/manager/type';
+import { FlowItemResponse } from '../stores/flow/type';
 
 declare global {
   namespace ReactNavigation {
@@ -33,6 +34,7 @@ export enum FlowStatus {
   Collected, // 已采集
   CollectCanceled, // 采集取消
   ToBeAnalyzed, // 待分析
+  AnalyzeInProgress, //  分析中
   Analyzed, // 已分析
   AnalyzeCanceled, // 分析取消
   ToBeEvaluated, // 待评价
@@ -76,6 +78,7 @@ export type RootStackParamList = {
   };
   FlowInfo: {
     from: FlowFrom;
+    currentFlow: FlowItemResponse;
   };
   Modal: undefined;
   NotFound: undefined;
@@ -87,7 +90,9 @@ export type RootStackParamList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
-  CustomerArchive: undefined;
+  CustomerArchive: {
+    defaultSelect?: number;
+  };
   Personal: undefined;
   AnalyzeInfo: undefined;
   ShopDetail: {
@@ -119,6 +124,7 @@ export type AppStackList = {
   };
   FlowInfo: {
     from: FlowFrom;
+    currentFlow: FlowItemResponse;
   };
   Camera: {
     type: 'lingual' | 'lefthand' | 'righthand' | 'other';
@@ -128,7 +134,9 @@ export type AppStackList = {
   ManagerRole: undefined;
   ManagerTemplate: undefined;
   ManagerUser: undefined;
-  CustomerArchive: undefined;
+  CustomerArchive: {
+    defaultSelect?: number;
+  };
   Personal: undefined;
   AnalyzeInfo: undefined;
   ShopDetail: {

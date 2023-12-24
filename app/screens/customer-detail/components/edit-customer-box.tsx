@@ -5,15 +5,14 @@ import {
   Icon,
   Input,
   Modal,
-  Radio,
   Row,
   Text,
   Pressable,
-  useToast,
   Spinner,
   ScrollView,
   Center,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import useFlowStore from '~/app/stores/flow';
@@ -38,14 +37,23 @@ export default function EditCustomerBox(params: EditCustomerBox) {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const {
-    requestPostCustomerArchive,
-    requestArchiveCustomers,
-    requestPatchCustomerArchive,
-    currentArchiveCustomer,
-    updateCurrentArchiveCustomer,
-  } = useFlowStore();
-  const { getTemplateGroups } = useManagerStore();
+  const requestPostCustomerArchive = useFlowStore(
+    (state) => state.requestPostCustomerArchive,
+  );
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
+  const requestPatchCustomerArchive = useFlowStore(
+    (state) => state.requestPatchCustomerArchive,
+  );
+  const currentArchiveCustomer = useFlowStore(
+    (state) => state.currentArchiveCustomer,
+  );
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+
+  const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
 
   const [tempCustomer, setTempCustomer] = useState(currentArchiveCustomer);
 
@@ -87,7 +95,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                     color={'#333333'}
                     fontSize={sp(16)}
                     inputMode='text'
-                    returnKeyType='done'
                     placeholder='请输入'
                     onChangeText={(text) => {
                       setTempCustomer({
@@ -226,8 +233,6 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 style={{ flex: 1 }}
                 form={
                   <Input
-                    inputMode='numeric'
-                    returnKeyType='done'
                     autoCorrect={false}
                     w={ls(380)}
                     defaultValue={tempCustomer.phoneNumber}
@@ -389,7 +394,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                     allergy: tempCustomer.allergy,
                     birthday: tempCustomer.birthday,
                   });
-                  await requestArchiveCustomers();
+                  await requestArchiveCustomers(1);
                   toastAlert(toast, 'success', '修改客户成功！');
                   params.onEditFinish();
                 })
@@ -410,7 +415,7 @@ export default function EditCustomerBox(params: EditCustomerBox) {
                 birthday: tempCustomer.birthday,
               })
                 .then(async (res) => {
-                  await requestArchiveCustomers();
+                  await requestArchiveCustomers(1);
                   toastAlert(toast, 'success', '新增客户成功！');
                   params.onEditFinish();
                 })

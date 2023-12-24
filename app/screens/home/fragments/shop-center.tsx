@@ -1,6 +1,4 @@
-import { Flex, Text, Column, Row, Box } from 'native-base';
-import { useEffect } from 'react';
-import useFlowStore from '~/app/stores/flow';
+import { Flex, Column, Row, Box } from 'native-base';
 import useLayoutConfigWithRole from '~/app/stores/layout';
 import { ss } from '~/app/utils/style';
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +8,6 @@ import { RoleAuthority } from '~/app/stores/auth/type';
 
 export default function ShopCenter() {
   const navigation = useNavigation();
-  const { requestArchiveCustomers } = useFlowStore();
 
   const { currentSelected, getLayoutConfig } = useLayoutConfigWithRole();
 
@@ -78,10 +75,6 @@ export default function ShopCenter() {
     }[auth];
   };
 
-  useEffect(() => {
-    requestArchiveCustomers();
-  }, []);
-
   return (
     <Flex flex={1}>
       <Column m={ss(10)}>
@@ -89,6 +82,7 @@ export default function ShopCenter() {
       </Column>
       <Row flexWrap={'wrap'} ml={ss(10)} mb={ss(10)}>
         {currentSelectedModule.features.map((feature) => {
+          if (!feature) return;
           return (
             <Box key={feature.auth} w={'33.33%'}>
               {

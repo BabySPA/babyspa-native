@@ -7,37 +7,44 @@ import {
   Spinner,
   Text,
 } from 'native-base';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, Image } from 'react-native';
 import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, ls, sp } from '~/app/utils/style';
-import { Image } from 'expo-image';
 import dayjs from 'dayjs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackList, FlowStatus } from '~/app/types';
-import { FollowUpResult, FollowUpStatus } from '~/app/stores/flow/type';
+import {
+  FlowItemResponse,
+  FollowUpResult,
+  FollowUpStatus,
+} from '~/app/stores/flow/type';
 import {
   FollowUpResultText,
   FollowUpStatusTextConfig,
   getFollowUpStatusTextConfig,
 } from '~/app/constants';
 import Dot from '../dot';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DialogModal } from '../modals';
 
 interface FollowUpCardParams {
   style?: StyleProp<ViewStyle>;
   edit: boolean;
+  currentFlow: FlowItemResponse;
 }
 
 export default function FollowUpCard(params: FollowUpCardParams) {
-  const {
-    currentFlow: { analyze },
-    requestPatchFollowUp,
-    requestGetFollowUps,
-  } = useFlowStore();
-  const { style = {}, edit } = params;
+  const { style = {}, edit, currentFlow } = params;
+
+  const analyze = currentFlow.analyze;
+  const requestPatchFollowUp = useFlowStore(
+    (state) => state.requestPatchFollowUp,
+  );
+  const requestGetFollowUps = useFlowStore(
+    (state) => state.requestGetFollowUps,
+  );
 
   const navigation =
     useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
@@ -58,6 +65,15 @@ export default function FollowUpCard(params: FollowUpCardParams) {
   const [followupContent, setFollowupContent] = useState(
     followUp.followUpContent,
   );
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    inputRef.current?.setNativeProps({
+      text: followupContent,
+    });
+  }, []);
   return (
     <>
       {followUp &&
@@ -204,6 +220,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   随访内容：
                 </Text>
                 <Input
+                  ref={inputRef}
                   borderWidth={ss(1)}
                   borderColor={'#D8D8D8'}
                   w={ls(362)}
@@ -211,7 +228,6 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                   p={ss(8)}
                   textAlignVertical='top'
                   multiline={true}
-                  defaultValue={followupContent}
                   placeholderTextColor={'#999'}
                   color={'#333333'}
                   fontSize={sp(16)}

@@ -24,7 +24,8 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 export default function ManagerLogger({
   navigation,
 }: AppStackScreenProps<'ManagerLogger'>) {
-  const { logs, requestGetLogs } = useManagerStore();
+  const logs = useManagerStore((state) => state.logs);
+  const requestGetLogs = useManagerStore((state) => state.requestGetLogs);
 
   useEffect(() => {
     requestGetLogs();
@@ -151,7 +152,10 @@ export default function ManagerLogger({
 }
 
 function Filter() {
-  const { logFilter, setLogFilter, requestGetLogs } = useManagerStore();
+  const logFilter = useManagerStore((state) => state.logFilter);
+  const setLogFilter = useManagerStore((state) => state.setLogFilter);
+  const requestGetLogs = useManagerStore((state) => state.requestGetLogs);
+
   const [isOpenDatePicker, setIsOpenDatePicker] = useState<{
     type?: 'start' | 'end';
     isOpen: boolean;

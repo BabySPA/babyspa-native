@@ -2,107 +2,173 @@ import {
   Box,
   Flex,
   Text,
-  ScrollView,
   Icon,
   Input,
   Row,
   Pressable,
   Center,
   FlatList,
+  Spinner,
 } from 'native-base';
-import { useEffect, useState } from 'react';
+import { PureComponent, ReactNode, useEffect, useRef, useState } from 'react';
 import useFlowStore, { DefaultCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
-import SelectShop, { useSelectShops } from '~/app/components/select-shop';
-import { debounce } from 'lodash';
+import { debounce, set } from 'lodash';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function Archive() {
   const navigation = useNavigation();
-  const {
-    archiveCustomers: { customers },
-    updateCurrentArchiveCustomer,
-  } = useFlowStore();
 
-  const [renderWaiting, setRenderWaiting] = useState(false);
+  const customers = useFlowStore((state) => state.archiveCustomers.customers);
+  const resetArchiveCustomers = useFlowStore(
+    (state) => state.resetArchiveCustomers,
+  );
+  const totalPages = useFlowStore((state) => state.archiveCustomers.totalPages);
+
+  const requestPage = useRef(1);
+
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+
+  const requestArchiveCustomers = useFlowStore(
+    (state) => state.requestArchiveCustomers,
+  );
+
+  useEffect(() => {
+    refresh();
+    return () => {
+      resetArchiveCustomers();
+    };
+  }, []);
+
+  const refresh = async () => {
+    requestPage.current = 1;
+    setRefreshing(true);
+    await requestArchiveCustomers(requestPage.current);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  const [renderWaiting, setRenderWaiting] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setRenderWaiting(true);
-    }, 50);
+    }, 10);
   }, []);
 
   return (
-    <Flex flex={1}>
-      <Filter />
-      <Box mt={ss(10)} flex={1}>
-        {customers.length == 0 ? (
-          <EmptyBox />
-        ) : (
-          <Row
-            flex={1}
-            py={ss(40)}
-            pl={ss(40)}
-            pr={ss(20)}
-            pb={0}
-            bgColor='white'
-            borderRadius={ss(10)}
-            minH={'100%'}>
-            {renderWaiting && (
-              <FlatList
-                numColumns={3}
-                mb={ss(120)}
-                data={customers}
-                renderItem={({ item: customer, index: idx }) => {
-                  return (
-                    <Center w={'33.33%'} key={idx}>
-                      <Pressable
-                        _pressed={{
-                          opacity: 0.8,
-                        }}
-                        hitSlop={ss(20)}
-                        key={idx}
-                        pr={ls(20)}
-                        onPress={() => {
-                          updateCurrentArchiveCustomer(customer);
-                          navigation.navigate('CustomerArchive');
-                        }}>
-                        <CustomerArchiveItem customer={customer} />
-                      </Pressable>
-                    </Center>
-                  );
-                }}
-              />
-            )}
-          </Row>
-        )}
+    <View style={{ flex: 1 }}>
+      <Filter
+        onRequest={() => {
+          refresh();
+        }}
+      />
+      <Box margin={ss(10)} flex={1}>
+        <Row
+          flex={1}
+          py={ss(40)}
+          pl={ss(40)}
+          pr={ss(20)}
+          pb={0}
+          bgColor='white'
+          borderRadius={ss(10)}
+          minH={'100%'}>
+          {renderWaiting && (
+            <FlatList
+              onEndReachedThreshold={0}
+              onEndReached={async () => {
+                if (customers.length > 0) {
+                  requestPage.current = requestPage.current + 1;
+                  if (requestPage.current <= totalPages) {
+                    await requestArchiveCustomers(requestPage.current);
+                  } else {
+                    setLoadingMore(false);
+                  }
+                }
+              }}
+              removeClippedSubviews={true}
+              refreshing={refreshing}
+              onRefresh={() => {
+                refresh();
+              }}
+              initialNumToRender={15}
+              numColumns={3}
+              mb={ss(120)}
+              data={customers}
+              ListEmptyComponent={<EmptyBox />}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item: customer }) => {
+                return (
+                  <ArchiveItem
+                    onPress={() => {
+                      updateCurrentArchiveCustomer(customer);
+                      navigation.navigate('CustomerArchive', {
+                        defaultSelect: 0,
+                      });
+                    }}
+                    customer={customer}
+                  />
+                );
+              }}
+              ListFooterComponent={
+                loadingMore ? (
+                  <Spinner size={sp(20)} mr={ls(5)} color={'emerald.500'} />
+                ) : null
+              }
+            />
+          )}
+        </Row>
       </Box>
-    </Flex>
+    </View>
   );
 }
 
-function Filter() {
+class ArchiveItem extends PureComponent<{ onPress: any; customer: any }> {
+  render(): ReactNode {
+    const { onPress, customer } = this.props;
+    return (
+      <Center w={'33.33%'}>
+        <Pressable
+          _pressed={{
+            opacity: 0.8,
+          }}
+          hitSlop={ss(20)}
+          pr={ls(20)}
+          onPress={() => {
+            onPress();
+          }}>
+          <CustomerArchiveItem customer={customer} />
+        </Pressable>
+      </Center>
+    );
+  }
+}
+
+function Filter({ onRequest }: { onRequest: () => void }) {
   const navigation = useNavigation();
-  const {
-    archiveCustomers,
-    updateArchiveCustomersFilter,
-    updateCurrentArchiveCustomer,
-    requestArchiveCustomers,
-  } = useFlowStore();
 
-  const [defaultSelectShop, selectShops] = useSelectShops(true);
+  const total = useFlowStore((state) => state.archiveCustomers.total);
 
-  useEffect(() => {
-    if (defaultSelectShop) {
-      updateArchiveCustomersFilter({
-        shopId: defaultSelectShop._id,
-      });
-      requestArchiveCustomers();
-    }
-  }, [defaultSelectShop]);
+  const searchKeywords = useFlowStore(
+    (state) => state.archiveCustomers.searchKeywords,
+  );
+
+  const updateArchiveCustomersFilter = useFlowStore(
+    (state) => state.updateArchiveCustomersFilter,
+  );
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
+
   return (
     <Row
       mx={ss(10)}
@@ -113,28 +179,20 @@ function Filter() {
       justifyContent={'space-between'}
       alignItems={'center'}>
       <Row alignItems={'center'} h={ss(75)}>
-        <SelectShop
-          onSelect={function (selectedItem: any, index: number): void {
-            updateArchiveCustomersFilter({
-              shopId: selectedItem._id,
-            });
-            requestArchiveCustomers();
-          }}
-          buttonHeight={ss(44)}
-          buttonWidth={ls(140, 210)}
-          shops={selectShops}
-          defaultButtonText={defaultSelectShop?.name}
-        />
+        <Text color='#000' fontSize={sp(20)} fontWeight={600}>
+          当前客户总量：
+          <Text color='#5EACA3'>{total}</Text>
+        </Text>
         <Input
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}
           autoCorrect={false}
-          minW={ls(240, 360)}
           ml={ls(20)}
+          minW={ls(240, 360)}
           h={ss(44)}
           p={ss(9)}
           borderRadius={ss(4)}
-          defaultValue={archiveCustomers.searchKeywords}
+          defaultValue={searchKeywords}
           placeholderTextColor={'#6E6F73'}
           color={'#333333'}
           fontSize={sp(16)}
@@ -142,7 +200,7 @@ function Filter() {
             updateArchiveCustomersFilter({
               searchKeywords: text,
             });
-            requestArchiveCustomers();
+            onRequest();
           }, 1000)}
           InputLeftElement={
             <Icon

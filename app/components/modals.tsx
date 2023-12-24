@@ -10,10 +10,11 @@ import {
   Icon,
   Box,
   ScrollView,
-  useToast,
   Image,
   Circle,
 } from 'native-base';
+import { useToast } from 'react-native-toast-notifications';
+
 import { sp, ss, ls } from '~/app/utils/style';
 import { ExtraItem, Template, TemplateItem } from '../stores/manager/type';
 import { useEffect, useRef, useState } from 'react';
@@ -120,8 +121,10 @@ export function TemplateModal({
 }: TemplateModalParams) {
   const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
   const [templateText, setTemplateText] = useState('');
-  const { requestGetTemplates, templates } = useManagerStore();
-
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
+  const templates = useManagerStore((state) => state.templates);
   useEffect(() => {
     setTemplateText(defaultText);
   }, [defaultText]);
@@ -186,7 +189,7 @@ export function TemplateModal({
               textAlignVertical='top'
               ml={ls(30)}
               autoCorrect={false}
-              defaultValue={templateText}
+              defaultValue={defaultText}
               onChangeText={(text) => {
                 setTemplateText(text);
               }}
@@ -256,12 +259,16 @@ export function TemplateModal({
                         onPress={() => {
                           const text = templateText.trim();
 
-                          // @ts-ignore
-                          inputRef.current.value =
-                            text.length > 0 ? templateText + ',' + item : item;
                           setTemplateText(
                             text.length > 0 ? templateText + ',' + item : item,
                           );
+                          // @ts-ignore
+                          inputRef.current.setNativeProps({
+                            text:
+                              text.length > 0
+                                ? templateText + ',' + item
+                                : item,
+                          });
                         }}>
                         <Box
                           px={ls(20)}
@@ -372,7 +379,6 @@ export function GrowthCurveModal({
                 color='#333'
                 ml={ls(20)}
                 defaultValue={`${defaultHeight}`}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(h) => {
                   setHeight(+h);
@@ -393,7 +399,6 @@ export function GrowthCurveModal({
                 color='#333'
                 ml={ls(20)}
                 defaultValue={`${defaultWeight}`}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(w) => {
                   setWeight(+w);
@@ -496,7 +501,6 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(text) => {
                   setOriginalPassword(text);
@@ -516,7 +520,6 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(text) => {
                   setNewPassword(text);
@@ -536,7 +539,6 @@ export function ChangePasswordModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                inputMode='numeric'
                 returnKeyType='done'
                 onChangeText={(text) => {
                   setConfirmPassword(text);
@@ -639,7 +641,7 @@ export function NewTemplateModalModal({
         </Modal.Header>
         <Modal.Body>
           <Center>
-            <Row alignItems={'flex-start'} mt={ss(30, 20)} px={ls(60, 30)}>
+            <Row alignItems={'center'} mt={ss(30, 20)} px={ls(60, 30)}>
               <Text fontSize={sp(20)} color='#333' w={ss(70)}>
                 {type == 'group' ? '模版组' : '模版项'}
               </Text>
@@ -653,10 +655,8 @@ export function NewTemplateModalModal({
                 fontSize={sp(18)}
                 color='#333'
                 ml={ls(20)}
-                multiline
                 textAlignVertical='top'
                 w={ls(340)}
-                height={ss(110, 100)}
                 defaultValue={defaultName}
                 inputMode='text'
                 onChangeText={(text) => {
@@ -1209,7 +1209,10 @@ export function TemplateExtraModal({
     useState(0);
   const [selectTemplateContentItemIdx, setSelectTemplateContentItemIdx] =
     useState(0);
-  const { requestGetTemplates, templates } = useManagerStore();
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
+  const templates = useManagerStore((state) => state.templates);
 
   useEffect(() => {
     if (isOpen && templates.length === 0) {

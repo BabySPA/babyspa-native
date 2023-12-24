@@ -12,7 +12,7 @@ export default function UserDetail({
   navigation,
   route: { params },
 }: AppStackScreenProps<'UserDetail'>) {
-  const { currentUser } = useManagerStore();
+  const currentUser = useManagerStore((state) => state.currentUser);
 
   const [edit, setEdit] = useState(params.type === 'edit' || !currentUser._id);
 

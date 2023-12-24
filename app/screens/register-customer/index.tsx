@@ -1,10 +1,12 @@
-import { Box, Text, Pressable, Row, useToast, Spinner } from 'native-base';
+import { Box, Text, Pressable, Row, Spinner } from 'native-base';
 import {
   AppStackScreenProps,
   CustomerScreenType,
   FlowStatus,
 } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
+import { useToast } from 'react-native-toast-notifications';
+
 import { sp, ss, ls } from '~/app/utils/style';
 import EditCustomer from './components/edit-customer';
 import SelectCustomer from '~/app/components/select-customer';
@@ -20,16 +22,21 @@ export default function RegisterCustomerScreen({
   const { type } = params;
   const isRegister = type == CustomerScreenType.register;
 
-  const {
-    currentFlow,
-    requestGetOperators,
-    requestPostRegisterInfo,
-    requestGetInitializeData,
-    updateCurrentFlow,
-  } = useFlowStore();
+  const customer = useFlowStore((state) => state.currentFlow.customer);
+  const requestGetOperators = useFlowStore(
+    (state) => state.requestGetOperators,
+  );
+  const requestPostRegisterInfo = useFlowStore(
+    (state) => state.requestPostRegisterInfo,
+  );
+  const requestGetInitializeData = useFlowStore(
+    (state) => state.requestGetInitializeData,
+  );
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
 
-  const { requestGetTemplates } = useManagerStore();
-
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -58,24 +65,24 @@ export default function RegisterCustomerScreen({
 
               setLoading(true);
 
-              if (!currentFlow.customer.name) {
+              if (!customer.name) {
                 toastAlert(toast, 'error', '请输入姓名！');
                 setLoading(false);
                 return;
               }
-              if (!currentFlow.customer.phoneNumber) {
+              if (!customer.phoneNumber) {
                 toastAlert(toast, 'error', '请输入电话！');
                 setLoading(false);
                 return;
               }
 
-              if (currentFlow.customer.phoneNumber.length !== 11) {
+              if (customer.phoneNumber.length !== 11) {
                 toastAlert(toast, 'error', '电话格式输入有误请检查！');
                 setLoading(false);
                 return;
               }
 
-              if (!currentFlow.customer.birthday) {
+              if (!customer.birthday) {
                 toastAlert(toast, 'error', '请选择生日！');
                 setLoading(false);
                 return;

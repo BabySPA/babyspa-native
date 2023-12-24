@@ -20,6 +20,8 @@ export function ShopArchive(params: ShopArchiveParams) {
     <Box>
       <ScrollView horizontal mt={ss(30)}>
         {params.archives.map((archive, idx) => {
+          console.log('params.archives', archive.analyze.conclusion);
+
           return (
             <Pressable
               _pressed={{
@@ -44,16 +46,13 @@ export function ShopArchive(params: ShopArchiveParams) {
                 {dayjs(archive.updatedAt).format('YYYY-MM-DD HH:mm')}
               </Text>
               <Column
-                p={ss(20)}
                 w={ls(262)}
-                h={ss(404)}
+                minH={ss(404)}
                 borderRadius={ss(4)}
                 borderWidth={ss(1)}
                 borderColor={'#5EACA3'}>
                 <Box
                   bgColor={'#03CBB2'}
-                  position={'absolute'}
-                  right={0}
                   px={ls(12)}
                   borderTopRightRadius={ss(4)}
                   borderBottomLeftRadius={ss(4)}
@@ -62,27 +61,25 @@ export function ShopArchive(params: ShopArchiveParams) {
                     {archive.shop?.name}
                   </Text>
                 </Box>
-                <Text color='#C87939' fontSize={sp(16)}>
-                  调理导向:
-                </Text>
-                <Text
-                  minH={ss(74)}
-                  color='#000'
-                  fontSize={sp(16)}
-                  numberOfLines={3}
-                  mt={ss(10)}>
-                  {archive.collect?.guidance}
-                </Text>
-                <Box
-                  bgColor={'#F6FBFA'}
-                  px={ls(10)}
-                  py={ss(20)}
-                  flex={1}
-                  mt={ss(5)}>
-                  <Text color='#5FADA4' fontSize={sp(16)}>
-                    {archive.analyze?.remark}
+
+                <Column p={ss(20)}>
+                  <Text color='#C87939' fontSize={sp(16)}>
+                    调理导向:
                   </Text>
-                </Box>
+                  <Text
+                    minH={ss(74)}
+                    color='#000'
+                    fontSize={sp(16)}
+                    numberOfLines={3}
+                    mt={ss(10)}>
+                    {archive.collect?.guidance}
+                  </Text>
+                  <Box bgColor={'#F6FBFA'} px={ls(10)} py={ss(20)} mt={ss(5)}>
+                    <Text color='#5FADA4' fontSize={sp(16)}>
+                      {archive.analyze.conclusion}
+                    </Text>
+                  </Box>
+                </Column>
               </Column>
             </Pressable>
           );

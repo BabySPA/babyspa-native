@@ -1,12 +1,14 @@
 import { Pressable, Text, Row } from 'native-base';
 import { ss, ls, sp } from '../utils/style';
 import * as Print from 'expo-print';
-import useFlowStore from '../stores/flow';
 import { getAge } from '../utils';
-import dayjs from 'dayjs';
+import { FlowItemResponse } from '../stores/flow/type';
 
-export function PrintButton() {
-  const { currentFlow } = useFlowStore();
+export function PrintButton({
+  currentFlow,
+}: {
+  currentFlow: FlowItemResponse;
+}) {
   const age = getAge(currentFlow.customer.birthday);
 
   let massageHtml = '';
@@ -143,7 +145,7 @@ export function PrintButton() {
           </tr>
           <tr>
             <td colspan="3">
-              注意事项：${currentFlow.analyze.remark || '无'}
+              注意事项：${currentFlow.analyze.conclusion || '无'}
             </td>
           </tr>
         </tbody>
