@@ -1,6 +1,6 @@
 {
   "name": "babyspa",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "scripts": {
     "start:client": "expo start --dev-client",
     "start": "expo start --dev-client",
@@ -12,7 +12,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "codepush:ios": "appcenter codepush release-react -a  Ulannxx/Babyspa-ios -t 1.2.1 -o ./build -d Production -m",
-    "codepush:android": "appcenter codepush release-react -a  Ulannxx/Babyspa-android -t 1.2.1 -o ./build -d Production -m"
+    "codepush:android": "appcenter codepush release-react -a  Ulannxx/Babyspa-android -t 1.2.2 -o ./build -d Production -m"
   },
   "jest": {
     "preset": "jest-expo"

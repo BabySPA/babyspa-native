@@ -11,6 +11,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import MessageDrawer from './message-drawer';
 import useMessageStore from '~/app/stores/message';
 import { memo, useEffect } from 'react';
+import Environment from '~/app/config/environment';
 
 // const Drawer = createDrawerNavigator();
 
@@ -123,6 +124,9 @@ const Layout = memo(() => {
             fontWeight={600}
             textAlign={'center'}>
             掌阅未来
+          </Text>
+          <Text color={'#fff'} fontSize={sp(10)}>
+            v{Environment.version}
           </Text>
         </Center>
         <Box mt={ss(30, 20)}>
