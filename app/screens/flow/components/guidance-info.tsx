@@ -75,7 +75,8 @@ export default function GuidanceInfo({
       <Column flex={1}>
         <BoxItem
           title={'调理导向'}
-          icon={require('~/assets/images/guidance.png')}>
+          icon={require('~/assets/images/guidance.png')}
+          detail={selectedConfig.disabled ? collect.guidance : ''}>
           <Box flex={1}>
             <TextInput
               ref={inputRef}

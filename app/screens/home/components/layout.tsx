@@ -12,18 +12,18 @@ import MessageDrawer from './message-drawer';
 import useMessageStore from '~/app/stores/message';
 import { memo, useEffect } from 'react';
 
-const Drawer = createDrawerNavigator();
+// const Drawer = createDrawerNavigator();
 
-function DrawerLayout() {
-  return (
-    <Drawer.Navigator
-      drawerContent={() => <MessageDrawer />}
-      screenOptions={{ drawerPosition: 'right', headerShown: false }}>
-      <Drawer.Screen name='content' component={Layout} />
-    </Drawer.Navigator>
-  );
-}
-export default DrawerLayout;
+// function DrawerLayout() {
+//   return (
+//     <Drawer.Navigator
+//       drawerContent={() => <MessageDrawer />}
+//       screenOptions={{ drawerPosition: 'right', headerShown: false }}>
+//       <Drawer.Screen name='content' component={Layout} />
+//     </Drawer.Navigator>
+//   );
+// }
+// export default DrawerLayout;
 
 const MessageNotify = memo(() => {
   const unReadCount = useMessageStore((state) => state.unReadCount);
@@ -253,7 +253,7 @@ const Layout = memo(() => {
                 </Pressable>
               );
             })}
-          <MessageNotify />
+          {/* <MessageNotify /> */}
         </Flex>
         <Flex bgColor={'#E6EEF1'} flex={1} borderTopLeftRadius={ss(10)}>
           {currentSelectedModule.noTab ? <NoTabFragment /> : <Fragment />}
@@ -262,3 +262,5 @@ const Layout = memo(() => {
     </Flex>
   );
 });
+
+export default Layout;

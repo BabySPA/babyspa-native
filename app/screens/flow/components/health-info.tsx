@@ -50,6 +50,7 @@ export default function HealthInfo({
         <BoxItem
           title={'过敏原'}
           icon={require('~/assets/images/notice.png')}
+          detail={selectedConfig.disabled ? collect.healthInfo.allergy : ''}
           autoScroll={false}>
           <Box flex={1}>
             <Pressable

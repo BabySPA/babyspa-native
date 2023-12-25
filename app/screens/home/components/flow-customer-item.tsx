@@ -2,10 +2,10 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
+import { memo } from 'react';
 import { Image } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
 import {
-  EvaluateStores,
   EvaluateTextConfig,
   getFlowStatus,
   getStatusTextConfig,
@@ -24,7 +24,7 @@ import { FlowStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-export default function FlowCustomerItem({
+function FlowCustomerItem({
   flow,
   type,
 }: {
@@ -252,3 +252,5 @@ export default function FlowCustomerItem({
     </Row>
   );
 }
+
+export default memo(FlowCustomerItem);

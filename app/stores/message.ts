@@ -130,21 +130,19 @@ const useMessageStore = create<MessageState>((set, get) => ({
   },
 
   requestMessages: async () => {
-    const { currentShopWithRole } = useAuthStore.getState();
-
-    const params = {
-      roleKey: currentShopWithRole?.role.roleKey,
-      shopId: currentShopWithRole?.shop._id,
-      startDate: dayjs().format('YYYY-MM-DD'),
-      endDate: dayjs().format('YYYY-MM-DD'),
-    };
-
-    const { data } = await request.get('/messages', { params });
-    const messages = data.docs;
-    const unReadCount = messages.filter(
-      (message: Message) => !message.hasRead,
-    ).length;
-    set({ messages: messages, unReadCount: unReadCount });
+    // const { currentShopWithRole } = useAuthStore.getState();
+    // const params = {
+    //   roleKey: currentShopWithRole?.role.roleKey,
+    //   shopId: currentShopWithRole?.shop._id,
+    //   startDate: dayjs().format('YYYY-MM-DD'),
+    //   endDate: dayjs().format('YYYY-MM-DD'),
+    // };
+    // const { data } = await request.get('/messages', { params });
+    // const messages = data.docs;
+    // const unReadCount = messages.filter(
+    //   (message: Message) => !message.hasRead,
+    // ).length;
+    // set({ messages: messages, unReadCount: unReadCount });
   },
 
   requestDeleteAllMessage: async () => {
