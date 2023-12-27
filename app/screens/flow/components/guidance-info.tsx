@@ -8,6 +8,7 @@ import {
   ScrollView,
   Text,
   Pressable,
+  Input,
 } from 'native-base';
 import BoxItem from './box-item';
 import { TextInput, Image } from 'react-native';
@@ -68,7 +69,7 @@ export default function GuidanceInfo({
     inputRef.current?.setNativeProps({
       text: collect.guidance,
     });
-  }, [collect.guidance]);
+  }, []);
 
   return (
     <Row flex={1}>
@@ -78,24 +79,22 @@ export default function GuidanceInfo({
           icon={require('~/assets/images/guidance.png')}
           detail={selectedConfig.disabled ? collect.guidance : ''}>
           <Box flex={1}>
-            <TextInput
+            <Input
+              borderWidth={ss(1)}
+              borderRadius={ss(4)}
+              borderColor={'#DFE1DE'}
+              bgColor={'#F8F8F8'}
+              p={ss(10)}
               ref={inputRef}
-              autoCorrect={false}
-              multiline={true}
-              textAlignVertical='top'
+              multiline
               placeholder='您可输入，或从右侧分类中选择'
-              style={{
-                textAlignVertical: 'top',
-                borderRadius: ss(4),
-                borderColor: '#DFE1DE',
-                borderWidth: ss(1),
-                height: ss(221),
-                maxHeight: ss(221),
-                backgroundColor: '#F8F8F8',
-                padding: ss(10),
-                fontSize: sp(20),
-                color: '#000',
-              }}
+              placeholderTextColor={'#ccc'}
+              fontSize={sp(20)}
+              color='#000'
+              maxLength={300}
+              h={ss(221)}
+              textAlignVertical='top'
+              autoCorrect={false}
               editable={selectedConfig.disabled ? false : true}
               onChangeText={(text) => {
                 updateCollection({
