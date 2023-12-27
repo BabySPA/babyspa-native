@@ -477,12 +477,14 @@ const useFlowStore = create(
       request.get('/flows', { params }).then((res) => {
         const { docs } = res.data;
 
-        const filterDocs = docs.filter(
-          (item: FlowItemResponse) =>
-            item.collect.status !== CollectStatus.CANCEL &&
-            item.register.status !== RegisterStatus.CANCEL &&
-            item.collect.status !== CollectStatus.NOT_SET,
-        );
+        // NOTE: 1224 - 这里不做过滤，分析师想看到取消的
+        // const filterDocs = docs.filter(
+        //   (item: FlowItemResponse) =>
+        //     item.collect.status !== CollectStatus.CANCEL &&
+        //     item.register.status !== RegisterStatus.CANCEL &&
+        //     item.collect.status !== CollectStatus.NOT_SET,
+        // );
+        const filterDocs = docs;
 
         set({
           analyze: {

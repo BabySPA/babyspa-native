@@ -50,14 +50,7 @@ export default function Analyze() {
     }, 1000);
   };
 
-  const [renderWaiting, setRenderWaiting] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderWaiting(true);
-    }, 10);
-  }, []);
 
   return (
     <Flex flex={1}>
@@ -75,50 +68,51 @@ export default function Analyze() {
           bgColor='white'
           borderRadius={ss(10)}
           minH={'100%'}>
-          {renderWaiting && (
-            <FlatList
-              removeClippedSubviews={true}
-              refreshing={refreshing}
-              onRefresh={() => {
-                refresh();
-              }}
-              initialNumToRender={30}
-              keyExtractor={(item) => item._id}
-              ListEmptyComponent={<EmptyBox />}
-              data={flows}
-              mb={ss(120)}
-              numColumns={2}
-              contentContainerStyle={{
-                marginTop: ss(10),
-                marginRight: ss(10),
-              }}
-              renderItem={({ item: flow, index: idx }) => {
-                return (
-                  <Center width={'50%'} key={idx}>
-                    <Pressable
-                      _pressed={{
-                        opacity: 0.8,
-                      }}
-                      ml={idx % 2 == 1 ? ss(20) : 0}
-                      mr={idx % 2 == 0 ? ss(20) : 0}
-                      mb={ss(40)}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        navigation.navigate('FlowInfo', {
-                          from: 'analyze',
-                          currentFlow: flow,
-                        });
-                      }}>
-                      <FlowCustomerItem
-                        flow={flow}
-                        type={OperateType.Analyze}
-                      />
-                    </Pressable>
-                  </Center>
-                );
-              }}
-            />
-          )}
+          <FlatList
+            refreshing={refreshing}
+            onRefresh={() => {
+              refresh();
+            }}
+            initialNumToRender={30}
+            legacyImplementation={true}
+            maxToRenderPerBatch={30}
+            keyExtractor={(item) => item._id}
+            ListEmptyComponent={<EmptyBox />}
+            data={flows}
+            mb={ss(120)}
+            numColumns={2}
+            contentContainerStyle={{
+              marginTop: ss(10),
+              marginRight: ss(10),
+            }}
+            getItemLayout={(data, index) => ({
+              length: ss(148),
+              offset: ss(148) * index,
+              index,
+            })}
+            renderItem={({ item: flow, index: idx }) => {
+              return (
+                <Center width={'50%'} key={idx}>
+                  <Pressable
+                    _pressed={{
+                      opacity: 0.8,
+                    }}
+                    ml={idx % 2 == 1 ? ss(20) : 0}
+                    mr={idx % 2 == 0 ? ss(20) : 0}
+                    mb={ss(40)}
+                    hitSlop={ss(20)}
+                    onPress={() => {
+                      navigation.navigate('FlowInfo', {
+                        from: 'analyze',
+                        currentFlow: flow,
+                      });
+                    }}>
+                    <FlowCustomerItem flow={flow} type={OperateType.Analyze} />
+                  </Pressable>
+                </Center>
+              );
+            }}
+          />
         </Row>
       </Box>
     </Flex>

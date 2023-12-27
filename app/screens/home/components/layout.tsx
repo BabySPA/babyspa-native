@@ -11,19 +11,20 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import MessageDrawer from './message-drawer';
 import useMessageStore from '~/app/stores/message';
 import { memo, useEffect } from 'react';
+import Environment from '~/app/config/environment';
 
-const Drawer = createDrawerNavigator();
+// const Drawer = createDrawerNavigator();
 
-function DrawerLayout() {
-  return (
-    <Drawer.Navigator
-      drawerContent={() => <MessageDrawer />}
-      screenOptions={{ drawerPosition: 'right', headerShown: false }}>
-      <Drawer.Screen name='content' component={Layout} />
-    </Drawer.Navigator>
-  );
-}
-export default DrawerLayout;
+// function DrawerLayout() {
+//   return (
+//     <Drawer.Navigator
+//       drawerContent={() => <MessageDrawer />}
+//       screenOptions={{ drawerPosition: 'right', headerShown: false }}>
+//       <Drawer.Screen name='content' component={Layout} />
+//     </Drawer.Navigator>
+//   );
+// }
+// export default DrawerLayout;
 
 const MessageNotify = memo(() => {
   const unReadCount = useMessageStore((state) => state.unReadCount);
@@ -123,6 +124,9 @@ const Layout = memo(() => {
             fontWeight={600}
             textAlign={'center'}>
             掌阅未来
+          </Text>
+          <Text color={'#fff'} fontSize={sp(10)}>
+            v{Environment.version}
           </Text>
         </Center>
         <Box mt={ss(30, 20)}>
@@ -253,7 +257,7 @@ const Layout = memo(() => {
                 </Pressable>
               );
             })}
-          <MessageNotify />
+          {/* <MessageNotify /> */}
         </Flex>
         <Flex bgColor={'#E6EEF1'} flex={1} borderTopLeftRadius={ss(10)}>
           {currentSelectedModule.noTab ? <NoTabFragment /> : <Fragment />}
@@ -262,3 +266,5 @@ const Layout = memo(() => {
     </Flex>
   );
 });
+
+export default Layout;
