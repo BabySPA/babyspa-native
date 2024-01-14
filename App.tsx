@@ -10,7 +10,7 @@ import KeyboardAvoider from '~/app/components/keyboard-avoid';
 import 'react-native-gesture-handler';
 import { ToastProvider } from 'react-native-toast-notifications';
 import CodePush from 'react-native-code-push';
-import { CacheManager } from '@georstat/react-native-image-cache';
+import { CacheManager } from '~/app/components/cache-image';
 import { Dirs } from 'react-native-file-access';
 
 LogBox.ignoreLogs([
@@ -28,8 +28,8 @@ CacheManager.config = {
   cacheLimit: 0,
   maxRetries: 3 /* optional, if not provided defaults to 0 */,
   retryDelay: 3000 /* in milliseconds, optional, if not provided defaults to 0 */,
-  sourceAnimationDuration: 1000,
-  thumbnailAnimationDuration: 1000,
+  sourceAnimationDuration: 500,
+  thumbnailAnimationDuration: 500,
 };
 
 const config = {

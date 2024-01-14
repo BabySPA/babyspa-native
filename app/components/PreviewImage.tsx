@@ -3,8 +3,7 @@ import { Box, Center, Icon, Pressable, Row } from 'native-base';
 import { ls, sp, ss } from '../utils/style';
 import { useState } from 'react';
 import { ImageGallery, ImageObject } from '../components/image-gallery';
-import { CachedImage } from '@georstat/react-native-image-cache';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { CachedImage } from '~/app/components/cache-image';
 import { AntDesign } from '@expo/vector-icons';
 
 export default function PreviewImage({
@@ -21,7 +20,7 @@ export default function PreviewImage({
   const loadImages = images.map((item) => {
     return {
       url: `${item.url}?x-oss-process=image/resize,p_70`,
-      thumbUrl: `${item.url}?x-oss-process=image/resize,h_100,m_lfit`,
+      thumbUrl: `${item.url}?x-oss-process=image/resize,p_20`,
     };
   });
 
@@ -121,7 +120,8 @@ export default function PreviewImage({
           }}>
           <CachedImage
             resizeMode='cover'
-            source={`${source}?x-oss-process=image/resize,h_100,m_lfit`}
+            source={`${source}?x-oss-process=image/resize,p_20`}
+            thumbnailSource={`${source}?x-oss-process=image/resize,p_20`}
             style={{
               width: ss(100),
               height: ss(100),

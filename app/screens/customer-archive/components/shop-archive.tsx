@@ -20,8 +20,6 @@ export function ShopArchive(params: ShopArchiveParams) {
     <Box>
       <ScrollView horizontal mt={ss(30)}>
         {params.archives.map((archive, idx) => {
-          console.log('params.archives', archive.analyze.conclusion);
-
           return (
             <Pressable
               _pressed={{
