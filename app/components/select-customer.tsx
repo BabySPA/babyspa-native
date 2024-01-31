@@ -131,6 +131,7 @@ function SelectCustomer(params: SelectCustomerParams) {
     () => {
       return (
         <FlatList
+          nestedScrollEnabled
           data={allCustomers}
           renderItem={({ item, index }) => {
             return (

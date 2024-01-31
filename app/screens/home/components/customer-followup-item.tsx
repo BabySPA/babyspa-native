@@ -48,7 +48,7 @@ export default function CustomerFollowUpItem({
   return (
     <Row
       borderRadius={ss(8)}
-      borderStyle={'dashed'}
+      // borderStyle={'dashed'}
       borderWidth={ss(1)}
       borderColor={'#15BD8F'}
       w={'100%'}

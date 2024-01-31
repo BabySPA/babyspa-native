@@ -40,6 +40,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   } = params;
 
   const evaluate = currentFlow.evaluate;
+  console.log(currentFlow, 2322312);
   const requestPutFlowToEvaluate = useFlowStore(
     (state) => state.requestPutFlowToEvaluate,
   );

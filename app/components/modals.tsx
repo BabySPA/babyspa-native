@@ -1358,7 +1358,7 @@ export function TemplateExtraModal({
                             mb={ss(8)}
                             p={ss(20)}
                             borderRadius={ss(4)}
-                            borderStyle={'dashed'}
+                            // borderStyle={'dashed'}
                             borderColor={'#7AB6AF'}
                             borderWidth={ss(1)}
                             bgColor={'#FAFAFA'}>

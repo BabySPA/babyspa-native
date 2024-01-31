@@ -70,6 +70,7 @@ export default function ManagerLogger({
           </Row>
         </Row>
         <FlatList
+          nestedScrollEnabled
           data={logs}
           style={{
             height: '80%',

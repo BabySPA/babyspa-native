@@ -203,6 +203,7 @@ const SelectDropdown = (
           />
           <DropdownWindow layoutStyle={dropdownWindowStyle}>
             <FlatList
+              nestedScrollEnabled
               data={dataArr}
               keyExtractor={(item, index) => index.toString()}
               ref={dropDownFlatlistRef}

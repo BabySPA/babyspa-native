@@ -22,7 +22,6 @@ import {
 } from '~/app/stores/flow/type';
 import {
   FollowUpResultText,
-  FollowUpStatusTextConfig,
   getFollowUpStatusTextConfig,
 } from '~/app/constants';
 import Dot from '../dot';
@@ -405,9 +404,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                 </Text>
                 <Text fontSize={sp(18)} color='#333'>
                   {followUp.followUpStatus === FollowUpStatus.DONE
-                    ? dayjs(followUp.actualFollowUpTime).format(
-                        'YYYY-MM-DD HH:mm',
-                      )
+                    ? dayjs(followUp.actualFollowUpTime).format('YYYY-MM-DD')
                     : dayjs(followUp.followUpTime).format('YYYY-MM-DD')}
                 </Text>
               </Row>

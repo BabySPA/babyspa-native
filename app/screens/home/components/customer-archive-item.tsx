@@ -1,30 +1,36 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon } from 'native-base';
-import { memo } from 'react';
-import { Image } from 'react-native';
+import { memo, useMemo } from 'react';
+import { Image, View } from 'react-native';
 import { Customer } from '~/app/stores/flow/type';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
 
-function CustomerArchiveItem({ customer }: { customer: Customer }) {
+function CustomerArchiveItem({ customer: _cust }: { customer: Customer }) {
+  const customer = useMemo(() => {
+    // 计算或处理data的逻辑
+    return _cust;
+  }, [_cust]); // 依赖项为data
   const age = getAge(customer.birthday);
   const ageText = `${age?.year}岁${age?.month}月`;
 
   return (
-    <Row
-      borderRadius={ss(8)}
-      borderStyle={'dashed'}
-      borderWidth={ss(1)}
-      borderColor={'#15BD8F'}
-      w={'100%'}
-      minH={ss(128)}
-      mb={ss(20)}
-      p={ss(20)}
-      justifyContent={'space-between'}
-      alignItems={'center'}>
-      <Row w={'100%'}>
-        <Column height={'100%'} alignItems={'center'}>
+    <View
+      style={{
+        borderRadius: ss(8),
+        borderWidth: ss(1),
+        borderColor: '#15BD8F',
+        width: ls(375),
+        minHeight: ss(128),
+        marginBottom: ss(20),
+        padding: ss(16),
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+      }}>
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ height: '100%', alignItems: 'center' }}>
           <Image
             style={{ width: ss(80, 70), height: ss(80, 70) }}
             source={
@@ -33,65 +39,79 @@ function CustomerArchiveItem({ customer }: { customer: Customer }) {
                 : require('~/assets/images/girl.png')
             }
           />
-        </Column>
+        </View>
 
-        <Flex ml={ls(12, 10)}>
-          <Row alignItems={'center'}>
+        <View style={{ marginLeft: ls(12, 10) }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text
-              color='#333'
-              fontSize={sp(20)}
-              fontWeight={400}
-              maxW={ls(150, 200)}
-              ellipsizeMode='tail'
-              numberOfLines={1}>
+              style={{
+                color: '#333',
+                fontSize: sp(20),
+                fontWeight: '400',
+                maxWidth: ls(150, 200),
+                marginRight: ls(5),
+              }}>
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
-            <Icon
-              as={
-                <MaterialCommunityIcons
-                  name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
-                />
-              }
+            <MaterialCommunityIcons
+              name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
               size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
-          </Row>
-          <Row alignItems={'center'} w={ls(190)} mt={ss(5)} pr={ls(5)}>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: ls(190),
+              marginTop: ss(5),
+              paddingRight: ls(5),
+            }}>
             <Text
-              color={'#666'}
-              fontWeight={400}
-              fontSize={sp(18, 20)}
-              ml={ls(3)}>
+              style={{
+                color: '#666',
+                fontWeight: '400',
+                fontSize: sp(18, 20),
+                marginLeft: ls(3),
+              }}>
               {ageText}
             </Text>
-
             <Text
-              color={'#666'}
-              fontWeight={400}
-              fontSize={sp(18, 20)}
-              ml={ls(4, 4)}>
+              style={{
+                color: '#666',
+                fontWeight: '400',
+                fontSize: sp(18, 20),
+                marginLeft: ls(4, 4),
+              }}>
               {customer.phoneNumber}
             </Text>
-          </Row>
-          <Row alignItems={'center'} mt={ss(5)}>
-            <Icon
-              as={<Ionicons name={'ios-time-outline'} />}
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: ss(5),
+            }}>
+            <Ionicons
+              name={'ios-time-outline'}
               size={sp(18, 20)}
               color={'#C87939'}
             />
             <Text
-              color={'#C87939'}
-              fontWeight={400}
-              fontSize={sp(18, 20)}
-              ml={ls(4, 4)}>
+              style={{
+                color: '#C87939',
+                fontWeight: '400',
+                fontSize: sp(18, 20),
+                marginLeft: ls(4, 4),
+              }}>
               {dayjs(customer.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
-          </Row>
-        </Flex>
-      </Row>
-    </Row>
+          </View>
+        </View>
+      </View>
+    </View>
   );
 }
 
-export default memo(CustomerArchiveItem);
+export default CustomerArchiveItem;

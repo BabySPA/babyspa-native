@@ -1,14 +1,3 @@
-import Register from '../screens/home/fragments/register';
-import Collection from '../screens/home/fragments/collection';
-import Analyze from '../screens/home/fragments/analyze';
-import Evaluate from '../screens/home/fragments/evaluate';
-import FollowUpVisit from '../screens/home/fragments/follow-up-visit';
-import Archive from '../screens/home/fragments/archive';
-import ShopCenter from '../screens/home/fragments/shop-center';
-import StatisticsVisit from '../screens/home/fragments/statistics-visit';
-import StatisticsShop from '../screens/home/fragments/statistics-shop';
-import StatisticsMassage from '../screens/home/fragments/statistics-massage';
-import StatisticsAnalyze from '../screens/home/fragments/statistics-analyze';
 import { RW, RoleAuthority } from '../stores/auth/type';
 import { FlowStatus } from '../types';
 import { ILayoutConfig } from '../stores/layout/type';
@@ -21,7 +10,6 @@ import {
   RegisterStatus,
   Score,
 } from '../stores/flow/type';
-import { ShopType } from '../stores/manager/type';
 
 export const EvaluateTextConfig = {
   ['TODO']: {
@@ -269,26 +257,21 @@ export const LayoutConfig: ILayoutConfig[] = [
     image: require('~/assets/images/tab_01.png'),
     selectedImage: require('~/assets/images/tab_01_selected.png'),
     text: '门店',
-    featureSelected: 0,
     features: [
       {
         text: '信息登记',
-        fragment: Register,
         auth: RoleAuthority.FLOW_REGISTER,
       },
       {
         text: '信息采集',
-        fragment: Collection,
         auth: RoleAuthority.FLOW_COLLECTION,
       },
       {
         text: '信息分析',
-        fragment: Analyze,
         auth: RoleAuthority.FLOW_ANALYZE,
       },
       {
         text: '评价反馈',
-        fragment: Evaluate,
         auth: RoleAuthority.FLOW_EVALUATE,
       },
     ],
@@ -297,16 +280,13 @@ export const LayoutConfig: ILayoutConfig[] = [
     image: require('~/assets/images/tab_02.png'),
     selectedImage: require('~/assets/images/tab_02_selected.png'),
     text: '客户',
-    featureSelected: 0,
     features: [
       {
         text: '客户档案',
-        fragment: Archive,
         auth: RoleAuthority.CUSTOMER_ARCHIVE,
       },
       {
         text: '客户随访',
-        fragment: FollowUpVisit,
         auth: RoleAuthority.CUSTOMER_FOLLOWUP,
       },
     ],
@@ -316,8 +296,6 @@ export const LayoutConfig: ILayoutConfig[] = [
     selectedImage: require('~/assets/images/tab_03_selected.png'),
     noTab: true,
     text: '管理',
-    featureSelected: 0,
-    fragment: ShopCenter,
     features: [
       {
         text: '门店管理',
@@ -345,26 +323,21 @@ export const LayoutConfig: ILayoutConfig[] = [
     image: require('~/assets/images/tab_04.png'),
     selectedImage: require('~/assets/images/tab_04_selected.png'),
     text: '统计',
-    featureSelected: 0,
     features: [
       {
         text: '门店统计',
-        fragment: StatisticsShop,
         auth: RoleAuthority.STATISTIC_SHOP,
       },
       {
         text: '调理统计',
-        fragment: StatisticsMassage,
         auth: RoleAuthority.STATISTIC_MASSAGE,
       },
       {
         text: '分析统计',
-        fragment: StatisticsAnalyze,
         auth: RoleAuthority.STATISTIC_ANALYZE,
       },
       {
         text: '随访统计',
-        fragment: StatisticsVisit,
         auth: RoleAuthority.STATISTIC_FOLLOWUP,
       },
     ],

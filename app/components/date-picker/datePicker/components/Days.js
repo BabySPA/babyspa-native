@@ -12,6 +12,7 @@ const Days = () => {
   const style = styles(options);
   const days = useMemo(() => utils.getMonthDays(mainState.activeDate));
 
+  const disabledWithoutToday = mainState.disabledWithoutToday ?? true;
   const onSelectDay = (date) => {
     setMainState({
       type: 'set',
@@ -30,7 +31,11 @@ const Days = () => {
       style={[style.container, utils.flexDirection]}
       onLayout={changeItemHeight}>
       {days.map((day, n) => {
-        if (day && dayjs(day.date).isAfter(dayjs(), 'day')) {
+        if (
+          day &&
+          disabledWithoutToday &&
+          dayjs(day.date).isAfter(dayjs(), 'day')
+        ) {
           day.disabled = true;
         }
         return (

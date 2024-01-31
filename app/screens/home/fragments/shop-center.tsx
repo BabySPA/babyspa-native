@@ -5,15 +5,28 @@ import { useNavigation } from '@react-navigation/native';
 import ShopCenterHeader from '../components/shop-center-header';
 import ShopCenterBox from '../components/shop-center-box';
 import { RoleAuthority } from '~/app/stores/auth/type';
+import { useEffect, useState } from 'react';
+import { ILayoutConfig } from '~/app/stores/layout/type';
 
 export default function ShopCenter() {
   const navigation = useNavigation();
 
   const { currentSelected, getLayoutConfig } = useLayoutConfigWithRole();
 
-  const currentSelectedModule = getLayoutConfig()[currentSelected];
+  const [currentSelectedModule, setCurrentSelectedModule] =
+    useState<ILayoutConfig>({
+      image: require('~/assets/images/logo.png'),
+      selectedImage: require('~/assets/images/logo.png'),
+      text: 'inital',
+      noTab: false,
+      features: [],
+    });
 
-  const ShopCenterBoxes = (
+  useEffect(() => {
+    setCurrentSelectedModule(getLayoutConfig()[currentSelected]);
+  }, [currentSelected]);
+
+  const renderShopCenterBoxes = (
     auth:
       | RoleAuthority.MANAGER_SHOP
       | RoleAuthority.MANAGER_STAFF
@@ -76,23 +89,27 @@ export default function ShopCenter() {
   };
 
   return (
-    <Flex flex={1}>
-      <Column m={ss(10)}>
-        <ShopCenterHeader />
-      </Column>
-      <Row flexWrap={'wrap'} ml={ss(10)} mb={ss(10)}>
-        {currentSelectedModule.features.map((feature) => {
-          if (!feature) return;
-          return (
-            <Box key={feature.auth} w={'33.33%'}>
-              {
-                // @ts-ignore
-                ShopCenterBoxes(feature.auth)()
-              }
-            </Box>
-          );
-        })}
-      </Row>
-    </Flex>
+    <>
+      {currentSelectedModule.text !== 'initial' && (
+        <Flex flex={1}>
+          <Column m={ss(10)}>
+            <ShopCenterHeader />
+          </Column>
+          <Row flexWrap={'wrap'} ml={ss(10)} mb={ss(10)}>
+            {currentSelectedModule.features.map((feature) => {
+              if (!feature) return;
+              return (
+                <Box key={feature.auth} w={'33.33%'}>
+                  {
+                    // @ts-ignore
+                    renderShopCenterBoxes(feature.auth)()
+                  }
+                </Box>
+              );
+            })}
+          </Row>
+        </Flex>
+      )}
+    </>
   );
 }

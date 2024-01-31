@@ -10,7 +10,8 @@ const getFilteredLayoutConfig = (
   authorityConfig: AuthorityConfig[],
   isCenter: boolean,
 ) => {
-  const filteredConfig = LayoutConfig.map((tab) => {
+  let featureSelected = 0;
+  const filterConfig = LayoutConfig.map((tab) => {
     const features = tab.features.filter((feature) => {
       const featureAuthority = feature.auth;
       return authorityConfig.some(
@@ -20,19 +21,21 @@ const getFilteredLayoutConfig = (
     return { ...tab, features };
   }).filter((tab) => tab.features.length > 0);
 
-  const f0 = filteredConfig[0];
+  const f0 = filterConfig[0];
   if (isCenter && f0.text == '门店') {
-    filteredConfig[0].featureSelected = f0.features.findIndex((item) => {
+    featureSelected = f0.features.findIndex((item) => {
       return item.auth == RoleAuthority.FLOW_ANALYZE;
     });
   }
 
-  return filteredConfig;
+  return { filterConfig, featureSelected };
 };
 
 const initialState = {
   layoutConfig: [],
   currentSelected: 0,
+  featureSelected: 0,
+  originFeatureSelected: 0,
 };
 
 const useLayoutStore = create(
@@ -58,24 +61,27 @@ const useLayoutStore = create(
         return [];
       }
 
-      const filterConfig = getFilteredLayoutConfig(
+      const { filterConfig, featureSelected } = getFilteredLayoutConfig(
         currentShopWithRole?.role.authorities,
         currentShopWithRole.shop.type === ShopType.CENTER,
       );
 
       set((state) => {
         state.layoutConfig = filterConfig;
+        state.featureSelected = featureSelected;
+        state.originFeatureSelected = featureSelected;
       });
 
       return filterConfig;
     },
     changeCurrentSelected: (index: number) => {
-      set({ currentSelected: index });
+      set((state) => {
+        state.currentSelected = index;
+        state.featureSelected = index === 0 ? state.originFeatureSelected : 0;
+      });
     },
     changeFeatureSelected: (index: number) => {
-      return set((state) => {
-        state.layoutConfig[state.currentSelected].featureSelected = index;
-      });
+      set({ featureSelected: index });
     },
   })),
 );

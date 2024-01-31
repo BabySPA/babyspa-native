@@ -84,6 +84,7 @@ export default function LoginScreen({
           请选择登录门店
         </Text>
         <FlatList
+          nestedScrollEnabled
           maxH={ss(220)}
           data={chooseShops}
           keyExtractor={(item, index) => {
@@ -172,7 +173,7 @@ export default function LoginScreen({
               resizeMode='contain'
             />
             <Text fontSize={sp(14)} color={'#2B3033'} mt={ss(18)}>
-              ZHANG YUE WEI LAI
+              SHOU CE
             </Text>
             <Text fontSize={sp(10)} color={'#A3A7AA'}>
               MingChun Infant physical therapy
@@ -183,7 +184,7 @@ export default function LoginScreen({
           ) : (
             <Center flex={1}>
               <Text color='#000' fontSize={sp(32)} fontWeight={500}>
-                欢迎登录掌阅未来
+                欢迎登录手策
               </Text>
 
               <Input

@@ -49,9 +49,7 @@ export default function Collection() {
   const refresh = async () => {
     setRefreshing(true);
     await requestGetCollectionFlows();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    setRefreshing(false);
   };
 
   const [renderWaiting, setRenderWaiting] = useState(false);
@@ -79,6 +77,7 @@ export default function Collection() {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
+              nestedScrollEnabled
               refreshing={refreshing}
               onRefresh={() => {
                 refresh();

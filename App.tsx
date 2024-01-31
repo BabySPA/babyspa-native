@@ -20,6 +20,7 @@ LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered',
   'Cannot update a component',
   '请不要频繁请求相同的接口',
+  ' VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead',
 ]);
 
 CacheManager.config = {

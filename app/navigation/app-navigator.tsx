@@ -32,6 +32,7 @@ import { Audio } from 'expo-av';
 import useFlowStore from '../stores/flow';
 import { useNavigation } from '@react-navigation/native';
 import JPush from 'jpush-react-native';
+import { Alert, Linking, Platform } from 'react-native';
 
 const Stack = createStackNavigator<AppStackList>();
 
@@ -106,6 +107,13 @@ export default function AppNavigator() {
         }
 
         if (event === MessageAction.ANALYZE_UPDATE) {
+          JPush.addLocalNotification({
+            messageID: message.flowId,
+            title: '分析完成',
+            content: message.customer + '分析完成，请及时处理',
+            extras: {},
+          });
+
           setShowActionDone({
             isOpen: true,
             customer: message.customer,
@@ -118,6 +126,12 @@ export default function AppNavigator() {
           sound.setIsLoopingAsync(false);
           sound.playAsync();
         } else if (event == MessageAction.COLLECTION_UPDATE) {
+          JPush.addLocalNotification({
+            messageID: message.flowId,
+            title: '信息采集完成',
+            content: message.customer + '信息采集完成，请及时处理',
+            extras: {},
+          });
           setShowActionDone({
             isOpen: true,
             customer: message.customer,
@@ -144,11 +158,25 @@ export default function AppNavigator() {
   };
 
   useEffect(() => {
+    JPush.isNotificationEnabled((isNotificationEnabled) => {
+      if (!isNotificationEnabled) {
+        // 前往设置打开通知
+        Alert.alert('通知未打开', '前往设置打开全部通知权限', [
+          {
+            text: '取消',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: '立即设置',
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+        ]);
+      }
+    });
     try {
-      JPush.setBadge({
-        badge: 0,
-        appBadge: 0,
-      });
       JPush.init({
         appKey: 'd185f1ce96771ab023bc7d86',
         channel: 'BABYSPA_MANAGE',

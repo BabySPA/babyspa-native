@@ -30,8 +30,11 @@ export default function AnalyzeInfo({
   navigation,
 }: AppStackScreenProps<'AnalyzeInfo'>) {
   const currentFlow = useFlowStore((state) => state.currentFlow);
-  const { collect, analyze, analyzeOperator, collectionOperator } = currentFlow;
-
+  const { collect, analyze, analyzeOperator, collectionOperator, customer } =
+    currentFlow;
+  const updateCurrentArchiveCustomer = useFlowStore(
+    (state) => state.updateCurrentArchiveCustomer,
+  );
   const [showWarn, setShowWarn] = useState<boolean>(true);
   const [showCollection, setShowCollection] = useState<boolean>(false);
 
@@ -40,9 +43,34 @@ export default function AnalyzeInfo({
       <NavigationBar
         onBackIntercept={() => false}
         leftElement={
-          <Text color='white' fontWeight={600} fontSize={sp(20)}>
-            分析详情
-          </Text>
+          <>
+            <Text color='white' fontWeight={600} fontSize={sp(20)}>
+              分析详情
+            </Text>
+            <Pressable
+              _pressed={{
+                opacity: 0.6,
+              }}
+              hitSlop={ss(20)}
+              onPress={() => {
+                // 跳转到历史记录
+                updateCurrentArchiveCustomer(customer);
+                navigation.navigate('CustomerArchive', {
+                  defaultSelect: 1,
+                });
+              }}>
+              <Row alignItems={'center'} bgColor={'#fff'} p={ss(8)} ml={ls(12)}>
+                <Text color='#03CBB2' fontSize={sp(12)}>
+                  历史记录
+                </Text>
+                <Icon
+                  size={sp(12)}
+                  as={<AntDesign name='doubleright' />}
+                  color={'#03CBB2'}
+                />
+              </Row>
+            </Pressable>
+          </>
         }
         rightElement={
           <Row>
@@ -132,7 +160,7 @@ export default function AnalyzeInfo({
                               mt={idx === 0 ? 0 : ss(20)}
                               bgColor={'#F2F9F8'}
                               borderRadius={1}
-                              borderStyle={'dashed'}
+                              // borderStyle={'dashed'}
                               borderWidth={ss(1)}
                               borderColor={'#7AB6AF'}
                               p={ss(20)}>
@@ -228,7 +256,7 @@ export default function AnalyzeInfo({
                               mt={idx === 0 ? 0 : ss(20)}
                               bgColor={'#F2F9F8'}
                               borderRadius={1}
-                              borderStyle={'dashed'}
+                              // borderStyle={'dashed'}
                               borderWidth={ss(1)}
                               borderColor={'#7AB6AF'}
                               p={ss(20)}>

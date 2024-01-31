@@ -243,6 +243,13 @@ const useManagerStore = create(
       });
     },
 
+    setCurrentSelectTemplateItemTexts: (groupIdx, texts) => {
+      set((state) => {
+        state.templates[state.currentSelectTemplateIdx].groups[
+          groupIdx
+        ].children = texts;
+      });
+    },
     getTemplateGroups: (groupKey) => {
       return get().templates.find((template) => template.key === groupKey);
     },
@@ -259,6 +266,21 @@ const useManagerStore = create(
       const template = get().templates[idx];
 
       return request.patch(`/templates/${template._id}/group`, { ...group });
+    },
+
+    requestPatchTemplateGroups: async (groups) => {
+      const idx = get().currentSelectTemplateIdx;
+      const template = get().templates[idx];
+
+      const req = await request.patch(
+        `/templates/${template._id}/groups`,
+        groups,
+      );
+
+      set((state) => {
+        state.templates[idx].groups = req.data.groups;
+      });
+      return req;
     },
 
     requestDeleteTemplateGroup: async (groupName, extra) => {

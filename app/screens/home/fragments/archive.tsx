@@ -10,7 +10,14 @@ import {
   FlatList,
   Spinner,
 } from 'native-base';
-import { PureComponent, ReactNode, useEffect, useRef, useState } from 'react';
+import {
+  PureComponent,
+  ReactNode,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import useFlowStore, { DefaultCustomer } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -18,9 +25,9 @@ import { useNavigation } from '@react-navigation/native';
 import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
 import { debounce, set } from 'lodash';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 
-export default function Archive() {
+function Archive() {
   const navigation = useNavigation();
 
   const customers = useFlowStore((state) => state.archiveCustomers.customers);
@@ -50,20 +57,11 @@ export default function Archive() {
     requestPage.current = 1;
     setRefreshing(true);
     await requestArchiveCustomers(requestPage.current);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    setRefreshing(false);
   };
 
-  const [renderWaiting, setRenderWaiting] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderWaiting(true);
-    }, 10);
-  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -82,73 +80,74 @@ export default function Archive() {
           bgColor='white'
           borderRadius={ss(10)}
           minH={'100%'}>
-          {renderWaiting && (
-            <FlatList
-              onEndReachedThreshold={0}
-              onEndReached={async () => {
-                if (customers.length > 0) {
-                  requestPage.current = requestPage.current + 1;
-                  if (requestPage.current <= totalPages) {
-                    await requestArchiveCustomers(requestPage.current);
-                  } else {
-                    setLoadingMore(false);
-                  }
+          <FlatList
+            nestedScrollEnabled
+            onEndReachedThreshold={0}
+            onEndReached={async () => {
+              if (customers.length > 0) {
+                requestPage.current = requestPage.current + 1;
+                if (requestPage.current <= totalPages) {
+                  await requestArchiveCustomers(requestPage.current);
+                } else {
+                  setLoadingMore(false);
                 }
-              }}
-              removeClippedSubviews={true}
-              refreshing={refreshing}
-              onRefresh={() => {
-                refresh();
-              }}
-              initialNumToRender={15}
-              numColumns={3}
-              mb={ss(120)}
-              data={customers}
-              ListEmptyComponent={<EmptyBox />}
-              keyExtractor={(item) => item._id}
-              renderItem={({ item: customer }) => {
-                return (
-                  <ArchiveItem
-                    onPress={() => {
-                      updateCurrentArchiveCustomer(customer);
-                      navigation.navigate('CustomerArchive', {
-                        defaultSelect: 0,
-                      });
-                    }}
-                    customer={customer}
-                  />
-                );
-              }}
-              ListFooterComponent={
-                loadingMore ? (
-                  <Spinner size={sp(20)} mr={ls(5)} color={'emerald.500'} />
-                ) : null
               }
-            />
-          )}
+            }}
+            refreshing={refreshing}
+            onRefresh={() => {
+              refresh();
+            }}
+            initialNumToRender={15}
+            numColumns={3}
+            mb={ss(120)}
+            data={customers}
+            ListEmptyComponent={<EmptyBox />}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item: customer }) => {
+              return (
+                <ArchiveItem
+                  onPress={() => {
+                    updateCurrentArchiveCustomer(customer);
+                    navigation.navigate('CustomerArchive', {
+                      defaultSelect: 0,
+                    });
+                  }}
+                  customer={customer}
+                />
+              );
+            }}
+            ListFooterComponent={
+              loadingMore ? (
+                <Spinner size={sp(20)} mr={ls(5)} color={'emerald.500'} />
+              ) : null
+            }
+          />
         </Row>
       </Box>
     </View>
   );
 }
 
-class ArchiveItem extends PureComponent<{ onPress: any; customer: any }> {
+export default memo(Archive);
+
+class ArchiveItem extends PureComponent<{
+  onPress: any;
+  customer: any;
+}> {
   render(): ReactNode {
     const { onPress, customer } = this.props;
     return (
-      <Center w={'33.33%'}>
-        <Pressable
-          _pressed={{
-            opacity: 0.8,
-          }}
-          hitSlop={ss(20)}
-          pr={ls(20)}
-          onPress={() => {
-            onPress();
-          }}>
-          <CustomerArchiveItem customer={customer} />
-        </Pressable>
-      </Center>
+      <Pressable
+        _pressed={{
+          opacity: 0.8,
+        }}
+        hitSlop={ss(20)}
+        pr={ls(20)}
+        onPress={() => {
+          onPress();
+        }}>
+        <CustomerArchiveItem customer={customer} />
+      </Pressable>
     );
   }
 }

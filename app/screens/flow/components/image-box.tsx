@@ -236,7 +236,7 @@ export default function ImageBox({
                 <Center
                   borderColor={'#ACACAC'}
                   borderWidth={ss(1.5)}
-                  borderStyle={'dashed'}
+                  // borderStyle={'dashed'}
                   bgColor={'#FFF'}
                   w={ss(100)}
                   h={ss(100)}>

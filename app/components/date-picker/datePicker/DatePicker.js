@@ -59,6 +59,7 @@ const DatePicker = (props) => {
       : '',
     monthOpen: props.mode === 'monthYear',
     timeOpen: props.mode === 'time',
+    disabledWithoutToday: props.disabledWithoutToday,
   });
 
   const [state, dispatch] = reducers;
@@ -189,6 +190,7 @@ DatePicker.propTypes = {
   mode: PropTypes.oneOf(modeArray),
   minuteInterval: PropTypes.oneOf(minuteIntervalArray),
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  disabledWithoutToday: PropTypes.any,
 };
 
 export { DatePicker, CalendarContext, useCalendar };

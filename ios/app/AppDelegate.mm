@@ -124,6 +124,8 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:J_APNS_NOTIFICATION_OPENED_EVENT object:userInfo];
   }
   else {
+    
+    
     // 本地通知
     NSLog(@"iOS 10 本地通知 消息事件回调");
     // 保障应用被杀死状态下，用户点击推送消息，打开app后可以收到点击通知事件

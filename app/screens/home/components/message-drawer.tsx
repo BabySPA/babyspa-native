@@ -197,6 +197,7 @@ export default function MessageDrawer() {
       <Divider h={ss(1)} />
       {messages.length > 0 ? (
         <FlatList
+          nestedScrollEnabled
           p={ss(20)}
           data={messages}
           showsVerticalScrollIndicator={false}

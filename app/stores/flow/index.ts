@@ -23,6 +23,7 @@ import useManagerStore from '../manager';
 import { generateFollowUpFlows } from '~/app/utils/generateFlowCounts';
 import { InteractionManager } from 'react-native';
 import useLayoutStore from '../layout';
+import { reject } from 'lodash';
 
 const DefaultFlowListData = {
   flows: [],
@@ -203,19 +204,18 @@ const useFlowStore = create(
 
     requsetGetHomeList: async () => {
       // 获取当前在首页哪个tab下
-      const { layoutConfig, currentSelected } = useLayoutStore.getState();
-      const featureSelected =
-        layoutConfig[currentSelected].features[
-          layoutConfig[currentSelected].featureSelected
-        ];
+      const { layoutConfig, currentSelected, featureSelected } =
+        useLayoutStore.getState();
+      const featureSelectedItem =
+        layoutConfig[currentSelected].features[featureSelected];
 
-      if (featureSelected.auth === RoleAuthority.FLOW_REGISTER) {
+      if (featureSelectedItem.auth === RoleAuthority.FLOW_REGISTER) {
         await get().requestGetRegisterFlows();
-      } else if (featureSelected.auth === RoleAuthority.FLOW_COLLECTION) {
+      } else if (featureSelectedItem.auth === RoleAuthority.FLOW_COLLECTION) {
         await get().requestGetCollectionFlows();
-      } else if (featureSelected.auth === RoleAuthority.FLOW_ANALYZE) {
+      } else if (featureSelectedItem.auth === RoleAuthority.FLOW_ANALYZE) {
         await get().requestGetAnalyzeFlows();
-      } else if (featureSelected.auth === RoleAuthority.FLOW_EVALUATE) {
+      } else if (featureSelectedItem.auth === RoleAuthority.FLOW_EVALUATE) {
         await get().requestGetEvaluateFlows();
       }
     },
@@ -451,50 +451,73 @@ const useFlowStore = create(
     },
 
     requestGetAnalyzeFlows: async () => {
-      const today = dayjs().format('YYYY-MM-DD');
+      return new Promise((resolve, reject) => {
+        resolve([]);
 
-      if (currentDate !== today) {
-        // 如果不是当天了，纠正时间
-        get().updateAnalyzeFilter({
-          startDate: today,
-          endDate: today,
+        const today = dayjs().format('YYYY-MM-DD');
+
+        if (currentDate !== today) {
+          // 如果不是当天了，纠正时间
+          get().updateAnalyzeFilter({
+            startDate: today,
+            endDate: today,
+          });
+          currentDate = today;
+        }
+
+        const {
+          analyze: { status, searchKeywords, startDate, endDate },
+        } = get();
+        const params: any = {};
+
+        if (startDate) {
+          params.startDate = startDate;
+        }
+        if (endDate) {
+          params.endDate = endDate;
+        }
+
+        request.get('/flows', { params }).then((res) => {
+          const { docs } = res.data;
+
+          // NOTE: 1224 - 这里不做过滤，分析师想看到取消的
+          // const filterDocs = docs.filter(
+          //   (item: FlowItemResponse) =>
+          //     item.collect.status !== CollectStatus.CANCEL &&
+          //     item.register.status !== RegisterStatus.CANCEL &&
+          //     item.collect.status !== CollectStatus.NOT_SET,
+          // );
+          const filterDocs = docs;
+          set((state) => {
+            const fuzzyDocs = fuzzySearch(filterDocs, searchKeywords, status);
+            if (state.analyze.flows.length === 0) {
+              state.analyze.all = filterDocs;
+              state.analyze.flows = fuzzySearch(
+                filterDocs,
+                searchKeywords,
+                status,
+              );
+            }
+
+            if (
+              // @ts-ignore
+              fuzzyDocs[0]?._id !== state.analyze.flows[0]?._id &&
+              // @ts-ignore
+              fuzzyDocs[0]?.analyze.status !==
+                state.analyze.flows[0]?.analyze.status
+            ) {
+              state.analyze.all = filterDocs;
+              state.analyze.flows = fuzzySearch(
+                filterDocs,
+                searchKeywords,
+                status,
+              );
+            }
+            resolve(docs);
+          });
         });
-        currentDate = today;
-      }
-
-      const {
-        analyze: { status, searchKeywords, startDate, endDate },
-      } = get();
-      const params: any = {};
-
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
-
-      request.get('/flows', { params }).then((res) => {
-        const { docs } = res.data;
-
-        // NOTE: 1224 - 这里不做过滤，分析师想看到取消的
-        // const filterDocs = docs.filter(
-        //   (item: FlowItemResponse) =>
-        //     item.collect.status !== CollectStatus.CANCEL &&
-        //     item.register.status !== RegisterStatus.CANCEL &&
-        //     item.collect.status !== CollectStatus.NOT_SET,
-        // );
-        const filterDocs = docs;
-
-        set({
-          analyze: {
-            ...get().analyze,
-            // @ts-ignore
-            all: filterDocs,
-            // @ts-ignore
-            flows: fuzzySearch(filterDocs, searchKeywords, status),
-          },
-        });
+      }).catch((e) => {
+        reject(e);
       });
     },
 

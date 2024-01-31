@@ -46,9 +46,7 @@ export default function FollowUpVisit(params: {
   const refresh = async () => {
     setRefreshing(true);
     await requestGetFollowUps();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    setRefreshing(false);
   };
 
   const [renderWaiting, setRenderWaiting] = useState(false);
@@ -76,6 +74,7 @@ export default function FollowUpVisit(params: {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
+              nestedScrollEnabled
               refreshing={refreshing}
               onRefresh={() => {
                 refresh();

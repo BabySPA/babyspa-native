@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
 import { memo } from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import OperateButton from '~/app/components/operate-button';
 import {
   EvaluateTextConfig,
@@ -23,7 +23,6 @@ import {
 import { FlowStatus, OperateType } from '~/app/types';
 import { getAge } from '~/app/utils';
 import { ss, ls, sp } from '~/app/utils/style';
-
 function FlowCustomerItem({
   flow,
   type,
@@ -40,65 +39,52 @@ function FlowCustomerItem({
   const flowStatus = getFlowStatus(flow);
 
   const OperatorStatusFlag = () => {
+    let statusConfig;
     if (type === OperateType.Evaluate) {
-      return (
-        <Box
-          bgColor={
-            EvaluateTextConfig[
-              flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
-            ].bgColor
-          }
-          px={ls(12)}
-          py={ss(6)}
-          _text={{
-            fontSize: sp(16),
-            color:
-              EvaluateTextConfig[
-                flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
-              ].textColor,
-          }}
-          borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
-          {
-            EvaluateTextConfig[
-              flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
-            ].text
-          }
-        </Box>
-      );
+      statusConfig =
+        EvaluateTextConfig[
+          flow.evaluate.status == EvaluateStatus.DONE ? 'DONE' : 'TODO'
+        ];
     } else {
-      const statusConfig = getStatusTextConfig(
+      statusConfig = getStatusTextConfig(
         flowStatus,
         flow.analyze.updatedAt ? flow.analyzeOperator?.name : '',
       );
-      return (
-        <Box
-          bgColor={statusConfig?.bgColor}
-          px={ls(12)}
-          py={ss(6)}
-          _text={{
+    }
+
+    return (
+      <View
+        style={{
+          backgroundColor: statusConfig?.bgColor,
+          paddingHorizontal: ls(12),
+          paddingVertical: ss(6),
+          borderBottomLeftRadius: ss(8),
+          borderTopRightRadius: ss(8),
+        }}>
+        <Text
+          style={{
             fontSize: sp(16),
             color: statusConfig?.textColor,
-          }}
-          borderBottomLeftRadius={ss(8)}
-          borderTopRightRadius={ss(8)}>
+          }}>
           {statusConfig?.text}
-        </Box>
-      );
-    }
+        </Text>
+      </View>
+    );
   };
 
   return (
-    <Row
-      borderRadius={ss(8)}
-      borderStyle={'dashed'}
-      borderWidth={ss(1)}
-      borderColor={'#15BD8F'}
-      w={'100%'}
-      minH={ss(148)}
-      justifyContent={'space-between'}>
-      <Row p={ss(20)} maxW={'70%'}>
-        <Column justifyContent={'flex-start'} alignItems={'center'}>
+    <View
+      style={{
+        borderRadius: ss(8),
+        borderWidth: ss(1),
+        borderColor: '#15BD8F',
+        width: '100%',
+        minHeight: ss(148),
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+      }}>
+      <View style={{ padding: ss(20), maxWidth: '70%', flexDirection: 'row' }}>
+        <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
           <Image
             style={{ width: ss(60), height: ss(60) }}
             source={
@@ -107,70 +93,90 @@ function FlowCustomerItem({
                 : require('~/assets/images/girl.png')
             }
           />
-          <Text color='#F7BA2A' fontSize={sp(24)}>
+          <Text
+            style={{ color: '#F7BA2A', fontSize: sp(18), marginTop: ss(10) }}>
             {flow.tag}
           </Text>
-        </Column>
+        </View>
 
-        <Flex ml={ls(20)}>
-          <Row alignItems={'center'}>
+        <View style={{ marginLeft: ss(20) }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text
-              color='#333'
-              fontSize={sp(20)}
-              fontWeight={400}
-              maxW={ls(180)}
-              numberOfLines={1}
-              ellipsizeMode='tail'>
+              style={{
+                color: '#333',
+                fontSize: sp(20),
+                fontWeight: '400',
+                maxWidth: ss(180),
+                flexWrap: 'wrap',
+              }}>
               {customer.name}
               {customer.nickname && <Text>({customer.nickname})</Text>}
             </Text>
-            <Icon
-              as={
-                <MaterialCommunityIcons
-                  name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
-                />
-              }
+            <MaterialCommunityIcons
+              name={customer.gender == 1 ? 'gender-male' : 'gender-female'}
               size={sp(26)}
               color={customer.gender == 1 ? '#648B62' : '#F3AF62'}
             />
             <Text
-              color={'#99A9BF'}
-              fontWeight={400}
-              fontSize={sp(18)}
-              ml={ls(3)}>
+              style={{
+                color: '#99A9BF',
+                fontWeight: '400',
+                fontSize: sp(18),
+                marginLeft: ss(3),
+              }}>
               {ageText}
             </Text>
-          </Row>
-          <Row alignItems={'center'}>
-            <Text mt={ss(10)} color={'#666'} fontSize={sp(18)}>
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text
+              style={{ marginTop: ss(10), color: '#666', fontSize: sp(18) }}>
               理疗师：{flow.collectionOperator?.name || '无'}
             </Text>
             {(type == OperateType.Evaluate ||
               (type == OperateType.Analyze &&
                 flow.analyze.status === AnalyzeStatus.DONE)) && (
-              <Text mt={ss(10)} color={'#666'} fontSize={sp(18)} ml={ss(30)}>
+              <Text
+                style={{
+                  marginTop: ss(10),
+                  color: '#666',
+                  fontSize: sp(18),
+                  marginLeft: ss(30),
+                }}>
                 分析师：{flow.analyzeOperator?.name}
               </Text>
             )}
-          </Row>
-          <Row alignItems={'center'}>
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {(type == OperateType.Analyze || type == OperateType.Evaluate) && (
-              <Text color={'#666'} fontSize={sp(18)} mt={ss(10)}>
+              <Text
+                style={{ color: '#666', fontSize: sp(18), marginTop: ss(10) }}>
                 门店：{flow.shop?.name}
               </Text>
             )}
             {type == OperateType.Evaluate &&
               flow.evaluate.status == EvaluateStatus.DONE && (
-                <Text color={'#666'} fontSize={sp(18)} mt={ss(10)} ml={ss(30)}>
+                <Text
+                  style={{
+                    color: '#666',
+                    fontSize: sp(18),
+                    marginTop: ss(10),
+                    marginLeft: ss(30),
+                  }}>
                   评价人：{flow.evaluateOperator?.name}
                 </Text>
               )}
-          </Row>
+          </View>
+
           {type == OperateType.Evaluate && (
-            <Row alignItems={'center'} mt={ss(10)}>
-              <Text color={'#666'} fontSize={sp(18)}>
-                评星：
-              </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: ss(10),
+              }}>
+              <Text style={{ color: '#666', fontSize: sp(18) }}>评星：</Text>
               {flow.evaluate.score ? (
                 new Array(flow.evaluate.score).fill(1).map((item, idx) => {
                   return (
@@ -182,29 +188,43 @@ function FlowCustomerItem({
                   );
                 })
               ) : (
-                <Text color={'#999'} fontSize={sp(16)}>
+                <Text style={{ color: '#999', fontSize: sp(16) }}>
                   暂未评价
                 </Text>
               )}
-            </Row>
+            </View>
           )}
-          <Row alignItems={'center'} mt={ss(10)}>
-            <Icon
-              as={<Ionicons name={'ios-time-outline'} />}
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: ss(10),
+            }}>
+            <Ionicons
+              name={'ios-time-outline'}
               size={sp(17)}
               color={'#C87939'}
             />
             <Text
-              color={'#C87939'}
-              fontWeight={400}
-              fontSize={sp(18)}
-              ml={ls(10)}>
+              style={{
+                color: '#C87939',
+                fontWeight: '400',
+                fontSize: sp(18),
+                marginLeft: ss(10),
+              }}>
               {dayjs(flow.updatedAt).format('YYYY-MM-DD HH:mm')}
             </Text>
-          </Row>
-        </Flex>
-      </Row>
-      <Flex justifyContent={'space-between'} alignItems={'flex-end'} flex={1}>
+          </View>
+        </View>
+      </View>
+
+      <View
+        style={{
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
+          flex: 1,
+        }}>
         <OperatorStatusFlag />
 
         {type === OperateType.Collection &&
@@ -213,9 +233,7 @@ function FlowCustomerItem({
               text={'采集'}
               onPress={() => {
                 updateCurrentFlow(flow);
-                navigation.navigate('Flow', {
-                  type: FlowStatus.ToBeCollected,
-                });
+                navigation.navigate('Flow', { type: FlowStatus.ToBeCollected });
               }}
             />
           )}
@@ -229,9 +247,7 @@ function FlowCustomerItem({
               text={'分析'}
               onPress={() => {
                 updateCurrentFlow(flow);
-                navigation.navigate('Flow', {
-                  type: FlowStatus.ToBeAnalyzed,
-                });
+                navigation.navigate('Flow', { type: FlowStatus.ToBeAnalyzed });
               }}
             />
           )}
@@ -241,6 +257,7 @@ function FlowCustomerItem({
             <OperateButton
               text={'评价'}
               onPress={() => {
+                updateCurrentFlow(flow);
                 navigation.navigate('FlowInfo', {
                   from: 'evaluate',
                   currentFlow: flow,
@@ -248,8 +265,8 @@ function FlowCustomerItem({
               }}
             />
           )}
-      </Flex>
-    </Row>
+      </View>
+    </View>
   );
 }
 

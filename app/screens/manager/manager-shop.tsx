@@ -82,6 +82,7 @@ export default function ManagerShop({
           </Row>
         </Row>
         <FlatList
+          nestedScrollEnabled
           style={{
             height: '80%',
           }}

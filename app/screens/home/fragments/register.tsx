@@ -11,7 +11,7 @@ import {
   Image,
   FlatList,
 } from 'native-base';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useFlowStore, { DefaultFlow } from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -25,7 +25,7 @@ import dayjs from 'dayjs';
 import FlowCustomerItem from '../components/flow-customer-item';
 import { RegisterStatus } from '~/app/stores/flow/type';
 
-export default function Register() {
+function Register() {
   const navigation = useNavigation();
 
   const requestGetRegisterFlows = useFlowStore(
@@ -47,9 +47,7 @@ export default function Register() {
   const refresh = async () => {
     setRefreshing(true);
     await requestGetRegisterFlows();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    setRefreshing(false);
   };
 
   const [renderWaiting, setRenderWaiting] = useState(false);
@@ -77,6 +75,7 @@ export default function Register() {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
+              nestedScrollEnabled
               refreshing={refreshing}
               onRefresh={() => {
                 refresh();
@@ -116,6 +115,7 @@ export default function Register() {
   );
 }
 
+export default memo(Register);
 function Filter({ onRequest }: { onRequest: () => void }) {
   const [showFilter, setShowFilter] = useState(false);
   const navigation = useNavigation();

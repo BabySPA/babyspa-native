@@ -12,6 +12,7 @@ interface DatePickerModalParams {
   onSelectedChange: (date: string) => void;
   current: string | undefined;
   selected: string | undefined;
+  disabledWithoutToday?: boolean | undefined;
 }
 export default function DatePickerModal({
   isOpen,
@@ -19,6 +20,7 @@ export default function DatePickerModal({
   onSelectedChange,
   current,
   selected,
+  disabledWithoutToday,
 }: DatePickerModalParams) {
   const toast = useToast();
 
@@ -41,6 +43,7 @@ export default function DatePickerModal({
           current={current}
           selected={selected}
           mode='calendar'
+          disabledWithoutToday={disabledWithoutToday}
         />
       ));
   }, [current, selected, isOpen]);
@@ -59,6 +62,7 @@ export default function DatePickerModal({
           current={current}
           selected={selected}
           mode='calendar'
+          disabledWithoutToday={disabledWithoutToday}
         />
       ));
     }, 50);
@@ -78,10 +82,6 @@ export default function DatePickerModal({
             }}
             hitSlop={ss(20)}
             onPress={() => {
-              if (dayjs(currentSelect).isAfter(dayjs())) {
-                toastAlert(toast, 'error', '不能大于当前日期');
-                return;
-              }
               onSelectedChange(currentSelect ?? '');
               onClose();
             }}>

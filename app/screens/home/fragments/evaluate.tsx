@@ -11,7 +11,7 @@ import {
   Box,
   FlatList,
 } from 'native-base';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -25,7 +25,7 @@ import DatePickerModal from '~/app/components/date-picker-modal';
 import { EvaluateStatus } from '~/app/stores/flow/type';
 import { Image as NativeImage } from 'react-native';
 
-export default function Evaluate() {
+function Evaluate() {
   const navigation = useNavigation();
 
   const requestGetEvaluateFlows = useFlowStore(
@@ -46,9 +46,7 @@ export default function Evaluate() {
   const refresh = async () => {
     setRefreshing(true);
     await requestGetEvaluateFlows();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    setRefreshing(false);
   };
 
   const [renderWaiting, setRenderWaiting] = useState(false);
@@ -76,14 +74,24 @@ export default function Evaluate() {
           minH={'100%'}>
           {renderWaiting && (
             <FlatList
+              nestedScrollEnabled
               refreshing={refreshing}
               onRefresh={() => {
                 refresh();
               }}
+              initialNumToRender={15}
+              legacyImplementation={true}
+              maxToRenderPerBatch={15}
+              keyExtractor={(item) => item._id}
               ListEmptyComponent={<EmptyBox />}
-              mb={ss(120)}
               data={flows}
+              mb={ss(120)}
               numColumns={2}
+              getItemLayout={(data, index) => ({
+                length: ss(148),
+                offset: ss(148) * index,
+                index,
+              })}
               renderItem={({ item: flow, index: idx }) => {
                 return (
                   <Center width={'50%'} key={idx}>
@@ -113,6 +121,7 @@ export default function Evaluate() {
     </Flex>
   );
 }
+export default memo(Evaluate);
 
 function Filter({ onRequest }: { onRequest: () => void }) {
   const [showFilter, setShowFilter] = useState(false);

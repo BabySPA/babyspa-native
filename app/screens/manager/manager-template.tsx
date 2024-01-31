@@ -9,6 +9,8 @@ import {
   Icon,
   Input,
   Circle,
+  Menu,
+  FlatList,
 } from 'native-base';
 import { useToast } from 'react-native-toast-notifications';
 import NavigationBar from '~/app/components/navigation-bar';
@@ -20,9 +22,9 @@ import BoxTitle from '~/app/components/box-title';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import {
   AntDesign,
+  Entypo,
   FontAwesome,
-  Ionicons,
-  MaterialIcons,
+  FontAwesome5,
   SimpleLineIcons,
 } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
@@ -34,14 +36,19 @@ import {
   NewTemplateModalModal,
 } from '~/app/components/modals';
 import { toastAlert } from '~/app/utils/toast';
-import { debounce } from 'lodash';
 import { ExtraItem, TemplateItem } from '~/app/stores/manager/type';
 import TextChild from './components/TextChild';
+import DraggableFlatList, {
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
+import useGlobalLoading from '~/app/stores/loading';
 
 export default function ManagerTemplate({
   navigation,
 }: AppStackScreenProps<'ManagerTemplate'>) {
   const templates = useManagerStore((state) => state.templates);
+  const { openLoading, closeLoading } = useGlobalLoading();
+
   const currentSelectTemplateIdx = useManagerStore(
     (state) => state.currentSelectTemplateIdx,
   );
@@ -51,8 +58,17 @@ export default function ManagerTemplate({
   const requestPatchTemplateGroup = useManagerStore(
     (state) => state.requestPatchTemplateGroup,
   );
+
+  const requestPatchTemplateGroups = useManagerStore(
+    (state) => state.requestPatchTemplateGroups,
+  );
+
   const requestDeleteTemplateGroup = useManagerStore(
     (state) => state.requestDeleteTemplateGroup,
+  );
+
+  const setCurrentSelectTemplateItemTexts = useManagerStore(
+    (state) => state.setCurrentSelectTemplateItemTexts,
   );
 
   const [currentLevel3SelectFolderIdx, setCurrentLevel3SelectFolderIdx] =
@@ -199,6 +215,97 @@ export default function ManagerTemplate({
       : 2;
   };
 
+  // 排序标识，展示排序列表
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const [showSubSortMenu, setShowSubSortMenu] = useState(false);
+
+  const SortTip = ({
+    isSub,
+    onSave,
+  }: {
+    isSub?: boolean;
+    onSave?: () => void;
+  }) => {
+    return (
+      <Row
+        px={ss(16)}
+        mb={ss(6)}
+        alignItems={'center'}
+        justifyContent={'space-between'}>
+        <Row alignItems={'center'} flex={1}>
+          <Circle bgColor={'#F56121'} size={sp(16)}>
+            <Text color='#fff' fontSize={sp(12)}>
+              !
+            </Text>
+          </Circle>
+          <Text color={'#F86021'} ml={ss(5)}>
+            拖拽进行排序
+          </Text>
+        </Row>
+        <Row alignItems={'center'}>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              requestGetTemplates();
+              isSub ? setShowSubSortMenu(false) : setShowSortMenu(false);
+            }}
+            justifyContent={'center'}
+            alignItems={'center'}>
+            <Text color='#00B49E' fontSize={sp(16)}>
+              取消
+            </Text>
+          </Pressable>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            ml={ss(12)}
+            hitSlop={ss(20)}
+            onPress={async () => {
+              if (onSave) {
+                onSave();
+                return;
+              }
+              try {
+                openLoading();
+                if (isSub) {
+                  const currentGroup =
+                    groups[currentLevel2SelectTemplateGroupIndex];
+                  const group = {
+                    name: currentGroup.name,
+                    children: getCurrentLevel2SelectTemplateGroupItems(),
+                  };
+                  await requestPatchTemplateGroup(group);
+                  toastAlert(toast, 'success', '排序保存成功！');
+                  setShowSubSortMenu(false);
+                } else {
+                  await requestPatchTemplateGroups(groups);
+                  toastAlert(toast, 'success', '排序保存成功！');
+                  setShowSortMenu(false);
+                  setCurrentLevel2SelectTemplateGroupIndex(0);
+                  setCurrentLevel3SelectFolderIdx({
+                    folder: 0,
+                    item: 0,
+                  });
+                }
+              } catch (error) {
+              } finally {
+                closeLoading();
+              }
+            }}
+            justifyContent={'center'}
+            alignItems={'center'}>
+            <Text color='#00B49E' fontSize={sp(16)}>
+              保存
+            </Text>
+          </Pressable>
+        </Row>
+      </Row>
+    );
+  };
   const ExtraChild = ({ item, index }: { item: any; index: number }) => {
     const { extra } = item;
     return (
@@ -207,7 +314,7 @@ export default function ManagerTemplate({
         mb={ss(8)}
         p={ss(20)}
         borderRadius={ss(4)}
-        borderStyle={'dashed'}
+        // borderStyle={'dashed'}
         borderColor={'#7AB6AF'}
         borderWidth={ss(1)}
         bgColor={'#FAFAFA'}>
@@ -219,7 +326,7 @@ export default function ManagerTemplate({
               </Text>
             </Circle>
             <Text color='#3CAEA4' fontSize={sp(20)} ml={ls(10)}>
-              {extra.title}
+              {extra?.title}
             </Text>
           </Row>
           <Row>
@@ -241,8 +348,8 @@ export default function ManagerTemplate({
                     templates[currentSelectTemplateIdx].key == 'application'
                       ? '穴位'
                       : '备注',
-                  defaultName: extra.title,
-                  defaultContent: extra.content,
+                  defaultName: extra?.title,
+                  defaultContent: extra?.content,
                   index: index - 1,
                 });
               }}>
@@ -258,7 +365,7 @@ export default function ManagerTemplate({
               onPress={() => {
                 setShowDeleteTemplateExtraModal({
                   isOpen: true,
-                  content: extra.title,
+                  content: extra?.title,
                   index: index - 1,
                 });
               }}>
@@ -278,7 +385,7 @@ export default function ManagerTemplate({
                 : '备注：'}
             </Text>
             <Text fontSize={sp(16)} color={'#333'} maxW={'90%'}>
-              {extra.content}
+              {extra?.content}
             </Text>
           </Row>
         </Row>
@@ -294,38 +401,62 @@ export default function ManagerTemplate({
             <BoxTitle
               title='模版列表'
               rightElement={
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    setShowEditTemplateModal({
-                      isOpen: true,
-                      isEdit: false,
-                      type: 'group',
-                      title: '新增模版组',
-                      defaultName: '',
-                      level: 2,
-                    });
+                <Menu
+                  w='190'
+                  trigger={(triggerProps) => {
+                    return (
+                      <Pressable
+                        accessibilityLabel='More options menu'
+                        {...triggerProps}>
+                        <Icon
+                          as={<Entypo name='dots-three-horizontal' />}
+                          size={sp(25)}
+                          color='#333'
+                          ml={ss(10)}
+                        />
+                      </Pressable>
+                    );
                   }}>
-                  <Row
-                    bgColor={'#E1F6EF'}
-                    borderRadius={ss(4)}
-                    px={ls(12)}
-                    py={ss(10)}
-                    borderColor={'#15BD8F'}
-                    borderWidth={ss(1)}>
-                    <Text color={'#0C1B16'} fontSize={sp(14)}>
-                      新增模版
-                    </Text>
-                  </Row>
-                </Pressable>
+                  <Menu.Item
+                    onPress={() => {
+                      setShowEditTemplateModal({
+                        isOpen: true,
+                        isEdit: false,
+                        type: 'group',
+                        title: '新增模版组',
+                        defaultName: '',
+                        level: 2,
+                      });
+                    }}>
+                    <Icon
+                      as={
+                        <FontAwesome5
+                          name='file-alt'
+                          size={sp(24)}
+                          color='black'
+                        />
+                      }
+                    />
+                    <Text>新增模版</Text>
+                  </Menu.Item>
+
+                  <Menu.Item
+                    onPress={() => {
+                      setShowSortMenu(true);
+                    }}>
+                    <Icon
+                      as={
+                        <FontAwesome5 name='sort' size={sp(24)} color='black' />
+                      }
+                    />
+                    <Text>位置排序</Text>
+                  </Menu.Item>
+                </Menu>
               }
             />
           </Box>
 
-          <Input
+          {/* <Input
             autoCorrect={false}
             h={ss(50)}
             p={ss(10)}
@@ -347,82 +478,122 @@ export default function ManagerTemplate({
             onChangeText={debounce((text) => {
               setGroupFilter(text);
             }, 1000)}
-          />
+          /> */}
 
-          <Box bg='white' flex={1} mt={ss(20)}>
-            <SwipeListView
-              ref={swiperlistRef}
-              data={groups}
-              keyExtractor={(item, index) => item.name}
-              renderItem={({ item, index }) => {
-                return (
-                  <Box>
+          <Box bg='white' flex={1} mt={ss(5)}>
+            {showSortMenu ? (
+              <>
+                <SortTip />
+                <DraggableFlatList
+                  style={{ marginBottom: ss(40) }}
+                  data={groups}
+                  onDragEnd={({ data }) => {
+                    setGroups(data);
+                  }}
+                  keyExtractor={(item) => item.name}
+                  renderItem={({ item, drag, isActive }) => {
+                    return (
+                      <ScaleDecorator activeScale={1.05}>
+                        <Pressable
+                          bg={isActive ? '#1AB7BE' : '#fff'}
+                          onLongPress={drag}
+                          flexDirection={'row'}
+                          alignItems='center'
+                          justifyContent='space-between'
+                          borderBottomColor='trueGray.200'
+                          borderBottomWidth={ss(1)}
+                          px={ls(20)}
+                          py={ss(16)}>
+                          <Text
+                            fontSize={sp(20)}
+                            color={isActive ? '#fff' : '#333'}>
+                            {item.name}
+                          </Text>
+                          <Icon
+                            as={<FontAwesome5 name='sort' size={sp(24)} />}
+                            color='#fff'
+                          />
+                        </Pressable>
+                      </ScaleDecorator>
+                    );
+                  }}
+                />
+              </>
+            ) : (
+              <SwipeListView
+                ref={swiperlistRef}
+                data={groups}
+                keyExtractor={(item, index) => item.name}
+                renderItem={({ item, index }) => {
+                  return (
+                    <Box>
+                      <Pressable
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          setCurrentLevel2SelectTemplateGroupIndex(index);
+                        }}
+                        onLongPress={() => {
+                          setCurrentLevel2SelectTemplateGroupIndex(index);
+                          setShowEditTemplateModal({
+                            isOpen: true,
+                            isEdit: true,
+                            type: 'group',
+                            title: '编辑模版组',
+                            defaultName: item.name,
+                            level: 2,
+                          });
+                        }}
+                        alignItems='flex-start'
+                        bg={
+                          currentLevel2SelectTemplateGroupIndex === index
+                            ? '#1AB7BE'
+                            : '#fff'
+                        }
+                        justifyContent='center'
+                        borderBottomColor='trueGray.200'
+                        borderBottomWidth={ss(1)}
+                        px={ls(20)}
+                        py={ss(16)}>
+                        <Text
+                          fontSize={sp(20)}
+                          color={
+                            currentLevel2SelectTemplateGroupIndex === index
+                              ? '#fff'
+                              : '#333'
+                          }>
+                          {item.name}
+                        </Text>
+                      </Pressable>
+                    </Box>
+                  );
+                }}
+                renderHiddenItem={(rowData, rowMap) => (
+                  <Row flex={1}>
+                    <Box flex={1} />
                     <Pressable
                       hitSlop={ss(20)}
+                      w={ls(72)}
+                      bg='red.500'
+                      justifyContent='center'
                       onPress={() => {
-                        setCurrentLevel2SelectTemplateGroupIndex(index);
-                      }}
-                      onLongPress={() => {
-                        setCurrentLevel2SelectTemplateGroupIndex(index);
-                        setShowEditTemplateModal({
+                        setShowDeleteTemplateModal({
                           isOpen: true,
-                          isEdit: true,
-                          type: 'group',
-                          title: '编辑模版组',
-                          defaultName: item.name,
+                          groupName: rowData.item.name,
                           level: 2,
                         });
                       }}
-                      alignItems='flex-start'
-                      bg={
-                        currentLevel2SelectTemplateGroupIndex === index
-                          ? '#1AB7BE'
-                          : '#fff'
-                      }
-                      justifyContent='center'
-                      borderBottomColor='trueGray.200'
-                      borderBottomWidth={ss(1)}
-                      px={ls(20)}
-                      py={ss(16)}>
-                      <Text
-                        fontSize={sp(20)}
-                        color={
-                          currentLevel2SelectTemplateGroupIndex === index
-                            ? '#fff'
-                            : '#333'
-                        }>
-                        {item.name}
+                      alignItems='center'>
+                      <Text fontSize={sp(14)} color={'#fff'}>
+                        删除
                       </Text>
                     </Pressable>
-                  </Box>
-                );
-              }}
-              renderHiddenItem={(rowData, rowMap) => (
-                <Row flex={1}>
-                  <Box flex={1} />
-                  <Pressable
-                    hitSlop={ss(20)}
-                    w={ls(72)}
-                    bg='red.500'
-                    justifyContent='center'
-                    onPress={() => {
-                      setShowDeleteTemplateModal({
-                        isOpen: true,
-                        groupName: rowData.item.name,
-                        level: 2,
-                      });
-                    }}
-                    alignItems='center'>
-                    <Text fontSize={sp(14)} color={'#fff'}>
-                      删除
-                    </Text>
-                  </Pressable>
-                </Row>
-              )}
-              rightOpenValue={-ls(72)}
-              previewOpenValue={-40}
-              previewOpenDelay={3000}
-            />
+                  </Row>
+                )}
+                rightOpenValue={-ls(72)}
+                previewOpenValue={-40}
+                previewOpenDelay={3000}
+              />
+            )}
           </Box>
 
           <Row bgColor={'#fff'} pb={ss(20)} justifyContent='center'>
@@ -437,66 +608,142 @@ export default function ManagerTemplate({
           bgColor={'#fff'}
           borderRadius={ss(10)}
           p={ss(20)}>
-          <BoxTitle title='模版详情' />
-
-          <ScrollView>
-            <Pressable
-              onPress={() => {
-                if (canEdit) setCanEdit(false);
-              }}>
-              <Row mt={ss(28)} flexWrap={'wrap'}>
-                {getCurrentLevel2SelectTemplateGroupItems().map(
-                  (item: any, index: any) => {
-                    return (
-                      <TextChild
-                        item={item}
-                        key={index}
-                        level={2}
-                        onDeleteItem={function (
-                          item: any,
-                          level: number,
-                        ): void {
-                          // 删除
-                          setShowDeleteItemModal({
-                            isOpen: true,
-                            item: item,
-                            level: level,
-                          });
-                        }}
-                        canEdit={canEdit}
-                        onLongPress={function (): void {
-                          setCanEdit(true);
-                        }}
+          <BoxTitle
+            title='模版详情'
+            rightElement={
+              <Menu
+                w='190'
+                trigger={(triggerProps) => {
+                  return (
+                    <Pressable
+                      accessibilityLabel='More options menu'
+                      {...triggerProps}>
+                      <Icon
+                        as={<Entypo name='dots-three-horizontal' />}
+                        size={sp(25)}
+                        color='#333'
+                        ml={ss(10)}
                       />
-                    );
-                  },
-                )}
-                <Pressable
-                  hitSlop={ss(20)}
+                    </Pressable>
+                  );
+                }}>
+                <Menu.Item
                   onPress={() => {
-                    setShowEditTemplateModal({
-                      isOpen: true,
-                      isEdit: false,
-                      title: '新增模版',
-                      type: 'item',
-                      defaultName: '',
-                      level: 2,
-                    });
-                  }}
-                  mr={ls(10)}
-                  mb={ss(10)}
-                  borderWidth={ss(1)}
-                  borderRadius={2}
-                  borderColor={'#D8D8D8'}
-                  px={ls(20)}
-                  py={ss(7)}>
-                  <Text color='#BCBCBC' fontSize={sp(18)}>
-                    + 自定义添加
-                  </Text>
-                </Pressable>
-              </Row>
-            </Pressable>
-          </ScrollView>
+                    setShowSubSortMenu(true);
+                  }}>
+                  <Icon
+                    as={
+                      <FontAwesome5 name='sort' size={sp(24)} color='black' />
+                    }
+                  />
+                  <Text>位置排序</Text>
+                </Menu.Item>
+              </Menu>
+            }
+          />
+
+          {showSubSortMenu ? (
+            <>
+              <SortTip isSub={true} />
+              <DraggableFlatList
+                style={{ marginBottom: ss(40) }}
+                data={getCurrentLevel2SelectTemplateGroupItems() as string[]}
+                onDragEnd={({ data }) => {
+                  // setCurrentLevel2SelectTemplateGroupItems(data);
+                  setCurrentSelectTemplateItemTexts(
+                    currentLevel2SelectTemplateGroupIndex,
+                    data,
+                  );
+                }}
+                keyExtractor={(item, index) => item}
+                renderItem={({ item, drag, isActive }) => {
+                  return (
+                    <ScaleDecorator activeScale={1.05}>
+                      <Pressable
+                        bg={isActive ? '#1AB7BE' : '#fff'}
+                        onLongPress={drag}
+                        flexDirection={'row'}
+                        alignItems='center'
+                        justifyContent='space-between'
+                        borderBottomColor='trueGray.200'
+                        borderBottomWidth={ss(1)}
+                        px={ls(20)}
+                        py={ss(16)}>
+                        <Text
+                          fontSize={sp(20)}
+                          color={isActive ? '#fff' : '#333'}>
+                          {item}
+                        </Text>
+                        <Icon
+                          as={<FontAwesome5 name='sort' size={sp(24)} />}
+                          color='#fff'
+                        />
+                      </Pressable>
+                    </ScaleDecorator>
+                  );
+                }}
+              />
+            </>
+          ) : (
+            <ScrollView>
+              <Pressable
+                onPress={() => {
+                  if (canEdit) setCanEdit(false);
+                }}>
+                <Row mt={ss(28)} flexWrap={'wrap'}>
+                  {getCurrentLevel2SelectTemplateGroupItems().map(
+                    (item: any, index: any) => {
+                      return (
+                        <TextChild
+                          item={item}
+                          key={index}
+                          level={2}
+                          onDeleteItem={function (
+                            item: any,
+                            level: number,
+                          ): void {
+                            // 删除
+                            setShowDeleteItemModal({
+                              isOpen: true,
+                              item: item,
+                              level: level,
+                            });
+                          }}
+                          canEdit={canEdit}
+                          onLongPress={function (): void {
+                            setCanEdit(true);
+                          }}
+                        />
+                      );
+                    },
+                  )}
+                  <Pressable
+                    hitSlop={ss(20)}
+                    onPress={() => {
+                      setShowEditTemplateModal({
+                        isOpen: true,
+                        isEdit: false,
+                        title: '新增模版',
+                        type: 'item',
+                        defaultName: '',
+                        level: 2,
+                      });
+                    }}
+                    mr={ls(10)}
+                    mb={ss(10)}
+                    borderWidth={ss(1)}
+                    borderRadius={2}
+                    borderColor={'#D8D8D8'}
+                    px={ls(20)}
+                    py={ss(7)}>
+                    <Text color='#BCBCBC' fontSize={sp(18)}>
+                      + 自定义添加
+                    </Text>
+                  </Pressable>
+                </Row>
+              </Pressable>
+            </ScrollView>
+          )}
         </Column>
       </Row>
     );
@@ -510,40 +757,83 @@ export default function ManagerTemplate({
             <BoxTitle
               title='模版列表'
               rightElement={
-                <Pressable
-                  _pressed={{
-                    opacity: 0.6,
-                  }}
-                  hitSlop={ss(20)}
-                  onPress={() => {
-                    setShowLevel3EditTemplateModal({
-                      isOpen: true,
-                      isEdit: false,
-                      title: '新增模版',
-                      groups:
-                        templates[currentSelectTemplateIdx]?.groups.map(
-                          (item) => item.name,
-                        ) || [],
-                      defaultGroup: '',
-                      defaultName: '',
-                    });
+                <Menu
+                  w='190'
+                  trigger={(triggerProps) => {
+                    return (
+                      <Pressable
+                        accessibilityLabel='More options menu'
+                        {...triggerProps}>
+                        <Icon
+                          as={<Entypo name='dots-three-horizontal' />}
+                          size={sp(25)}
+                          color='#333'
+                          ml={ss(10)}
+                        />
+                      </Pressable>
+                    );
                   }}>
-                  <Row
-                    bgColor={'#E1F6EF'}
-                    borderRadius={ss(4)}
-                    px={ls(12)}
-                    py={ss(10)}
-                    borderColor={'#15BD8F'}
-                    borderWidth={ss(1)}>
-                    <Text color={'#0C1B16'} fontSize={sp(14)}>
-                      新增模版
-                    </Text>
-                  </Row>
-                </Pressable>
+                  <Menu.Item
+                    onPress={() => {
+                      setShowLevel3EditTemplateModal({
+                        isOpen: true,
+                        isEdit: false,
+                        title: '新增模版',
+                        groups:
+                          templates[currentSelectTemplateIdx]?.groups.map(
+                            (item) => item.name,
+                          ) || [],
+                        defaultGroup: '',
+                        defaultName: '',
+                      });
+                    }}>
+                    <Icon
+                      as={
+                        <FontAwesome5
+                          name='file-alt'
+                          size={sp(24)}
+                          color='black'
+                        />
+                      }
+                    />
+                    <Text>新增模版</Text>
+                  </Menu.Item>
+                  <Menu.Item
+                    onPress={() => {
+                      setShowEditTemplateGroupModal({
+                        isOpen: true,
+                        isEdit: false,
+                        title: '新增分组',
+                        defaultName: '',
+                      });
+                    }}>
+                    <Icon
+                      as={
+                        <FontAwesome5
+                          name='folder-open'
+                          size={sp(24)}
+                          color='black'
+                        />
+                      }
+                    />
+                    <Text>新增分组</Text>
+                  </Menu.Item>
+                  <Menu.Item
+                    onPress={() => {
+                      setShowSortMenu(true);
+                    }}>
+                    <Icon
+                      as={
+                        <FontAwesome5 name='sort' size={sp(24)} color='black' />
+                      }
+                    />
+                    <Text>位置排序</Text>
+                  </Menu.Item>
+                </Menu>
               }
             />
           </Box>
-
+          {/* 
           <Input
             autoCorrect={false}
             h={ss(50)}
@@ -566,204 +856,245 @@ export default function ManagerTemplate({
             onChangeText={debounce((text) => {
               setGroupFilter(text);
             }, 1000)}
-          />
+          /> */}
 
-          <Box bg='white' flex={1} mt={ss(20)}>
-            <Pressable
-              hitSlop={ss(20)}
-              onPress={() => {
-                // toggle
-                setShowEditTemplateGroupModal({
-                  isOpen: true,
-                  isEdit: false,
-                  title: '新增分组',
-                  defaultName: '',
-                });
-              }}
-              alignItems='center'
-              justifyContent={'space-between'}
-              bg={'#FFF'}
-              borderBottomColor='trueGray.200'
-              borderBottomWidth={ss(1)}
-              flexDirection={'row'}
-              px={ls(20)}
-              py={ss(16)}>
-              <Row alignItems={'center'}>
-                <Icon
-                  ml={ls(10)}
-                  as={<AntDesign name='addfolder' />}
-                  size={sp(24)}
-                  color='#E36C36'
-                />
-                <Text fontSize={sp(20)} ml={ls(10)} color={'#E36C36'}>
-                  新增分组
-                </Text>
-              </Row>
-            </Pressable>
-            <ScrollView>
-              {groups.map((group, groupIdx) => {
-                return (
-                  <Box key={groupIdx}>
-                    <Pressable
-                      onLongPress={() => {
-                        // toggle
-                        setCurrentLevel3SelectFolderIdx({
-                          folder: groupIdx,
-                          item:
-                            currentLevel3SelectFolderIdx.folder === groupIdx
-                              ? currentLevel3SelectFolderIdx.item
-                              : 0,
-                        });
-                        setShowEditTemplateGroupModal({
-                          isOpen: true,
-                          isEdit: true,
-                          title: '编辑分组',
-                          defaultName: group.name,
-                        });
-                      }}
-                      hitSlop={ss(20)}
-                      onPress={() => {
-                        // toggle
-                        setCurrentLevel3SelectFolderIdx({
-                          folder:
-                            currentLevel3SelectFolderIdx.folder === groupIdx
-                              ? -1
-                              : groupIdx,
-                          item: 0,
-                        });
-                      }}
-                      alignItems='center'
-                      justifyContent={'space-between'}
-                      bg={
-                        currentLevel3SelectFolderIdx.folder === groupIdx
-                          ? '#F8FBFA'
-                          : '#fff'
-                      }
-                      borderBottomColor='trueGray.200'
-                      borderBottomWidth={ss(1)}
-                      flexDirection={'row'}
-                      px={ls(20)}
-                      py={ss(16)}>
-                      <Row alignItems={'center'}>
-                        <Icon
-                          ml={ls(10)}
-                          as={<AntDesign name='folder1' />}
-                          size={sp(24)}
-                          color='#B4B4B4'
-                        />
-                        <Text fontSize={sp(20)} ml={ls(10)} color={'#333'}>
-                          {group.name}
-                        </Text>
-                      </Row>
-
-                      <Icon
-                        as={
-                          <SimpleLineIcons
-                            name={
-                              currentLevel3SelectFolderIdx.folder === groupIdx
-                                ? 'arrow-down'
-                                : 'arrow-right'
-                            }
-                          />
-                        }
-                        size={sp(16)}
-                        color={'#BCBCBC'}
-                      />
-                    </Pressable>
-                    {currentLevel3SelectFolderIdx.folder == groupIdx && (
-                      <SwipeListView
-                        ref={swiperlistRef}
-                        data={group.children as TemplateItem[]}
-                        keyExtractor={(groupItem, index) => groupItem.name}
-                        renderItem={({ item: groupItem, index: groupIdx }) => {
-                          return (
-                            <Box>
-                              <Pressable
-                                hitSlop={ss(20)}
-                                onPress={() => {
-                                  setCurrentLevel3SelectFolderIdx({
-                                    folder: currentLevel3SelectFolderIdx.folder,
-                                    item: groupIdx,
-                                  });
-                                }}
-                                onLongPress={() => {
-                                  setCurrentLevel3SelectFolderIdx({
-                                    folder: currentLevel3SelectFolderIdx.folder,
-                                    item: groupIdx,
-                                  });
-                                  setShowLevel3EditTemplateModal({
-                                    isOpen: true,
-                                    isEdit: true,
-                                    title: '编辑模版',
-                                    groups:
-                                      templates[
-                                        currentSelectTemplateIdx
-                                      ]?.groups.map((item) => item.name) || [],
-                                    defaultGroup: group.name,
-                                    defaultName: groupItem.name,
-                                  });
-                                }}
-                                alignItems='flex-start'
-                                bg={
-                                  currentLevel3SelectFolderIdx.item === groupIdx
-                                    ? '#1AB7BE'
-                                    : '#fff'
-                                }
-                                justifyContent='center'
-                                borderBottomColor='trueGray.200'
-                                borderBottomWidth={ss(1)}
-                                px={ls(20)}
-                                py={ss(16)}>
-                                <Text
-                                  ml={ls(46)}
-                                  fontSize={sp(20)}
-                                  color={
-                                    currentLevel3SelectFolderIdx.item ===
-                                    groupIdx
-                                      ? '#fff'
-                                      : '#333'
-                                  }>
-                                  {groupItem.name}
-                                </Text>
-                              </Pressable>
-                            </Box>
-                          );
-                        }}
-                        renderHiddenItem={(rowData, rowMap) => (
-                          <Row flex={1}>
-                            <Box flex={1} />
-                            <Pressable
-                              _pressed={{
-                                opacity: 0.6,
-                              }}
-                              hitSlop={ss(20)}
-                              w={ls(72)}
-                              bg='red.500'
-                              justifyContent='center'
-                              onPress={() => {
-                                setShowDeleteTemplateModal({
-                                  isOpen: true,
-                                  groupName: rowData.item.name,
-                                  groupIdx: groupIdx,
-                                  level: 3,
-                                });
-                              }}
-                              alignItems='center'>
-                              <Text fontSize={sp(14)} color={'#fff'}>
-                                删除
-                              </Text>
-                            </Pressable>
+          <Box bg='white' flex={1} mt={ss(5)}>
+            {showSortMenu ? (
+              <>
+                <SortTip />
+                <DraggableFlatList
+                  style={{ marginBottom: ss(40) }}
+                  data={groups}
+                  onDragEnd={({ data }) => {
+                    setGroups(data);
+                  }}
+                  keyExtractor={(item) => item.name}
+                  renderItem={({ item, drag, isActive }) => {
+                    return (
+                      <ScaleDecorator activeScale={1.05}>
+                        <Pressable
+                          bg={isActive ? '#1AB7BE' : '#fff'}
+                          onLongPress={drag}
+                          flexDirection={'row'}
+                          alignItems='center'
+                          justifyContent='space-between'
+                          borderBottomColor='trueGray.200'
+                          borderBottomWidth={ss(1)}
+                          px={ls(20)}
+                          py={ss(16)}>
+                          <Row alignItems='center' justifyContent='flex-start'>
+                            <Icon
+                              ml={ls(10)}
+                              as={<AntDesign name='folder1' />}
+                              size={sp(24)}
+                              color={isActive ? '#fff' : '#B4B4B4'}
+                            />
+                            <Text
+                              marginLeft={ls(10)}
+                              fontSize={sp(20)}
+                              color={isActive ? '#fff' : '#333'}>
+                              {item.name}
+                            </Text>
                           </Row>
-                        )}
-                        rightOpenValue={-ls(72)}
-                        previewOpenValue={-40}
-                        previewOpenDelay={3000}
-                      />
-                    )}
-                  </Box>
-                );
-              })}
-            </ScrollView>
+                          <Icon
+                            as={<FontAwesome5 name='sort' size={sp(24)} />}
+                            color='#fff'
+                          />
+                        </Pressable>
+                      </ScaleDecorator>
+                    );
+                  }}
+                />
+              </>
+            ) : (
+              <FlatList
+                data={[]}
+                renderItem={() => null}
+                keyExtractor={(item, index) => `${index}`}
+                ListFooterComponent={
+                  <>
+                    {groups.map((group, groupIdx) => {
+                      return (
+                        <Box key={groupIdx}>
+                          <Pressable
+                            onLongPress={() => {
+                              // toggle
+                              setCurrentLevel3SelectFolderIdx({
+                                folder: groupIdx,
+                                item:
+                                  currentLevel3SelectFolderIdx.folder ===
+                                  groupIdx
+                                    ? currentLevel3SelectFolderIdx.item
+                                    : 0,
+                              });
+                              setShowEditTemplateGroupModal({
+                                isOpen: true,
+                                isEdit: true,
+                                title: '编辑分组',
+                                defaultName: group.name,
+                              });
+                            }}
+                            hitSlop={ss(20)}
+                            onPress={() => {
+                              // toggle
+                              setCurrentLevel3SelectFolderIdx({
+                                folder:
+                                  currentLevel3SelectFolderIdx.folder ===
+                                  groupIdx
+                                    ? -1
+                                    : groupIdx,
+                                item: 0,
+                              });
+                            }}
+                            alignItems='center'
+                            justifyContent={'space-between'}
+                            bg={
+                              currentLevel3SelectFolderIdx.folder === groupIdx
+                                ? '#F8FBFA'
+                                : '#fff'
+                            }
+                            borderBottomColor='trueGray.200'
+                            borderBottomWidth={ss(1)}
+                            flexDirection={'row'}
+                            px={ls(20)}
+                            py={ss(16)}>
+                            <Row alignItems={'center'}>
+                              <Icon
+                                ml={ls(10)}
+                                as={<AntDesign name='folder1' />}
+                                size={sp(24)}
+                                color='#B4B4B4'
+                              />
+                              <Text
+                                fontSize={sp(20)}
+                                ml={ls(10)}
+                                color={'#333'}>
+                                {group.name}
+                              </Text>
+                            </Row>
+
+                            <Icon
+                              as={
+                                <SimpleLineIcons
+                                  name={
+                                    currentLevel3SelectFolderIdx.folder ===
+                                    groupIdx
+                                      ? 'arrow-down'
+                                      : 'arrow-right'
+                                  }
+                                />
+                              }
+                              size={sp(16)}
+                              color={'#BCBCBC'}
+                            />
+                          </Pressable>
+                          {currentLevel3SelectFolderIdx.folder == groupIdx && (
+                            <SwipeListView
+                              ref={swiperlistRef}
+                              data={group.children as TemplateItem[]}
+                              keyExtractor={(groupItem, index) =>
+                                groupItem.name
+                              }
+                              renderItem={({
+                                item: groupItem,
+                                index: groupIdx,
+                              }) => {
+                                return (
+                                  <Box>
+                                    <Pressable
+                                      hitSlop={ss(20)}
+                                      onPress={() => {
+                                        setCurrentLevel3SelectFolderIdx({
+                                          folder:
+                                            currentLevel3SelectFolderIdx.folder,
+                                          item: groupIdx,
+                                        });
+                                      }}
+                                      onLongPress={() => {
+                                        setCurrentLevel3SelectFolderIdx({
+                                          folder:
+                                            currentLevel3SelectFolderIdx.folder,
+                                          item: groupIdx,
+                                        });
+                                        setShowLevel3EditTemplateModal({
+                                          isOpen: true,
+                                          isEdit: true,
+                                          title: '编辑模版',
+                                          groups:
+                                            templates[
+                                              currentSelectTemplateIdx
+                                            ]?.groups.map(
+                                              (item) => item.name,
+                                            ) || [],
+                                          defaultGroup: group.name,
+                                          defaultName: groupItem.name,
+                                        });
+                                      }}
+                                      alignItems='flex-start'
+                                      bg={
+                                        currentLevel3SelectFolderIdx.item ===
+                                        groupIdx
+                                          ? '#1AB7BE'
+                                          : '#fff'
+                                      }
+                                      justifyContent='center'
+                                      borderBottomColor='trueGray.200'
+                                      borderBottomWidth={ss(1)}
+                                      px={ls(20)}
+                                      py={ss(16)}>
+                                      <Text
+                                        ml={ls(46)}
+                                        fontSize={sp(20)}
+                                        color={
+                                          currentLevel3SelectFolderIdx.item ===
+                                          groupIdx
+                                            ? '#fff'
+                                            : '#333'
+                                        }>
+                                        {groupItem.name}
+                                      </Text>
+                                    </Pressable>
+                                  </Box>
+                                );
+                              }}
+                              renderHiddenItem={(rowData, rowMap) => (
+                                <Row flex={1}>
+                                  <Box flex={1} />
+                                  <Pressable
+                                    _pressed={{
+                                      opacity: 0.6,
+                                    }}
+                                    hitSlop={ss(20)}
+                                    w={ls(72)}
+                                    bg='red.500'
+                                    justifyContent='center'
+                                    onPress={() => {
+                                      setShowDeleteTemplateModal({
+                                        isOpen: true,
+                                        groupName: rowData.item.name,
+                                        groupIdx: groupIdx,
+                                        level: 3,
+                                      });
+                                    }}
+                                    alignItems='center'>
+                                    <Text fontSize={sp(14)} color={'#fff'}>
+                                      删除
+                                    </Text>
+                                  </Pressable>
+                                </Row>
+                              )}
+                              rightOpenValue={-ls(72)}
+                              previewOpenValue={-40}
+                              previewOpenDelay={3000}
+                            />
+                          )}
+                        </Box>
+                      );
+                    })}
+                  </>
+                }
+              />
+            )}
           </Box>
 
           <Row bgColor={'#fff'} pb={ss(20)} justifyContent='center'>
@@ -782,110 +1113,296 @@ export default function ManagerTemplate({
             title='模版详情'
             rightElement={
               <>
-                {(templates[currentSelectTemplateIdx].key == 'application' ||
-                  templates[currentSelectTemplateIdx].key == 'massage') && (
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.8,
-                    }}
-                    hitSlop={ss(20)}
+                <Menu
+                  w='190'
+                  trigger={(triggerProps) => {
+                    return (
+                      <Pressable
+                        accessibilityLabel='More options menu'
+                        {...triggerProps}>
+                        <Icon
+                          as={<Entypo name='dots-three-horizontal' />}
+                          size={sp(25)}
+                          color='#333'
+                          ml={ss(10)}
+                        />
+                      </Pressable>
+                    );
+                  }}>
+                  {(templates[currentSelectTemplateIdx].key == 'application' ||
+                    templates[currentSelectTemplateIdx].key == 'massage') && (
+                    <Menu.Item
+                      onPress={() => {
+                        setShowExtraModal({
+                          isOpen: true,
+                          isEdit: false,
+                          title:
+                            templates[currentSelectTemplateIdx].key ==
+                            'application'
+                              ? '新增贴敷模板详情'
+                              : '新增推拿模板详情',
+                          des1:
+                            templates[currentSelectTemplateIdx].key ==
+                            'application'
+                              ? '贴敷名称'
+                              : '推拿名称',
+                          des2:
+                            templates[currentSelectTemplateIdx].key ==
+                            'application'
+                              ? '穴位'
+                              : '备注',
+                          defaultName: '',
+                          defaultContent: '',
+                          index: -1,
+                        });
+                      }}>
+                      <Icon
+                        as={
+                          <FontAwesome5
+                            name='file-alt'
+                            size={sp(24)}
+                            color='black'
+                          />
+                        }
+                      />
+                      <Text>添加详情</Text>
+                    </Menu.Item>
+                  )}
+
+                  <Menu.Item
                     onPress={() => {
-                      setShowExtraModal({
-                        isOpen: true,
-                        isEdit: false,
-                        title:
-                          templates[currentSelectTemplateIdx].key ==
-                          'application'
-                            ? '新增贴敷模板详情'
-                            : '新增推拿模板详情',
-                        des1:
-                          templates[currentSelectTemplateIdx].key ==
-                          'application'
-                            ? '贴敷名称'
-                            : '推拿名称',
-                        des2:
-                          templates[currentSelectTemplateIdx].key ==
-                          'application'
-                            ? '穴位'
-                            : '备注',
-                        defaultName: '',
-                        defaultContent: '',
-                        index: -1,
-                      });
+                      setShowSubSortMenu(true);
                     }}>
-                    <Row
-                      bgColor={'#E1F6EF'}
-                      borderRadius={ss(4)}
-                      px={ls(12)}
-                      py={ss(10)}
-                      borderColor={'#15BD8F'}
-                      borderWidth={ss(1)}>
-                      <Text color={'#0C1B16'} fontSize={sp(14)}>
-                        添加详情
-                      </Text>
-                    </Row>
-                  </Pressable>
-                )}
+                    <Icon
+                      as={
+                        <FontAwesome5 name='sort' size={sp(24)} color='black' />
+                      }
+                    />
+                    <Text>位置排序</Text>
+                  </Menu.Item>
+                </Menu>
               </>
             }
           />
 
-          <ScrollView>
-            <Row mt={ss(28)} flexWrap={'wrap'}>
-              {level3Children?.map((item: any, index: any) => {
-                return typeof item === 'string' ? (
-                  <TextChild
-                    key={index}
-                    item={item}
-                    level={3}
-                    onDeleteItem={function (item: any, level: number): void {
-                      // 删除
-                      setShowDeleteItemModal({
-                        isOpen: true,
-                        item: item,
-                        level: level,
-                      });
-                    }}
-                    canEdit={canEdit}
-                    onLongPress={function (): void {
-                      setCanEdit(true);
+          {templates[currentSelectTemplateIdx].key !== 'application' &&
+          templates[currentSelectTemplateIdx].key !== 'massage' ? (
+            <>
+              {showSubSortMenu ? (
+                <>
+                  <SortTip
+                    isSub={true}
+                    onSave={async () => {
+                      try {
+                        openLoading();
+
+                        const currentGroups = groups.map((group, groupIdx) => {
+                          return {
+                            ...group,
+                            children: group.children.map((item, itemIdx) => {
+                              if (
+                                currentLevel3SelectFolderIdx.folder ===
+                                  groupIdx &&
+                                currentLevel3SelectFolderIdx.item === itemIdx
+                              ) {
+                                return {
+                                  // @ts-ignore
+                                  ...item,
+                                  children: level3Children,
+                                };
+                              } else {
+                                return item;
+                              }
+                            }),
+                          };
+                        });
+
+                        await requestPatchTemplateGroups(currentGroups as any);
+                        toastAlert(toast, 'success', '排序保存成功！');
+                        setShowSubSortMenu(false);
+                      } catch (error) {
+                      } finally {
+                        closeLoading();
+                      }
                     }}
                   />
-                ) : (
-                  <ExtraChild key={index} item={item} index={index + 1} />
-                );
-              })}
-              {templates[currentSelectTemplateIdx].key !== 'application' &&
-                templates[currentSelectTemplateIdx].key !== 'massage' && (
-                  <Pressable
-                    _pressed={{
-                      opacity: 0.6,
+                  <DraggableFlatList
+                    style={{ marginBottom: ss(40) }}
+                    data={level3Children as any[]}
+                    onDragEnd={({ data }) => {
+                      setLevel3Children(data);
                     }}
-                    hitSlop={ss(20)}
-                    onPress={() => {
-                      setShowEditTemplateModal({
-                        isOpen: true,
-                        isEdit: false,
-                        title: '新增模版',
-                        type: 'item',
-                        defaultName: '',
-                        level: 3,
-                      });
+                    keyExtractor={(item, index) => item}
+                    renderItem={({ item, drag, isActive }) => {
+                      return (
+                        <ScaleDecorator activeScale={1.05}>
+                          <Pressable
+                            bg={isActive ? '#1AB7BE' : '#fff'}
+                            onLongPress={drag}
+                            flexDirection={'row'}
+                            alignItems='center'
+                            justifyContent='space-between'
+                            borderBottomColor='trueGray.200'
+                            borderBottomWidth={ss(1)}
+                            px={ls(20)}
+                            py={ss(16)}>
+                            <Text
+                              fontSize={sp(20)}
+                              color={isActive ? '#fff' : '#333'}>
+                              {item}
+                            </Text>
+                            <Icon
+                              as={<FontAwesome5 name='sort' size={sp(24)} />}
+                              color='#fff'
+                            />
+                          </Pressable>
+                        </ScaleDecorator>
+                      );
                     }}
-                    mr={ls(10)}
-                    mb={ss(10)}
-                    borderWidth={ss(1)}
-                    borderRadius={2}
-                    borderColor={'#D8D8D8'}
-                    px={ls(20)}
-                    py={ss(7)}>
-                    <Text color='#BCBCBC' fontSize={sp(18)}>
-                      + 自定义添加
-                    </Text>
-                  </Pressable>
-                )}
-            </Row>
-          </ScrollView>
+                  />
+                </>
+              ) : (
+                <>
+                  <ScrollView>
+                    <Row mt={ss(28)} flexWrap={'wrap'}>
+                      {level3Children?.map((item: any, index: any) => {
+                        return (
+                          <TextChild
+                            key={index}
+                            item={item}
+                            level={3}
+                            onDeleteItem={function (
+                              item: any,
+                              level: number,
+                            ): void {
+                              // 删除
+                              setShowDeleteItemModal({
+                                isOpen: true,
+                                item: item,
+                                level: level,
+                              });
+                            }}
+                            canEdit={canEdit}
+                            onLongPress={function (): void {
+                              setCanEdit(true);
+                            }}
+                          />
+                        );
+                      })}
+
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
+                        hitSlop={ss(20)}
+                        onPress={() => {
+                          setShowEditTemplateModal({
+                            isOpen: true,
+                            isEdit: false,
+                            title: '新增模版',
+                            type: 'item',
+                            defaultName: '',
+                            level: 3,
+                          });
+                        }}
+                        mr={ls(10)}
+                        mb={ss(10)}
+                        borderWidth={ss(1)}
+                        borderRadius={2}
+                        borderColor={'#D8D8D8'}
+                        px={ls(20)}
+                        py={ss(7)}>
+                        <Text color='#BCBCBC' fontSize={sp(18)}>
+                          + 自定义添加
+                        </Text>
+                      </Pressable>
+                    </Row>
+                  </ScrollView>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {showSubSortMenu ? (
+                <>
+                  <SortTip
+                    isSub={true}
+                    onSave={async () => {
+                      try {
+                        openLoading();
+
+                        const currentGroups = groups.map((group, groupIdx) => {
+                          return {
+                            ...group,
+                            children: group.children.map((item, itemIdx) => {
+                              if (
+                                currentLevel3SelectFolderIdx.folder ===
+                                  groupIdx &&
+                                currentLevel3SelectFolderIdx.item === itemIdx
+                              ) {
+                                return {
+                                  // @ts-ignore
+                                  ...item,
+                                  children: level3Children,
+                                };
+                              } else {
+                                return item;
+                              }
+                            }),
+                          };
+                        });
+
+                        await requestPatchTemplateGroups(currentGroups as any);
+                        toastAlert(toast, 'success', '排序保存成功！');
+                        setShowSubSortMenu(false);
+                      } catch (error) {
+                      } finally {
+                        closeLoading();
+                      }
+                    }}
+                  />
+                  <DraggableFlatList
+                    style={{ marginBottom: ss(40) }}
+                    data={level3Children as ExtraItem[]}
+                    onDragEnd={({ data }) => {
+                      setLevel3Children(data);
+                    }}
+                    keyExtractor={(item, index) =>
+                      item.extra?.title + item.extra?.content
+                    }
+                    renderItem={({ item, drag, getIndex, isActive }) => {
+                      return (
+                        <ScaleDecorator activeScale={1.05}>
+                          <Pressable onLongPress={drag}>
+                            <ExtraChild
+                              item={item}
+                              index={(getIndex() as number) + 1}
+                            />
+                          </Pressable>
+                        </ScaleDecorator>
+                      );
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <ScrollView>
+                    <Row mt={ss(28)} flexWrap={'wrap'}>
+                      {level3Children?.map((item: any, index: any) => {
+                        return (
+                          <ExtraChild
+                            key={index}
+                            item={item}
+                            index={index + 1}
+                          />
+                        );
+                      })}
+                    </Row>
+                  </ScrollView>
+                </>
+              )}
+            </>
+          )}
         </Column>
       </Row>
     );
@@ -918,6 +1435,9 @@ export default function ManagerTemplate({
             <Tabs
               onChangeTab={() => {
                 if (canEdit) setCanEdit(false);
+
+                setShowSortMenu(false);
+                setShowSubSortMenu(false);
               }}
             />
           </Box>

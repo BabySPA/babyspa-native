@@ -12,7 +12,7 @@ import BoxItem from './box-item';
 import { ls, sp, ss } from '~/app/utils/style';
 import useFlowStore from '~/app/stores/flow';
 import { useState } from 'react';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 import SelectDay, { getDay } from '~/app/components/select-day';
@@ -23,6 +23,7 @@ import { FollowUpStatus } from '~/app/stores/flow/type';
 import { RadioBox } from '~/app/components/radio';
 import { TemplateExtraModal } from '../../../components/modals';
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import DatePickerModal from '~/app/components/date-picker-modal';
 
 export default function SolutionInfo({
   selectedConfig,
@@ -53,7 +54,9 @@ export default function SolutionInfo({
   const updateNextTime = useFlowStore((state) => state.updateNextTime);
 
   const getTemplateGroups = useManagerStore((state) => state.getTemplateGroups);
-
+  const [isFollowUpDatePicker, setIsFollowUpDatePicker] =
+    useState<boolean>(false);
+  const [isNextDatePicker, setIsNextDatePicker] = useState<boolean>(false);
   const {
     analyze: {
       solution: { applications, massages },
@@ -92,7 +95,7 @@ export default function SolutionInfo({
                     borderWidth={ss(1)}
                     borderRadius={ss(4)}
                     borderColor={'#7AB6AF'}
-                    borderStyle={'dashed'}
+                    // borderStyle={'dashed'}
                     bgColor={'#F2F9F8'}
                     mt={idx === 0 ? 0 : ss(10)}
                     p={ss(20)}>
@@ -281,7 +284,7 @@ export default function SolutionInfo({
                     borderWidth={ss(1)}
                     borderRadius={ss(4)}
                     borderColor={'#7AB6AF'}
-                    borderStyle={'dashed'}
+                    // borderStyle={'dashed'}
                     bgColor={'#F2F9F8'}
                     mt={idx === 0 ? 0 : ss(10)}
                     p={ss(20)}>
@@ -435,31 +438,35 @@ export default function SolutionInfo({
                   });
                 }}
               />
-              <Text fontSize={sp(20)} color='#333' ml={ls(60)} mr={ls(10)}>
+              <Text fontSize={sp(20)} color='#333' ml={ls(20)} mr={ls(10)}>
                 随访时间
               </Text>
-              <SelectDay
-                onSelect={function (selectedItem: any, index: number): void {
-                  updateFollowUp({
-                    followUpTime: dayjs()
-                      .add(selectedItem.value, 'day')
-                      .format('YYYY-MM-DD HH:mm'),
-                  });
+
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
                 }}
-                defaultButtonText={
-                  followUp.followUpTime
-                    ? '今'
-                    : getDay(
-                        Math.ceil(
-                          dayjs(followUp.followUpTime).diff(dayjs(), 'hours') /
-                            24,
-                        ),
-                      )
-                }
-              />
-              <Text fontSize={sp(20)} color='#333' ml={ls(10)}>
-                天
-              </Text>
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setIsFollowUpDatePicker(true);
+                }}
+                flexDirection={'row'}
+                h={ss(44)}
+                alignItems={'center'}
+                pl={ls(12)}
+                pr={ls(25)}
+                borderRadius={ss(4)}
+                borderColor={'#D8D8D8'}
+                borderWidth={ss(1)}>
+                <Icon
+                  as={<MaterialIcons name='date-range' />}
+                  size={sp(20)}
+                  color='rgba(0,0,0,0.2)'
+                />
+                <Text color={'#333333'} fontSize={sp(14)} ml={ls(4)}>
+                  {followUp.followUpTime || '未设置'}
+                </Text>
+              </Pressable>
             </Row>
             <Row alignItems={'center'} mt={ss(20)}>
               <Text fontSize={sp(20)} color='#333' mr={ls(20)}>
@@ -478,30 +485,34 @@ export default function SolutionInfo({
                   });
                 }}
               />
-              <Text fontSize={sp(20)} color='#333' ml={ls(60)} mr={ls(10)}>
+              <Text fontSize={sp(20)} color='#333' ml={ls(20)} mr={ls(10)}>
                 复推时间
               </Text>
-              <SelectDay
-                onSelect={function (selectedItem: any, index: number): void {
-                  updateNextTime({
-                    nextTime: dayjs()
-                      .add(selectedItem.value, 'day')
-                      .format('YYYY-MM-DD HH:mm'),
-                  });
+              <Pressable
+                _pressed={{
+                  opacity: 0.6,
                 }}
-                defaultButtonText={
-                  next.nextTime
-                    ? '今'
-                    : getDay(
-                        Math.ceil(
-                          dayjs(next.nextTime).diff(dayjs(), 'hours') / 24,
-                        ),
-                      )
-                }
-              />
-              <Text fontSize={sp(20)} color='#333' ml={ls(10)}>
-                天
-              </Text>
+                hitSlop={ss(20)}
+                onPress={() => {
+                  setIsNextDatePicker(true);
+                }}
+                flexDirection={'row'}
+                h={ss(44)}
+                alignItems={'center'}
+                pl={ls(12)}
+                pr={ls(25)}
+                borderRadius={ss(4)}
+                borderColor={'#D8D8D8'}
+                borderWidth={ss(1)}>
+                <Icon
+                  as={<MaterialIcons name='date-range' />}
+                  size={sp(20)}
+                  color='rgba(0,0,0,0.2)'
+                />
+                <Text color={'#333333'} fontSize={sp(14)} ml={ls(4)}>
+                  {next.nextTime || '未设置'}
+                </Text>
+              </Pressable>
             </Row>
           </BoxItem>
         </Column>
@@ -534,6 +545,40 @@ export default function SolutionInfo({
                 type: 'application',
               });
             }}
+          />
+        )}
+
+        {isFollowUpDatePicker && (
+          <DatePickerModal
+            isOpen={isFollowUpDatePicker}
+            onClose={() => {
+              setIsFollowUpDatePicker(false);
+            }}
+            onSelectedChange={(date: string) => {
+              updateFollowUp({
+                followUpTime: `${date} 23:59`,
+              });
+            }}
+            current={followUp.followUpTime}
+            selected={followUp.followUpTime}
+            disabledWithoutToday={false}
+          />
+        )}
+
+        {isNextDatePicker && (
+          <DatePickerModal
+            isOpen={isNextDatePicker}
+            onClose={() => {
+              setIsNextDatePicker(false);
+            }}
+            onSelectedChange={(date: string) => {
+              updateNextTime({
+                nextTime: `${date} 23:59`,
+              });
+            }}
+            current={next.nextTime}
+            selected={next.nextTime}
+            disabledWithoutToday={false}
           />
         )}
       </Row>

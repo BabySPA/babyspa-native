@@ -83,7 +83,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     mt={idx === 0 ? 0 : ss(20)}
                     bgColor={'#F2F9F8'}
                     borderRadius={1}
-                    borderStyle={'dashed'}
+                    // borderStyle={'dashed'}
                     borderWidth={ss(1)}
                     borderColor={'#7AB6AF'}
                     p={ss(20)}>
@@ -121,7 +121,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
                     mt={ss(20)}
                     bgColor={'#F2F9F8'}
                     borderRadius={1}
-                    borderStyle={'dashed'}
+                    // borderStyle={'dashed'}
                     borderWidth={ss(1)}
                     borderColor={'#7AB6AF'}
                     p={ss(20)}>
@@ -201,9 +201,7 @@ export default function AnalyzeCard(params: AnalyzeCardParams) {
             <Text fontSize={sp(18)} color='#333'>
               {analyze.followUp.followUpStatus === FollowUpStatus.NOT_SET
                 ? '无'
-                : dayjs(analyze.followUp?.followUpTime).format(
-                    'YYYY-MM-DD HH:mm:ss',
-                  )}
+                : dayjs(analyze.followUp?.followUpTime).format('YYYY-MM-DD')}
             </Text>
           </Row>
 

@@ -10,9 +10,8 @@ import {
   Image,
   Box,
   FlatList,
-  Spinner,
 } from 'native-base';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -26,12 +25,13 @@ import FlowCustomerItem from '../components/flow-customer-item';
 import { getFlowStatus } from '~/app/constants';
 import { Image as NativeImage } from 'react-native';
 
-export default function Analyze() {
+function Analyze() {
   const navigation = useNavigation();
 
   const requestGetAnalyzeFlows = useFlowStore(
     (state) => state.requestGetAnalyzeFlows,
   );
+
   const resetAnalyzeFlows = useFlowStore((state) => state.resetAnalyzeFlows);
   const flows = useFlowStore((state) => state.analyze.flows);
 
@@ -41,14 +41,12 @@ export default function Analyze() {
       resetAnalyzeFlows();
     };
   }, []);
-
-  const refresh = async () => {
+  const refresh = useCallback(() => {
     setRefreshing(true);
-    await requestGetAnalyzeFlows();
-    setTimeout(() => {
+    requestGetAnalyzeFlows().then(() => {
       setRefreshing(false);
-    }, 1000);
-  };
+    });
+  }, []);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -62,29 +60,25 @@ export default function Analyze() {
       <Box margin={ss(10)} flex={1}>
         <Row
           flex={1}
-          pt={ss(30)}
-          pr={ss(30)}
-          pl={ss(40)}
+          p={ss(40)}
+          pb={0}
           bgColor='white'
           borderRadius={ss(10)}
           minH={'100%'}>
           <FlatList
+            nestedScrollEnabled
             refreshing={refreshing}
             onRefresh={() => {
               refresh();
             }}
-            initialNumToRender={30}
+            initialNumToRender={15}
             legacyImplementation={true}
-            maxToRenderPerBatch={30}
+            maxToRenderPerBatch={15}
             keyExtractor={(item) => item._id}
             ListEmptyComponent={<EmptyBox />}
             data={flows}
             mb={ss(120)}
             numColumns={2}
-            contentContainerStyle={{
-              marginTop: ss(10),
-              marginRight: ss(10),
-            }}
             getItemLayout={(data, index) => ({
               length: ss(148),
               offset: ss(148) * index,
@@ -118,6 +112,8 @@ export default function Analyze() {
     </Flex>
   );
 }
+
+export default memo(Analyze);
 
 function Filter({ onRequest }: { onRequest: () => void }) {
   const [showFilter, setShowFilter] = useState(false);

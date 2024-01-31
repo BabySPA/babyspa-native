@@ -147,16 +147,16 @@ export default function FlowScreen({
   };
 
   const checkCollection = () => {
-    if (
-      collect.healthInfo.audioFiles.length == 0 &&
-      collect.healthInfo.leftHandImages.length == 0 &&
-      collect.healthInfo.rightHandImages.length == 0 &&
-      collect.healthInfo.lingualImage.length == 0 &&
-      collect.healthInfo.otherImages.length == 0
-    ) {
-      toastAlert(toast, 'error', '尚未输入任何有效采集信息！');
-      return false;
-    }
+    // if (
+    //   collect.healthInfo.audioFiles.length == 0 &&
+    //   collect.healthInfo.leftHandImages.length == 0 &&
+    //   collect.healthInfo.rightHandImages.length == 0 &&
+    //   collect.healthInfo.lingualImage.length == 0 &&
+    //   collect.healthInfo.otherImages.length == 0
+    // ) {
+    //   toastAlert(toast, 'error', '尚未输入任何有效采集信息！');
+    //   return false;
+    // }
 
     if (
       hasNoUpdateFinished(collect.healthInfo.leftHandImages) ||

@@ -153,20 +153,22 @@ interface TemplateState {
 
   requestGetTemplates: () => Promise<any>;
   requestPatchTemplateGroup: (
-    group: TemplateItem & {
+    group?: TemplateItem & {
       originalName?: string;
       groupName?: string;
       originalGroupName?: string;
     },
     extra?: { isGroup: boolean },
   ) => Promise<any>;
-
+  requestPatchTemplateGroups: (groups: TemplateItem[]) => Promise<any>;
   requestDeleteTemplateGroup: (
     groupName: string,
     extra?: { groupIdx?: number },
   ) => Promise<any>;
 
   setCurrentSelectTemplateIdx: (idx: number) => void;
+
+  setCurrentSelectTemplateItemTexts: (gidx: number, texts: string[]) => void;
 
   getTemplateGroups: (groupKey: string) => Template | undefined;
 }
