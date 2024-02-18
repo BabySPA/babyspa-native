@@ -101,7 +101,7 @@ export const generateFollowUpFlows = (
 
     if (flow.analyze.followUp.followUpStatus === FollowUpStatus.WAIT) {
       // 待随访
-      if (dayjs().isAfter(dayjs(flow.analyze.followUp.followUpTime))) {
+      if (dayjs().isAfter(dayjs(flow.analyze.followUp.followUpTime), 'day')) {
         // 已经过了随访时间
         counts.overdue++;
         flow.analyze.followUp.followUpStatus = FollowUpStatus.OVERDUE;

@@ -45,6 +45,8 @@ export default function FollowUpCard(params: FollowUpCardParams) {
     (state) => state.requestGetFollowUps,
   );
 
+  const updateCurrentFlow = useFlowStore((state) => state.updateCurrentFlow);
+
   const navigation =
     useNavigation<StackNavigationProp<AppStackList, 'FlowInfo'>>();
 
@@ -72,6 +74,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
     inputRef.current?.setNativeProps({
       text: followupContent,
     });
+    updateCurrentFlow(currentFlow);
   }, []);
   return (
     <>
@@ -303,6 +306,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                     }).then(async (res) => {
                       await requestGetFollowUps();
                       setCancelLoading(false);
+                      setShowCancelDialog(false);
                       navigation.goBack();
                     });
                   }}
@@ -324,6 +328,7 @@ export default function FollowUpCard(params: FollowUpCardParams) {
                     }).then(async (res) => {
                       await requestGetFollowUps();
                       setConfirmLoading(false);
+                      setShowConfirmDialog(false);
                       navigation.goBack();
                     });
                   }}

@@ -21,7 +21,7 @@ function CustomerArchiveItem({ customer: _cust }: { customer: Customer }) {
         borderRadius: ss(8),
         borderWidth: ss(1),
         borderColor: '#15BD8F',
-        width: ls(375),
+        maxWidth: ls(345),
         minHeight: ss(128),
         marginBottom: ss(20),
         padding: ss(16),

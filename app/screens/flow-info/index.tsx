@@ -20,7 +20,11 @@ import EvaluateCard, {
 } from '~/app/components/info-cards/evaluate-card';
 import FollowUpCard from '~/app/components/info-cards/follow-up-card';
 import { PrintButton } from '~/app/components/print-button';
-import { AnalyzeStatus, EvaluateStatus } from '~/app/stores/flow/type';
+import {
+  AnalyzeStatus,
+  Evaluate,
+  EvaluateStatus,
+} from '~/app/stores/flow/type';
 import { getFlowStatus } from '~/app/constants';
 import { AntDesign } from '@expo/vector-icons';
 import useFlowStore from '~/app/stores/flow';
@@ -29,10 +33,11 @@ export default function FlowInfo({
   navigation,
   route: { params },
 }: AppStackScreenProps<'FlowInfo'>) {
-  const { from: paramFlow, currentFlow } = params;
-  const { evaluate } = currentFlow;
+  const { from: paramFlow, currentFlow: _cf } = params;
 
   const [from, setFrom] = useState(paramFlow);
+  const [currentFlow, setCurrentFlow] = useState(_cf);
+  const { evaluate } = currentFlow;
 
   const [loading, setLoading] = useState(false);
 
@@ -45,8 +50,15 @@ export default function FlowInfo({
     ) : null;
   };
 
-  const evalutedDone = () => {
+  const evalutedDone = (ev: Evaluate) => {
     setFrom('evaluate-detail');
+    setCurrentFlow({
+      ...currentFlow,
+      evaluate: {
+        ...currentFlow.evaluate,
+        ...ev,
+      },
+    });
   };
   const updateCurrentArchiveCustomer = useFlowStore(
     (state) => state.updateCurrentArchiveCustomer,
@@ -156,8 +168,8 @@ export default function FlowInfo({
                 currentFlow={currentFlow}
                 type='card'
                 canEdit={from == 'evaluate'}
-                onEvaluated={() => {
-                  evalutedDone();
+                onEvaluated={(e) => {
+                  evalutedDone(e);
                 }}
               />
             )}
@@ -179,8 +191,8 @@ export default function FlowInfo({
           onClose={function (): void {
             setIsEvaluateCardDialogShow(false);
           }}
-          onEvaluated={() => {
-            evalutedDone();
+          onEvaluated={(e) => {
+            evalutedDone(e);
           }}
         />
       )}

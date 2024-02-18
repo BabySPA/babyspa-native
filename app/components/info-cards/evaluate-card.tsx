@@ -16,7 +16,12 @@ import useFlowStore from '~/app/stores/flow';
 import BoxTitle from '~/app/components/box-title';
 import { ss, sp, ls } from '~/app/utils/style';
 import { EvaluateStoreConfig, EvaluateStores } from '~/app/constants';
-import { FlowItemResponse, Score } from '~/app/stores/flow/type';
+import {
+  Evaluate,
+  EvaluateStatus,
+  FlowItemResponse,
+  Score,
+} from '~/app/stores/flow/type';
 import { useEffect, useRef, useState } from 'react';
 import { toastAlert } from '~/app/utils/toast';
 
@@ -25,7 +30,7 @@ interface EvaluateCardParams {
   type: 'dialog' | 'card';
   canEdit: boolean;
   onClose?: () => void;
-  onEvaluated?: () => void;
+  onEvaluated?: (e: Evaluate) => void;
   currentFlow: FlowItemResponse;
 }
 
@@ -40,7 +45,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
   } = params;
 
   const evaluate = currentFlow.evaluate;
-  console.log(currentFlow, 2322312);
+
   const requestPutFlowToEvaluate = useFlowStore(
     (state) => state.requestPutFlowToEvaluate,
   );
@@ -119,7 +124,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
         .then(async (res) => {
           toastAlert(toast, 'success', '评价成功！');
           await requestGetEvaluateFlows();
-          onEvaluated?.();
+          onEvaluated?.(templateEvaluate);
         })
         .catch((e) => {
           toastAlert(toast, 'error', '评价失败！请稍后重试。');
@@ -186,6 +191,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
                       ...templateEvaluate,
                       remark: templateEvaluate?.remark || '',
                       score: item,
+                      status: EvaluateStatus.DONE,
                     });
                   }
                 }}>
@@ -241,6 +247,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
                 ...templateEvaluate,
                 remark: text,
                 score: templateEvaluate?.score || 3,
+                status: EvaluateStatus.DONE,
               });
             }}
           />
@@ -254,7 +261,7 @@ export default function EvaluateCard(params: EvaluateCardParams) {
 interface EvaluateCardDialogParams {
   isOpen: boolean;
   onClose: () => void;
-  onEvaluated?: () => void;
+  onEvaluated?: (t: Evaluate) => void;
   currentFlow: FlowItemResponse;
 }
 
