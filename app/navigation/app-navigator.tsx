@@ -107,12 +107,12 @@ export default function AppNavigator() {
         }
 
         if (event === MessageAction.ANALYZE_UPDATE) {
-          JPush.addLocalNotification({
-            messageID: message.flowId,
-            title: '分析完成',
-            content: message.customer + '分析完成，请及时处理',
-            extras: {},
-          });
+          // JPush.addLocalNotification({
+          //   messageID: message.flowId,
+          //   title: '分析完成',
+          //   content: message.customer + '分析完成，请及时处理',
+          //   extras: {},
+          // });
 
           setShowActionDone({
             isOpen: true,
@@ -126,12 +126,12 @@ export default function AppNavigator() {
           sound.setIsLoopingAsync(false);
           sound.playAsync();
         } else if (event == MessageAction.COLLECTION_UPDATE) {
-          JPush.addLocalNotification({
-            messageID: message.flowId,
-            title: '信息采集完成',
-            content: message.customer + '信息采集完成，请及时处理',
-            extras: {},
-          });
+          // JPush.addLocalNotification({
+          //   messageID: message.flowId,
+          //   title: '信息采集完成',
+          //   content: message.customer + '信息采集完成，请及时处理',
+          //   extras: {},
+          // });
           setShowActionDone({
             isOpen: true,
             customer: message.customer,
@@ -144,6 +144,7 @@ export default function AppNavigator() {
           sound.setIsLoopingAsync(false);
           sound.playAsync();
         }
+        requestGetInitializeData();
       };
 
       socket.onerror = (e) => {

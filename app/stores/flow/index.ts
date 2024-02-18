@@ -500,11 +500,8 @@ const useFlowStore = create(
             }
 
             if (
-              // @ts-ignore
-              fuzzyDocs[0]?._id !== state.analyze.flows[0]?._id &&
-              // @ts-ignore
-              fuzzyDocs[0]?.analyze.status !==
-                state.analyze.flows[0]?.analyze.status
+              JSON.stringify(fuzzyDocs[0]) !==
+              JSON.stringify(state.analyze.flows[0])
             ) {
               state.analyze.all = filterDocs;
               state.analyze.flows = fuzzySearch(

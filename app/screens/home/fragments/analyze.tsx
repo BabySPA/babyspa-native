@@ -41,12 +41,13 @@ function Analyze() {
       resetAnalyzeFlows();
     };
   }, []);
-  const refresh = useCallback(() => {
+
+  const refresh = async () => {
     setRefreshing(true);
-    requestGetAnalyzeFlows().then(() => {
-      setRefreshing(false);
-    });
-  }, []);
+    await requestGetAnalyzeFlows();
+    setRefreshing(false);
+  };
+
 
   const [refreshing, setRefreshing] = useState(false);
 
