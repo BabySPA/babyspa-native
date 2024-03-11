@@ -139,7 +139,7 @@ const ShopStatisticBox = () => {
                 </Row>
                 <Row w={ls(100)}>
                   <Text fontSize={sp(18)} color={'#333'}>
-                    {dayjs(flow.analyze.updatedAt).format('YY-MM-DD')}
+                    {dayjs(flow.analyze?.updatedAt).format('YY-MM-DD')}
                   </Text>
                 </Row>
                 <Row w={ls(80)}>

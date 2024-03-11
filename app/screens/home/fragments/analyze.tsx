@@ -48,7 +48,6 @@ function Analyze() {
     setRefreshing(false);
   };
 
-
   const [refreshing, setRefreshing] = useState(false);
 
   return (

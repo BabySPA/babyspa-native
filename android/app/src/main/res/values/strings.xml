@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name" translatable="false">掌阅未来</string>
+  <string name="app_name" translatable="false">手策</string>
   <string moduleConfig="true" name="CodePushDeploymentKey" translatable="false">4dYQ2SiZJOl983Oo1aM79khuH25GpJcWnUTx2</string>
   <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
   <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>

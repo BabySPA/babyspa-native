@@ -48,7 +48,7 @@ function FlowCustomerItem({
     } else {
       statusConfig = getStatusTextConfig(
         flowStatus,
-        flow.analyze.updatedAt ? flow.analyzeOperator?.name : '',
+        flow.analyze?.updatedAt ? flow.analyzeOperator?.name : '',
       );
     }
 
@@ -213,7 +213,9 @@ function FlowCustomerItem({
                 fontSize: sp(18),
                 marginLeft: ss(10),
               }}>
-              {dayjs(flow.updatedAt).format('YYYY-MM-DD HH:mm')}
+              {dayjs(flow.analyze?.updatedAt || flow.updatedAt).format(
+                'YYYY-MM-DD HH:mm',
+              )}
             </Text>
           </View>
         </View>

@@ -26,6 +26,8 @@ import EmptyBox from '~/app/components/empty-box';
 import CustomerArchiveItem from '../components/customer-archive-item';
 import { debounce, set } from 'lodash';
 import { View } from 'react-native';
+import SelectShop, { useSelectShops } from '~/app/components/select-shop';
+import { ShopType } from '~/app/stores/manager/type';
 
 function Archive() {
   const navigation = useNavigation();
@@ -45,13 +47,25 @@ function Archive() {
   const requestArchiveCustomers = useFlowStore(
     (state) => state.requestArchiveCustomers,
   );
-
+  const [defaultSelectShop, selectShops] = useSelectShops(false);
+  const updateArchiveCustomersFilter = useFlowStore(
+    (state) => state.updateArchiveCustomersFilter,
+  );
   useEffect(() => {
-    refresh();
+    if (defaultSelectShop) {
+      updateArchiveCustomersFilter({
+        shopId:
+          defaultSelectShop.type === ShopType.CENTER
+            ? ''
+            : defaultSelectShop._id,
+      });
+      refresh();
+    }
+
     return () => {
       resetArchiveCustomers();
     };
-  }, []);
+  }, [defaultSelectShop]);
 
   const refresh = async () => {
     requestPage.current = 1;
@@ -167,6 +181,7 @@ function Filter({ onRequest }: { onRequest: () => void }) {
   const updateCurrentArchiveCustomer = useFlowStore(
     (state) => state.updateCurrentArchiveCustomer,
   );
+  const [defaultSelectShop, selectShops] = useSelectShops(false);
 
   return (
     <Row
@@ -178,10 +193,23 @@ function Filter({ onRequest }: { onRequest: () => void }) {
       justifyContent={'space-between'}
       alignItems={'center'}>
       <Row alignItems={'center'} h={ss(75)}>
-        <Text color='#000' fontSize={sp(20)} fontWeight={600}>
+        <Text color='#000' fontSize={sp(20)} fontWeight={600} mr={ls(20)}>
           当前客户总量：
           <Text color='#5EACA3'>{total}</Text>
         </Text>
+        <SelectShop
+          onSelect={function (selectedItem: any, index: number): void {
+            updateArchiveCustomersFilter({
+              shopId:
+                selectedItem.type === ShopType.CENTER ? '' : selectedItem._id,
+            });
+            onRequest();
+          }}
+          buttonHeight={ss(44)}
+          buttonWidth={ls(180, 210)}
+          shops={selectShops}
+          defaultButtonText={defaultSelectShop?.name}
+        />
         <Input
           borderWidth={ss(1)}
           borderColor={'#D8D8D8'}

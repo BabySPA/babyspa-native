@@ -90,7 +90,7 @@ export default function FlowScreen({
           if (
             flow.analyze.status === AnalyzeStatus.IN_PROGRESS &&
             flow.analyzeOperator?._id !== user?.id &&
-            flow.analyze.updatedAt
+            flow.analyze?.updatedAt
           ) {
             setOpenLockModal({
               isOpen: true,

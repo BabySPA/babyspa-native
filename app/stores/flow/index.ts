@@ -305,9 +305,13 @@ const useFlowStore = create(
     requestArchiveCustomers: async (page: number) => {
       if (page === 1) {
         const {
-          archiveCustomers: { startDate, endDate, searchKeywords },
+          archiveCustomers: { startDate, endDate, searchKeywords, shopId },
         } = get();
+        console.log(shopId, 'shopId');
         const params: any = {};
+        if (shopId) {
+          params.shopId = shopId;
+        }
 
         return request.get('/customers/all', { params }).then(({ data }) => {
           const { docs } = data;
@@ -1164,7 +1168,7 @@ const useFlowStore = create(
       const dateRange = generateDateRange(startDate, endDate);
       for (let i = 0; i < data.flows.length; i++) {
         const flow = data.flows[i];
-        const date = dayjs(flow.analyze.updatedAt).format('YYYY-MM-DD');
+        const date = dayjs(flow.analyze?.updatedAt).format('YYYY-MM-DD');
         if (date) {
           const massageCount = flow.analyze.solution.massages.reduce(
             (sum: number, item: { count: number }) => {

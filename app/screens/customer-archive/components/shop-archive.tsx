@@ -41,7 +41,7 @@ export function ShopArchive(params: ShopArchiveParams) {
               </Row>
 
               <Text color='#5EACA3' fontSize={sp(16)} my={ss(10)}>
-                {dayjs(archive.updatedAt).format('YYYY-MM-DD HH:mm')}
+                {dayjs(archive.analyze.updatedAt).format('YYYY-MM-DD HH:mm')}
               </Text>
               <Column
                 w={ls(262)}
