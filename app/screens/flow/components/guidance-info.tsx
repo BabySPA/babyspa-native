@@ -20,7 +20,7 @@ import useManagerStore from '~/app/stores/manager';
 import { FlowOperatorConfigItem, TemplateGroupKeys } from '~/app/constants';
 import { TemplateItem } from '~/app/stores/manager/type';
 import EmptyBox from '~/app/components/empty-box';
-import { TemplateModal } from '~/app/components/modals';
+import { ConclusionModal, TemplateModal } from '~/app/components/modals';
 import { FlowItemResponse } from '~/app/stores/flow/type';
 import DashedLine from 'react-native-dashed-line';
 import dayjs from 'dayjs';
@@ -206,7 +206,7 @@ export default function GuidanceInfo({
                 </Text>
               </Pressable>
               {isOpenTemplatePicker && (
-                <TemplateModal
+                <ConclusionModal
                   defaultText={conclusion || ''}
                   template={getTemplateGroups(TemplateGroupKeys.conclusion)}
                   isOpen={isOpenTemplatePicker}

@@ -391,7 +391,6 @@ export const TemplateGroupKeys = {
   conclusion: 'conclusion',
   application: 'application',
   massage: 'massage',
-  ['flow-remark']: 'flow-remark',
 };
 
 export const FollowUpResultText = {

@@ -42,6 +42,7 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 import useGlobalLoading from '~/app/stores/loading';
+import { get } from 'lodash';
 
 export default function ManagerTemplate({
   navigation,
@@ -93,6 +94,10 @@ export default function ManagerTemplate({
     });
   }, [currentSelectTemplateIdx]);
 
+  const setCurrentSelectTemplateIdx = useManagerStore(
+    (state) => state.setCurrentSelectTemplateIdx,
+  );
+  
   useEffect(() => {
     const filterRegex = new RegExp(groupFilter, 'i');
     const filteredGroups = templates[currentSelectTemplateIdx]?.groups?.filter(
@@ -208,11 +213,13 @@ export default function ManagerTemplate({
   const getGroupLevel = () => {
     if (!groups) return 2;
 
-    return templates[currentSelectTemplateIdx]?.key === 'application' ||
-      templates[currentSelectTemplateIdx]?.key === 'massage' ||
-      templates[currentSelectTemplateIdx]?.key === 'guidance'
-      ? 3
-      : 2;
+    const secondChildren = get(templates[currentSelectTemplateIdx], [
+      'groups',
+      0,
+      'children',
+      0,
+    ]);
+    return typeof secondChildren === 'string' ? 2 : 3;
   };
 
   // 排序标识，展示排序列表
@@ -307,6 +314,9 @@ export default function ManagerTemplate({
     );
   };
   const ExtraChild = ({ item, index }: { item: any; index: number }) => {
+    if(typeof item === 'string') {
+      return null
+    }
     const { extra } = item;
     return (
       <Column
@@ -833,30 +843,6 @@ export default function ManagerTemplate({
               }
             />
           </Box>
-          {/* 
-          <Input
-            autoCorrect={false}
-            h={ss(50)}
-            p={ss(10)}
-            mx={ls(20)}
-            placeholderTextColor={'#C0CCDA'}
-            borderWidth={ss(1)}
-            borderColor={'#D8D8D8'}
-            color={'#333333'}
-            fontSize={sp(16)}
-            InputLeftElement={
-              <Icon
-                as={<MaterialIcons name='search' />}
-                size={sp(25)}
-                color='#C0CCDA'
-                ml={ss(10)}
-              />
-            }
-            placeholder='搜索模版名称'
-            onChangeText={debounce((text) => {
-              setGroupFilter(text);
-            }, 1000)}
-          /> */}
 
           <Box bg='white' flex={1} mt={ss(5)}>
             {showSortMenu ? (
@@ -1129,8 +1115,8 @@ export default function ManagerTemplate({
                       </Pressable>
                     );
                   }}>
-                  {(templates[currentSelectTemplateIdx].key == 'application' ||
-                    templates[currentSelectTemplateIdx].key == 'massage') && (
+                  {(templates[currentSelectTemplateIdx]?.key == 'application' ||
+                    templates[currentSelectTemplateIdx]?.key == 'massage') && (
                     <Menu.Item
                       onPress={() => {
                         setShowExtraModal({
@@ -1185,8 +1171,8 @@ export default function ManagerTemplate({
             }
           />
 
-          {templates[currentSelectTemplateIdx].key !== 'application' &&
-          templates[currentSelectTemplateIdx].key !== 'massage' ? (
+          {templates[currentSelectTemplateIdx]?.key !== 'application' &&
+          templates[currentSelectTemplateIdx]?.key !== 'massage' ? (
             <>
               {showSubSortMenu ? (
                 <>
@@ -1433,11 +1419,16 @@ export default function ManagerTemplate({
         <Box mt={ss(10)} flex={1}>
           <Box>
             <Tabs
-              onChangeTab={() => {
+              onChangeTab={(index) => {
                 if (canEdit) setCanEdit(false);
-
+                setCurrentLevel2SelectTemplateGroupIndex(0);
+                setCurrentLevel3SelectFolderIdx({
+                  folder: -1,
+                  item: 0,
+                });
                 setShowSortMenu(false);
                 setShowSubSortMenu(false);
+                setCurrentSelectTemplateIdx(index);
               }}
             />
           </Box>
@@ -1455,7 +1446,6 @@ export default function ManagerTemplate({
           }}
           title={`是否确认删除${showDeleteTemplateModal.groupName}整个模版组？`}
           onConfirm={function (): void {
-            console.log('showDeleteTemplateModal', showDeleteTemplateModal);
             if (showDeleteTemplateModal.level === 2) {
               requestDeleteTemplateGroup(showDeleteTemplateModal.groupName)
                 .then((res) => {
@@ -1964,14 +1954,12 @@ export default function ManagerTemplate({
   );
 }
 
-function Tabs({ onChangeTab }: { onChangeTab(): void }) {
+function Tabs({ onChangeTab }: { onChangeTab(index: number): void }) {
   const templates = useManagerStore((state) => state.templates);
   const currentSelectTemplateIdx = useManagerStore(
     (state) => state.currentSelectTemplateIdx,
   );
-  const setCurrentSelectTemplateIdx = useManagerStore(
-    (state) => state.setCurrentSelectTemplateIdx,
-  );
+
   return (
     <ScrollView horizontal={true} bgColor={'#fff'} borderRadius={ss(10)}>
       <Row h={ss(80)}>
@@ -1984,8 +1972,7 @@ function Tabs({ onChangeTab }: { onChangeTab(): void }) {
                 if (currentSelectTemplateIdx === index) {
                   return;
                 }
-                setCurrentSelectTemplateIdx(index);
-                onChangeTab();
+                onChangeTab(index);
               }}>
               <Column
                 flex={1}

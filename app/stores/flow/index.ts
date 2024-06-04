@@ -307,7 +307,6 @@ const useFlowStore = create(
         const {
           archiveCustomers: { startDate, endDate, searchKeywords, shopId },
         } = get();
-        console.log(shopId, 'shopId');
         const params: any = {};
         if (shopId) {
           params.shopId = shopId;
@@ -350,7 +349,14 @@ const useFlowStore = create(
       const { data } = await request.get(
         `/flows/archive/courses/${customerId}`,
       );
-      return data;
+
+      return data.sort((a: string | any[], b: string | any[]) => {
+        // 按照每个数组中最后一个对象的 updatedAt 字段进行排序
+        return (
+          +new Date(b[b.length - 1].updatedAt) -
+          +new Date(a[a.length - 1].updatedAt)
+        );
+      });
     },
 
     resetCollectionCustomers: () => {

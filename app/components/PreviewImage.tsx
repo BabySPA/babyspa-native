@@ -1,5 +1,5 @@
-import { StatusBar, Text, View, ImageResizeMode } from 'react-native';
-import { Box, Center, Icon, Pressable, Row } from 'native-base';
+import { Text, View } from 'react-native';
+import { Center, Icon, Pressable, Row } from 'native-base';
 import { ls, sp, ss } from '../utils/style';
 import { useState } from 'react';
 import { ImageGallery, ImageObject } from '../components/image-gallery';
@@ -24,7 +24,7 @@ export default function PreviewImage({
     };
   });
 
-  const renderHeaderComponent = (image: ImageObject, currentIndex: number) => {
+  const renderHeaderComponent = () => {
     return (
       <Row safeAreaLeft>
         <Row alignItems={'center'} height={ss(52)}>
@@ -38,7 +38,7 @@ export default function PreviewImage({
             }}>
             <Icon
               as={<AntDesign name='close' />}
-              size={sp(20)}
+              size={sp(26)}
               color={'#FFF'}
               mr={ls(10)}
             />
@@ -92,7 +92,9 @@ export default function PreviewImage({
           justifyContent: 'center',
           paddingHorizontal: ls(24),
           width: '100%',
-        }}>
+        }}
+     
+        >
         <CachedImage
           resizeMode='contain'
           source={image.url}
@@ -103,10 +105,12 @@ export default function PreviewImage({
             width: '100%',
           }}
           thumbnailSource={image.thumbUrl}
+          canSave
         />
       </View>
     );
   };
+
   return (
     <>
       {typeof source === 'string' ? (

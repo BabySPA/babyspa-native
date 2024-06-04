@@ -11,7 +11,7 @@ import {
   Box,
   FlatList,
 } from 'native-base';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo,  useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';

@@ -11,7 +11,7 @@ import {
 import { AppStackScreenProps, FlowStatus } from '../../types';
 import NavigationBar from '~/app/components/navigation-bar';
 import { sp, ss, ls } from '~/app/utils/style';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RegisterCard from '~/app/components/info-cards/register-card';
 import CollectionCard from '~/app/components/info-cards/collection-card';
 import AnalyzeCard from '~/app/components/info-cards/analyze-card';
@@ -38,6 +38,10 @@ export default function FlowInfo({
   const [from, setFrom] = useState(paramFlow);
   const [currentFlow, setCurrentFlow] = useState(_cf);
   const { evaluate } = currentFlow;
+
+  useEffect(() => {
+    setCurrentFlow(_cf);
+  }, [_cf]);
 
   const [loading, setLoading] = useState(false);
 

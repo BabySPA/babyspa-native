@@ -242,12 +242,13 @@ export default function CustomerArchive({
           </Row>
         </Row>
 
-        <ScrollView
+        <Box
           mt={ss(10)}
           bgColor='white'
           borderRadius={ss(10)}
           flex={1}
-          p={ss(40)}>
+          p={ss(40)}
+          >
           <Row alignItems={'center'} justifyContent={'space-between'}>
             <Container>
               <Row
@@ -365,7 +366,7 @@ export default function CustomerArchive({
                 <EmptyBox />
               ))}
           </Box>
-        </ScrollView>
+        </Box>
       </Column>
       {showEditGrowthCurve.isOpen && (
         <GrowthCurveModal

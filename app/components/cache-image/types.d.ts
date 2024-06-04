@@ -65,6 +65,7 @@ export interface IProps {
   thumbnailAnimationDuration?: number;
   thumbnailSource?: string;
   tintColor?: string;
+  canSave?: boolean;
 }
 
 export interface Config {

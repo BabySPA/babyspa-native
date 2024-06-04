@@ -16,6 +16,9 @@ const TextChild = ({
   level: number;
   onDeleteItem: (item: any, level: number) => void;
 }) => {
+  if(typeof item!=='string'){
+    return null
+  }
   return (
     <Pressable
       hitSlop={ss(20)}

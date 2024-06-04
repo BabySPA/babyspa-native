@@ -6,8 +6,6 @@ export function isRemoteImage(url: any) {
     return false;
   }
 
-  console.log('url',url)
-
   if (
     !isImageWithRequire(url) &&
     (url.startsWith('http://') || url.startsWith('https://'))

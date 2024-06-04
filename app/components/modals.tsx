@@ -338,6 +338,270 @@ export function TemplateModal({
   );
 }
 
+export function ConclusionModal({
+  template,
+  defaultText,
+  isOpen,
+  onClose,
+  onConfirm,
+}: TemplateModalParams) {
+  const [selectTemplateItemsIdx, setSelectTemplateItemsIdx] = useState(0);
+  const [selectTemplateSecondItemsIdx, setSelectTemplateSecondItemsIdx] = useState(0);
+  const [templateText, setTemplateText] = useState('');
+  const requestGetTemplates = useManagerStore(
+    (state) => state.requestGetTemplates,
+  );
+  const templates = useManagerStore((state) => state.templates);
+  useEffect(() => {
+    setTemplateText(defaultText);
+  }, [defaultText]);
+  useEffect(() => {
+    if (isOpen && templates.length === 0) {
+      // 打开模版弹窗时，如果没有模版数据，则请求模版数据
+      requestGetTemplates();
+    }
+  }, [isOpen, templates]);
+
+  useEffect(() => {
+    if (templateText.length > 300) {
+      setTemplateText(templateText.slice(0, 300));
+    }
+  }, [templateText]);
+
+  const inputRef = useRef(null);
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}>
+      <Column bgColor={'white'} borderRadius={ss(10)}>
+        <Row
+          px={ls(30)}
+          py={ss(20)}
+          alignItems={'center'}
+          justifyContent={'space-between'}>
+          <Text fontSize={sp(20)} color={'#000'}>
+            {template?.name}
+          </Text>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              onClose();
+            }}>
+            <Icon
+              as={<AntDesign name={'close'} />}
+              size={sp(24)}
+              color='#999'
+            />
+          </Pressable>
+        </Row>
+        <Row>
+          <Column h={ss(350)}>
+            <Input
+              borderWidth={ss(1)}
+              borderColor={'#D8D8D8'}
+              ref={inputRef}
+              multiline
+              placeholder='请输入或选择内容'
+              placeholderTextColor={'#ccc'}
+              fontSize={sp(16)}
+              color='#333'
+              maxLength={300}
+              w={ls(340)}
+              h={'100%'}
+              textAlignVertical='top'
+              ml={ls(30)}
+              autoCorrect={false}
+              defaultValue={defaultText}
+              onChangeText={(text) => {
+                setTemplateText(text);
+              }}
+            />
+            <Text
+              color={'#999'}
+              fontSize={sp(14)}
+              style={{ position: 'absolute', right: ss(10), bottom: ss(10) }}>
+              {templateText.length}/300
+            </Text>
+          </Column>
+          <Column w={ls(700)} h={ss(350)}>
+            <Row flex={1} bgColor='#fff' borderRadius={ss(10)}>
+              <ScrollView bgColor={'#EDF7F6'} w={ls(120)}>
+                {template?.groups.map((item, idx) => {
+                  return (
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
+                      hitSlop={ss(20)}
+                      key={idx}
+                      onPress={() => {
+                        setSelectTemplateItemsIdx(idx);
+                        setSelectTemplateSecondItemsIdx(0);
+                      }}>
+                      <Center
+                        p={ss(10)}
+                        minH={ss(80)}
+                        bgColor={
+                          selectTemplateItemsIdx === idx ? '#ffffff' : '#EDF7F6'
+                        }>
+                        <Text
+                          numberOfLines={2}
+                          ellipsizeMode='tail'
+                          mt={ss(3)}
+                          color={
+                            selectTemplateItemsIdx === idx
+                              ? '#5EACA3'
+                              : '#99A9BF'
+                          }
+                          fontSize={sp(18)}>
+                          {item.name}
+                        </Text>
+                      </Center>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+              <ScrollView bgColor={'#FFFFFF'} w={ls(100)}>
+                {template?.groups[selectTemplateItemsIdx]
+                      .children.map((item, idx) => {
+                  return (
+                    <Pressable
+                      _pressed={{
+                        opacity: 0.6,
+                      }}
+                      hitSlop={ss(20)}
+                      key={idx}
+                      onPress={() => {
+                        setSelectTemplateSecondItemsIdx(idx);
+                      }}>
+                      <Center
+                        p={ss(10)}
+                        minH={ss(60)}
+                        bgColor={
+                          selectTemplateSecondItemsIdx === idx ? '#ffffff' : '#EDF7F6'
+                        }>
+                        <Text
+                          numberOfLines={2}
+                          ellipsizeMode='tail'
+                          mt={ss(3)}
+                          color={
+                            selectTemplateSecondItemsIdx === idx
+                              ? '#5EACA3'
+                              : '#99A9BF'
+                          }
+                          fontSize={sp(14)}>
+                          {item.name}
+                        </Text>
+                      </Center>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+                      <ScrollView>
+                <Row
+                  flex={1}
+                  flexWrap={'wrap'}
+                  py={ss(16)}
+                  px={ls(20)}
+                  w={ls(420)}>
+                  {(
+                    template?.groups[selectTemplateItemsIdx]
+                      .children[selectTemplateSecondItemsIdx]?.children as string[]
+                  )?.map((item, idx) => {
+                    return (
+                      <Pressable
+                        _pressed={{
+                          opacity: 0.6,
+                        }}
+                        hitSlop={ss(20)}
+                        key={idx}
+                        onPress={() => {
+                         const text = templateText.trim();
+
+                          setTemplateText(
+                            text.length > 0 ? templateText + ',' + item : item,
+                          );
+                          // @ts-ignore
+                          inputRef.current.setNativeProps({
+                            text:
+                              text.length > 0
+                                ? templateText + ',' + item
+                                : item,
+                          });
+                        }}>
+                        <Box
+                          px={ls(20)}
+                          py={ss(7)}
+                          mr={ls(10)}
+                          mb={ss(10)}
+                          borderRadius={2}
+                          borderColor={'#D8D8D8'}
+                          borderWidth={ss(1)}>
+                          <Text fontSize={sp(18)} color='#000'>
+                            {item}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    );
+                  })}
+                </Row>
+              </ScrollView>
+            </Row>
+          </Column>
+        </Row>
+
+        <Row justifyContent={'center'} mt={ss(38)} mb={ss(22)}>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              onClose();
+            }}
+            borderRadius={ss(4)}
+            borderWidth={ss(1)}
+            w={ls(100)}
+            h={ss(46)}
+            justifyContent={'center'}
+            alignItems={'center'}
+            borderColor='#D8D8D8'>
+            <Text color='#333' fontSize={sp(16)}>
+              取消
+            </Text>
+          </Pressable>
+          <Pressable
+            _pressed={{
+              opacity: 0.6,
+            }}
+            hitSlop={ss(20)}
+            onPress={() => {
+              onConfirm(templateText);
+            }}
+            borderRadius={ss(4)}
+            borderWidth={ss(1)}
+            borderColor='#00B49E'
+            w={ls(100)}
+            h={ss(46)}
+            justifyContent={'center'}
+            alignItems={'center'}
+            ml={ls(40)}
+            bgColor={'rgba(0, 180, 158, 0.10)'}>
+            <Text color='#00B49E' fontSize={sp(16)}>
+              保存
+            </Text>
+          </Pressable>
+        </Row>
+      </Column>
+    </Modal>
+  );
+}
+
 interface GrowthCurveModalParams {
   isOpen: boolean;
   defaultHeight: number;

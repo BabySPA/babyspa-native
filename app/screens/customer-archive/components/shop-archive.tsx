@@ -17,7 +17,7 @@ interface ShopArchiveParams {
 }
 export function ShopArchive(params: ShopArchiveParams) {
   return (
-    <Box>
+    <ScrollView>
       <ScrollView horizontal mt={ss(30)}>
         {params.archives.map((archive, idx) => {
           return (
@@ -83,6 +83,6 @@ export function ShopArchive(params: ShopArchiveParams) {
           );
         })}
       </ScrollView>
-    </Box>
+    </ScrollView>
   );
 }

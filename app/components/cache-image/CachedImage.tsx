@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import {
   ImageLoadEventData,
@@ -18,13 +19,15 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-
 import CacheManager from './CacheManager';
 import { ImageProps, IProps } from './types';
 import { isAndroid, isImageWithRequire, isRemoteImage } from './helpers';
-import { sp } from '~/app/utils/style';
-import { Spinner } from 'native-base';
-
+import { sp, ss, ls } from '~/app/utils/style';
+import { Icon, Pressable, Spinner } from 'native-base';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { AntDesign } from '@expo/vector-icons';
+import { useToast } from 'react-native-toast-notifications';
+import { DialogModal } from '../modals';
 const AnimatedImage = Animated.Image;
 const AnimatedView = Animated.View;
 
@@ -83,6 +86,7 @@ const CachedImage = (props: IProps & typeof defaultProps) => {
     return { opacity: animatedLoadingImage.value };
   });
 
+  const toast = useToast();
   useEffect(() => {
     if (isRemoteImage(propsSource)) {
       setLoading(true);
@@ -190,11 +194,12 @@ const CachedImage = (props: IProps & typeof defaultProps) => {
     style,
     testID,
     thumbnailSource,
+    canSave,
     ...rest
   } = props;
 
   const isImageReady = useMemo(() => !!uri, [uri, propsSource]);
-
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
   const imageSource = useMemo(() => {
     if (error || !uri) {
       return loadingSource;
@@ -215,6 +220,7 @@ const CachedImage = (props: IProps & typeof defaultProps) => {
   return (
     <View style={[styles.container, style]} testID={testID}>
       {!isImageReady && <Spinner color='#1AB7BE' size={sp(40)} />}
+
       {!isImageReady &&
         (LoadingImageComponent ? (
           <AnimatedView
@@ -249,6 +255,60 @@ const CachedImage = (props: IProps & typeof defaultProps) => {
           style={[styles.imageStyle, thumbnailSourceAnimatedStyle]}
         />
       )}
+      {canSave &&
+        (imageSource ? (
+          <>
+            <Pressable
+              style={{
+                position: 'absolute',
+                top: ss(50),
+                right: ss(50),
+                zIndex: 1000,
+              }}
+              ml={ls(50)}
+              _pressed={{
+                opacity: 0.6,
+              }}
+              hitSlop={ss(20)}
+              onPress={() => {
+                setShowSaveDialog(true);
+              }}>
+              <Icon
+                as={<AntDesign name='download' />}
+                size={sp(26)}
+                color={'#FFF'}
+                mr={ls(10)}
+              />
+            </Pressable>
+            {showSaveDialog && (
+              <DialogModal
+                isOpen={showSaveDialog}
+                title='是否确认保存图片？'
+                onClose={function (): void {
+                  setShowSaveDialog(false);
+                }}
+                onConfirm={function (): void {
+                  CameraRoll.saveAsset(uri as string, {
+                    type: 'photo',
+                  });
+                  setShowSaveDialog(false);
+                }}
+              />
+            )}
+          </>
+        ) : (
+          <Spinner
+            color='#1AB7BE'
+            size={sp(40)}
+            style={{
+              position: 'absolute',
+              top: ss(50),
+              right: ss(50),
+              zIndex: 1000,
+            }}
+            ml={ls(50)}
+          />
+        ))}
       {imageSource && (
         <AnimatedImage
           {...rest}

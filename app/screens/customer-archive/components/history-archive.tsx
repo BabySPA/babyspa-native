@@ -15,12 +15,19 @@ export function HistoryArchive(params: HistoryArchiveParams) {
   const [selectIdx, setSelectIdx] = useState(0);
 
   return (
-    <Box>
+    <>
       {params.courses && (
         <Row>
-          <ScrollView py={ss(10)} maxW={ls(290)} maxH={ss(530)}>
+          <ScrollView py={ss(10)} maxW={ls(290)}>
             {params.courses.map((course, idx) => {
-              const latestCourse = course[0];
+              const sc =  course.sort(
+                (a, b) =>
+                  // @ts-ignore
+                  new Date(b.analyze.updatedAt) -
+                  // @ts-ignore
+                  new Date(a.analyze.updatedAt),
+              );
+              const latestCourse = sc[0];
 
               return (
                 <Pressable
@@ -52,7 +59,8 @@ export function HistoryArchive(params: HistoryArchiveParams) {
               );
             })}
           </ScrollView>
-          <ScrollView horizontal ml={ls(30)} mt={ss(30)} flex={1}>
+          <ScrollView>
+            <ScrollView horizontal ml={ls(30)} mt={ss(30)} flex={1} >
             {params.courses[selectIdx]
               .sort(
                 (a, b) =>
@@ -153,8 +161,9 @@ export function HistoryArchive(params: HistoryArchiveParams) {
                 );
               })}
           </ScrollView>
+          </ScrollView>
         </Row>
       )}
-    </Box>
+    </>
   );
 }

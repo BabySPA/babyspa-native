@@ -72,7 +72,7 @@ export default function RegisterCard(params: RegisterCardParams) {
             <Text fontSize={sp(18)} color='#999'>
               登记时间：
               <Text color='#333'>
-                {dayjs(currentFlow.customer.updatedAt).format(
+                {dayjs(currentFlow.register.updatedAt).format(
                   'YYYY-MM-DD HH:mm',
                 )}
               </Text>
