@@ -97,7 +97,7 @@ export default function ManagerTemplate({
   const setCurrentSelectTemplateIdx = useManagerStore(
     (state) => state.setCurrentSelectTemplateIdx,
   );
-  
+
   useEffect(() => {
     const filterRegex = new RegExp(groupFilter, 'i');
     const filteredGroups = templates[currentSelectTemplateIdx]?.groups?.filter(
@@ -314,8 +314,8 @@ export default function ManagerTemplate({
     );
   };
   const ExtraChild = ({ item, index }: { item: any; index: number }) => {
-    if(typeof item === 'string') {
-      return null
+    if (typeof item === 'string') {
+      return null;
     }
     const { extra } = item;
     return (
@@ -759,6 +759,38 @@ export default function ManagerTemplate({
     );
   };
 
+  const GroupPressItem = ({ group, groupIdx }) => {
+    return (
+      <>
+        <Row alignItems={'center'}>
+          <Icon
+            ml={ls(10)}
+            as={<AntDesign name='folder1' />}
+            size={sp(24)}
+            color='#B4B4B4'
+          />
+          <Text fontSize={sp(20)} ml={ls(10)} color={'#333'}>
+            {group.name}
+          </Text>
+        </Row>
+
+        <Icon
+          as={
+            <SimpleLineIcons
+              name={
+                currentLevel3SelectFolderIdx.folder === groupIdx
+                  ? 'arrow-down'
+                  : 'arrow-right'
+              }
+            />
+          }
+          size={sp(16)}
+          color={'#BCBCBC'}
+        />
+      </>
+    );
+  };
+
   const Level3 = () => {
     return (
       <Row mt={ss(10)} flex={1}>
@@ -944,42 +976,14 @@ export default function ManagerTemplate({
                             flexDirection={'row'}
                             px={ls(20)}
                             py={ss(16)}>
-                            <Row alignItems={'center'}>
-                              <Icon
-                                ml={ls(10)}
-                                as={<AntDesign name='folder1' />}
-                                size={sp(24)}
-                                color='#B4B4B4'
-                              />
-                              <Text
-                                fontSize={sp(20)}
-                                ml={ls(10)}
-                                color={'#333'}>
-                                {group.name}
-                              </Text>
-                            </Row>
-
-                            <Icon
-                              as={
-                                <SimpleLineIcons
-                                  name={
-                                    currentLevel3SelectFolderIdx.folder ===
-                                    groupIdx
-                                      ? 'arrow-down'
-                                      : 'arrow-right'
-                                  }
-                                />
-                              }
-                              size={sp(16)}
-                              color={'#BCBCBC'}
-                            />
+                            <GroupPressItem group={group} groupIdx={groupIdx} />
                           </Pressable>
                           {currentLevel3SelectFolderIdx.folder == groupIdx && (
                             <SwipeListView
                               ref={swiperlistRef}
                               data={group.children as TemplateItem[]}
                               keyExtractor={(groupItem, index) =>
-                                groupItem.name
+                                `${groupItem.name + index}`
                               }
                               renderItem={({
                                 item: groupItem,
@@ -1089,6 +1093,7 @@ export default function ManagerTemplate({
             </Text>
           </Row>
         </Column>
+
         <Column
           flex={1}
           ml={ls(10)}
