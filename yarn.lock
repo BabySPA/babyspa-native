@@ -4984,11 +4984,6 @@ expo-print@~12.2.1:
   resolved "https://registry.npmmirror.com/expo-print/-/expo-print-12.2.1.tgz#0cca097f67ab445e94f2c849002b811d02756e89"
   integrity sha512-scvbr85YJmCQs9HdzD7xmmaHkiGwZPlvCkpOKfPrRC0AEhb8JvyQ9kcl7ub91mFyTJwTFJ6rjlSqBuHRTBxbgw==
 
-expo-screen-orientation@~5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-5.1.1.tgz#d586f035cca8eb4e4620a774f9510bd77083258d"
-  integrity sha512-rYpHUwHpuKlEErxupl3wM+KWcySrSJTXb5Une5gDINMmjWbLBx0N1P2MG1aSPA2eT7bShTO/xDJyegjf438l8w==
-
 expo-splash-screen@~0.18.2:
   version "0.18.2"
   resolved "https://registry.npmmirror.com/expo-splash-screen/-/expo-splash-screen-0.18.2.tgz#dde246204da875785ba40c7143a70013cdefdbb6"
@@ -8272,6 +8267,11 @@ react-native-patchpicker@4.3.7:
   version "4.3.7"
   resolved "https://registry.npmmirror.com/react-native-patchpicker/-/react-native-patchpicker-4.3.7.tgz#14defc033ea6c0a8a1f9df62999ed183e6d45c12"
   integrity sha512-7F/JK7dpQrEUyxtEU0R4/PgOrFkS36xRNSQVC/XyQeERcppb3sGZshIQEPPZoElN6g5owtfaPPd3FW/51022Gw==
+
+react-native-pip-android@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-pip-android/-/react-native-pip-android-1.0.1.tgz#541717fae99685ebe1b10a431a1ed0cd5142ee01"
+  integrity sha512-x6klZyInwovU9SCVUqlkSsAdvjt2IxHbqYy6+Axx0PVYvSK/WolWgvfIp0yFu8H3G2AQgcbDdCo3+AvSq7+YPg==
 
 react-native-reanimated@~2.14.4:
   version "2.14.4"

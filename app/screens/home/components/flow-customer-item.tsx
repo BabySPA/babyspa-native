@@ -1,7 +1,7 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import { Column, Row, Text, Flex, Icon, Box } from 'native-base';
+import { Text } from 'native-base';
 import { memo } from 'react';
 import { Image, View } from 'react-native';
 import OperateButton from '~/app/components/operate-button';

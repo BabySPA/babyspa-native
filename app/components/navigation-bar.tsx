@@ -23,7 +23,6 @@ export default function NavigationBar(props: NavigationBarParams) {
     <Row
       safeAreaLeft
       safeAreaRight
-      safeAreaTop
       bg={{
         linearGradient: {
           colors: ['#22D59C', '#1AB7BE'],

@@ -24,8 +24,8 @@ export default function LoginScreen({
 }: AuthStackScreenProps<'Login'>) {
   const login = useAuthStore((state) => state.login);
   const selectLoginShop = useAuthStore((state) => state.selectLoginShop);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('13000000001');
+  const [password, setPassword] = useState('000001');
   const [loading, setLoading] = useState(false);
   const [selectAgreement, setSelectAgreement] = useState(true);
   const [showPassword, setShowPassword] = useState(false);

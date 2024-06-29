@@ -1,18 +1,22 @@
 package com.mcbabyspa.managemenet;
 
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
-import com.swmansion.reanimated.BuildConfig;
+import com.reactnativepipandroid.PipAndroidModule;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import expo.modules.ReactActivityDelegateWrapper;
 
 public class MainActivity extends ReactActivity {
+ protected  OnepxReceiver mOnepxReceiver;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // Set the theme to AppTheme BEFORE onCreate to support 
@@ -21,7 +25,22 @@ public class MainActivity extends ReactActivity {
     setTheme(R.style.AppTheme);
     super.onCreate(null);
     CrashReport.initCrashReport(getApplicationContext(), "a56dd00610", false);
+    saveAlive();
+    // 设置状态栏为不可见
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
   }
+
+  private void saveAlive() {
+    ServiceHelper.startForegroundService(this);
+
+    mOnepxReceiver = new OnepxReceiver();
+    IntentFilter intentFilter = new IntentFilter();
+    intentFilter.addAction("android.intent.action.SCREEN_OFF");
+    intentFilter.addAction("android.intent.action.SCREEN_ON");
+    intentFilter.addAction("android.intent.action.USER_PRESENT");
+    registerReceiver(mOnepxReceiver, intentFilter);
+  }
+
 
   /**
    * Returns the name of the main component registered from JavaScript.
@@ -30,6 +49,12 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "main";
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    unregisterReceiver(mOnepxReceiver);
   }
 
   /**
@@ -68,4 +93,9 @@ public class MainActivity extends ReactActivity {
     // because it's doing more than {@link Activity#moveTaskToBack} in fact.
     super.invokeDefaultOnBackPressed();
   }
+
+    @Override
+    public void onPictureInPictureModeChanged (boolean isInPictureInPictureMode, Configuration newConfig) {
+        PipAndroidModule.pipModeChanged(isInPictureInPictureMode);
+    }
 }

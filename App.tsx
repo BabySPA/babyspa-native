@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { NativeBaseProvider, extendTheme } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,6 +11,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import CodePush from 'react-native-code-push';
 import { CacheManager } from '~/app/components/cache-image';
 import { Dirs } from 'react-native-file-access';
+import { usePipModeListener } from 'react-native-pip-android';
 
 LogBox.ignoreLogs([
   'Require cycle',
@@ -73,7 +73,6 @@ function App() {
           <NativeBaseProvider config={config} theme={theme}>
             <KeyboardAvoider>
               <Navigation colorScheme={colorScheme} />
-              <StatusBar hidden={true} />
             </KeyboardAvoider>
           </NativeBaseProvider>
         </ToastProvider>
@@ -82,7 +81,7 @@ function App() {
   }
 }
 let codePushOptions = {
-  checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
+  checkFrequency: CodePush.CheckFrequency.MANUAL,
   updateDialog: {
     title: '发现更新',
     optionalUpdateMessage: '是否立即更新~',

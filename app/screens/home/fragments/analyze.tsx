@@ -11,7 +11,7 @@ import {
   Box,
   FlatList,
 } from 'native-base';
-import { memo,  useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import useFlowStore from '~/app/stores/flow';
 import { ls, sp, ss } from '~/app/utils/style';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -36,6 +36,7 @@ function Analyze() {
   const flows = useFlowStore((state) => state.analyze.flows);
 
   useEffect(() => {
+    // 耗时操作
     refresh();
     return () => {
       resetAnalyzeFlows();
@@ -49,7 +50,6 @@ function Analyze() {
   };
 
   const [refreshing, setRefreshing] = useState(false);
-
   return (
     <Flex flex={1}>
       <Filter

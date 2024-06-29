@@ -35,12 +35,6 @@
     },
     "plugins": [
       [
-        "expo-screen-orientation",
-        {
-          "initialOrientation": "LANDSCAPE_RIGHT"
-        }
-      ],
-      [
         "expo-image-picker",
         {
           "photosPermission": "允许 $(PRODUCT_NAME) 访问您的照片",

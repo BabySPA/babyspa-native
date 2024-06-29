@@ -27,6 +27,8 @@ import StatisticsShop from '../../home/fragments/statistics-shop';
 import StatisticsMassage from '../../home/fragments/statistics-massage';
 import StatisticsAnalyze from '../../home/fragments/statistics-analyze';
 import { RoleAuthority } from '~/app/stores/auth/type';
+import PipView from '~/app/components/PipView';
+import { usePipModeListener } from 'react-native-pip-android';
 
 // const Drawer = createDrawerNavigator();
 
@@ -145,7 +147,15 @@ const Layout = memo(() => {
 
   const { openLoading, closeLoading } = useGlobalLoading();
   const toast = useToast();
+ const inPipMode = usePipModeListener();
 
+  if (inPipMode) {
+    return (
+      <Box>
+        <Text>PIP Mode</Text>
+      </Box>
+    );
+  }
   return (
     <>
       {currentSelectedModule.text !== 'inital' && (
@@ -278,7 +288,7 @@ const Layout = memo(() => {
               />
             </Center>
           </Box>
-          <Flex direction='column' flex={1} safeAreaTop>
+          <Flex direction='column' flex={1}>
             <Flex
               direction='row'
               justifyContent={'center'}
@@ -315,6 +325,7 @@ const Layout = memo(() => {
                   );
                 })}
               {/* <MessageNotify /> */}
+              <PipView />
             </Flex>
             <Flex bgColor={'#E6EEF1'} flex={1} borderTopLeftRadius={ss(10)}>
               {renderContent()}

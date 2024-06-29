@@ -22,8 +22,6 @@ import { decodePassword } from '../utils';
 import { toastAlert } from '../utils/toast';
 import useManagerStore from '../stores/manager';
 import SelectDropdown from './select-dropdown';
-import { StatusBar } from 'expo-status-bar';
-
 interface DialogParams {
   isOpen: boolean;
   headerText?: string;
